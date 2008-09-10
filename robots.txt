@@ -1,0 +1,9 @@
+Sitemap: http://lulzhq.com/sitemap.xml
+
+User-agent: *
+Disallow: /code/
+Disallow: /filteron
+Disallow: /filteroff
+Disallow: /users
+Disallow: /random
+Disallow: /thumb
