@@ -7,7 +7,14 @@
             $time = 60*60*24*365*10;
             $name = 'thisaintnews';
             session_name($name);
-            session_set_cookie_params($time, '/', 'howmanykillings.com');
+
+			if ($_SERVER['HTTP_HOST'] === 'web01.hub01.howmanykillings.com'){
+			    $domain = 'howmanykillings.com';
+			} else {
+			    $domain = 'thisaintnews.com';
+			}
+
+            session_set_cookie_params($time, '/', $domain);
             ini_set("session.gc_maxlifetime", $time);
             session_cache_expire($time);
             session_start();

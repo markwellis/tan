@@ -96,6 +96,12 @@ class unified{
         }
     }
 
+    function getRandom(){
+        $sql = new sql();
+        $query = "SELECT * FROM {$this->kind_of_object}_details ORDER BY RAND() limit 1;";
+        return $sql->query($query, 'row');
+    }
+
     function isValid($data, $title, $description){
 /*   Does a few checks on whats being submitted */
         $sql = new sql();

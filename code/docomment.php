@@ -1,5 +1,5 @@
 <?php
-require_once('class.inputfilter_clean.php5');
+require_once('inputfilter.php');
 require_once('user.php');
 $user = new user();
 if ($user->isLoggedIn()){

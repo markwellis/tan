@@ -1,6 +1,7 @@
 Options +FollowSymlinks
 RewriteEngine on
 ErrorDocument 404 /index.php?function=15
+RewriteRule ^(.*/)?\\.svn/ - [F,L]
 
 RewriteRule ^link/([^/]+)/([^/]+)/([^/]+)/ ./index.php?function=0&type=$1&page=$2&sortby=$3 [NC]
 RewriteRule ^viewlink/([^/]+) ./index.php?function=1&link=$1 [NC]

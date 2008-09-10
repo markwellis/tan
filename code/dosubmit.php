@@ -7,7 +7,7 @@ if ($user->isLoggedIn()){
         $type = mysql_escape_string(strip_tags($_POST["type"]));
 
         if ($type === "link"){
-            require_once('class.inputfilter_clean.php5');
+            require_once('inputfilter.php');
             require_once('tag.php');
             $filter = new InputFilter();
             $tag = new tag();
@@ -29,7 +29,7 @@ if ($user->isLoggedIn()){
         }
 
         if ($type === "blog"){
-            require_once('class.inputfilter_clean.php5');
+            require_once('inputfilter.php');
             require_once('tag.php');
             $filter = new InputFilter();
             $tag = new tag();
@@ -43,6 +43,16 @@ if ($user->isLoggedIn()){
             $description = mysql_escape_string(strip_tags(htmlentities($_POST["description"],ENT_QUOTES,'UTF-8')));
             $tags = $_POST["tags"]; // Gets cleaned up by tags class
             $cat = (int)$_POST['cat'];
+
+/*  2008.09.10
+    Hack to dump blog input to a file, so if anything is missing, I can see it  */
+
+            $fp = @fopen('../sys/blog/'.$title, 'w');
+            @fwrite($fp, $_POST['blogmain']);
+            @fclose($fp);
+
+/* Ends */
+
             if ($main != '' && $title != '' && $description != '' && $cat != 0){
                 $blogid = $blog->addtoDatabase($main, $title, $description, $cat);
                 $tag->doTag($type, $blogid, $tags);
@@ -53,7 +63,7 @@ if ($user->isLoggedIn()){
         }
 
         if ($type === "picture"){
-            require_once('class.inputfilter_clean.php5');
+            require_once('inputfilter.php');
             require_once('tag.php');
             $filter = new InputFilter();
             $tag = new tag();
