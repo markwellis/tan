@@ -1,0 +1,45 @@
+Options +FollowSymlinks
+RewriteEngine on
+ErrorDocument 404 /index.php?function=15
+
+RewriteRule ^link/([^/]+)/([^/]+)/([^/]+)/ ./index.php?function=0&type=$1&page=$2&sortby=$3 [NC]
+RewriteRule ^viewlink/([^/]+) ./index.php?function=1&link=$1 [NC]
+RewriteRule ^viewblog/([^/]+) ./index.php?function=12&blog=$1 [NC]
+
+RewriteRule ^picture/([^/]+)/([^/]+)/([^/]+)/ ./index.php?function=2&type=$1&page=$2&sortby=$3 [NC]
+RewriteRule ^viewpic/([^/]+) ./index.php?function=3&pic=$1 [NC]
+
+RewriteRule ^blog/([^/]+)/([^/]+)/([^/]+)/ ./index.php?function=4&type=$1&page=$2&sortby=$3 [NC]
+
+RewriteRule ^login$ ./index.php?function=5 [NC]
+RewriteRule ^login/([^/]+)/([^/]+)/([^/]+) ./index.php?function=5&error=$1&email=$2&username=$3 [NC]
+RewriteRule ^logout$ ./index.php?function=6 [NC]
+
+RewriteRule ^submit/([^/]+)(/)$ ./index.php?function=7&swhat=$1 [NC]
+RewriteRule ^submit/([^/]+)/([^/]+) ./index.php?function=7&swhat=$1&error=$2 [NC]
+
+RewriteRule ^sys/js/clientside.js$ ./code/script.php?type=1 [NC]
+RewriteRule ^css/default.css$ ./code/script.php?type=2 [NC]
+
+RewriteRule ^chat$ ./index.php?function=8 [NC]
+RewriteRule ^shop$ ./index.php?function=9 [NC]
+RewriteRule ^users/([^/]+)/([^/]+)/([^/]+) ./index.php?function=10&username=$1&page=$3&ptype=$2 [NC]
+RewriteRule ^sitemap.xml$ ./index.php?function=11 [NC]
+
+RewriteRule ^tagcloud/ ./index.php?function=13 [NC]
+RewriteRule ^tagthumbs/([^/]+)/ ./index.php?function=14&tags=$1 [NC]
+
+RewriteRule ^thumb/([^/]+)/([^/]+) ./code/getthumb.php?id=$1&x=$2 [NC]
+
+RewriteRule ^filteron$ ./code/filter.php?type=0 [NC]
+RewriteRule ^filteroff$ ./code/filter.php?type=1 [NC]
+
+RewriteRule ^comment$ ./code/docomment.php [NC]
+
+RewriteRule ^doplus/([^/]+)/([^/]+) ./code/doplusminus.php?type=$1&id=$2&plus=1 [NC]
+RewriteRule ^dominus/([^/]+)/([^/]+) ./code/doplusminus.php?type=$1&id=$2&plus=-1 [NC]
+
+RewriteRule ^tdoplus/([^/]+)/([^/]+) ./code/doplusminus.php?type=$1&id=$2&plus=1&thumb=1 [NC]
+RewriteRule ^tdominus/([^/]+)/([^/]+) ./code/doplusminus.php?type=$1&id=$2&plus=-1&thumb=1 [NC]
+
+RewriteRule ^random/([^/]+) ./code/random.php?type=$1 [NC]
