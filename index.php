@@ -384,7 +384,7 @@ switch($function){
         $title = 'webchat';
 
         $uname = $user->getUserName();
-        if ($uname === ''){
+        if ($uname == ''){
             $uname = 'n00b';
         } 
 
