@@ -163,6 +163,8 @@ class InputFilter {
 	}
 	protected function decode($source) {
 		$source = html_entity_decode($source, ENT_QUOTES, "UTF-8");
+		$source = preg_replace('/&#(\d+);/me',"chr(\\1)", $source);
+		$source = preg_replace('/&#x([a-f0-9]+);/mei',"chr(0x\\1)", $source);
 		return $source;
 	}
 	public function safeSQL($source, &$connection) {
