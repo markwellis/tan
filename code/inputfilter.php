@@ -162,9 +162,7 @@ class InputFilter {
 		return $newSet;
 	}
 	protected function decode($source) {
-		$source = html_entity_decode($source, ENT_QUOTES, "ISO-8859-1");
-		$source = preg_replace('/&#(\d+);/me',"chr(\\1)", $source);
-		$source = preg_replace('/&#x([a-f0-9]+);/mei',"chr(0x\\1)", $source);
+		$source = html_entity_decode($source, ENT_QUOTES, "UTF-8");
 		return $source;
 	}
 	public function safeSQL($source, &$connection) {
