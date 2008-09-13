@@ -1,4 +1,4 @@
-Sitemap: http://lulzhq.com/sitemap.xml
+Sitemap: http://thisaintnews.com/sitemap.xml
 
 User-agent: *
 Disallow: /code/
