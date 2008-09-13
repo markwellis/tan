@@ -586,7 +586,7 @@ switch($function){
             $middle .= $blog->CreateObjectHTML($details, $typeo, 1);
             $middle .= $blog->CreateCommentHTML($blog->getComments($details['blog_id']), $details['blog_id']);
         } else {
-            $middle .= $link->error404();
+            $middle .= $blog->error404();
         }
         break; 
 
