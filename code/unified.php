@@ -51,7 +51,7 @@ class unified{
                 $uploaddir = $this->rootimagedir .'/pics/';
             }
             $now = time();
-			$newname = strtolower(preg_replace("/[^a-zA-Z0-9]/", "", $newname));
+			$newname = strtolower(preg_replace("/[^a-zA-Z0-9\.]/", "_", $_FILES['pic']['name']));
             while(file_exists($this->uploadFilename = $uploaddir.$now.'-'.$newname)) {
                 $now++;
             }
