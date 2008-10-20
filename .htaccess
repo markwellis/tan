@@ -16,7 +16,7 @@ RewriteRule ^viewpic/([^/]+) ./viewpage.php?kindofpage=picture&id=$1 [NC]
 
 RewriteRule ^login$ ./index.php?function=5 [NC]
 RewriteRule ^login/([^/]+)/([^/]+)/([^/]+) ./index.php?function=5&error=$1&email=$2&username=$3 [NC]
-RewriteRule ^logout$ ./index.php?function=6 [NC]
+RewriteRule ^logout/$ ./index.php?function=6 [NC]
 
 RewriteRule ^submit/([^/]+)(/)$ ./index.php?function=7&swhat=$1 [NC]
 RewriteRule ^submit/([^/]+)/([^/]+) ./index.php?function=7&swhat=$1&error=$2 [NC]
