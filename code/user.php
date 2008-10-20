@@ -4,7 +4,7 @@
     class user {
 
         public function __construct() {
-            $time = 60*60*24*365*10;
+            $time = 60*60*24*90;
             $name = 'thisaintnews';
             session_name($name);
 
@@ -18,7 +18,7 @@
             ini_set("session.gc_maxlifetime", $time);
             session_cache_expire($time);
             session_start();
-            if (isset($_COOKIE[$ses])){
+            if (isset($_COOKIE[$name])){
                 setcookie($name, $_COOKIE[$name], time() + $time, "/");
             }
         }

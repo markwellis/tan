@@ -218,7 +218,7 @@ class tag{
                 $size = $fontmin + ($tag['count'] - $low) * $step;
                 $tcolour = dechex(hexdec($colour) + ($size*53));
                 $tcolour = str_pad($tcolour, 6, '0');
-                $output[] = "<a class='tag' style='color:#{$tcolour};font-size:{$size}em' title='{$tag['count']}' href='#'>".htmlspecialchars(stripslashes($tag['tag'])).'</a>';            
+                $output[] = "<a class='tag' style='color:#{$tcolour};font-size:{$size}em' title='{$tag['count']}' href='#'>".htmlspecialchars(stripslashes($tag['tag'])).'</a>';
             }
             return join("\n ", $output);
         } else {

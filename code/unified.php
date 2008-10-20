@@ -51,10 +51,9 @@ class unified{
                 $uploaddir = $this->rootimagedir .'/pics/';
             }
             $now = time();
-			$newname = strtolower(preg_replace("/[^a-zA-Z0-9\.]/", "_", $_FILES['pic']['name']));
+            $newname = strtolower(preg_replace("/[^a-zA-Z0-9\.]/", "_", $_FILES['pic']['name']));
             while(file_exists($this->uploadFilename = $uploaddir.$now.'-'.$newname)) {
-                $now++;
-            }
+                $now++;                                                                                }
             if (!move_uploaded_file($_FILES['pic']['tmp_name'], $this->uploadFilename)) {
                 return 'receiving directory insuffiecient permission';
             }
@@ -230,9 +229,9 @@ class unified{
         $user = new user();
         $userid = $user->getUserId();
         $username = $user->getUserName();
-        $picture_id = '';
-        $blog_id = '';
-        $link_id = '';
+        $picture_id = 0;
+        $blog_id = 0;
+        $link_id = 0;
         switch ($this->kind_of_object){
             case 'link':
                 $link_id = $id;
@@ -252,12 +251,12 @@ class unified{
     function addPlusMinus($id, $plus){
         $sql = new sql();
         $user = new user();
-        $picture_id = ''; 
-        $blog_id = ''; 
-        $link_id = '';
+        $picture_id = 0; 
+        $blog_id = 0; 
+        $link_id = 0;
         if ($plus === 1) {
             $table = 'plus';
-        } elseif ($plus === 0) {
+        } elseif ($plus === -1) {
             $table = 'minus';
         }
         if ($table){
@@ -282,11 +281,11 @@ class unified{
             $count = $sql->query($query, 'count');
             if (!$count){
                 $query = "INSERT INTO $table ({$table}_id, username, user_id, date, picture_id, blog_id, link_id) 
-                    VALUES ('', '{$user->getUsername()}'', {$user->getUserId()}, NOW(), $picture_id, $blog_id, $link_id);";
+                    VALUES ('', '{$user->getUsername()}', {$user->getUserId()}, NOW(), $picture_id, $blog_id, $link_id);";
                 $res = $sql->query($query, 'none');
                 if ($table === 'plus'){
-                $count = $this->getPlus($id);
-                    if ($count == $this->promoted_threashold){
+                $count = $this->getPlusMinus($id, 1);
+                    if ($count['count'] == $this->promoted_threashold){
                         $sql1 = new sql();
                         $query = "UPDATE $dtable SET promoted=NOW() WHERE $conditions;";
                         $sql1->query($query, 'none');
@@ -297,8 +296,8 @@ class unified{
                 $query = "DELETE FROM $table WHERE user_id={$user->getUserId()} AND $conditions;";
                 $res = $sql->query($query, 'none');
                 if ($table === 'plus'){
-                $count = $this->getPlus($id);
-                    if ($count == $this->promoted_threashold -1){
+                $count = $this->getPlusMinus($id, -1);
+                    if ($count['count'] == $this->promoted_threashold -1){
                         $sql1 = new sql();
                         $query = "UPDATE $dtable SET promoted='' WHERE $conditions;";
                         $sql1->query($query, 'none');
@@ -313,23 +312,33 @@ class unified{
         $sql = new sql();
         if ($plus === 1) {
             $table = 'plus';
-        } elseif ($plus === 0) {
+        } elseif ($plus === -1) {
             $table = 'minus';
         }
         if ($table) {
             switch ($this->kind_of_object){
                 case 'link':
                     $conditions = "link_id=$id";
+                    $object_id = 'link_id';
                     break;
                 case 'blog':
                     $conditions = "blog_id=$id";
+                    $object_id = 'blog_id';
                     break;
                 case 'picture':
                     $conditions = "picture_id=$id";
+                    $object_id = 'picture_id';
                     break;
             }
-            $query = "SELECT {$table}_id FROM $table WHERE $conditions;";
-            $count = $sql->query($query, 'count');
+            $user = new user();
+            $uid = $user->getUserId();
+            if (!$uid){ $uid = -1; }
+
+            $query = "SELECT count({$table}_id) as count,
+                (SELECT COUNT(*) FROM plus WHERE plus.{$object_id} = {$id} and plus.user_id=$uid) AS meplus, 
+                (SELECT COUNT(*) FROM minus WHERE minus.{$object_id} = {$id} and minus.user_id=$uid) AS meminus 
+                FROM $table WHERE $conditions;";
+            $count = $sql->query($query, 'row');
             return $count;
         }
     }
@@ -555,6 +564,82 @@ class unified{
         return preg_replace("/[^a-zA-Z0-9_]/", "", str_replace(' ','_', html_entity_decode(trim($text),ENT_QUOTES,'UTF-8')));
     }
 
+    function getImageFilename($id){
+        $sql = new sql;
+        $query = "select filename from picture_details where picture_id=$id;";
+        $fn = $sql->query($query, 'row');
+        return $fn['filename'];
+    }
+    
+    function imagecreatefromfile($path, $info = ''){
+        if(!$info){
+            return false;
+        }
+
+        $functions = array(IMAGETYPE_GIF => 'imagecreatefromgif',
+            IMAGETYPE_JPEG => 'imagecreatefromjpeg',
+            IMAGETYPE_PNG => 'imagecreatefrompng',
+            IMAGETYPE_WBMP => 'imagecreatefromwbmp',
+            IMAGETYPE_XBM => 'imagecreatefromwxbm');
+
+        if(!$functions[$info[2]]) {
+            return false;
+        }
+
+        if(!function_exists($functions[$info[2]])) {
+            return false;
+        }
+
+        return $functions[$info[2]]($path);
+    }
+
+    function resizeImage($id, $newx){
+        $cacheimg = $this->rootdir."/images/cache/resize/$id/$newx.jpg";
+        if (file_exists($cacheimg)){
+            $usecache = 1;
+        }else {
+            $filename = $this->rootdir.'/images/pics/' . basename($this->getImageFilename($id));
+            $usecache = 0;
+        }
+        if (!$usecache){
+            $srcSize = @getimagesize($filename);
+            $srcImg = $this->imagecreatefromfile($filename, $srcSize);
+            
+            if ($srcSize[0] !=0){
+                $rat = $srcSize[1] / $srcSize[0];
+                $dstImg = imagecreatetruecolor($newx, $newx*$rat);
+
+                $bg = imagecolorallocate($dstImg, 249, 248, 248);
+                imagefilledrectangle($dstImg, 0, 0, $newx, $newx*$rat, $bg);
+                imagecopyresampled($dstImg, $srcImg, 0, 0, 0, 0, $newx, $newx*$rat,$srcSize[0],$srcSize[1]);
+                $image = imagejpeg($dstImg, NULL, 75);
+                @mkdir(dirname($cacheimg));
+                $wcache = @imagejpeg($dstImg, $cacheimg, 75);
+                @imagedestroy($dstImg);
+                @imagedestroy($scrImg);
+            }
+        }else {
+            $last_modified_time = filemtime($cacheimg);
+            $etag = '"'.md5_file($cacheimg).'"';
+            $expires_time= time()+(60*60*24*365*10);
+
+            header("Last-Modified: ".gmdate("D, d M Y H:i:s", $last_modified_time)." GMT");
+            header("Etag: $etag");
+            header("Expires: ".gmdate("D, d M Y H:i:s", $expires_time)." GMT");
+            header('Cache-Control: maxage='.(60*60*24*365*10).', public');
+            header("Content-Type: image/jpeg");
+            if (@strtotime($_SERVER['HTTP_IF_MODIFIED_SINCE']) == $last_modified_time ||
+                trim($_SERVER['HTTP_IF_NONE_MATCH']) == $etag) {
+                header("HTTP/1.1 304 Not Modified");
+                exit;
+            }
+            $handle = fopen($cacheimg, "rb");
+            $image = fread($handle, filesize($cacheimg));
+            fclose($handle);
+        }
+        return $image;
+    }
+
     function CreateCommentHTML($comments, $id){
         switch($this->kind_of_object){
             case 'link':
@@ -586,7 +671,7 @@ class unified{
             $output .= stripslashes($comment['details']) . "<br/>
                 <span style='display:block;float:right;'>Edit Comment</span>
                 </div>
-                </div><br /><hr style='width:700px'/>";
+                </div><br />";
         }
         if ($user->isLoggedIn()){
             $output .= "<h2 id='lcomments'>Leave your comments</h2>

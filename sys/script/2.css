@@ -384,10 +384,11 @@ a{
 
 .comment {
     overflow:hidden;
+    font-size:0.8em;
     margin: 10px;
     padding: 5px;
-    border:1px solid #C5D0D9;
-    background:#ECF4E2;
+    padding-left: 10px;
+    border-top:1px solid #C5D0D9;
 }
 
 .comment p{

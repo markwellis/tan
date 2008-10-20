@@ -2,35 +2,25 @@
 require_once('inputfilter.php');
 require_once('user.php');
 $user = new user();
-if ($user->isLoggedIn()){
-    $filter = new InputFilter();
-    $comment = $filter->process(stripslashes($_POST['comment']));
-    $comment =mysql_escape_string(preg_replace("/\[youtube\](.+?)\[\/youtube\]/", '<object type="application/x-shockwave-flash" style="width:425px; height:350px;" data="http://www.youtube.com/v/$1"><param name="movie" value="http://www.youtube.com/v/$1" /></object>', $comment));
-    $comment = str_replace(array('\r','\t','\n'), '', $comment);
 
-    if($_SERVER['REQUEST_METHOD']==='POST') {
-        $id = (int)$_POST['id'];
-        $type = $_POST['type'];
-        if ($type === 'picture'){
-            require_once('picture.php');
-            $picture = new picture();
-            $picture->leaveComment($id, $comment);
+$type = $_POST['type'];
+$kinds = array ('picture', 'link', 'blog');
+
+if (in_array($type, $kinds, true)){
+/*  is equal to something in the array, so its safe  */
+    if ($user->isLoggedIn()){
+        $filter = new InputFilter();
+        $comment = $filter->process(stripslashes($_POST['comment']));
+        $comment =mysql_escape_string(preg_replace("/\[youtube\](.+?)\[\/youtube\]/", '<object type="application/x-shockwave-flash" style="width:425px; height:350px;" data="http://www.youtube.com/v/$1"><param name="movie" value="http://www.youtube.com/v/$1" /></object>', $comment));
+        $comment = str_replace(array('\r','\t','\n'), '', $comment);
+    
+        if($_SERVER['REQUEST_METHOD']==='POST') {
+            require_once('unified.php');
+            $id = (int)$_POST['id'];
+            $object = new unified($type);
+            $object->leaveComment($id, $comment);
             header("location: ".$_SERVER['HTTP_REFERER']);
-    print $comment;
-        }
-        if ($type === 'link'){
-            require_once('link.php');
-            $link = new linkobj();
-            $link->leaveComment($id, $comment);
-            header("location: ".$_SERVER['HTTP_REFERER']);
-        }
-        if ($type === 'blog'){
-            require_once('blog.php');
-            $blog = new blog();
-            $blog->leaveComment($id, $comment);
-            header("location: ".$_SERVER['HTTP_REFERER']);
-        }
-        
-    } else { die('error');}
-} else { header("Location: /");}
+        } else { die('error');}
+    } else { header("Location: /");}
+} else { die('error');}
 ?>

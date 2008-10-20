@@ -1,16 +1,18 @@
 Options +FollowSymlinks
 RewriteEngine on
-ErrorDocument 404 /index.php?function=15
+ErrorDocument 404 /error404.php
 RewriteRule ^(.*/)?\\.svn/ - [F,L]
 
 RewriteRule ^link/([^/]+)/([^/]+)/([^/]+)/ ./index.php?function=0&type=$1&page=$2&sortby=$3 [NC]
-RewriteRule ^viewlink/([^/]+) ./index.php?function=1&link=$1 [NC]
-RewriteRule ^viewblog/([^/]+) ./index.php?function=12&blog=$1 [NC]
-
-RewriteRule ^picture/([^/]+)/([^/]+)/([^/]+)/ ./index.php?function=2&type=$1&page=$2&sortby=$3 [NC]
-RewriteRule ^viewpic/([^/]+) ./index.php?function=3&pic=$1 [NC]
-
 RewriteRule ^blog/([^/]+)/([^/]+)/([^/]+)/ ./index.php?function=4&type=$1&page=$2&sortby=$3 [NC]
+RewriteRule ^picture/([^/]+)/([^/]+)/([^/]+)/ ./index.php?function=2&type=$1&page=$2&sortby=$3 [NC]
+
+RewriteRule ^viewlink/([^/]+) ./viewpage.php?kindofpage=link&id=$1 [NC]
+RewriteRule ^viewblog/([^/]+) ./viewpage.php?kindofpage=blog&id=$1 [NC]
+RewriteRule ^viewpic/([^/]+) ./viewpage.php?kindofpage=picture&id=$1 [NC]
+
+
+
 
 RewriteRule ^login$ ./index.php?function=5 [NC]
 RewriteRule ^login/([^/]+)/([^/]+)/([^/]+) ./index.php?function=5&error=$1&email=$2&username=$3 [NC]
@@ -22,13 +24,13 @@ RewriteRule ^submit/([^/]+)/([^/]+) ./index.php?function=7&swhat=$1&error=$2 [NC
 RewriteRule ^sys/js/clientside.js$ ./code/script.php?type=1 [NC]
 RewriteRule ^css/default.css$ ./code/script.php?type=2 [NC]
 
-RewriteRule ^chat$ ./index.php?function=8 [NC]
-RewriteRule ^shop$ ./index.php?function=9 [NC]
+RewriteRule ^chat/?$ /chat.php [NC]
+RewriteRule ^shop/ /shop.php [NC]
 RewriteRule ^users/([^/]+)/([^/]+)/([^/]+) ./index.php?function=10&username=$1&page=$3&ptype=$2 [NC]
-RewriteRule ^sitemap.xml$ ./index.php?function=11 [NC]
+RewriteRule ^sitemap.xml$ ./sitemap.php [NC]
 
 RewriteRule ^tagcloud/ ./index.php?function=13 [NC]
-RewriteRule ^tagthumbs/([^/]+)/ ./index.php?function=14&tags=$1 [NC]
+RewriteRule ^tagthumbs/([^/]+)/?$ /tagthumbs.php?tags=$1 [NC]
 
 RewriteRule ^thumb/([^/]+)/([^/]+) ./code/getthumb.php?id=$1&x=$2 [NC]
 

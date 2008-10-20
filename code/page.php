@@ -12,6 +12,11 @@ class page{
     function createMenu($where, $type){
         $selclass = ' mainselected';
         $subclass = ' subselected';
+        
+	    $linkmenu = null;
+ 	    $picturemenu = null;
+	    $blogmenu = null;
+
         if ($where == 'link'){
             $menu = & $linkmenu;
             $lselected = & $selclass;
@@ -47,6 +52,7 @@ class page{
                 $bsub = & $subclass;
             }
         }
+
         $allmenu = "<a href='/random/all/' class='nav anav'>Random</a>
             <a href='/all/0/1/' class='nav anav'>Promoted</a> 
             <a href='/all/1/1/' class='nav anav'>Upcoming</a>";
@@ -105,7 +111,7 @@ class page{
         if ($user->isLoggedIn()){
             $this->output .= "<a href='/users/".urlencode($user->getUserName())."/plus/1' class='menulink'>Profile</a> | ";
         } else {
-            $this->output .= "<a href='/login' class='menulink'>Login/Register</a> | ";
+            $this->output .= "<a href='/login/' class='menulink'>Login/Register</a> | ";
         }
 
 /*        if($_SESSION['filteroff']== 1){
@@ -113,10 +119,10 @@ class page{
         } else {
             $this->output .="<a href='/filteroff' class='menulink'>Disable NSFW filter</a> | ";
         }*/
-        $this->output .= "<a href='/shop' class='menulink'>Shop</a> |
-            <a href='/chat' class='menulink'>Chat</a> | 
+        $this->output .= "<a href='/shop/' class='menulink'>Shop</a> |
+            <a href='/chat/' class='menulink'>Chat</a> | 
             <a href='/tagcloud/' class='menulink'>Tag Cloud</a> |
-            <a href='/logout' class='menulink'>Logout</a>
+            <a href='/logout/' class='menulink'>Logout</a>
             </div>
             <a href='/' class='logo'><img src='/sys/images/logo.png' height='75' width='400' style='float:left;display:inline' alt='ThisAintNews' /></a><br/>";
         $this->output .= $this->createMenu($where, $type);
@@ -125,16 +131,6 @@ class page{
 
     private function closePage($footer){
         $this->output .= "</div><div id='bottom'>
-            <script type=\"text/javascript\">
-            google_ad_client = \"pub-1285639119107315\";
-            /* 728x90, created 7/30/08 */
-            google_ad_slot = \"0915158096\";
-            google_ad_width = 750;
-            google_ad_height = 100;
-            </script>
-            <script type=\"text/javascript\"
-            src=\"http://pagead2.googlesyndication.com/pagead/show_ads.js\">
-            </script>
             <a href=\"http://validator.w3.org/check?uri=referer\">
             <img src=\"http://www.w3.org/Icons/valid-xhtml10\"
             style='height:31px;width:88px;float:right;'
@@ -166,7 +162,7 @@ class page{
         if ($js){
             $code = preg_replace(array("/(^[\/]{2}[^\n]*)|([\n]{1,}[\/]{2}[^\n]*)/"), ' ', $code);
         }
-        return preg_replace(array("/\r/", "/\t/", "/\s+\ /"), ' ', $code);
+        return preg_replace(array("/\r/", "/\t/", "/\n/", "/\s+\ /"), ' ', $code);
     }
 
     public function compress($data){

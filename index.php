@@ -100,30 +100,6 @@ switch($function){
         $middle .= $link->CreatePageBoxHTML($pageCount, $page, $type, $sort);
         break;
 
-    case 1:  //viewlink
-        $where = 'link';
-        require_once('code/unified.php');
-
-        $link = new unified('link');
-
-        $link_id = (int)$_GET['link'];
-        $details = $link->getPageObjects(null, null, null, null, $link_id);
-        $details = $details[0];
-
-        if (sizeOf($details)>1){
-            if ($details['promoted'] != '0000-00-00 00:00:00') {
-                $typeo = 0;
-            } else {
-                $typeo = 1;
-            }
-            $title = $details['title'];
-            $middle .= $link->CreateObjectHTML($details, $typeo, 1);
-            $middle .= $link->CreateCommentHTML($link->getComments($details['link_id']), $details['link_id']);
-        } else {
-            $middle .= $link->error404();
-        } 
-        break;
-
     case 2:  //picture
         $where = 'picture';
         require_once('code/unified.php');
@@ -158,26 +134,6 @@ switch($function){
 
         $pageCount = (int)ceil($picture->getPlusMinusCount($type, 1) / 27);
         $middle .= $picture->CreatePageBoxHTML($pageCount, $page, $type, $sort);
-        break;
-
-    case 3:  //viewpic
-        $where = 'picture';
-        require_once('code/unified.php');
-        $picture = new unified('picture');
-
-        $picture_id = (int)$_GET['pic'];
-        $details = $picture->getPageObjects(null, null, null, null, $picture_id);
-        $details = $details[0];
-        $title = stripslashes($details['title']);
-
-        if (sizeOf($details)>1){
-            $comments = $picture->getComments($details['picture_id']);
-            $middle .= $picture->CreateObjectHTML($details, 0, 1);
-            $middle .= $picture->CreateCommentHTML($comments, $details['picture_id']);
-        } else {
-            $middle .= $picture->error404();
-        }
-        $where = 'picture';
         break;
 
     case 4:  //blog
@@ -378,27 +334,7 @@ switch($function){
         }
         break;
 
-    case 8:  //irc
-        require_once("code/user.php");
-        $user = new user();
-        $title = 'webchat';
-
-        $uname = $user->getUserName();
-        if ($uname == ''){
-            $uname = 'n00b';
-        } 
-
-        $middle .= '<div style="text-align:center;">
-            <iframe width=720 height=400 scrolling=no style="border:0" 
-            src="http://embed.mibbit.com/?server=irc.abjects.net&chatOutputShowTimes=true&channel=%23thisaintnews&settings=8a8a5ac18a22e7eecd04026233c3df93t&nick='.$uname.'">
-            </iframe></div>';
-        break;
-
-    case 9:  //shop
-        $title = 'WebShop';
-        $middle = "<iframe src='http://www.cafepress.com/thisaintnews' style='border:0px;height:1000px;width:100%;'/>";
-        break;
-
+/* disabled for the time being
     case 10:  //profile
         require_once('code/sql.php');
         require_once('code/user.php');
@@ -489,106 +425,7 @@ switch($function){
         }
         $middle .=  "</div>";
         break;
-
-    case 11:  //sitemap
-        require_once("code/unified.php"); 
-        $type = (int)$_GET['type'];
-        header ("content-type: text/xml");
-        $output = '<?xml version="1.0" encoding="UTF-8"?>
-            <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-            <url>
-            <loc>http://thisaintnews.com/</loc>
-            <priority>1.00</priority>
-            <changefreq>daily</changefreq>
-            </url>
-            <url>
-            <loc>http://thisaintnews.com/link/0/1/0/</loc>
-            <priority>0.80</priority>
-            <changefreq>daily</changefreq>
-            </url>
-            <url>
-            <loc>http://thisaintnews.com/link/1/1/0/</loc>
-            <priority>0.80</priority>
-            <changefreq>daily</changefreq>
-            </url>
-            <url>
-            <loc>http://thisaintnews.com/blog/0/1/0/</loc>
-            <priority>0.80</priority>
-            <changefreq>daily</changefreq>
-            </url>
-            <url>
-            <loc>http://thisaintnews.com/blog/1/1/0/</loc>
-            <priority>0.80</priority>
-            <changefreq>daily</changefreq>
-            </url>
-            <url>
-            <loc>http://thisaintnews.com/picture/0/1/0/</loc>
-            <priority>0.80</priority>
-            <changefreq>daily</changefreq>
-            </url>
-            <url>
-            <loc>http://thisaintnews.com/picture/1/1/0/</loc>
-            <priority>0.80</priority>
-            <changefreq>daily</changefreq>
-            </url>';
-        $links = unified::getAllObjects('link_details');
-        $pictures = unified::getAllObjects('picture_details');
-        $blogs = unified::getAllObjects('blog_details');
-        foreach ($links as $linkdetails){
-            $output .= "<url>
-                <loc>http://thisaintnews.com/viewlink/{$linkdetails['link_id']}/".
-                user::cleanTitle($linkdetails['title'])."/</loc>
-                <priority>0.80</priority>
-                <changefreq>always</changefreq>
-                </url>";
-        }
-        foreach ($blogs as $blogdetails){
-            $output .= "<url>
-                <loc>http://thisaintnews.com/viewblog/{$blogdetails['blog_id']}/".
-                user::cleanTitle($blogdetails['title'])."/</loc>
-                <priority>0.80</priority>
-                <changefreq>always</changefreq>
-                </url>";
-        }
-        foreach ($pictures as $picdetails){
-            $output .= "<url>
-                <loc>http://thisaintnews.com/viewpic/{$picdetails['picture_id']}/".
-                user::cleanTitle($picdetails['title'])."/</loc>
-                <priority>0.80</priority>
-                <changefreq>always</changefreq>
-                </url>";
-        }
-
-        $output .= "</urlset>";
-        print $output;
-        $noPage = 1;
-        break;
-
-    case 12:  //viewblog
-        $where='blog';
-        require_once('code/unified.php');
-
-        $blog = new unified('blog');
-
-        $blog_id = (int)$_GET['blog'];
-        $details = $blog->getPageObjects(null, null, null, null, $blog_id);
-        $details = $details[0];
-
-        if (sizeOf($details)>1){
-            $title = stripslashes($details['title']);
-
-            if ($details['promoted'] != '0000-00-00 00:00:00') {
-                $typeo = 0;
-            } else {
-                $typeo = 1;
-            }
-            
-            $middle .= $blog->CreateObjectHTML($details, $typeo, 1);
-            $middle .= $blog->CreateCommentHTML($blog->getComments($details['blog_id']), $details['blog_id']);
-        } else {
-            $middle .= $blog->error404();
-        }
-        break; 
+*/
 
     case 13:  //tagcloud
         require_once('code/tag.php');
@@ -598,37 +435,6 @@ switch($function){
         $middle = "<div class='tagholder'>".$cloud."</div>";
         break;
 
-    case 14:  //tagthumbs
-        require_once('code/tag.php');
-        require_once('code/picture.php');
-        $tag = new tag();
-        $picture = new picture();
-
-        $noPage = 1;
-
-        $tagss = urldecode($_GET['tags']);
-        $res = $tag->getMatchingObjects('picture', $tagss);
-        $alreadydone = array();
-        foreach ($res as $tagrow){
-            foreach ($tagrow as $picid){
-                if (!in_array($picid['picture_id'], $alreadydone)){
-                    $details = $picture->getPicDetails($picid['picture_id']);
-                    $images .="<img id='pic{$picid['picture_id']}' 
-                        style='height:50px;width:50px;cursor:pointer;vertical-align:middle;margin-top:15px;' 
-                        src='/thumb/{$details['picture_id']}/100/' alt={$picid['picture_id']} 
-                        onclick=\"selectImage(this.id);return false;\" />\n";
-                    $alreadydone[] = $picid['picture_id'];
-                }
-            }
-        }
-        print $images;
-        exit();
-        break;
-
-    case 15:  //error404
-        require_once('code/unified.php');
-        $middle .= unified::error404();
-        break;
 }
 //  bottom 
 
