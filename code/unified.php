@@ -668,9 +668,9 @@ class unified{
             $output .= "<div style='font-size:.8em;'>{$comment['username']} ,on {$comment['date']}<br />
                 Total Comments: {$comment['total_comments']}, Joined on: {$comment['join_date']}</div>
                 <div class='comment'>";
-            $output .= stripslashes($comment['details']) . "<br/>
-                <span style='display:block;float:right;'>Edit Comment</span>
-                </div>
+            $output .= stripslashes($comment['details']) . "<br/>"
+//            <span style='display:block;float:right;'>Edit Comment</span>
+            $output .= "</div>
                 </div><br />";
         }
         if ($user->isLoggedIn()){
