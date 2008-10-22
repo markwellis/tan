@@ -25,7 +25,7 @@ class sql {
                 break;
             case 'array':
                 $larray = array();
-                while($row = mysql_fetch_array($result, MYSQL_ASSOC)){
+                while($row = @mysql_fetch_array($result, MYSQL_ASSOC)){
                     $larray[]= $row;
                 }
                 return $larray; 
