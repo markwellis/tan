@@ -9,9 +9,8 @@
 define('MAGIC', null);
 require_once("code/unified.php"); 
 header ("content-type: text/xml");
-?>
 
-<?xml version="1.0" encoding="UTF-8"?>
+print '<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
 <loc>http://thisaintnews.com/</loc>
@@ -47,9 +46,8 @@ header ("content-type: text/xml");
 <loc>http://thisaintnews.com/picture/1/1/0/</loc>
 <priority>0.80</priority>
 <changefreq>daily</changefreq>
-</url>
+</url>';
 
-<?php
 $links = unified::getAllObjects('link_details');
 $pictures = unified::getAllObjects('picture_details');
 $blogs = unified::getAllObjects('blog_details');
