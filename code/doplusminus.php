@@ -43,10 +43,10 @@ if (in_array($type, $kinds, true)){
         }
         print ";return false;\">+</a>";
     } else {
-        print "<a href='/login'>Login\nFirst</a>";
+        print "<a href='/login/'>Login\nFirst</a>";
     }
 } else {
-    print "<a href='/login'>Login\nFirst</a>";
+    print "<a href='/login/'>Login\nFirst</a>";
 }
 
 ?>

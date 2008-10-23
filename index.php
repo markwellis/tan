@@ -243,7 +243,7 @@ switch($function){
         require_once("code/user.php");
         $user = new user();
         if (!$user->isLoggedIn()) {
-            header('location: /login');
+            header('location: /login/');
             exit();
         }
 

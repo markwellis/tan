@@ -509,7 +509,7 @@ class unified{
                 $output .= $objectDetails['details'];
             }
             $output .= "<hr />";
-        } else {
+        } else if ($ispic){
 ///////////////////
 //****Picture****//
 ///////////////////
@@ -556,6 +556,9 @@ class unified{
                     <img class='thumbPic' src='/thumb/{$objectDetails['picture_id']}/160/'
                     alt='{$objectDetails['title']}'/></a></div>$plusminusbox";
             }
+        }else {
+        	header('Location: /');
+        	exit();	
         }
         return $output;
     }
@@ -594,50 +597,63 @@ class unified{
     }
 
     function resizeImage($id, $newx){
-        $cacheimg = $this->rootdir."/images/cache/resize/$id/$newx.jpg";
-        if (file_exists($cacheimg)){
-            $usecache = 1;
-        }else {
-            $filename = $this->rootdir.'/images/pics/' . basename($this->getImageFilename($id));
-            $usecache = 0;
-        }
-        if (!$usecache){
-            $srcSize = @getimagesize($filename);
-            $srcImg = $this->imagecreatefromfile($filename, $srcSize);
-            
-            if ($srcSize[0] !=0){
-                $rat = $srcSize[1] / $srcSize[0];
-                $dstImg = imagecreatetruecolor($newx, $newx*$rat);
-
-                $bg = imagecolorallocate($dstImg, 249, 248, 248);
-                imagefilledrectangle($dstImg, 0, 0, $newx, $newx*$rat, $bg);
-                imagecopyresampled($dstImg, $srcImg, 0, 0, 0, 0, $newx, $newx*$rat,$srcSize[0],$srcSize[1]);
-                $image = imagejpeg($dstImg, NULL, 75);
-                @mkdir(dirname($cacheimg));
-                $wcache = @imagejpeg($dstImg, $cacheimg, 75);
-                @imagedestroy($dstImg);
-                @imagedestroy($scrImg);
-            }
-        }else {
-            $last_modified_time = filemtime($cacheimg);
-            $etag = '"'.md5_file($cacheimg).'"';
-            $expires_time= time()+(60*60*24*365*10);
-
-            header("Last-Modified: ".gmdate("D, d M Y H:i:s", $last_modified_time)." GMT");
-            header("Etag: $etag");
-            header("Expires: ".gmdate("D, d M Y H:i:s", $expires_time)." GMT");
-            header('Cache-Control: maxage='.(60*60*24*365*10).', public');
-            header("Content-Type: image/jpeg");
-            if (@strtotime($_SERVER['HTTP_IF_MODIFIED_SINCE']) == $last_modified_time ||
-                trim($_SERVER['HTTP_IF_NONE_MATCH']) == $etag) {
-                header("HTTP/1.1 304 Not Modified");
-                exit;
-            }
-            $handle = fopen($cacheimg, "rb");
-            $image = fread($handle, filesize($cacheimg));
-            fclose($handle);
-        }
-        return $image;
+        $newx = abs($newx);
+    	$allowed_sizes = array(100, 160, 200, 250, 300, 400, 500);
+    	if (in_array($newx, $allowed_sizes, TRUE)){
+	        $cacheimg = $this->rootdir."/images/cache/resize/$id/$newx.jpg";
+	        if (file_exists($cacheimg)){
+	            $usecache = 1;
+	        }else {
+                $basefile = $this->getImageFilename($id);
+	            $filename = $this->rootdir.'/images/pics/' . basename($basefile);
+	            $usecache = 0;
+	        }
+	        if (!$usecache && $basefile){
+	            $srcSize = @getimagesize($filename);
+	            $srcImg = $this->imagecreatefromfile($filename, $srcSize);
+	            
+	            if ($srcSize[0] !=0){
+	                header("Content-Type: image/jpeg");
+	                $rat = abs($srcSize[1] / $srcSize[0]);
+	                $dstImg = imagecreatetruecolor($newx, $newx*$rat);
+	
+	                $bg = imagecolorallocate($dstImg, 249, 248, 248);
+	                imagefilledrectangle($dstImg, 0, 0, $newx, $newx*$rat, $bg);
+	                imagecopyresampled($dstImg, $srcImg, 0, 0, 0, 0, $newx, $newx*$rat,$srcSize[0],$srcSize[1]);
+	                $image = imagejpeg($dstImg, NULL, 75);
+	                @mkdir(dirname($cacheimg));
+	                $wcache = @imagejpeg($dstImg, $cacheimg, 75);
+	                @imagedestroy($dstImg);
+	                @imagedestroy($scrImg);
+	            }
+	        }else {
+                if (file_exists($cacheimg)){
+	                $last_modified_time = filemtime($cacheimg);
+                    $etag = '"'.$last_modified_time.'"';
+                    $expires_time= time()+(60*60*24*365);
+        
+                    header("Last-Modified: ".gmdate("D, d M Y H:i:s", $last_modified_time)." GMT");
+                    header("Etag: $etag");
+                    header("Expires: ".gmdate("D, d M Y H:i:s", $expires_time)." GMT");
+                    header('Cache-Control: maxage='.(60*60*24*365*10).', public');
+                    header("Content-Type: image/jpeg");
+                    if (@strtotime($_SERVER['HTTP_IF_MODIFIED_SINCE']) == $last_modified_time ||
+                        trim($_SERVER['HTTP_IF_NONE_MATCH']) == $etag) {
+                        header("HTTP/1.1 304 Not Modified");
+                        exit;
+                    }
+                    $handle = fopen($cacheimg, "rb");
+                    $image = fread($handle, filesize($cacheimg));
+                    fclose($handle);
+                } else {
+                    exit();
+                }
+	        }
+	        return $image;
+	    } else {
+                exit();
+	    }
+	    
     }
 
     function CreateCommentHTML($comments, $id){
@@ -665,7 +681,7 @@ class unified{
                 $output .= "\n<img class='avatar' style='height:30px;width:30px;margin-left:10px;'
                     src='/sys/images/_user.png' alt='{$comment['username']}' />";
             }
-            $output .= "<div style='font-size:.8em;'>{$comment['username']} ,on {$comment['date']}<br />
+            $output .= "<div style='font-size:.8em;'>{$comment['username']}, on {$comment['date']}<br />
                 Total Comments: {$comment['total_comments']}, Joined on: {$comment['join_date']}</div>
                 <div class='comment'>";
             $output .= stripslashes($comment['details']) . "<br/>";
@@ -689,7 +705,7 @@ class unified{
             $output .= "<input type='submit' value='Comment' />
                     </form>";
         } else {
-            $output .= "<br />Please <a href='/login'>login</a> to leave comments";
+            $output .= "<br />Please <a href='/login/'>login</a> to leave comments";
         }
         return $output;
     }

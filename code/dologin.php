@@ -13,7 +13,7 @@ if($_SERVER['REQUEST_METHOD']==='POST') {
             header("Location: ".$_POST["ref"]);
         }
     } else { 
-        header("Location: ../login");
+        header("Location: ../login/");
         exit();
     }
 } else { die('error'); }

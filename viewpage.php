@@ -34,10 +34,10 @@ if ($where) {
 		} else {
 			$upcoming = 1;
 		}
-		$title = $details['title'];
+		$title = stripslashes($details['title']);
 		$middle .= $article->CreateObjectHTML($details, $upcoming, 1);
 		$middle .= $article->CreateCommentHTML(
-			$article->getComments($details["${where}_id"]), $details["${where}_id"]);
+		$article->getComments($details["${where}_id"]), $details["${where}_id"]);
 	} else {
 		$middle .= $article->error404();
 	}
