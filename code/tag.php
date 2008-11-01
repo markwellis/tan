@@ -149,32 +149,25 @@ class tag{
                 break;
         }
         $res = array();
-        if (preg_match('/^all$/', $tagstr)){
-            $sql = new sql();
-            $query = "SELECT $sqlstr0 FROM tag_details WHERE $sqlstr;";
-            $ret = $sql->query($query, 'array');
-            $res[] = $ret; 
-        } else {
-            $tags = explode(' ', trim($tagstr));
-            foreach ($tags as $tag){
-                $tag = $this->normalize($tag);
-                $existing = $this->isExisting($tag);
-                if ($existing){
-                    $sql = new sql();
-                    $query = "SELECT $sqlstr0 FROM tag_details WHERE tag_id=$existing $conds $sqlstr;";
-                    $ret = $sql->query($query, 'array');
-                    if ($ret){
-                        $res[] = $ret;
-                    }
-                }
-            }
-            $sql0 = new sql();
-            $query = "SELECT $sqlstr0 FROM tag_details order by rand() limit 20;";
-            $ret = $sql0->query($query, 'array');
-            if ($ret){
-                $res[] = $ret;
-            }
-        }
+	$tags = explode(' ', trim($tagstr));
+	foreach ($tags as $tag){
+	$tag = $this->normalize($tag);
+	$existing = $this->isExisting($tag);
+	if ($existing){
+		$sql = new sql();
+		$query = "SELECT $sqlstr0 FROM tag_details WHERE tag_id=$existing $conds $sqlstr;";
+		$ret = $sql->query($query, 'array');
+		if ($ret){
+		$res[] = $ret;
+		}
+	}
+	}
+	$sql0 = new sql();
+	$query = "SELECT $sqlstr0 FROM tag_details order by rand() limit 20;";
+	$ret = $sql0->query($query, 'array');
+	if ($ret){
+	$res[] = $ret;
+	}
         return $res;
     }
 
