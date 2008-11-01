@@ -149,7 +149,7 @@ class tag{
                 break;
         }
         $res = array();
-        if (preg_match('/all/', $tagstr)){
+        if (preg_match('/^all$/', $tagstr)){
             $sql = new sql();
             $query = "SELECT $sqlstr0 FROM tag_details WHERE $sqlstr;";
             $ret = $sql->query($query, 'array');
