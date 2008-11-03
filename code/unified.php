@@ -280,8 +280,8 @@ class unified{
             $query = "SELECT {$table}_id FROM $table WHERE user_id={$user->getUserId()} AND $conditions;";
             $count = $sql->query($query, 'count');
             if (!$count){
-                $query = "INSERT INTO $table ({$table}_id, username, user_id, date, picture_id, blog_id, link_id) 
-                    VALUES ('', '{$user->getUsername()}', {$user->getUserId()}, NOW(), $picture_id, $blog_id, $link_id);";
+                $query = "INSERT INTO $table ({$table}_id, user_id, date, picture_id, blog_id, link_id) 
+                    VALUES ('', {$user->getUserId()}, NOW(), $picture_id, $blog_id, $link_id);";
                 $res = $sql->query($query, 'none');
                 if ($table === 'plus'){
                 $count = $this->getPlusMinus($id, 1);
