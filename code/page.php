@@ -90,13 +90,13 @@ class page{
         return $mainmenu;
 }
 
-    private function createHead($title, $script){
+    private function createHead($title, $script, $description){
         $this->output = "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'
             'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
             <html xmlns='http://www.w3.org/1999/xhtml'>
             <head>
             <title>$title</title>
-            <meta name='Description' content='We&#039;re the newest social news site. Ran by the community, for the community, no corporations involved.'/>
+            <meta name='Description' content='$description'/>
             <meta name='keywords' content='news community comments english lulz lol social lulzhq fun jokes 
             videos pictures share sharing lol lolz funny humour humur'/>
             <meta http-equiv='Content-Type' content='text/html; charset=utf-8'/>
@@ -166,12 +166,15 @@ try{var AdBrite_Iframe=window.top!=window.self?2:1;var AdBrite_Referrer=document
             </body></html>";
     }
 
-    public function createPage($title,$header, $middle, $footer, $where, $type = -1, $sortby = null){
+    public function createPage($title,$header, $middle, $footer, $where, $type = -1, $sortby = null, $description = null){
         if ($_SESSION['filteroff']== 0) {
         //     $middle = $this->sfw($middle); 
          //    $title = $this->sfw($title); 
         }
-        $this->createHead($title, $header);
+        if (!$description) {
+            $description = "We&#039;re the newest social news site. Ran by the community, for the community, no corporations involved.";
+        }
+        $this->createHead($title, $header, $description);
         $this->createBody($where, $type, $sortby);
         $this->output .= $middle;
         $this->closePage($footer);

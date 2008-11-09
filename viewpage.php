@@ -36,6 +36,7 @@ if ($where) {
 		}
 		$title = stripslashes($details['title']);
 		$middle .= $article->CreateObjectHTML($details, $upcoming, 1);
+        $description = nl2br(stripslashes($details['description']));
         $res = $article->create_top_random($upcoming, $where);
         $sort_by .= $article->CreateRandomHTML($res);
 		$middle .= $article->CreateCommentHTML(
