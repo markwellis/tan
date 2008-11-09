@@ -134,15 +134,15 @@ img {
 }
 
 #right_menu{
-    position:fixed;
-/* This is here for ie */
-//    position:absolute;
-    right:180px;
-    height:500px;
+    position:absolute;
+    left:10px;
+    height:800px;
     width:142px;
+    top:93px;
+  float:left;
     background: #555555 url('/sys/images/bg2.png') repeat-x 0 0;
-    -moz-border-radius: 5px;
-    -webkit-border-radius:5px;
+    -moz-border-radius: 8px;
+    -webkit-border-radius:8px;
     padding:3px;
 }
 
@@ -181,16 +181,16 @@ img {
 }
 
 #those_damn_dirty_evil_ads{
-    position:fixed;
-/* This is here for ie */
-//    position:absolute;
+    position:absolute;
     right:10px;
+    top:90px;
 }
 
 #middle {
 	padding-bottom:15px;
     background: #555555 url('/sys/images/bg2.png') repeat-x 0 0;
-    margin-right:330px;
+    margin-right:170px;
+    margin-left:160px;
 	height:100%;
 	padding:5px;
     min-width:650px;

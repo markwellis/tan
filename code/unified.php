@@ -741,7 +741,7 @@ class unified{
             $this->new_kind = $types[rand(0, 2)];
         }
         $this->kind_of_object = $this->new_kind;
-        $res = $this->getPageObjects(1, $below, 'date', null, null, 6, 1);
+        $res = $this->getPageObjects(1, $below, 'date', null, null, 9, 1);
         $this->kind_of_object = $old;
         return $res;
     }
