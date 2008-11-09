@@ -41,7 +41,8 @@ class unified{
             $this->kind_of_object = $kind;
             $this->rootimagedir = $this->rootdir .'/images';
         } else {
-            die("Invalid object choice!");
+            header("Location: /");
+            die("Error 404");
         }
     }
 
@@ -349,19 +350,24 @@ class unified{
         return $sql->query($query, 'array');
     }
 
-    function getPageObjects($page, $below, $order, $username = null, $specific = null){
+    function getPageObjects($page, $below, $order, $username = null, $specific = null, $limit = null, $random = null){
 /* Old code, but has union select, will be needed later on for all!
             $query = "select * from link_details where (SELECT count(*) from plus where plus.link_id = link_details.link_id) >= ".$this->threashold." 
             union select * from blog_details where (SELECT count(*) from plus where plus.blog_id = blog_details.blog_id) >= ".$this->threashold." 
             order by date desc limit $page, $limit;"; */
         $sql = new sql();
         $page = ($page * 27) -27;
-        $limit = 27;
+        if (!$limit) {
+            $limit = 27;
+        }
 
         if ($below === 0 && $order==='date'){
             $order = 'promoted';
         }
-
+        
+        require_once('code/user.php');
+        $user = new user();
+        
         switch ($this->kind_of_object){
             case 'link':
                 $table = 'link_details';
@@ -394,9 +400,17 @@ class unified{
             $conditions = "HAVING plus $oper {$this->promoted_threashold}";
         } else {
             $conditions = "WHERE username = '$username'";
+            if ($below === 0) {
+            	$ptable = 'plus';
+            } else {
+            	$ptable = 'minus';
+            }
+            $suserid = $user->usernameToId($username);
+            $conditions = "INNER JOIN {$ptable} ON ( {$table}.{$id} = {$ptable}.{$id} ) WHERE {$ptable}.user_id={$suserid}";
+            $order = "{$ptable}.date";
         }
-        require_once('code/user.php');
-        $user = new user();
+
+
         $uid = $user->getUserId();
         if (!$uid){ $uid = -1; }
         if ($specific){
@@ -407,6 +421,7 @@ class unified{
             $query = "UPDATE {$table} SET views=({$table}.views) + 1 WHERE {$table}.{$id} = $specific";
             $sql->query($query, 'none');
         }
+        if ($random) {$order = 'RAND()';}
         $query = "SELECT *,(SELECT COUNT(*) FROM plus WHERE plus.$id = {$table}.{$id}) AS plus,
             (SELECT COUNT(*) FROM minus WHERE minus.$id = {$table}.{$id}) AS minus,
             (SELECT COUNT(*) FROM comments WHERE comments.{$id} = {$table}.{$id}) AS comments,
@@ -414,7 +429,10 @@ class unified{
             $extraSql
             (SELECT COUNT(*) FROM minus WHERE minus.{$id} = {$table}.{$id} and minus.user_id=$uid) AS meminus
             FROM $table $conditions ORDER BY $order DESC LIMIT $page, $limit;";
-        return $sql->query($query, 'array');
+#print $query;
+        $sql1 = new sql();
+        $ret = $sql1->query($query, 'array');
+		return $ret;
     }
 
     function getPlusMinusCount($below, $plus){
@@ -469,8 +487,8 @@ class unified{
             $plusminusbox .= $this->CreatePlusMinusHTML($objectDetails[$kind.'_id'], $objectDetails['plus'],
             $objectDetails['minus'], $objectDetails['meplus'], $objectDetails['meminus'], null);
 
-            $output .= "<div class='news'><img src='/thumb/{$objectDetails['category']}/100/' alt='{$objectDetails['category']}' class='newsImg'/>
-                $plusminusbox</div>";
+            $output .= "<div class='news'><div style='background-image:url(/thumb/{$objectDetails['category']}/100/);'
+                 class='newsImg' ></div>$plusminusbox</div>";
             if ($article === 0){
                 $output .= "<h1 style='display:inline;font-weight:normal;'>
                     <a class='title' href='/view{$kind}/{$objectid}/".$this->urlTitle($objectDetails['title'])."/'
@@ -502,13 +520,13 @@ class unified{
                 $output .= " | Ratio " . $ratio[0] . ":" . $ratio[1];
             }
 
-            $output .= "<br /><p>".nl2br(stripslashes($objectDetails['description']))."</p></div>";
+            $output .= "<br /><p>".nl2br(stripslashes($objectDetails['description']))."</p>";
             if ($article && $kind === 'link'){
                 $output .= "<a style='margin-right:70px;float:right;font-size:1.5em;' href='".stripslashes($objectDetails['url'])."'>View Link</a><br/><br/>";
             } elseif ($article && $kind === 'blog'){
                 $output .= $objectDetails['details'];
             }
-            $output .= "<hr />";
+            $output .= "</div>";
         } else if ($ispic){
 ///////////////////
 //****Picture****//
@@ -518,7 +536,7 @@ class unified{
                 $divholder = "<div id='picHolder'>";
             } else {
                 $divholder = "<div style='text-align:left;width:230px;'>";
-                $style = 'float:right;margin-top:60px;margin-right:15px;';
+                $style = 'float:right;margin-top:60px;margin-right:2%;';
             }
             $plusminusbox .= $this->CreatePlusMinusHTML($objectDetails['picture_id'], $objectDetails['plus'],
                 $objectDetails['minus'], $objectDetails['meplus'], $objectDetails['meminus'], $style);
@@ -532,7 +550,7 @@ class unified{
                 $output .= "\n<img class='avatar' style='margin-left:5px;' src='/sys/images/_user.png'
                     alt='{$objectDetails['username']}' />";
             }
-            $output .= "<a class='user' href='/users/{$objectDetails['username']}/plus/1/'>{$objectDetails['username']}</a><br />
+            $output .= "<a class='user' href='/users/{$objectDetails['username']}/plus/1/'>{$objectDetails['username']}</a> 
                 <a href='/viewpic/{$objectDetails['picture_id']}/".user::cleanTitle($objectDetails['title']) ."/#comments'>
                 <img src='/sys/images/comment.png' alt=' ' />  {$objectDetails['comments']}</a>
                 | {$objectDetails['views']} views";
@@ -552,9 +570,8 @@ class unified{
                     alt='".stripslashes($objectDetails['title'])."'/></a>
                     </div>{$objectDetails['description']}</div>";
             } else {
-                $output .= "</div><a href='/viewpic/{$objectDetails['picture_id']}/". user::cleanTitle($objectDetails['title']) ."/'>
-                    <img class='thumbPic' src='/thumb/{$objectDetails['picture_id']}/160/'
-                    alt='{$objectDetails['title']}'/></a></div>$plusminusbox";
+                $output .= "</div>
+                    <div class='thumbPic' style='background-image:url(\"/thumb/".$objectDetails['picture_id']."/160/\");background-repeat:no-repeat;position center center;'><a style='display:block;height:100%;width:100%;' href='/viewpic/{$objectDetails['picture_id']}/". user::cleanTitle($objectDetails['title']) ."/'></a></div></div>$plusminusbox";
             }
         }else {
         	header('Location: /');
@@ -670,8 +687,7 @@ class unified{
         }
         require_once('user.php');
         $user = new user();
-
-        $output .= "<h2 id='comments'>Comments</h2>";
+        $output .= "<div id='comment_wrapper'><h2 id='comments'>Comments</h2>";
         foreach($comments as $comment){    
             $output .= "<div style='margin-left:5px;'>";
             if (file_exists("sys/users/avatar/{$comment['user_id']}.jpg")){
@@ -691,7 +707,7 @@ class unified{
         }
         if ($user->isLoggedIn()){
             $output .= "<h2 id='lcomments'>Leave your comments</h2>
-                    <form style='margin-left:15px;' action='/comment' method='post'>
+                    <form style='margin-left:15px;' action='/comment' method='post'><p>
                     <input name='id' type='hidden' value='$id' />
                     <input name='type' type='hidden' value='$type' />";
             include_once("sys/js/fckeditor/fckeditor.php") ;
@@ -699,14 +715,15 @@ class unified{
             $oFCKeditor->BasePath = '/sys/js/fckeditor/' ;
             $oFCKeditor->Value = '' ;
             $oFCKeditor->ToolbarSet = 'lulz';
-            $oFCKeditor->Width = 750;
+            $oFCKeditor->Width = '98%';
             $oFCKeditor->Config['EnterMode'] = 'br';
             $output .= $oFCKeditor->CreateHTML() ;
             $output .= "<input type='submit' value='Comment' />
-                    </form>";
+                    </p></form>";
         } else {
             $output .= "<br />Please <a href='/login/'>login</a> to leave comments";
         }
+        $output .= "</div>";
         return $output;
     }
 
@@ -714,6 +731,35 @@ class unified{
         header("HTTP/1.1 404 Not Found");
         header("Status: 404 Not Found");
         return "<h1>Error 404 : File not found</h1>";
+    }
+
+    function create_top_random($below, $where){
+        $types = array('link', 'blog', 'picture');
+        $old = $this->kind_of_object;
+        $this->new_kind = $types[rand(0, 2)];
+        while ($this->new_kind === $where){
+            $this->new_kind = $types[rand(0, 2)];
+        }
+        $this->kind_of_object = $this->new_kind;
+        $res = $this->getPageObjects(1, $below, 'date', null, null, 6, 1);
+        $this->kind_of_object = $old;
+        return $res;
+    }
+
+    function CreateRandomHTML ($details) {
+        $kindo = $this->new_kind;
+        $output .= "<br/><div style='margin-top:15px;'>See also<br/>";
+        if ($kindo === 'picture') {
+            $what = 'pic';
+        } else {
+            $what = $kindo;
+        }
+        foreach ($details as $detail){
+            $id=$kindo.'_id';
+            $output .= "<a href='/view{$what}/{$detail[$id]}/".$this->urlTitle($detail['title'])."/' class='top_selection'>"
+                . stripslashes($detail['title'])."</a>";
+        }                                                                                                                                $output .= "</div>";
+        return $output;
     }
 
     function CreateSortBoxHTML($type, $page, $sort){
@@ -729,26 +775,27 @@ class unified{
                 break;
         }
         $sort_by = &$this->sort_by;
-        $link_array = array();
+        $selected_array = array();
 
         for($i=0, $max=count($sort_by);$i<$max;++$i){
             if ($i === $sort){
-                $link_array[] = 'sselected';
+                $selected_array[] = ' selected="selected"';
             } else {
-                $link_array[] = '';
+                $selected_array[] = '';
             }
         }
 
-        $output = "<span style='float:right;'>Sort by
-            <a href='/$where/$type/$page/0/' class='sortby {$link_array[0]}'>Date</a>
-            <a href='/$where/$type/$page/1/' class='sortby {$link_array[1]}'>Comments</a>
-            <a href='/$where/$type/$page/2/' class='sortby {$link_array[2]}'>Plus's</a>
-            <a href='/$where/$type/$page/3/' class='sortby {$link_array[3]}'>Minus's</a>
-            <a href='/$where/$type/$page/4/' class='sortby {$link_array[4]}'>Views</a></span><br/><br/>";
+        $output = "<select name='sort_by' id='sort_by' onchange='dosort(this.value)'>
+            <option value='0' $selected_array[0]>Date</option>
+            <option value='1' $selected_array[1]>Comments</option>
+            <option value='2' $selected_array[2]>Plus</option>
+            <option value='3' $selected_array[3]>Minus</option>
+            <option value='4' $selected_array[4]>Views</option>
+            </select>";
         return $output;
     }
 
-    function CreatePageBoxHTML($pageCount, $page, $type, $sort = null){
+    function CreatePageBoxHTML($pageCount, $page, $type){
         switch($this->kind_of_object){
             case 'link':
                 $where = 'link';
@@ -767,11 +814,7 @@ class unified{
             if ($i === $page){
                 $output .= " thisPage";
             }
-            if ($sort === null){
-                $output .= " ' href='/$where/$type/$i/'>$i</a>";
-            } else {
-                $output .= " ' href='/$where/$type/$i/$sort/'>$i</a>";
-            }
+            $output .= " ' href='/$where/$type/$i/'>$i</a>";
         }
         $output .=  "</div>";
         return $output;

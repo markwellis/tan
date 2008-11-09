@@ -11,7 +11,7 @@ if ($middle){
     require_once('code/page.php');
     $pageobj = new page();
     $html = $pageobj->createPage("ThisAintNews.com :: $title",$extraScript, $middle,
-                "Page processed in $totaltime seconds" , $where, $type);
+                "Page processed in $totaltime seconds" , $where, $type, $sort_by);
     $html = $pageobj->minify($html);
 #    $etag = '"'.md5($middle).'"';
 #    header("Etag: $etag");

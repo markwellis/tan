@@ -3,9 +3,9 @@ RewriteEngine on
 ErrorDocument 404 /error404.php
 RewriteRule ^(.*/)?\\.svn/ - [F,L]
 
-RewriteRule ^link/([^/]+)/([^/]+)/([^/]+)/ ./index.php?function=0&type=$1&page=$2&sortby=$3 [NC]
-RewriteRule ^blog/([^/]+)/([^/]+)/([^/]+)/ ./index.php?function=4&type=$1&page=$2&sortby=$3 [NC]
-RewriteRule ^picture/([^/]+)/([^/]+)/([^/]+)/ ./index.php?function=2&type=$1&page=$2&sortby=$3 [NC]
+RewriteRule ^link/([^/]+)/([^/]+)/ ./index.php?function=0&type=$1&page=$2 [NC]
+RewriteRule ^blog/([^/]+)/([^/]+)/ ./index.php?function=4&type=$1&page=$2 [NC]
+RewriteRule ^picture/([^/]+)/([^/]+)/ ./index.php?function=2&type=$1&page=$2 [NC]
 
 RewriteRule ^viewlink/([^/]+) ./viewpage.php?kindofpage=link&id=$1 [NC]
 RewriteRule ^viewblog/([^/]+) ./viewpage.php?kindofpage=blog&id=$1 [NC]

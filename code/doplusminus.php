@@ -24,8 +24,10 @@ if (in_array($type, $kinds, true)){
 
         if ($plus === 1){
             $keyword = 'plus';
+            $symbol = "+";
         } elseif ($plus === -1){
             $keyword = 'minus';
+            $symbol = "-";
         }
         print $res['count'] . "<a class='add". ucwords($keyword) ."";
         if ($res['me'.$keyword]){
@@ -41,7 +43,7 @@ if (in_array($type, $kinds, true)){
         } else {
             print "'{$keyword}{$id}')";
         }
-        print ";return false;\">+</a>";
+        print ";return false;\">$symbol</a>";
     } else {
         print "<a href='/login/'>Login\nFirst</a>";
     }

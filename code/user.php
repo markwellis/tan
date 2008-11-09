@@ -5,7 +5,7 @@
 
         public function __construct() {
             $time = 60*60*24*90;
-            $name = 'thisaintnews';
+            $name = '32duihsfd8923rj21ws';
             session_name($name);
 
 			if ($_SERVER['HTTP_HOST'] === 'web01.hub01.howmanykillings.com'){
@@ -48,7 +48,8 @@
         public function usernameToId($username){
             $sql = new sql();
             $query = "select user_id from user_details where username='$username';";
-            return $sql->query($query, 'row');
+            $retval = $sql->query($query, 'row');
+            return $retval['user_id'];
         }
 
         public function getPlusLinks($uid,$page){

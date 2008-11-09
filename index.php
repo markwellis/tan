@@ -1,12 +1,13 @@
 <?php
-header("Cache-Control: no-cache, must-revalidate"); 
+require_once('code/header.php');
+/*header("Cache-Control: no-cache, must-revalidate"); 
 header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
 
 $time = microtime();
 $time = explode(" ", $time);
 $time = $time[1] + $time[0];
 $start = $time;
-
+*/
 $function = (int)$_GET['function'];
 
 /* function is the page to dispaly
@@ -66,13 +67,6 @@ $function = (int)$_GET['function'];
     }
     $middle .= "</div>";
   */  
-
-
-$middle = '';
-$where = 'all';
-$extraHeader = '';
-$title = 'Welcome home';
-
 switch($function){
     case 0:  //link
         $where = 'link';
@@ -82,12 +76,15 @@ switch($function){
 
         $page = (int)$_GET['page'];
         $type = (int)$_GET['type'];
-        $sort = (int)$_GET['sortby'];
+        $user = new user();
+        $sort = (int)$_SESSION['sortby'];
 
         if ($type > 1){ $type = 1; }
         if ($page===0) { $page = 1; }
 
-        $middle .= $link->CreateSortBoxHTML($type, $page, $sort);
+        $sort_by = $link->CreateSortBoxHTML($type, $page, $sort);
+        $res = $link->create_top_random($type, $where);
+        $sort_by .= $link->CreateRandomHTML($res);
         $links = $link->getPageObjects($page, $type, $link->sort_by[$sort]);
         
         foreach ($links as $linkdetails){
@@ -107,14 +104,17 @@ switch($function){
 
         $page = (int)$_GET['page'];
         $type = (int)$_GET['type'];
-        $sort = (int)$_GET['sortby'];
+        $user = new user();
+        $sort = (int)$_SESSION['sortby'];
 
         $title = 'Pictures';
 
         if ($type > 1){ $type = 1; }
         if ($page==0) { $page = 1; }
 
-        $middle .= $picture->CreateSortBoxHTML($type, $page, $sort);
+        $sort_by = $picture->CreateSortBoxHTML($type, $page, $sort);
+        $res = $picture->create_top_random($type, $where);
+        $sort_by .= $picture->CreateRandomHTML($res);
         $thumbs = $picture->getPageObjects($page, $type, $picture->sort_by[$sort]);
 
         $middle .= "<div class='thumbLine'>";
@@ -144,13 +144,16 @@ switch($function){
 
         $page = (int)$_GET['page'];
         $type = (int)$_GET['type'];
-        $sort = (int)$_GET['sortby'];
+        $user = new user();
+        $sort = (int)$_SESSION['sortby'];
 
         if ($type > 1){ $type = 1; }
         if ($page==0) { $page = 1; }
 
-        $middle .= $blog->CreateSortBoxHTML($type, $page, $sort);
+        $sort_by = $blog->CreateSortBoxHTML($type, $page, $sort);
         $blogs = $blog->getPageObjects($page, $type, $blog->sort_by[$sort]);
+        $res = $blog->create_top_random($type, $where);
+        $sort_by .= $blog->CreateRandomHTML($res);
 
         foreach ($blogs as $blogdetails){
             if ($blogdetails['blog_id'] != 0){
@@ -184,7 +187,7 @@ switch($function){
                 $middle .= "<h2>".$errorCodes[$error]."</h2>";
             }
 
-            $middle .= "<hr />
+            $middle .= "
                 <div class='news'>
                 <h1>Sign In</h1>
                 <img class='newsImg' src='/sys/images/login.png' alt='Login' />
@@ -195,7 +198,7 @@ switch($function){
                 <p><input type='submit' value='Login'/></p>
                 </form>
                 </div>
-                <hr />
+                
                 <div class='news'>
                 <h1>Register</h1>
                 <img class='newsImg' src='/sys/images/register.png' alt='Register' />
@@ -222,7 +225,8 @@ switch($function){
                     <p><input type='submit' value='Register'/></p>
                     </form></div>";
         } else {
-            $middle .= "<h1>You are already logged in!</h1>";
+            header("Location: /");
+            exit();
         }
         break;
 
@@ -254,9 +258,9 @@ switch($function){
 
         $title = 'Submit';
 
-        if ($_GET['swhat'] === 'link') { $swhat = 0; }
-        if ($_GET['swhat'] === 'picture') { $swhat = 1; }
-        if ($_GET['swhat'] === 'blog') { $swhat = 2; }
+        if ($_GET['swhat'] === 'link') { $swhat = 0; $where='link'; }
+        if ($_GET['swhat'] === 'picture') { $swhat = 1;$where='picture'; }
+        if ($_GET['swhat'] === 'blog') { $swhat = 2;$where='blog'; }
         if ($_GET['swhat'] === 'editorial') { $swhat = 3; }
         // 0 = link
         // 1 = pic
@@ -282,7 +286,7 @@ switch($function){
                 <label for='tags' style='width:540px;'>Type some relevant tags (simple words that describe the link), separated by a space. Then pictures will appear, click the one you want to appear next to the link.</label><br /><br />
                 <input class='textInput' size='55' type='text' name='tags' id='tags' onkeyup='drawTagImages((event))' />
                 <a href='#' onclick='updateThumbs();return false;'>Update</a><br />
-                <div id='thumbtags' style='width:700px;overflow:visible;margin-left:auto;margin-right:auto;'></div><br/>
+                <div id='thumbtags'></div><br/>
                 <br /><input type='submit' value='Submit Link'/>
                 </form></div>";
         }
@@ -320,7 +324,7 @@ switch($function){
             $oFCKeditor->BasePath = '/sys/js/fckeditor/' ;
             $oFCKeditor->Value = '' ;
             $oFCKeditor->ToolbarSet = 'lulz';
-            $oFCKeditor->Width = 750;
+            $oFCKeditor->Width = '98%';
             $oFCKeditor->Height = 450;
             $oFCKeditor->Config['EnterMode'] = 'br';
             $middle .= $oFCKeditor->CreateHTML() ;
@@ -328,7 +332,7 @@ switch($function){
                 Then pictures will appear, click the one you want to appear next to your blog</label><br /><br />
                 <input class='textInput' size='55' type='text' name='tags' id='tags' onkeyup='drawTagImages((event))' />
                 <a href='#' onclick='updateThumbs();return false;'>Update</a><br />
-                <div id='thumbtags' style='width:700px;overflow:visible;margin-left:auto;margin-right:auto;'></div><br/>
+                <div id='thumbtags'></div><br/>
                 <input type='submit' value='Submit Blog'/>
                 </form></div>";
         }
@@ -437,7 +441,8 @@ switch($function){
 
 }
 //  bottom 
-
+include('code/footer.php');
+/*
 $time = microtime();
 $time = explode(" ", $time);
 $time = $time[1] + $time[0];
@@ -457,5 +462,5 @@ if (!isset($noPage)){
         exit;
     }
     print $pageobj->compress($html);
-}
+}*/
 ?>

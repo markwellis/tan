@@ -22,18 +22,21 @@ class page{
             $lselected = & $selclass;
             if ($type === 0){$plink = & $subclass;}
             if ($type === 1){$ulink = & $subclass;}
+            $lnav = " lnav";
         }
         if ($where == 'picture'){
             $menu = & $picturemenu;
             $pselected = & $selclass;
             if ($type === 0){$ppic = & $subclass;}
             if ($type === 1){$upic = & $subclass;}
+            $pnav = " pnav";
         }
         if ($where == 'blog'){
             $menu = & $blogmenu;
             $bselected = & $selclass;
             if ($type === 0){$pblog = & $subclass;}
             if ($type === 1){$ublog = & $subclass;}
+            $bnav = " bnav";
         }
         if ($where == 'submit'){
             if ($type === 0){
@@ -53,35 +56,36 @@ class page{
             }
         }
 
-        $allmenu = "<a href='/random/all/' class='nav anav'>Random</a>
-            <a href='/all/0/1/' class='nav anav'>Promoted</a> 
-            <a href='/all/1/1/' class='nav anav'>Upcoming</a>";
+//        $allmenu = "<a href='/random/all/' class='nav anav'>Random</a>
+//            <a href='/all/0/1/' class='nav anav'>Promoted</a> 
+//            <a href='/all/1/1/' class='nav anav'>Upcoming</a>";
 
-        $blogmenu = "<a href='/submit/blog/' class='nav bnav $bsub'>Submit</a>
-            <a href='/random/blog/' class='nav bnav'>Random</a>
-            <a href='/blog/0/1/0/' class='nav  bnav $pblog'>Promoted</a> 
-            <a href='/blog/1/1/0/' class='nav bnav $ublog'>Upcoming</a>";
+        $blogmenu = "<a href='/submit/blog/' class='nav bnav $bsub'>Submit</a><br/>
+            <a href='/random/blog/' class='nav bnav'>Random</a><br/>
+            <a href='/blog/0/1/' class='nav  bnav $pblog'>Promoted</a><br/>
+            <a href='/blog/1/1/' class='nav bnav $ublog'>Upcoming</a>";
 
-        $picturemenu = "<a href='/submit/picture/' class='nav pnav $psub'>Submit</a>
-            <a href='/random/picture/' class='nav pnav'>Random</a>
-            <a href='/picture/0/1/0/' class='nav pnav $ppic'>Promoted</a> 
-            <a href='/picture/1/1/0/' class='nav pnav $upic'>Upcoming</a>";
+        $picturemenu = "<a href='/submit/picture/' class='nav pnav $psub'>Submit</a><br/>
+            <a href='/random/picture/' class='nav pnav'>Random</a><br/>
+            <a href='/picture/0/1/' class='nav pnav $ppic'>Promoted</a><br/>
+            <a href='/picture/1/1/' class='nav pnav $upic'>Upcoming</a>";
 
-        $linkmenu = "<a href='/submit/link/' class='nav lnav $lsub'>Submit</a>
-            <a href='/random/link/' class='nav lnav'>Random</a>
-            <a href='/link/0/1/0/' class='nav lnav $plink'>Promoted</a> 
-            <a href='/link/1/1/0/' class='nav lnav $ulink'>Upcoming</a>";
+        $linkmenu = "<a href='/submit/link/' class='nav lnav $lsub'>Submit</a><br/>
+            <a href='/random/link/' class='nav lnav'>Random</a><br/>
+            <a href='/link/0/1/' class='nav lnav $plink'>Promoted</a><br/> 
+            <a href='/link/1/1/' class='nav lnav $ulink'>Upcoming</a>";
 
-        $mainmenu = "<div style='display:none' id='allmenu'>$allmenu</div>
-            <div style='display:none' id='blogmenu'>$blogmenu</div>
+        $mainmenu = //"<div style='display:none' id='allmenu'>$allmenu</div>
+            "<div style='display:none' id='blogmenu'>$blogmenu</div>
             <div style='display:none' id='picturemenu'>$picturemenu</div>
             <div style='display:none' id='linkmenu'>$linkmenu</div>
-            <div style='width:400px;height:60px;float:right;text-align:right;'>";
+            <div style='height:60px;float:right;text-align:right;'>";
 //            <a href='#' onclick=\"changeMenu('all')\" id='alllink' class='nav anav $aselected'>All</a>
-        $mainmenu .= "<a href='#' onclick=\"changeMenu('link')\" id='linklink' class='nav lnav $lselected'>Links</a>
-            <a href='#' onclick=\"changeMenu('blog')\" id='bloglink' class='nav bnav $bselected'>Blogs</a>
-            <a href='#' onclick=\"changeMenu('picture')\" id='picturelink' class='nav pnav $pselected'>Pictures</a>
-            <span style='margin-top:15px;display:block;' id='menuholder'>$menu</span></div>";
+
+        $mainmenu .= "<a href='#' onclick=\"changeMenu('link');return false;\" id='linklink' class='nav lnav $lselected'>Links</a>"
+            . "<a href='#' onclick=\"changeMenu('blog');return false;\" id='bloglink' class='nav bnav $bselected'>Blogs</a>"
+            . "<a href='#' onclick=\"changeMenu('picture');return false;\" id='picturelink' class='nav pnav $pselected'>Pictures</a>"
+            . "<span id='menuholder' class='$lnav $pnav $bnav'>$menu</span></div>";
 
         return $mainmenu;
 }
@@ -98,16 +102,30 @@ class page{
             <meta http-equiv='Content-Type' content='text/html; charset=utf-8'/>
             <link rel='stylesheet' type='text/css' title='default' href='/css/default.css' />
             <link rel='shortcut icon' href='/favicon.ico' />
-            <script type='text/javascript' language='javascript' src='/sys/js/clientside.js'></script>
+            <script type='text/javascript' src='/sys/js/clientside.js'></script>
             $script
             </head>";
     }
     
-    private function createBody($where, $type){
+    private function createBody($where, $type, $sortby = null){
         $user = new user();
         $this->output .= "<body>
             <div id='main'>
-            <div id='top'><div style='float:right;margin-top:25px;margin-right:5px;margin-bottom:10px;text-align:right;'>";
+<div id='right_menu'><div id='menu_holder'>" .$this->createMenu($where, $type) ."</div>$sortby</div>
+<div id='those_damn_dirty_evil_ads'><!-- Begin: AdBrite, Generated: 2008-11-09 10:41:42  -->
+<script type=\"text/javascript\">
+var AdBrite_Title_Color = 'FFFFFF';
+var AdBrite_Text_Color = 'EEEEEE';
+var AdBrite_Background_Color = '888888';
+var AdBrite_Border_Color = '555555';
+var AdBrite_URL_Color = 'DDDDDD';
+try{var AdBrite_Iframe=window.top!=window.self?2:1;var AdBrite_Referrer=document.referrer==''?document.location:document.referrer;AdBrite_Referrer=encodeURIComponent(AdBrite_Referrer);}catch(e){var AdBrite_Iframe='';var AdBrite_Referrer='';}
+</script>
+<script type=\"text/javascript\">document.write(String.fromCharCode(60,83,67,82,73,80,84));document.write(' src=\"http://ads.adbrite.com/mb/text_group.php?sid=917367&amp;zs=3136305f363030&amp;ifr='+AdBrite_Iframe+'&amp;ref='+AdBrite_Referrer+'\" type=\"text/javascript\">');document.write(String.fromCharCode(60,47,83,67,82,73,80,84,62));</script>
+<div><a target=\"_top\" href=\"http://www.adbrite.com/mb/commerce/purchase_form.php?opid=917367&amp;afsid=1\" style=\"font-weight:bold;font-family:Arial;font-size:13px;\"></a></div>
+<!-- End: AdBrite --></div>
+            <div id='top'>
+<div style='float:right;margin-top:25px;margin-right:5px;text-align:right;'>";
         if ($user->isLoggedIn()){
             $this->output .= "<a href='/users/".urlencode($user->getUserName())."/plus/1' class='menulink'>Profile</a> | ";
         } else {
@@ -121,19 +139,21 @@ class page{
         }*/
         $this->output .= "<a href='/shop/' class='menulink'>Shop</a> |
             <a href='/chat/' class='menulink'>Chat</a> | 
-            <a href='/tagcloud/' class='menulink'>Tag Cloud</a> |
-            <a href='/logout/' class='menulink'>Logout</a>
-            </div>
-            <a href='/' class='logo'><img src='/sys/images/logo.png' height='75' width='400' style='float:left;display:inline' alt='ThisAintNews' /></a><br/>";
-        $this->output .= $this->createMenu($where, $type);
+            <a href='/tagcloud/' class='menulink'>Tag Cloud</a>";
+
+        if ($user->isLoggedIn()){
+            $this->output .= " | <a href='/logout/' class='menulink'>Logout</a>";
+        }
+        $this->output .= " </div>
+            <div class='logoimg'/><a href='/' class='logo'></a></div>";
         $this->output .= "</div><div id='middle'>"; 
     }
 
     private function closePage($footer){
-        $this->output .= "</div><div id='bottom'>
+        $this->output .= "<div id='bottom'>
             <a href=\"http://validator.w3.org/check?uri=referer\">
             <img src=\"http://www.w3.org/Icons/valid-xhtml10\"
-            style='height:31px;width:88px;float:right;'
+            style='height:31px;width:88px;margin-top:20px;float:right;'
             alt=\"Valid XHTML 1.0 Transitional\" /></a><br/><br/>
             <span style='display:block;margin-bottom:10px;'>$footer, All User-generated content is licensed under a <a href='http://creativecommons.org/'>Creative Commons Public Domain license</a></span>
             </div></div>
@@ -146,13 +166,13 @@ class page{
             </body></html>";
     }
 
-    public function createPage($title,$header, $middle, $footer, $where, $type = -1){
+    public function createPage($title,$header, $middle, $footer, $where, $type = -1, $sortby = null){
         if ($_SESSION['filteroff']== 0) {
         //     $middle = $this->sfw($middle); 
          //    $title = $this->sfw($title); 
         }
         $this->createHead($title, $header);
-        $this->createBody($where, $type);
+        $this->createBody($where, $type, $sortby);
         $this->output .= $middle;
         $this->closePage($footer);
         return $this->output;

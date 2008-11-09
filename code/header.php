@@ -8,7 +8,7 @@ $time = $time[1] + $time[0];
 $start = $time;
 $title = 'Welcome Home';
 $extraScript ='';
-$where = 'all';
+$where = 'link';
 define('MAGIC', null);
 
 ?>

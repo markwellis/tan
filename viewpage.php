@@ -36,8 +36,10 @@ if ($where) {
 		}
 		$title = stripslashes($details['title']);
 		$middle .= $article->CreateObjectHTML($details, $upcoming, 1);
+        $res = $article->create_top_random($upcoming, $where);
+        $sort_by .= $article->CreateRandomHTML($res);
 		$middle .= $article->CreateCommentHTML(
-		$article->getComments($details["${where}_id"]), $details["${where}_id"]);
+    		$article->getComments($details["${where}_id"]), $details["${where}_id"]);
 	} else {
 		$middle .= $article->error404();
 	}

@@ -36,9 +36,18 @@ function updateThumbs(){
 }
 
 function changeMenu(type){var linkarray = ['linklink', 'bloglink', 'picturelink'];
-    for (i = 0; i<linkarray.length;i++){document.getElementById(linkarray[i]).className = 'nav '+linkarray[i].substr(0,1)+'nav';}
+    for (i = 0; i<linkarray.length;i++){
+        document.getElementById(linkarray[i]).className = 'nav '+linkarray[i].substr(0,1)+'nav';
+    }
+
     var menuholder = document.getElementById('menuholder');menuholder.innerHTML = document.getElementById(type + 'menu').innerHTML;
-    document.getElementById(type + 'link').className = 'nav mainselected';
+    document.getElementById(type + 'link').className = 'nav mainselected ' +type.substr(0,1)+'nav';
+    document.getElementById('menuholder').className = type.substr(0,1)+'nav';
+    return false;
+}
+
+function dosort(sort) {
+    window.location = '/code/dosort.php?sortby='+sort;
 }
 
 function selectImage(image){
