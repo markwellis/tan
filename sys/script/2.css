@@ -33,6 +33,7 @@ img {
 	padding:5px;
     min-width:650px;
     margin-right:170px;
+    margin-left:175px;
     padding-bottom:0px;
 }
 
@@ -91,8 +92,8 @@ img {
     margin-bottom:15px;
 	font-size:1em;
 	color:#ffffff;
-    padding-left:1px;
-    padding-right:1px;
+    padding-left:4px;
+    padding-right:4px;
     -moz-border-radius-topleft:5px;
     -moz-border-radius-topright:5px;
     -webkit-border-top-left-radius:5px;
@@ -137,7 +138,7 @@ img {
     position:absolute;
     left:10px;
     height:800px;
-    width:142px;
+    width:160px;
     top:93px;
   float:left;
     background: #555555 url('/sys/images/bg2.png') repeat-x 0 0;
@@ -190,7 +191,7 @@ img {
 	padding-bottom:15px;
     background: #555555 url('/sys/images/bg2.png') repeat-x 0 0;
     margin-right:170px;
-    margin-left:160px;
+    margin-left:175px;
 	height:100%;
 	padding:5px;
     min-width:650px;
@@ -216,6 +217,7 @@ img {
 
 #bottom {
     margin-right:170px;
+    margin-left:175px;
 	padding:5px;
     text-align:center;
     min-width:650px;
