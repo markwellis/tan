@@ -397,7 +397,9 @@ class unified{
                     $order .= ' DESC, date ';
                 }
             }
-            $conditions = "HAVING plus $oper {$this->promoted_threashold}";
+            if (!$random){
+                $conditions = "HAVING plus $oper {$this->promoted_threashold}";
+            }
         } else {
             $conditions = "WHERE username = '$username'";
             if ($below === 0) {
@@ -429,7 +431,6 @@ class unified{
             $extraSql
             (SELECT COUNT(*) FROM minus WHERE minus.{$id} = {$table}.{$id} and minus.user_id=$uid) AS meminus
             FROM $table $conditions ORDER BY $order DESC LIMIT $page, $limit;";
-#print $query;
         $sql1 = new sql();
         $ret = $sql1->query($query, 'array');
 		return $ret;
@@ -754,6 +755,7 @@ class unified{
         } else {
             $what = $kindo;
         }
+
         foreach ($details as $detail){
             $id=$kindo.'_id';
             $output .= "<a href='/view{$what}/{$detail[$id]}/".$this->urlTitle($detail['title'])."/' class='top_selection'>"
