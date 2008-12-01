@@ -214,7 +214,6 @@ if (defined('MAGIC')) {
 	    	$memcache = new Memcache;
 	    	$det = $this->get_details_count($id);
 			$memcache_key = $this->kind_of_object . ":comment:{$id}:count:{$det['comments']}:p:{$det['plus']}:m:{$det['minus']}";
-			error_log($memcache_key);
 			@$memcache->connect('127.0.0.1', 11211);
 			$cached = @$memcache->get($memcache_key);
 			
