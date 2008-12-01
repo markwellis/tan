@@ -212,7 +212,9 @@ if (defined('MAGIC')) {
 	
 	    function getComments($id){
 	    	$memcache = new Memcache;
-			$memcache_key = $this->kind_of_object . ":comment:{$id}:count:" . $this->get_comment_count($id);;
+	    	$det = $this->get_details_count($id);
+			$memcache_key = $this->kind_of_object . ":comment:{$id}:count:{$det['comments']}:p:{$det['plus']}:m:{$det['minus']}";
+			error_log($memcache_key);
 			@$memcache->connect('127.0.0.1', 11211);
 			$cached = @$memcache->get($memcache_key);
 			
@@ -391,7 +393,7 @@ if (defined('MAGIC')) {
 	        }
 	    }
 	
-		function get_comment_count($oid){
+		function get_details_count($oid){
 			switch ($this->kind_of_object){
 	            case 'link':
 	                $id ='link_id';
@@ -407,9 +409,10 @@ if (defined('MAGIC')) {
 	        }
 	        
 			$sql = new sql();
-			$query  = "SELECT COUNT($id) as comments FROM comments where $id = $oid;";
+			$query = "SELECT COUNT($id) as comments, (SELECT COUNT($id) FROM plus WHERE $id=$oid) as plus, "
+				."(SELECT COUNT($id) FROM minus WHERE $id=$oid) as minus FROM comments where $id = $oid;";
 			$res = $sql->query($query, 'row');
-			return $res['comments'];
+			return $res;
 		}
 	
 	    function getAllObjects($table){
@@ -423,12 +426,14 @@ if (defined('MAGIC')) {
 	            $query = "select * from link_details where (SELECT count(*) from plus where plus.link_id = link_details.link_id) >= ".$this->threashold." 
 	            union select * from blog_details where (SELECT count(*) from plus where plus.blog_id = blog_details.blog_id) >= ".$this->threashold." 
 	            order by date desc limit $page, $limit;"; */
+	        $cache_time = 2;
 	        $memcache = new Memcache;
 	        if ($specific) {
-	        	$count = $this->get_comment_count($specific);
+	        	$min = $this->get_details_count($specific);
+	        	$cache_time = 45;
 	        }
 	        
-			$memcache_key = $this->kind_of_object . ":p:{$page}:b:{$below}:o:{$order}:u:{$username}:s:{$specific}:c:{$count}:l:{$limit}:r:{$random}";
+			$memcache_key = $this->kind_of_object . ":p:{$page}:b:{$below}:o:{$order}:u:{$username}:s:{$specific}:c:{$min['comments']}:p:{$min['plus']}:m:{$min['minus']}:l:{$limit}:r:{$random}";
 			@$memcache->connect('127.0.0.1', 11211);
 			$cached = @$memcache->get($memcache_key);
 			
@@ -513,7 +518,7 @@ if (defined('MAGIC')) {
 		            FROM $table $conditions ORDER BY $order DESC LIMIT $page, $limit;";
 		        $sql1 = new sql();
 		        $ret = $sql1->query($query, 'array');
-		        @$memcache->set($memcache_key, $ret, false, 20);
+		        @$memcache->set($memcache_key, $ret, false, $cache_time);
 				return $ret;
 			}
 			return $cached;
