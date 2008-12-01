@@ -27,8 +27,8 @@ if(!$user->isLoggedIn()){
         <h1>Sign In</h1>
         <img class='newsImg' src='/sys/images/login.png' alt='Login' />
         <form action='/code/dologin.php' id='loginform' method='post'>
-        <p><label style='width:70px;' for='username'>Username </label><input class='textInput' id='username' name='username' type='text'/></p>
-        <p><label style='width:70px;' for='password'>Password </label><input class='textInput' id='password' name='password' type='password'/></p>
+        <p><label style='width:70px;color:#000000;' for='username'>Username </label><input class='textInput' id='username' name='username' type='text'/></p>
+        <p><label style='width:70px;color:#000000;' for='password'>Password </label><input class='textInput' id='password' name='password' type='password'/></p>
         <p><input type='submit' value='Login'/></p>
         </form>
         </div>
@@ -37,7 +37,7 @@ if(!$user->isLoggedIn()){
         <h1>Register</h1>
         <img class='newsImg' src='/sys/images/register.png' alt='Register' />
         <form action='/code/doregister.php' id='regform' method='post'>
-        <p><label style='width:70px;' for='rusername'>Username </label><input class='textInput' id='rusername' name='rusername' type='text'";
+        <p><label style='width:70px;color:#000000;' for='rusername'>Username </label><input class='textInput' id='rusername' name='rusername' type='text'";
     if ($_GET['username'] != '') {
         $middle .= "value='" . strip_tags($_SESSION['username']) . "'";
     } 
@@ -46,8 +46,8 @@ if(!$user->isLoggedIn()){
         $middle .= "value='" . strip_tags($_SESSION['email']) . "'";
     } 
     $middle .= "/></p>
-        <p><label style='width:70px;' for='rpassword0'>Password </label><input class='textInput' id='rpassword0' name='rpassword0' type='password'/></p>
-        <p><label style='width:70px;' for='rpassword1'>Password again </label><input class='textInput' id='rpassword1' name='rpassword1' 
+        <p><label style='width:70px;color:#000000;' for='rpassword0'>Password </label><input class='textInput' id='rpassword0' name='rpassword0' type='password'/></p>
+        <p><label style='width:70px;color:#000000;' for='rpassword1'>Password again </label><input class='textInput' id='rpassword1' name='rpassword1' 
         type='password'/></p>
         <script type='text/javascript'>
         document.getElementById('regform').setAttribute(\"autocomplete\", \"off\"); 
