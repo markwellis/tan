@@ -1,6 +1,8 @@
 <?php
 header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
 header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
+
+define('MAGIC', true);
 require_once('unified.php');
 
 switch ($_GET['type']) {
@@ -24,6 +26,7 @@ if ($where) {
     header("location:  /view{$urlk}/".$det["{$where}_id"]."/".str_replace(" ", "_",$det['title']));
     exit();
 } else {
-	header("Location: /");	
+	header("Location: /");
+	exit();
 }
 ?>

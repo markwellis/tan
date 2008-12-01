@@ -1,5 +1,6 @@
 <?php
 if($_SERVER['REQUEST_METHOD']==='POST') {
+	define('MAGIC', true);
     require_once("user.php") ;
     $password0 = mysql_escape_string(strip_tags($_POST["rpassword0"]));
     $password1 = mysql_escape_string(strip_tags($_POST["rpassword1"]));
@@ -12,26 +13,39 @@ if($_SERVER['REQUEST_METHOD']==='POST') {
                                     $_SERVER["REMOTE_ADDR"],
                                     $_POST["recaptcha_challenge_field"],
                                     $_POST["recaptcha_response_field"]);
+	$user = new user;
 
     if (!$resp->is_valid) {
-        header("Location: ../login/-8/$email/$username");
+    	$_SESSION['username'] = $username;
+    	$_SESSION['email'] = $email;
+    	$_SESSION['register_error'] = -8;
+        header("Location: /login/");
         exit();
     }
-
-    $user = new user;
-
     $return = $user->register($username, $password0, $password1, $email);
-    if ($return==1){
+
+    if ($return){
         if ($user->login($username, $password0)) {
-            if ($_POST["rref"] != ''){
-                header("Location: " .$_POST["rref"]);
+            if ($_SESSION['ref'] != '' ){
+            	if ($_SESSION['ref'] === '/login/') {
+            		$_SESSION['ref'] = '/';
+            	}
+                header("Location: " .$_SESSION['ref']);
+                exit();
             }else {
                 header("Location: /");
+                exit();
             }
         } 
     } else {
-            header("Location: ../login/$return/$email/$username");
+	    	$_SESSION['username'] = $username;
+	    	$_SESSION['email'] = $email;
+	    	$_SESSION['register_error'] = $return;
+            header("Location: /login/");
             exit();
     }
-} else { die('error');}
+} else { 
+    header("Location: /error404/");
+    exit();
+}
 ?>

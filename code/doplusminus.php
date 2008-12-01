@@ -3,6 +3,7 @@
 header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
 header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
 
+define('MAGIC', true);
 require_once('user.php');
 $user = new user();
 $id = (int)$_GET['id'];

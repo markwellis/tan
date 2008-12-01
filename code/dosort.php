@@ -1,4 +1,6 @@
 <?php
+
+define('MAGIC', true);
 require_once('user.php');
 
 $sort = (int) $_GET['sortby'];
@@ -11,4 +13,5 @@ if (!$goto) {
 }
 header("Location: $goto");
 exit();
+
 ?>

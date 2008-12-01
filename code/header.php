@@ -9,6 +9,6 @@ $start = $time;
 $title = 'Welcome Home';
 $extraScript ='';
 $where = 'link';
-define('MAGIC', null);
+define('MAGIC', true);
 
 ?>

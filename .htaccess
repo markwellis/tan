@@ -11,22 +11,29 @@ RewriteRule ^viewlink/([^/]+) ./viewpage.php?kindofpage=link&id=$1 [NC]
 RewriteRule ^viewblog/([^/]+) ./viewpage.php?kindofpage=blog&id=$1 [NC]
 RewriteRule ^viewpic/([^/]+) ./viewpage.php?kindofpage=picture&id=$1 [NC]
 
+RewriteRule ^login/$ ./login.php [NC]
+RewriteRule ^logout/$ ./logout.php [NC]
 
-
-
-RewriteRule ^login/$ ./index.php?function=5 [NC]
-RewriteRule ^login/([^/]+)/([^/]+)/([^/]+) ./index.php?function=5&error=$1&email=$2&username=$3 [NC]
-RewriteRule ^logout/$ ./index.php?function=6 [NC]
+RewriteRule ^users/([^/]+)/([^/]+)/([^/]+) ./profile.php?username=$1&kindofpage=$2&ptype=$3 [NC]
 
 RewriteRule ^submit/([^/]+)(/)$ ./index.php?function=7&swhat=$1 [NC]
 RewriteRule ^submit/([^/]+)/([^/]+) ./index.php?function=7&swhat=$1&error=$2 [NC]
 
 RewriteRule ^sys/js/clientside.js$ ./code/script.php?type=1 [NC]
-RewriteRule ^css/default.css$ ./code/script.php?type=2 [NC]
+RewriteRule ^sys/js/scriptaculous/prototype.js$ ./code/script.php?type=3 [NC]
+RewriteRule ^sys/js/scriptaculous/effects.js$ ./code/script.php?type=4 [NC]
+RewriteRule ^sys/js/scriptaculous/builder.js$ ./code/script.php?type=5 [NC]
+RewriteRule ^sys/js/scriptaculous/controls.js$ ./code/script.php?type=6 [NC]
+RewriteRule ^sys/js/scriptaculous/dragdrop.js$ ./code/script.php?type=7 [NC]
+RewriteRule ^sys/js/scriptaculous/scriptaculous.js$ ./code/script.php?type=8 [NC]
+RewriteRule ^sys/js/scriptaculous/slider.js$ ./code/script.php?type=9 [NC]
+RewriteRule ^sys/js/scriptaculous/sound.js$ ./code/script.php?type=10 [NC]
+RewriteRule ^sys/js/nicEdit.js$ ./code/script.php?type=11 [NC]
+RewriteRule ^sys/js/nicEditorIcons.gif$ ./code/script.php?type=12 [NC]
 
 RewriteRule ^chat/?$ /chat.php [NC]
 RewriteRule ^shop/ /shop.php [NC]
-RewriteRule ^users/([^/]+)/([^/]+)/([^/]+) ./index.php?function=10&username=$1&page=$3&ptype=$2 [NC]
+
 RewriteRule ^sitemap.xml$ ./sitemap.php [NC]
 
 RewriteRule ^tagcloud/ ./index.php?function=13 [NC]

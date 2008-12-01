@@ -39,6 +39,7 @@ if ($where) {
         $description = nl2br(stripslashes($details['description']));
         $res = $article->create_top_random($upcoming, $where);
         $sort_by .= $article->CreateRandomHTML($res);
+
 		$middle .= $article->CreateCommentHTML(
     		$article->getComments($details["${where}_id"]), $details["${where}_id"]);
 	} else {

@@ -107,16 +107,40 @@ img {
 .lnav{
     background-color:#747474;
 	color:#FFFFFF;
+    margin-bottom:2px;
+}
+
+#bloglink{
+	 -moz-border-radius-topleft:5px;
+    -moz-border-radius-topright:5px;
+    -webkit-border-top-left-radius:5px;
+    -webkit-border-top-right-radius:5px;
+}
+
+#picturelink{
+     -moz-border-radius-topleft:5px;
+    -moz-border-radius-topright:5px;
+    -webkit-border-top-left-radius:5px;
+    -webkit-border-top-right-radius:5px;
+}
+
+#linklink{
+     -moz-border-radius-topleft:5px;
+    -moz-border-radius-topright:5px;
+    -webkit-border-top-left-radius:5px;
+    -webkit-border-top-right-radius:5px;
 }
 
 .bnav{
     background-color:#636363;
 	color:#FFFFFF;
+    margin-bottom:2px;
 }
 
 .pnav{
     background-color:#525252;
 	color:#FFFFFF;
+    margin-bottom:2px;
 }
 
 .snav{
@@ -134,7 +158,7 @@ img {
 	float:left;
 }
 
-#right_menu{
+#main_menu{
     position:absolute;
     left:10px;
     height:800px;
@@ -147,7 +171,7 @@ img {
     padding:3px;
 }
 
-#comment_wrapper{
+.comment_wrapper{
     padding:5px;
     margin-top:5px;
     -moz-border-radius: 5px;
@@ -172,9 +196,10 @@ img {
 
 #sort_by{
     border:0px;
-    float:right;
+
     margin:2px;
-    margin-right:1px;
+    margin-right:auto;
+//    margin-left:auto;
 }
 
 #menu_holder{
@@ -206,7 +231,7 @@ img {
     float:left;
     display: block;
     text-align: left;
-    color:#FFFFFF;
+    color:#000000;
 }
 
 #thumbtags{
@@ -627,4 +652,48 @@ textarea{
 .sselected {
     background: #DDDDDD;
     color:#000000;
+}
+
+
+ul#mainmenu{
+    margin-bottom: 15px;
+    list-style: none;
+    padding-left: 5px;
+    padding-right: 5px;
+    width: 148px;
+}
+
+ul#mainmenu li span{
+    padding: 1px 0 1px 15px;
+    color: #000;
+    font-weight: bold;
+    display: block;
+    cursor: pointer;
+    height: 39px;
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+
+ul#mainmenu li ul{
+    list-style: none;
+    width:105px;
+}
+
+ul#mainmenu a{
+    color:#ffffff;
+}
+
+ul#mainmenu a:hover {
+    color:#FF8000;
+}
+
+ul#mainmenu li ul li{
+    list-style: none;
+}
+
+.hidden{
+    display: none;
+}
+.clear{
+    clear: both;
 }

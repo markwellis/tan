@@ -1,39 +1,87 @@
 <?php
-require_once('page.php');
-require_once('jsmin-1.1.1.php');
-$page = new page();
+define('MAGIC', true);
 
 $type = (int)$_GET['type'];
 
-if ($type === 1){
-    $spath = '../sys/script/1.js';
-    header("Content-Type: application/x-javascript");
-    $jsmin = 1;
-}
-if ($type === 2){
-    $spath = '../sys/script/2.css';
-    header("Content-Type: text/css");
+switch ($type) {
+	case 1:
+    	$spath = '../sys/script/clientside.js';
+    	header("Content-Type: application/x-javascript");
+    	$jsmin = 1;
+    	break;
+
+	case 3:
+	    $spath = '../sys/script/scriptaculous/prototype.js';
+	    header("Content-Type: application/x-javascript");
+	    $jsmin = 1;
+		break;
+	
+	case 4:
+	    $spath = '../sys/script/scriptaculous/effects.js';
+	    header("Content-Type: application/x-javascript");
+	    $jsmin = 1;
+		break;
+	
+	case 5:
+	    $spath = '../sys/script/scriptaculous/builder.js';
+	    header("Content-Type: application/x-javascript");
+	    $jsmin = 1;
+		break;
+	
+	case 6:
+	    $spath = '../sys/script/scriptaculous/controls.js';
+	    header("Content-Type: application/x-javascript");
+	    $jsmin = 1;
+		break;
+	
+	case 7:
+	    $spath = '../sys/script/scriptaculous/dragdrop.js';
+	    header("Content-Type: application/x-javascript");
+	    $jsmin = 1;
+		break;
+	
+	case 8:
+	    $spath = '../sys/script/scriptaculous/scriptaculous.js';
+	    header("Content-Type: application/x-javascript");
+	    $jsmin = 1;
+		break;
+	
+	case 9:
+	    $spath = '../sys/script/scriptaculous/slider.js';
+	    header("Content-Type: application/x-javascript");
+	    $jsmin = 1;
+		break;
+	
+	case 10:
+	    $spath = '../sys/script/scriptaculous/sound.js';
+	    header("Content-Type: application/x-javascript");
+	    $jsmin = 1;
+	    break;
+	case 11:
+	    $spath = '../sys/script/nicEdit.js';
+	    header("Content-Type: application/x-javascript");
+	    $jsmin = 1;
+	    break;
+	case 12:
+	    $spath = '../sys/script/nicEditorIcons.gif';
+	    header("Content-Type: image/gif");
+	    $jsmin = 0;
+	    break;
 }
 
 if ($spath){
-    $last_modified_time = filemtime($spath);
-    $etag = '"'.md5_file($spath).'"';
-    $expires_time= time()+(60*60*24*365*10);
-
-    header("Last-Modified: ".gmdate("D, d M Y H:i:s", $last_modified_time)." GMT");
+    $script = file_get_contents($spath);
+    if ($jsmin){
+    	require_once('jsmin-1.1.1.php');
+    	$script =  JSMin::minify($script);
+    }
+    $etag = '"11f3ae-29f-454'.filemtime($spath).'"';
     header("Etag: $etag");
-    header("Expires: ".gmdate("D, d M Y H:i:s", $expires_time)." GMT");
-    header('Cache-Control: maxage='.(60*60*24*365*10).', public');
-    if (@strtotime($_SERVER['HTTP_IF_MODIFIED_SINCE']) == $last_modified_time ||
-        trim($_SERVER['HTTP_IF_NONE_MATCH']) == $etag) {
+    if (trim($_SERVER['HTTP_IF_NONE_MATCH']) == $etag) {
         header("HTTP/1.1 304 Not Modified");
         exit;
     }
-    $script = file_get_contents($spath);
-    if ($jsmin){
-        $script =  JSMin::minify($script);
-    }
-    print $page->compress($script); 
+    print $script; 
 }
 
 ?>

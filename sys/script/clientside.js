@@ -1,3 +1,4 @@
+
 function ajax_get(file, pos, style){
 	var xmlHttp;
 	try{

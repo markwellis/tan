@@ -6,7 +6,7 @@
  * Generates a google sitemap.xml
  */
   
-define('MAGIC', null);
+define('MAGIC', true);
 require_once("code/unified.php"); 
 header ("content-type: text/xml");
 

@@ -1,6 +1,8 @@
 <?php
+define('MAGIC', true);
 require_once('user.php');
 $user = new user();
+
 if ($user->isLoggedIn()){
     require_once('unified.php');
     if($_SERVER['REQUEST_METHOD']==='POST') {
@@ -44,15 +46,6 @@ if ($user->isLoggedIn()){
             $tags = $_POST["tags"]; // Gets cleaned up by tags class
             $cat = (int)$_POST['cat'];
 
-/*  2008.09.10
-    Hack to dump blog input to a file, so if anything is missing, I can see it  */
-
-            $fp = @fopen('../sys/blog/'.$title, 'w');
-            @fwrite($fp, $_POST['blogmain']);
-            @fclose($fp);
-
-/* Ends */
-
             if ($main != '' && $title != '' && $description != '' && $cat != 0){
                 $blogid = $blog->addtoDatabase($main, $title, $description, $cat);
                 $tag->doTag($type, $blogid, $tags);
@@ -76,18 +69,25 @@ if ($user->isLoggedIn()){
             
             $picValid = $picture->isValid(null, $title, $description);
             if ($picValid[0] === null){
-                $picMove  = $picture->moveUploaded('picture');
+                $picMove  = $picture->move_uploaded('picture');
                 if ($picMove[0] === null){
                     $picid = $picture->addtoDatabase($picMove[1], $title, $description, $cat, array($picValid[1], $picValid[2]));
                     $tag->doTag($type, $picid, $tags);
                     header ("location: /picture/1/1/0/");
+                    exit();
                 } else {
                     header ("location: /submit/picture/$picMove");
+                    exit();
                 }
             } else {
                 header ("location: /submit/picture/$picValid");
+                exit();
             }
         }
-    } else { die('error'); }
-} else { die('error'); }
+    } else { 
+    	die('error');
+    }
+} else {
+	die('error');
+}
 ?>

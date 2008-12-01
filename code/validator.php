@@ -1,4 +1,5 @@
 <?php
+if (defined('MAGIC')) {
     class validator {
         private $NotAllowed = Array("|", "?", " ", ",");
         private $minLen = 6;
@@ -54,4 +55,8 @@
             return false;
         }
     }
+} else {
+		header('Location: /error404/');
+		exit;
+}
 ?>

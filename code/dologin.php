@@ -1,5 +1,6 @@
 <?php
-if($_SERVER['REQUEST_METHOD']==='POST') { 
+if($_SERVER['REQUEST_METHOD']==='POST') {
+	define('MAGIC', true);
     include_once("user.php");
 
     $password = mysql_escape_string(strip_tags($_POST["password"]));
@@ -7,14 +8,19 @@ if($_SERVER['REQUEST_METHOD']==='POST') {
 
     $user = new user;
     if ($user->login($username, $password)) {
-        if ($_POST["ref"] == ''){
+        if ($_SESSION["ref"] == '' || $_SESSION['ref'] === '/login/'){
             header("Location: /");
+            exit();
         }else{
-            header("Location: ".$_POST["ref"]);
+            header("Location: ".  $_SESSION["ref"]);
+            exit();
         }
     } else { 
-        header("Location: ../login/");
+        header("Location: /login/");
         exit();
     }
-} else { die('error'); }
+} else {
+    header("Location: /error404/");
+    exit();
+}
 ?>

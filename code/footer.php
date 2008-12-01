@@ -19,7 +19,10 @@ if ($middle){
 #        header("HTTP/1.1 304 Not Modified");
 #        exit;
 #    }
-    print $pageobj->compress($html);
+
+	ob_start();
+    print $html;
+    ob_end_flush();
 }
 exit();
 ?>

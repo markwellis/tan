@@ -1,4 +1,5 @@
 <?php
+if (defined('MAGIC')) {
     require_once("validator.php");
     require_once("sql.php");
     class user {
@@ -8,18 +9,20 @@
             $name = '32duihsfd8923rj21ws';
             session_name($name);
 
-			if ($_SERVER['HTTP_HOST'] === 'web01.hub01.howmanykillings.com'){
-			    $domain = 'howmanykillings.com';
+			if ($_SERVER['HTTP_HOST'] === 'htdev.hub00.howmanykillings.com' 
+				|| $_SERVER['HTTP_HOST'] === 'web01.hub01.howmanykillings.com'){
+			    	$domain = '.howmanykillings.com';
 			} else {
-			    $domain = 'thisaintnews.com';
+			    $domain = '.thisaintnews.com';
 			}
 
             session_set_cookie_params($time, '/', $domain);
             ini_set("session.gc_maxlifetime", $time);
+            ini_set("session.cookie_httponly", true);
             session_cache_expire($time);
             session_start();
             if (isset($_COOKIE[$name])){
-                setcookie($name, $_COOKIE[$name], time() + $time, "/");
+                @setcookie($name, $_COOKIE[$name], time() + $time, "/", false, true);
             }
         }
 
@@ -70,6 +73,32 @@
 //            $query = "select t1.* from link_details as t1 inner join plus t2 on t1.link_id = t2.link_id where t2.user_id=$uid order by t2.date desc limit $limit, $page;";
             return $sql->query($query, 'array');
         }
+
+		public function get_plus_minus_count($uid, $what, $type) {
+			switch ($what) {
+				case 'link':
+					$table = 'link';
+					break;
+				case 'picture':
+					$table = 'picture';
+					break;
+				case 'blog':
+					$table = 'blog';
+					break;
+					
+			}
+			if ($type === 0) {
+				$ptable = 'plus';	
+			} elseif ($type === 1) {
+				$ptable = 'minus';
+			} elseif ($type === 3) {
+				$ptable = 'comments';
+			}
+			$sql = new sql();
+            $query = "SELECT COUNT({$table}_id) as count FROM {$table}_details WHERE {$table}_id=ANY(SELECT {$table}_id FROM {$ptable} WHERE user_id={$uid});";
+            $res = $sql->query($query, 'row');
+            return $res['count'];
+		}
 
         public function getUPlusLinkCount($uid){
             $sql = new sql();
@@ -176,4 +205,8 @@
         }
 
     }
+} else {
+		header('Location: /error404/');
+		exit;
+}
 ?>

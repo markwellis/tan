@@ -1,4 +1,5 @@
 <?php
+define('MAGIC', true);
 require_once('code/tag.php');
 require_once('code/unified.php');
 $tag = new tag();
