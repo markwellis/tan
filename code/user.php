@@ -190,7 +190,7 @@ if (defined('MAGIC')) {
         }
 
         public function register($username, $password0, $password1, $email){
-            $validator = new validator();
+            $validator = &new validator();
             $retval = $validator->validate($username, $password0, $password1, $email); 
             if ($retval == 1) {
                 $sql = new sql();

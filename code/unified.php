@@ -913,11 +913,7 @@ if (defined('MAGIC')) {
 	            if ($i === $page){
 	                $output .= " thisPage";
 	            }
-	            if ($username){
-		        	$output .= " ' href='/users/{$username}/{$where}/{$type}/{$i}/'>$i</a>";
-	        	} else {
-	            	$output .= " ' href='/{$where}/{$type}/{$i}/'>$i</a>";
-	            }
+	            $output .= " ' href='/{$where}/{$type}/{$i}/'>$i</a>";
 	        }
 	        $output .=  "</div>";
 	        return $output;

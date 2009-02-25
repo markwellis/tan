@@ -240,6 +240,8 @@ if (defined('MAGIC')) {
 	           .'<img src="/sys/images/valid-xhtml10.png" '
 	            .'style="height:31px;width:88px;margin-top:20px;float:right;" '
 	            .'alt="Valid XHTML 1.0 Transitional" /></a><br/><br/> '
+		    .'<a href="http://www.blogged.com/directory/society/news-media">'
+		    .'<img src="http://www.blogged.com/icons/vn_mrbig4545m_1475849.gif" border="0" alt="News & Media Blog Directory" title="News & Media Blog Directory" /></a>'
 	            ."<span style='display:block;margin-bottom:10px;'>"
 	            ."$footer , All User-generated content is licensed under a " 
 				.'<a href="http://creativecommons.org/">Creative Commons Public Domain license</a></span> '
