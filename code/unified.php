@@ -36,7 +36,7 @@ if (defined('MAGIC')) {
 	    public $sort_by = array('date', 'comments', 'plus', 'minus', 'views');
 	
 	/*  cutoff for promoted stuff */
-	    private $promoted_threashold = 3;
+	    private $promoted_threashold = 5;
 	
 	    function __construct($kind){
 	        if (in_array($kind, $this->kinds_of_objects, TRUE)){
