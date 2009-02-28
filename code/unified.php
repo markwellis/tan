@@ -619,7 +619,7 @@ if (defined('MAGIC')) {
 	                $output .= "<img class='avatar' src='/sys/images/_user.png' alt='{$objectDetails['username']}' />"; 
 	            }
 	
-	            $output .= "Posted by <a class='user' href='/users/{$objectDetails['username']}/plus/1/'>{$objectDetails['username']}</a>";
+	            $output .= "Posted by <span class='user'>{$objectDetails['username']}</span>";
 	
 	            if ($type == 0) {
 	                $output .= " promoted on {$objectDetails['promoted']}";

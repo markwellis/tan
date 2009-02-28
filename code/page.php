@@ -250,9 +250,7 @@ if (defined('MAGIC')) {
 	            .'<div id="main">'
 	            .'<div id="top">'
 				.'<div style="float:right;margin-top:25px;margin-right:5px;text-align:right;">';
-	        if ($user->isLoggedIn()){
-	            $this->output .= '<a href="/users/'.urlencode($user->getUserName()).'/plus/1" class="menulink">Profile</a> | ';
-	        } else {
+	        if (!$user->isLoggedIn()){
 	            $this->output .= '<a href="/login/" class="menulink">Login/Register</a> | ';
 	        }
 	
