@@ -17,13 +17,12 @@ if (defined('MAGIC')) {
 			}
 
             session_set_cookie_params($time, '/', $domain);
-            error_log("$time , $domain , $name");
             ini_set("session.gc_maxlifetime", $time);
             ini_set("session.cookie_httponly", true);
             session_cache_expire($time);
-            session_start();
+	    session_start();
             if (isset($_COOKIE[$name])){
-                @setcookie($name, $_COOKIE[$name], time() + $time, "/", false, true);
+                @setcookie($name, $_COOKIE[$name], time() + $time, "/", false);
             }
         }
 
