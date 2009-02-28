@@ -523,7 +523,7 @@ if (defined('MAGIC')) {
 			return $cached;
 	    }
         
-        function get_thumb_pics($page, $below, $limit = 5){
+        function get_thumb_pics($below, $limit = 5){
             $sql = new sql();
             $page = ($page * 27) - 27;
             if ($below == 0) {
@@ -541,7 +541,7 @@ if (defined('MAGIC')) {
                     (SELECT count(*) from comments WHERE comments.picture_id = picture_details.picture_id) as comments,
                     (SELECT count(*) from plus where plus.picture_id = picture_details.picture_id and plus.user_id=$uid) as meplus,
                     (SELECT count(*) from minus where minus.picture_id = picture_details.picture_id and minus.user_id=$uid) as meminus
-                    from picture_details HAVING plus $oper ".$this->promoted_threashold." order by date desc limit $page, $limit;";
+                    from picture_details HAVING plus $oper ".$this->promoted_threashold." order by date desc limit $limit;";
                 return $sql->query($query, 'array');
             }
             return -1;
