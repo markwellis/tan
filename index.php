@@ -33,7 +33,7 @@ switch($function){
         $link = &new unified('link');
 
         $middle .= "<div id='thumbs'>";
-        $thumbs = $link->get_thumb_pics(1, $type, 4);
+        $thumbs = $link->get_thumb_pics(0, $type, 4);
         $middle .= "<a href='/picture/$type/1/' id='seeAllThumbs'>";
         if ($type == 0){
             $middle .= "Top Pictures - click to see the rest";
