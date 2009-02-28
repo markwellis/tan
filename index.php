@@ -36,9 +36,9 @@ switch($function){
         $thumbs = $link->get_thumb_pics($type, 4);
         $middle .= "<a href='/picture/$type/1/' id='seeAllThumbs'>";
         if ($type == 0){
-            $middle .= "Top Pictures - click to see the rest";
+            $middle .= "Promoted Pictures - click to see the rest";
         } else if ($type == 1){
-            $middle .= "Newest pictures - click to see the rest";
+            $middle .= "Upcoming pictures - click to see the rest";
         }
         $middle .= "</a>";
     
