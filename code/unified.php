@@ -919,29 +919,56 @@ if (defined('MAGIC')) {
 	        return $output;
 	    }
 	
-	    function CreatePageBoxHTML($pageCount, $page, $type, $username = null, $swhere = null){
+	    function CreatePageBoxHTML($total_pages, $current_page, $upcoming, $username = null, $swhere = null){
 	        switch($this->kind_of_object){
 	            case 'link':
-	                $where = 'link';
+	                $location = 'link';
 	                break;
 	            case 'blog':
-	                $where = 'blog';
+	                $location = 'blog';
 	                break;
 	            case 'picture':
-	                $where = 'picture';
+	                $location = 'picture';
 	                break;
 	        }
 
-	        $output .= "<div id='pageNoHolder' style='margin-left:auto;margin-right:auto;margin-bottom:25px;width:".($pageCount * 40) ."px;'>";
-	
-	        for ($i=1;$i<=$pageCount;++$i){
-	            $output .= "<a class='pageNumber";
-	            if ($i === $page){
-	                $output .= " thisPage";
-	            }
-	            $output .= " ' href='/{$where}/{$type}/{$i}/'>$i</a>";
-	        }
-	        $output .=  "</div>";
+            $total_pages = (int)$total_pages;
+            $show_this_many = 6;
+            
+            $lower=$current_page - $show_this_many;
+            $max=$current_page + $show_this_many;
+            
+            if ($lower <= 1) {
+                $lower = 1;
+                $max = $max + $show_this_many;
+            }
+            
+            if ($max >= $total_pages) {
+                $lower = $total_pages - (2 * $show_this_many);
+                if ($lower <= 1) { $lower = 1; }
+                $max = $total_pages;
+            }
+            
+            $output .= "<div id='pageNoHolder' style='margin-left:auto;margin-right:auto;margin-bottom:25px;width:".($total_pages * 40) ."px;'>";
+            if ($lower != 1) {
+                $output .= "<a class='pageNumber' href='/{$location}/{$upcoming}>/1/'>0</a>"
+                ."<span class='pageNumber'>...</span>";
+            }
+            
+            for ($i=$lower; $i<=$max; ++$i){
+                $output .= "<a class='pageNumber";
+                if ($i === $current_page){
+                    $output .= " thisPage";
+                }
+                $output .= "' href='/{$location}/{$upcoming}/{$i}/'>{$i}</a>";
+            }
+            
+            if ($max != $total_pages){
+                $output .= "<span class='pageNumber'>...</span>"
+                ."<a class='pageNumber' href='/{$location}/{$upcoming}/{$total_pages}/'>{$total_pages}</a>";
+            }
+            $output .= "</div>";
+
 	        return $output;
 	    }
 	
