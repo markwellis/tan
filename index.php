@@ -19,64 +19,62 @@ $function = (int)$_GET['function'];
  15 = error404
 */
 
-/* Old code, used to make the thumb box bar
-    $middle .= "<div id='thumbs'>";
+// Old code, used to make the thumb box bar
 
-    require_once("code/picture.php");
-    $picture = new picture();
-    $thumbs = $picture->getPlusThumbs(1, $type, 5);
-
-    $middle .= "<a href='/picture/$type/1/' id='seeAllThumbs'>";
-    if ($type == 0){
-        $middle .= "Top 5 Pictures - click to see the rest";
-    } else if ($type == 1){
-        $middle .= "Newest pictures - click to see the rest";
-    }
-    $middle .= "</a>";
-
-    for ($i=0, $count=count($thumbs); $i<$count; ++$i){
-        $plus = & $thumbs[$i]['plus'];
-        $minus =& $thumbs[$i]['minus'];
-        $pmyminus = & $thumbs[$i]['meminus'];
-        $pmyplus = & $thumbs[$i]['meplus'];
-        $comments = & $thumbs[$i]['comments'];
-        $middle .= "<div class='imgDiv' id='imgdiv$i'>
-            <a href='/viewpic/".$thumbs[$i]['picture_id']."/".stripslashes(str_replace(array(' ','%'),array('_',''),$thumbs[$i]['title']))."'>
-            <img alt='".$thumbs[$i]['title']."' class='Imgnormal' id='thumb$i' 
-            src='/thumb/".$thumbs[$i]['picture_id']."/150/'
-            onmouseover=\"popupBox(".$i.")\" onmouseout=\"unpopup(".$i.")\"
-            onclick=\"className='Imgnormal';\"/></a>
-            <div style='background-color:#FBFDFF;opacity:0.8;filter:alpha(opacity=80);display:none;position:relative;top:-40px;height:45px;width:150px;' id='popup$i' 
-            onmouseover=\"popupBox($i)\" onmouseout=\"unpopup($i)\">
-            <div class='plus' id='tplus".$thumbs[$i]['picture_id']."' style='float:left;'>$plus<a class='addPlus";
-            if ($pmyplus){
-                $middle .= " pselected";
-            }
-            $middle .= "' href='#' onclick=\"javascript:taddPlus(".$thumbs[$i]['picture_id'].", 'picture', 
-                'tplus".$thumbs[$i]['picture_id']."');return false;\">+</a></div>
-                <div style='float:left;width:40px;margin-top:10px;'>
-                <a style='display:block' href='/viewpic/".$thumbs[$i]['picture_id']."/".stripslashes(str_replace(array(' ','%'),array('_',''),$thumbs[$i]['title'])) ."#comments'>
-                <img src='/sys/images/comment.png' style='float:left;' alt=' ' /> ". $comments ."</a></div>
-                <div class='minus' id='tminus".$thumbs[$i]['picture_id']."' style='float:right;margin-top:0px'>$minus<a class='addMinus";
-            if ($pmyminus){
-               $middle .= " mselected";
-            }
-            $middle .= "' href='#' onclick=\"javascript:taddMinus(".$thumbs[$i]['picture_id'].", 'picture', 
-                'tminus".$thumbs[$i]['picture_id']."');return false;\">-</a></div></div>";
-            $middle .= "</div>";
-    }
-    $middle .= "</div>";
-  */  
 switch($function){
     case 0:  //link
         $where = 'link';
         require_once('code/unified.php');
-
-        $link = new unified('link');
-
+        $user = &new user();
+        
         $page = (int)$_GET['page'];
         $type = (int)$_GET['type'];
-        $user = new user();
+
+        $link = &new unified('link');
+
+        $middle .= "<div id='thumbs'>";
+        $thumbs = $link->get_thumb_pics(1, $type, 4);
+        $middle .= "<a href='/picture/$type/1/' id='seeAllThumbs'>";
+        if ($type == 0){
+            $middle .= "Top Pictures - click to see the rest";
+        } else if ($type == 1){
+            $middle .= "Newest pictures - click to see the rest";
+        }
+        $middle .= "</a>";
+    
+        for ($i=0, $count=count($thumbs); $i<$count; ++$i){
+            $plus = & $thumbs[$i]['plus'];
+            $minus =& $thumbs[$i]['minus'];
+            $pmyminus = & $thumbs[$i]['meminus'];
+            $pmyplus = & $thumbs[$i]['meplus'];
+            $comments = & $thumbs[$i]['comments'];
+            $middle .= "<div class='imgDiv' id='imgdiv$i'>
+                <a href='/viewpic/".$thumbs[$i]['picture_id']."/".stripslashes(str_replace(array(' ','%'),array('_',''),$thumbs[$i]['title']))."'>
+                <img alt='".$thumbs[$i]['title']."' class='Imgnormal' id='thumb$i' 
+                src='/thumb/".$thumbs[$i]['picture_id']."/150/'
+                onmouseover=\"popupBox(".$i.")\" onmouseout=\"unpopup(".$i.")\"
+                onclick=\"className='Imgnormal';\"/></a>
+                <div style='background-color:#FBFDFF;opacity:0.8;filter:alpha(opacity=80);display:none;position:relative;top:-40px;height:45px;width:150px;' id='popup$i' 
+                onmouseover=\"popupBox($i)\" onmouseout=\"unpopup($i)\">
+                <div class='plus' id='tplus".$thumbs[$i]['picture_id']."' style='float:left;'>$plus<a class='addPlus";
+                if ($pmyplus){
+                    $middle .= " pselected";
+                }
+                $middle .= "' href='#' onclick=\"javascript:taddPlus(".$thumbs[$i]['picture_id'].", 'picture', 
+                    'tplus".$thumbs[$i]['picture_id']."');return false;\">+</a></div>
+                    <div style='float:left;width:40px;margin-top:10px;'>
+                    <a style='display:block' href='/viewpic/".$thumbs[$i]['picture_id']."/".stripslashes(str_replace(array(' ','%'),array('_',''),$thumbs[$i]['title'])) ."#comments'>
+                    <img src='/sys/images/comment.png' style='float:left;' alt=' ' /> ". $comments ."</a></div>
+                    <div class='minus' id='tminus".$thumbs[$i]['picture_id']."' style='float:right;margin-top:0px'>$minus<a class='addMinus";
+                if ($pmyminus){
+                   $middle .= " mselected";
+                }
+                $middle .= "' href='#' onclick=\"javascript:taddMinus(".$thumbs[$i]['picture_id'].", 'picture', 
+                    'tminus".$thumbs[$i]['picture_id']."');return false;\">-</a></div></div>";
+                $middle .= "</div>";
+        }
+        $middle .= "</div>";
+
         $sort = (int)$_SESSION['sortby'];
 
         if ($type > 1){ $type = 1; }
@@ -87,7 +85,7 @@ switch($function){
         $sort_by .= $link->CreateRandomHTML($res);
         $links = $link->getPageObjects($page, $type, $link->sort_by[$sort]);
 
-	foreach ($links as $linkdetails){
+        foreach ($links as $linkdetails){
             if ($linkdetails['link_id'] != 0){
                 $middle .= $link->CreateObjectHTML($linkdetails, $type);
             }

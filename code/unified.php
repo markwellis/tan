@@ -522,6 +522,30 @@ if (defined('MAGIC')) {
 			}
 			return $cached;
 	    }
+        
+        function get_thumb_pics($page, $below, $limit = 5){
+            $sql = new sql();
+            $page = ($page * 27) - 27;
+            if ($below == 0) {
+                $oper = '>=';
+            } else if ($below == 1){
+                $oper = '<';
+            }
+            if (isset($oper)) { 
+                $uid = -1;
+                if (isset($_SESSION['user_id'])){
+                    $uid = $_SESSION['user_id'];
+                }
+                $query = "select *,(SELECT count(*) from plus where plus.picture_id = picture_details.picture_id) as plus,
+                    (SELECT count(*) from minus where minus.picture_id = picture_details.picture_id) as minus,
+                    (SELECT count(*) from comments WHERE comments.picture_id = picture_details.picture_id) as comments,
+                    (SELECT count(*) from plus where plus.picture_id = picture_details.picture_id and plus.user_id=$uid) as meplus,
+                    (SELECT count(*) from minus where minus.picture_id = picture_details.picture_id and minus.user_id=$uid) as meminus
+                    from picture_details HAVING plus $oper ".$this->promoted_threashold." order by date desc limit $page, $limit;";
+                return $sql->query($query, 'array');
+            }
+            return -1;
+        }
 	
 	    function getPlusMinusCount($below, $plus){
 	        $sql = new sql();
@@ -704,7 +728,7 @@ if (defined('MAGIC')) {
 	
 	    function resizeImage($id, $newx){
 	        $newx = abs($newx);
-	    	$allowed_sizes = array(100, 160, 200, 250, 300, 400, 500);
+	    	$allowed_sizes = array(100, 150, 160, 200, 250, 300, 400, 500);
 	    	if (in_array($newx, $allowed_sizes, TRUE)){
 		        $cacheimg = $this->rootdir."/images/cache/resize/$id/$newx.jpg";
 
