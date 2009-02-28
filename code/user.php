@@ -17,6 +17,7 @@ if (defined('MAGIC')) {
 			}
 
             session_set_cookie_params($time, '/', $domain);
+            error_log("$time , $domain , $name");
             ini_set("session.gc_maxlifetime", $time);
             ini_set("session.cookie_httponly", true);
             session_cache_expire($time);
@@ -169,7 +170,7 @@ if (defined('MAGIC')) {
                 $encPassword = hash('sha512',$password);
                 $query = "SELECT * FROM user_details WHERE username LIKE '$username';";
                 $row = $sql->query($query, 'row');
-                error_log($row['username']);
+
                 if ($row['password'] === $encPassword) {
                     $_SESSION['time'] = time();
                     $_SESSION['username'] = $username;

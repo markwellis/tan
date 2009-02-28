@@ -7,8 +7,6 @@ if($_SERVER['REQUEST_METHOD']==='POST') {
     $username = mysql_escape_string(htmlentities(strip_tags(strtolower($_POST["username"])),ENT_QUOTES,'UTF-8'));
 
     $user = new user;
-    error_log("{$username},{$password}");
-    
     
     if ($user->login($username, $password)) {
         
