@@ -780,7 +780,7 @@ if (defined('MAGIC')) {
 	        	$output .= "<h2 id='comments'>Comments</h2>";
 	        }
 	        foreach($comments as $comment){    
-	            $output .= "<div style='margin-left:5px;'>";
+	            $output .= "<div style='margin-left:5px;' id='comment{$comment['comment_id']}'>";
 	            if (file_exists("sys/users/avatar/{$comment['user_id']}.jpg")){
 	                $output .= "<img class='avatar' style='height:30px;width:30px;margin-left:10px;'
 	                    src='/sys/users/avatar/{$comment['user_id']}.jpg' alt='{$comment['username']}' />";

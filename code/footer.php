@@ -12,7 +12,7 @@ if ($middle){
     $pageobj = new page();
     $html = $pageobj->createPage("ThisAintNews.com :: $title",$extraScript, $middle,
                 "Page processed in $totaltime seconds" , $where, $type, $sort_by, $description);
-    $html = $pageobj->minify($html);
+#    $html = $pageobj->minify($html);
 #    $etag = '"'.md5($middle).'"';
 #    header("Etag: $etag");
 #    if (trim($_SERVER['HTTP_IF_NONE_MATCH']) == $etag) {

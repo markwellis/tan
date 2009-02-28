@@ -180,7 +180,49 @@ if (defined('MAGIC')) {
 
         return $mainmenu;
 	}
-	
+    
+# this code here is fucking disgusting.
+# it CANNOT stay
+    
+    function get_recent_comments(){
+        $memcache = new Memcache;
+        $memcache_key = "recent_comments";
+        @$memcache->connect('127.0.0.1', 11211);
+        $cached = @$memcache->get($memcache_key);
+            
+        if (!$cached){
+            $sql = &new sql();
+            $query = "SELECT * FROM log WHERE type = 'comment' ORDER BY date DESC LIMIT 10";
+            $recent_comments = $sql->query($query, 'array');
+            $tmp = '<div><span>Recent Comments</span><ul style="list-style:none;margin:0px;padding:0px;" class"" >';
+            foreach ($recent_comments as $recent_comment){
+                if ($recent_comment['blog_id']) {
+                    $comment_type = 'blog';
+                    $object = $comment_type;
+                    $comment_id = $recent_comment['blog_id'];
+                } elseif ($recent_comment['link_id']) {
+                    $comment_type = 'link';
+                    $object = $comment_type;
+                    $comment_id = $recent_comment['link_id'];
+                } elseif ($recent_comment['picture_id']){
+                    $comment_type = 'pic';
+                    $object = 'picture';
+                    $comment_id = $recent_comment['picture_id'];
+                }
+                $query = "SELECT details FROM comments WHERE comment_id = {$recent_comment['comment_id']} ORDER BY date DESC LIMIT 1";
+                $comment = $sql->query($query, 'row');
+                $comment = htmlentities(strip_tags(substr($comment['details'], 0, 50)),ENT_QUOTES,'UTF-8');
+                $tmp .= "<li><a style='margin:0px;padding:3px;' class='top_selection' href='/view{$comment_type}/{$comment_id}/{$comment}/#comment{$recent_comment['comment_id']}'>{$comment}</a></li>";
+            }
+            $tmp .= '</ul></div>';
+            @$memcache->set($memcache_key, $tmp, false, 20);
+            return $tmp;
+        }
+        return $cached;
+    }
+        
+# end        
+
 	    private function createHead($title, $script, $description){
 	        ob_start();
     		print  '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" '
@@ -233,7 +275,7 @@ if (defined('MAGIC')) {
 	
 	    private function closePage($footer, $where, $type, $sortby = null){
 	        $this->output .= '<div id="main_menu"><div id="menu_holder"> '
-	        	. $this->createMenu($where, $type) ."</div>$sortby</div> "
+	        	. $this->createMenu($where, $type) ."</div>".$this->get_recent_comments()."$sortby</div> "
 				.'<div id="those_damn_dirty_evil_ads"></div> '
 				.'<div id="bottom"> '
 	            .'<a href="http://validator.w3.org/check?uri=referer"> '
