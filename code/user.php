@@ -20,7 +20,8 @@ if (defined('MAGIC')) {
             ini_set("session.gc_maxlifetime", $time);
             ini_set("session.cookie_httponly", true);
             session_cache_expire($time);
-	    session_start();
+    	    session_start();
+
             if (isset($_COOKIE[$name])){
                 @setcookie($name, $_COOKIE[$name], time() + $time, "/", false);
             }
@@ -174,7 +175,7 @@ if (defined('MAGIC')) {
                     $_SESSION['time'] = time();
                     $_SESSION['username'] = $username;
                     $_SESSION['user_id'] = $row['user_id'];
-
+                    session_regenerate_id();
                     $query = "update user_details set last_date=NOW() where user_id=".$row['user_id'].";";
                     $sql->query($query, 'none');
                     return true;
