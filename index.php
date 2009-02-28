@@ -86,11 +86,6 @@ switch($function){
         $res = $link->create_top_random($type, $where);
         $sort_by .= $link->CreateRandomHTML($res);
         $links = $link->getPageObjects($page, $type, $link->sort_by[$sort]);
-        if (strrpos($_SERVER['HTTP_USER_AGENT'], "MSIE")){
-	        $middle .= "<b>Internet Explorer is not suppotred</b>"
-                	."<br />Dont complain if you cant login/register - "
-        	        ."use a real browser instead!";
-	}
 
 	foreach ($links as $linkdetails){
             if ($linkdetails['link_id'] != 0){

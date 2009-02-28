@@ -15,8 +15,7 @@ if($_SERVER['REQUEST_METHOD']==='POST') {
 	        $filter = new InputFilter();
 	        $comment = $filter->process(stripslashes($_POST['comment']));
 #	        $comment =mysql_escape_string(preg_replace("/\[youtube\]\s*(.+?)\s?.*?\[\/youtube\]/", '<object type="application/x-shockwave-flash" style="width:425px; height:350px;" data="http://www.youtube.com/v/$1"><param name="movie" value="http://www.youtube.com/v/$1" /></object>', $comment));
-		$comment =mysql_escape_string(preg_replace("/\[youtube\](.+?)\[\/youtube\]/", '<object type="application/x-shockwave-flash" style="width:425px; he
-ight:350px;" data="http://www.youtube.com/v/$1"><param name="movie" value="http://www.youtube.com/v/$1" /></object>', $comment));
+		$comment =mysql_escape_string(preg_replace("/\[youtube\](.+?)\[\/youtube\]/", '<object type="application/x-shockwave-flash" style="width:425px; height:350px;" data="http://www.youtube.com/v/$1"><param name="movie" value="http://www.youtube.com/v/$1" /></object>', $comment));
 	        $comment = str_replace(array('\r','\t','\n'), '', $comment);
             require_once('unified.php');
             $id = (int)$_POST['id'];

@@ -18,10 +18,6 @@ if(!$user->isLoggedIn()){
         "-7" => "Email address already asscoiated with username",
         "-8" => "Captcha words incorrect");
 
-    if (strrpos($_SERVER['HTTP_USER_AGENT'], "MSIE")){
-	$middle .= "<h2>Internet explorer does not work, you will not be able to login.</h2>";
-    }
-
     if ($error != 0) {
         $middle .= "<h2>".$errorCodes[$error]."</h2>";
     }
