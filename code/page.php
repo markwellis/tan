@@ -212,7 +212,7 @@ if (defined('MAGIC')) {
                 $query = "SELECT details FROM comments WHERE comment_id = {$recent_comment['comment_id']} ORDER BY date DESC LIMIT 1";
                 $comment = $sql->query($query, 'row');
                 $comment = strip_tags(substr($comment['details'], 0, 50));
-                $tmp .= "<li><a style='margin:0px;padding:3px;' class='top_selection' href='/view{$comment_type}/{$comment_id}/{$comment}/#comment{$recent_comment['comment_id']}'>{$comment}</a></li>";
+                $tmp .= "<li><a style='margin:0px;padding:3px;' class='top_selection' href='/view{$comment_type}/{$comment_id}/comment{$recent_comment['comment_id']}/#comment{$recent_comment['comment_id']}'>{$comment}</a></li>";
             }
             $tmp .= '</ul></div>';
             @$memcache->set($memcache_key, $tmp, false, 20);
