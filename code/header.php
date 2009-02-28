@@ -10,5 +10,5 @@ $title = 'Welcome Home';
 $extraScript ='';
 $where = 'link';
 define('MAGIC', true);
-
+require_once('user.php');
 ?>

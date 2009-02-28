@@ -167,8 +167,9 @@ if (defined('MAGIC')) {
             if (!$this->isLoggedIn()) {
                 $sql = new sql();
                 $encPassword = hash('sha512',$password);
-                $query = "SELECT * FROM user_details WHERE username='$username';";
+                $query = "SELECT * FROM user_details WHERE username LIKE '$username';";
                 $row = $sql->query($query, 'row');
+                error_log($row['username']);
                 if ($row['password'] === $encPassword) {
                     $_SESSION['time'] = time();
                     $_SESSION['username'] = $username;
@@ -179,6 +180,7 @@ if (defined('MAGIC')) {
                     return true;
                 } else { return false; }
             } else { return false; }
+            return false;
         }
 
         public function logout() {

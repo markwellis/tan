@@ -32,7 +32,7 @@ if (defined('MAGIC')) {
 
         private function checkUser($username){
             $sql = new sql();
-            $query = "SELECT * FROM user_details WHERE username='$username';";
+            $query = "SELECT * FROM user_details WHERE username LIKE '$username';";
             $result = $sql->query($query, 'row');
             $rows = count($result);
             if ($rows < 2) { $rows = 0; }
