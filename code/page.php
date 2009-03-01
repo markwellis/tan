@@ -234,7 +234,7 @@ if (defined('MAGIC')) {
 	            .'<meta name="keywords" content="news community comments english lulz lol social lulzhq fun jokes '
 	            .'videos pictures share sharing lol lolz funny humour humur"/> '
 	            .'<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/> '
-	            .'<link rel="stylesheet" type="text/css" title="default" href="/css/default.css?1=123123" /> '
+	            .'<link rel="stylesheet" type="text/css" title="default" href="/css/default.css?1=11" /> '
 	            .'<link rel="shortcut icon" href="/favicon.ico" /> '
 	            .$script
 //	            .'<script type="text/javascript" src="/sys/js/scriptaculous/prototype.js"></script> '
