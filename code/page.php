@@ -234,12 +234,14 @@ if (defined('MAGIC')) {
 	            .'<meta name="keywords" content="news community comments english lulz lol social lulzhq fun jokes '
 	            .'videos pictures share sharing lol lolz funny humour humur"/> '
 	            .'<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/> '
-	            .'<link rel="stylesheet" type="text/css" title="default" href="/css/default.css" /> '
+	            .'<link rel="stylesheet" type="text/css" title="default" href="/css/default.css?1" /> '
 	            .'<link rel="shortcut icon" href="/favicon.ico" /> '
 	            .$script
 //	            .'<script type="text/javascript" src="/sys/js/scriptaculous/prototype.js"></script> '
 //	            .'<script type="text/javascript" src="/sys/js/scriptaculous/scriptaculous.js"></script> '
-	            .'</head> ';
+	            .'</head> '
+                .'<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/mootools/1.2.1/mootools-yui-compressed.js"></script>';
+                
 			ob_end_flush();
 	    }
 	    

@@ -74,6 +74,30 @@ switch($function){
                 $middle .= "</div>";
         }
         $middle .= "</div>";
+        ob_start();
+?>
+<script type="text/javascript">
+        window.addEvent('domready', function(){
+    // The same as before: adding events
+    $('thumbs').addEvents({
+        'mouseenter': function(){
+            // Always sets the duration of the tween to 1000 ms and a bouncing transition
+            // And then tweens the height of the element
+            this.set('tween', {
+                duration: 1000,
+                transition: Fx.Transitions.Linear // This could have been also 'bounce:out'
+            }).tween('height', '160px');
+        },
+        'mouseleave': function(){
+            // Resets the tween and changes the element back to its original size
+            this.set('tween', {}).tween('height', '19px');
+        }
+    });
+});
+</script>
+<?php
+        $middle .= ob_get_contents();
+        ob_end_clean();
 
         $sort = (int)$_SESSION['sortby'];
 
