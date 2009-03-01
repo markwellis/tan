@@ -86,7 +86,7 @@ switch($function){
             this.set('tween', {
                 duration: 1000,
                 transition: Fx.Transitions.Linear // This could have been also 'bounce:out'
-            }).tween('height', '160px');
+            }).tween('height', '170px');
         },
         'mouseleave': function(){
             // Resets the tween and changes the element back to its original size
