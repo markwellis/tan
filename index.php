@@ -93,18 +93,18 @@ switch($function){
     
     
     // this thumbnails
-    $$('.Imgnormal').addEvents({
+    $$('.imgDiv').addEvents({
         'mouseenter': function(){
             // Always sets the duration of the tween to 1000 ms and a bouncing transition
             // And then tweens the height of the element
-            this.morph({'max-width': '150px', 'height' : '130px'});
-            var id = this.id.substr(5);
+            var id = this.id.substr(6);
+            $('thumb' + id).morph({'max-width': '150px', 'height' : '130px'});
             $('popup'+id).style.display='block';
         },
         'mouseleave': function(){
             // Resets the tween and changes the element back to its original size
-            this.morph({'max-width': '100px', 'height' : '80px'});
-            var id = this.id.substr(5);
+            var id = this.id.substr(6);
+            $('thumb' + id).morph({'max-width': '100px', 'height' : '80px'});
             $('popup'+id).style.display='none';
         }
     });
