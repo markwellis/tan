@@ -212,16 +212,16 @@ if (defined('MAGIC')) {
                 $comment_length = strlen($comment['details']);
                 $comment['details'] = htmlentities(strip_tags($comment['details']), ENT_QUOTES,'UTF-8');
                 $comment['short'] = substr($comment['details'], 0, 50);
-                $comment['details'] = substr($comment['details'], 0, 400);
+                $comment['long'] = substr($comment['details'], 0, 400);
                 $comment['date'] = date( 'H:i:s', $comment['date']);
-                if ( $comment_length > strlen($comment['short']) ){
+                if ( $comment['short'] !== $comment['details'] ){
                        $comment['short'] .= '...';
                 }
-                if ( $comment_length > strlen($comment['details']) ) {
-                    $comment['details'] .= '...';
+                if ( $comment['long'] !== $comment['details'] ) {
+                    $comment['long'] .= '...';
                 }
                 
-                $tip_title = "{$comment['username']}@{$comment['date']}::".strip_tags($comment['details']);
+                $tip_title = "{$comment['username']}@{$comment['date']}::".strip_tags($comment['long']);
                 $tmp .= "<li><a style='margin:0px;padding:3px;' class='top_selection recent_comments' title='{$tip_title}' href='/view{$comment_type}/{$comment_id}/#comment{$comment['comment_id']}'>{$comment['short']}</a></li>";
             }
             $tmp .= '</ul></div>';
@@ -273,8 +273,6 @@ if (defined('MAGIC')) {
 	            .'<link rel="stylesheet" type="text/css" title="default" href="/css/default.css?1=111" /> '
 	            .'<link rel="shortcut icon" href="/favicon.ico" /> '
 	            .$script
-//	            .'<script type="text/javascript" src="/sys/js/scriptaculous/prototype.js"></script> '
-//	            .'<script type="text/javascript" src="/sys/js/scriptaculous/scriptaculous.js"></script> '
 	            .'</head> '
                 .'<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/mootools/1.2.1/mootools-yui-compressed.js"></script>'
                 .'<script type="text/javascript" src="/sys/script/mootools-1.2-more.js"></script>';
