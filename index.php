@@ -48,14 +48,11 @@ switch($function){
             $pmyminus = & $thumbs[$i]['meminus'];
             $pmyplus = & $thumbs[$i]['meplus'];
             $comments = & $thumbs[$i]['comments'];
-            $middle .= "<div class='imgDiv' id='imgdiv$i'>
+            $middle .= "<div class='imgDiv' id='imgdiv{$i}'>
                 <a href='/viewpic/".$thumbs[$i]['picture_id']."/".stripslashes(str_replace(array(' ','%'),array('_',''),$thumbs[$i]['title']))."'>
                 <img alt='".$thumbs[$i]['title']."' class='Imgnormal' id='thumb$i' 
-                src='/thumb/".$thumbs[$i]['picture_id']."/150/'
-                onmouseover=\"popupBox(".$i.")\" onmouseout=\"unpopup(".$i.")\"
-                onclick=\"className='Imgnormal';\"/></a>
-                <div style='background-color:#FBFDFF;opacity:0.8;filter:alpha(opacity=80);display:none;position:relative;top:-40px;height:45px;width:150px;' id='popup$i' 
-                onmouseover=\"popupBox($i)\" onmouseout=\"unpopup($i)\">
+                src='/thumb/".$thumbs[$i]['picture_id']."/150/' /></a>
+                <div style='background-color:#FBFDFF;opacity:0.8;filter:alpha(opacity=80);display:none;position:relative;top:-40px;height:45px;width:150px;' id='popup$i' >
                 <div class='plus' id='tplus".$thumbs[$i]['picture_id']."' style='float:left;'>$plus<a class='addPlus";
                 if ($pmyplus){
                     $middle .= " pselected";
@@ -78,7 +75,7 @@ switch($function){
 ?>
 <script type="text/javascript">
         window.addEvent('domready', function(){
-    // The same as before: adding events
+    // The slider
     $('thumbs').addEvents({
         'mouseenter': function(){
             // Always sets the duration of the tween to 1000 ms and a bouncing transition
@@ -86,11 +83,29 @@ switch($function){
             this.set('tween', {
                 duration: 1000,
                 transition: Fx.Transitions.Linear // This could have been also 'bounce:out'
-            }).tween('height', '170px');
+            }).tween('height', '190px');
         },
         'mouseleave': function(){
             // Resets the tween and changes the element back to its original size
             this.set('tween', {}).tween('height', '19px');
+        }
+    });
+    
+    
+    // this thumbnails
+    $$('.Imgnormal').addEvents({
+        'mouseenter': function(){
+            // Always sets the duration of the tween to 1000 ms and a bouncing transition
+            // And then tweens the height of the element
+            this.morph({'max-width': '150px', 'height' : '130px'});
+            var id = this.id.substr(5);
+            $('popup'+id).style.display='block';
+        },
+        'mouseleave': function(){
+            // Resets the tween and changes the element back to its original size
+            this.morph({'max-width': '100px', 'height' : '80px'});
+            var id = this.id.substr(5);
+            $('popup'+id).style.display='none';
         }
     });
 });
