@@ -697,3 +697,17 @@ ul#mainmenu li ul li{
 .clear{
     clear: both;
 }
+
+.tip { 
+	width:250px;
+	text-align:justify;
+	-moz-border-radius:3px;
+	-webkit-border-radius:3px;
+	padding:3px;
+	border:1px solid #000;
+	background-color: #FFF;
+	background-image: url(/sys/images/tooltip.png);
+	background-repeat: repeat-x;
+}  
+.tip-title      { color:#000; border-bottom:1px solid #000;}  
+.tip-text       { color:#222222}

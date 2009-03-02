@@ -192,30 +192,65 @@ if (defined('MAGIC')) {
             
         if (!$cached){
             $sql = &new sql();
-            $query = "SELECT * FROM log WHERE type = 'comment' ORDER BY date DESC LIMIT 10";
+            $query = "SELECT details, comment_id, username, UNIX_TIMESTAMP(date) as date, blog_id, link_id, picture_id FROM comments ORDER BY date DESC LIMIT 10";
             $recent_comments = $sql->query($query, 'array');
             $tmp = '<div><span>Recent Comments</span><ul style="list-style:none;margin:0px;padding:0px;" class"" >';
-            foreach ($recent_comments as $recent_comment){
-                if ($recent_comment['blog_id']) {
+            foreach ($recent_comments as $comment){
+                if ($comment['blog_id']) {
                     $comment_type = 'blog';
                     $object = $comment_type;
-                    $comment_id = $recent_comment['blog_id'];
-                } elseif ($recent_comment['link_id']) {
+                    $comment_id = $comment['blog_id'];
+                } elseif ($comment['link_id']) {
                     $comment_type = 'link';
                     $object = $comment_type;
-                    $comment_id = $recent_comment['link_id'];
-                } elseif ($recent_comment['picture_id']){
+                    $comment_id = $comment['link_id'];
+                } elseif ($comment['picture_id']){
                     $comment_type = 'pic';
                     $object = 'picture';
-                    $comment_id = $recent_comment['picture_id'];
+                    $comment_id = $comment['picture_id'];
                 }
-                $query = "SELECT details FROM comments WHERE comment_id = {$recent_comment['comment_id']} ORDER BY date DESC LIMIT 1";
-                $comment = $sql->query($query, 'row');
+                $comment_length = strlen($comment['details']);
                 $comment['details'] = htmlentities(strip_tags($comment['details']), ENT_QUOTES,'UTF-8');
                 $comment['short'] = substr($comment['details'], 0, 50);
-                $tmp .= "<li><a style='margin:0px;padding:3px;' class='top_selection' title=\"".strip_tags($comment['details']). "\" href='/view{$comment_type}/{$comment_id}/comment{$recent_comment['comment_id']}/#comment{$recent_comment['comment_id']}'>{$comment['short']}</a></li>";
+                $comment['details'] = substr($comment['details'], 0, 400);
+                $comment['date'] = date( 'H:i:s', $comment['date']);
+                if ( $comment_length > strlen($comment['short']) ){
+                       $comment['short'] .= '...';
+                }
+                if ( $comment_length > strlen($comment['details']) ) {
+                    $comment['details'] .= '...';
+                }
+                
+                $tip_title = "{$comment['username']}@{$comment['date']}::".strip_tags($comment['details']);
+                $tmp .= "<li><a style='margin:0px;padding:3px;' class='top_selection recent_comments' title='{$tip_title}' href='/view{$comment_type}/{$comment_id}/#comment{$comment['comment_id']}'>{$comment['short']}</a></li>";
             }
             $tmp .= '</ul></div>';
+
+            ob_start();
+            ?>
+            <script type="text/javascript">
+                window.addEvent('domready', function() {  
+                   
+                    
+                    //store titles and text  
+                    $$('a.recent_comments').each(function(element,index) {  
+                        var content = element.get('title').split('::');  
+                        element.store('tip:title', content[0]);  
+                        element.store('tip:text', content[1]);  
+                    });  
+
+                    //create the tooltips  
+                    var tips = new Tips('.recent_comments',{  
+                        className: 'recent_comments',  
+                        hideDelay: 50,  
+                        showDelay: 50,
+                    });
+                });  
+            </script>
+            <?php
+            $tmp .= ob_get_contents();
+            ob_end_clean();
+
             @$memcache->set($memcache_key, $tmp, false, 20);
             return $tmp;
         }
@@ -241,7 +276,8 @@ if (defined('MAGIC')) {
 //	            .'<script type="text/javascript" src="/sys/js/scriptaculous/prototype.js"></script> '
 //	            .'<script type="text/javascript" src="/sys/js/scriptaculous/scriptaculous.js"></script> '
 	            .'</head> '
-                .'<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/mootools/1.2.1/mootools-yui-compressed.js"></script>';
+                .'<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/mootools/1.2.1/mootools-yui-compressed.js"></script>'
+                .'<script type="text/javascript" src="/sys/script/mootools-1.2-more.js"></script>';
                 
 			ob_end_flush();
 	    }
