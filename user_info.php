@@ -45,13 +45,11 @@ if ($_SERVER['REQUEST_METHOD']==='POST') {
         if ($_FILES['avatar']){
             require_once("code/m_image_upload.php");
             $avatar = &new m_image_upload($_FILES['avatar'], PROFILE_PICTURE_UPLOAD_PATH . "/{$user->getUserId()}.jpg");
-        } else {
-            echo 'false';
+            $avatar->upload();
         }
-    } else { 
-        echo 'false';
     }
 }
+
 $middle = "<span>Current avatar</span>";
 if (file_exists("sys/users/avatar/{$user_id}.jpg")){
     $middle .= "<img class='avatar' src='/sys/users/avatar/{$user_id}.jpg' alt='{$user_id}' />";
