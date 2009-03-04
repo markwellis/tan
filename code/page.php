@@ -289,7 +289,9 @@ if (defined('MAGIC')) {
 				.'<div style="float:right;margin-top:25px;margin-right:5px;text-align:right;">';
 	        if (!$user->isLoggedIn()){
 	            $this->output .= '<a href="/login/" class="menulink">Login/Register</a> | ';
-	        }
+	        } else {
+                $this->output .= '<a href="/avatar/" class="menulink">Avatar</a> | ';
+            }
 	
 	/*        if($_SESSION['filteroff']== 1){
 	            $this->output .="<a href='/filteron' class='menulink'>Enable NSFW filter</a> | ";

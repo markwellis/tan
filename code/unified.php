@@ -612,7 +612,7 @@ if (defined('MAGIC')) {
 	                >".stripslashes($objectDetails['title'])."</a></h1><br/>";
 	            }
 	
-	            if (file_exists("sys/users/avatar/{$objectDetails['user_id']}.jpg")){
+	            if (file_exists("{$_SERVER['DOCUMENT_ROOT']}/sys/users/avatar/{$objectDetails['user_id']}.jpg")){
 	                $output .= "<img class='avatar' src='/sys/users/avatar/{$objectDetails['user_id']}.jpg'
 	                    alt='{$objectDetails['username']}' />";
 	            } else { 
@@ -658,7 +658,8 @@ if (defined('MAGIC')) {
 	
 	            $output .= "{$divholder}<a class='Pictitle'
 	                href='/images/pics/".basename($objectDetails['filename']). "'>".stripslashes($objectDetails['title']).'</a><br />';
-	            if (file_exists("sys/users/avatar/{$objectDetails['user_id']}.jpg")){
+
+	            if (file_exists("{$_SERVER['DOCUMENT_ROOT']}/sys/users/avatar/{$objectDetails['user_id']}.jpg")){
 	                $output .= "\n<img class='avatar' style='margin-left:5px;'
 	                    src='/sys/users/avatar/{$objectDetails['user_id']}.jpg' alt='".stripslashes($objectDetails['username'])."' />";
 	            } else {
@@ -807,7 +808,7 @@ if (defined('MAGIC')) {
 	        }
 	        foreach($comments as $comment){    
 	            $output .= "<div style='margin-left:5px;' id='comment{$comment['comment_id']}'>";
-	            if (file_exists("sys/users/avatar/{$comment['user_id']}.jpg")){
+	            if (file_exists("{$_SERVER['DOCUMENT_ROOT']}/sys/users/avatar/{$comment['user_id']}.jpg")){
 	                $output .= "<img class='avatar' style='height:30px;width:30px;margin-left:10px;'
 	                    src='/sys/users/avatar/{$comment['user_id']}.jpg' alt='{$comment['username']}' />";
 	            } else {
@@ -818,7 +819,7 @@ if (defined('MAGIC')) {
 	                Total Comments: {$comment['total_comments']}, Joined on: {$comment['join_date']}</div>
 	                <div class='comment'>";
 	            $output .= stripslashes($comment['details']) . "<br/>";
-	//            <span style='display:block;float:right;'>Edit Comment</span>
+//	            $output .= "<a style='display:block;float:right;' class='comment_edit' >Edit Comment</a>";
 	            $output .= "</div>
 	                </div><br />";
 	        }

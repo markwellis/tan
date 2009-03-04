@@ -14,6 +14,8 @@ RewriteRule ^viewpic/([^/]+) ./viewpage.php?kindofpage=picture&id=$1 [NC]
 RewriteRule ^login/$ ./login.php [NC]
 RewriteRule ^logout/$ ./logout.php [NC]
 
+RewriteRule ^avatar/$ ./user_info.php [NC]
+
 RewriteRule ^users/([^/]+)/([^/]+)/([^/]+) ./profile.php?username=$1&kindofpage=$2&ptype=$3 [NC]
 
 RewriteRule ^submit/([^/]+)(/)$ ./index.php?function=7&swhat=$1 [NC]
