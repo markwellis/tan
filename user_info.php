@@ -46,13 +46,16 @@ if ($_SERVER['REQUEST_METHOD']==='POST') {
             require_once("code/m_image_upload.php");
             $avatar = &new m_image_upload($_FILES['avatar'], PROFILE_PICTURE_UPLOAD_PATH . "/{$user->getUserId()}.jpg");
             $avatar->upload();
+	    $middle .= "<h1>Your new avatar has been uploaded</h1><br />";
         }
     }
 }
 
-$middle = "<span>Current avatar</span>";
-if (file_exists("sys/users/avatar/{$user_id}.jpg")){
-    $middle .= "<img class='avatar' src='/sys/users/avatar/{$user_id}.jpg' alt='{$user_id}' />";
+$middle .= "<span>Current avatar</span>";
+$avatar_image = "sys/users/avatar/{$user_id}.jpg";
+if (file_exists($avatar_image)){
+	$avatar_mtime = filemtime($avatar_image);
+    $middle .= "<img class='avatar' src='/{$avatar_image}?m={$avatar_mtime}' alt='{$user_id}' />";
 } else { 
     $middle .= "<img class='avatar' src='/sys/images/_user.png' alt='{$user_id}' />"; 
 }

@@ -611,9 +611,10 @@ if (defined('MAGIC')) {
 	                $output .= "<h1 style='display:inline;font-weight:normal;'><a class='title' href='".stripslashes($objectDetails['url'])."'
 	                >".stripslashes($objectDetails['title'])."</a></h1><br/>";
 	            }
-	
-	            if (file_exists("{$_SERVER['DOCUMENT_ROOT']}/sys/users/avatar/{$objectDetails['user_id']}.jpg")){
-	                $output .= "<img class='avatar' src='/sys/users/avatar/{$objectDetails['user_id']}.jpg'
+	            $avatar_image = "sys/users/avatar/{$objectDetails['user_id']}.jpg";
+	            if (file_exists("{$_SERVER['DOCUMENT_ROOT']}/{$avatar_image}")){
+                        $avatar_mtime = filemtime($avatar_image);
+	                $output .= "<img class='avatar' src='/{$avatar_image}?m={$avatar_mtime}'
 	                    alt='{$objectDetails['username']}' />";
 	            } else { 
 	                $output .= "<img class='avatar' src='/sys/images/_user.png' alt='{$objectDetails['username']}' />"; 
@@ -658,10 +659,11 @@ if (defined('MAGIC')) {
 	
 	            $output .= "{$divholder}<a class='Pictitle'
 	                href='/images/pics/".basename($objectDetails['filename']). "'>".stripslashes($objectDetails['title']).'</a><br />';
-
-	            if (file_exists("{$_SERVER['DOCUMENT_ROOT']}/sys/users/avatar/{$objectDetails['user_id']}.jpg")){
+                    $avatar_image = "sys/users/avatar/{$objectDetails['user_id']}.jpg";
+	            if (file_exists("{$_SERVER['DOCUMENT_ROOT']}/{$avatar_image}")){
+                        $avatar_mtime = filemtime($avatar_image);
 	                $output .= "\n<img class='avatar' style='margin-left:5px;'
-	                    src='/sys/users/avatar/{$objectDetails['user_id']}.jpg' alt='".stripslashes($objectDetails['username'])."' />";
+	                    src='/{$avatar_image}?m={$avatar_mtime}' alt='".stripslashes($objectDetails['username'])."' />";
 	            } else {
 	                $output .= "\n<img class='avatar' style='margin-left:5px;' src='/sys/images/_user.png'
 	                    alt='{$objectDetails['username']}' />";
@@ -808,9 +810,11 @@ if (defined('MAGIC')) {
 	        }
 	        foreach($comments as $comment){    
 	            $output .= "<div style='margin-left:5px;' id='comment{$comment['comment_id']}'>";
-	            if (file_exists("{$_SERVER['DOCUMENT_ROOT']}/sys/users/avatar/{$comment['user_id']}.jpg")){
+                    $avatar_image = "sys/users/avatar/{$comment['user_id']}.jpg";
+	            if (file_exists("{$_SERVER['DOCUMENT_ROOT']}/{$avatar_image}")){
+			$avatar_mtime = filemtime($avatar_image);
 	                $output .= "<img class='avatar' style='height:30px;width:30px;margin-left:10px;'
-	                    src='/sys/users/avatar/{$comment['user_id']}.jpg' alt='{$comment['username']}' />";
+	                    src='/{$avatar_image}?m={$avatar_mtime}' alt='{$comment['username']}' />";
 	            } else {
 	                $output .= "\n<img class='avatar' style='height:30px;width:30px;margin-left:10px;'
 	                    src='/sys/images/_user.png' alt='{$comment['username']}' />";
