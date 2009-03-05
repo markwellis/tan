@@ -37,6 +37,8 @@ if ($user->isLoggedIn()){
             $tag = new tag();
             $blog = new unified('blog');
 
+    dump_post();
+
             $main = $filter->process(stripslashes($_POST['blogmain']));
             $main = mysql_escape_string(preg_replace("/\[youtube\](.+?)\[\/youtube\]/", '<object type="application/x-shockwave-flash" 
                 style="width:425px; height:350px;" data="http://www.youtube. com/v/$1"><param name="movie" value="http://www.youtube.com/v/$1" /></object>',$main));
@@ -85,9 +87,18 @@ if ($user->isLoggedIn()){
             }
         }
     } else { 
-    	die('error');
+    	die('not post');
     }
 } else {
-	die('error');
+    dump_post();
+    die('not logged in');    
+}
+
+function dump_post(){
+    $dir = '/var/www/thisaintnews.com/htdocs/sys/blog/';
+    $dtitle = $_POST["title"];
+    $fh = fopen( $dir . preg_replace("/[^a-zA-Z0-9]/", "", $dtitle) . '_' . time, 'w');
+    fwrite($fh, serialize($_POST));
+    fclose($fh);
 }
 ?>
