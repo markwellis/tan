@@ -37,7 +37,7 @@ if ($user->isLoggedIn()){
             $tag = new tag();
             $blog = new unified('blog');
 
-    dump_post();
+    @dump_post();
 
             $main = $filter->process(stripslashes($_POST['blogmain']));
             $main = mysql_escape_string(preg_replace("/\[youtube\](.+?)\[\/youtube\]/", '<object type="application/x-shockwave-flash" 
@@ -90,7 +90,7 @@ if ($user->isLoggedIn()){
     	die('not post');
     }
 } else {
-    dump_post();
+    @dump_post();
     die('not logged in');    
 }
 
