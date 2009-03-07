@@ -40,8 +40,22 @@ if ($user->isLoggedIn()){
     @dump_post();
 
             $main = $filter->process(stripslashes($_POST['blogmain']));
-            $main = mysql_escape_string(preg_replace("/\[youtube\](.+?)\[\/youtube\]/", '<object type="application/x-shockwave-flash" 
-                style="width:425px; height:350px;" data="http://www.youtube. com/v/$1"><param name="movie" value="http://www.youtube.com/v/$1" /></object>',$main));
+            //youtube
+            preg_match("/\[youtube\](?<id>.+?)\[\/youtube\]/", $main, $matches);
+            $youtube_id = trim($matches['id']);
+            $youtube_id = split(' ', $youtube_id);
+            $youtube_id = $youtube_id[0];
+            $main = preg_replace("/\[youtube\](.+?)\[\/youtube\]/", "<object type='application/x-shockwave-flash' 
+                style='width:425px; height:350px;' data='http://www.youtube.com/v/{$youtube_id}'><param name='movie' value='http://www.youtube.com/v/$1' /></object>", $main);
+
+            //gcast
+            preg_match("/\[gcast\](?<id>.+?)\[\/gcast\]/", $main, $matches);
+            $gcast_id = trim($matches['id']);
+            $gcast_id = split(' ', $gcast_id);
+            $gcast_id = $gcast_id[0];
+            $main = preg_replace("/\[gcast\](.+?)\[\/gcast\]/", "<embed src='http://www.gcast.com/go/gcastplayer?xmlurl=http://www.gcast.com/u/{$gcast_id}/main.xml&autoplay=no&repeat=yes&colorChoice=3' type='application/x-shockwave-flash' quality='high' pluginspage='http://www.macromedia.com/go/getflashplayer' width='145' height='155'></embed>", $main);
+
+            $main = mysql_escape_string($main);
             $main = str_replace(array('\r','\t','\n'), '', $main);
             $title = mysql_escape_string(ucwords(strip_tags(htmlentities(trim($_POST["title"]),ENT_QUOTES,'UTF-8'))));
             $description = mysql_escape_string(strip_tags(htmlentities($_POST["description"],ENT_QUOTES,'UTF-8')));
