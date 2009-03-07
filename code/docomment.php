@@ -14,9 +14,22 @@ if($_SERVER['REQUEST_METHOD']==='POST') {
 	    if ($user->isLoggedIn()){
 	        $filter = new InputFilter();
 	        $comment = $filter->process(stripslashes($_POST['comment']));
-#	        $comment =mysql_escape_string(preg_replace("/\[youtube\]\s*(.+?)\s?.*?\[\/youtube\]/", '<object type="application/x-shockwave-flash" style="width:425px; height:350px;" data="http://www.youtube.com/v/$1"><param name="movie" value="http://www.youtube.com/v/$1" /></object>', $comment));
-		$comment =mysql_escape_string(preg_replace("/\[youtube\](.+?)\[\/youtube\]/", '<object type="application/x-shockwave-flash" style="width:425px; height:350px;" data="http://www.youtube.com/v/$1"><param name="movie" value="http://www.youtube.com/v/$1" /></object>', $comment));
-	        $comment = str_replace(array('\r','\t','\n'), '', $comment);
+            //youtube
+            preg_match("/\[youtube\](?<id>.+?)\[\/youtube\]/", $comment, $matches);
+            $youtube_id = trim($matches['id']);
+            $youtube_id = split(' ', $youtube_id);
+            $youtube_id = $youtube_id[0];
+            $comment = preg_replace("/\[youtube\](.+?)\[\/youtube\]/", "<object type='application/x-shockwave-flash' 
+                style='width:425px; height:350px;' data='http://www.youtube.com/v/{$youtube_id}'><param name='movie' value='http://www.youtube.com/v/$1' /></object>", $comment);
+
+            //gcast
+            preg_match("/\[gcast\](?<id>.+?)\[\/gcast\]/", $comment, $matches);
+            $gcast_id = trim($matches['id']);
+            $gcast_id = split(' ', $gcast_id);
+            $gcast_id = $gcast_id[0];
+            $comment = preg_replace("/\[gcast\](.+?)\[\/gcast\]/", "<embed src='http://www.gcast.com/go/gcastplayer?xmlurl=http://www.gcast.com/u/{$gcast_id}/main.xml&autoplay=no&repeat=yes&colorChoice=3' type='application/x-shockwave-flash' quality='high' pluginspage='http://www.macromedia.com/go/getflashplayer' width='145' height='155'></embed>", $comment);
+
+	        $comment = mysql_escape_string(str_replace(array('\r','\t','\n'), '', $comment));
             require_once('unified.php');
             $id = (int)$_POST['id'];
             $object = new unified($type);
