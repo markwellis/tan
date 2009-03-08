@@ -260,6 +260,7 @@ if (defined('MAGIC')) {
 # end        
 
 	    private function createHead($title, $script, $description){
+            $description = htmlentities(strip_tags($description),ENT_QUOTES,'UTF-8');
 	        ob_start();
     		print  '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" '
     			.'"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">'
