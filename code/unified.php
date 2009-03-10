@@ -620,7 +620,7 @@ if (defined('MAGIC')) {
 	                $output .= "<img class='avatar' src='/sys/images/_user.png' alt='{$objectDetails['username']}' />"; 
 	            }
 	
-	            $output .= "Posted by <span class='user'>{$objectDetails['username']}</span>";
+	            $output .= "Posted by <a class='user' href='/user/{$objectDetails['username']}/1/'>{$objectDetails['username']}</a>";
 	
 	            if ($type == 0) {
 	                $output .= " promoted on {$objectDetails['promoted']}";
@@ -668,7 +668,7 @@ if (defined('MAGIC')) {
 	                $output .= "\n<img class='avatar' style='margin-left:5px;' src='/sys/images/_user.png'
 	                    alt='{$objectDetails['username']}' />";
 	            }
-	            $output .= "<a class='user' href='/users/{$objectDetails['username']}/plus/1/'>{$objectDetails['username']}</a> 
+	            $output .= "<a class='user' href='/user/{$objectDetails['username']}/1/'>{$objectDetails['username']}</a> 
 	                <a href='/viewpic/{$objectDetails['picture_id']}/".user::cleanTitle($objectDetails['title']) ."/#comments'>
 	                <img src='/sys/images/comment.png' alt=' ' />  {$objectDetails['comments']}</a>
 	                | {$objectDetails['views']} views";

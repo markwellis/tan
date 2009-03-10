@@ -291,7 +291,7 @@ if (defined('MAGIC')) {
 	        if (!$user->isLoggedIn()){
 	            $this->output .= '<a href="/login/" class="menulink">Login/Register</a> | ';
 	        } else {
-                $this->output .= '<a href="/avatar/" class="menulink">Avatar</a> | ';
+                $this->output .= '<a href="/user/' . $user->getUsername() . '/1/" class="menulink">My Comments</a> | <a href="/avatar/" class="menulink">Avatar</a> | ';
             }
 	
 	/*        if($_SESSION['filteroff']== 1){
