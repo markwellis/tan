@@ -2,6 +2,9 @@
 if($_SERVER['REQUEST_METHOD']==='POST') {
 	define('MAGIC', true);
     require_once("user.php") ;
+    require_once("sql.php");
+    global $sql;
+    $sql = &new sql();
     $password0 = mysql_escape_string(strip_tags($_POST["rpassword0"]));
     $password1 = mysql_escape_string(strip_tags($_POST["rpassword1"]));
     $username = mysql_escape_string(htmlentities(strip_tags($_POST["rusername"]), ENT_QUOTES,'UTF-8'));

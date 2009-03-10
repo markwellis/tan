@@ -4,6 +4,15 @@ if (defined('MAGIC')) {
         private $NotAllowed = Array("|", "?", " ", ",");
         private $minLen = 6;
 
+        function __construct(){
+            global $sql;
+            if ($sql) {
+                $this->sql = $sql;
+            } else {
+                $this->sql = &new sql();
+            }
+        }
+    
         public function validate($username, $password0, $password1, $email){
          /* returns 1 on on success!
             -6 = missing input
@@ -31,7 +40,7 @@ if (defined('MAGIC')) {
         }
 
         private function checkUser($username){
-            $sql = new sql();
+            $sql = $this->sql;
             $query = "SELECT * FROM user_details WHERE username LIKE '$username';";
             $result = $sql->query($query, 'row');
             $rows = count($result);
@@ -40,7 +49,7 @@ if (defined('MAGIC')) {
         }
         
         private function checkEmail($email){
-            $sql = new sql();
+            $sql = $this->sql;
             $query = "SELECT * FROM user_details WHERE email='$email';";
             $result = $sql->query($query, 'row');
             $rows = count($result);
