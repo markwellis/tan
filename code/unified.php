@@ -956,7 +956,7 @@ if (defined('MAGIC')) {
             
             $output .= "<div id='pageNoHolder' style='margin-left:auto;margin-right:auto;margin-bottom:25px;width:".($total_pages * 40) ."px;'>";
             if ($lower != 1) {
-                $output .= "<a class='pageNumber' href='/{$location}/{$upcoming}>/1/'>0</a>"
+                $output .= "<a class='pageNumber' href='/{$location}/{$upcoming}/1/'>1</a>"
                 ."<span class='pageNumber'>...</span>";
             }
             

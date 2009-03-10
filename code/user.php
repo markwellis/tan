@@ -25,6 +25,12 @@ if (defined('MAGIC')) {
             if (isset($_COOKIE[$name])){
                 @setcookie($name, $_COOKIE[$name], time() + $time, "/", false);
             }
+            global $sql;
+            if ($sql) {
+                $this->sql = $sql;
+            } else {
+                $this->sql = &new sql();
+            }
         }
 
         public function isLoggedIn() {
@@ -44,20 +50,20 @@ if (defined('MAGIC')) {
         }
 
         public function userid2username($userid) {
-            $sql = new sql();
+            $sql = $this->sql;
             $query = "select username from user_details where user_id=$userid;";
             return $sql->query($query, 'row');
         }
         
         public function usernameToId($username){
-            $sql = new sql();
+            $sql = $this->sql;
             $query = "select user_id from user_details where username='$username';";
             $retval = $sql->query($query, 'row');
             return $retval['user_id'];
         }
 
         public function getPlusLinks($uid,$page){
-            $sql = new sql();
+            $sql = $this->sql;
             $page = ($page * 27);
             $limit = $page - 27;
         $muid = -1;
@@ -95,14 +101,14 @@ if (defined('MAGIC')) {
 			} elseif ($type === 3) {
 				$ptable = 'comments';
 			}
-			$sql = new sql();
+			$sql = $this->sql;
             $query = "SELECT COUNT({$table}_id) as count FROM {$table}_details WHERE {$table}_id=ANY(SELECT {$table}_id FROM {$ptable} WHERE user_id={$uid});";
             $res = $sql->query($query, 'row');
             return $res['count'];
 		}
 
         public function getUPlusLinkCount($uid){
-            $sql = new sql();
+            $sql = $this->sql;
             $query = "select count(*) from link_details where link_id=ANY(select link_id from plus where user_id=$uid);";
             $res = $sql->query($query, 'row');
             return $res[0];
@@ -113,7 +119,7 @@ if (defined('MAGIC')) {
             if (isset($_SESSION['user_id'])){
                 $muid = $_SESSION['user_id'];
             }
-            $sql = new sql();
+            $sql = $this->sql;
             $page = ($page * 27);
             $limit = $page - 27;
             $query = "select *,(SELECT count(*) from plus where plus.link_id = link_details.link_id) as plus,
@@ -127,14 +133,14 @@ if (defined('MAGIC')) {
         }
 
         public function getUMinusLinkCount($uid){
-            $sql = new sql();
+            $sql = $this->sql;
             $query = "select count(*) from link_details where link_id=ANY(select link_id from minus where user_id=$uid);";
             $res = $sql->query($query, 'row');
             return $res[0];
         }
 
         public function getSubmittedLinks($uid, $page){
-            $sql = new sql();
+            $sql = $this->sql;
             $page = ($page * 27);
             $limit = $page - 27;
         $muid = -1;
@@ -153,20 +159,20 @@ if (defined('MAGIC')) {
         }
 
         public function getJoinDate($userid) {
-            $sql = new sql();
+            $sql = $this->sql;
             $query = "select DATE_FORMAT(join_date, '%D %M %Y') from user_details where user_id=$userid";
             return $sql->query($query, 'row');
         }
 
         public function getTotalComments($userid) {
-            $sql = new sql();
+            $sql = $this->sql;
             $query = "select * from comments where user_id=$userid";
             return $sql->query($query, 'count');
         }
 
         public function login($username, $password) { 
             if (!$this->isLoggedIn()) {
-                $sql = new sql();
+                $sql = $this->sql;
                 $encPassword = hash('sha512',$password);
                 $query = "SELECT * FROM user_details WHERE username LIKE '$username';";
                 $row = $sql->query($query, 'row');
@@ -196,7 +202,7 @@ if (defined('MAGIC')) {
             $validator = &new validator();
             $retval = $validator->validate($username, $password0, $password1, $email); 
             if ($retval == 1) {
-                $sql = new sql();
+                $sql = $this->sql;
                 $encPassword = hash('sha512',$password0);
                 $query = "INSERT INTO user_details VALUES ('', '$username',  NOW(),  NOW(), '$email', '$encPassword');";
                 return $sql->query($query, 'none');

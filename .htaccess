@@ -15,6 +15,7 @@ RewriteRule ^login/$ ./login.php [NC]
 RewriteRule ^logout/$ ./logout.php [NC]
 
 RewriteRule ^avatar/$ ./user_info.php [NC]
+RewriteRule ^user/([^/]+)/([^/]+)/ ./user_comments.php?username=$1&page=$2 [NC]
 
 RewriteRule ^users/([^/]+)/([^/]+)/([^/]+) ./profile.php?username=$1&kindofpage=$2&ptype=$3 [NC]
 
