@@ -120,7 +120,7 @@ for ($i=$lower; $i<=$max; ++$i){
     }
     $output .= "' href='/user/{$username}/{$i}/'>{$i}</a>";
 }
-
+//s
 if ($max != $total_pages){
     $output .= "<span class='pageNumber'>...</span>"
     ."<a class='pageNumber' href='/user/{$username}/{$total_pages}/'>{$total_pages}</a>";
