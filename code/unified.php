@@ -813,10 +813,10 @@ if (defined('MAGIC')) {
                     $avatar_image = "sys/users/avatar/{$comment['user_id']}.jpg";
 	            if (file_exists("{$_SERVER['DOCUMENT_ROOT']}/{$avatar_image}")){
 			$avatar_mtime = filemtime($avatar_image);
-	                $output .= "<img class='avatar' style='height:30px;width:30px;margin-left:10px;'
+	                $output .= "<img class='avatar' style='height:64px;width:64px;margin-left:10px;'
 	                    src='/{$avatar_image}?m={$avatar_mtime}' alt='{$comment['username']}' />";
 	            } else {
-	                $output .= "\n<img class='avatar' style='height:30px;width:30px;margin-left:10px;'
+	                $output .= "\n<img class='avatar' style='height:64px;width:64px;margin-left:10px;'
 	                    src='/sys/images/_user.png' alt='{$comment['username']}' />";
 	            }
 	            $output .= "<div style='font-size:.8em;'>{$comment['username']}, on {$comment['date']}<br />
