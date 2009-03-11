@@ -332,7 +332,7 @@ if (defined('MAGIC')) {
 	                $res = $sql->query($query, 'none');
 	                if ($table === 'plus'){
 	                $count = $this->getPlusMinus($id, 1);
-	                    if ($count['count'] == $this->promoted_threashold){
+	                    if ( ($count['count'] == $this->promoted_threashold) && (!$count['promoted']) ){
 	                        $sql1 = new sql();
 	                        $query = "UPDATE $dtable SET promoted=NOW() WHERE $conditions;";
 	                        $sql1->query($query, 'none');
@@ -343,15 +343,6 @@ if (defined('MAGIC')) {
 	            } else {
 	                $query = "DELETE FROM $table WHERE user_id={$user->getUserId()} AND $conditions;";
 	                $res = $sql->query($query, 'none');
-	                if ($table === 'plus'){
-	                $count = $this->getPlusMinus($id, -1);
-	                    if ($count['count'] == $this->promoted_threashold -1){
-	                        $sql1 = new sql();
-	                        $query = "UPDATE $dtable SET promoted='' WHERE $conditions;";
-	                        $sql1->query($query, 'none');
-	                        $this->add_to_log($username, $userid, $id, 'demoted');
-	                    }
-	                }
 	                return $res;
 	            }
 	        }
@@ -383,10 +374,11 @@ if (defined('MAGIC')) {
 	            $uid = $user->getUserId();
 	            if (!$uid){ $uid = -1; }
 	
-	            $query = "SELECT count({$table}_id) as count,
-	                (SELECT COUNT(*) FROM plus WHERE plus.{$object_id} = {$id} and plus.user_id=$uid) AS meplus, 
-	                (SELECT COUNT(*) FROM minus WHERE minus.{$object_id} = {$id} and minus.user_id=$uid) AS meminus 
-	                FROM $table WHERE $conditions;";
+	            $query = "SELECT count({$table}_id) as count, "
+	                ."(SELECT COUNT(*) FROM plus WHERE plus.{$object_id} = {$id} and plus.user_id=$uid) AS meplus, "
+	                ."(SELECT COUNT(*) FROM minus WHERE minus.{$object_id} = {$id} and minus.user_id=$uid) AS meminus, "
+                    ."(SELECT UNIX_TIMESTAMP(promoted) FROM {$this->kind_of_object}_details WHERE {$this->kind_of_object}_details.{$object_id} = {$id}) AS promoted "
+	                ."FROM $table WHERE $conditions;";
 	            $count = $sql->query($query, 'row');
 	            return $count;
 	        }
