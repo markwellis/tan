@@ -301,7 +301,7 @@ if (defined('MAGIC')) {
 	        }*/
 	        $this->output .= '<a href="/shop/" class="menulink">Shop</a> |'
 	            .'<a href="/chat/" class="menulink">Chat</a> | '
-	            .'<a href="/tagcloud/" class="menulink">Tag Cloud</a>';
+	            .'<a href="http://forums.thisaintnews.com" class="menulink">FORUMS!</a>';
 	
 	        if ($user->isLoggedIn()){
 	            $this->output .= " | <a href='/logout/' class='menulink'>Logout</a>";
