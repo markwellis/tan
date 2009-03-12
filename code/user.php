@@ -174,14 +174,14 @@ if (defined('MAGIC')) {
             if (!$this->isLoggedIn()) {
                 $sql = $this->sql;
                 $encPassword = hash('sha512',$password);
-                $query = "SELECT * FROM user_details WHERE username LIKE '$username';";
+                $query = "SELECT * FROM user_details WHERE lower(username) = '$username';";
                 $row = $sql->query($query, 'row');
 
                 if ($row['password'] === $encPassword) {
                     $_SESSION['time'] = time();
                     $_SESSION['username'] = $username;
                     $_SESSION['user_id'] = $row['user_id'];
-                    session_regenerate_id();
+                    session_regenerate_id(true);
                     $query = "update user_details set last_date=NOW() where user_id=".$row['user_id'].";";
                     $sql->query($query, 'none');
                     return true;
