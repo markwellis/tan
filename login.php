@@ -21,6 +21,10 @@ if(!$user->isLoggedIn()){
     if ($error != 0) {
         $middle .= "<h2>".$errorCodes[$error]."</h2>";
     }
+    if ($_SESSION['login_error']){
+	$middle .= "<h2>{$_SESSION['login_error']}</h2>";
+	unset($_SESSION['login_error']);
+    }
 	$_SESSION['ref'] = $_SERVER['HTTP_REFERER'];
     $middle .= "
         <div class='news'>

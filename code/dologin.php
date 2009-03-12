@@ -6,7 +6,7 @@ if($_SERVER['REQUEST_METHOD']==='POST') {
     $password = mysql_escape_string(strip_tags($_POST["password"]));
     $username = mysql_escape_string(htmlentities(strip_tags(strtolower($_POST["username"])),ENT_QUOTES,'UTF-8'));
 
-    $user = new user;
+    $user = &new user;
     
     if ($user->login($username, $password)) {
         
@@ -18,6 +18,7 @@ if($_SERVER['REQUEST_METHOD']==='POST') {
             exit();
         }
     } else { 
+    	$_SESSION['login_error'] = 'check username/password';
         header("Location: /login/");
         exit();
     }
