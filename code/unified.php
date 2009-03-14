@@ -796,6 +796,32 @@ if (defined('MAGIC')) {
 	        }
 	        require_once('user.php');
 	        $user = new user();
+ob_start();
+?>
+<script type="text/javascript">
+window.addEvent('domready', function(){
+    
+    $$('.comment_edit').addEvent('click', function() {
+        var href = this.href;
+        var comment_id = href.replace(/.*\/(\d+)\//g, "$1");
+        var ts = new Date().getTime();
+
+        var req = new Request.HTML({url:href + '/' + ts, 
+   
+            onFailure: function() {
+                $('comment' + comment_id).set('text', 'The request failed.');
+            },
+            update: 'comment' + comment_id,
+            noCache: true
+        }).get();
+
+        return false;
+    });
+});
+</script>
+<?
+$output .= ob_get_contents();
+ob_clean();
 	        $output .= "<div class='comment_wrapper'>";
 	        if ($comments){
 	        	$output .= "<h2 id='comments'>Comments</h2>";
@@ -812,13 +838,21 @@ if (defined('MAGIC')) {
 	                    src='/sys/images/_user.png' alt='{$comment['username']}' />";
 	            }
 	            $output .= "<div style='font-size:.8em;'>{$comment['username']}, on {$comment['date']}<br />
-	                Total Comments: {$comment['total_comments']}, Joined on: {$comment['join_date']}</div>
+	                Total Comments: {$comment['total_comments']}, Joined on: {$comment['join_date']}
+                    </div>
 	                <div class='comment'>";
 	            $output .= stripslashes($comment['details']) . "<br/>";
-//	            $output .= "<a style='display:block;float:right;' class='comment_edit' >Edit Comment</a>";
+
+                $user_id = (int)$user->getUserId();
+                $comment_user_id = (int)$comment['user_id'];
+                if ($user->isLoggedIn() && ($user_id === $comment_user_id) ){
+                    $output .= "<a style='display:block;float:right;' class='comment_edit' href='/edit_comment/{$comment['comment_id']}/'>Edit Comment</a>";
+                }
+
 	            $output .= "</div>
 	                </div><br />";
 	        }
+            
 	        if ($user->isLoggedIn()){
 	            $output .= "<h2 id='lcomments'>Leave your comments</h2>"
 	                .'<form style="margin-left:15px;" action="/comment" method="post"><p>'

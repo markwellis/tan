@@ -11,6 +11,8 @@ RewriteRule ^viewlink/([^/]+) ./viewpage.php?kindofpage=link&id=$1 [NC]
 RewriteRule ^viewblog/([^/]+) ./viewpage.php?kindofpage=blog&id=$1 [NC]
 RewriteRule ^viewpic/([^/]+) ./viewpage.php?kindofpage=picture&id=$1 [NC]
 
+RewriteRule ^edit_comment/([^/]+)/ ./lib/controllers/edit.php?comment_id=$1 [NC]
+
 RewriteRule ^login/$ ./login.php [NC]
 RewriteRule ^logout/$ ./logout.php [NC]
 

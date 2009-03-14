@@ -194,7 +194,7 @@ if (defined('MAGIC')) {
             $sql = &new sql();
             $query = "SELECT details, comment_id, username, UNIX_TIMESTAMP(date) as date, blog_id, link_id, picture_id FROM comments ORDER BY date DESC LIMIT 10";
             $recent_comments = $sql->query($query, 'array');
-            $tmp = '<div><span>Recent Comments</span><ul style="list-style:none;margin:0px;padding:0px;" class"" >';
+            $tmp = '<div><span>Recent Comments</span><ul style="list-style:none;margin:0px;padding:0px;" class="" >';
             foreach ($recent_comments as $comment){
                 if ($comment['blog_id']) {
                     $comment_type = 'blog';
@@ -274,16 +274,16 @@ if (defined('MAGIC')) {
 	            .'<link rel="stylesheet" type="text/css" title="default" href="/css/default.css?1=11111" /> '
 	            .'<link rel="shortcut icon" href="/favicon.ico" /> '
 	            .$script
-	            .'</head> '
-                .'<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/mootools/1.2.1/mootools-yui-compressed.js"></script>'
-                .'<script type="text/javascript" src="/sys/script/mootools-1.2-more.js"></script>';
+	            .'</head> ';
                 
 			ob_end_flush();
 	    }
 	    
 	    private function createBody($where, $type, $sortby = null){
 	        $user = new user();
-	        $this->output .= '<body>'
+            $this->output .= '<body>'
+                .'<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/mootools/1.2.1/mootools-yui-compressed.js"></script>'
+                .'<script type="text/javascript" src="/sys/script/mootools-1.2-more.js"></script>'
 	            .'<script type="text/javascript" src="/sys/js/clientside.js"></script>'
 	            .'<div id="main">'
 	            .'<div id="top">'
@@ -321,7 +321,7 @@ if (defined('MAGIC')) {
 	            .'style="height:31px;width:88px;margin-top:20px;float:right;" '
 	            .'alt="Valid XHTML 1.0 Transitional" /></a><br/><br/> '
 		    .'<a href="http://www.blogged.com/directory/society/news-media">'
-		    .'<img src="http://www.blogged.com/icons/vn_mrbig4545m_1475849.gif" border="0" alt="News & Media Blog Directory" title="News & Media Blog Directory" /></a>'
+		    .'<img src="http://www.blogged.com/icons/vn_mrbig4545m_1475849.gif" alt="News &amp; Media Blog Directory" title="News &amp; Media Blog Directory" /></a>'
 	            ."<span style='display:block;margin-bottom:10px;'>"
 	            ."$footer , All User-generated content is licensed under a " 
 				.'<a href="http://creativecommons.org/">Creative Commons Public Domain license</a></span> '
