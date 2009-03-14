@@ -400,7 +400,7 @@ if (defined('MAGIC')) {
 	        }
 	        
 			$sql = new sql();
-			$query = "SELECT COUNT($id) as comments,MAX(date) as last, (SELECT COUNT($id) FROM plus WHERE $id=$oid) as plus, "
+			$query = "SELECT COUNT($id) as comments,MAX(edited) as last, (SELECT COUNT($id) FROM plus WHERE $id=$oid) as plus, "
 				."(SELECT COUNT($id) FROM minus WHERE $id=$oid) as minus FROM comments where $id = $oid;";
 			$res = $sql->query($query, 'row');
 			return $res;

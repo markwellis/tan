@@ -25,7 +25,7 @@ class m_comment {
      * Updates the comment, assumes its been scrubbed already
      */
     function update($new_comment){
-        $query = "UPDATE {$this->comments_table} SET details = '{$new_comment}' WHERE comment_id = {$this->comment_id} LIMIT 1";
+        $query = "UPDATE {$this->comments_table} SET details = '{$new_comment}', edited = NOW() WHERE comment_id = {$this->comment_id} LIMIT 1";
         $this->sql->query ($query, 'none');
     }
     
