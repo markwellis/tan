@@ -213,7 +213,7 @@ if (defined('MAGIC')) {
 	    function getComments($id){
 	    	$memcache = new Memcache;
 	    	$det = $this->get_details_count($id);
-			$memcache_key = $this->kind_of_object . ":comment:{$id}:count:{$det['comments']}:p:{$det['plus']}:m:{$det['minus']}";
+			$memcache_key = $this->kind_of_object . ":comment:{$id}:count:{$det['comments']}:l{$det['last']}:p:{$det['plus']}:m:{$det['minus']}";
 			@$memcache->connect('127.0.0.1', 11211);
 			$cached = @$memcache->get($memcache_key);
 			
@@ -400,7 +400,7 @@ if (defined('MAGIC')) {
 	        }
 	        
 			$sql = new sql();
-			$query = "SELECT COUNT($id) as comments, (SELECT COUNT($id) FROM plus WHERE $id=$oid) as plus, "
+			$query = "SELECT COUNT($id) as comments,MAX(date) as last, (SELECT COUNT($id) FROM plus WHERE $id=$oid) as plus, "
 				."(SELECT COUNT($id) FROM minus WHERE $id=$oid) as minus FROM comments where $id = $oid;";
 			$res = $sql->query($query, 'row');
 			return $res;

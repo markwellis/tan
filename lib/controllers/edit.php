@@ -72,7 +72,9 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
                 $location = 'pic';
                 $id = $comment_details['picture_id'];
             } 
+
             header("location: /view{$location}/{$id}/#comment{$comment_details['comment_id']}");
+            exit();
     }
 }
 $user_id = (int)$user->getUserId();
