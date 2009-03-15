@@ -210,6 +210,7 @@ if (defined('MAGIC')) {
                     $comment_id = $comment['picture_id'];
                 }
                 $comment_length = strlen($comment['details']);
+                $comment['details'] = preg_replace("/\[quote\ user=[\"'](.+?)[\"']\](.*?)\[\/quote\]/miUs", '', $comment['details']);
                 $comment['details'] = htmlentities(strip_tags($comment['details']), ENT_QUOTES,'UTF-8');
                 $comment['short'] = substr($comment['details'], 0, 50);
                 $comment['long'] = substr($comment['details'], 0, 400);
@@ -271,7 +272,7 @@ if (defined('MAGIC')) {
 	            .'<meta name="keywords" content="news community comments english lulz lol social lulzhq fun jokes '
 	            .'videos pictures share sharing lol lolz funny humour humur"/> '
 	            .'<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/> '
-	            .'<link rel="stylesheet" type="text/css" title="default" href="/css/default.css?1=11111" /> '
+	            .'<link rel="stylesheet" type="text/css" title="default" href="/css/default.css?1=111111" /> '
 	            .'<link rel="shortcut icon" href="/favicon.ico" /> '
 	            .$script
 	            .'</head> ';

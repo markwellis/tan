@@ -103,6 +103,59 @@ if (defined('MAGIC')) {
 	        $query = "SELECT * FROM {$this->kind_of_object}_details ORDER BY RAND() limit 1;";
 	        return $sql->query($query, 'row');
 	    }
+        
+        function bbcode_to_html($text){
+            //youtube
+            preg_match("/\[youtube\](?<id>.+?)\[\/youtube\]/", $text, $matches);
+            if ($matches['id']){
+                $youtube_id = trim($matches['id']);
+                $youtube_id = split(' ', $youtube_id);
+                $youtube_id = $youtube_id[0];
+                $text = preg_replace("/\[youtube\](.+?)\[\/youtube\]/", "<object type='application/x-shockwave-flash' 
+                    style='width:425px; height:350px;' data='http://www.youtube.com/v/{$youtube_id}'><param name='movie' value='http://www.youtube.com/v/$1' /></object>", $text);
+            }
+            unset($matches);
+            
+            //gcast
+            preg_match("/\[gcast\](?<id>.+?)\[\/gcast\]/", $text, $matches);
+            if ($matches['id']){
+                $gcast_id = trim($matches['id']);
+                $gcast_id = split(' ', $gcast_id);
+                $gcast_id = $gcast_id[0];
+                $text = preg_replace("/\[gcast\](.+?)\[\/gcast\]/", "<embed src='http://www.gcast.com/go/gcastplayer?xmlurl=http://www.gcast.com/u/{$gcast_id}/main.xml&autoplay=no&repeat=yes&colorChoice=3' type='application/x-shockwave-flash' quality='high' pluginspage='http://www.macromedia.com/go/getflashplayer' width='145' height='155'></embed>", $text);
+            }
+            unset($matches);
+            
+            #[quote name="mrbig4545"]blah blah[/quote]
+            $quote_replace = "/\[quote\ user=[\"'](.+?)[\"']\](.*?)\[\/quote\]/miUs";
+            $quote_match = "/\[quote\ user=[\"'](?<name>.+?)[\"']\](?<quote>.*?)\[\/quote\]/miUs";
+
+require_once('inputfilter.php');
+            $filter = new InputFilter();
+            $text = $filter->process(stripslashes($text));
+            $string_array = split('\[\/quote\]', $text);
+
+            foreach ($string_array as $string){
+                $string .= '[/quote]';
+                preg_match($quote_match, $string, $matches);
+                if ($matches['name']){
+                    $quoted_username = trim($matches['name']);
+                    $quoted_username = split(' ', $quoted_username);
+                    $quoted_username = $quoted_username[0];
+                    $quote = &$matches['quote'];
+    
+                    $string = preg_replace($quote_replace, "<div class='quote_holder'><span class='quoted_username'>$quoted_username wrote:</span><div class='quote'>$quote</div></div>", $string);
+                }
+                $new_string .= $string;
+            }
+            if ($new_string){
+                $new_string = str_replace('[/quote]', '', $new_string);
+                $text = $new_string;
+            };
+            unset($matches);
+
+            return $text;
+        }
 	
 	    function isValid($data, $title, $description){
 	/*   Does a few checks on whats being submitted */
@@ -632,6 +685,7 @@ if (defined('MAGIC')) {
 	                $output .= "<a style='margin-right:70px;float:right;font-size:1.5em;' href='".stripslashes($objectDetails['url'])."'>View Link</a><br/><br/>";
 	            } elseif ($article && $kind === 'blog'){
 	            	$output .= "</div>";
+                    $objectDetails['details'] = $this->bbcode_to_html($objectDetails['details']);
 	                $output .= "<div class='comment_wrapper'>{$objectDetails['details']}";
 	            }
 	            $output .= "</div>";
@@ -800,7 +854,7 @@ ob_start();
 ?>
 <script type="text/javascript">
 window.addEvent('domready', function(){
-    
+
     $$('.comment_edit').addEvent('click', function() {
         var href = this.href;
         var comment_id = href.replace(/.*\/(\d+)\//g, "$1");
@@ -817,6 +871,21 @@ window.addEvent('domready', function(){
 
         return false;
     });
+
+    $$('.quote_link').addEvent('click', function() {
+        var title = this.title.split('::');
+        var username = title[0]; 
+        var comment_id = title[1]; 
+        
+        var comment_name = 'actual_comment' + comment_id;
+        var quote = $(comment_name).innerHTML;
+        
+        var comment_so_far = FCKeditorAPI.GetInstance('comment').GetHTML();
+        comment_so_far += '[quote user="' + username + '"]' + quote + '[/quote]';
+        FCKeditorAPI.GetInstance('comment').SetHTML(comment_so_far);
+        return false;
+    });
+
 });
 </script>
 <?
@@ -830,7 +899,7 @@ ob_clean();
 	            $output .= "<div style='margin-left:5px;' id='comment{$comment['comment_id']}'>";
                     $avatar_image = "sys/users/avatar/{$comment['user_id']}.jpg";
 	            if (file_exists("{$_SERVER['DOCUMENT_ROOT']}/{$avatar_image}")){
-			$avatar_mtime = filemtime($avatar_image);
+                    $avatar_mtime = filemtime($avatar_image);
 	                $output .= "<img class='avatar' style='height:64px;width:64px;margin-left:10px;'
 	                    src='/{$avatar_image}?m={$avatar_mtime}' alt='{$comment['username']}' />";
 	            } else {
@@ -840,17 +909,27 @@ ob_clean();
 	            $output .= "<div style='font-size:.8em;'>{$comment['username']}, on {$comment['date']}<br />
 	                Total Comments: {$comment['total_comments']}, Joined on: {$comment['join_date']}
                     </div>
-	                <div class='comment'>";
-	            $output .= stripslashes($comment['details']) . "<br/>";
+                    <div class='comment'>
+	                <div id='actual_comment{$comment['comment_id']}'>";
+                $comment['details'] = $this->bbcode_to_html($comment['details']);
+	            $output .= stripslashes($comment['details']) . "<br/></div>";
 
                 $user_id = (int)$user->getUserId();
                 $comment_user_id = (int)$comment['user_id'];
-                if ($user->isLoggedIn() && ($user_id === $comment_user_id) ){
-                    $output .= "<a style='display:block;float:right;' class='comment_edit' href='/edit_comment/{$comment['comment_id']}/'>Edit Comment</a>";
+
+                if ($user->isLoggedIn()){
+                    $output .= "<span style='display:block;float:right;'>"; 
+                    $output .= "<a onclick='return false;' href='#' class='quote_link' title='{$comment['username']}::{$comment['comment_id']}'>Quote</a>";
                 }
 
-	            $output .= "</div>
-	                </div><br />";
+                if ($user->isLoggedIn() && ($user_id === $comment_user_id) ){
+                    $output .= " | <a class='comment_edit' href='/edit_comment/{$comment['comment_id']}/'>Edit Comment</a>";
+                }
+
+                if ($user->isLoggedIn()){
+                    $output .= "</span>";
+                }
+	            $output .= "</div></div><br />";
 	        }
             
 	        if ($user->isLoggedIn()){

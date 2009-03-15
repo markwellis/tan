@@ -711,3 +711,19 @@ ul#mainmenu li ul li{
 }  
 .tip-title      { color:#000; border-bottom:1px solid #000;}  
 .tip-text       { color:#222222}
+
+.quoted_username{
+    font-weight:bold;
+}
+
+.quote_holder{
+	padding:5px;
+    background-color:#e1ebf2;
+    -moz-border-radius:3px;
+    -webkit-border-radius:3px;
+}
+
+.quote{
+	padding-left:15px;
+    font-style:italic;
+}

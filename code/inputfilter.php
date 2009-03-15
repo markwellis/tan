@@ -27,13 +27,13 @@ class InputFilter {
                       "thead", "tr", "tt", "u", "ul");
        $attrArray = array("abbr", "align", "alt", "axis", "background", "behavior", "bgcolor", "border", "bordercolor",
                       "bordercolordark", "bordercolorlight", "bottompadding", "cellpadding", "cellspacing", "char",
-                      "charoff", "cite", "clear", "color", "cols", "direction", "face", "font-weight", "headers",
+                      "charoff", "cite", "clear", "class", "color", "cols", "direction", "face", "font-weight", "headers",
                       "height", "href", "hspace", "leftpadding", "loop", "noshade", "nowrap", "point-size", "rel",
                       "rev", "rightpadding", "rowspan", "rules", "scope", "scrollamount", "scrolldelay", "size",
                       "span", "src", "start", "style","summary", "target", "title", "toppadding", "type", "valign",
                       "value", "vspace", "width", "wrap");	
-		for ($i = 0; $i < count($tagsArray); $i++) $tagsArray[$i] = strtolower($tagsArray[$i]);
-		for ($i = 0; $i < count($attrArray); $i++) $attrArray[$i] = strtolower($attrArray[$i]);
+		for ($i = 0; $i < count($tagsArray); ++$i) $tagsArray[$i] = strtolower($tagsArray[$i]);
+		for ($i = 0; $i < count($attrArray); ++$i) $attrArray[$i] = strtolower($attrArray[$i]);
 		$this->tagsArray = (array) $tagsArray;
 		$this->attrArray = (array) $attrArray;
 		$this->tagsMethod = $tagsMethod;
