@@ -721,6 +721,7 @@ ul#mainmenu li ul li{
     background-color:#e1ebf2;
     -moz-border-radius:3px;
     -webkit-border-radius:3px;
+    border: #bebebe 1px solid;
 }
 
 .quote{
