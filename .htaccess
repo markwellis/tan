@@ -39,8 +39,6 @@ RewriteRule ^sys/js/nicEditorIcons.gif$ ./code/script.php?type=12 [NC]
 RewriteRule ^chat/?$ /chat.php [NC]
 RewriteRule ^shop/ /shop.php [NC]
 
-RewriteRule ^sitemap.xml$ ./sitemap.php [NC]
-
 RewriteRule ^tagcloud/ ./index.php?function=13 [NC]
 RewriteRule ^tagthumbs/([^/]+)/?$ /tagthumbs.php?tags=$1 [NC]
 

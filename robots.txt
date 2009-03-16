@@ -2,8 +2,8 @@ User-agent: *
 Disallow: /code/
 Disallow: /filteron
 Disallow: /filteroff
-Disallow: /users
+Disallow: /user
 Disallow: /random
 Disallow: /thumb
 
-Sitemap: http://thisaintnews.com/sitemap.xml
+Sitemap: http://thisaintnews.com/sitemaps/sitemap_index.xml
