@@ -105,27 +105,6 @@ if (defined('MAGIC')) {
 	    }
         
         function bbcode_to_html($text){
-            //youtube
-            preg_match("/\[youtube\](?<id>.+?)\[\/youtube\]/", $text, $matches);
-            if ($matches['id']){
-                $youtube_id = trim($matches['id']);
-                $youtube_id = split(' ', $youtube_id);
-                $youtube_id = $youtube_id[0];
-                $text = preg_replace("/\[youtube\](.+?)\[\/youtube\]/", "<object type='application/x-shockwave-flash' 
-                    style='width:425px; height:350px;' data='http://www.youtube.com/v/{$youtube_id}'><param name='movie' value='http://www.youtube.com/v/$1' /></object>", $text);
-            }
-            unset($matches);
-            
-            //gcast
-            preg_match("/\[gcast\](?<id>.+?)\[\/gcast\]/", $text, $matches);
-            if ($matches['id']){
-                $gcast_id = trim($matches['id']);
-                $gcast_id = split(' ', $gcast_id);
-                $gcast_id = $gcast_id[0];
-                $text = preg_replace("/\[gcast\](.+?)\[\/gcast\]/", "<embed src='http://www.gcast.com/go/gcastplayer?xmlurl=http://www.gcast.com/u/{$gcast_id}/main.xml&autoplay=no&repeat=yes&colorChoice=3' type='application/x-shockwave-flash' quality='high' pluginspage='http://www.macromedia.com/go/getflashplayer' width='145' height='155'></embed>", $text);
-            }
-            unset($matches);
-            
             #[quote name="mrbig4545"]blah blah[/quote]
             $quote_replace = "/\[quote\ user=[\"'](.+?)[\"']\](.*?)\[\/quote\]/miUs";
             $quote_match = "/\[quote\ user=[\"'](?<name>.+?)[\"']\](?<quote>.*?)\[\/quote\]/miUs";
@@ -154,6 +133,26 @@ require_once('inputfilter.php');
             };
             unset($matches);
 
+            //youtube
+            preg_match("/\[youtube\](?<id>.+?)\[\/youtube\]/", $text, $matches);
+            if ($matches['id']){
+                $youtube_id = trim($matches['id']);
+                $youtube_id = split(' ', $youtube_id);
+                $youtube_id = $youtube_id[0];
+                $text = preg_replace("/\[youtube\](.+?)\[\/youtube\]/", "<object type='application/x-shockwave-flash' style='width:425px; height:350px;' data='http://www.youtube.com/v/{$youtube_id}'><param name='movie' value='http://www.youtube.com/v/$1' /></object>", $text);
+            }
+            unset($matches);
+            
+            //gcast
+            preg_match("/\[gcast\](?<id>.+?)\[\/gcast\]/", $text, $matches);
+            if ($matches['id']){
+                $gcast_id = trim($matches['id']);
+                $gcast_id = split(' ', $gcast_id);
+                $gcast_id = $gcast_id[0];
+                $text = preg_replace("/\[gcast\](.+?)\[\/gcast\]/", "<embed src='http://www.gcast.com/go/gcastplayer?xmlurl=http://www.gcast.com/u/{$gcast_id}/main.xml&autoplay=no&repeat=yes&colorChoice=3' type='application/x-shockwave-flash' quality='high' pluginspage='http://www.macromedia.com/go/getflashplayer' width='145' height='155'></embed>", $text);
+            }
+            unset($matches);
+            
             return $text;
         }
 	
