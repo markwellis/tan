@@ -317,7 +317,7 @@ if (defined('MAGIC')) {
   </div>
 </form>
 
-<script type="text/javascript" src="http://www.google.com/coop/cse/brand?form=cse-search-box&lang=en"></script></div>
+<script type="text/javascript" src="http://www.google.com/coop/cse/brand?form=cse-search-box&amp;lang=en"></script></div>
 </div><div class="logoimg"/><a href="/" class="logo"></a></div>';
 
 	        $this->output .= "</div><div id='middle'>"; 
