@@ -25,10 +25,10 @@ if (in_array($type, $kinds, true)){
 
         if ($plus === 1){
             $keyword = 'plus';
-            $symbol = "+";
+            $symbol = "IsNews";
         } elseif ($plus === -1){
             $keyword = 'minus';
-            $symbol = "-";
+            $symbol = "AintNews";
         }
         print $res['count'] . "<a class='add". ucwords($keyword) ."";
         if ($res['me'.$keyword]){

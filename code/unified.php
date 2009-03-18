@@ -1100,14 +1100,14 @@ ob_clean();
 	            $output .= "pselected ";
 	        }
 	        $output .= "' href='#' onclick=\"javascript:addPlus({$objectid}, '$type',
-	            'plus{$objectid}');return false;\">+</a></div>
+	            'plus{$objectid}');return false;\">IsNews</a></div>
 	            <div class='minus' id='minus{$objectid}'
 	            >{$minus}<a class='addMinus ";
 	        if ($meminus){
 	           $output .= " mselected ";
 	        }
 	        $output .= "' href='#' onclick=\"javascript:addMinus({$objectid}, '$type',
-	            'minus{$objectid}');return false;\">-</a></div>";
+	            'minus{$objectid}');return false;\">AintNews</a></div>";
 	        return $output;
 	    }
 	} // end of class!
