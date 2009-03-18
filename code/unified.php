@@ -652,7 +652,7 @@ require_once('inputfilter.php');
 	                    <a class='title' href='/view{$kind}/{$objectid}/".$this->urlTitle($objectDetails['title'])."/'
 	                >".stripslashes($objectDetails['title'])."</a></h1><br/>";
 	            } else {
-	                $output .= "<h1 style='display:inline;font-weight:normal;'><a class='title' rel='nofollow' href='".stripslashes($objectDetails['url'])."'
+	                $output .= "<h1 style='display:inline;font-weight:normal;'><a class='title' rel='external nofollow' href='".stripslashes($objectDetails['url'])."'
 	                >".stripslashes($objectDetails['title'])."</a></h1><br/>";
 	            }
 	            $avatar_image = "sys/users/avatar/{$objectDetails['user_id']}.jpg";
@@ -681,7 +681,7 @@ require_once('inputfilter.php');
 	
 	            $output .= "<br /><p>".nl2br(stripslashes($objectDetails['description']))."</p>";
 	            if ($article && $kind === 'link'){
-	                $output .= "<a style='margin-right:70px;float:right;font-size:1.5em;' rel='nofollow' href='".stripslashes($objectDetails['url'])."'>View Link</a><br/><br/>";
+	                $output .= "<a style='margin-right:70px;float:right;font-size:1.5em;' rel='external nofollow' href='".stripslashes($objectDetails['url'])."'>View Link</a><br/><br/>";
 	            } elseif ($article && $kind === 'blog'){
 	            	$output .= "</div>";
                     $objectDetails['details'] = $this->bbcode_to_html($objectDetails['details']);
