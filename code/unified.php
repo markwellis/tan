@@ -832,9 +832,8 @@ require_once('inputfilter.php');
 		    } else {
 	                exit();
 		    }
-		    
 	    }
-	
+
 	    function CreateCommentHTML($comments, $id){
 	        switch($this->kind_of_object){
 	            case 'link':
@@ -852,9 +851,11 @@ require_once('inputfilter.php');
 ob_start();
 ?>
 <script type="text/javascript">
+var spellcheck_complete = 0;
+
 window.addEvent('domready', function(){
 
-    $$('.comment_edit').addEvent('click', function() {
+    $$('.comment_edit').addEvent('click', function(e) {
         var href = this.href;
         var comment_id = href.replace(/.*\/(\d+)\//g, "$1");
         var ts = new Date().getTime();
@@ -871,7 +872,7 @@ window.addEvent('domready', function(){
         return false;
     });
 
-    $$('.quote_link').addEvent('click', function() {
+    $$('.quote_link').addEvent('click', function(e) {
         var title = this.title.split('::');
         var username = title[0]; 
         var comment_id = title[1]; 
@@ -884,6 +885,28 @@ window.addEvent('domready', function(){
         FCKeditorAPI.GetInstance('comment').SetHTML(comment_so_far);
         return false;
     });
+    
+    <? if ($user->isLoggedIn()){ ?>
+    
+    $('submit_comment').addEvent('click', function(e) {
+        var oEditor = FCKeditorAPI.GetInstance('comment');
+        var comment = oEditor.GetHTML();
+        comment = comment.trim();
+        if (comment.length < 7){
+            alert('Please enter a comment');
+            e.stop();
+            return false;
+        }
+        if (!spellcheck_complete){
+            e.stop();
+            var ret = oEditor.Commands.GetCommand('SpellCheck').Execute();
+            spellcheck_complete = 1;
+            return false;
+        }
+        return true;
+    });
+    
+    <?php } ?>
 
 });
 </script>
@@ -945,9 +968,7 @@ ob_clean();
 	            $oFCKeditor->Config['EnterMode'] = 'br';
 	            $output .= $oFCKeditor->CreateHTML() 
 	            
-					."<br/><input type='submit' value='Comment' onclick=\"if(FCKeditorAPI.GetInstance('comment').GetHTML().length < 7) " 
-						."{alert('Please enter a comment');return false;}return true;\" "
-					.'/> '
+					."<br/><input type='submit' value='Comment' id='submit_comment'/>"
 	                .'</p></form> ';
 	        } else {
 	            $output .="<span style='font-size:1.2em;padding-bottom:15px;display:block;'>" 

@@ -7,24 +7,21 @@ if (defined('MAGIC')) {
         public function __construct() {
             $time = 60*60*24*90;
             $name = '32duihsfd8923rj21ws';
-            session_name($name);
-
-			if ($_SERVER['HTTP_HOST'] === 'htdev.hub00.howmanykillings.com' 
-				|| $_SERVER['HTTP_HOST'] === 'web01.hub01.howmanykillings.com'){
-			    	$domain = '.howmanykillings.com';
-			} else {
-			    $domain = '.thisaintnews.com';
-			}
-
-            session_set_cookie_params($time, '/', $domain);
-            ini_set("session.gc_maxlifetime", $time);
-            ini_set("session.cookie_httponly", true);
-            session_cache_expire($time);
-    	    session_start();
-
+            if ( !isset( $_SESSION ['ready'] ) ) {
+                session_name($name);
+                $domain = $_SERVER['HTTP_HOST'];
+                ini_set("session.gc_maxlifetime", $time);
+                session_cache_expire($time);
+                session_set_cookie_params($time, '/', $domain);
+                
+                session_start ();
+                $_SESSION ['ready'] = TRUE;
+             }
+            
             if (isset($_COOKIE[$name])){
                 @setcookie($name, $_COOKIE[$name], time() + $time, "/", false);
             }
+            
             global $sql;
             if ($sql) {
                 $this->sql = $sql;
@@ -185,9 +182,11 @@ if (defined('MAGIC')) {
                     $query = "update user_details set last_date=NOW() where user_id=".$row['user_id'].";";
                     $sql->query($query, 'none');
                     return true;
-                } else { return false; }
-            } else { return false; }
-            return false;
+                } else {
+                    return false; 
+                }
+            }
+            return false; 
         }
 
         public function logout() {
@@ -213,6 +212,9 @@ if (defined('MAGIC')) {
             return preg_replace("/[^a-zA-Z0-9_]/", "", str_replace(' ','_', html_entity_decode(trim($text),ENT_QUOTES,'UTF-8')));
         }
 
+        public function __destruct(){
+            unset ( $_SESSION['ready'] );
+        }
     }
 } else {
 		header('Location: /error404/');
