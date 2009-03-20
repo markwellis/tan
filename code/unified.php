@@ -888,6 +888,7 @@ window.addEvent('domready', function(){
     
     <? if ($user->isLoggedIn()){ ?>
     
+    
     $('submit_comment').addEvent('click', function(e) {
         var oEditor = FCKeditorAPI.GetInstance('comment');
         var comment = oEditor.GetHTML();
@@ -897,6 +898,12 @@ window.addEvent('domready', function(){
             e.stop();
             return false;
         }
+        return true;
+    });
+    
+    
+    $('submit_comment_spell').addEvent('click', function(e) {
+        var oEditor = FCKeditorAPI.GetInstance('comment');
         if (!spellcheck_complete){
             e.stop();
             var ret = oEditor.Commands.GetCommand('SpellCheck').Execute();
@@ -969,6 +976,7 @@ ob_clean();
 	            $output .= $oFCKeditor->CreateHTML() 
 	            
 					."<br/><input type='submit' value='Comment' id='submit_comment'/>"
+                    ."<input type='button' value='Check Spelling' id='submit_comment_spell'/>"
 	                .'</p></form> ';
 	        } else {
 	            $output .="<span style='font-size:1.2em;padding-bottom:15px;display:block;'>" 
