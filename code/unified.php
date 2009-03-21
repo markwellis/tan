@@ -904,13 +904,7 @@ window.addEvent('domready', function(){
     
     $('submit_comment_spell').addEvent('click', function(e) {
         var oEditor = FCKeditorAPI.GetInstance('comment');
-        if (!spellcheck_complete){
-            e.stop();
-            var ret = oEditor.Commands.GetCommand('SpellCheck').Execute();
-            spellcheck_complete = 1;
-            return false;
-        }
-        return true;
+	var ret = oEditor.Commands.GetCommand('SpellCheck').Execute();
     });
     
     <?php } ?>

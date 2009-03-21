@@ -58,7 +58,7 @@ switch($function){
                     $middle .= " pselected";
                 }
                 $middle .= "' href='#' onclick=\"javascript:taddPlus(".$thumbs[$i]['picture_id'].", 'picture', 
-                    'tplus".$thumbs[$i]['picture_id']."');return false;\">+</a></div>
+                    'tplus".$thumbs[$i]['picture_id']."');return false;\">IsNews</a></div>
                     <div style='float:left;width:40px;margin-top:10px;'>
                     <a style='display:block' href='/viewpic/".$thumbs[$i]['picture_id']."/".stripslashes(str_replace(array(' ','%'),array('_',''),$thumbs[$i]['title'])) ."#comments'>
                     <img src='/sys/images/comment.png' style='float:left;' alt=' ' /> ". $comments ."</a></div>
@@ -67,7 +67,7 @@ switch($function){
                    $middle .= " mselected";
                 }
                 $middle .= "' href='#' onclick=\"javascript:taddMinus(".$thumbs[$i]['picture_id'].", 'picture', 
-                    'tminus".$thumbs[$i]['picture_id']."');return false;\">-</a></div></div>";
+                    'tminus".$thumbs[$i]['picture_id']."');return false;\">AintNews</a></div></div>";
                 $middle .= "</div>";
         }
         $middle .= "</div>";
