@@ -24,7 +24,6 @@ define('TEMPLATE_PATH', LIB_PATH .'/templates');
 require_once(BASE_PATH . '/code/header.php');
 require_once(MODEL_PATH . '/m_comment.php');
 require_once(BASE_PATH . '/code/sql.php');
-require_once(BASE_PATH . '/code/user.php');
 global $sql;
 global $user;
 

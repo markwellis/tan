@@ -192,9 +192,9 @@ if (defined('MAGIC')) {
             
         if (!$cached){
             $sql = &new sql();
-            $query = "SELECT details, comment_id, username, UNIX_TIMESTAMP(date) as date, blog_id, link_id, picture_id FROM comments ORDER BY date DESC LIMIT 10";
+            $query = "SELECT details, comment_id, username, UNIX_TIMESTAMP(date) as date, blog_id, link_id, picture_id FROM comments ORDER BY date DESC LIMIT 20";
             $recent_comments = $sql->query($query, 'array');
-            $tmp = '<div><span>Recent Comments</span><ul style="list-style:none;margin:0px;padding:0px;" class="" >';
+            $tmp = '<div style="overflow:hidden;"><span>Recent Comments</span><ul style="list-style:none;margin:0px;padding:0px;" class="" >';
             foreach ($recent_comments as $comment){
                 if ($comment['blog_id']) {
                     $comment_type = 'blog';
@@ -324,8 +324,11 @@ if (defined('MAGIC')) {
 	    }
 	
 	    private function closePage($footer, $where, $type, $sortby = null){
+            if ($sortby){
+                $sortby = "Sort by: {$sortby}";
+            }
 	        $this->output .= '<div id="main_menu"><div id="menu_holder"> '
-	        	. $this->createMenu($where, $type) ."</div>".$this->get_recent_comments()."$sortby</div> "
+	        	. $this->createMenu($where, $type) ."</div>{$sortby}".$this->get_recent_comments()."</div> "
 				.'<div id="those_damn_dirty_evil_ads"></div> '
 				.'<div id="bottom"> '
 	            .'<a href="http://validator.w3.org/check?uri=referer"> '

@@ -881,7 +881,7 @@ window.addEvent('domready', function(){
         var quote = $(comment_name).innerHTML;
         
         var comment_so_far = FCKeditorAPI.GetInstance('comment').GetHTML();
-        comment_so_far += '[quote user="' + username + '"]' + quote + '[/quote]' + "\n<br /><br /><br />";
+        comment_so_far += '[quote user="' + username + '"]' + quote + '[/quote]' + "\n<br /><br />";
         FCKeditorAPI.GetInstance('comment').InsertHtml(comment_so_far);
         return false;
     });
@@ -966,6 +966,7 @@ ob_clean();
 	            $oFCKeditor->Value = '' ;
 	            $oFCKeditor->ToolbarSet = 'lulz';
 	            $oFCKeditor->Width = '98%';
+                $oFCKeditor->Config["CustomConfigurationsPath"] = "/sys/script/fckconfig.js";
                 $oFCKeditor->Height = '300px';
 	            $oFCKeditor->Config['EnterMode'] = 'br';
 	            $output .= $oFCKeditor->CreateHTML() 

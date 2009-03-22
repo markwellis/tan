@@ -702,7 +702,7 @@ ul#mainmenu li ul li{
 
 .tip { 
 	width:250px;
-	text-align:justify;
+	overflow:hidden;
 	-moz-border-radius:3px;
 	-webkit-border-radius:3px;
 	padding:3px;
