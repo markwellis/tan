@@ -26,7 +26,7 @@
 
 FCKConfig.CustomConfigurationsPath = '' ;
 
-FCKConfig.EditorAreaCSS = FCKConfig.BasePath + 'css/fck_editorarea.css' ;
+FCKConfig.EditorAreaCSS = '/css/fckeditor.css'; //FCKConfig.BasePath + 'css/fck_editorarea.css' ;
 FCKConfig.EditorAreaStyles = '' ;
 FCKConfig.ToolbarComboPreviewCSS = '' ;
 
@@ -214,7 +214,7 @@ FCKConfig.CleanWordKeepsStructure = false ;
 FCKConfig.RemoveFormatTags = 'b,big,code,del,dfn,em,font,i,ins,kbd,q,samp,small,span,strike,strong,sub,sup,tt,u,var' ;
 
 // Attributes that will be removed
-FCKConfig.RemoveAttributes = 'class,style,lang,width,height,align,hspace,valign' ;
+FCKConfig.RemoveAttributes = 'style,lang,width,height,align,hspace,valign' ;
 
 FCKConfig.CustomStyles =
 {

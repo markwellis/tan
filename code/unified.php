@@ -881,8 +881,8 @@ window.addEvent('domready', function(){
         var quote = $(comment_name).innerHTML;
         
         var comment_so_far = FCKeditorAPI.GetInstance('comment').GetHTML();
-        comment_so_far += '[quote user="' + username + '"]' + quote + '[/quote]';
-        FCKeditorAPI.GetInstance('comment').SetHTML(comment_so_far);
+        comment_so_far += '[quote user="' + username + '"]' + quote + '[/quote]' + "\n<br /><br /><br />";
+        FCKeditorAPI.GetInstance('comment').InsertHtml(comment_so_far);
         return false;
     });
     
@@ -966,6 +966,7 @@ ob_clean();
 	            $oFCKeditor->Value = '' ;
 	            $oFCKeditor->ToolbarSet = 'lulz';
 	            $oFCKeditor->Width = '98%';
+                $oFCKeditor->Height = '300px';
 	            $oFCKeditor->Config['EnterMode'] = 'br';
 	            $output .= $oFCKeditor->CreateHTML() 
 	            
@@ -987,35 +988,37 @@ ob_clean();
 	    }
 	
 	    function create_top_random($below = null, $where = null){
-	    	$memcache = new Memcache;
-			$memcache_key = $this->kind_of_object . ":b:{$below}w:{$where}";
-			@$memcache->connect('127.0.0.1', 11211);
-			$cached = @$memcache->get($memcache_key);
-			if (!$cached){
-	    		$sql = new sql();
-		    	#Massive sql statement due to ORDER BY RAND() being VERY slow
-	            $query = "(SELECT title, picture_id as id, 'pic' as type, (SELECT COUNT(comment_id) FROM comments WHERE comments.picture_id = a.picture_id) AS comments FROM picture_details AS a JOIN (SELECT FLOOR(MAX(picture_id) * RAND()) AS ID FROM  picture_details) AS x ON a.picture_id >= x.ID LIMIT 1)"
-					."UNION (SELECT title, picture_id as id, 'pic' as type, (SELECT COUNT(comment_id) FROM comments WHERE comments.picture_id = a.picture_id) AS comments FROM picture_details AS a JOIN (SELECT FLOOR(MAX(picture_id) * RAND()) AS ID FROM  picture_details) AS x ON a.picture_id >= x.ID LIMIT 1)"
-					."UNION (SELECT title, blog_id as id, 'blog' as type, (SELECT COUNT(comment_id) FROM comments WHERE comments.blog_id = a.blog_id) AS comments FROM blog_details AS a JOIN (SELECT FLOOR(MAX(blog_id) * RAND()) AS ID FROM blog_details) AS x ON a.blog_id >= x.ID LIMIT 1)"
-					."UNION (SELECT title, blog_id as id, 'blog' as type, (SELECT COUNT(comment_id) FROM comments WHERE comments.blog_id = a.blog_id) AS comments FROM blog_details AS a JOIN (SELECT FLOOR(MAX(blog_id) * RAND()) AS ID FROM blog_details) AS x ON a.blog_id >= x.ID LIMIT 1)"
-					."UNION (SELECT title, link_id as id, 'link' as type, (SELECT COUNT(comment_id) FROM comments WHERE comments.link_id = a.link_id) AS comments FROM link_details AS a JOIN (SELECT FLOOR(MAX(link_id) * RAND()) AS ID FROM link_details) AS x ON a.link_id >= x.ID LIMIT 1)"
-					."UNION (SELECT title, link_id as id, 'link' as type, (SELECT COUNT(comment_id) FROM comments WHERE comments.link_id = a.link_id) AS comments FROM link_details AS a JOIN (SELECT FLOOR(MAX(link_id) * RAND()) AS ID FROM link_details) AS x ON a.link_id >= x.ID LIMIT 1);";
-		    	$res = $sql->query($query,'array');
-		    	@$memcache->set($memcache_key, $res, false, 10);
-		    	return $res;
-			}
-			return $cached;
+            return;
+//	    	$memcache = new Memcache;
+//			$memcache_key = $this->kind_of_object . ":b:{$below}w:{$where}";
+//			@$memcache->connect('127.0.0.1', 11211);
+//			$cached = @$memcache->get($memcache_key);
+//			if (!$cached){
+//	    		$sql = new sql();
+//		    	#Massive sql statement due to ORDER BY RAND() being VERY slow
+//	            $query = "(SELECT title, picture_id as id, 'pic' as type, (SELECT COUNT(comment_id) FROM comments WHERE comments.picture_id = a.picture_id) AS comments FROM picture_details AS a JOIN (SELECT FLOOR(MAX(picture_id) * RAND()) AS ID FROM  picture_details) AS x ON a.picture_id >= x.ID LIMIT 1)"
+//					."UNION (SELECT title, picture_id as id, 'pic' as type, (SELECT COUNT(comment_id) FROM comments WHERE comments.picture_id = a.picture_id) AS comments FROM picture_details AS a JOIN (SELECT FLOOR(MAX(picture_id) * RAND()) AS ID FROM  picture_details) AS x ON a.picture_id >= x.ID LIMIT 1)"
+//					."UNION (SELECT title, blog_id as id, 'blog' as type, (SELECT COUNT(comment_id) FROM comments WHERE comments.blog_id = a.blog_id) AS comments FROM blog_details AS a JOIN (SELECT FLOOR(MAX(blog_id) * RAND()) AS ID FROM blog_details) AS x ON a.blog_id >= x.ID LIMIT 1)"
+//					."UNION (SELECT title, blog_id as id, 'blog' as type, (SELECT COUNT(comment_id) FROM comments WHERE comments.blog_id = a.blog_id) AS comments FROM blog_details AS a JOIN (SELECT FLOOR(MAX(blog_id) * RAND()) AS ID FROM blog_details) AS x ON a.blog_id >= x.ID LIMIT 1)"
+//					."UNION (SELECT title, link_id as id, 'link' as type, (SELECT COUNT(comment_id) FROM comments WHERE comments.link_id = a.link_id) AS comments FROM link_details AS a JOIN (SELECT FLOOR(MAX(link_id) * RAND()) AS ID FROM link_details) AS x ON a.link_id >= x.ID LIMIT 1)"
+//					."UNION (SELECT title, link_id as id, 'link' as type, (SELECT COUNT(comment_id) FROM comments WHERE comments.link_id = a.link_id) AS comments FROM link_details AS a JOIN (SELECT FLOOR(MAX(link_id) * RAND()) AS ID FROM link_details) AS x ON a.link_id >= x.ID LIMIT 1);";
+//		    	$res = $sql->query($query,'array');
+//		    	@$memcache->set($memcache_key, $res, false, 10);
+//		    	return $res;
+//			}
+//			return $cached;
 	    }
 	
 	    function CreateRandomHTML ($details) {
-	        $output .= "<br/><div style='margin-top:15px;'>See also<br/>";
-	
-	        foreach ($details as $detail){
-	            $output .= "<a href='/view{$detail['type']}/{$detail['id']}/".$this->urlTitle($detail['title'])."/' class='top_selection'>"
-	                . stripslashes($detail['title']).", {$detail['comments']}</a>";
-	        }
-	        $output .= "</div>";
-	        return $output;
+//	        $output .= "<br/><div style='margin-top:15px;'>See also<br/>";
+//	
+//	        foreach ($details as $detail){
+//	            $output .= "<a href='/view{$detail['type']}/{$detail['id']}/".$this->urlTitle($detail['title'])."/' class='top_selection'>"
+//	                . stripslashes($detail['title']).", {$detail['comments']}</a>";
+//	        }
+//	        $output .= "</div>";
+//	        return $output;
+            return;
 	    }
 	
 	    function CreateSortBoxHTML($type, $page, $sort){
