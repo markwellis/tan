@@ -287,6 +287,7 @@ switch($function){
             $oFCKeditor->Width = '98%';
             $oFCKeditor->Height = 450;
             $oFCKeditor->Config['EnterMode'] = 'br';
+            $oFCKeditor->Config["CustomConfigurationsPath"] = "/sys/script/fckconfig.js";
             $middle .= $oFCKeditor->CreateHTML() ;
             $middle .= "<br /><br /><label for='tags' style='width:540px;'>Type some relevant tags (simple words that describe the blog), separated by a space. 
                 Then pictures will appear, click the one you want to appear next to your blog</label><br /><br />
