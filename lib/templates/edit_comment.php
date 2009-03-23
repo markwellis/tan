@@ -15,7 +15,7 @@ $oFCKeditor = new FCKeditor("comment_edit_{$comment_id}");
 $oFCKeditor->BasePath = '/sys/js/fckeditor/' ;
 $oFCKeditor->ToolbarSet = 'lulz';
 $oFCKeditor->Width = '98%';
-
+$oFCKeditor->Config["CustomConfigurationsPath"] = "/sys/script/fckconfig.js";
 $oFCKeditor->Config['EnterMode'] = 'br';
 $oFCKeditor->Value = $comment;
 
