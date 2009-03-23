@@ -46,8 +46,12 @@ if ($_SERVER['REQUEST_METHOD']==='POST') {
             require_once("code/m_image_upload.php");
             $user_id = $user->getUserId();
             $avatar = &new m_image_upload($_FILES['avatar'], PROFILE_PICTURE_UPLOAD_PATH . "/{$user_id}.jpg");
-            $avatar->upload();
-	    $middle .= "<h1>Your new avatar has been uploaded</h1><br />";
+            $res = $avatar->upload();
+            if($res === true){
+    	       $middle .= "<h1>Your new avatar has been uploaded</h1><br />";
+            }else{
+                $middle .= "<h1>{$res}</h1>";
+            }
         }
     }
 }

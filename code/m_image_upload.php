@@ -42,25 +42,25 @@ class m_image_upload {
          * -4: Not a jpg
          */
         if ($this->image['error'] !== 0) {
-            return -2;
+            return 'Upload error';
         }
 
         if ($this->image['size'] > MAX_UPLOADED_PICTURE_SIZE ){
-            return -1;
+            return 'Filesize exceeded';
         }
 
         if (!@is_uploaded_file($this->image['tmp_name'])){
-            return -1;
+            return 'Filesize exceeded';
         }
 
         if($this->image['type'] !== "image/jpeg"){
-            return -4;
+            return 'Not a jpg';
         }
 
         // if we cant get the image resolution, its not an image.
         $res = @getimagesize($this->image['tmp_name']);
         if (!$res){
-            return -3;
+            return 'Not an image';
         }
         return true;
     }
@@ -72,7 +72,7 @@ class m_image_upload {
         if (!move_uploaded_file($this->image['tmp_name'], $this->uploaded_filename)) {
             return null;
         }
-        return $this->uploaded_file;
+        return true;
     }    
 }
 
