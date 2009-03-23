@@ -4,7 +4,8 @@ if($_SERVER['REQUEST_METHOD']==='POST') {
 	define('MAGIC', true);
 	require_once('inputfilter.php');
 	require_once('user.php');
-	$user = new user();
+    global $user;
+	$user = &new user();
 	
 	$type = $_POST['type'];
 	$kinds = array ('picture', 'link', 'blog');

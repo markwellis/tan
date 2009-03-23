@@ -42,6 +42,16 @@ if (defined('MAGIC')) {
 	        if (in_array($kind, $this->kinds_of_objects, TRUE)){
 	            $this->kind_of_object = $kind;
 	            $this->rootimagedir = $this->rootdir .'/images';
+                global $user;
+                if (!$user){
+                    $user = &new user();
+                }
+                global $sql;
+                if (!$sql){
+                    $sql = &new sql();
+                }
+                $this->sql = &$sql;
+                $this->user = &$user;
 	        } else {
 	            header("Location: /");
 	            die("Error 404");
@@ -80,7 +90,7 @@ if (defined('MAGIC')) {
 	
 	    function get_image_properties($id, $filename){
 	        if ($this->kind_of_object === 'picture'){
-	            $sql = new sql();
+	            $sql = &$this->sql;
 	            $query = "SELECT x, y, size FROM picture_details WHERE picture_id=$id;";
 	            $res = $sql->query($query, 'row');
 	            if (!$res['x'] || !$res['y'] || !$res['size']){
@@ -99,7 +109,7 @@ if (defined('MAGIC')) {
 	    }
 	
 	    function getRandom(){
-	        $sql = new sql();
+	        $sql = &$this->sql;
 	        $query = "SELECT * FROM {$this->kind_of_object}_details ORDER BY RAND() limit 1;";
 	        return $sql->query($query, 'row');
 	    }
@@ -158,8 +168,8 @@ require_once('inputfilter.php');
 	
 	    function isValid($data, $title, $description){
 	/*   Does a few checks on whats being submitted */
-	        $sql = new sql();
-	        $user = new user();
+	        $sql = &$this->sql;
+	        $user = &$this->user;
 	        switch ($this->kind_of_object) {
 	            case 'link':
 	                $link_error_codes = array(0 => 'Title cannont be blank',
@@ -227,8 +237,8 @@ require_once('inputfilter.php');
 	/*      $data should be the url, blog text, image filename etc
 	/*      returns the newly added objects id */
 	
-	        $sql = new sql();
-	        $user = new user();
+	        $sql = &$this->sql;
+	        $user = &$this->user;
 	        $userid = $user->getUserId();
 	        $username = $user->getUserName();
 	        switch ($this->kind_of_object) {
@@ -270,7 +280,7 @@ require_once('inputfilter.php');
 			$cached = @$memcache->get($memcache_key);
 			
 			if (!$cached){
-		        $sql = new sql();
+		        $sql = &$this->sql;
 		        switch ($this->kind_of_object){
 		            case 'link':
 		                $condtions = "WHERE link_id=$id ORDER BY date";
@@ -292,8 +302,8 @@ require_once('inputfilter.php');
 	    }
 	
 	    function leaveComment($id, $comment){
-	        $sql = new sql();
-	        $user = new user();
+	        $sql = &$this->sql;
+	        $user = &$this->user;
 	        $userid = $user->getUserId();
 	        $username = $user->getUserName();
 	        $picture_id = 0;
@@ -321,7 +331,7 @@ require_once('inputfilter.php');
 	    }
 	
         function add_to_log($username, $userid, $id, $type, $comment_id = null) {
-			$sql = new sql();
+			$sql = &$this->sql;
 			$link_id = 0;
 			$blog_id = 0;
 			$picture_id = 0;
@@ -346,8 +356,8 @@ require_once('inputfilter.php');
 		}
 	
 	    function addPlusMinus($id, $plus){
-	        $sql = new sql();
-	        $user = new user();
+	        $sql = &$this->sql;
+	        $user = &$this->user;
 	        $picture_id = 0; 
 	        $blog_id = 0; 
 	        $link_id = 0;
@@ -385,7 +395,7 @@ require_once('inputfilter.php');
 	                if ($table === 'plus'){
 	                $count = $this->getPlusMinus($id, 1);
 	                    if ( ($count['count'] == $this->promoted_threashold) && (!$count['promoted']) ){
-	                        $sql1 = new sql();
+	                        $sql1 = &$this->sql;
 	                        $query = "UPDATE $dtable SET promoted=NOW() WHERE $conditions;";
 	                        $sql1->query($query, 'none');
 	                        $this->add_to_log($username, $userid, $id, 'promoted');
@@ -401,7 +411,7 @@ require_once('inputfilter.php');
 	    }
 	
 	    function getPlusMinus($id, $plus){
-	        $sql = new sql();
+	        $sql = &$this->sql;
 	        if ($plus === 1) {
 	            $table = 'plus';
 	        } elseif ($plus === -1) {
@@ -422,7 +432,7 @@ require_once('inputfilter.php');
 	                    $object_id = 'picture_id';
 	                    break;
 	            }
-	            $user = new user();
+	            $user = &$this->user;
 	            $uid = $user->getUserId();
 	            if (!$uid){ $uid = -1; }
 	
@@ -451,7 +461,7 @@ require_once('inputfilter.php');
                 break;
 	        }
 	        
-			$sql = new sql();
+			$sql = &$this->sql;
 			$query = "SELECT COUNT($id) as comments,MAX(edited) as last, (SELECT COUNT($id) FROM plus WHERE $id=$oid) as plus, "
 				."(SELECT COUNT($id) FROM minus WHERE $id=$oid) as minus FROM comments where $id = $oid;";
 			$res = $sql->query($query, 'row');
@@ -459,7 +469,7 @@ require_once('inputfilter.php');
 		}
 	
 	    function getAllObjects($table){
-	        $sql = new sql();
+	        $sql = &$this->sql;
 	        $query = "SELECT * FROM $table;";
 	        return $sql->query($query, 'array');
 	    }
@@ -481,7 +491,7 @@ require_once('inputfilter.php');
 			$cached = @$memcache->get($memcache_key);
 			
 			if (!$cached){
-		        $sql = new sql();
+		        $sql = &$this->sql;
 		        $page = ($page * 27) -27;
 		        if (!$limit) {
 		            $limit = 27;
@@ -492,7 +502,7 @@ require_once('inputfilter.php');
 		        }
 		        
 		        require_once('code/user.php');
-		        $user = new user();
+		        $user = &$this->user;
 		        
 		        switch ($this->kind_of_object){
 		            case 'link':
@@ -559,7 +569,7 @@ require_once('inputfilter.php');
 		            $extraSql
 		            (SELECT COUNT(*) FROM minus WHERE minus.{$id} = {$table}.{$id} and minus.user_id=$uid) AS meminus
 		            FROM $table $conditions ORDER BY $order DESC LIMIT $page, $limit;";
-		        $sql1 = new sql();
+		        $sql1 = &$this->sql;
 		        $ret = $sql1->query($query, 'array');
 		        @$memcache->set($memcache_key, $ret, false, $cache_time);
 				return $ret;
@@ -568,7 +578,7 @@ require_once('inputfilter.php');
 	    }
         
         function get_thumb_pics($below, $limit = 5){
-            $sql = new sql();
+            $sql = &$this->sql;
             $page = ($page * 27) - 27;
             if ($below == 0) {
                 $oper = '>=';
@@ -594,7 +604,7 @@ require_once('inputfilter.php');
         }
 	
 	    function getPlusMinusCount($below, $plus){
-	        $sql = new sql();
+	        $sql = &$this->sql;
 	        switch ($this->kind_of_object){
 	            case 'link':
 	                $table = 'link_details';
@@ -847,7 +857,7 @@ require_once('inputfilter.php');
 	                break;
 	        }
 	        require_once('user.php');
-	        $user = new user();
+	        $user = &$this->user;
 ob_start();
 ?>
 <script type="text/javascript">

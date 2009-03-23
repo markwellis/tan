@@ -25,6 +25,7 @@ switch($function){
     case 0:  //link
         $where = 'link';
         require_once('code/unified.php');
+        global $user;
         $user = &new user();
         
         $page = (int)$_GET['page'];
@@ -137,11 +138,12 @@ switch($function){
     case 2:  //picture
         $where = 'picture';
         require_once('code/unified.php');
-        $picture = new unified('picture');
+        $picture = &new unified('picture');
 
         $page = (int)$_GET['page'];
         $type = (int)$_GET['type'];
-        $user = new user();
+        global $user;
+        $user = &new user();
         $sort = (int)$_SESSION['sortby'];
 
         $title = 'Pictures';
@@ -177,11 +179,12 @@ switch($function){
         $where = 'blog';
         require_once('code/unified.php');
 
-        $blog = new unified('blog');
+        $blog = &new unified('blog');
 
         $page = (int)$_GET['page'];
         $type = (int)$_GET['type'];
-        $user = new user();
+        global $user;
+        $user = &new user();
         $sort = (int)$_SESSION['sortby'];
 
         if ($type > 1){ $type = 1; }
@@ -205,7 +208,8 @@ switch($function){
     case 7:  //submit
         $where = 'submit';
         require_once("code/user.php");
-        $user = new user();
+        global $user;
+        $user = &new user();
         if (!$user->isLoggedIn()) {
             header('location: /login/');
             exit();
@@ -280,7 +284,7 @@ switch($function){
                 <textarea rows='10' cols='70' name='description' id='blogdescription'></textarea><br /><br />
                 <label for='blogmain' size='55'>Write your blog here</label><br /><br />";
             include_once("sys/js/fckeditor/fckeditor.php") ;
-            $oFCKeditor = new FCKeditor('blogmain');
+            $oFCKeditor = &new FCKeditor('blogmain');
             $oFCKeditor->BasePath = '/sys/js/fckeditor/' ;
             $oFCKeditor->Value = '' ;
             $oFCKeditor->ToolbarSet = 'lulz';
@@ -394,7 +398,7 @@ switch($function){
 
     case 13:  //tagcloud
         require_once('code/tag.php');
-        $tag = new tag();
+        $tag = &new tag();
         $cloud = $tag->createCloud('all');
         $title = 'Tag Cloud';
         $middle = "<div class='tagholder'>".$cloud."</div>";

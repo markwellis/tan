@@ -5,7 +5,8 @@ header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
 
 define('MAGIC', true);
 require_once('user.php');
-$user = new user();
+global $user;
+$user = &new user();
 $id = (int)$_GET['id'];
 $plus = (int)$_GET['plus'];
 $thumb = (int)$_GET['thumb'];

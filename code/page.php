@@ -7,7 +7,16 @@ if (defined('MAGIC')) {
 	    static $output;   
 	
 	    function __construct(){
-	        $user = new user();
+            global $user;
+            if (!$user){
+                $user = &new user();
+            }
+            global $sql;
+            if (!$sql){
+                $sql = &new sql();
+            }
+            $this->sql = &$sql;
+            $this->user = &$user;
 	    }
 	
 	    function createMenu($where, $type){
@@ -191,7 +200,7 @@ if (defined('MAGIC')) {
         $cached = @$memcache->get($memcache_key);
             
         if (!$cached){
-            $sql = &new sql();
+            $sql = &$this->sql;
             $query = "SELECT details, comment_id, username, UNIX_TIMESTAMP(date) as date, blog_id, link_id, picture_id FROM comments ORDER BY date DESC LIMIT 20";
             $recent_comments = $sql->query($query, 'array');
             $tmp = '<div style="overflow:hidden;"><span>Recent Comments</span><ul style="list-style:none;margin:0px;padding:0px;" class="" >';
@@ -281,7 +290,7 @@ if (defined('MAGIC')) {
 	    }
 	    
 	    private function createBody($where, $type, $sortby = null){
-	        $user = new user();
+	        $user = &$this->user;
             $this->output .= '<body>'
                 .'<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/mootools/1.2.1/mootools-yui-compressed.js"></script>'
                 .'<script type="text/javascript" src="/sys/script/mootools-1.2-more.js"></script>'
