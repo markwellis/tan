@@ -1,7 +1,12 @@
 <?php
 define('MAGIC', true);
 require_once('user.php');
+global $user;
 $user = new user();
+
+require_once('sql.php');
+global $sql;
+$sql = &new sql();
 
 if ($user->isLoggedIn()){
     require_once('unified.php');
@@ -60,8 +65,8 @@ if ($user->isLoggedIn()){
             require_once('inputfilter.php');
             require_once('tag.php');
             $filter = new InputFilter();
-            $tag = new tag();
-            $picture = new unified('picture');
+            $tag = &new tag();
+            $picture = &new unified('picture');
 
             $title = mysql_escape_string(ucwords(strip_tags(htmlentities(trim($_POST["title"]),ENT_QUOTES,'UTF-8'))));
             $description = mysql_escape_string(strip_tags(htmlentities($_POST["description"],ENT_QUOTES,'UTF-8')));

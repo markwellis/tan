@@ -19,7 +19,7 @@ if (defined('MAGIC')) {
 	        returns false if not */
 	
 	        $tag = mysql_escape_string($tag);
-	        $sql = new sql();
+	        $sql = &$this->sql;
 	        $query = "select tag_id from tags where tag='$tag';";
 	        $row = $sql->query($query, 'row');
 	        if ($row){
