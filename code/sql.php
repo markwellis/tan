@@ -2,10 +2,9 @@
 if (defined('MAGIC')) {
 	require_once('/var/www/thisaintnews.com/config/thisaintnews/config.php');
 	class sql {
-	    static $mysqlLink = Null;
 	
 	    function __construct(){
-	        $this->mysqlLink = mysql_connect(config::$dbServer,config::$dbUser,config::$dbPassword);
+	        $this->mysqlLink = &mysql_connect(config::$dbServer,config::$dbUser,config::$dbPassword);
 	        @mysql_select_db(config::$dbName, $this->mysqlLink) or die( "Unable to select database");
 	    }
 	    

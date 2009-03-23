@@ -10,7 +10,7 @@ if ($id != null && $x !=null){
 
 	header("Content-Type: image/jpeg");
 
-	$newimg = new unified('picture');
+	$newimg = &new unified('picture');
 	$image = $newimg->resizeImage($id, $x, $y);
 	print $image;
 	exit();

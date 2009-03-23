@@ -5,6 +5,14 @@ if (defined('MAGIC')) {
 	class tag{
 	    private $control_tags = 'all';
 	
+        function __construct(){
+            global $sql;
+            if (!$sql){
+                $sql = &new sql();
+            }
+            $this->sql = &$sql;
+        }
+    
 	    function isExisting($tag){
 	        /* checks to see if its an existing tag
 	        returns tag_id if existing
@@ -59,7 +67,7 @@ if (defined('MAGIC')) {
 	        returns new tags id */
 	
 	        $tag = mysql_escape_string($tag);
-	        $sql = new sql();
+	        $sql = &$this->sql;
 	        $query0 = "insert into tags (tag_id, tag) values ('','$tag');";
 	        $query1 = "select tag_id from tags where tag='$tag';";
 	        $sql->query($query0, 'none');
@@ -69,7 +77,7 @@ if (defined('MAGIC')) {
 	
 	    function isTagged($type, $id, $tagid){
 	    /* Check if something is tagged */
-	        $sql = new sql();
+	        $sql = &$this->sql;
 	        $id = (int)$id; 
 	        $tagid = (int)$tagid;
 	        if ($type == 'picture'){
@@ -96,7 +104,7 @@ if (defined('MAGIC')) {
 	        foreach ($tags as $tag){
 	            $res = $this->isTagged($type, $id, $tag);
 	            if (!$res){
-	                $sql = new sql();
+	                $sql = &$this->sql;
 	                if ($type == 'picture'){
 	                    $query = "insert into tag_details (td_id,tag_id, user_id, username, picture_id, blog_id, link_id, date) values ('',$tag, $userid, '$username', $id, '','', NOW());";
 	                }
@@ -113,7 +121,7 @@ if (defined('MAGIC')) {
 	    }
 	
 	    function getTags($type, $id){
-	        $sql = new sql();
+	        $sql = &$this->sql;
 	        $id = (int)$id;
 	        if ($type === 'picture'){
 	            $query = "select * from tag_details inner join tags on tag_details.tag_id = tags.tag_id where picture_id=$id;";
@@ -136,17 +144,17 @@ if (defined('MAGIC')) {
 	            case 'link':
 	                $sqlstr0 = 'DISTINCT link_id';
 	                $conds = 'AND';
-	                $sqlstr = 'link_id!=0 AND picture_id=0 AND blog_id=0';
+	                $sqlstr = 'link_id > 0';
 	                break;
 	            case 'picture':
 	                $sqlstr0 = 'DISTINCT picture_id';
 	                $conds = 'AND';
-	                $sqlstr = 'link_id=0 AND picture_id!=0 AND blog_id=0';
+	                $sqlstr = 'picture_id > 0';
 	                break;
 	            case 'blog':
 	                $sqlstr0 = 'DISTINCT blog_id';
 	                $conds = 'AND';
-	                $sqlstr = 'link_id=0 AND picture_id=0 AND blog_id!=0';
+	                $sqlstr = 'blog_id > 0';
 	                break;
 	        }
 	        $res = array();
@@ -155,7 +163,7 @@ if (defined('MAGIC')) {
 		$tag = $this->normalize($tag);
 		$existing = $this->isExisting($tag);
 		if ($existing){
-			$sql = new sql();
+			$sql = &$this->sql;
 			$query = "SELECT $sqlstr0 FROM tag_details WHERE tag_id=$existing $conds $sqlstr;";
 			$ret = $sql->query($query, 'array');
 			if ($ret){
@@ -163,7 +171,7 @@ if (defined('MAGIC')) {
 			}
 		}
 		}
-		$sql0 = new sql();
+		$sql0 = &$this->sql;
 		$query = "SELECT $sqlstr0 FROM tag_details order by rand() limit 20;";
 		$ret = $sql0->query($query, 'array');
 		if ($ret){
@@ -173,7 +181,7 @@ if (defined('MAGIC')) {
 	    }
 	
 	    function totalTagCount($type, $max = 100){
-	        $sql = new sql();
+	        $sql = &$this->sql;
 	        switch($type){
 	            case 'all':
 	                $conditions = '';
