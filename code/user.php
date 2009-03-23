@@ -12,14 +12,14 @@ if (defined('MAGIC')) {
                 $domain = $_SERVER['HTTP_HOST'];
                 ini_set("session.gc_maxlifetime", $time);
                 session_cache_expire($time);
-                session_set_cookie_params($time, '/', $domain);
+                session_set_cookie_params($time, '/');
                 
                 session_start ();
                 $_SESSION ['ready'] = TRUE;
              }
             
             if (isset($_COOKIE[$name])){
-                @setcookie($name, $_COOKIE[$name], time() + $time, "/", false);
+                @setcookie($name, $_COOKIE[$name], time() + $time, "/");
             }
             
             global $sql;
@@ -178,7 +178,7 @@ if (defined('MAGIC')) {
                     $_SESSION['time'] = time();
                     $_SESSION['username'] = $username;
                     $_SESSION['user_id'] = $row['user_id'];
-                    session_regenerate_id(true);
+//                    session_regenerate_id(true);
                     $query = "update user_details set last_date=NOW() where user_id=".$row['user_id'].";";
                     $sql->query($query, 'none');
                     return true;

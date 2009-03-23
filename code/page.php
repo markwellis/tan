@@ -288,7 +288,7 @@ if (defined('MAGIC')) {
 	            .'<script type="text/javascript" src="/sys/js/clientside.js"></script>'
 	            .'<div id="main">'
 	            .'<div id="top">'
-				.'<div style="float:right;margin-top:25px;margin-right:5px;text-align:right;">';
+				.'<div style="float:right;margin-top:15px;margin-right:5px;text-align:right;">';
 	        if (!$user->isLoggedIn()){
 	            $this->output .= '<a href="/login/" class="menulink">Login/Register</a> | ';
 	        } else {
@@ -307,7 +307,7 @@ if (defined('MAGIC')) {
 	        if ($user->isLoggedIn()){
 	            $this->output .= " | <a href='/logout/' class='menulink'>Logout</a>";
 	        }
-	        $this->output .= '<div style="float:right">
+	        $this->output .= '<br /><div style="float:right">
 <form action="http://www.google.com/cse" id="cse-search-box">
   <div>
     <input type="hidden" name="cx" value="017135894524023845720:-eqs9gh9cxm" />
