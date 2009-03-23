@@ -16,6 +16,7 @@ if($_SERVER['REQUEST_METHOD']==='POST') {
                                     $_SERVER["REMOTE_ADDR"],
                                     $_POST["recaptcha_challenge_field"],
                                     $_POST["recaptcha_response_field"]);
+    global $user;
 	$user = &new user();
 
     if (!$resp->is_valid) {
@@ -29,15 +30,15 @@ if($_SERVER['REQUEST_METHOD']==='POST') {
 
     if ($return > 0){
         if ($user->login($username, $password0)) {
-            if ($_SESSION['ref'] != '' ){
-            	if ($_SESSION['ref'] === '/login/') {
-            		$_SESSION['ref'] = '/';
+            $ref = $_SESSION['ref'];
+            if ($ref){
+            	if ($ref === '/login/') {
+            		$ref = '/';
             	}
-		$loc = $_SESSION['ref'];
-		$_SESSION['ref'] = null;
-		$_SESSION['email'] = null;
-		$_SESSION['register_error'] = null;
-                header("Location: " .$loc);
+        		unset($_SESSION['ref']);
+        		unset($_SESSION['email']);
+        		unset($_SESSION['register_error']);
+                header("Location: " .$ref);
 
                 exit();
             }else {
