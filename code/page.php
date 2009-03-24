@@ -309,7 +309,7 @@ if (defined('MAGIC')) {
 	        } else {
 	            $this->output .="<a href='/filteroff' class='menulink'>Disable NSFW filter</a> | ";
 	        }*/
-	        $this->output .= '<a href="/shop/" class="menulink">Shop</a> |'
+	        $this->output .= '<a href="http://www.cafepress.com/thisaintnews" target="_blank" class="menulink">Shop</a> |'
 	            .'<a href="/chat/" class="menulink">Chat</a> | '
 	            .'<a href="http://forums.thisaintnews.com" class="menulink">Forum</a>';
 	
