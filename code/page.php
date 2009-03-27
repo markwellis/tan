@@ -298,6 +298,21 @@ if (defined('MAGIC')) {
 	            .'<div id="main">'
 	            .'<div id="top">'
 				.'<div style="float:right;margin-top:15px;margin-right:5px;text-align:right;">';
+ob_start();
+?>
+<script type="text/javascript">
+window.addEvent('domready', function() {
+    $$('.mibbit').addEvent('click', function(e) {
+        popUpWindow("http://embed.mibbit.com/?server=irc.newnet.net&chatOutputShowTimes=true"
+  	  +"&channel=%23thisaintnews&settings=8a8a5ac18a22e7eecd04026233c3df93t"
+	  +"&nick=<?= $user->getUsername() ?>", 720, 400);
+	e.stop();
+    });
+});
+</script>
+<?php
+$this->output .= ob_get_contents();
+ob_clean();
 	        if (!$user->isLoggedIn()){
 	            $this->output .= '<a href="/login/" class="menulink">Login/Register</a> | ';
 	        } else {
@@ -310,7 +325,7 @@ if (defined('MAGIC')) {
 	            $this->output .="<a href='/filteroff' class='menulink'>Disable NSFW filter</a> | ";
 	        }*/
 	        $this->output .= '<a href="http://www.cafepress.com/thisaintnews" target="_blank" class="menulink">Shop</a> |'
-	            .'<a href="/chat/" class="menulink">Chat</a> | '
+	            .'<a href="/chat/" class="menulink mibbit">Chat</a> | '
 	            .'<a href="http://forums.thisaintnews.com" class="menulink">Forum</a>';
 	
 	        if ($user->isLoggedIn()){

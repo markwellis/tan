@@ -1,3 +1,18 @@
+function popUpWindow(URLStr,width,height) {
+	winName = "mibbitPopUp"
+	winSetup = "toolbar=no," +
+	"location=no," +
+	"status=no," +
+	"menubar=no," +
+	"scrollbars=no," +
+	"resizable=no," +
+	"width="+width+"," +
+	"height="+height+"," + 
+	"top=110," +
+	"left=110"
+	sgWindow = window.open(URLStr,winName,winSetup) ;
+// if (msgWindow.opener == null) msgWindow.opener = self;
+}
 
 function ajax_get(file, pos, style){
 	var xmlHttp;
