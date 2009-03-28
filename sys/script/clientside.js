@@ -5,7 +5,7 @@ function popUpWindow(URLStr,width,height) {
 	"status=no," +
 	"menubar=no," +
 	"scrollbars=no," +
-	"resizable=no," +
+	"resizable=yes," +
 	"width="+width+"," +
 	"height="+height+"," + 
 	"top=110," +

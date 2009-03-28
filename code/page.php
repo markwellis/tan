@@ -294,7 +294,7 @@ if (defined('MAGIC')) {
             $this->output .= '<body>'
                 .'<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/mootools/1.2.1/mootools-yui-compressed.js"></script>'
                 .'<script type="text/javascript" src="/sys/script/mootools-1.2-more.js"></script>'
-	            .'<script type="text/javascript" src="/sys/js/clientside.js"></script>'
+	            .'<script type="text/javascript" src="/sys/js/clientside.js?t=2"></script>'
 	            .'<div id="main">'
 	            .'<div id="top">'
 				.'<div style="float:right;margin-top:15px;margin-right:5px;text-align:right;">';
