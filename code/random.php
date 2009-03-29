@@ -20,10 +20,14 @@ switch ($_GET['type']) {
 		break;
 }
 
+function url_title($text){
+    return preg_replace("/[^a-zA-Z0-9_]/", "", str_replace(' ','_', html_entity_decode(trim($text),ENT_QUOTES,'UTF-8')));
+}
+
 if ($where) {
     $obj = new unified($where);
     $det = $obj->getRandom();
-    header("location:  /view{$urlk}/".$det["{$where}_id"]."/".str_replace(" ", "_",$det['title']));
+    header("location:  /view{$urlk}/".$det["{$where}_id"]."/".url_title($det['title']) . '/');
     exit();
 } else {
 	header("Location: /");
