@@ -193,7 +193,8 @@ function init_spell() {
 
 <script type="text/javascript">//<![CDATA[
 wordWindowObj.writeBody();
-//]]></script>
+//]]>
+</script>
 
 </body>
 </html>

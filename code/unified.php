@@ -920,7 +920,8 @@ window.addEvent('domready', function(){
     <?php } ?>
 
 });
-//]]></script>
+//]]>
+</script>
 <?
 $output .= ob_get_contents();
 ob_clean();

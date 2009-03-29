@@ -166,7 +166,8 @@ if (defined('MAGIC')) {
                             showDelay: 50,
                         });
                     });  
-                //]]></script>
+                //]]>
+                </script>
                 <?php
                 $tmp .= ob_get_contents();
                 ob_end_clean();
@@ -221,7 +222,8 @@ window.addEvent('domready', function() {
 	e.stop();
     });
 });
-//]]></script>
+//]]>
+</script>
 <?php
 $this->output .= ob_get_contents();
 ob_clean();
@@ -275,10 +277,12 @@ var AdBrite_Border_Color = 'CCCCCC';
 var AdBrite_URL_Color = '008000';
 try{var AdBrite_Iframe=window.top!=window.self?2:1;var AdBrite_Referrer=document.referrer==''?document.location:document.referrer;AdBrite_Referrer=encodeURIComponent(AdBrite_Referrer);}catch(e){var AdBrite_Iframe='';var AdBrite_Referrer='';}
 
-//]]></script>
+//]]>
+</script>
 <script type="text/javascript">//<![CDATA[
 document.write(String.fromCharCode(60,83,67,82,73,80,84));document.write(' src="http://ads.adbrite.com/mb/text_group.php?sid=1104667&zs=3132305f363030&ifr='+AdBrite_Iframe+'&ref='+AdBrite_Referrer+'" type="text/javascript">');document.write(String.fromCharCode(60,47,83,67,82,73,80,84,62));
-//]]></script>
+//]]>
+</script>
 <div><a target="_top" href="http://www.adbrite.com/mb/commerce/purchase_form.php?opid=1104667&amp;afsid=55544" style="font-weight:bold;font-family:Arial;font-size:13px;">Your Ad Here</a></div>
 <!-- End: Black Label Ads -->      
         <?php
@@ -298,10 +302,12 @@ var AdBrite_Border_Color = 'CCCCCC';
 var AdBrite_URL_Color = '008000';
 try{var AdBrite_Iframe=window.top!=window.self?2:1;var AdBrite_Referrer=document.referrer==''?document.location:document.referrer;AdBrite_Referrer=encodeURIComponent(AdBrite_Referrer);}catch(e){var AdBrite_Iframe='';var AdBrite_Referrer='';}
 
-//]]></script>
+//]]>
+</script>
 <script type="text/javascript">//<![CDATA[
 document.write(String.fromCharCode(60,83,67,82,73,80,84));document.write(' src="http://ads.adbrite.com/mb/text_group.php?sid=1104661&zs=3132305f363030&ifr='+AdBrite_Iframe+'&ref='+AdBrite_Referrer+'" type="text/javascript">');document.write(String.fromCharCode(60,47,83,67,82,73,80,84,62));
-//]]></script>
+//]]>
+</script>
 <div><a href="http://www.adbrite.com/mb/commerce/purchase_form.php?opid=1104661&amp;afsid=1" style="font-weight:bold;font-family:Arial;font-size:13px;">Your Ad Here</a></div>
 <!-- End: AdBrite -->
         <?php
@@ -333,7 +339,7 @@ document.write(String.fromCharCode(60,83,67,82,73,80,84));document.write(' src="
 	            .'var pageTracker = _gat._getTracker("UA-5148406-3"); '
 	            .'pageTracker._initData(); '
 	            ."pageTracker._trackPageview(); \n"
-	            .'//]]></script> '
+	            ."//]]>\n</script> "
 	            .'</body></html>';
 	    }
 	
