@@ -44,8 +44,8 @@ RewriteRule ^tagthumbs/([^/]+)/?$ /tagthumbs.php?tags=$1 [NC]
 
 RewriteRule ^thumb/([^/]+)/([^/]+) ./code/getthumb.php?id=$1&x=$2 [NC]
 
-RewriteRule ^filteron$ ./code/filter.php?type=0 [NC]
-RewriteRule ^filteroff$ ./code/filter.php?type=1 [NC]
+RewriteRule ^filteron/$ ./code/filter.php [NC]
+RewriteRule ^filteroff/$ ./code/filter.php [NC]
 
 RewriteRule ^comment$ ./code/docomment.php [NC]
 

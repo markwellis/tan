@@ -8,11 +8,11 @@ $y = (int)$_GET['y'];
 
 if ($id != null && $x !=null){
 
-	header("Content-Type: image/jpeg");
-
 	$newimg = &new unified('picture');
 	$image = $newimg->resizeImage($id, $x, $y);
-	print $image;
+    
+    header("Content-type: image/{$image[1]}");
+	print $image[0];
 	exit();
 }
 ?>

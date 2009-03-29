@@ -25,7 +25,6 @@ if ( $user->isLoggedIn() && ($user->getUsername() == 'mrbig4545') ){
         $conditions = implode(' OR picture_id=', $_POST['nsfw']);
         
         $query= "UPDATE picture_details SET NSFW = 'Y' WHERE picture_id={$conditions}";
-error_log($query);
         $sql->query($query, 'none');
     }
     

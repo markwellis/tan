@@ -20,252 +20,162 @@ if (defined('MAGIC')) {
 	    }
 	
 	    function createMenu($where, $type){
-/*	        $selclass = ' mainselected';
-	        $subclass = ' subselected';
-	        
-		    $linkmenu = null;
-	 	    $picturemenu = null;
-		    $blogmenu = null;
-	
-	        if ($where == 'link'){
-	            $menu = & $linkmenu;
-	            $lselected = & $selclass;
-	            if ($type === 0){$plink = & $subclass;}
-	            if ($type === 1){$ulink = & $subclass;}
-	            $lnav = " lnav";
-	        }
-	        if ($where == 'picture'){
-	            $menu = & $picturemenu;
-	            $pselected = & $selclass;
-	            if ($type === 0){$ppic = & $subclass;}
-	            if ($type === 1){$upic = & $subclass;}
-	            $pnav = " pnav";
-	        }
-	        if ($where == 'blog'){
-	            $menu = & $blogmenu;
-	            $bselected = & $selclass;
-	            if ($type === 0){$pblog = & $subclass;}
-	            if ($type === 1){$ublog = & $subclass;}
-	            $bnav = " bnav";
-	        }
-	        if ($where == 'submit'){
-	            if ($type === 0){
-	                $lselected = & $selclass;
-	                $menu = & $linkmenu;
-	                $lsub = & $subclass;
-	            }
-	            if ($type === 1){
-	                $pselected = & $selclass;
-	                $menu = & $picturemenu;
-	                $psub = & $subclass;
-	            }
-	            if ($type === 2){
-	                $bselected = & $selclass;            
-	                $menu = & $blogmenu;
-	                $bsub = & $subclass;
-	            }
-	        }
-	
-	//        $allmenu = "<a href='/random/all/' class='nav anav'>Random</a>
-	//            <a href='/all/0/1/' class='nav anav'>Promoted</a> 
-	//            <a href='/all/1/1/' class='nav anav'>Upcoming</a>";
-	
-	        $blogmenu = '<li><span class="openlist " 
-			style="background-image: url(/sys/images/blogs.png);">&nbsp;</span>
-				<ul style="overflow: visible; display: none;" class="bnav">
-					<li><a href="/submit/blog/">Submit</a></li>
-					<li><a href="/random/blog/">Random</a></li>
-					<li><a href="/blog/0/1/">Promoted</a></li>
-					<li><a href="/blog/1/1/">Upcoming</a></li>
-				</ul>
-				</li>';
-	
-	        $picturemenu = '<li><span  
-				style="background-image: url(/sys/images/pictures.png);">&nbsp;</span>
-				<ul style="overflow: visible;" class="pnav">
-					<li><a href="/submit/picture/">Submit</a></li>
-					<li><a href="/random/picture/">Random</a></li>
-					<li><a href="/picture/0/1/">Promoted</a></li>
-					<li><a href="/picture/1/1/">Upcoming</a></li>
-				</ul>
-				</li>';
-	
-	        $linkmenu = '<li><span class="openlist " 
-				style="background-image: url(/sys/images/links.png);">&nbsp;</span>
-				<ul style="overflow: visible; display: none;" class="lnav">
-					<li><a href="/submit/link/">Submit</a></li>
-					<li><a href="/random/link/">Random</a></li>
-					<li><a href="/link/0/1/">Promoted</a></li>
-					<li><a href="/link/1/1/">Upcoming</a></li>
-				</ul>
-				</li>';
-	
-	        $mainmenu = "<ul id='mainmenu'>
-				$linkmenu
-				$blogmenu
-				$picturemenu
-				</ul>";
-	//            <a href='#' onclick=\"changeMenu('all')\" id='alllink' class='nav anav $aselected'>All</a>
-	
-			$js = "<script type='text/javascript' src='/sys/script/menu.js'></script>";
-
-	        return $mainmenu . $js;*/
-	    $selclass = ' mainselected';
-        $subclass = ' subselected';
-        
-	    $linkmenu = null;
- 	    $picturemenu = null;
-	    $blogmenu = null;
-
-        if ($where == 'link'){
-            $menu = & $linkmenu;
-            $lselected = & $selclass;
-            if ($type === 0){$plink = & $subclass;}
-            if ($type === 1){$ulink = & $subclass;}
-            $lnav = " lnav";
-        }
-        if ($where == 'picture'){
-            $menu = & $picturemenu;
-            $pselected = & $selclass;
-            if ($type === 0){$ppic = & $subclass;}
-            if ($type === 1){$upic = & $subclass;}
-            $pnav = " pnav";
-        }
-        if ($where == 'blog'){
-            $menu = & $blogmenu;
-            $bselected = & $selclass;
-            if ($type === 0){$pblog = & $subclass;}
-            if ($type === 1){$ublog = & $subclass;}
-            $bnav = " bnav";
-        }
-        if ($where == 'submit'){
-            if ($type === 0){
-                $lselected = & $selclass;
+    	    $selclass = ' mainselected';
+            $subclass = ' subselected';
+            
+    	    $linkmenu = null;
+     	    $picturemenu = null;
+    	    $blogmenu = null;
+    
+            if ($where == 'link'){
                 $menu = & $linkmenu;
-                $lsub = & $subclass;
+                $lselected = & $selclass;
+                if ($type === 0){$plink = & $subclass;}
+                if ($type === 1){$ulink = & $subclass;}
+                $lnav = " lnav";
             }
-            if ($type === 1){
-                $pselected = & $selclass;
+            if ($where == 'picture'){
                 $menu = & $picturemenu;
-                $psub = & $subclass;
+                $pselected = & $selclass;
+                if ($type === 0){$ppic = & $subclass;}
+                if ($type === 1){$upic = & $subclass;}
+                $pnav = " pnav";
             }
-            if ($type === 2){
-                $bselected = & $selclass;            
+            if ($where == 'blog'){
                 $menu = & $blogmenu;
-                $bsub = & $subclass;
+                $bselected = & $selclass;
+                if ($type === 0){$pblog = & $subclass;}
+                if ($type === 1){$ublog = & $subclass;}
+                $bnav = " bnav";
             }
-        }
+            if ($where == 'submit'){
+                if ($type === 0){
+                    $lselected = & $selclass;
+                    $menu = & $linkmenu;
+                    $lsub = & $subclass;
+                }
+                if ($type === 1){
+                    $pselected = & $selclass;
+                    $menu = & $picturemenu;
+                    $psub = & $subclass;
+                }
+                if ($type === 2){
+                    $bselected = & $selclass;            
+                    $menu = & $blogmenu;
+                    $bsub = & $subclass;
+                }
+            }
 
 //        $allmenu = "<a href='/random/all/' class='nav anav'>Random</a>
 //            <a href='/all/0/1/' class='nav anav'>Promoted</a> 
 //            <a href='/all/1/1/' class='nav anav'>Upcoming</a>";
 
-        $blogmenu = "<a href='/submit/blog/' class='nav bnav $bsub'>Submit</a><br/>
-            <a href='/random/blog/' class='nav bnav'>Random</a><br/>
-            <a href='/blog/0/1/' class='nav  bnav $pblog'>Promoted</a><br/>
-            <a href='/blog/1/1/' class='nav bnav $ublog'>Upcoming</a>";
-
-        $picturemenu = "<a href='/submit/picture/' class='nav pnav $psub'>Submit</a><br/>
-            <a href='/random/picture/' class='nav pnav'>Random</a><br/>
-            <a href='/picture/0/1/' class='nav pnav $ppic'>Promoted</a><br/>
-            <a href='/picture/1/1/' class='nav pnav $upic'>Upcoming</a>";
-
-        $linkmenu = "<a href='/submit/link/' class='nav lnav $lsub'>Submit</a><br/>
-            <a href='/random/link/' class='nav lnav'>Random</a><br/>
-            <a href='/link/0/1/' class='nav lnav $plink'>Promoted</a><br/> 
-            <a href='/link/1/1/' class='nav lnav $ulink'>Upcoming</a>";
-
-        $mainmenu = //"<div style='display:none' id='allmenu'>$allmenu</div>
-            "<div style='display:none' id='blogmenu'>$blogmenu</div>
-            <div style='display:none' id='picturemenu'>$picturemenu</div>
-            <div style='display:none' id='linkmenu'>$linkmenu</div>
-            <div style='height:60px;float:right;text-align:right;'>";
-//            <a href='#' onclick=\"changeMenu('all')\" id='alllink' class='nav anav $aselected'>All</a>
-
-        $mainmenu .= "<a href='#' onclick=\"changeMenu('link');return false;\" id='linklink' class='nav lnav $lselected'>Links</a>"
-            . "<a href='#' onclick=\"changeMenu('blog');return false;\" id='bloglink' class='nav bnav $bselected'>Blogs</a>"
-            . "<a href='#' onclick=\"changeMenu('picture');return false;\" id='picturelink' class='nav pnav $pselected'>Pictures</a>"
-            . "<span id='menuholder' class='$lnav $pnav $bnav'>$menu</span></div>";
-
-        return $mainmenu;
-	}
+            $blogmenu = "<a href='/submit/blog/' class='nav bnav $bsub'>Submit</a><br/>
+                <a href='/random/blog/' class='nav bnav'>Random</a><br/>
+                <a href='/blog/0/1/' class='nav  bnav $pblog'>Promoted</a><br/>
+                <a href='/blog/1/1/' class='nav bnav $ublog'>Upcoming</a>";
     
-# this code here is fucking disgusting.
+            $picturemenu = "<a href='/submit/picture/' class='nav pnav $psub'>Submit</a><br/>"
+                ."<a href='/random/picture/' class='nav pnav'>Random</a><br/>"
+                ."<a href='/picture/0/1/' class='nav pnav $ppic'>Promoted</a><br/>"
+                ."<a href='/picture/1/1/' class='nav pnav $upic'>Upcoming</a>";
+    //            ."<a href='http://nsfw.thisaintnews.com/picture/0/1/' class='nav pnav'>NSFW</a>";
+    
+            $linkmenu = "<a href='/submit/link/' class='nav lnav $lsub'>Submit</a><br/>
+                <a href='/random/link/' class='nav lnav'>Random</a><br/>
+                <a href='/link/0/1/' class='nav lnav $plink'>Promoted</a><br/> 
+                <a href='/link/1/1/' class='nav lnav $ulink'>Upcoming</a>";
+    
+            $mainmenu = //"<div style='display:none' id='allmenu'>$allmenu</div>
+                "<div style='display:none' id='blogmenu'>$blogmenu</div>
+                <div style='display:none' id='picturemenu'>$picturemenu</div>
+                <div style='display:none' id='linkmenu'>$linkmenu</div>
+                <div style='float:right;text-align:right;'>";
+    //            <a href='#' onclick=\"changeMenu('all')\" id='alllink' class='nav anav $aselected'>All</a>
+    
+            $mainmenu .= "<a href='#' onclick=\"changeMenu('link');return false;\" id='linklink' class='nav lnav $lselected'>Links</a>"
+                . "<a href='#' onclick=\"changeMenu('blog');return false;\" id='bloglink' class='nav bnav $bselected'>Blogs</a>"
+                . "<a href='#' onclick=\"changeMenu('picture');return false;\" id='picturelink' class='nav pnav $pselected'>Pictures</a>"
+                . "<span id='menuholder' class='$lnav $pnav $bnav'>$menu</span></div>";
+    
+            return $mainmenu;
+    	}
+    
 # it CANNOT stay
-    
-    function get_recent_comments(){
-        $memcache = new Memcache;
-        $memcache_key = "recent_comments";
-        @$memcache->connect('127.0.0.1', 11211);
-        $cached = @$memcache->get($memcache_key);
-            
-        if (!$cached){
-            $sql = &$this->sql;
-            $query = "SELECT details, comment_id, username, UNIX_TIMESTAMP(date) as date, blog_id, link_id, picture_id FROM comments ORDER BY date DESC LIMIT 20";
-            $recent_comments = $sql->query($query, 'array');
-            $tmp = '<div style="overflow:hidden;"><span>Recent Comments</span><ul style="list-style:none;margin:0px;padding:0px;" class="" >';
-            foreach ($recent_comments as $comment){
-                if ($comment['blog_id']) {
-                    $comment_type = 'blog';
-                    $object = $comment_type;
-                    $comment_id = $comment['blog_id'];
-                } elseif ($comment['link_id']) {
-                    $comment_type = 'link';
-                    $object = $comment_type;
-                    $comment_id = $comment['link_id'];
-                } elseif ($comment['picture_id']){
-                    $comment_type = 'pic';
-                    $object = 'picture';
-                    $comment_id = $comment['picture_id'];
-                }
-                $comment_length = strlen($comment['details']);
-                $comment['details'] = preg_replace("/\[quote\ user=[\"'](.+?)[\"']\](.*?)\[\/quote\]/miUs", '', $comment['details']);
-                $comment['details'] = htmlentities(strip_tags($comment['details']), ENT_QUOTES,'UTF-8');
-                $comment['short'] = substr($comment['details'], 0, 50);
-                $comment['long'] = substr($comment['details'], 0, 400);
-                $comment['date'] = date( 'H:i:s', $comment['date']);
-                if ( $comment['short'] !== $comment['details'] ){
-                       $comment['short'] .= '...';
-                }
-                if ( $comment['long'] !== $comment['details'] ) {
-                    $comment['long'] .= '...';
-                }
+        
+        function get_recent_comments(){
+            $memcache = new Memcache;
+            $memcache_key = "recent_comments";
+            @$memcache->connect('127.0.0.1', 11211);
+            $cached = @$memcache->get($memcache_key);
                 
-                $tip_title = "{$comment['username']}@{$comment['date']}::".strip_tags($comment['long']);
-                $tmp .= "<li><a style='margin:0px;padding:3px;' class='top_selection recent_comments' title='{$tip_title}' href='/view{$comment_type}/{$comment_id}/#comment{$comment['comment_id']}'>{$comment['short']}</a></li>";
-            }
-            $tmp .= '</ul></div>';
-
-            ob_start();
-            ?>
-            <script type="text/javascript">
-                window.addEvent('domready', function() {  
-                   
+            if (!$cached){
+                $sql = &$this->sql;
+                $query = "SELECT details, comment_id, username, UNIX_TIMESTAMP(date) as date, blog_id, link_id, picture_id FROM comments ORDER BY date DESC LIMIT 20";
+                $recent_comments = $sql->query($query, 'array');
+                $tmp = '<div style="overflow:hidden;"><span>Recent Comments</span><ul style="list-style:none;margin:0px;padding:0px;" class="" >';
+                foreach ($recent_comments as $comment){
+                    if ($comment['blog_id']) {
+                        $comment_type = 'blog';
+                        $object = $comment_type;
+                        $comment_id = $comment['blog_id'];
+                    } elseif ($comment['link_id']) {
+                        $comment_type = 'link';
+                        $object = $comment_type;
+                        $comment_id = $comment['link_id'];
+                    } elseif ($comment['picture_id']){
+                        $comment_type = 'pic';
+                        $object = 'picture';
+                        $comment_id = $comment['picture_id'];
+                    }
+                    $comment_length = strlen($comment['details']);
+                    $comment['details'] = preg_replace("/\[quote\ user=[\"'](.+?)[\"']\](.*?)\[\/quote\]/miUs", '', $comment['details']);
+                    $comment['details'] = htmlentities(strip_tags($comment['details']), ENT_QUOTES,'UTF-8');
+                    $comment['short'] = substr($comment['details'], 0, 50);
+                    $comment['long'] = substr($comment['details'], 0, 400);
+                    $comment['date'] = date( 'H:i:s', $comment['date']);
+                    if ( $comment['short'] !== $comment['details'] ){
+                           $comment['short'] .= '...';
+                    }
+                    if ( $comment['long'] !== $comment['details'] ) {
+                        $comment['long'] .= '...';
+                    }
                     
-                    //store titles and text  
-                    $$('a.recent_comments').each(function(element,index) {  
-                        var content = element.get('title').split('::');  
-                        element.store('tip:title', content[0]);  
-                        element.store('tip:text', content[1]);  
+                    $tip_title = "{$comment['username']}@{$comment['date']}::".strip_tags($comment['long']);
+                    $tmp .= "<li><a style='margin:0px;padding:3px;' class='top_selection recent_comments' title='{$tip_title}' href='/view{$comment_type}/{$comment_id}/#comment{$comment['comment_id']}'>{$comment['short']}</a></li>";
+                }
+                $tmp .= '</ul></div>';
+    
+                ob_start();
+                ?>
+                <script type="text/javascript">
+                    window.addEvent('domready', function() {  
+                       
+                        
+                        //store titles and text  
+                        $$('a.recent_comments').each(function(element,index) {  
+                            var content = element.get('title').split('::');  
+                            element.store('tip:title', content[0]);  
+                            element.store('tip:text', content[1]);  
+                        });  
+    
+                        //create the tooltips  
+                        var tips = new Tips('.recent_comments',{  
+                            className: 'recent_comments',  
+                            hideDelay: 50,  
+                            showDelay: 50,
+                        });
                     });  
-
-                    //create the tooltips  
-                    var tips = new Tips('.recent_comments',{  
-                        className: 'recent_comments',  
-                        hideDelay: 50,  
-                        showDelay: 50,
-                    });
-                });  
-            </script>
-            <?php
-            $tmp .= ob_get_contents();
-            ob_end_clean();
-
-            @$memcache->set($memcache_key, $tmp, false, 20);
-            return $tmp;
+                </script>
+                <?php
+                $tmp .= ob_get_contents();
+                ob_end_clean();
+    
+                @$memcache->set($memcache_key, $tmp, false, 20);
+                return $tmp;
+            }
+            return $cached;
         }
-        return $cached;
-    }
         
 # end        
 
@@ -281,7 +191,7 @@ if (defined('MAGIC')) {
 	            .'<meta name="keywords" content="news community comments english lulz lol social lulzhq fun jokes '
 	            .'videos pictures share sharing lol lolz funny humour humur"/> '
 	            .'<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/> '
-	            .'<link rel="stylesheet" type="text/css" title="default" href="/css/default.css?1=1111000" /> '
+	            .'<link rel="stylesheet" type="text/css" title="default" href="/css/default.css?1=2" /> '
 	            .'<link rel="shortcut icon" href="/favicon.ico" /> '
 	            .$script
 	            .'</head> ';
@@ -294,7 +204,7 @@ if (defined('MAGIC')) {
             $this->output .= '<body>'
                 .'<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/mootools/1.2.1/mootools-yui-compressed.js"></script>'
                 .'<script type="text/javascript" src="/sys/script/mootools-1.2-more.js"></script>'
-	            .'<script type="text/javascript" src="/sys/js/clientside.js?t=2"></script>'
+	            .'<script type="text/javascript" src="/sys/js/clientside.js?t=3"></script>'
 	            .'<div id="main">'
 	            .'<div id="top">'
 				.'<div style="float:right;margin-top:15px;margin-right:5px;text-align:right;">';
@@ -313,24 +223,26 @@ window.addEvent('domready', function() {
 <?php
 $this->output .= ob_get_contents();
 ob_clean();
+            $this->output .= '<a href="http://www.cafepress.com/thisaintnews" target="_blank" class="menulink">Shop</a> |'
+                .'<a href="/chat/" class="menulink mibbit">Chat</a> | '
+                .'<a href="http://forums.thisaintnews.com" class="menulink">Forum</a>';
+    
+            if ($user->isLoggedIn()){
+                $this->output .= " | <a href='/logout/' class='menulink'>Logout</a>";
+            }
+            $this->output .= '<br/>';
 	        if (!$user->isLoggedIn()){
 	            $this->output .= '<a href="/login/" class="menulink">Login/Register</a> | ';
 	        } else {
                 $this->output .= '<a href="/user/' . $user->getUsername() . '/1/" class="menulink">My Comments</a> | <a href="/avatar/" class="menulink">Avatar</a> | ';
             }
 	
-	/*        if($_SESSION['filteroff']== 1){
-	            $this->output .="<a href='/filteron' class='menulink'>Enable NSFW filter</a> | ";
+	        if($_SESSION['nsfw']== 1){
+	            $this->output .="<a href='/filteron/' class='menulink'>Enable NSFW filter</a>";
 	        } else {
-	            $this->output .="<a href='/filteroff' class='menulink'>Disable NSFW filter</a> | ";
-	        }*/
-	        $this->output .= '<a href="http://www.cafepress.com/thisaintnews" target="_blank" class="menulink">Shop</a> |'
-	            .'<a href="/chat/" class="menulink mibbit">Chat</a> | '
-	            .'<a href="http://forums.thisaintnews.com" class="menulink">Forum</a>';
-	
-	        if ($user->isLoggedIn()){
-	            $this->output .= " | <a href='/logout/' class='menulink'>Logout</a>";
+	            $this->output .="<a href='/filteroff/' class='menulink'>Disable NSFW filter</a>";
 	        }
+
 	        $this->output .= '<br /><div style="float:right">
 <form action="http://www.google.com/cse" id="cse-search-box">
   <div>
@@ -346,14 +258,57 @@ ob_clean();
 
 	        $this->output .= "</div><div id='middle'>"; 
 	    }
+
+function get_ad_code(){
+    if ($_SESSION['nsfw']){
+        ob_start();
+        ?>
+<!-- Begin: Black Label Ads, Generated: 2009-03-28 19:40:31  -->
+<script type="text/javascript">
+var AdBrite_Title_Color = '0000FF';
+var AdBrite_Text_Color = '000000';
+var AdBrite_Background_Color = '808080';
+var AdBrite_Border_Color = 'CCCCCC';
+var AdBrite_URL_Color = '008000';
+try{var AdBrite_Iframe=window.top!=window.self?2:1;var AdBrite_Referrer=document.referrer==''?document.location:document.referrer;AdBrite_Referrer=encodeURIComponent(AdBrite_Referrer);}catch(e){var AdBrite_Iframe='';var AdBrite_Referrer='';}
+</script>
+<script type="text/javascript">document.write(String.fromCharCode(60,83,67,82,73,80,84));document.write(' src="http://ads.adbrite.com/mb/text_group.php?sid=1103836&zs=3136305f363030&ifr='+AdBrite_Iframe+'&ref='+AdBrite_Referrer+'" type="text/javascript">');document.write(String.fromCharCode(60,47,83,67,82,73,80,84,62));</script>
+<div><a target="_top" href="http://www.adbrite.com/mb/commerce/purchase_form.php?opid=1103836&afsid=55544" style="font-weight:bold;font-family:Arial;font-size:13px;">Your Ad Here</a></div>
+<!-- End: Black Label Ads -->        
+        <?php
+        $code = ob_get_contents();
+        ob_clean();
+        return $code;
+    } else {
+        ob_start();
+        ?>
+<!-- Begin: AdBrite, Generated: 2009-03-28 19:44:27  -->
+<script type="text/javascript">
+var AdBrite_Title_Color = '0000FF';
+var AdBrite_Text_Color = '000000';
+var AdBrite_Background_Color = '808080';
+var AdBrite_Border_Color = 'CCCCCC';
+var AdBrite_URL_Color = '008000';
+try{var AdBrite_Iframe=window.top!=window.self?2:1;var AdBrite_Referrer=document.referrer==''?document.location:document.referrer;AdBrite_Referrer=encodeURIComponent(AdBrite_Referrer);}catch(e){var AdBrite_Iframe='';var AdBrite_Referrer='';}
+</script>
+<script type="text/javascript">document.write(String.fromCharCode(60,83,67,82,73,80,84));document.write(' src="http://ads.adbrite.com/mb/text_group.php?sid=1103840&zs=3136305f363030&ifr='+AdBrite_Iframe+'&ref='+AdBrite_Referrer+'" type="text/javascript">');document.write(String.fromCharCode(60,47,83,67,82,73,80,84,62));</script>
+<div><a target="_top" href="http://www.adbrite.com/mb/commerce/purchase_form.php?opid=1103840&afsid=1" style="font-weight:bold;font-family:Arial;font-size:13px;">Your Ad Here</a></div>
+<!-- End: AdBrite -->
+        <?php
+        $code = ob_get_contents();
+        ob_clean();
+        return $code;
+    }
+}
 	
 	    private function closePage($footer, $where, $type, $sortby = null){
             if ($sortby){
                 $sortby = "Sort by: {$sortby}";
             }
+            $ad_code = $this->get_ad_code();
 	        $this->output .= '<div id="main_menu"><div id="menu_holder"> '
 	        	. $this->createMenu($where, $type) ."</div>{$sortby}".$this->get_recent_comments()."</div> "
-				.'<div id="those_damn_dirty_evil_ads"></div> '
+				."<div id='those_damn_dirty_evil_ads'>{$ad_code}</div> "
 				.'<div id="bottom"> '
 	            .'<a href="http://validator.w3.org/check?uri=referer"> '
 	           .'<img src="/sys/images/valid-xhtml10.png" '

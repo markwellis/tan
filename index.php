@@ -19,8 +19,6 @@ $function = (int)$_GET['function'];
  15 = error404
 */
 
-// Old code, used to make the thumb box bar
-
 switch($function){
     case 0:  //link
         $where = 'link';
@@ -30,6 +28,7 @@ switch($function){
         
         $page = (int)$_GET['page'];
         $type = (int)$_GET['type'];
+        
 
         $link = &new unified('link');
 
@@ -207,6 +206,7 @@ switch($function){
 
     case 7:  //submit
         $where = 'submit';
+
         require_once("code/user.php");
         global $user;
         $user = &new user();
@@ -226,6 +226,7 @@ switch($function){
         if ($_GET['swhat'] === 'picture') { $swhat = 1;$where='picture'; }
         if ($_GET['swhat'] === 'blog') { $swhat = 2;$where='blog'; }
         if ($_GET['swhat'] === 'editorial') { $swhat = 3; }
+
         // 0 = link
         // 1 = pic
         // 2 = blog
@@ -257,20 +258,28 @@ switch($function){
         //pic
         elseif ($swhat == 1){
             $type=1;
-            $middle .= "<div id='picture'>
-                <form onsubmit=\"return checkForm('picture');\" enctype='multipart/form-data' action='/code/dosubmit.php' method='post'>
-                <input type='hidden' name='MAX_FILE_SIZE' value='2000000' />
-                <input type='hidden' id='type5' name='type' value='picture' />
-                <label for='pic'>Select an image file</label><br />
-                <input class='textInput' size='55' type='file' name='pic' id='pic' /><br /><br />
-                <label for='pictitle'>Choose a title for the picture</label><br />
-                <input class='textInput'  size='55'  type='text' name='title' id='pictitle' /><br /> <br />
-                <label for='picdescription'>Write a short discription of the picture (optional)</label><br /><br />
-                <textarea rows='10' cols='70' name='description' id='picdescription' ></textarea><br /><br />
-                <label for='pictags' size='55'>Type some relevant tags (simple words that describe the picture)</label><br />
-                <input class='textInput' size='55' type='text' name='tags' id='pictags' /><br /><br />
-                <input type='submit' value='Submit Picture'/>
-                </form></div>";
+            $middle .= "<div id='picture'>"
+                ."<form onsubmit=\"return checkForm('picture');\" enctype='multipart/form-data' action='/code/dosubmit.php' method='post'>"
+                ."<input type='hidden' name='MAX_FILE_SIZE' value='2000000' />"
+                ."<input type='hidden' id='type5' name='type' value='picture' />"
+
+                ."<label for='pic'>Select an image file</label><br />"
+                ."<input class='textInput' size='55' type='file' name='pic' id='pic' /><br /><br />"
+
+                ."<label for='pictitle'>Choose a title for the picture</label><br />"
+                ."<input class='textInput'  size='55'  type='text' name='title' id='pictitle' /><br /> <br />"
+
+                ."<label for='nsfw'>Not Safe for Work?</label>"
+                ."<input type='checkbox' name='nsfw' /><br /> <br />"
+
+                ."<label for='picdescription'>Write a short discription of the picture (optional)</label><br /><br />"
+                ."<textarea rows='10' cols='70' name='description' id='picdescription' ></textarea><br /><br />"
+
+                ."<label for='pictags' size='55'>Type some relevant tags (simple words that describe the picture)</label><br />"
+                ."<input class='textInput' size='55' type='text' name='tags' id='pictags' /><br /><br />"
+
+                ."<input type='submit' value='Submit Picture'/>"
+                ."</form></div>";
         }
         //blog
         elseif ($swhat == 2){

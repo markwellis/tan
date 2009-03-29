@@ -257,8 +257,11 @@ require_once('inputfilter.php');
 	            case 'picture':
 	                $idtype = "picture_id";
 	                $table = "picture_details";
-	                $columns = "(picture_id, title, description, user_id, date, promoted, filename, views, category, username, x, y, size)";
-	                $values = "('', '$title',  '$description', $userid, NOW(), '', '$data', '', $cat, '$username', {$meta[1][0]}, {$meta[1][1]}, {$meta[0]})";
+                    if (!$ised){
+                        $ised = 'N';
+                    }
+	                $columns = "(picture_id, title, description, user_id, date, promoted, filename, views, category, username, x, y, size, nsfw)";
+	                $values = "('', '$title',  '$description', $userid, NOW(), '', '$data', '', $cat, '$username', {$meta[1][0]}, {$meta[1][1]}, {$meta[0]}, '{$ised}')";
 	                break;
 	        }
 	        if ($idtype && $user->isLoggedIn()){ 
@@ -518,6 +521,9 @@ require_once('inputfilter.php');
 		            case 'picture':
 		                $table = 'picture_details';
 		                $id ='picture_id';
+                        if ( !$_SESSION['nsfw'] ){
+                            $conditions = " WHERE NSFW='N' ";
+                        } 
 		                $extraSql ='';
 		                break;
 		        }
@@ -534,7 +540,7 @@ require_once('inputfilter.php');
 		                }
 		            }
 		            if (!$random){
-		                $conditions = "HAVING plus $oper {$this->promoted_threashold}";
+		                $conditions .= "HAVING plus $oper {$this->promoted_threashold}";
 		            }
 		        } else {
 		            $conditions = "WHERE username = '$username'";
@@ -546,7 +552,7 @@ require_once('inputfilter.php');
 	                    $ptable = 'comments';
 	                }
 		            $suserid = $user->usernameToId($username);
-		            $conditions = "INNER JOIN {$ptable} ON ( {$table}.{$id} = {$ptable}.{$id} ) WHERE {$ptable}.user_id={$suserid}";
+		            $conditions = "INNER JOIN {$ptable} ON ( {$table}.{$id} = {$ptable}.{$id} ) WHERE {$ptable}.user_id={$suserid} ";
 		            $order = "{$ptable}.date";
 		        }
 		
@@ -711,9 +717,13 @@ require_once('inputfilter.php');
 	            }
 	            $plusminusbox .= $this->CreatePlusMinusHTML($objectDetails['picture_id'], $objectDetails['plus'],
 	                $objectDetails['minus'], $objectDetails['meplus'], $objectDetails['meminus'], $style);
-	
+
+                if ($objectDetails['NSFW'] == 'Y'){
+                    $nsfw = ' - <strong>NSFW</strong>';
+                }
+
 	            $output .= "{$divholder}<a class='Pictitle'
-	                href='/images/pics/".basename($objectDetails['filename']). "'>".stripslashes($objectDetails['title']).'</a><br />';
+	                href='/images/pics/".basename($objectDetails['filename']). "'>".stripslashes($objectDetails['title'])."</a>{$nsfw}<br />";
                     $avatar_image = "sys/users/avatar/{$objectDetails['user_id']}.jpg";
 	            if (file_exists("{$_SERVER['DOCUMENT_ROOT']}/{$avatar_image}")){
                         $avatar_mtime = filemtime($avatar_image);
@@ -723,10 +733,11 @@ require_once('inputfilter.php');
 	                $output .= "\n<img class='avatar' style='margin-left:5px;' src='/sys/images/_user.png'
 	                    alt='{$objectDetails['username']}' />";
 	            }
-	            $output .= "<a class='user' href='/user/{$objectDetails['username']}/1/'>{$objectDetails['username']}</a> 
-	                <a href='/viewpic/{$objectDetails['picture_id']}/".user::cleanTitle($objectDetails['title']) ."/#comments'>
-	                <img src='/sys/images/comment.png' alt=' ' />  {$objectDetails['comments']}</a>
-	                | {$objectDetails['views']} views";
+
+	            $output .= "<a class='user' href='/user/{$objectDetails['username']}/1/'>{$objectDetails['username']}</a> "
+	                ."<a href='/viewpic/{$objectDetails['picture_id']}/".user::cleanTitle($objectDetails['title']) ."/#comments'>"
+	                ."<img src='/sys/images/comment.png' alt=' ' />  {$objectDetails['comments']}</a>"
+	                ."| {$objectDetails['views']} views";
 	            $ratio = $this->plus_to_minus_ratio($objectDetails['plus'], $objectDetails['minus']);
 	            if ($article){
 	                if ($ratio) {
@@ -764,33 +775,11 @@ require_once('inputfilter.php');
 	        return $fn['filename'];
 	    }
 	    
-	    function imagecreatefromfile($path, $info = ''){
-	        if(!$info){
-	            return false;
-	        }
-	
-	        $functions = array(IMAGETYPE_GIF => 'imagecreatefromgif',
-	            IMAGETYPE_JPEG => 'imagecreatefromjpeg',
-	            IMAGETYPE_PNG => 'imagecreatefrompng',
-	            IMAGETYPE_WBMP => 'imagecreatefromwbmp',
-	            IMAGETYPE_XBM => 'imagecreatefromwxbm');
-	
-	        if(!$functions[$info[2]]) {
-	            return false;
-	        }
-	
-	        if(!function_exists($functions[$info[2]])) {
-	            return false;
-	        }
-	
-	        return $functions[$info[2]]($path);
-	    }
-	
 	    function resizeImage($id, $newx){
 	        $newx = abs($newx);
 	    	$allowed_sizes = array(100, 150, 160, 200, 250, 300, 400, 500);
 	    	if (in_array($newx, $allowed_sizes, TRUE)){
-		        $cacheimg = $this->rootdir."/images/cache/resize/$id/$newx.jpg";
+		        $cacheimg = $this->rootdir."/images/cache/resize/$id/$newx";
 
 		        if (file_exists($cacheimg)){
 		            $usecache = 1;
@@ -799,23 +788,26 @@ require_once('inputfilter.php');
 		            $filename = $this->rootdir.'/images/pics/' . basename($basefile);
 		            $usecache = 0;
 		        }
-		        if (!$usecache && $basefile){
-		            $srcSize = @getimagesize($filename);
-		            $srcImg = $this->imagecreatefromfile($filename, $srcSize);
-		            
-		            if ($srcSize[0] !=0){
-		                $rat = abs($srcSize[1] / $srcSize[0]);
-		                $dstImg = imagecreatetruecolor($newx, $newx*$rat);
-		
-		                $bg = imagecolorallocate($dstImg, 249, 248, 248);
-		                imagefilledrectangle($dstImg, 0, 0, $newx, $newx*$rat, $bg);
-		                imagecopyresampled($dstImg, $srcImg, 0, 0, 0, 0, $newx, $newx*$rat,$srcSize[0],$srcSize[1]);
-		                $image = imagejpeg($dstImg, NULL, 75);
-		                @mkdir(dirname($cacheimg));
-		                $wcache = @imagejpeg($dstImg, $cacheimg, 75);
-		                @imagedestroy($dstImg);
-		                @imagedestroy($srcImg);
-		            }
+
+		        if ( !$usecache && $basefile && file_exists($basefile) ){
+                    $im = new Imagick();
+                    $im->readImage($basefile);
+
+                    $thumb_format = trim($im->getImageFormat());
+                    $im->thumbnailImage($newx,$newx,true);
+                    if ($thumb_format == 'GIF' || $thumb_format == 'PNG' ){
+                        $im->setImageFormat($thumb_format); 
+                    } else {
+                        $im->setImageFormat('jpeg'); 
+                    }
+
+                    $thumb_image = $im->getImageBlob();
+                    $thumb_format = $im->getImageFormat();
+		            @mkdir(dirname($cacheimg));
+
+                    $im->writeImage($cacheimg);
+                    $im->clear();
+                    $im->destroy();
 		        }else {
 	                if (file_exists($cacheimg)){
 		                $last_modified_time = filemtime($cacheimg);
@@ -829,16 +821,21 @@ require_once('inputfilter.php');
 	                    if (@strtotime($_SERVER['HTTP_IF_MODIFIED_SINCE']) == $last_modified_time ||
 	                    	trim($_SERVER['HTTP_IF_NONE_MATCH']) == $etag) {
 		                        header("HTTP/1.1 304 Not Modified");
-		                        exit;
+		                        exit();
 	                    }
-	                    $handle = fopen($cacheimg, "rb");
-	                    $image = fread($handle, filesize($cacheimg));
-	                    fclose($handle);
+
+                        $im = new Imagick();
+                        $im->readImage($cacheimg);
+                        $thumb_image = $im->getImageBlob();
+                        $thumb_format = $im->getImageFormat();
+
+                        $im->clear();
+                        $im->destroy();
 	                } else {
 	                    exit();
 	                }
 		        }
-		        return $image;
+		        return array($thumb_image, $thumb_format);
 		    } else {
 	                exit();
 		    }
@@ -890,9 +887,8 @@ window.addEvent('domready', function(){
         var comment_name = 'actual_comment' + comment_id;
         var quote = $(comment_name).innerHTML;
         
-        var comment_so_far = FCKeditorAPI.GetInstance('comment').GetHTML();
-        comment_so_far += '[quote user="' + username + '"]' + quote + '[/quote]' + "\n<br /><br />";
-        FCKeditorAPI.GetInstance('comment').InsertHtml(comment_so_far);
+        comment = '[quote user="' + username + '"]' + quote + '[/quote]' + "\n<br /><br />";
+        FCKeditorAPI.GetInstance('comment').InsertHtml(comment);
         return false;
     });
     

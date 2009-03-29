@@ -72,12 +72,15 @@ if ($user->isLoggedIn()){
             $description = mysql_escape_string(strip_tags(htmlentities($_POST["description"],ENT_QUOTES,'UTF-8')));
             $tags = $_POST["tags"]; // Gets cleaned up by tags class
             $cat = (int)$_POST['cat'];
-            
+            if ($_POST['nsfw'] === 'on'){
+                $nsfw = 'Y';
+            }
+
             $picValid = $picture->isValid(null, $title, $description);
             if ($picValid[0] === null){
                 $picMove  = $picture->move_uploaded('picture');
                 if ($picMove[0] === null){
-                    $picid = $picture->addtoDatabase($picMove[1], $title, $description, $cat, array($picValid[1], $picValid[2]));
+                    $picid = $picture->addtoDatabase($picMove[1], $title, $description, $cat, array($picValid[1], $picValid[2]), $nsfw);
                     $tag->doTag($type, $picid, $tags);
                     header ("location: /picture/1/1/0/");
                     exit();

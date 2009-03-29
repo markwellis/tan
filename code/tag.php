@@ -160,16 +160,16 @@ if (defined('MAGIC')) {
 	        $res = array();
 		$tags = explode(' ', trim($tagstr));
 		foreach ($tags as $tag){
-		$tag = $this->normalize($tag);
-		$existing = $this->isExisting($tag);
-		if ($existing){
-			$sql = &$this->sql;
-			$query = "SELECT $sqlstr0 FROM tag_details WHERE tag_id=$existing $conds $sqlstr;";
-			$ret = $sql->query($query, 'array');
-			if ($ret){
-			$res[] = $ret;
-			}
-		}
+    		$tag = $this->normalize($tag);
+    		$existing = $this->isExisting($tag);
+    		if ($existing){
+    			$sql = &$this->sql;
+    			$query = "SELECT $sqlstr0 FROM tag_details WHERE tag_id=$existing $conds $sqlstr;";
+    			$ret = $sql->query($query, 'array');
+    			if ($ret){
+    			$res[] = $ret;
+    			}
+    		}
 		}
 		$sql0 = &$this->sql;
 		$query = "SELECT $sqlstr0 FROM tag_details order by rand() limit 20;";
