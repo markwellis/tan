@@ -250,16 +250,16 @@ img {
 }
 
 .news {
-	padding:7px;
-    padding-bottom:20px;
-	margin-bottom:5px;
-	margin-right:125px;
-	overflow:hidden;
-	font-size:13px;
-	color:#222222;
-    -moz-border-radius: 5px;
+    margin-left:auto;
+    margin-right:125px;
+    margin-bottom:5px;
+    height:225px;
+    -moz-border-radius:5px;
     -webkit-border-radius:5px;
-    background-color: #f7faff;
+    background-color: #F7FAFF;
+	color:#222222;
+	padding-bottom:20px;
+	padding:7px;
 }
 
 .news p {
@@ -415,7 +415,7 @@ img {
     text-align:center;
     padding-bottom:5px;
     margin-left:auto;
-    margin-right:125px;
+    margin-right:auto;
     margin-bottom:5px;
     overflow:hidden;
     background-color:#f7faff;

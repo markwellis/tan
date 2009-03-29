@@ -191,7 +191,7 @@ if (defined('MAGIC')) {
 	            .'<meta name="keywords" content="news community comments english lulz lol social lulzhq fun jokes '
 	            .'videos pictures share sharing lol lolz funny humour humur"/> '
 	            .'<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/> '
-	            .'<link rel="stylesheet" type="text/css" title="default" href="/css/default.css?2=12" /> '
+	            .'<link rel="stylesheet" type="text/css" title="default" href="/css/default.css?2=13" /> '
 	            .'<link rel="shortcut icon" href="/favicon.ico" /> '
 	            .$script
 	            .'</head> ';
@@ -277,7 +277,7 @@ try{var AdBrite_Iframe=window.top!=window.self?2:1;var AdBrite_Referrer=document
 <script type="text/javascript">//<![CDATA[
 document.write(String.fromCharCode(60,83,67,82,73,80,84));document.write(' src="http://ads.adbrite.com/mb/text_group.php?sid=1104667&zs=3132305f363030&ifr='+AdBrite_Iframe+'&ref='+AdBrite_Referrer+'" type="text/javascript">');document.write(String.fromCharCode(60,47,83,67,82,73,80,84,62));
 //]]></script>
-<div><a target="_top" href="http://www.adbrite.com/mb/commerce/purchase_form.php?opid=1104667&afsid=55544" style="font-weight:bold;font-family:Arial;font-size:13px;">Your Ad Here</a></div>
+<div><a target="_top" href="http://www.adbrite.com/mb/commerce/purchase_form.php?opid=1104667&amp;afsid=55544" style="font-weight:bold;font-family:Arial;font-size:13px;">Your Ad Here</a></div>
 <!-- End: Black Label Ads -->      
         <?php
         $code = ob_get_contents();
@@ -298,7 +298,7 @@ try{var AdBrite_Iframe=window.top!=window.self?2:1;var AdBrite_Referrer=document
 <script type="text/javascript">//<![CDATA[
 document.write(String.fromCharCode(60,83,67,82,73,80,84));document.write(' src="http://ads.adbrite.com/mb/text_group.php?sid=1104661&zs=3132305f363030&ifr='+AdBrite_Iframe+'&ref='+AdBrite_Referrer+'" type="text/javascript">');document.write(String.fromCharCode(60,47,83,67,82,73,80,84,62));
 //]]></script>
-<div><a href="http://www.adbrite.com/mb/commerce/purchase_form.php?opid=1104661&afsid=1" style="font-weight:bold;font-family:Arial;font-size:13px;">Your Ad Here</a></div>
+<div><a href="http://www.adbrite.com/mb/commerce/purchase_form.php?opid=1104661&amp;afsid=1" style="font-weight:bold;font-family:Arial;font-size:13px;">Your Ad Here</a></div>
 <!-- End: AdBrite -->
         <?php
         $code = ob_get_contents();
