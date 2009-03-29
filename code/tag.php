@@ -145,35 +145,45 @@ if (defined('MAGIC')) {
 	                $sqlstr0 = 'DISTINCT link_id';
 	                $conds = 'AND';
 	                $sqlstr = 'link_id > 0';
+                    $where = '';
 	                break;
 	            case 'picture':
-	                $sqlstr0 = 'DISTINCT picture_id';
+	                $sqlstr0 = 'DISTINCT picture_id, (SELECT NSFW FROM picture_details WHERE picture_details.picture_id=t2.picture_id) AS NSFW';
 	                $conds = 'AND';
 	                $sqlstr = 'picture_id > 0';
+                    $extra_conditions = " AS t2 ";
+                    $where = 'HAVING NSFW="N"';
 	                break;
 	            case 'blog':
 	                $sqlstr0 = 'DISTINCT blog_id';
 	                $conds = 'AND';
 	                $sqlstr = 'blog_id > 0';
+                    $where = '';
 	                break;
 	        }
 	        $res = array();
 		$tags = explode(' ', trim($tagstr));
-		foreach ($tags as $tag){
+        $sql = &$this->sql;
+        foreach ($tags as $tag){
     		$tag = $this->normalize($tag);
-    		$existing = $this->isExisting($tag);
-    		if ($existing){
-    			$sql = &$this->sql;
-    			$query = "SELECT $sqlstr0 FROM tag_details WHERE tag_id=$existing $conds $sqlstr;";
+            $tag_ids[] = $this->isExisting($tag);
+        }
+
+        $tag_id = implode(' OR tag_id=',$tag_ids);
+        
+//		$existing = $this->isExisting($tag);
+		if ($tag_id){
+			$query = "SELECT {$sqlstr0} FROM tag_details {$extra_conditions} WHERE tag_id={$tag_id} {$conds} {$sqlstr} {$where};";
+
     			$ret = $sql->query($query, 'array');
-    			if ($ret){
-    			$res[] = $ret;
-    			}
-    		}
+			if ($ret){
+			$res[] = $ret;
+			}
 		}
-		$sql0 = &$this->sql;
-		$query = "SELECT $sqlstr0 FROM tag_details order by rand() limit 20;";
-		$ret = $sql0->query($query, 'array');
+
+		$query = "SELECT {$sqlstr0} FROM tag_details {$extra_conditions} {$where} order by rand() limit 20;";
+
+		$ret = $sql->query($query, 'array');
 		if ($ret){
 		$res[] = $ret;
 		}
