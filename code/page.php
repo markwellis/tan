@@ -254,8 +254,8 @@ ob_clean();
     <input type="submit" name="sa" value="Search" />
   </div>
 </form>
+</div>
 
-<script type="text/javascript" src="http://www.google.com/coop/cse/brand?form=cse-search-box&amp;lang=en"></script></div>
 </div><div class="logoimg"/><a href="/" class="logo"></a></div>';
 	        $this->output .= "</div><div id='middle'>"
                 ."<div id='those_damn_dirty_evil_ads'>{$ad_code}</div> ";
@@ -267,12 +267,14 @@ function get_ad_code($where){
         ?>
 <!-- Begin: Black Label Ads, Generated: 2009-03-29 9:54:20  -->
 <script type="text/javascript">//<![CDATA[
+
 var AdBrite_Title_Color = '0000FF';
 var AdBrite_Text_Color = '000000';
 var AdBrite_Background_Color = '808080';
 var AdBrite_Border_Color = 'CCCCCC';
 var AdBrite_URL_Color = '008000';
 try{var AdBrite_Iframe=window.top!=window.self?2:1;var AdBrite_Referrer=document.referrer==''?document.location:document.referrer;AdBrite_Referrer=encodeURIComponent(AdBrite_Referrer);}catch(e){var AdBrite_Iframe='';var AdBrite_Referrer='';}
+
 //]]></script>
 <script type="text/javascript">//<![CDATA[
 document.write(String.fromCharCode(60,83,67,82,73,80,84));document.write(' src="http://ads.adbrite.com/mb/text_group.php?sid=1104667&zs=3132305f363030&ifr='+AdBrite_Iframe+'&ref='+AdBrite_Referrer+'" type="text/javascript">');document.write(String.fromCharCode(60,47,83,67,82,73,80,84,62));
@@ -288,12 +290,14 @@ document.write(String.fromCharCode(60,83,67,82,73,80,84));document.write(' src="
         ?>
 <!-- Begin: AdBrite, Generated: 2009-03-29 9:52:20  -->
 <script type="text/javascript">//<![CDATA[
+
 var AdBrite_Title_Color = '0000FF';
 var AdBrite_Text_Color = '000000';
 var AdBrite_Background_Color = '808080';
 var AdBrite_Border_Color = 'CCCCCC';
 var AdBrite_URL_Color = '008000';
 try{var AdBrite_Iframe=window.top!=window.self?2:1;var AdBrite_Referrer=document.referrer==''?document.location:document.referrer;AdBrite_Referrer=encodeURIComponent(AdBrite_Referrer);}catch(e){var AdBrite_Iframe='';var AdBrite_Referrer='';}
+
 //]]></script>
 <script type="text/javascript">//<![CDATA[
 document.write(String.fromCharCode(60,83,67,82,73,80,84));document.write(' src="http://ads.adbrite.com/mb/text_group.php?sid=1104661&zs=3132305f363030&ifr='+AdBrite_Iframe+'&ref='+AdBrite_Referrer+'" type="text/javascript">');document.write(String.fromCharCode(60,47,83,67,82,73,80,84,62));
