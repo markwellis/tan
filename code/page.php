@@ -259,8 +259,8 @@ ob_clean();
 	        $this->output .= "</div><div id='middle'>"; 
 	    }
 
-function get_ad_code(){
-    if ($_SESSION['nsfw']){
+function get_ad_code($where){
+    if ($_SESSION['nsfw'] && $where === 'picture'){
         ob_start();
         ?>
 <!-- Begin: Black Label Ads, Generated: 2009-03-28 19:40:31  -->
@@ -305,7 +305,7 @@ try{var AdBrite_Iframe=window.top!=window.self?2:1;var AdBrite_Referrer=document
             if ($sortby){
                 $sortby = "Sort by: {$sortby}";
             }
-            $ad_code = $this->get_ad_code();
+            $ad_code = $this->get_ad_code($where);
 	        $this->output .= '<div id="main_menu"><div id="menu_holder"> '
 	        	. $this->createMenu($where, $type) ."</div>{$sortby}".$this->get_recent_comments()."</div> "
 				."<div id='those_damn_dirty_evil_ads'>{$ad_code}</div> "
