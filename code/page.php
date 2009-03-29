@@ -191,7 +191,7 @@ if (defined('MAGIC')) {
 	            .'<meta name="keywords" content="news community comments english lulz lol social lulzhq fun jokes '
 	            .'videos pictures share sharing lol lolz funny humour humur"/> '
 	            .'<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/> '
-	            .'<link rel="stylesheet" type="text/css" title="default" href="/css/default.css?2=10" /> '
+	            .'<link rel="stylesheet" type="text/css" title="default" href="/css/default.css?2=11" /> '
 	            .'<link rel="shortcut icon" href="/favicon.ico" /> '
 	            .$script
 	            .'</head> ';
@@ -201,6 +201,7 @@ if (defined('MAGIC')) {
 	    
 	    private function createBody($where, $type, $sortby = null){
 	        $user = &$this->user;
+            $ad_code = $this->get_ad_code($where);
             $this->output .= '<body>'
                 .'<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/mootools/1.2.1/mootools-yui-compressed.js"></script>'
                 .'<script type="text/javascript" src="/sys/script/mootools-1.2-more.js"></script>'
@@ -256,9 +257,8 @@ ob_clean();
 
 <script type="text/javascript" src="http://www.google.com/coop/cse/brand?form=cse-search-box&amp;lang=en"></script></div>
 </div><div class="logoimg"/><a href="/" class="logo"></a></div>';
-            $ad_code = $this->get_ad_code($where);
 	        $this->output .= "</div><div id='middle'>"
-            ."<div id='those_damn_dirty_evil_ads'>{$ad_code}</div> ";
+                ."<div id='those_damn_dirty_evil_ads'>{$ad_code}</div> ";
 	    }
 
 function get_ad_code($where){
