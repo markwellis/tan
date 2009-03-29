@@ -253,7 +253,7 @@ img {
     margin-left:auto;
     margin-right:125px;
     margin-bottom:5px;
-    height:225px;
+    min-height:125px;
     -moz-border-radius:5px;
     -webkit-border-radius:5px;
     background-color: #F7FAFF;
