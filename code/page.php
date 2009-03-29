@@ -264,7 +264,7 @@ function get_ad_code($where){
     if ($_SESSION['nsfw'] && $where === 'picture'){
         ob_start();
         ?>
-<!-- Begin: Black Label Ads, Generated: 2009-03-28 19:40:31  -->
+<!-- Begin: Black Label Ads, Generated: 2009-03-29 9:54:20  -->
 <script type="text/javascript">//<![CDATA[
 var AdBrite_Title_Color = '0000FF';
 var AdBrite_Text_Color = '000000';
@@ -274,10 +274,10 @@ var AdBrite_URL_Color = '008000';
 try{var AdBrite_Iframe=window.top!=window.self?2:1;var AdBrite_Referrer=document.referrer==''?document.location:document.referrer;AdBrite_Referrer=encodeURIComponent(AdBrite_Referrer);}catch(e){var AdBrite_Iframe='';var AdBrite_Referrer='';}
 //]]></script>
 <script type="text/javascript">//<![CDATA[
-document.write(String.fromCharCode(60,83,67,82,73,80,84));document.write(' src="http://ads.adbrite.com/mb/text_group.php?sid=1103836&zs=3136305f363030&ifr='+AdBrite_Iframe+'&ref='+AdBrite_Referrer+'" type="text/javascript">');document.write(String.fromCharCode(60,47,83,67,82,73,80,84,62)); 
+document.write(String.fromCharCode(60,83,67,82,73,80,84));document.write(' src="http://ads.adbrite.com/mb/text_group.php?sid=1104667&zs=3132305f363030&ifr='+AdBrite_Iframe+'&ref='+AdBrite_Referrer+'" type="text/javascript">');document.write(String.fromCharCode(60,47,83,67,82,73,80,84,62));
 //]]></script>
-<div><a href="http://www.adbrite.com/mb/commerce/purchase_form.php?opid=1103836&afsid=55544" style="font-weight:bold;font-family:Arial;font-size:13px;">Your Ad Here</a></div>
-<!-- End: Black Label Ads -->        
+<div><a target="_top" href="http://www.adbrite.com/mb/commerce/purchase_form.php?opid=1104667&afsid=55544" style="font-weight:bold;font-family:Arial;font-size:13px;">Your Ad Here</a></div>
+<!-- End: Black Label Ads -->      
         <?php
         $code = ob_get_contents();
         ob_clean();
@@ -285,7 +285,7 @@ document.write(String.fromCharCode(60,83,67,82,73,80,84));document.write(' src="
     } else {
         ob_start();
         ?>
-<!-- Begin: AdBrite, Generated: 2009-03-28 19:44:27  -->
+<!-- Begin: AdBrite, Generated: 2009-03-29 9:52:20  -->
 <script type="text/javascript">//<![CDATA[
 var AdBrite_Title_Color = '0000FF';
 var AdBrite_Text_Color = '000000';
@@ -295,9 +295,9 @@ var AdBrite_URL_Color = '008000';
 try{var AdBrite_Iframe=window.top!=window.self?2:1;var AdBrite_Referrer=document.referrer==''?document.location:document.referrer;AdBrite_Referrer=encodeURIComponent(AdBrite_Referrer);}catch(e){var AdBrite_Iframe='';var AdBrite_Referrer='';}
 //]]></script>
 <script type="text/javascript">//<![CDATA[
-document.write(String.fromCharCode(60,83,67,82,73,80,84));document.write(' src="http://ads.adbrite.com/mb/text_group.php?sid=1103840&zs=3136305f363030&ifr='+AdBrite_Iframe+'&ref='+AdBrite_Referrer+'" type="text/javascript">');document.write(String.fromCharCode(60,47,83,67,82,73,80,84,62));
+document.write(String.fromCharCode(60,83,67,82,73,80,84));document.write(' src="http://ads.adbrite.com/mb/text_group.php?sid=1104661&zs=3132305f363030&ifr='+AdBrite_Iframe+'&ref='+AdBrite_Referrer+'" type="text/javascript">');document.write(String.fromCharCode(60,47,83,67,82,73,80,84,62));
 //]]></script>
-<div><a href="http://www.adbrite.com/mb/commerce/purchase_form.php?opid=1103840&amp;afsid=1" style="font-weight:bold;font-family:Arial;font-size:13px;">Your Ad Here</a></div>
+<div><a href="http://www.adbrite.com/mb/commerce/purchase_form.php?opid=1104661&afsid=1" style="font-weight:bold;font-family:Arial;font-size:13px;">Your Ad Here</a></div>
 <!-- End: AdBrite -->
         <?php
         $code = ob_get_contents();
