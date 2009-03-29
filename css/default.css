@@ -32,7 +32,6 @@ img {
 	height:80px;
 	padding:5px;
     min-width:650px;
-    margin-right:170px;
     margin-left:175px;
     padding-bottom:0px;
 }
@@ -207,15 +206,13 @@ img {
 }
 
 #those_damn_dirty_evil_ads{
-    position:absolute;
-    right:10px;
-    top:90px;
+    float:right;
+    margin-left:7px;
 }
 
 #middle {
 	padding-bottom:15px;
     background: #555555 url('/sys/images/bg2.png') repeat-x 0 0;
-    margin-right:170px;
     margin-left:175px;
 	height:100%;
 	padding:5px;
@@ -241,7 +238,6 @@ img {
 }
 
 #bottom {
-    margin-right:170px;
 	padding:5px;
     text-align:center;
     min-width:650px;
