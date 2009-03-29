@@ -73,7 +73,7 @@ switch($function){
         $middle .= "</div>";
         ob_start();
 ?>
-<script type="text/javascript">
+<script type="text/javascript">//<![CDATA[
         window.addEvent('domready', function(){
     // The slider
     $('thumbs').addEvents({
@@ -109,7 +109,7 @@ switch($function){
         }
     });
 });
-</script>
+//]]></script>
 <?php
         $middle .= ob_get_contents();
         ob_end_clean();

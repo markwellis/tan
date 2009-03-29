@@ -860,7 +860,7 @@ require_once('inputfilter.php');
 	        $user = &$this->user;
 ob_start();
 ?>
-<script type="text/javascript">
+<script type="text/javascript">//<![CDATA[
 var spellcheck_complete = 0;
 
 window.addEvent('domready', function(){
@@ -919,7 +919,7 @@ window.addEvent('domready', function(){
     <?php } ?>
 
 });
-</script>
+//]]></script>
 <?
 $output .= ob_get_contents();
 ob_clean();
