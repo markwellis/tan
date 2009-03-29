@@ -329,10 +329,10 @@ document.write(String.fromCharCode(60,83,67,82,73,80,84));document.write(' src="
 				.'<a href="http://creativecommons.org/">Creative Commons Public Domain license</a></span> '
 	            .'</div></div>'
 	            .'<script src="/sys/script/ga.js" type="text/javascript"></script> '
-	            .'<script type="text/javascript">//<![CDATA[ '
+	            ."<script type='text/javascript'>//<![CDATA[ \n"
 	            .'var pageTracker = _gat._getTracker("UA-5148406-3"); '
 	            .'pageTracker._initData(); '
-	            .'pageTracker._trackPageview(); '
+	            ."pageTracker._trackPageview(); \n"
 	            .'//]]></script> '
 	            .'</body></html>';
 	    }
