@@ -598,12 +598,15 @@ require_once('inputfilter.php');
                 if (isset($_SESSION['user_id'])){
                     $uid = $_SESSION['user_id'];
                 }
+                if (!$_SESSION['nsfw']){
+                    $nsfw = "WHERE NSFW='N'";
+                }
                 $query = "select *,(SELECT count(*) from plus where plus.picture_id = picture_details.picture_id) as plus,
                     (SELECT count(*) from minus where minus.picture_id = picture_details.picture_id) as minus,
                     (SELECT count(*) from comments WHERE comments.picture_id = picture_details.picture_id) as comments,
                     (SELECT count(*) from plus where plus.picture_id = picture_details.picture_id and plus.user_id=$uid) as meplus,
                     (SELECT count(*) from minus where minus.picture_id = picture_details.picture_id and minus.user_id=$uid) as meminus
-                    from picture_details HAVING plus $oper ".$this->promoted_threashold." order by ($orderby) desc limit $limit;";
+                    from picture_details {$nsfw} HAVING plus $oper ".$this->promoted_threashold." order by ($orderby) desc limit $limit;";
                 return $sql->query($query, 'array');
             }
             return -1;
