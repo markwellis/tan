@@ -792,9 +792,9 @@ require_once('inputfilter.php');
 		            $usecache = 0;
 		        }
 
-		        if ( !$usecache && $basefile && file_exists($basefile) ){
+		        if ( !$usecache && $filename && file_exists($filename) ){
                     $im = new Imagick();
-                    $im->readImage($basefile);
+                    $im->readImage($filename);
 
                     $thumb_format = trim($im->getImageFormat());
                     $im->thumbnailImage($newx,$newx,true);
@@ -806,6 +806,7 @@ require_once('inputfilter.php');
 
                     $thumb_image = $im->getImageBlob();
                     $thumb_format = $im->getImageFormat();
+
 		            @mkdir(dirname($cacheimg));
 
                     $im->writeImage($cacheimg);
