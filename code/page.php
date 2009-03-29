@@ -191,7 +191,7 @@ if (defined('MAGIC')) {
 	            .'<meta name="keywords" content="news community comments english lulz lol social lulzhq fun jokes '
 	            .'videos pictures share sharing lol lolz funny humour humur"/> '
 	            .'<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/> '
-	            .'<link rel="stylesheet" type="text/css" title="default" href="/css/default.css?1=2" /> '
+	            .'<link rel="stylesheet" type="text/css" title="default" href="/css/default.css?1=9" /> '
 	            .'<link rel="shortcut icon" href="/favicon.ico" /> '
 	            .$script
 	            .'</head> ';
@@ -207,7 +207,7 @@ if (defined('MAGIC')) {
 	            .'<script type="text/javascript" src="/sys/js/clientside.js?t=3"></script>'
 	            .'<div id="main">'
 	            .'<div id="top">'
-				.'<div style="float:right;margin-top:15px;margin-right:5px;text-align:right;">';
+				.'<div style="float:right;margin-top:5px;margin-right:5px;text-align:right;">';
 ob_start();
 ?>
 <script type="text/javascript">
@@ -314,8 +314,8 @@ try{var AdBrite_Iframe=window.top!=window.self?2:1;var AdBrite_Referrer=document
 	           .'<img src="/sys/images/valid-xhtml10.png" '
 	            .'style="height:31px;width:88px;margin-top:20px;float:right;" '
 	            .'alt="Valid XHTML 1.0 Transitional" /></a><br/><br/> '
-		    .'<a href="http://www.blogged.com/directory/society/news-media">'
-		    .'<img src="http://www.blogged.com/icons/vn_mrbig4545m_1475849.gif" alt="News &amp; Media Blog Directory" title="News &amp; Media Blog Directory" /></a>'
+		    .'<a rel="external nofollow" href="http://www.blogged.com/directory/society/news-media">'
+		    .'<img src="/sys/images/blogged.gif" alt="News &amp; Media Blog Directory" title="News &amp; Media Blog Directory" /></a>'
 	            ."<span style='display:block;margin-bottom:10px;'>"
 	            ."$footer , All User-generated content is licensed under a " 
 				.'<a href="http://creativecommons.org/">Creative Commons Public Domain license</a></span> '

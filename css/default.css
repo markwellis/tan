@@ -497,7 +497,6 @@ a{
 #picHolder .picThumb{
     max-height:300px;
     max-width:400px;
-//  width:expression(this.width > 250 ? 250: true);
     border:none;
 }
 
@@ -577,7 +576,6 @@ textarea{
     height:160px;
     max-width:160px;
     margin:2px;
-//  width: expression(this.width > 160 ? 160: true);
     background-position: center center;
     background-repeat:no-repeat;
 }
