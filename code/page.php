@@ -264,7 +264,7 @@ ob_clean();
 	    }
 
 function get_ad_code($where){
-    if ($_SESSION['nsfw'] && $where === 'picture'){
+    if ($_SESSION['nsfw']){
         ob_start();
         ?>
 <!-- Begin: Black Label Ads, Generated: 2009-03-29 9:54:20  -->
@@ -292,24 +292,7 @@ document.write(String.fromCharCode(60,83,67,82,73,80,84));document.write(' src="
     } else {
         ob_start();
         ?>
-<!-- Begin: AdBrite, Generated: 2009-03-29 9:52:20  -->
-<script type="text/javascript">//<![CDATA[
-
-var AdBrite_Title_Color = '0000FF';
-var AdBrite_Text_Color = '000000';
-var AdBrite_Background_Color = '808080';
-var AdBrite_Border_Color = 'CCCCCC';
-var AdBrite_URL_Color = '008000';
-try{var AdBrite_Iframe=window.top!=window.self?2:1;var AdBrite_Referrer=document.referrer==''?document.location:document.referrer;AdBrite_Referrer=encodeURIComponent(AdBrite_Referrer);}catch(e){var AdBrite_Iframe='';var AdBrite_Referrer='';}
-
-//]]>
-</script>
-<script type="text/javascript">//<![CDATA[
-document.write(String.fromCharCode(60,83,67,82,73,80,84));document.write(' src="http://ads.adbrite.com/mb/text_group.php?sid=1104661&zs=3132305f363030&ifr='+AdBrite_Iframe+'&ref='+AdBrite_Referrer+'" type="text/javascript">');document.write(String.fromCharCode(60,47,83,67,82,73,80,84,62));
-//]]>
-</script>
-<div><a href="http://www.adbrite.com/mb/commerce/purchase_form.php?opid=1104661&amp;afsid=1" style="font-weight:bold;font-family:Arial;font-size:13px;">Your Ad Here</a></div>
-<!-- End: AdBrite -->
+<iframe width="120" height="600" name="AdSpace101951" src="http://hosting.adjug.com/AdJugSearch/PageBuilder.aspx?ivi=V3.0+JS+NS&amp;aid=1572&amp;slid=101951&amp;height=600&amp;width=120&amp;HTMLOP=True" frameborder="0" marginwidth="0" marginheight="0" vspace="0" hspace="0" allowtransparency="true" scrolling="no"></iframe>
         <?php
         $code = ob_get_contents();
         ob_clean();
