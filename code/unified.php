@@ -149,6 +149,13 @@ require_once('inputfilter.php');
                 $youtube_id = trim($matches['id']);
                 $youtube_id = split(' ', $youtube_id);
                 $youtube_id = $youtube_id[0];
+
+                //test for full url 
+                preg_match('/v=(.*)[\ |\&]/', $youtube_id, $matches);
+                if ($matches[1]){
+                    $youtube_id = $matches[1];
+                }
+
                 $text = preg_replace("/\[youtube\](.+?)\[\/youtube\]/", "<object type='application/x-shockwave-flash' style='width:425px; height:350px;' data='http://www.youtube.com/v/{$youtube_id}'><param name='movie' value='http://www.youtube.com/v/$1' /></object>", $text);
             }
             unset($matches);
