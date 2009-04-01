@@ -151,7 +151,7 @@ require_once('inputfilter.php');
                 $youtube_id = $youtube_id[0];
 
                 //test for full url 
-                preg_match('/v=(.*)[\ |\&]/', $youtube_id, $matches);
+                preg_match('/v=(.*)\&/', "{$youtube_id}&", $matches);
                 if ($matches[1]){
                     $youtube_id = $matches[1];
                 }
