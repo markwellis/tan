@@ -131,8 +131,8 @@ if (defined('MAGIC')) {
                     $comment_length = strlen($comment['details']);
                     $comment['details'] = preg_replace("/\[quote\ user=[\"'](.+?)[\"']\](.*?)\[\/quote\]/miUs", '', $comment['details']);
                     $comment['details'] = htmlentities(strip_tags($comment['details']), ENT_QUOTES,'UTF-8');
-                    $comment['short'] = preg_replace('/\W+/', ' ', substr(html_entity_decode($comment['details'], ENT_QUOTES, 'UTF-8'), 0, 50));
-                    $comment['long'] = preg_replace('/\W+/', ' ', substr(html_entity_decode($comment['details'], ENT_QUOTES, 'UTF-8'), 0, 400));
+                    $comment['short'] = substr(html_entity_decode($comment['details'], ENT_QUOTES, 'UTF-8'), 0, 50);
+                    $comment['long'] = substr(html_entity_decode($comment['details'], ENT_QUOTES, 'UTF-8'), 0, 400);
                     $comment['date'] = date( 'H:i:s', $comment['date']);
                     if ( $comment['short'] !== $comment['details'] ){
                            $comment['short'] .= '...';
