@@ -577,7 +577,7 @@ require_once('inputfilter.php');
 		        if ($random) {$order = 'RAND()';}
 		        $query = "SELECT *,(SELECT COUNT(*) FROM plus WHERE plus.$id = {$table}.{$id}) AS plus,
 		            (SELECT COUNT(*) FROM minus WHERE minus.$id = {$table}.{$id}) AS minus,
-		            (SELECT COUNT(*) FROM comments WHERE comments.{$id} = {$table}.{$id}) AS comments,
+		            (SELECT COUNT(*) FROM comments WHERE comments.{$id} = {$table}.{$id} AND deleted='N') AS comments,
 		            (SELECT COUNT(*) FROM plus WHERE plus.{$id} = {$table}.{$id} and plus.user_id=$uid) AS meplus,
 		            $extraSql
 		            (SELECT COUNT(*) FROM minus WHERE minus.{$id} = {$table}.{$id} and minus.user_id=$uid) AS meminus
