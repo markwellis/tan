@@ -111,7 +111,7 @@ if (defined('MAGIC')) {
                 
             if (!$cached){
                 $sql = &$this->sql;
-                $query = "SELECT details, comment_id, username, UNIX_TIMESTAMP(date) as date, blog_id, link_id, picture_id FROM comments ORDER BY date DESC LIMIT 20";
+                $query = "SELECT details, comment_id, username, UNIX_TIMESTAMP(date) as date, blog_id, link_id, picture_id FROM comments WHERE deleted='N' ORDER BY date DESC LIMIT 20";
                 $recent_comments = $sql->query($query, 'array');
                 $tmp = '<div style="overflow:hidden;"><span>Recent Comments</span><ul style="list-style:none;margin:0px;padding:0px;" class="" >';
                 foreach ($recent_comments as $comment){
@@ -244,7 +244,7 @@ ob_clean();
 	        if($_SESSION['nsfw']== 1){
 	            $this->output .="<a href='/filteron/' class='menulink'>Enable NSFW filter</a>";
 	        } else {
-	            $this->output .="<a href='/filteroff/' class='menulink'>Disable NSFW filter</a>";
+	            $this->output .="<a href='/filteroff/' class='menulink' onclick='return confirm(\"Are you sure you want to disable the NSFW work filter? The ads will switch to adult mode, and there will be content which is not suitable for work\");'>Disable NSFW filter</a>";
 	        }
 
 	        $this->output .= '<br /><div style="float:right">

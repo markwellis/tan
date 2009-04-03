@@ -26,7 +26,7 @@ class m_comment {
      */
     function update($new_comment){
         $query = "UPDATE {$this->comments_table} SET details = '{$new_comment}', edited = NOW() WHERE comment_id = {$this->comment_id} LIMIT 1";
-        $this->sql->query ($query, 'none');
+        return $this->sql->query ($query, 'none');
     }
     
     /**
@@ -35,6 +35,11 @@ class m_comment {
     function get (){
         $query= "SELECT * FROM {$this->comments_table} WHERE comment_id={$this->comment_id}";
         return $this->sql->query($query, 'row');
+    }
+    
+    function delete(){
+        $query = "UPDATE {$this->comments_table} SET deleted = 'Y', edited = NOW() WHERE comment_id = {$this->comment_id} LIMIT 1";
+        return $this->sql->query ($query, 'none');
     }
 }
 

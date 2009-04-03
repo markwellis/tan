@@ -40,25 +40,27 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
     $comment_user_id = (int)$comment_details['user_id'];
 
     if ($user->isLoggedIn() && ($user_id === $comment_user_id) ){
+        if($_POST['delete_comment']){
+            $m_comment->delete();
+        } else {
             require_once(BASE_PATH . '/code/inputfilter.php');
             $filter = &new InputFilter();
             $comment = $filter->process(stripslashes($_POST["comment_edit_{$comment_id}"]));
             $comment = mysql_escape_string(str_replace(array('\r','\t','\n'), '', $comment));
             $m_comment->update($comment);
-
-            if ($comment_details['link_id']){
-                $location = 'link';
-                $id = $comment_details['link_id'];
-            } elseif ($comment_details['blog_id']){
-                $location = 'blog';
-                $id = $comment_details['blog_id'];
-            } elseif ($comment_details['picture_id']){
-                $location = 'pic';
-                $id = $comment_details['picture_id'];
-            } 
-
-            header("location: /view{$location}/{$id}/#comment{$comment_details['comment_id']}");
-            exit();
+        }
+        if ($comment_details['link_id']){
+            $location = 'link';
+            $id = $comment_details['link_id'];
+        } elseif ($comment_details['blog_id']){
+            $location = 'blog';
+            $id = $comment_details['blog_id'];
+        } elseif ($comment_details['picture_id']){
+            $location = 'pic';
+            $id = $comment_details['picture_id'];
+        } 
+        header("location: /view{$location}/{$id}/#comment{$comment_details['comment_id']}");
+        exit();
     }
 }
 $user_id = (int)$user->getUserId();

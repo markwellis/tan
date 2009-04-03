@@ -23,5 +23,5 @@ $oFCKeditor->Value = $comment;
 $oFCKeditor->Create() 
 ?>
 
-<input type="submit" id="submit_edit">
+<input type="submit" id="submit_edit" value='Edit'><input type="submit" id="delete_comment" name="delete_comment" value='Delete Comment'>
 </form>

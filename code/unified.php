@@ -293,13 +293,13 @@ require_once('inputfilter.php');
 		        $sql = &$this->sql;
 		        switch ($this->kind_of_object){
 		            case 'link':
-		                $condtions = "WHERE link_id=$id ORDER BY date";
+		                $condtions = "WHERE link_id=$id AND deleted='N' ORDER BY date";
 		                break;
 		            case 'blog':
-		                $condtions = "WHERE blog_id=$id ORDER BY date";
+		                $condtions = "WHERE blog_id=$id AND deleted='N' ORDER BY date";
 		                break;
 		            case 'picture':
-		                $condtions = "WHERE picture_id=$id ORDER BY date";
+		                $condtions = "WHERE picture_id=$id AND deleted='N' ORDER BY date";
 		                break;
 		        }
 		        $query = "SELECT *, (SELECT join_date FROM user_details WHERE user_details.user_id=t2.user_id) AS join_date, 
