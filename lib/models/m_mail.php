@@ -9,6 +9,19 @@
 
 
 class m_mail{
+    public $to;
+    public $message;
+    public $subject;
+    public $headers;
+    public $from;
+
+    public function send(){
+        if (!$this->headers){
+            $this->headers = "From: {$this->from}\r\n" .
+                "Reply-To: webmaster@example.com\r\n";
+        }
+    mail($this->to, $this->subject, $this->message, $this->headers);
+    }
     
 }
 

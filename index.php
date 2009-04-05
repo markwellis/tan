@@ -206,7 +206,7 @@ switch($function){
         break;
 
     case 7:  //submit
-        $where = 'submit';
+        $type = '2';
 
         require_once("code/user.php");
         global $user;
@@ -238,7 +238,6 @@ switch($function){
         }
         //link
         if ($swhat == 0) {
-            $type = 0;
             $middle .= "<div id='link'>
                 <form action='/code/dosubmit.php' onsubmit=\"return checkForm('link');\" method='post'>
                 <input type='hidden' id='type4' name='type' value='link' />
@@ -258,7 +257,6 @@ switch($function){
         }
         //pic
         elseif ($swhat == 1){
-            $type=1;
             $middle .= "<div id='picture'>"
                 ."<form onsubmit=\"return checkForm('picture');\" enctype='multipart/form-data' action='/code/dosubmit.php' method='post'>"
                 ."<input type='hidden' name='MAX_FILE_SIZE' value='2000000' />"
@@ -284,7 +282,6 @@ switch($function){
         }
         //blog
         elseif ($swhat == 2){
-            $type = 2;
             $middle .= "<div id='blog'><form action='/code/dosubmit.php' onsubmit=\"return checkForm('blog');\" method='post'>
                 <input type='hidden' id='type6' name='type' value='blog' />
                 <input type='hidden' id='cat' name='cat' value='' />
