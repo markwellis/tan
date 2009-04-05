@@ -1066,8 +1066,8 @@ ob_clean();
 	        $output = "<select name='sort_by' id='sort_by' onchange='dosort(this.value)'>
 	            <option value='0' $selected_array[0]>Date</option>
 	            <option value='1' $selected_array[1]>Comments</option>
-	            <option value='2' $selected_array[2]>Plus</option>
-	            <option value='3' $selected_array[3]>Minus</option>
+	            <option value='2' $selected_array[2]>IsNews</option>
+	            <option value='3' $selected_array[3]>AintNews</option>
 	            <option value='4' $selected_array[4]>Views</option>
 	            </select>";
 	        return $output;
