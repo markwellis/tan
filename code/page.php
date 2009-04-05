@@ -19,87 +19,6 @@ if (defined('MAGIC')) {
             $this->user = &$user;
 	    }
 	
-//	    function createMenu($where, $type){
-//    	    $selclass = ' mainselected';
-//            $subclass = ' subselected';
-//            
-//    	    $linkmenu = null;
-//     	    $picturemenu = null;
-//    	    $blogmenu = null;
-//    
-//            if ($where == 'link'){
-//                $menu = & $linkmenu;
-//                $lselected = & $selclass;
-//                if ($type === 0){$plink = & $subclass;}
-//                if ($type === 1){$ulink = & $subclass;}
-//                $lnav = " lnav";
-//            }
-//            if ($where == 'picture'){
-//                $menu = & $picturemenu;
-//                $pselected = & $selclass;
-//                if ($type === 0){$ppic = & $subclass;}
-//                if ($type === 1){$upic = & $subclass;}
-//                $pnav = " pnav";
-//            }
-//            if ($where == 'blog'){
-//                $menu = & $blogmenu;
-//                $bselected = & $selclass;
-//                if ($type === 0){$pblog = & $subclass;}
-//                if ($type === 1){$ublog = & $subclass;}
-//                $bnav = " bnav";
-//            }
-//            if ($where == 'submit'){
-//                if ($type === 0){
-//                    $lselected = & $selclass;
-//                    $menu = & $linkmenu;
-//                    $lsub = & $subclass;
-//                }
-//                if ($type === 1){
-//                    $pselected = & $selclass;
-//                    $menu = & $picturemenu;
-//                    $psub = & $subclass;
-//                }
-//                if ($type === 2){
-//                    $bselected = & $selclass;            
-//                    $menu = & $blogmenu;
-//                    $bsub = & $subclass;
-//                }
-//            }
-//
-////        $allmenu = "<a href='/random/all/' class='nav anav'>Random</a>
-////            <a href='/all/0/1/' class='nav anav'>Promoted</a> 
-////            <a href='/all/1/1/' class='nav anav'>Upcoming</a>";
-//
-//            $blogmenu = "<a href='/submit/blog/' class='nav bnav $bsub'>Submit</a><br/>
-//                <a href='/random/blog/' class='nav bnav'>Random</a><br/>
-//                <a href='/blog/0/1/' class='nav  bnav $pblog'>Promoted</a><br/>
-//                <a href='/blog/1/1/' class='nav bnav $ublog'>Upcoming</a>";
-//    
-//            $picturemenu = "<a href='/submit/picture/' class='nav pnav $psub'>Submit</a><br/>"
-//                ."<a href='/random/picture/' class='nav pnav'>Random</a><br/>"
-//                ."<a href='/picture/0/1/' class='nav pnav $ppic'>Promoted</a><br/>"
-//                ."<a href='/picture/1/1/' class='nav pnav $upic'>Upcoming</a>";
-//    //            ."<a href='http://nsfw.thisaintnews.com/picture/0/1/' class='nav pnav'>NSFW</a>";
-//    
-//            $linkmenu = "<a href='/submit/link/' class='nav lnav $lsub'>Submit</a><br/>
-//                <a href='/random/link/' class='nav lnav'>Random</a><br/>
-//                <a href='/link/0/1/' class='nav lnav $plink'>Promoted</a><br/> 
-//                <a href='/link/1/1/' class='nav lnav $ulink'>Upcoming</a>";
-//    
-//            $mainmenu = //"<div style='display:none' id='allmenu'>$allmenu</div>
-//                "<div style='display:none' id='blogmenu'>$blogmenu</div>
-//                <div style='display:none' id='picturemenu'>$picturemenu</div>
-//                <div style='display:none' id='linkmenu'>$linkmenu</div>
-//                <div style='float:right;text-align:right;'>";
-//    //            <a href='#' onclick=\"changeMenu('all')\" id='alllink' class='nav anav $aselected'>All</a>
-//    
-//            $mainmenu .= "<a href='#' onclick=\"changeMenu('link');return false;\" id='linklink' class='nav lnav $lselected'>Links</a>"
-//                . "<a href='#' onclick=\"changeMenu('blog');return false;\" id='bloglink' class='nav bnav $bselected'>Blogs</a>"
-//                . "<a href='#' onclick=\"changeMenu('picture');return false;\" id='picturelink' class='nav pnav $pselected'>Pictures</a>"
-//                . "<span id='menuholder' class='$lnav $pnav $bnav'>$menu</span></div>";
-//    
-//            return $mainmenu;
-//    	}
     function createMenu($tab, $type){
         $current_menu = array($tab => 'style="display:block";');
         $current_tab = array($tab => ' tab_selected');
@@ -262,7 +181,7 @@ if (defined('MAGIC')) {
 	            .'<meta name="keywords" content="news community comments english lulz lol social lulzhq fun jokes '
 	            .'videos pictures share sharing lol lolz funny humour humur"/> '
 	            .'<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/> '
-	            .'<link rel="stylesheet" type="text/css" title="default" href="/css/default.css?2=17" /> '
+	            .'<link rel="stylesheet" type="text/css" title="default" href="/css/default.css?2=18" /> '
 	            .'<link rel="shortcut icon" href="/favicon.ico" /> '
 	            .$script
 	            .'</head> ';

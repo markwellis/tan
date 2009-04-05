@@ -787,6 +787,7 @@ ul#mainmenu li ul li{
 
 #navmenu_holder .navmenu_option_selected{
 	font-weight:bold;
+	text-decoration:underline;
 }
 
 #navmenu_holder a{
