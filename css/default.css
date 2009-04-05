@@ -786,8 +786,10 @@ ul#mainmenu li ul li{
 }
 
 #navmenu_holder .navmenu_option_selected{
-	font-weight:bold;
-	text-decoration:underline;
+	background:#d9d7d6 url(/sys/images/sidebar_contents_selected.jpg) repeat-x scroll 0 0;
+    -moz-border-radius:5px;
+    -webkit-border-radius:5px;
+    color:#000;
 }
 
 #navmenu_holder a{
