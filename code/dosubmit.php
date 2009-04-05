@@ -1,12 +1,13 @@
 <?php
 define('MAGIC', true);
-require_once('user.php');
-global $user;
-$user = new user();
 
 require_once('sql.php');
 global $sql;
 $sql = &new sql();
+
+require_once('user.php');
+global $user;
+$user = &new user();
 
 if ($user->isLoggedIn()){
     require_once('unified.php');
@@ -26,6 +27,7 @@ if ($user->isLoggedIn()){
             $tags = $_POST["tags"]; // Gets cleaned up by tags class
             $cat = (int)$_POST['cat'];
             $linkValid = $link->isValid($url, $title, $description);
+
             if ($linkValid === null){
                 $linkid = $link->addtoDatabase($url, $title, $description, $cat);
                 $tag->doTag($type, $linkid, $tags);

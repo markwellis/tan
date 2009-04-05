@@ -7,20 +7,8 @@
  * @package package_name
  */
  
-/**
- * TODO
- * MOVE FROM HERE
- */
+require_once('../config.php');
 
-define('BASE_PATH', $_SERVER['DOCUMENT_ROOT']);
-define('SYS_PATH', BASE_PATH . '/sys');
-define('LIB_PATH', BASE_PATH . '/lib');
-define('MODEL_PATH', LIB_PATH . '/models');
-define('TEMPLATE_PATH', LIB_PATH .'/templates');
-
-/**
- * END TODO
- */
 require_once(BASE_PATH . '/code/header.php');
 require_once(MODEL_PATH . '/m_registration.php');
 require_once(BASE_PATH . '/code/sql.php');

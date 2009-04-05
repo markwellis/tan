@@ -7,6 +7,10 @@
  */
 require_once('code/header.php');
 require_once ('code/unified.php');
+require_once('code/user.php');
+
+global $user;
+$user = &new user();
 
 $article_id = (int) $_GET['id'];
 
@@ -23,7 +27,7 @@ switch ($_GET['kindofpage']) {
 }
 
 if ($where) {
-	$article = new unified($where);
+	$article = &new unified($where);
 	
 	$details = $article->getPageObjects(null, null, null, null, $article_id);
 	$details = $details[0];
@@ -39,7 +43,6 @@ if ($where) {
         $description = nl2br(stripslashes($details['description']));
         $res = $article->create_top_random($upcoming, $where);
         $sort_by .= $article->CreateRandomHTML($res);
-
 		$middle .= $article->CreateCommentHTML(
     		$article->getComments($details["${where}_id"]), $details["${where}_id"]);
 	} else {
@@ -49,5 +52,5 @@ if ($where) {
 	header("Location: /");
 	exit();
 }
-require_once('code/footer.php');
+include_once('code/footer.php');
 ?>

@@ -6,20 +6,20 @@ if (defined('MAGIC')) {
 
         public function __construct() {
             $time = 60*60*24*90;
-            $name = '32duihsfd8923rj21ws';
+            $name = '62duihsfd8923rj21ws';
             if ( !isset( $_SESSION ['ready'] ) ) {
                 session_name($name);
                 $domain = $_SERVER['HTTP_HOST'];
                 ini_set("session.gc_maxlifetime", $time);
+                ini_set("session.cookie_httponly", true);
                 session_cache_expire($time);
-                session_set_cookie_params($time, '/');
-                
+                session_set_cookie_params($time, '/', null, null, true);
                 session_start ();
                 $_SESSION ['ready'] = TRUE;
              }
             
             if (isset($_COOKIE[$name])){
-                @setcookie($name, $_COOKIE[$name], time() + $time, "/");
+                @setcookie($name, $_COOKIE[$name], time() + $time, "/", null, null, true);
             }
             
             global $sql;
@@ -178,7 +178,7 @@ if (defined('MAGIC')) {
                     $_SESSION['time'] = time();
                     $_SESSION['username'] = $username;
                     $_SESSION['user_id'] = $row['user_id'];
-//                    session_regenerate_id(true);
+                    session_regenerate_id(true);
                     $query = "update user_details set last_date=NOW() where user_id=".$row['user_id'].";";
                     $sql->query($query, 'none');
                     return true;
@@ -213,7 +213,9 @@ if (defined('MAGIC')) {
         }
 
         public function __destruct(){
-            unset ( $_SESSION['ready'] );
+            if ($_SESSION['ready']){
+                unset ( $_SESSION['ready'] );
+            }
         }
     }
 } else {

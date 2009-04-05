@@ -6,7 +6,8 @@
  * License is in the root directory, entitled LICENSE
  * @package user_info
  */
-require_once('code/header.php');
+require_once('../config.php');
+require_once(OLD_CODE_PATH . '/header.php');
 
 /**
  * THIS SHOULD NOT BE HERE!
@@ -23,8 +24,8 @@ define('PROFILE_PICTURE_UPLOAD_PATH', "{$_SERVER['DOCUMENT_ROOT']}/sys/users/ava
 
 global $user;
 if (!$user){
-    require_once("code/user.php");
-    $user = new user();
+    require_once(OLD_CODE_PATH . '/user.php');
+    $user = &new user();
 }
 
 if (!$user->isLoggedIn()){
@@ -43,7 +44,7 @@ if (!$user->isLoggedIn()){
 if ($_SERVER['REQUEST_METHOD']==='POST') {
     if ($user->isLoggedIn()){
         if ($_FILES['avatar']){
-            require_once("code/m_image_upload.php");
+            require_once(MODEL_PATH . '/m_image_upload.php');
             $user_id = $user->getUserId();
             $avatar = &new m_image_upload($_FILES['avatar'], PROFILE_PICTURE_UPLOAD_PATH . "/{$user_id}.jpg");
             $res = $avatar->upload();
@@ -83,5 +84,5 @@ ob_start();
 <?php
 $middle .= ob_get_contents();
 ob_clean();
-require_once('code/footer.php');
+require_once(OLD_CODE_PATH . '/footer.php');
 ?>

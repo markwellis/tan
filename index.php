@@ -310,99 +310,6 @@ switch($function){
         }
         break;
 
-/* disabled for the time being
-    case 10:  //profile
-        require_once('code/sql.php');
-        require_once('code/user.php');
-        require_once('code/link.php');
-        $user = new user();
-        $sql = new sql();
-        $link = new linkobj();
-
-        $page = (int)$_GET['page'];
-        if ($page==0) { $page = 1; }
-        $username = mysql_escape_string(strip_tags($_GET['username']));
-        if ($_GET['ptype'] === 'plus'){ $ptype = 0;}
-        if ($_GET['ptype'] === 'minus'){ $ptype = 1;}
-        if ($_GET['ptype'] === 'submitted'){ $ptype = 2;}
-
-        $uid = $user->usernameToId($username);
-        $uid = $uid['user_id'];
-       
-        $title = "$username&#039;s profile";
-     
-        $middle .= "<h1>$username&#039;s profile</h1>";
-        $middle .= "<span style='margin-left:15px;'>
-            <a class='profLink' href='/users/$username/plus/$page/'>Plus</a> 
-            <a class='profLink' href='/users/$username/minus/$page/'>Minus</a> 
-            <a class='profLink' href='/users/$username/submitted/$page/'>Submitted</a><br/><br/></span>";
-
-        if ($ptype == 0){
-            $plink = 'plus';
-            $pluslinks= $user->getPlusLinks($uid, $page);
-            if (isset($pluslinks[0])){
-                for($i=0; $i<count($pluslinks);$i++){
-                   if ($pluslinks[$i]['promoted'] != '0000-00-00 00:00:00') {
-                        $type = 0;
-                   } else {
-                        $type = 1;
-                   }
-                   $middle .= $link->drawBox($pluslinks[$i], $type);  
-                }
-
-                $pageCount = (int)ceil($user->getUPlusLinkCount($uid) / 27);
-            } else {
-                $middle .= "This user hasn't plus'd anything yet";
-            }
-        }
-        if ($ptype == 1){
-            $plink = 'minus';
-            $minuslinks= $user->getMinusLinks($uid, $page);
-            if (isset($minuslinks[0])){
-                for($i=0; $i<count($minuslinks);$i++){
-                   if ($minuslinks[$i]['promoted'] != '0000-00-00 00:00:00') {
-                        $type = 0;
-                   } else {
-                        $type = 1;
-                   }
-                   $middle .= $link->drawBox($minuslinks[$i], $type);  
-                }
-
-                $pageCount = (int)ceil($user->getUMinusLinkCount($uid) / 27);
-            } else {
-                $middle .= "This user hasn't minus'd anything yet";
-            }
-        }
-        if ($ptype == 2){
-            $plink = 'submitted';
-            $sublinks = $user->getSubmittedLinks($uid, $page);
-            if (isset($sublinks[0])){
-                for($i=0; $i<count($sublinks);$i++){
-                    if ($sublinks[$i]['promoted'] != '0000-00-00 00:00:00') {
-                        $type = 0;
-                   } else {
-                        $type = 1;
-                   }
-                   $middle .= $link->drawBox($sublinks[$i], $type);
-                }
-                $pageCount = (int)ceil(count($sublinks) / 27);
-            } else {
-                $middle .= "This user hasn't submitted anything yet";
-            }
-        }
-        $middle .= "<div style='margin-left:auto;margin-right:auto;margin-bottom:25px;width:".($pageCount * 40) ."px;'>";
-
-        for ($i=1;$i<=$pageCount;$i++){
-            $middle .= "<a class='pageNumber";
-            if ($i == $page){
-                $middle .= " thisPage";
-            }
-            $middle .= " ' href='/users/$username/$plink/$i'>$i</a>";
-        }
-        $middle .=  "</div>";
-        break;
-*/
-
     case 13:  //tagcloud
         require_once('code/tag.php');
         $tag = &new tag();
@@ -413,26 +320,5 @@ switch($function){
 
 }
 //  bottom 
-include('code/footer.php');
-/*
-$time = microtime();
-$time = explode(" ", $time);
-$time = $time[1] + $time[0];
-$totaltime = number_format(($time - $start), 4);
-if (!isset($type)){
-    $type = -1;
-}
-if (!isset($noPage)){
-    require_once('code/page.php');
-    $pageobj = new page();
-    $html = $pageobj->createPage("ThisAintNews.com :: $title",$extraScript, $middle, "Page processed in $totaltime seconds" , $where, $type);
-    $html = $pageobj->minify($html);
-    $etag = '"'.md5($middle).'"';
-    header("Etag: $etag");
-    if (trim($_SERVER['HTTP_IF_NONE_MATCH']) == $etag) {
-        header("HTTP/1.1 304 Not Modified");
-        exit;
-    }
-    print $pageobj->compress($html);
-}*/
+include_once('code/footer.php');
 ?>

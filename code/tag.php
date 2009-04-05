@@ -96,7 +96,10 @@ if (defined('MAGIC')) {
 	    function doTag($type, $id, $tags) {
 	    /* tags something */
 	        require_once('user.php');
-	        $user = new user();
+            global $user;
+            if (!$user){
+	           $user = &new user();
+            }
 	        $userid = $user->getUserId();
 	        $username = $user->getUsername();
 	        $tags = $this->getTagIds($tags);
