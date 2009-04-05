@@ -52,8 +52,7 @@ class m_image_upload {
         if (!@is_uploaded_file($this->image['tmp_name'])){
             return 'Filesize exceeded';
         }
-
-        if($this->image['type'] !== "image/jpeg"){
+        if( ($this->image['type'] !== 'image/jpeg') && ($this->image['type'] !== 'image/pjpeg')){
             return 'Not a jpg';
         }
 
