@@ -11,15 +11,14 @@ if (defined('MAGIC')) {
                 session_name($name);
                 $domain = $_SERVER['HTTP_HOST'];
                 ini_set("session.gc_maxlifetime", $time);
-                ini_set("session.cookie_httponly", true);
                 session_cache_expire($time);
-                session_set_cookie_params($time, '/', null, null, true);
+                session_set_cookie_params($time, '/');
                 session_start ();
                 $_SESSION ['ready'] = TRUE;
              }
             
             if (isset($_COOKIE[$name])){
-                @setcookie($name, $_COOKIE[$name], time() + $time, "/", null, null, true);
+                @setcookie($name, $_COOKIE[$name], time() + $time, "/");
             }
             
             global $sql;
