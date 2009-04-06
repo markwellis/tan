@@ -121,7 +121,7 @@ if (defined('MAGIC')) {
 
 require_once('inputfilter.php');
             $filter = new InputFilter();
-            $text = $filter->process(stripslashes($text));
+            $text = $filter->process($text);
             $string_array = split('\[\/quote\]', $text);
 
             foreach ($string_array as $string){
@@ -880,7 +880,7 @@ ob_clean();
                     <div class='comment'>
 	                <div id='actual_comment{$comment['comment_id']}'>";
                 $comment['details'] = $this->bbcode_to_html($comment['details']);
-	            $output .= stripslashes($comment['details']) . "<br/></div>";
+	            $output .= $comment['details'] . "<br/></div>";
 
                 $user_id = (int)$user->getUserId();
                 $comment_user_id = (int)$comment['user_id'];
