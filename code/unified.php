@@ -864,7 +864,7 @@ ob_clean();
 	        	$output .= "<h2 id='comments'>Comments</h2>";
 	        }
 	        foreach($comments as $comment){    
-	            $output .= "<div style='margin-left:5px;' id='comment{$comment['comment_id']}'>";
+                $output .= "<div style='margin-left:5px;' id='comment{$comment['comment_id']}'>";
                     $avatar_image = "sys/users/avatar/{$comment['user_id']}.jpg";
 	            if (file_exists("{$_SERVER['DOCUMENT_ROOT']}/{$avatar_image}")){
                     $avatar_mtime = filemtime($avatar_image);
@@ -880,6 +880,7 @@ ob_clean();
                     <div class='comment'>
 	                <div id='actual_comment{$comment['comment_id']}'>";
                 $comment['details'] = $this->bbcode_to_html($comment['details']);
+                $comment['details'] = str_replace('<a ', '<a rel="external nofollow" ', $comment['details']);
 	            $output .= $comment['details'] . "<br/></div>";
 
                 $user_id = (int)$user->getUserId();

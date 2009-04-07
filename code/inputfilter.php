@@ -28,7 +28,7 @@ class InputFilter {
        $attrArray = array("abbr", "align", "alt", "axis", "background", "behavior", "bgcolor", "border", "bordercolor",
                       "bordercolordark", "bordercolorlight", "bottompadding", "cellpadding", "cellspacing", "char",
                       "charoff", "cite", "clear", "class", "color", "cols", "direction", "face", "font-weight", "headers",
-                      "height", "href", "hspace", "leftpadding", "loop", "noshade", "nowrap", "point-size", "rel",
+                      "height", "href", "hspace", "leftpadding", "loop", "noshade", "nowrap", "point-size",
                       "rev", "rightpadding", "rowspan", "rules", "scope", "scrollamount", "scrolldelay", "size",
                       "span", "src", "start", "style","summary", "target", "title", "toppadding", "type", "valign",
                       "value", "vspace", "width", "wrap");	

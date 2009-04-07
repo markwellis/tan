@@ -106,7 +106,7 @@ if ($user->isLoggedIn()){
 function dump_post(){
     $dir = '/var/www/thisaintnews.com/htdocs/sys/blog/';
     $dtitle = $_POST["title"];
-    $fh = fopen( $dir . preg_replace("/[^a-zA-Z0-9]/", "", $dtitle) . '_' . time, 'w');
+    $fh = fopen( $dir . preg_replace("/[^a-zA-Z0-9]/", "", $dtitle) . '_' . time(), 'w');
     fwrite($fh, serialize($_POST));
     fclose($fh);
 }
