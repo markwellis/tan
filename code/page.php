@@ -181,7 +181,7 @@ if (defined('MAGIC')) {
 	            .'<meta name="keywords" content="news community comments english lulz lol social lulzhq fun jokes '
 	            .'videos pictures share sharing lol lolz funny humour humur"/> '
 	            .'<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/> '
-	            .'<link rel="stylesheet" type="text/css" title="default" href="/css/default.css?2=21" /> '
+	            .'<link rel="stylesheet" type="text/css" title="default" href="/css/default.css?2=20" /> '
 	            .'<link rel="shortcut icon" href="/favicon.ico" /> '
 	            .$script
 	            .'</head> ';
