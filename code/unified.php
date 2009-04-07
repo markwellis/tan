@@ -994,8 +994,8 @@ ob_clean();
 	        $output = "<select name='sort_by' id='sort_by' onchange='dosort(this.value)'>
 	            <option value='0' $selected_array[0]>Date</option>
 	            <option value='1' $selected_array[1]>Comments</option>
-	            <option value='2' $selected_array[2]>IsNews</option>
-	            <option value='3' $selected_array[3]>AintNews</option>
+	            <option value='2' $selected_array[2]>TITS</option>
+	            <option value='3' $selected_array[3]>GTFO</option>
 	            <option value='4' $selected_array[4]>Views</option>
 	            </select>";
 	        return $output;
@@ -1073,14 +1073,14 @@ ob_clean();
 	            $output .= "pselected ";
 	        }
 	        $output .= "' href='#' onclick=\"javascript:addPlus({$objectid}, '$type',
-	            'plus{$objectid}');return false;\">IsNews</a></div>
+	            'plus{$objectid}');return false;\">TITS</a></div>
 	            <div class='minus' id='minus{$objectid}'
 	            >{$minus}<a class='addMinus ";
 	        if ($meminus){
 	           $output .= " mselected ";
 	        }
 	        $output .= "' href='#' onclick=\"javascript:addMinus({$objectid}, '$type',
-	            'minus{$objectid}');return false;\">AintNews</a></div>";
+	            'minus{$objectid}');return false;\">GTFO</a></div>";
 	        return $output;
 	    }
 	} // end of class!
