@@ -169,7 +169,7 @@ require_once('inputfilter.php');
                 $text = preg_replace("/\[gcast\](.+?)\[\/gcast\]/", "<embed src='http://www.gcast.com/go/gcastplayer?xmlurl=http://www.gcast.com/u/{$gcast_id}/main.xml&autoplay=no&repeat=yes&colorChoice=3' type='application/x-shockwave-flash' quality='high' pluginspage='http://www.macromedia.com/go/getflashplayer' width='145' height='155'></embed>", $text);
             }
             unset($matches);
-            
+            $text = str_replace('<a ', '<a rel="external nofollow" ', $text);
             return $text;
         }
 	
@@ -880,7 +880,7 @@ ob_clean();
                     <div class='comment'>
 	                <div id='actual_comment{$comment['comment_id']}'>";
                 $comment['details'] = $this->bbcode_to_html($comment['details']);
-                $comment['details'] = str_replace('<a ', '<a rel="external nofollow" ', $comment['details']);
+
 	            $output .= $comment['details'] . "<br/></div>";
 
                 $user_id = (int)$user->getUserId();
