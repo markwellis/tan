@@ -15,9 +15,7 @@ if ($user->isLoggedIn()){
         $type = mysql_escape_string(strip_tags($_POST["type"]));
 
         if ($type === "link"){
-            require_once('inputfilter.php');
             require_once('tag.php');
-            $filter = new InputFilter();
             $tag = new tag();
 
             $link = new unified('link');
@@ -38,15 +36,16 @@ if ($user->isLoggedIn()){
         }
 
         if ($type === "blog"){
-            require_once('inputfilter.php');
+
             require_once('tag.php');
-            $filter = new InputFilter();
+
             $tag = new tag();
             $blog = new unified('blog');
 
     @dump_post();
-
-            $main = $filter->process(stripslashes($_POST['blogmain']));
+            require_once ($_SERVER['DOCUMENT_ROOT'] . '/lib/3rdparty/htmlpurifier/loader.php');
+            $purifier = &new purifier();
+            $main = $purifier->purify(stripslashes($_POST['blogmain']));
             $main = mysql_escape_string($main);
             $main = str_replace(array('\r','\t','\n'), '', $main);
             $title = mysql_escape_string(ucwords(strip_tags(htmlentities(trim($_POST["title"]),ENT_QUOTES,'UTF-8'))));
@@ -64,9 +63,7 @@ if ($user->isLoggedIn()){
         }
 
         if ($type === "picture"){
-            require_once('inputfilter.php');
             require_once('tag.php');
-            $filter = new InputFilter();
             $tag = &new tag();
             $picture = &new unified('picture');
 

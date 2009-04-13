@@ -31,9 +31,9 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
         if($_POST['delete_comment']){
             $m_comment->delete();
         } else {
-            require_once(BASE_PATH . '/code/inputfilter.php');
-            $filter = &new InputFilter();
-            $comment = $filter->process(stripslashes($_POST["comment_edit_{$comment_id}"]));
+            require_once ($_SERVER['DOCUMENT_ROOT'] . '/lib/3rdparty/htmlpurifier/loader.php');
+            $purifier = &new purifier();
+            $comment = $purifier->purify(stripslashes($_POST["comment_edit_{$comment_id}"]));
             $comment = mysql_escape_string(str_replace(array('\r','\t','\n'), '', $comment));
             $m_comment->update($comment);
         }

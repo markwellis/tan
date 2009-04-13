@@ -119,9 +119,9 @@ if (defined('MAGIC')) {
             $quote_replace = "/\[quote\ user=[\"'](.+?)[\"']\](.*?)\[\/quote\]/miUs";
             $quote_match = "/\[quote\ user=[\"'](?<name>.+?)[\"']\](?<quote>.*?)\[\/quote\]/miUs";
 
-require_once('inputfilter.php');
-            $filter = new InputFilter();
-            $text = $filter->process($text);
+            require_once ($_SERVER['DOCUMENT_ROOT'] . '/lib/3rdparty/htmlpurifier/loader.php');
+            $purifier = &new purifier();
+            $text = $purifier->purify($text);
             $string_array = split('\[\/quote\]', $text);
 
             foreach ($string_array as $string){
