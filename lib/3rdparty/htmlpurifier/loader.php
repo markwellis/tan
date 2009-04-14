@@ -8,6 +8,7 @@ class purifier{
         $this->config = HTMLPurifier_Config::createDefault();
         $this->config->set('Core', 'Encoding', 'UTF-8');
         $this->config->set('HTML', 'Doctype', 'XHTML 1.0 Strict');
+        $this->config->set('HTML', 'ForbiddenAttributes', 'rel');
         $this->purifier = new HTMLPurifier($this->config);
     }
 
