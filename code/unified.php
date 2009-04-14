@@ -32,7 +32,7 @@ if (defined('MAGIC')) {
 	    private $desc_max = 1000;
 	    private $max_picture_size = 2000000;
 	    private $blog_min = 20;
-	
+
 	    public $sort_by = array('date', 'comments', 'plus', 'minus', 'views');
 	
 	/*  cutoff for promoted stuff */
@@ -52,6 +52,10 @@ if (defined('MAGIC')) {
                 }
                 $this->sql = &$sql;
                 $this->user = &$user;
+                
+                require_once ($_SERVER['DOCUMENT_ROOT'] . '/lib/3rdparty/htmlpurifier/loader.php');
+                $this->purifier = &new purifier();
+                
 	        } else {
 	            header("Location: /");
 	            die("Error 404");
@@ -119,9 +123,7 @@ if (defined('MAGIC')) {
             $quote_replace = "/\[quote\ user=[\"'](.+?)[\"']\](.*?)\[\/quote\]/miUs";
             $quote_match = "/\[quote\ user=[\"'](?<name>.+?)[\"']\](?<quote>.*?)\[\/quote\]/miUs";
 
-require_once('inputfilter.php');
-            $filter = new InputFilter();
-            $text = $filter->process($text);
+            $text = $this->purifier->purify($text);
             $string_array = split('\[\/quote\]', $text);
 
             foreach ($string_array as $string){
