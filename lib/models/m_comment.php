@@ -8,38 +8,38 @@
  */
 
 class m_comment {
-    
-    private $comments_table = 'comments';
-    
     function __construct($comment_id){
         if (!$comment_id){
             die('No comment id');
         }
         $this->comment_id = (int)$comment_id;
         
-        global $sql;
-        $this->sql = $sql;
+        global $m_sql;
+        $this->m_sql = $m_sql;
     }
     
     /**
      * Updates the comment, assumes its been scrubbed already
      */
     function update($new_comment){
-        $query = "UPDATE {$this->comments_table} SET details = '{$new_comment}', edited = NOW() WHERE comment_id = {$this->comment_id} LIMIT 1";
-        return $this->sql->query ($query, 'none');
+        $query = "UPDATE comments SET details = ?, edited = NOW() WHERE comment_id = ? LIMIT 1";
+        return $this->m_sql->query($query, 'si', array($new_comment, $this->comment_id), 'insert');
     }
     
     /**
      * Gets the comment
      */
-    function get (){
-        $query= "SELECT * FROM {$this->comments_table} WHERE comment_id={$this->comment_id}";
-        return $this->sql->query($query, 'row');
+    function get(){
+        $query= "SELECT * FROM comments WHERE comment_id = ?";
+        return $this->m_sql->query($query, 'i', array($this->comment_id));
     }
-    
+
+    /**
+     * delete the comment
+     */    
     function delete(){
-        $query = "UPDATE {$this->comments_table} SET deleted = 'Y', edited = NOW() WHERE comment_id = {$this->comment_id} LIMIT 1";
-        return $this->sql->query ($query, 'none');
+        $query = "UPDATE comments SET deleted = 'Y', edited = NOW() WHERE comment_id = ? LIMIT 1";
+        return $this->m_sql->query($query, 'i', array($this->comment_id), 'insert');
     }
 }
 

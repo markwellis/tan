@@ -2,7 +2,7 @@
 
 if($_SERVER['REQUEST_METHOD']==='POST') {
 	define('MAGIC', true);
-	require_once('inputfilter.php');
+
 	require_once('user.php');
     global $user;
 	$user = &new user();
@@ -13,8 +13,10 @@ if($_SERVER['REQUEST_METHOD']==='POST') {
 	if (in_array($type, $kinds, true)){
 	/*  is equal to something in the array, so its safe  */
 	    if ($user->isLoggedIn()){
-	        $filter = new InputFilter();
-	        $comment = $filter->process(stripslashes($_POST['comment']));
+            require_once ($_SERVER['DOCUMENT_ROOT'] . '/lib/3rdparty/htmlpurifier/loader.php');
+            $purifier = &new purifier();
+            $comment = $purifier->purify(stripslashes($_POST['comment']));
+
 	        $comment = mysql_escape_string(str_replace(array('\r','\t','\n'), '', $comment));
             require_once('unified.php');
             $id = (int)$_POST['id'];

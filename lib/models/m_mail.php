@@ -13,14 +13,16 @@ class m_mail{
     public $message;
     public $subject;
     public $headers;
-    public $from;
+    public $from = 'noreply@thisaintnews.com';
 
     public function send(){
         if (!$this->headers){
             $this->headers = "From: {$this->from}\r\n" .
-                "Reply-To: webmaster@example.com\r\n";
+                "Reply-To: webmaster@thisaintnews.com\r\n" . 
+                "MIME-Version: 1.0\r\n" .
+                "Content-type: text/html; charset=utf-8\n\r\n";
         }
-    mail($this->to, $this->subject, $this->message, $this->headers);
+    mail($this->to, $this->subject, $this->message, $this->headers, "-f{$this->from}");
     }
     
 }
