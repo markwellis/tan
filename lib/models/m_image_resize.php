@@ -34,7 +34,7 @@ class image_resize{
                 $usecache = 0;
             }
 
-            if ( !$usecache && $filename && file_exists($filename) ){
+            if ( !$usecache && $basefile && file_exists($filename) ){
                 $im = &new Imagick();
                 $im->readImage($filename);
 
