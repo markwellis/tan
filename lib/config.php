@@ -21,7 +21,7 @@ define('THIRD_PARTY_PATH', LIB_PATH . '/3rdparty');
 /**
  * Site settings
  */
-define('VERSION', '0.80');
+define('VERSION', '0.80a');
 
 define('DEBUG', TRUE);
 define('DEBUG_SQL', FALSE);
