@@ -6,7 +6,7 @@
     load_template('lib/sidebar');
 
     $query = $m_stash->query_count();
-    if ($query > 1){
+    if ($query !== 1){
         $query = "{$query} queries";
     } else {
         $query = "{$query} query";
