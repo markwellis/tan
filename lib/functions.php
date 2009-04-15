@@ -39,10 +39,9 @@ function error($error){
 
 function get_recent_comments(){
     $memcache = new Memcache;
-    $memcache_key = "recent_comments";
+    $memcache_key = "2recent_comments";
     @$memcache->connect('127.0.0.1', 11211);
     $cached = @$memcache->get($memcache_key);
-        
     if (!$cached){
         global $m_sql;
         $sql = &$m_sql;
