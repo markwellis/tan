@@ -49,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'){
                 $m_stash->add_message("You need to confirm your email address");
             }
         } elseif ($_POST['location'] === 'register') {
-            require_once(MODEL_PATH . '/recaptchalib.php');
+            require_once(THIRD_PARTY_PATH . '/recaptchalib.php');
             $resp = recaptcha_check_answer(
                 RECAPTCHA_PRIVATE_KEY,
                 $_SERVER["REMOTE_ADDR"],
