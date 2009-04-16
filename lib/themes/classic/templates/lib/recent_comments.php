@@ -14,11 +14,11 @@
                 $comment_type = 'pic';
                 $comment_id = $comment['picture_id'];
             }
-            $comment_length = strlen($comment['details']);
-            $comment['details'] = preg_replace("/\[quote\ user=[\"'](.+?)[\"']\](.*?)\[\/quote\]/miUs", '', $comment['details']);
-            $comment['details'] = strip_tags($comment['details']);
-            $comment['short'] = htmlentities(substr(html_entity_decode($comment['details'], ENT_QUOTES, 'UTF-8'), 0, 50),ENT_QUOTES,'UTF-8');
-            $comment['long'] = htmlentities(substr(html_entity_decode($comment['details'], ENT_QUOTES, 'UTF-8'), 0, 400),ENT_QUOTES,'UTF-8');
+
+            $comment['ndetails'] = preg_replace("/\[quote\ user=[\"'](.+?)[\"']\](.*?)\[\/quote\]/miUs", '', $comment['details']);
+            $comment['ndetails'] = strip_tags(html_entity_decode($comment['ndetails'], ENT_QUOTES, 'UTF-8'));
+            $comment['short'] = htmlentities(substr($comment['ndetails'], 0, 50),ENT_QUOTES,'UTF-8');
+            $comment['long'] = htmlentities(substr($comment['ndetails'], 0, 400),ENT_QUOTES,'UTF-8');
             $comment['date'] = date( 'H:i:s', $comment['date']);
             if ( $comment['short'] !== $comment['details'] ){
                    $comment['short'] .= '...';
@@ -27,10 +27,10 @@
                 $comment['long'] .= '...';
             }
             
-            $tip_title = "{$comment['username']}@{$comment['date']}::".strip_tags($comment['long']);
+            $tip_title = "{$comment['username']}@{$comment['date']}::{$comment['long']}";
     ?>
         <li>
-            <a style='margin:0px;padding:3px;' class='recent_comment recent_comments' title='<?php echo $tip_title ?>' href='/view<?php echo $comment_type ?>/<?php echo $comment_id ?>/#comment<?php echo $comment['comment_id'] ?>'><?php echo $comment['short'] ?></a>
+            <a style='margin:0px;padding:3px;' class='recent_comment recent_comments' title='<?php echo "{$comment['username']}@{$comment['date']}::{$comment['long']}" ?>' href='/view<?php echo $comment_type ?>/<?php echo $comment_id ?>/#comment<?php echo $comment['comment_id'] ?>'><?php echo $comment['short'] ?></a>
         </li>
     <?php
         }
