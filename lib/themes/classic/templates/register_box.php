@@ -18,7 +18,7 @@
                     <label for='rusername'>Username </label>
                 </td>
                 <td>
-                    <input id='rusername' name='rusername' type='text' value='<? echo $m_stash->flash('username'); ?>'/>
+                    <input id='rusername' name='rusername' type='text' value='<? echo $m_stash->flash('username'); ?>' class='text_input'/>
                 </td>
             </tr>
             <tr>
@@ -26,7 +26,7 @@
                     <label for='email'>Email address </label>
                 </td>
                 <td>
-                    <input id='email' name='email' type='text' value='<? echo $m_stash->flash('email'); ?>'/>
+                    <input id='email' name='email' type='text' value='<? echo $m_stash->flash('email'); ?>' class='text_input'/>
                 </td>
             </tr>
             <tr>
@@ -34,7 +34,7 @@
                     <label for='rpassword0'>Password </label>
                 </td>
                 <td>
-                    <input id='rpassword0' name='rpassword0' type='password'/>
+                    <input id='rpassword0' name='rpassword0' type='password' class='text_input'/>
                 </td>
             </tr>
             <tr>
@@ -42,7 +42,7 @@
                     <label for='rpassword1'>Password again </label>
                 </td>
                 <td>
-                    <input id='rpassword1' name='rpassword1' type='password'/>
+                    <input id='rpassword1' name='rpassword1' type='password' class='text_input'/>
                 </td>
             </tr>
         </table>

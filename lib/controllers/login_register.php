@@ -15,6 +15,12 @@ if ($_GET['logout']) {
     exit();
 }
 
+if ($m_user->logged_in()){
+    $m_stash->add_message('You are already logged in');
+    header("location: /");
+    exit();
+}
+
 if ($_GET['token'] && $_GET['user_id']) {
     $user_id = (int)$_GET['user_id'];
     $m_registration = load_model('m_registration');
