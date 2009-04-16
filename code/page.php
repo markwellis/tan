@@ -1,5 +1,6 @@
 <?php
 require_once("user.php");
+require_once("{$_SERVER['DOCUMENT_ROOT']}/lib/models/m_stash.php");
 
 if (defined('MAGIC')) {
 	class page{
@@ -17,6 +18,7 @@ if (defined('MAGIC')) {
             }
             $this->sql = &$sql;
             $this->user = &$user;
+            $this->m_stash = &new m_stash();
 	    }
 	
     function createMenu($tab, $type){
@@ -199,23 +201,23 @@ if (defined('MAGIC')) {
 	            .'<div id="main">'
 	            .'<div id="top">'
 				.'<div style="float:right;margin-top:5px;margin-right:5px;text-align:right;">';
-ob_start();
-?>
-<script type="text/javascript">//<![CDATA[
-
-window.addEvent('domready', function() {
-    $$('.mibbit').addEvent('click', function(e) {
-        popUpWindow("http://embed.mibbit.com/?server=irc.newnet.net&chatOutputShowTimes=true"
-  	  +"&channel=%23thisaintnews&settings=8a8a5ac18a22e7eecd04026233c3df93t"
-	  +"&nick=<?= $user->getUsername() ?>", 720, 400);
-	e.stop();
-    });
-});
-//]]>
-</script>
-<?php
-$this->output .= ob_get_contents();
-ob_clean();
+                ob_start();
+                ?>
+                <script type="text/javascript">//<![CDATA[
+                
+                window.addEvent('domready', function() {
+                    $$('.mibbit').addEvent('click', function(e) {
+                        popUpWindow("http://embed.mibbit.com/?server=irc.newnet.net&chatOutputShowTimes=true"
+                  	  +"&channel=%23thisaintnews&settings=8a8a5ac18a22e7eecd04026233c3df93t"
+                	  +"&nick=<?= $user->getUsername() ?>", 720, 400);
+                	e.stop();
+                    });
+                });
+                //]]>
+                </script>
+                <?php
+                $this->output .= ob_get_contents();
+                ob_clean();
             $this->output .= '<a href="http://www.cafepress.com/thisaintnews" class="menulink">Shop</a> |'
                 .'<a href="/chat/" class="menulink mibbit">Chat</a> | '
                 .'<a href="http://forums.thisaintnews.com" class="menulink">Forum</a>';
@@ -237,19 +239,25 @@ ob_clean();
 	        }
 
 	        $this->output .= '<br /><div style="float:right">
-<form action="http://www.google.com/cse" id="cse-search-box">
-  <div>
-    <input type="hidden" name="cx" value="017135894524023845720:-eqs9gh9cxm" />
-    <input type="hidden" name="ie" value="UTF-8" />
-    <input type="text" name="q" size="31" />
-    <input type="submit" name="sa" value="Search" />
-  </div>
-</form>
-</div>
-
-</div><div class="logoimg"/><a href="/" class="logo"></a></div>';
-	        $this->output .= "</div><div id='middle'>"
-                ."<div id='those_damn_dirty_evil_ads'>{$ad_code}</div> ";
+                <form action="http://www.google.com/cse" id="cse-search-box">
+                  <div>
+                    <input type="hidden" name="cx" value="017135894524023845720:-eqs9gh9cxm" />
+                    <input type="hidden" name="ie" value="UTF-8" />
+                    <input type="text" name="q" size="31" />
+                    <input type="submit" name="sa" value="Search" />
+                  </div>
+                </form>
+                </div>
+                
+                </div><div class="logoimg"/><a href="/" class="logo"></a></div>';
+	        $this->output .= "</div><div id='middle'>";
+            $messages = $this->m_stash->flash('message');
+            if ($messages){
+                foreach ($messages as $message){
+                    $this->output .= "<span class='message'>{$message}</span>";
+                }
+            }
+            $this->output .= "<div id='those_damn_dirty_evil_ads'>{$ad_code}</div> ";
 	    }
 
 function get_ad_code($where){

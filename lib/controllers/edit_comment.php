@@ -7,34 +7,28 @@
  * @package edit
  */
 
-require_once('../config.php');
+require_once('../header.php');
 
-require_once(BASE_PATH . '/code/header.php');
-require_once(MODEL_PATH . '/m_comment.php');
-require_once(BASE_PATH . '/code/sql.php');
-global $sql;
-global $user;
-
-$sql = &new sql();
-$user = &new user();
+global $m_user;
+$m_user = &load_model('m_user');
 
 $comment_id = (int)$_GET['comment_id'];
 
-$m_comment = &new m_comment($comment_id);
+$m_comment = &load_model('m_comment', array($comment_id));
+$user_id = (int)$m_user->user_id();
+$comment_details = $m_comment->get();
+$comment_details = $comment_details[0];
+$comment_user_id = (int)$comment_details['user_id'];
 
 if($_SERVER['REQUEST_METHOD'] === 'POST'){
-    $user_id = (int)$user->getUserId();
-    $comment_details = $m_comment->get();
-    $comment_user_id = (int)$comment_details['user_id'];
-
-    if ($user->isLoggedIn() && ($user_id === $comment_user_id) ){
+    if ($m_user->logged_in() && ($user_id === $comment_user_id) ){
         if($_POST['delete_comment']){
             $m_comment->delete();
         } else {
-            require_once ($_SERVER['DOCUMENT_ROOT'] . '/lib/3rdparty/htmlpurifier/loader.php');
+            require_once (THIRD_PARTY_PATH . '/htmlpurifier/loader.php');
             $purifier = &new purifier();
             $comment = $purifier->purify(stripslashes($_POST["comment_edit_{$comment_id}"]));
-            $comment = mysql_escape_string(str_replace(array('\r','\t','\n'), '', $comment));
+            $comment = str_replace(array('\r','\t','\n'), '', $comment);
             $m_comment->update($comment);
         }
         if ($comment_details['link_id']){
@@ -51,16 +45,19 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
         exit();
     }
 }
-$user_id = (int)$user->getUserId();
 $comment_details = $m_comment->get();
+$comment_details = $comment_details[0];
 $comment_user_id = (int)$comment_details['user_id'];
-if (!$user->isLoggedIn() || ($user_id !== $comment_user_id) ){
+
+
+if (!$m_user->logged_in() || ($user_id !== $comment_user_id) ){
     header('HTTP/1.1 403 Forbidden');
     die("Forbidden");
 }
 
-$comment = $comment_details['details'];
-$comment_id = $comment_details['comment_id'];
+$m_stash->comment = $comment_details['details'];
+$m_stash->comment_id = $comment_details['comment_id'];
+
 ?>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -68,10 +65,7 @@ $comment_id = $comment_details['comment_id'];
 <?php
 
 ob_start();
-    require(TEMPLATE_PATH . '/edit_comment.php');
+    load_template('edit_comment');
 ob_end_flush();
 
 ?>
-
-
-
