@@ -810,3 +810,8 @@ ul#mainmenu li ul li{
     display:none;
     position:relative;
 }
+
+.message{
+    color:#fff;
+    font-size:1.5em;
+}

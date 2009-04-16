@@ -704,3 +704,15 @@ ul#mainmenu li ul li{
     color:#fff;
     font-size:1.5em;
 }
+
+.text_input{
+    border:1px solid #606060;
+}
+
+.text_input:focus{
+    border:1px solid #2c2c2c;
+}
+
+.text_input:hover{
+    background-color:#d6d6d6;
+}

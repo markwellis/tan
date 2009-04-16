@@ -11,7 +11,7 @@
                     <label for='password0'>Password </label>
                 </td>
                 <td>
-                    <input id='password0' name='password0' type='password'/>
+                    <input id='password0' name='password0' type='password' class='text_input'/>
                 </td>
             </tr>
             <tr>
@@ -19,7 +19,7 @@
                     <label for='password1'>Password again</label>
                 </td>
                 <td>
-                    <input id='password1' name='password1' type='password'/>
+                    <input id='password1' name='password1' type='password' class='text_input'/>
                 </td>
             </tr>
         </table>

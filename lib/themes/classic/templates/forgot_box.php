@@ -10,7 +10,7 @@
                     <label for='email'>Enter you email address</label>
                 </td>
                 <td>
-                    <input id='email' name='email' type='text'/>
+                    <input id='email' name='email' type='text' class='text_input'/>
                 </td>
             </tr>
         </table>
