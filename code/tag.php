@@ -165,37 +165,36 @@ if (defined('MAGIC')) {
 	                break;
 	        }
 	        $res = array();
-		$tags = explode(' ', trim($tagstr));
-        $sql = &$this->sql;
-        foreach ($tags as $tag){
-    		$tag = $this->normalize($tag);
-            $tmp_tag_id = $this->isExisting($tag);
-            if ($tmp_tag_id){
-                $tag_ids[] = $tmp_tag_id;
+    		$tags = explode(' ', trim($tagstr));
+            $sql = &$this->sql;
+
+            foreach ($tags as $tag){
+        		$tag = $this->normalize($tag);
+                $tmp_tag_id = $this->isExisting($tag);
+                if ($tmp_tag_id){
+                    $tag_ids[] = $tmp_tag_id;
+                }
             }
-        }
-        if (!$tag_ids || !is_array($tag_ids)){
-            return array();
-        }
-        $tag_id = implode(' OR tag_id=',$tag_ids);
-        $tag_id = "{$tag_id})";
 
-//		$existing = $this->isExisting($tag);
-		if ($tag_id){
-			$query = "SELECT {$sqlstr0} FROM tag_details {$extra_conditions} WHERE (tag_id={$tag_id} {$conds} {$sqlstr} {$where};";
-
-    			$ret = $sql->query($query, 'array');
-			if ($ret){
-			$res[] = $ret;
-			}
-		}
-
-		$query = "SELECT {$sqlstr0} FROM tag_details {$extra_conditions} {$where} order by rand() limit 20;";
-
-		$ret = $sql->query($query, 'array');
-		if ($ret){
-		$res[] = $ret;
-		}
+            if (is_array($tag_ids)){
+                $tag_id = implode(' OR tag_id=',$tag_ids);
+                $tag_id = "{$tag_id})";
+        
+        //		$existing = $this->isExisting($tag);
+        		if ($tag_id){
+        			$query = "SELECT {$sqlstr0} FROM tag_details {$extra_conditions} WHERE (tag_id={$tag_id} {$conds} {$sqlstr} {$where};";
+            			$ret = $sql->query($query, 'array');
+        			if ($ret){
+                        $res[] = $ret;
+        			}
+        		}
+            }
+    
+    		$query = "SELECT {$sqlstr0} FROM tag_details {$extra_conditions} {$where} order by rand() limit 20;";
+    		$ret = $sql->query($query, 'array');
+    		if ($ret){
+    		  $res[] = $ret;
+    		}
 	        return $res;
 	    }
 	
