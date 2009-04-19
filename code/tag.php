@@ -174,7 +174,9 @@ if (defined('MAGIC')) {
                 $tag_ids[] = $tmp_tag_id;
             }
         }
-
+        if (!$tag_ids || !is_array($tag_ids)){
+            return array();
+        }
         $tag_id = implode(' OR tag_id=',$tag_ids);
         $tag_id = "{$tag_id})";
 
