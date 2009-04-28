@@ -120,7 +120,7 @@ if (defined('MAGIC')) {
         
         function bbcode_to_html($text){
             #[quote name="mrbig4545"]blah blah[/quote]
-            $quote_replace = "/\[quote\ user=[\"'](.+?)[\"']\](.*?)\[\/quote\]/miUs";
+            $quote_replace = "/\[quote\ user=[\"'].+?[\"']\](.*?)\[\/quote\]/miUs";
             $quote_match = "/\[quote\ user=[\"'](?<name>.+?)[\"']\](?<quote>.*?)\[\/quote\]/miUs";
 
             $text = $this->purifier->purify($text);
@@ -133,8 +133,7 @@ if (defined('MAGIC')) {
                     $quoted_username = trim($matches['name']);
                     $quoted_username = split(' ', $quoted_username);
                     $quoted_username = $quoted_username[0];
-                    $quote = &$matches['quote'];
-    
+                    $quote = $matches['quote'];
                     $string = preg_replace($quote_replace, "<div class='quote_holder'><span class='quoted_username'>$quoted_username wrote:</span><div class='quote'>$quote</div></div>", $string);
                 }
                 $new_string .= $string;
@@ -144,23 +143,35 @@ if (defined('MAGIC')) {
                 $text = $new_string;
             };
             unset($matches);
+            unset($new_string);
 
             //youtube
             preg_match("/\[youtube\](?<id>.+?)\[\/youtube\]/", $text, $matches);
-            if ($matches['id']){
-                $youtube_id = trim($matches['id']);
-                $youtube_id = split(' ', $youtube_id);
-                $youtube_id = $youtube_id[0];
 
-                //test for full url 
-                preg_match('/v=(.*)\&/', "{$youtube_id}&", $matches);
-                if ($matches[1]){
-                    $youtube_id = $matches[1];
+            $string_array = split('\[\/youtube\]', $text);
+            
+            foreach ($string_array as $string){
+                $string .= '[/youtube]';
+                preg_match("/\[youtube\](?<id>.+?)\[\/youtube\]/", $string, $matches);
+                if ($matches['id']){
+                    $youtube_id = trim($matches['id']);
+                    $youtube_id = split(' ', $youtube_id);
+                    $youtube_id = $youtube_id[0];
+                    //test for full url 
+                    preg_match('/v=(.*)\&/', "{$youtube_id}&", $matches);
+                    if ($matches[1]){
+                        $youtube_id = $matches[1];
+                    }
+                    $string = preg_replace("/\[youtube\].+?\[\/youtube\]/", "<object type='application/x-shockwave-flash' style='width:425px; height:350px;' data='http://www.youtube.com/v/{$youtube_id}'><param name='movie' value='http://www.youtube.com/v/{$youtube_id}' /></object>", $string);
                 }
-
-                $text = preg_replace("/\[youtube\](.+?)\[\/youtube\]/", "<object type='application/x-shockwave-flash' style='width:425px; height:350px;' data='http://www.youtube.com/v/{$youtube_id}'><param name='movie' value='http://www.youtube.com/v/$1' /></object>", $text);
+                $new_string .= $string;
             }
+            if ($new_string){
+                $new_string = str_replace('[/youtube]', '', $new_string);
+                $text = $new_string;
+            };
             unset($matches);
+            unset($new_string);
             
             //gcast
             preg_match("/\[gcast\](?<id>.+?)\[\/gcast\]/", $text, $matches);
