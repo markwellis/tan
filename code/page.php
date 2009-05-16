@@ -193,7 +193,7 @@ if (defined('MAGIC')) {
 	    
 	    private function createBody($where, $type, $sortby = null){
 	        $user = &$this->user;
-            $ad_code = $this->get_ad_code($where);
+            $ad_code = $this->get_right_ad();
             $this->output .= '<body>'
                 .'<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/mootools/1.2.1/mootools-yui-compressed.js"></script>'
                 .'<script type="text/javascript" src="/sys/script/mootools-1.2-more.js"></script>'
@@ -260,49 +260,44 @@ if (defined('MAGIC')) {
             $this->output .= "<div id='those_damn_dirty_evil_ads'>{$ad_code}</div> ";
 	    }
 
-function get_ad_code($where){
-    if ($_SESSION['nsfw']){
-        ob_start();
-        ?>
-<!-- Begin: Black Label Ads, Generated: 2009-03-29 9:54:20  -->
-<script type="text/javascript">//<![CDATA[
+        function get_right_ad(){
+                ob_start();
 
-var AdBrite_Title_Color = '0000FF';
-var AdBrite_Text_Color = '000000';
-var AdBrite_Background_Color = '808080';
-var AdBrite_Border_Color = 'CCCCCC';
-var AdBrite_URL_Color = '008000';
-try{var AdBrite_Iframe=window.top!=window.self?2:1;var AdBrite_Referrer=document.referrer==''?document.location:document.referrer;AdBrite_Referrer=encodeURIComponent(AdBrite_Referrer);}catch(e){var AdBrite_Iframe='';var AdBrite_Referrer='';}
+                include(dirname(__FILE__) . '/../lib/themes/classic/templates/lib/ads/right.php');
+                
+                $code = ob_get_contents();
+                ob_clean();
+                return $code;
+        }
+        
+        function get_left_ad(){
+                ob_start();
 
-//]]>
-</script>
-<script type="text/javascript">//<![CDATA[
-document.write(String.fromCharCode(60,83,67,82,73,80,84));document.write(' src="http://ads.adbrite.com/mb/text_group.php?sid=1104667&zs=3132305f363030&ifr='+AdBrite_Iframe+'&ref='+AdBrite_Referrer+'" type="text/javascript">');document.write(String.fromCharCode(60,47,83,67,82,73,80,84,62));
-//]]>
-</script>
-<div><a target="_top" href="http://www.adbrite.com/mb/commerce/purchase_form.php?opid=1104667&amp;afsid=55544" style="font-weight:bold;font-family:Arial;font-size:13px;">Your Ad Here</a></div>
-<!-- End: Black Label Ads -->      
-        <?php
-        $code = ob_get_contents();
-        ob_clean();
-        return $code;
-    } else {
-        ob_start();
-        ?>
-<iframe width="120" height="600" name="AdSpace101951" src="http://hosting.adjug.com/AdJugSearch/PageBuilder.aspx?ivi=V3.0+JS+NS&amp;aid=1572&amp;slid=101951&amp;height=600&amp;width=120&amp;HTMLOP=True" frameborder="0" marginwidth="0" marginheight="0" vspace="0" hspace="0" allowtransparency="true" scrolling="no"></iframe>
-        <?php
-        $code = ob_get_contents();
-        ob_clean();
-        return $code;
-    }
-}
+                include(dirname(__FILE__) . '/../lib/themes/classic/templates/lib/ads/left.php');
+                
+                $code = ob_get_contents();
+                ob_clean();
+                return $code;
+        }
+        
+        function get_bottom_ad(){
+                ob_start();
+
+                include(dirname(__FILE__) . '/../lib/themes/classic/templates/lib/ads/bottom.php');
+                
+                $code = ob_get_contents();
+                ob_clean();
+                return $code;
+        }
 	
 	    private function closePage($footer, $where, $type, $sortby = null){
             if ($sortby){
                 $sortby = "Sort by: {$sortby}";
             }
 	        $this->output .= '<div id="main_menu"> '
-	        	. $this->createMenu($where, $type) ."{$sortby}".$this->get_recent_comments()."</div> "
+	        	. $this->createMenu($where, $type) ."{$sortby}".$this->get_recent_comments();
+            $this->output .= $this->get_left_ad();
+            $this->output .= "</div> "
 				.'<div id="bottom"> '
 	            .'<a href="http://validator.w3.org/check?uri=referer"> '
 	           .'<img src="/sys/images/valid-xhtml10.png" '
@@ -313,8 +308,10 @@ document.write(String.fromCharCode(60,83,67,82,73,80,84));document.write(' src="
 	            ."<span style='display:block;margin-bottom:10px;'>"
 	            ."$footer , All User-generated content is licensed under a " 
 				.'<a href="http://creativecommons.org/">Creative Commons Public Domain license</a></span> '
-	            .'</div></div>'
-	            .'<script src="/sys/script/ga.js" type="text/javascript"></script> '
+	            .'</div>';
+            $this->output .= $this->get_bottom_ad();
+            $this->output .= '</div>'
+	            .'<script src="http://www.google-analytics.com/ga.js" type="text/javascript"></script> '
 	            ."<script type='text/javascript'>//<![CDATA[ \n"
 	            .'var pageTracker = _gat._getTracker("UA-5148406-3"); '
 	            .'pageTracker._initData(); '

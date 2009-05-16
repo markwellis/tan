@@ -209,10 +209,6 @@ img {
     height:110px;
 }
 
-#those_damn_dirty_evil_ads{
-	float:right;
-}
-
 #middle {
 	padding-bottom:15px;
     background: #555555 url('/sys/images/bg2.png') repeat-x 0 0;
@@ -813,4 +809,20 @@ ul#mainmenu li ul li{
 .message{
     color:#fff;
     font-size:1.5em;
+}
+
+#left_ad{
+    float:left;
+    height:600px;
+    width:160px;
+    margin-left:5px;
+}
+
+#bottom_ad{
+    padding-top:25px;
+}
+
+#right_ad{
+    float:right;
+    height:600px;
 }
