@@ -162,7 +162,7 @@ if (defined('MAGIC')) {
                     if ($matches[1]){
                         $youtube_id = $matches[1];
                     }
-                    $string = preg_replace("/\[youtube\].+?\[\/youtube\]/", "<object type='application/x-shockwave-flash' style='width:425px; height:350px;' data='http://www.youtube.com/v/{$youtube_id}'><param name='movie' value='http://www.youtube.com/v/{$youtube_id}' /></object>", $string);
+                    $string = preg_replace("/\[youtube\].+?\[\/youtube\]/", "<object type='application/x-shockwave-flash' style='width:425px; height:350px;' data='http://www.youtube.com/v/{$youtube_id}'><param name='wmode' value='transparent' /><param name='movie' value='http://www.youtube.com/v/{$youtube_id}' /></object>", $string);
                 }
                 $new_string .= $string;
             }
