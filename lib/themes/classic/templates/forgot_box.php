@@ -4,18 +4,16 @@
     <br/>
     <img class='newsImg' src='<? echo $m_stash->theme_settings['image_path'] ?>/forgot_password.jpg' alt='Forgot' />
     <form id='forgotform' method='post' action='' style='margin-top:50px;'>
-        <table>
-            <tr>
-                <td>
+        <fieldset>
+            <ul>
+                <li>
                     <label for='email'>Enter you email address</label>
-                </td>
-                <td>
                     <input id='email' name='email' type='text' class='text_input'/>
-                </td>
-            </tr>
-        </table>
-        <input type='submit' value='Mail Me!' />
-        <br />
+                </li>
+                <li>
+                    <input type='submit' value='Mail Me!' />
+                </li>
+            </ul>
+        </fieldset>
     </form>
-    <br />
 </div>
