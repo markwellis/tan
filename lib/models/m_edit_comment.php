@@ -5,7 +5,7 @@ class m_edit_comment {
         if (!$comment_id){
             die('No comment id');
         }
-        $this->comment_id = $comment_id;
+        $this->comment_id = (int)$comment_id;
         
         global $m_sql;
         $this->m_sql = $m_sql;
