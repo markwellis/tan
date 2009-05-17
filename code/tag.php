@@ -180,20 +180,19 @@ if (defined('MAGIC')) {
                 $tag_id = implode(' OR tag_id=',$tag_ids);
                 $tag_id = "{$tag_id})";
         
-        //		$existing = $this->isExisting($tag);
         		if ($tag_id){
         			$query = "SELECT {$sqlstr0} FROM tag_details {$extra_conditions} WHERE (tag_id={$tag_id} {$conds} {$sqlstr} {$where};";
             			$ret = $sql->query($query, 'array');
         			if ($ret){
-                        $res[] = $ret;
+                        $res = array_merge($res, $ret);
         			}
         		}
             }
-    
+
     		$query = "SELECT {$sqlstr0} FROM tag_details {$extra_conditions} {$where} order by rand() limit 20;";
     		$ret = $sql->query($query, 'array');
     		if ($ret){
-    		  $res[] = $ret;
+                $res = array_merge($res, $ret);
     		}
 	        return $res;
 	    }

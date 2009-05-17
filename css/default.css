@@ -159,7 +159,6 @@ img {
 #main_menu{
     position:absolute;
     left:10px;
-    height:800px;
     width:170px;
     top:93px;
   float:left;
@@ -208,10 +207,6 @@ img {
 
 #menu_holder{
     height:110px;
-}
-
-#those_damn_dirty_evil_ads{
-	float:right;
 }
 
 #middle {
@@ -814,4 +809,19 @@ ul#mainmenu li ul li{
 .message{
     color:#fff;
     font-size:1.5em;
+}
+
+#left_ad{
+    height:600px;
+    width:160px;
+    margin-left:5px;
+}
+
+#bottom_ad{
+    padding-top:25px;
+}
+
+#right_ad{
+    float:right;
+    height:600px;
 }

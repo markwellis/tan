@@ -53,4 +53,4 @@
             <div class="logoimg"/><a href="/" class="logo"></a></div>
         </div>
         <div id='middle'>
-        <?php load_template('lib/right_ad'); ?>
+        <?php load_template('lib/ads/right'); ?>

@@ -57,7 +57,6 @@ img {
 #sidebar{
     position:absolute;
     left:10px;
-    height:800px;
     width:170px;
     top:93px;
     float:left;
@@ -102,10 +101,6 @@ img {
     margin:2px;
     margin-right:auto;
 //    margin-left:auto;
-}
-
-#those_damn_dirty_evil_ads{
-	float:right;
 }
 
 #middle {
@@ -427,18 +422,7 @@ a{
     border: 1px solid #781351;
 }
 
-textarea{
-    color: #781351;
-    background: #D5D6DC;
-    border: 1px solid #781351;
-}
-
 #picture {
-    margin-left:35px;
-    padding-top:20px;
-}
-
-#blog {
     margin-left:35px;
     padding-top:20px;
 }
@@ -707,12 +691,50 @@ ul#mainmenu li ul li{
 
 .text_input{
     border:1px solid #606060;
+    width: 97%;
+    margin-left:25px;
 }
 
 .text_input:focus{
-    border:1px solid #2c2c2c;
+    border:1px solid #ff0000;
 }
 
 .text_input:hover{
     background-color:#d6d6d6;
+}
+
+#thumb_tags {
+    opacity:0;
+    visibility:hidden;
+}
+
+.tag_thumb_img{
+	height:50px;
+	width:50px;
+	cursor:pointer;
+	vertical-align:middle;
+	margin:5px;
+}
+
+#left_ad{
+    height:600px;
+    width:160px;
+    margin-left:5px;
+}
+
+#bottom_ad{
+    padding-top:25px;
+}
+
+#right_ad{
+    float:right;
+    height:600px;
+}
+
+.refresh_thumbs{
+    float:right;
+}
+
+fieldset{
+    border:0px;
 }
