@@ -14,6 +14,10 @@
 ?>
     <div id="bottom">
         Page processed in <?= $totaltime ?> seconds, with <?php echo $query ?><br />
-        All User-generated content is licensed under a <a href="http://creativecommons.org/" rel='external nofollow'>Creative Commons Public Domain license</a>
-   </div>
+        All User-generated content is licensed under a <a href="http://creativecommons.org/" rel='external nofollow'>Creative Commons Public Domain license</a><br />
+        Version <?php echo VERSION ?>
+        <?php
+            load_template('/lib/ads/bottom');
+        ?>
+    </div>
 </div>

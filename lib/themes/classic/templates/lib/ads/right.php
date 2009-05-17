@@ -1,4 +1,4 @@
-<div id="those_damn_dirty_evil_ads">
+<div id="right_ad">
 <?php if ($_SESSION['nsfw']){ ?>
     <script type="text/javascript">
         //<![CDATA[
@@ -17,7 +17,6 @@
         document.write(String.fromCharCode(60,83,67,82,73,80,84));document.write(' src="http://ads.adbrite.com/mb/text_group.php?sid=1104667&zs=3132305f363030&ifr='+AdBrite_Iframe+'&ref='+AdBrite_Referrer+'" type="text/javascript">');document.write(String.fromCharCode(60,47,83,67,82,73,80,84,62));
     //]]>
     </script>
-    <div><a href="http://www.adbrite.com/mb/commerce/purchase_form.php?opid=1104667&amp;afsid=55544" style="font-weight:bold;font-family:Arial;font-size:13px;">Your Ad Here</a></div>
 <?php } else { ?>
     <script type='text/javascript' src="http://hosting.adjug.com/AdJugSearch/PageBuilder.aspx?ivi=V3.0+JS&amp;aid=1572&amp;slid=101951&amp;height=600&amp;width=120&amp;HTMLOP=False&amp;ShowIFrame=True"></script>
 <?php } ?>
