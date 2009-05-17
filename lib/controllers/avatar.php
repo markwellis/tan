@@ -9,19 +9,6 @@
 require_once('../config.php');
 require_once(OLD_CODE_PATH . '/header.php');
 
-/**
- * THIS SHOULD NOT BE HERE!
- */
-
-define('MAX_UPLOADED_PICTURE_SIZE', 2000000);
-define('PROFILE_PICTURE_UPLOAD_PATH', "{$_SERVER['DOCUMENT_ROOT']}/sys/users/avatar");
-
-/**
- * END OF NAUGHTY CODE
- */
- 
- // $this->uploaded_file = PROFILE_PICTURE_UPLOAD_PATH . "/{$user->getUserId()}.jpg";
-
 global $user;
 if (!$user){
     require_once(OLD_CODE_PATH . '/user.php');

@@ -14,8 +14,7 @@ function load_model($model, $args = null){
     include_once(MODEL_PATH . "/{$model}.php");
     
     if ($args){
-        $margs = implode(', ', $args);
-        return new $model($margs);
+        return new $model($args);
     }
     return new $model();
 }

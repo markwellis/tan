@@ -18,6 +18,10 @@ define('RESIZE_CACHE_PATH', BASE_PATH . '/images/cache/resize');
 define('OLD_CODE_PATH', BASE_PATH . '/code');
 define('THIRD_PARTY_PATH', LIB_PATH . '/3rdparty');
 
+define('IMAGE_UPLOAD_PATH', BASE_PATH . '/images/pics');
+define('MAX_UPLOADED_PICTURE_SIZE', 2000000);
+define('PROFILE_PICTURE_UPLOAD_PATH', BASE_PATH . '/sys/users/avatar');
+
 /**
  * Site settings
  */

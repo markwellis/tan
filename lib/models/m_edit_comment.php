@@ -1,10 +1,11 @@
 <?php
 class m_edit_comment {
-    function __construct($comment_id){
+    function __construct($args){
+        $comment_id = (int)$args[0];
         if (!$comment_id){
             die('No comment id');
         }
-        $this->comment_id = (int)$comment_id;
+        $this->comment_id = $comment_id;
         
         global $m_sql;
         $this->m_sql = $m_sql;
