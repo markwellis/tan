@@ -274,7 +274,6 @@ if (defined('MAGIC')) {
                 ob_start();
 
                 include(dirname(__FILE__) . '/../lib/themes/classic/templates/lib/ads/left.php');
-                include(dirname(__FILE__) . '/../lib/themes/classic/templates/lib/widgets/funadvice_exchange.php');
                 
                 $code = ob_get_contents();
                 ob_clean();
