@@ -18,13 +18,17 @@ define('RESIZE_CACHE_PATH', BASE_PATH . '/images/cache/resize');
 define('OLD_CODE_PATH', BASE_PATH . '/code');
 define('THIRD_PARTY_PATH', LIB_PATH . '/3rdparty');
 
+define('IMAGE_UPLOAD_PATH', BASE_PATH . '/images/pics');
+define('MAX_UPLOADED_PICTURE_SIZE', 2000000);
+define('PROFILE_PICTURE_UPLOAD_PATH', BASE_PATH . '/sys/users/avatar');
+
 /**
  * Site settings
  */
-define('VERSION', '0.80.9');
+define('VERSION', '0.80.10');
 
-define('DEBUG', TRUE);
-define('DEBUG_SQL', FALSE);
+define('DEBUG', false);
+define('DEBUG_SQL', false);
 
 define('PROMOTED_CUTOFF', 10);
 define('SALT', '13f76tfvtf43x68fd');
@@ -43,9 +47,9 @@ define('RECAPTCHA_PRIVATE_KEY', '6LfOtQIAAAAAAK0DnRYVGRWVP0aBtfG158_OYGok');
  */
 define('MEMCACHE_HOST', '127.0.0.1');
 define('MEMCACHE_PORT', 11211);
-define('LONG_CACHE', 36000); // 10 hours
-define('MEDIUM_CACHE', 10800); // 3 hours
-define('SHORT_CACHE', 3600); // 1 hour
+
+define('ONE_HOUR', 3600);
+define('ONE_MIN', 60);
 
 /**
  * SQL settings

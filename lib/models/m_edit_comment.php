@@ -1,6 +1,7 @@
 <?php
 class m_edit_comment {
-    function __construct($comment_id){
+    function __construct($args){
+        $comment_id = (int)$args[0];
         if (!$comment_id){
             die('No comment id');
         }

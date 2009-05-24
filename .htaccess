@@ -15,6 +15,8 @@ RewriteRule ^edit_comment/([^/]+)/ ./lib/controllers/edit_comment.php?comment_id
 RewriteRule ^thumb/([^/]+)/([^/]+)/ ./lib/controllers/thumb.php?id=$1&x=$2 [NC]
 RewriteRule ^avatar/$ ./lib/controllers/avatar.php [NC]
 
+RewriteRule ^news_widget/$ ./lib/controllers/news_widget.php [NC]
+
 RewriteRule ^login/ ./lib/controllers/login_register.php [NC]
 RewriteRule ^logout/$ ./lib/controllers/login_register.php?logout=1 [NC]
 RewriteRule ^registration_confirm/([^/]+)/([^/]+)/$ ./lib/controllers/login_register.php?user_id=$1&token=$2 [NC]
@@ -32,7 +34,7 @@ RewriteRule ^chat/?$ /chat.php [NC]
 RewriteRule ^shop/ /shop.php [NC]
 
 RewriteRule ^tagcloud/ ./index.php?function=13 [NC]
-RewriteRule ^tagthumbs/([^/]+)/?$ /tagthumbs.php?tags=$1 [NC]
+RewriteRule ^tagthumbs/([^/]+)/ /tagthumbs.php?tags=$1 [NC]
 
 RewriteRule ^filteron/$ ./code/filter.php [NC]
 RewriteRule ^filteroff/$ ./code/filter.php [NC]

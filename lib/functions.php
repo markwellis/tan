@@ -14,8 +14,7 @@ function load_model($model, $args = null){
     include_once(MODEL_PATH . "/{$model}.php");
     
     if ($args){
-        $margs = implode(', ', $args);
-        return new $model($margs);
+        return new $model($args);
     }
     return new $model();
 }
@@ -57,4 +56,7 @@ function check_referer(){
     return preg_match('/' . addslashes($_SERVER['HTTP_HOST']) . '/', $_SERVER['HTTP_REFERER']);
 }
 
+function url_title($text){
+    return preg_replace("/[^a-zA-Z0-9_]/", "", str_replace(' ','_', html_entity_decode(trim($text),ENT_QUOTES,'UTF-8')));
+}
 ?>

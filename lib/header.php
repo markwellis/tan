@@ -15,6 +15,9 @@ $m_user = load_model('m_user');
 global $m_stash;
 $m_stash = load_model('m_stash');
 
+global $m_cache;
+$m_cache = load_model('m_cache');
+
 include_once(THEME_PATH . '/' . THEME_NAME . '/' . THEME_NAME . '.php');
 
 //populate the stash with defaults

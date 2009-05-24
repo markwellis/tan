@@ -4,26 +4,21 @@
     <img class='newsImg' src='<? echo $m_stash->theme_settings['image_path'] ?>/forgot_password.jpg' alt='Login' />
     Enter your new password and click confirm
     <form id='loginform' method='post' action=''>
+        <fieldset>
         <input type='hidden' name='location' value='login' />
-        <table>
-            <tr>
-                <td>
+            <ul>
+                <li>
                     <label for='password0'>Password </label>
-                </td>
-                <td>
                     <input id='password0' name='password0' type='password' class='text_input'/>
-                </td>
-            </tr>
-            <tr>
-                <td>
+                </li>
+                <li>
                     <label for='password1'>Password again</label>
-                </td>
-                <td>
                     <input id='password1' name='password1' type='password' class='text_input'/>
-                </td>
-            </tr>
-        </table>
-        <input type='submit' value='Confirm' />
+                </li>
+                <li>
+                    <input type='submit' value='Confirm' />
+                </li>
+            </ul>
+        </fieldset>
     </form>
-    <br />
 </div>
