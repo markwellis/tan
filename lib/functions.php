@@ -14,7 +14,8 @@ function load_model($model, $args = null){
     include_once(MODEL_PATH . "/{$model}.php");
     
     if ($args){
-        return new $model($args);
+        $rc = &new ReflectionClass($model);
+        return $rc->newInstanceArgs($args);
     }
     return new $model();
 }
@@ -37,16 +38,15 @@ function error($error){
 }
 
 function get_recent_comments(){
-    $memcache = new Memcache;
-    $memcache_key = "2recent_comments";
-    @$memcache->connect('127.0.0.1', 11211);
-    $cached = @$memcache->get($memcache_key);
+    global $m_cache;
+    $memcache_key = "menu_recent_comments";
+    $cached = $m_cache->get($memcache_key);
     if (!$cached){
         global $m_sql;
         $sql = &$m_sql;
         $query = "SELECT details, comment_id, username, UNIX_TIMESTAMP(date) as date, blog_id, link_id, picture_id FROM comments WHERE deleted='N' ORDER BY date DESC LIMIT 20";
         $recent_comments = $sql->query($query, null, array(null));
-        @$memcache->set($memcache_key, $recent_comments, false, 10);
+        $m_cache->set($memcache_key, $recent_comments, 10);
         return $recent_comments;
     }
     return $cached;
