@@ -1,4 +1,5 @@
 <?php
+$m_stash->recent_comments = get_recent_comments();
 $current_menu = array($m_stash->location => 'style="display:block;"');
 $current_tab = array($m_stash->location => ' tab_selected');
 $current_option = array($m_stash->location => array($m_stash->sub_location => 'class="navmenu_option_selected"' ));
