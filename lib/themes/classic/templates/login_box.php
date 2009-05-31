@@ -7,11 +7,11 @@
             <input type='hidden' name='location' value='login' />
             <ul>
                 <li>
-                    <label for='username'>Username </label>
+                    <label for='username' class='login_label'>Username </label>
                     <input id='username' name='username' type='text' class='text_input'/>
                 </li>
                 <li>
-                    <label for='password'>Password </label>
+                    <label for='password' class='login_label'>Password </label>
                     <input id='password' name='password' type='password' class='text_input'/>
                 </li>
                 <li>

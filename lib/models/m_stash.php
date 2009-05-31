@@ -3,7 +3,7 @@
 class m_stash{
     function __construct(){
         global $m_user;
-        $this->m_user = &$m_user;
+        $this->m_user = $m_user;
     }
     
     function flash($key, $value = null){

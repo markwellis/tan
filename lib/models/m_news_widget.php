@@ -23,7 +23,7 @@ class m_news_widget{
                 ."ORDER BY promoted DESC LIMIT 10";
             
             $recent = $this->m_sql->query($query, null, null);
-            $m_cache->set('news_widget_recent', $recent, 15 * ONE_MIN);
+            $m_cache->set('news_widget_recent', $recent, 15 * 60);
         }
         return $recent;
     }

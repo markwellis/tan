@@ -8,6 +8,8 @@
  */
 
 class m_image_upload {
+    public $types;
+    
     function __construct($image, $filename){
         if (!$image){
             die("no image");
@@ -24,6 +26,7 @@ class m_image_upload {
         $is_image = $this->_is_an_image();
         
         if($is_image === true) {
+            $this->uploaded_filename = "{$this->uploaded_filename}." . $this->get_image_extension();
             return $this->move_uploaded();
         }
         return $is_image;
@@ -32,15 +35,7 @@ class m_image_upload {
     /**
      * validates the image
      */    
-    function _is_an_image(){
-        /**
-         * Return codes
-         * 1: Success
-         * -1: Filesize exceeded
-         * -2: Upload error
-         * -3: Not an image
-         * -4: Not a jpg
-         */
+    private function _is_an_image(){
         if ($this->image['error'] !== 0) {
             return 'Upload error';
         }
@@ -52,8 +47,10 @@ class m_image_upload {
         if (!@is_uploaded_file($this->image['tmp_name'])){
             return 'Filesize exceeded';
         }
-        if( ($this->image['type'] !== 'image/jpeg') && ($this->image['type'] !== 'image/pjpeg')){
-            return 'Not a jpg';
+        if ($this->types){
+            if (!in_array($this->image['type'], $this->types, true)){
+                return 'Incorrect Image Format';
+            }
         }
 
         // if we cant get the image resolution, its not an image.
@@ -61,18 +58,43 @@ class m_image_upload {
         if (!$res){
             return 'Not an image';
         }
+        $this->meta = array($res[0], $res[1], $this->image['size'] / 1024);
         return true;
     }
 
     /**
      * Moves the image to the correct location
      */
-    function move_uploaded(){
+    private function move_uploaded(){
         if (!move_uploaded_file($this->image['tmp_name'], $this->uploaded_filename)) {
-            return null;
+            return 'Error Uploading';
         }
         return true;
-    }    
+    }
+
+    private function get_image_extension(){
+        $image_types = array( 
+            null,
+            'gif',
+            'jpg',
+            'png',
+            'swf',
+            'psd',
+            'bmp',
+            'tiff',
+            'tiff',
+            'jpc',
+            'jp2',
+            'jpx',
+            'jb2',
+            'swc',
+            'iff',
+            'wbmp',
+            'xbm',
+         );
+         return $image_types[exif_imagetype($this->image['tmp_name'])];
+    }
+
 }
 
 ?>

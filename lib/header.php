@@ -29,10 +29,8 @@ $m_stash->js_includes = array(
 
 $m_stash->page_title = 'ThisAintNews :: Social News For Pirates';
 $m_stash->page_meta_description = 'Social News For Pirates';
-$m_stash->page_keywords = 'strange news community comments english social fun jokes videos pictures share sharing lol lolz funny humour humor';
+$m_stash->page_keywords = 'strange pirate news community comments english social fun jokes videos pictures share sharing lol lolz funny humour humor';
 $m_stash->location = 'link';
-
-$m_stash->recent_comments = get_recent_comments();
 
 $m_stash->start_time = $time;
 ?>

@@ -1,11 +1,4 @@
 <?php
-/*
- * Created on 3 Mar 2009
- *
- * Copyright 2009 - mark@thisaintnews.com
- * License is in the root directory, entitled LICENSE
- * @package user_info
- */
 require_once('../config.php');
 require_once(OLD_CODE_PATH . '/header.php');
 
@@ -20,13 +13,7 @@ if (!$user->isLoggedIn()){
     exit();
 }
 
-
-//$user_name = htmlentities(strip_tags(strtolower($_GET["username"])),ENT_QUOTES,'UTF-8');
-//if (!$user_name){
-    $user_id = $user->getUserId();
-//} else {
-//    $user_id = $user->usernameToId(mysql_escape_string($user_name));
-//}
+$user_id = $user->getUserId();
 
 if ($_SERVER['REQUEST_METHOD']==='POST') {
     if ($user->isLoggedIn()){
@@ -34,6 +21,7 @@ if ($_SERVER['REQUEST_METHOD']==='POST') {
             require_once(MODEL_PATH . '/m_image_upload.php');
             $user_id = $user->getUserId();
             $avatar = &new m_image_upload($_FILES['avatar'], PROFILE_PICTURE_UPLOAD_PATH . "/{$user_id}.jpg");
+            $avatar->types = array('image/jpeg', 'image/pjpeg');
             $res = $avatar->upload();
             if($res === true){
     	       $middle .= "<h1>Your new avatar has been uploaded</h1><br />";
