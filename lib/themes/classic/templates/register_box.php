@@ -15,19 +15,19 @@
             <input type='hidden' name='location' value='register' />
             <ul>
                 <li>
-                    <label for='rusername'>Username </label>
+                    <label for='rusername' class='login_label'>Username </label>
                     <input id='rusername' name='rusername' type='text' value='<? echo $m_stash->flash('username'); ?>' class='text_input'/>
                 </li>
                 <li>
-                    <label for='email'>Email address </label>
+                    <label for='email' class='login_label'>Email address </label>
                     <input id='email' name='email' type='text' value='<? echo $m_stash->flash('email'); ?>' class='text_input'/>
                 </li>
                 <li>
-                    <label for='rpassword0'>Password </label>
+                    <label for='rpassword0' class='login_label'>Password </label>
                     <input id='rpassword0' name='rpassword0' type='password' class='text_input'/>
                 </li>
                 <li>
-                    <label for='rpassword1'>Password again </label>
+                    <label for='rpassword1' class='login_label'>Password again </label>
                     <input id='rpassword1' name='rpassword1' type='password' class='text_input'/>
                 </li>
                 <li>

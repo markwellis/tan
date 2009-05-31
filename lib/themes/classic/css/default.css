@@ -701,11 +701,6 @@ ul#mainmenu li ul li{
     background-color:#d6d6d6;
 }
 
-#thumb_tags {
-    opacity:0;
-    visibility:hidden;
-}
-
 .tag_thumb_img{
 	height:50px;
 	width:50px;
@@ -734,7 +729,10 @@ ul#mainmenu li ul li{
 }
 
 fieldset ul, fieldset li{
-border:0; margin:0; padding:0; list-style:none;
+    border:0px;
+    margin:0px;
+    padding:0px;
+    list-style:none;
 }
 
 fieldset{
@@ -747,7 +745,15 @@ fieldset li{
 	padding-bottom:10px;
 }
 
-label{
+fieldset label{
     float:left;
+    font-weight:bold;
+}
+
+.login_label{
     width:180px;
+}
+
+.full_width{
+    width:100%;
 }
