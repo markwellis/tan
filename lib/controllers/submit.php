@@ -17,11 +17,11 @@ if (!$m_user->logged_in()){
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST'){
     if ( check_referer() ){
-        if (!$location === 'picture'){
-            $desc_field = 'description';
-        } else {
+        $desc_field = 'description';
+        if ($location === 'picture'){
             $desc_field = 'pdescription';
         }
+
         $data = array(
             0 => trim(ucwords(strip_tags(htmlentities(trim($_POST['title']),ENT_QUOTES,'UTF-8')))), //title
             1 => trim(strip_tags(htmlentities($_POST[$desc_field],ENT_QUOTES,'UTF-8'))),          //description
