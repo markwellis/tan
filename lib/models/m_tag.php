@@ -13,7 +13,7 @@ class m_tag{
     function existing($tag){
         $query = "SELECT tag_id FROM tags WHERE tag = ?";
         $row = $this->m_sql->query($query, 's', array($tag));
-        if ($row[0]){
+        if ($row){
             return $row[0]['tag_id'];
         } else {
             return false;
@@ -85,7 +85,7 @@ class m_tag{
             }
         }
 
-        if ($tag_ids[0]){
+        if ($tag_ids){
             $tag_id = implode(' OR tag_id=',$tag_ids);
             $tag_id = "{$tag_id})";
     
