@@ -13,9 +13,12 @@ class m_stash{
             }
             $_SESSION['flash'][$key] = $value;
         } else {
-            $value = $_SESSION['flash'][$key];
-            unset($_SESSION['flash'][$key]);
-            return $value;
+            if ($_SESSION['flash'][$key]){
+                $value = $_SESSION['flash'][$key];
+                unset($_SESSION['flash'][$key]);
+                return $value;
+            }
+            return null;
         }
     }
 

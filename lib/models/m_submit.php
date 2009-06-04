@@ -18,6 +18,11 @@ if (defined('MAGIC')) {
         }
         
         function submit($data){
+            if ($this->location === 'link'){
+               if (preg_match('/thisaintnews/', $data[5])){
+                   return "Don't be daft.";
+               }
+            }
             $this->data = $data;
             $is_valid = $this->is_valid();
             if ($is_valid === null){

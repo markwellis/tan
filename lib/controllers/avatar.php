@@ -20,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD']==='POST') {
         if ($_FILES['avatar']){
             require_once(MODEL_PATH . '/m_image_upload.php');
             $user_id = $user->getUserId();
-            $avatar = &new m_image_upload($_FILES['avatar'], PROFILE_PICTURE_UPLOAD_PATH . "/{$user_id}.jpg");
+            $avatar = &new m_image_upload($_FILES['avatar'], PROFILE_PICTURE_UPLOAD_PATH . "/{$user_id}");
             $avatar->types = array('image/jpeg', 'image/pjpeg');
             $res = $avatar->upload();
             if($res === true){
@@ -33,9 +33,12 @@ if ($_SERVER['REQUEST_METHOD']==='POST') {
 }
 
 $middle .= "<span>Current avatar</span>";
+
 $avatar_image = "sys/users/avatar/{$user_id}.jpg";
-if (file_exists($avatar_image)){
-	$avatar_mtime = filemtime($avatar_image);
+$avatar_path = "{$_SERVER['DOCUMENT_ROOT']}/{$avatar_image}";
+
+if (file_exists($avatar_path)){
+    $avatar_mtime = filemtime($avatar_path);
     $middle .= "<img class='avatar' src='/{$avatar_image}?m={$avatar_mtime}' alt='{$user_id}' />";
 } else { 
     $middle .= "<img class='avatar' src='/sys/images/_user.png' alt='{$user_id}' />"; 

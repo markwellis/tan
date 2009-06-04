@@ -29,7 +29,7 @@ if (defined('MAGIC')) {
             if (!is_array($args) ){
                 $args = array($args);
             }
-
+            $result = array();
             $stmt = $this->mysqli->stmt_init();
             if ( $stmt->prepare($query) ) {
                 if ($format && $args ){

@@ -8,7 +8,7 @@ if (defined('MAGIC')) {
             if (!$remote_image){
                 die("no image");
             }
-            
+            $this->remote_image = $remote_image;
             $this->uploaded_filename = $filename;
 
             $this->ch = curl_init($remote_image);
@@ -30,6 +30,9 @@ if (defined('MAGIC')) {
         }
         
         public function upload(){
+            if (preg_match('/thisaintnews/', $this->remote_image)){
+            	return "Don't be daft.";
+            }
             $this->get_head();
             return $this->validate_and_save();
         }

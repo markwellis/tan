@@ -7,7 +7,7 @@
  */
 
 class m_cache {
-	static $memcache;
+	private $memcache;
 	
 	function __construct(){
 		$this->memcache = new Memcache;
