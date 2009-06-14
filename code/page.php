@@ -219,8 +219,7 @@ if (defined('MAGIC')) {
                 $this->output .= ob_get_contents();
                 ob_clean();
             $this->output .= '<a href="http://www.cafepress.com/thisaintnews" class="menulink">Shop</a> |'
-                .'<a href="/chat/" class="menulink mibbit">Chat</a> | '
-                .'<a href="http://forums.thisaintnews.com" class="menulink">Forum</a>';
+                .'<a href="/chat/" class="menulink mibbit">Chat</a>';
     
             if ($user->isLoggedIn()){
                 $this->output .= " | <a href='/logout/' class='menulink'>Logout</a>";

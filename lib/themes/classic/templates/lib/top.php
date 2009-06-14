@@ -21,7 +21,7 @@
                         });
                     //]]>
                 </script>
-                <a href="http://www.cafepress.com/thisaintnews" class="top_link">Shop</a> | <a href="/chat/" class="top_link mibbit">Chat</a> | <a href="http://forums.thisaintnews.com" class="top_link">Forum</a>
+                <a href="http://www.cafepress.com/thisaintnews" class="top_link">Shop</a> | <a href="/chat/" class="top_link mibbit">Chat</a>
                 <?php if ($m_stash->m_user->logged_in()){ ?>
                      | <a href='/logout/' class='top_link'>Logout</a>
                 <?php } ?>
