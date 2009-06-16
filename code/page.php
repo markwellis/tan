@@ -207,8 +207,8 @@ if (defined('MAGIC')) {
                 
                 window.addEvent('domready', function() {
                     $$('.mibbit').addEvent('click', function(e) {
-                        popUpWindow("http://embed.mibbit.com/?server=irc.thisaintnews.com&chatOutputShowTimes=true"
-                  	  +"&channel=%23thisaintnews&settings=8a8a5ac18a22e7eecd04026233c3df93t"
+                        popUpWindow("http://embed.mibbit.com/?server=irc.thisaintnews.com%3A%2B6697&chatOutputShowTimes=true"
+                  	  +"&channel=%23thisaintnews&settings=8a8a5ac18a22e7eecd04026233c3df93&autoConnect=true"
                 	  +"&nick=<?= $user->getUsername() ?>", 720, 400);
                 	e.stop();
                     });
@@ -219,8 +219,7 @@ if (defined('MAGIC')) {
                 $this->output .= ob_get_contents();
                 ob_clean();
             $this->output .= '<a href="http://www.cafepress.com/thisaintnews" class="menulink">Shop</a> |'
-                .'<a href="/chat/" class="menulink mibbit">Chat</a> | '
-                .'<a href="http://forums.thisaintnews.com" class="menulink">Forum</a>';
+                .'<a href="/chat/" class="menulink mibbit">Chat</a>';
     
             if ($user->isLoggedIn()){
                 $this->output .= " | <a href='/logout/' class='menulink'>Logout</a>";

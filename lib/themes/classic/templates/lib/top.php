@@ -13,15 +13,15 @@
                     //<![CDATA[
                         window.addEvent('domready', function() {
                             $$('.mibbit').addEvent('click', function(e) {
-                                popUpWindow("http://embed.mibbit.com/?server=irc.thisaintnews.com&chatOutputShowTimes=true"
-                              +"&channel=%23thisaintnews&settings=8a8a5ac18a22e7eecd04026233c3df93t"
+                                popUpWindow("http://embed.mibbit.com/?server=irc.thisaintnews.com%3A%2B6697&chatOutputShowTimes=true&autoConnect=true"
+                              +"&channel=%23thisaintnews&settings=8a8a5ac18a22e7eecd04026233c3df93"
                               +"&nick=<?php echo $username ?>", 720, 400);
                             e.stop();
                             });
                         });
                     //]]>
                 </script>
-                <a href="http://www.cafepress.com/thisaintnews" class="top_link">Shop</a> | <a href="/chat/" class="top_link mibbit">Chat</a> | <a href="http://forums.thisaintnews.com" class="top_link">Forum</a>
+                <a href="http://www.cafepress.com/thisaintnews" class="top_link">Shop</a> | <a href="/chat/" class="top_link mibbit">Chat</a>
                 <?php if ($m_stash->m_user->logged_in()){ ?>
                      | <a href='/logout/' class='top_link'>Logout</a>
                 <?php } ?>
