@@ -208,7 +208,7 @@ if (defined('MAGIC')) {
                 window.addEvent('domready', function() {
                     $$('.mibbit').addEvent('click', function(e) {
                         popUpWindow("http://embed.mibbit.com/?server=irc.thisaintnews.com&chatOutputShowTimes=true"
-                  	  +"&channel=%23thisaintnews&settings=8a8a5ac18a22e7eecd04026233c3df93"
+                  	  +"&channel=%23thisaintnews&settings=8a8a5ac18a22e7eecd04026233c3df93&autoConnect=true"
                 	  +"&nick=<?= $user->getUsername() ?>", 720, 400);
                 	e.stop();
                     });

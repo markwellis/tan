@@ -13,7 +13,7 @@
                     //<![CDATA[
                         window.addEvent('domready', function() {
                             $$('.mibbit').addEvent('click', function(e) {
-                                popUpWindow("http://embed.mibbit.com/?server=irc.thisaintnews.com&chatOutputShowTimes=true"
+                                popUpWindow("http://embed.mibbit.com/?server=irc.thisaintnews.com&chatOutputShowTimes=true&autoConnect=true"
                               +"&channel=%23thisaintnews&settings=8a8a5ac18a22e7eecd04026233c3df93"
                               +"&nick=<?php echo $username ?>", 720, 400);
                             e.stop();
