@@ -104,7 +104,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'){
                         $data[6] = $m_image_upload->meta[0];
                         $data[7] = $m_image_upload->meta[1];
                         $data[8] = $m_image_upload->meta[2];
-                        $data[9] = $_POST['nsfw'] ? 'Y' : 'N';
+                        $data[9] = isset($_POST['nsfw']) ? 'Y' : 'N';
 
                         $message = $m_submit->submit($data);
                     }
