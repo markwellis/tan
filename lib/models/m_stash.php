@@ -23,7 +23,10 @@ class m_stash{
     }
 
     function add_message($value){
-        if (!is_array($_SESSION['flash']['message'])){
+        if (!isset($_SESSION['flash'])){
+            $_SESSION['flash'] = array();
+        }
+        if (!isset($_SESSION['flash']['message'])){
             $_SESSION['flash']['message'] = array($value);
         } else {
             array_push($_SESSION['flash']['message'], $value);

@@ -1,7 +1,7 @@
 <?php
 require_once('../header.php');
 
-if ($_GET['logout']) {
+if (isset($_GET['logout'])) {
     $m_user->logout();
     if ($_SERVER['HTTP_REFERER'] != ''){
         header("location: {$_SERVER['HTTP_REFERER']}");
@@ -17,7 +17,7 @@ if ($m_user->logged_in()){
     exit();
 }
 
-if ($_GET['token'] && $_GET['user_id']) {
+if (isset($_GET['token']) && isset($_GET['user_id'])) {
     $user_id = (int)$_GET['user_id'];
     $m_registration = load_model('m_registration');
     
@@ -105,11 +105,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'){
     }
 
     // login failed, or user not posting from one of our pages.
-    header("Location: /login/" . time());
+    header("Location: /login/?t=" . time());
     exit();
 }
 
-$m_stash->flash('ref', $_SERVER['HTTP_REFERER']);
+$m_stash->flash('ref', isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : null);
 
 require_once(THIRD_PARTY_PATH . '/recaptchalib.php');
 $error_cap = null;

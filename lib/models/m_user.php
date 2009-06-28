@@ -32,7 +32,7 @@ if (defined('MAGIC')) {
         }
         
         public function username() { 
-            return $_SESSION['username'];
+            return isset($_SESSION['username']) ? $_SESSION['username'] : null;
         }
 
         public function user_id() {
@@ -67,7 +67,10 @@ if (defined('MAGIC')) {
                 $enc_password = hash('sha512',$password);
                 $query = "SELECT * FROM user_details WHERE lower(username) = ?";
                 $row = $this->m_sql->query($query, 's', array($username));
-                if ($row[0]['password'] === $enc_password && $row[0]['confirmed'] === 'Y') {
+                if (isset($row[0]['password']) && $row[0]['password'] === $enc_password){
+                    if ($row[0]['confirmed'] === 'N'){
+                        return null;
+                    }
                     $_SESSION['time'] = time();
                     $_SESSION['username'] = $row[0]['username'];
                     $_SESSION['user_id'] = $row[0]['user_id'];
@@ -76,9 +79,6 @@ if (defined('MAGIC')) {
                     $this->m_sql->query($query, 'i', array($row[0]['user_id']), 'insert');
                     return true;
                 } else {
-                    if ($row[0]['confirmed'] === 'N'){
-                        return null;
-                    }
                     return false; 
                 }
             }
@@ -92,7 +92,7 @@ if (defined('MAGIC')) {
         }
 
         public function __destruct(){
-            if ($_SESSION['ready']){
+            if (isset($_SESSION['ready'])){
                 unset ( $_SESSION['ready'] );
             }
         }

@@ -1,5 +1,5 @@
 <div id="left_ad">
-<?php if ($_SESSION['nsfw']){ ?>
+<?php if (isset($_SESSION['nsfw'])){ ?>
     <script type="text/javascript">
         //<![CDATA[
         
