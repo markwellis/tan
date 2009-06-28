@@ -28,7 +28,7 @@ define('PROFILE_PICTURE_UPLOAD_PATH', BASE_PATH . '/sys/users/avatar');
 /**
  * Site settings
  */
-define('VERSION', '0.82.1');
+define('VERSION', '0.82.2');
 
 define('DEBUG', false);
 define('DEBUG_SQL', false);

@@ -80,7 +80,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'){
                 break;
             case 'picture':
                 if ($edit){
-                    $data[3] = $_POST['nsfw'] ? 'Y' : 'N';
+                    $data[3] = isset($_POST['nsfw']) ? 'Y' : 'N';
                     $data[4] = $edit;
 
                     $message = $m_submit->submit($data);
