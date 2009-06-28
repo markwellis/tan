@@ -70,6 +70,11 @@ class m_tag{
     
     function thumbs_tags($tagstr){
         $tag_ids = array();
+        $matches = array();
+        if (preg_match('/\!(\d+)/', $tagstr, &$matches)){
+            $id = $matches[1];
+        }
+
         $tags = explode(' ', trim($tagstr));
         
         //this is here so that if there are no tags, the array merge for random tags still works
@@ -95,12 +100,25 @@ class m_tag{
             }
         }
 
-        $query = "SELECT DISTINCT picture_id, (SELECT NSFW FROM picture_details WHERE picture_details.picture_id=t2.picture_id) AS NSFW FROM tag_details AS t2 HAVING NSFW='N' ORDER BY RAND() LIMIT 20";
+        $query = "SELECT DISTINCT picture_id, tag_id, (SELECT NSFW FROM picture_details WHERE picture_details.picture_id=t2.picture_id) AS NSFW FROM tag_details AS t2 HAVING NSFW='N' ORDER BY RAND() LIMIT 20";
         $ret = $this->m_sql->query($query, null, array(null));
         if ($ret){
             $res = array_merge($res, $ret);
         }
+        
+        if (isset($id)){
+            $res[] = array('picture_id' => $id);
+        }
         return $res;
+    }
+    
+    function get_tags($id){
+        $query = "SELECT * FROM tag_details INNER JOIN tags ON (tag_details.tag_id = tags.tag_id) WHERE {$this->location}_id = ?";
+        $tags= '';
+        foreach ($this->m_sql->query($query, 'i', array($id)) as $tag){
+            $tags .= " {$tag['tag']}";
+        }
+        return trim($tags);
     }
 }
 ?>

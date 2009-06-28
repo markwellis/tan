@@ -1,21 +1,21 @@
 <div class='news' style='padding-right:20px'>
-    <form action='/submit/blog/' id='submit_form' method='post'>
+    <form action='<?php echo $_SERVER['REQUEST_URI'] ?>' id='submit_form' method='post'>
         <fieldset>
             <ul>
                 <li>
-                    <input type='hidden' id='cat' name='cat' value='' />
+                    <input type='hidden' id='cat' name='cat' value='<?php echo isset($m_stash->details['category']) ? $m_stash->details['category'] : '' ?>' />
                 </li>
                 <li>
                     <label for='title'>Title</label>
                 </li>
                 <li>
-                    <input type='text' name='title' id='title' class='text_input full_width'/>
+                    <input type='text' name='title' id='title' class='text_input full_width' value='<?php echo isset($m_stash->details['title']) ? $m_stash->details['title'] : '' ?>' />
                 </li>
                 <li>
                     <label for='description'>Description</label>
                 </li>
                 <li>
-                    <textarea cols='1' rows='5' name='description' id='description' class='text_input full_width'></textarea><br/>
+                    <textarea cols='1' rows='5' name='description' id='description' class='text_input full_width' ><?php echo isset($m_stash->details['description']) ? $m_stash->details['description'] : '' ?></textarea><br/>
                 </li>
                 <li>
                     <label for='blogmain'>Blog</label>
@@ -30,9 +30,8 @@
                     $oFCKeditor->Height = '600px';
                     $oFCKeditor->Config["CustomConfigurationsPath"] = "/sys/script/fckconfig.js";
                     $oFCKeditor->Config['EnterMode'] = 'br';
-        
-                    $oFCKeditor->Value = $m_stash->comment;
                     
+                    $oFCKeditor->Value = isset($m_stash->details['details']) ? $m_stash->details['details'] : '';
                     $oFCKeditor->Create();
                     ?>
                 </li>

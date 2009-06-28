@@ -1,27 +1,27 @@
 <div class='news' style='padding-right:20px'>
-    <form action='/submit/link/' id='submit_form' method='post'>
+    <form action='<?php echo $_SERVER['REQUEST_URI'] ?>' id='submit_form' method='post'>
         <fieldset>
             <ul>
                 <li>
-                    <input type='hidden' id='cat' name='cat' value='' />
+                    <input type='hidden' id='cat' name='cat' value='<?php echo isset($m_stash->details['category']) ? $m_stash->details['category'] : '' ?>' />
                 </li>
                 <li>
                     <label for='url'>Title</label>
                 </li>
                 <li>
-                    <input type='text' name='title' id='title' class='text_input full_width'/>
+                    <input type='text' name='title' id='title' class='text_input full_width' value='<?php echo isset($m_stash->details['title']) ? stripslashes($m_stash->details['title']) : '' ?>'/>
                 </li>
                 <li>
                     <label for='url'>Url</label>
                 </li>
                 <li>
-                    <input type='text' name='url' id='url' class='text_input full_width'/>
+                    <input type='text' name='url' id='url' class='text_input full_width' value='<?php echo isset($m_stash->details['url']) ? "{$m_stash->details['url']}' disabled='disabled" : '' ?>'/>
                 </li>
                 <li>
                     <label for='description'>Description</label>
                 </li>
                 <li>
-                    <textarea cols='1' rows='5' name='description' id='description' class='text_input full_width'></textarea><br/>
+                    <textarea cols='1' rows='5' name='description' id='description' class='text_input full_width'><?php echo isset($m_stash->details['description']) ? stripslashes($m_stash->details['description']) : '' ?></textarea><br/>
                 </li>
             </ul>   
             <?php load_template('/lib/tag_thumb_browser'); ?>

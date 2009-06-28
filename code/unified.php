@@ -718,6 +718,10 @@ if (defined('MAGIC')) {
 	            if ($ratio) {
 	                $output .= " | Ratio " . $ratio[0] . ":" . $ratio[1];
 	            }
+                
+                if ($this->user->getUserId() == $objectDetails['user_id']){
+                    $output .= " | <a href='/esubmit/{$this->kind_of_object}/{$objectDetails[$this->kind_of_object . '_id']}/'>Edit</a>";
+                }
 	
 	            $output .= "<br /><p>".nl2br(stripslashes($objectDetails['description']))."</p>";
 	            if ($article && $kind === 'link'){
@@ -773,6 +777,11 @@ if (defined('MAGIC')) {
 	                } else {
 	                    $size = number_format($meta[0], 2) . 'KB';
 	                }
+
+                    if ($this->user->getUserId() == $objectDetails['user_id']){
+                        $size .= " | <a href='/esubmit/{$this->kind_of_object}/{$objectDetails[$this->kind_of_object . '_id']}/'>Edit</a>";
+                    }
+
 	                $output .=" | {$meta[1][0]}x{$meta[1][1]} | {$size}{$plusminusbox}</div><div class='thumbPlace'><a href='/images/pics/".stripslashes(htmlentities(basename($objectDetails['filename']),ENT_QUOTES,'UTF-8'))."'>
 	                    <img class='picThumb' src='/thumb/{$objectDetails['picture_id']}/400/'
 	                    alt='".stripslashes($objectDetails['title'])."'/></a>

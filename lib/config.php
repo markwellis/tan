@@ -1,4 +1,7 @@
 <?php
+
+//error_reporting (E_ERROR | E_WARNING | E_PARSE | E_NOTICE);
+
 /**
  * Directory settings
  */
@@ -25,7 +28,7 @@ define('PROFILE_PICTURE_UPLOAD_PATH', BASE_PATH . '/sys/users/avatar');
 /**
  * Site settings
  */
-define('VERSION', '0.81.6');
+define('VERSION', '0.81.7');
 
 define('DEBUG', false);
 define('DEBUG_SQL', false);
