@@ -22,7 +22,7 @@ class image_resize{
     
     function resize($id, $newx){
         $newx = abs($newx);
-        $allowed_sizes = array(100, 150, 160, 200, 250, 300, 400, 500);
+        $allowed_sizes = array(100, 150, 160, 200, 250, 300, 400, 500, 600);
         if (in_array($newx, $allowed_sizes, TRUE)){
             $cacheimg = $_SERVER['DOCUMENT_ROOT']."/images/cache/resize/$id/$newx";
 
@@ -65,7 +65,7 @@ class image_resize{
                     header("Expires: ".gmdate("D, d M Y H:i:s", $expires_time)." GMT");
                     header('Cache-Control: maxage='.(60*60*24*365*10).', public');
                     if (@strtotime($_SERVER['HTTP_IF_MODIFIED_SINCE']) == $last_modified_time ||
-                        trim($_SERVER['HTTP_IF_NONE_MATCH']) == $etag) {
+                        (isset($_SERVER['HTTP_IF_NONE_MATCH']) && trim($_SERVER['HTTP_IF_NONE_MATCH']) == $etag) ) {
                             header("HTTP/1.1 304 Not Modified");
                             exit();
                     }
