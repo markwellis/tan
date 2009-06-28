@@ -1,3 +1,6 @@
+<?php
+$count = 0;
+?>
 <body>
 <style type='text/css'>
 body{

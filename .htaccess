@@ -14,7 +14,9 @@ RewriteRule ^forgot_confirm/([^/]+)/([^/]+)/$ lib/controllers/forgot_confirm.php
 RewriteRule ^news_widget lib/controllers/news_widget.php [NC]
 
 ##submit
-RewriteRule ^submit/([^/]+)/$ lib/controllers/submit.php?type=$1 [NC]
+RewriteRule ^submit/([^/]+)/$ lib/controllers/submit.php?location=$1 [NC]
+##edit
+RewriteRule ^esubmit/([^/]+)/([^/]+)/$ lib/controllers/submit.php?location=$1&edit=$2 [NC]
 
 ##thumb
 RewriteRule ^thumb/([^/]+)/([^/]+)/ lib/controllers/thumb.php?id=$1&x=$2 [NC]
@@ -29,6 +31,7 @@ RewriteRule ^picture/([^/]+)/([^/]+)/ ./index.php?function=2&type=$1&page=$2 [NC
 RewriteRule ^viewlink/([^/]+) ./viewpage.php?kindofpage=link&id=$1 [NC]
 RewriteRule ^viewblog/([^/]+) ./viewpage.php?kindofpage=blog&id=$1 [NC]
 RewriteRule ^viewpic/([^/]+) ./viewpage.php?kindofpage=picture&id=$1 [NC]
+RewriteRule ^viewpicture/([^/]+) ./viewpage.php?kindofpage=picture&id=$1 [NC]
 
 RewriteRule ^edit_comment/([^/]+)/ ./lib/controllers/edit_comment.php?comment_id=$1 [NC]
 RewriteRule ^avatar/$ ./lib/controllers/avatar.php [NC]

@@ -44,6 +44,10 @@ if (defined('MAGIC')) {
         public function getUserId() {
             return $_SESSION['user_id'];
         }
+        
+        public function admin(){
+            return ($this->getUserId() === 1);
+        }
 
         public function userid2username($userid) {
             $sql = $this->sql;

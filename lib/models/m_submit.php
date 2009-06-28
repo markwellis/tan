@@ -7,11 +7,12 @@ if (defined('MAGIC')) {
         private $desc_max = 1000;
         private $blog_min = 20;
 
-        function __construct($location){
+        function __construct($location, $edit = null){
             if (!$location){
                 die('no location');
             }
             $this->location = $location;
+            $this->edit = $edit;
 
             global $m_sql;
             $this->m_sql = &$m_sql;
@@ -19,16 +20,20 @@ if (defined('MAGIC')) {
         
         function submit($data){
             if ($this->location === 'link'){
-               if (preg_match('/thisaintnews/', $data[5])){
+               if (isset($data[5]) && preg_match('/thisaintnews/', $data[5])){
                    return "Don't be daft.";
                }
             }
             $this->data = $data;
             $is_valid = $this->is_valid();
             if ($is_valid === null){
-                $id = $this->insert();
-                $m_plusminus = load_model('m_plusminus', array($this->location));
-                $m_plusminus->add_plus($data[3],$id);
+                if ($this->edit){
+                    $id = $this->update();
+                } else {
+                    $id = $this->insert();
+                    $m_plusminus = load_model('m_plusminus', array($this->location));
+                    $m_plusminus->add_plus($data[3],$id);
+                }
                 return $id;
             }
             return $is_valid;
@@ -50,6 +55,24 @@ if (defined('MAGIC')) {
                     break;
             }
             return $id;
+        }
+        
+        function update(){
+            switch ($this->location){
+                case 'link':
+                    $query = 'UPDATE link_details SET title = ?, description = ?, category = ? WHERE link_id = ?';
+                    $this->m_sql->query($query, 'ssii', $this->data, 'insert');
+                    break;
+                case 'blog':
+                    $query = 'UPDATE blog_details SET title = ?, description = ?, category = ?, details = ? WHERE blog_id = ?';
+                    $this->m_sql->query($query, 'ssisi', $this->data, 'insert');
+                    break;
+                case 'picture':
+                    $query = 'UPDATE picture_details SET title = ?, description = ?, category = ?, NSFW = ? WHERE picture_id = ?';
+                    $this->m_sql->query($query, 'ssisi', $this->data, 'insert');
+                    break;
+            }
+            return 0;
         }
         
         function is_valid(){
@@ -88,22 +111,30 @@ if (defined('MAGIC')) {
                     if (strlen($data[1]) < $this->desc_min) {
                         return $error_codes[5];
                     }
-                    if (!preg_match('/^(http|https|ftp):\/\/([A-Z0-9][A-Z0-9_-]*(?:\.[A-Z0-9][A-Z0-9_-]*)+):?(\d+)?\/?/i', $data[5])) {
-                        return $error_codes[6];
-                    }
-    
-                    $query = "SELECT link_id FROM link_details WHERE url = ?";
-                    $res = $this->m_sql->query($query, 's', array($data[5]), 'count'); 
-                    if ($res){ 
-                        return $error_codes[7];
+                    if (!$this->edit){
+                        if (!preg_match('/^(http|https|ftp):\/\/([A-Z0-9][A-Z0-9_-]*(?:\.[A-Z0-9][A-Z0-9_-]*)+):?(\d+)?\/?/i', $data[5])) {
+                            return $error_codes[6];
+                        }
+        
+                        $query = "SELECT link_id FROM link_details WHERE url = ?";
+                        $res = $this->m_sql->query($query, 's', array($data[5]), 'count'); 
+                        if ($res){ 
+                            return $error_codes[7];
+                        }
                     }
                     break;
                 case 'blog':
                     if (strlen($data[1]) < $this->desc_min) {
                         return $error_codes[5];
                     }
-                    if (strlen($data[5]) < $this->blog_min) {
-                        return $error_codes[8];
+                    if ($this->edit){
+                        if (strlen($data[3]) < $this->blog_min) {
+                            return $error_codes[8];
+                        }
+                    } else {
+                        if (strlen($data[5]) < $this->blog_min) {
+                            return $error_codes[8];
+                        }
                     }
                     break;
             } 

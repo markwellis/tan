@@ -2,35 +2,25 @@
 $m_stash->recent_comments = get_recent_comments();
 $current_menu = array($m_stash->location => 'style="display:block;"');
 $current_tab = array($m_stash->location => ' tab_selected');
-$current_option = array($m_stash->location => array($m_stash->sub_location => 'class="navmenu_option_selected"' ));
+if (isset($m_stash->sub_location)){
+    $current_option = array($m_stash->location => array($m_stash->sub_location => 'class="navmenu_option_selected"' ));
+}
 ?>
 <div id="navmenu_holder">
-    <span class='tab <?php echo $current_tab['link'] ?>' title='link' id='link_tab'>Links</span><span class='tab <?php echo $current_tab['blog'] ?>' title='blog' id='blog_tab'>Blogs</span><span class='tab <?php echo $current_tab['picture'] ?>' title='picture' id='picture_tab'>Pictures</span>
-        <div id="navmenu_contents">
-        <div id='link_menu' <?php echo $current_menu['link'] ?>>
+<?php foreach (array('Links' => 'link', 'Blogs' => 'blog', 'Pictures' => 'picture') as $key => $value) { ?>
+<span class='tab <?php echo isset($current_tab[$value]) ? $current_tab[$value] : '' ?>' title='<?php echo $value ?>' id='<?php echo $value ?>_tab'><?php echo $key ?></span><?php //null ?>
+<?php } ?>
+    <div id="navmenu_contents">
+    <?php foreach (array('Links' => 'link', 'Pictures' => 'picture', 'Blogs' => 'blog') as $value) { ?>
+        <div id='<?php echo $value ?>_menu' <?php echo isset($current_option[$value]) ? $current_option[$value] : '' ?>>
             <ul>
-                <li class='navmenu_option'><a href='/submit/link/' <?php echo $current_option['link'][2] ?>>Submit</a></li>
-                <li class='navmenu_option'><a href='/random/link/'>Random</a></li>
-                <li class='navmenu_option'><a href='/link/0/1/' <?php echo $current_option['link'][0] ?>>Promoted</a></li>
-                <li class='navmenu_option'><a href='/link/1/1/' <?php echo $current_option['link'][1] ?>>Upcoming</a></li>
+                <li class='navmenu_option'><a href='/submit/<?php echo $value ?>/' <?php echo isset($current_option[$value][2]) ? $current_option[$value][2] : '' ?>>Submit</a></li>
+                <li class='navmenu_option'><a href='/random/<?php echo $value ?>/'>Random</a></li>
+                <li class='navmenu_option'><a href='/<?php echo $value ?>/0/1/' <?php echo isset($current_option[$value][0]) ? $current_option[$value][0] : '' ?>>Promoted</a></li>
+                <li class='navmenu_option'><a href='/<?php echo $value ?>/1/1/' <?php echo isset($current_option[$value][1]) ? $current_option[$value][1] : '' ?>>Upcoming</a></li>
             </ul>
         </div>
-        <div id='blog_menu' <?php echo $current_menu['blog'] ?>>
-            <ul>
-                <li class='navmenu_option'><a href='/submit/blog/' <?php echo $current_option['blog'][2] ?>>Submit</a></li>
-                <li class='navmenu_option'><a href='/random/blog/'>Random</a></li>
-                <li class='navmenu_option'><a href='/blog/0/1/' <?php echo $current_option['blog'][0] ?>>Promoted</a></li>
-                <li class='navmenu_option'><a href='/blog/1/1/' <?php echo $current_option['blog'][1] ?>>Upcoming</a></li>
-            </ul>
-        </div>
-        <div id='picture_menu' <?php echo $current_menu['picture'] ?>>
-            <ul>
-                <li class='navmenu_option'><a href='/submit/picture/' <?php echo $current_option['picture'][2] ?>>Submit</a></li>
-                <li class='navmenu_option'><a href='/random/picture/'>Random</a></li>
-                <li class='navmenu_option'><a href='/picture/0/1/' <?php echo $current_option['picture'][0] ?>>Promoted</a></li>
-                <li class='navmenu_option'><a href='/picture/1/1/' <?php echo $current_option['picture'][1] ?>>Upcoming</a></li>
-            </ul>
-        </div>
+    <?php } ?> 
     </div>
 </div>
 <?php if ($m_stash->location) { ?>

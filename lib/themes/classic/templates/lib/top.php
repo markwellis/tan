@@ -33,7 +33,7 @@
                     <a href="/user/' . $user->getUsername() . '/1/" class="top_link">My Comments</a> | <a href="/avatar/" class="top_link">Avatar</a> | 
                 <?php } ?>
             
-                <?php if($_SESSION['nsfw'] == 1){ ?>
+                <?php if(isset($_SESSION['nsfw'])){ ?>
                     <a href='/filteron/' class='top_link'>Enable NSFW filter</a>
                 <?php } else { ?>
                     <a href='/filteroff/' class='top_link' onclick='return confirm("Are you sure you want to disable the NSFW work filter? The ads will switch to adult mode, and there will be content which is not suitable for work");'>Disable NSFW filter</a>

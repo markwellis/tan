@@ -8,12 +8,12 @@ class m_stash{
     
     function flash($key, $value = null){
         if ($value){
-            if (!$_SESSION['flash']){
+            if (!isset($_SESSION['flash'])){
                 $_SESSION['flash'] = array();
             }
             $_SESSION['flash'][$key] = $value;
         } else {
-            if ($_SESSION['flash'][$key]){
+            if (isset($_SESSION['flash'][$key])){
                 $value = $_SESSION['flash'][$key];
                 unset($_SESSION['flash'][$key]);
                 return $value;
@@ -23,7 +23,10 @@ class m_stash{
     }
 
     function add_message($value){
-        if (!is_array($_SESSION['flash']['message'])){
+        if (!isset($_SESSION['flash'])){
+            $_SESSION['flash'] = array();
+        }
+        if (!isset($_SESSION['flash']['message'])){
             $_SESSION['flash']['message'] = array($value);
         } else {
             array_push($_SESSION['flash']['message'], $value);
