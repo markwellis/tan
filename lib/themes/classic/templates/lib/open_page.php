@@ -1,6 +1,6 @@
 <?php
     load_template('lib/xhtml_head');
-    if (!$m_stash->overlay){
+    if (!isset($m_stash->overlay)){
         load_template('lib/top');
         $messages = $m_stash->flash('message');
         if ($messages){

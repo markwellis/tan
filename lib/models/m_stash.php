@@ -8,12 +8,12 @@ class m_stash{
     
     function flash($key, $value = null){
         if ($value){
-            if (!$_SESSION['flash']){
+            if (!isset($_SESSION['flash'])){
                 $_SESSION['flash'] = array();
             }
             $_SESSION['flash'][$key] = $value;
         } else {
-            if ($_SESSION['flash'][$key]){
+            if (isset($_SESSION['flash'][$key])){
                 $value = $_SESSION['flash'][$key];
                 unset($_SESSION['flash'][$key]);
                 return $value;
