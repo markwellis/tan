@@ -46,7 +46,7 @@ if (defined('MAGIC')) {
         }
         
         public function admin(){
-            return ($this->getUserId() === 1);
+            return ($this->getUserId() === 1 && $this->getUsername() === 'mrbig4545');
         }
 
         public function userid2username($userid) {

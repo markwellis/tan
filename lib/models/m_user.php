@@ -58,7 +58,7 @@ if (defined('MAGIC')) {
         }
 
         public function admin(){
-            return ($this->user_id() === 1);
+            return ($this->getUserId() === 1 && $this->getUsername() === 'mrbig4545');
         }
 
         public function total_comments($user_id) {

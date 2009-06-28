@@ -15,7 +15,7 @@
                     <label for='description'>Description</label>
                 </li>
                 <li>
-                    <textarea cols='1' rows='5' name='description' id='description' class='text_input full_width' ><?php echo isset($m_stash->details['description']) ? $m_stash->details['description'] : '' ?></textarea><br/>
+                    <textarea cols='1' rows='5' name='description' id='description' class='text_input full_width' ><?php echo isset($m_stash->details['description']) ? stripslashes($m_stash->details['description']) : '' ?></textarea><br/>
                 </li>
                 <li>
                     <label for='blogmain'>Blog</label>
