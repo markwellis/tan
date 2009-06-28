@@ -7,7 +7,7 @@ if (isset($m_stash->sub_location)){
 }
 ?>
 <div id="navmenu_holder">
-<?php foreach (array('Links' => 'link', 'Pictures' => 'picture', 'Blogs' => 'blog') as $key => $value) { ?>
+<?php foreach (array('Links' => 'link', 'Blogs' => 'blog', 'Pictures' => 'picture') as $key => $value) { ?>
 <span class='tab <?php echo isset($current_tab[$value]) ? $current_tab[$value] : '' ?>' title='<?php echo $value ?>' id='<?php echo $value ?>_tab'><?php echo $key ?></span><?php //null ?>
 <?php } ?>
     <div id="navmenu_contents">

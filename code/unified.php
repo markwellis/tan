@@ -719,7 +719,7 @@ if (defined('MAGIC')) {
 	                $output .= " | Ratio " . $ratio[0] . ":" . $ratio[1];
 	            }
                 
-                if ($this->user->getUserId() == $objectDetails['user_id']){
+                if (($this->user->getUserId() == $objectDetails['user_id']) || $this->user->admin()){
                     $output .= " | <a href='/esubmit/{$this->kind_of_object}/{$objectDetails[$this->kind_of_object . '_id']}/'>Edit</a>";
                 }
 	
@@ -778,7 +778,7 @@ if (defined('MAGIC')) {
 	                    $size = number_format($meta[0], 2) . 'KB';
 	                }
 
-                    if ($this->user->getUserId() == $objectDetails['user_id']){
+                    if (($this->user->getUserId() == $objectDetails['user_id']) || $this->user->admin()){
                         $size .= " | <a href='/esubmit/{$this->kind_of_object}/{$objectDetails[$this->kind_of_object . '_id']}/'>Edit</a>";
                     }
 

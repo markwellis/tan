@@ -2,7 +2,7 @@
 require_once('../header.php');
 
 $location = isset($_GET['location']) ? $_GET['location'] : '';
-$edit = isset($_GET['edit']) ? (int)$_GET['edit'] : 0;
+$edit = isset($_GET['edit']) ? (int)$_GET['edit'] : null;
 
 if ($location !== 'blog' && $location !== 'link' && $location !== 'picture'){
     $m_stash->add_message('That was random');
@@ -23,7 +23,7 @@ if ($edit){
      */
      $m_object = load_model('m_object',array($location));
      $m_stash->details = $m_object->get($edit);
-     if (!$m_stash->details || ($m_user->user_id() !== $m_stash->details['user_id'])){
+     if (!$m_stash->details || (($m_user->user_id() !== $m_stash->details['user_id']) && !$m_user->admin())){
         $m_stash->add_message('Sorry');
         $ref = $_SERVER["HTTP_REFERER"] ? $_SERVER["HTTP_REFERER"] : '/';
         header("location: {$ref}");
@@ -120,7 +120,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'){
             $message = 'Submission Complete';
         }
         $m_stash->add_message($message);
-        header("location: /{$location}/1/1/");
+        $location = isset($edit) ? "/view{$location}/{$edit}/" . url_title($data[0]) . '/' : "/{$location}/1/1/";
+        header("location: {$location}");
         exit();
     }
 }

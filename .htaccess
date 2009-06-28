@@ -31,6 +31,7 @@ RewriteRule ^picture/([^/]+)/([^/]+)/ ./index.php?function=2&type=$1&page=$2 [NC
 RewriteRule ^viewlink/([^/]+) ./viewpage.php?kindofpage=link&id=$1 [NC]
 RewriteRule ^viewblog/([^/]+) ./viewpage.php?kindofpage=blog&id=$1 [NC]
 RewriteRule ^viewpic/([^/]+) ./viewpage.php?kindofpage=picture&id=$1 [NC]
+RewriteRule ^viewpicture/([^/]+) ./viewpage.php?kindofpage=picture&id=$1 [NC]
 
 RewriteRule ^edit_comment/([^/]+)/ ./lib/controllers/edit_comment.php?comment_id=$1 [NC]
 RewriteRule ^avatar/$ ./lib/controllers/avatar.php [NC]

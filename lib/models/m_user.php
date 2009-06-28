@@ -57,6 +57,10 @@ if (defined('MAGIC')) {
             return $join_date[0]['join_date'];
         }
 
+        public function admin(){
+            return ($this->user_id() === 1);
+        }
+
         public function total_comments($user_id) {
             $query = "SELECT comment_id FROM comments WHERE user_id = ?";
             return $this->m_sql->query($query, 'i', array($user_id), 'count');
