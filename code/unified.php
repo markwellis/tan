@@ -882,6 +882,10 @@ window.addEvent('domready', function(){
 $output .= ob_get_contents();
 ob_clean();
 	        $output .= "<div class='comment_wrapper'>";
+            if ( !$_SESSION['nsfw'] ){
+                $output .= '<script type="text/javascript" src="/sys/js/nsfw_comments.js"></script>';
+            }
+
 	        if ($comments){
 	        	$output .= "<h2 id='comments'>Comments</h2>";
 	        }
@@ -921,6 +925,7 @@ ob_clean();
                     $output .= "</span>";
                 }
 	            $output .= "</div></div><br />";
+
 	        }
             
 	        if ($user->isLoggedIn()){
