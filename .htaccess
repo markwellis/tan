@@ -7,7 +7,15 @@ RewriteCond %{HTTP_REFERER} !^http://thisaintnews.com [NC]
 RewriteCond %{HTTP_REFERER} !^http://beta.thisaintnews.com [NC]
 RewriteCond %{HTTP_REFERER} !^http://htdev.hub00.howmanykillings.com [NC]
 RewriteCond %{HTTP_USER_AGENT} !redditbot [NC]
+RewriteCond %{HTTP_USER_AGENT} !googlebot [NC]
 RewriteRule images/pics/(.*)$ lib/controllers/image_redirect.php?filename=$1 [NC]
+
+RewriteCond %{HTTP_REFERER} !^http://thisaintnews.com [NC]
+RewriteCond %{HTTP_REFERER} !^http://beta.thisaintnews.com [NC]
+RewriteCond %{HTTP_REFERER} !^http://htdev.hub00.howmanykillings.com [NC]
+RewriteCond %{HTTP_USER_AGENT} !redditbot [NC]
+RewriteCond %{HTTP_USER_AGENT} !googlebot [NC]
+RewriteRule thumb/(.*)/.*$ lib/controllers/image_redirect.php?id=$1 [NC]
 
 ##login stuff
 RewriteRule ^login/$ lib/controllers/login_register.php [NC]
