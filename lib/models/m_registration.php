@@ -77,7 +77,7 @@ class m_registration{
     }
     
     private function clean_tokens($user_id){
-        $query = "DELETE FROM user_tokens WHERE user_id = ? OR expires < NOW()";
+        $query = "DELETE FROM user_tokens WHERE user_id = ?";
         return $this->m_sql->query($query, 'i', array($user_id), 'insert');
     }
 
