@@ -3,8 +3,10 @@ RewriteEngine on
 ErrorDocument 404 /error404.php
 RewriteRule ^(.*/)?\\.svn/ - [F,L]
 
-RewriteCond %{HTTP_REFERER} !thisaintnews.com [NC]
-RewriteCond %{HTTP_REFERER} !howmanykillings.com [NC]
+RewriteCond %{HTTP_REFERER} !^http://thisaintnews.com [NC]
+RewriteCond %{HTTP_REFERER} !^http://beta.thisaintnews.com [NC]
+RewriteCond %{HTTP_REFERER} !^http://htdev.hub00.howmanykillings.com [NC]
+RewriteCond %{HTTP_USER_AGENT} !redditbot [NC]
 RewriteRule images/pics/(.*)$ lib/controllers/image_redirect.php?filename=$1 [NC]
 
 ##login stuff
