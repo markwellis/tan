@@ -883,7 +883,7 @@ $output .= ob_get_contents();
 ob_clean();
 	        $output .= "<div id='comment_wrapper' class='comment_wrapper'>";
             if ( !$_SESSION['nsfw'] ){
-                $output .= '<script type="text/javascript" src="/sys/js/nsfw_comments.js?r=6"></script>';
+                $output .= '<script type="text/javascript" src="/sys/js/nsfw_comments.js?r=7"></script>';
             }
 
 	        if ($comments){

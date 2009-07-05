@@ -5,32 +5,24 @@ var j = 0;
 window.addEvent('domready', function() {
     $$('.comment img').each(function(el) {
         if (el.src.indexOf('/sys/js/fckeditor/editor/images/smiley/') < 0){
-            var width = el.width;
-            var height = el.height;
-
             var img = new Element('img', {
                 'src': '/sys/images/mouseover.jpg',
-                'style': 'border:1px solid #000;visibility:hidden',
+                'style': 'display:none',
                 'id': 'nsfw_hid_pic' + i
             });
+            el.set('opacity','.001');
 
-            img.addEvent('mouseover', function(e){
-                this.set('opacity','.001');
-                e.stop();
-            });
-
-            img.addEvent('mouseout', function(e){
+            el.addEvent('mouseover', function(e){
                 this.set('opacity','1');
                 e.stop();
             });
 
-            var parent = el.getParent();
+            el.addEvent('mouseout', function(e){
+                this.set('opacity','.001');
+                e.stop();
+            });
 
-            if (parent.get('tag') === 'a'){
-                parent.grab(img); 
-            } else {
-                $('comment_wrapper').grab(img); 
-            }
+            $('comment_wrapper').grab(img); 
 
             ++i;
         }
@@ -43,21 +35,23 @@ window.addEvent('load', function() {
             var cords = el.getCoordinates();
             var img = $('nsfw_hid_pic' + j);
 
+           
             if (img){
                 img.setStyles({
+                    'display': 'block',
                     'position': 'absolute',
                     'left': cords.left + 'px',
+                    'top': cords.top + 'px',
                     'width': cords.width + 'px',
                     'height': cords.height + 'px',
-                    'visibility': 'visible'
+                    'z-index': 1
                 });
-    
-                if (img.getParent().get('tag') !== 'a'){
-                    img.setStyles({
-                        'top': cords.top + 'px'
-                    });
-                }
             }
+
+            el.setStyles({
+                'position': 'relative',
+                'z-index': 2
+            });
 
             ++j;
         }
