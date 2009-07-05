@@ -152,9 +152,9 @@ if (defined('MAGIC')) {
     
                         //create the tooltips  
                         var tips = new Tips('.recent_comments',{  
-                            className: 'recent_comments',  
-                            hideDelay: 50,  
-                            showDelay: 50,
+                            'className': 'recent_comments',  
+                            'hideDelay': 50,  
+                            'showDelay': 50
                         });
                     });  
                 //]]>
