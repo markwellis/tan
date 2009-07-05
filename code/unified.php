@@ -881,9 +881,9 @@ window.addEvent('domready', function(){
 <?
 $output .= ob_get_contents();
 ob_clean();
-	        $output .= "<div class='comment_wrapper'>";
+	        $output .= "<div id='comment_wrapper' class='comment_wrapper'>";
             if ( !$_SESSION['nsfw'] ){
-                $output .= '<script type="text/javascript" src="/sys/js/nsfw_comments.js"></script>';
+                $output .= '<script type="text/javascript" src="/sys/js/nsfw_comments.js?r=3"></script>';
             }
 
 	        if ($comments){

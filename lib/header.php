@@ -24,7 +24,7 @@ include_once(THEME_PATH . '/' . THEME_NAME . '/' . THEME_NAME . '.php');
 $m_stash->js_includes = array(
     'http://ajax.googleapis.com/ajax/libs/mootools/1.2.1/mootools-yui-compressed.js', 
     '/sys/script/mootools-1.2-more.js',
-    $m_stash->theme_settings['js_path'] . '/clientside.js',
+    $m_stash->theme_settings['js_path'] . '/clientside.js?r=1',
 );
 
 $m_stash->page_title = 'ThisAintNews :: Social News For Pirates';
