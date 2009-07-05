@@ -582,6 +582,9 @@ ul#mainmenu li ul li{
 }  
 .tip-title      { color:#000; border-bottom:1px solid #000;}  
 .tip-text       { color:#222222}
+.recent_comments{
+    z-index:9999;
+}
 
 .quoted_username{
     font-weight:bold;

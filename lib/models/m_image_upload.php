@@ -26,8 +26,13 @@ class m_image_upload {
         $is_image = $this->_is_an_image();
         
         if($is_image === true) {
-            $this->uploaded_filename = "{$this->uploaded_filename}." . $this->get_image_extension();
-            return $this->move_uploaded();
+            $extension = $this->get_image_extension();
+            $this->uploaded_filename = "{$this->uploaded_filename}.{$extension}";
+            $is_image = $this->move_uploaded();
+            $this->move_uploaded();
+            if ($extension !== 'gif'){
+                $this->strip();
+            }
         }
         return $is_image;
     }
@@ -70,6 +75,14 @@ class m_image_upload {
             return 'Error Uploading';
         }
         return true;
+    }
+    
+    private function strip(){
+        $im = &new Imagick();
+        $im->readImage($this->uploaded_filename);
+        
+        $im->stripImage();
+        return $im->writeImage($this->uploaded_filename);
     }
 
     private function get_image_extension(){

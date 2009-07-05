@@ -68,9 +68,14 @@ if (defined('MAGIC')) {
             fwrite($fh, $this->image_data);
             fclose($fh);
 
-            $this->image['filename'] = "{$this->image['filename']}." . $this->get_image_extension();
+            $extension = $this->get_image_extension();
+
+            $this->image['filename'] = "{$this->image['filename']}.{$extension}";
             rename($this->uploaded_filename, $this->image['filename']);
             $this->uploaded_filename = $this->image['filename'];
+            if ($extension !== 'gif'){
+                $this->strip();
+            }
         }
         
         private function get_head(){
@@ -92,6 +97,14 @@ if (defined('MAGIC')) {
             $this->image_data = $content;
 
             curl_close($this->ch);
+        }
+        
+        private function strip(){
+            $im = &new Imagick();
+            $im->readImage($this->uploaded_filename);
+            
+            $im->stripImage();
+            return $im->writeImage($this->uploaded_filename);
         }
         
         private function get_image_extension(){

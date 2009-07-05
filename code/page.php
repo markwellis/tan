@@ -152,9 +152,9 @@ if (defined('MAGIC')) {
     
                         //create the tooltips  
                         var tips = new Tips('.recent_comments',{  
-                            className: 'recent_comments',  
-                            hideDelay: 50,  
-                            showDelay: 50,
+                            'className': 'recent_comments',  
+                            'hideDelay': 50,  
+                            'showDelay': 50
                         });
                     });  
                 //]]>
@@ -183,7 +183,7 @@ if (defined('MAGIC')) {
 	            .'<meta name="keywords" content="news community comments english lulz lol social lulzhq fun jokes '
 	            .'videos pictures share sharing lol lolz funny humour humur"/> '
 	            .'<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/> '
-	            .'<link rel="stylesheet" type="text/css" title="default" href="/css/default.css?2=24" /> '
+	            .'<link rel="stylesheet" type="text/css" title="default" href="/css/default.css?2=25" /> '
 	            .'<link rel="shortcut icon" href="/favicon.ico" /> '
 	            .$script
 	            .'</head> ';
@@ -234,7 +234,7 @@ if (defined('MAGIC')) {
 	        if($_SESSION['nsfw']== 1){
 	            $this->output .="<a href='/filteron/' class='menulink'>Enable NSFW filter</a>";
 	        } else {
-	            $this->output .="<a href='/filteroff/' class='menulink' onclick='return confirm(\"Are you sure you want to disable the NSFW work filter? The ads will switch to adult mode, and there will be content which is not suitable for work\");'>Disable NSFW filter</a>";
+	            $this->output .="<a href='/filteroff/' class='menulink' onclick='return confirm(\"Are you sure you want to disable the NSFW work filter? There will be content which is not suitable for work\");'>Disable NSFW filter</a>";
 	        }
 
 	        $this->output .= '<br /><div style="float:right">
