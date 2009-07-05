@@ -20,13 +20,18 @@ window.addEvent('domready', function() {
             });
 
             img.addEvent('mouseout', function(e){
-                this.setStyle('visibility','visible');
                 this.set('opacity','1');
                 e.stop();
             });
 
-            img.inject($('comment_wrapper'));
-            
+            var parent = el.getParent();
+
+            if (parent.get('tag') === 'a'){
+                parent.grab(img); 
+            } else {
+                $('comment_wrapper').grab(img); 
+            }
+
             ++i;
         }
     });
@@ -36,16 +41,24 @@ window.addEvent('load', function() {
     $$('.comment img').each(function(el) {
         if (el.src.indexOf('/sys/js/fckeditor/editor/images/smiley/') < 0){
             var cords = el.getCoordinates();
+            var img = $('nsfw_hid_pic' + j);
 
-            $('nsfw_hid_pic' + j).setStyles({
-                'position': 'absolute',
-                'top': cords.top + 'px',
-                'left': cords.left + 'px',
-                'width': cords.width + 'px',
-                'height': cords.height + 'px',
-                'visibility': 'visible'
-            });
-            
+            if (img){
+                img.setStyles({
+                    'position': 'absolute',
+                    'left': cords.left + 'px',
+                    'width': cords.width + 'px',
+                    'height': cords.height + 'px',
+                    'visibility': 'visible'
+                });
+    
+                if (img.getParent().get('tag') !== 'a'){
+                    img.setStyles({
+                        'top': cords.top + 'px'
+                    });
+                }
+            }
+
             ++j;
         }
     });
