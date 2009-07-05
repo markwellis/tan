@@ -36,7 +36,7 @@
                 <?php if(isset($_SESSION['nsfw'])){ ?>
                     <a href='/filteron/' class='top_link'>Enable NSFW filter</a>
                 <?php } else { ?>
-                    <a href='/filteroff/' class='top_link' onclick='return confirm("Are you sure you want to disable the NSFW work filter? The ads will switch to adult mode, and there will be content which is not suitable for work");'>Disable NSFW filter</a>
+                    <a href='/filteroff/' class='top_link' onclick='return confirm("Are you sure you want to disable the NSFW work filter? There will be content which is not suitable for work");'>Disable NSFW filter</a>
                 <?php } ?>
                 <br />
                 <div style="float:right">
