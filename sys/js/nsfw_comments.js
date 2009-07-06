@@ -8,9 +8,8 @@ var j = 0;
 if (nsfw === 1){
     $$('#blog_wrapper img', '.comment img').each(function(el) {
         if (el.src.indexOf('/sys/js/fckeditor/editor/images/smiley/') < 0){
-//            alert(el.src);
             var img = new Element('img', {
-                'src': '/sys/images/mouseover.png?r=7',
+                'src': '/sys/images/mouseover.png?r=8',
                 'style': 'display:none',
                 'id': 'nsfw_hid_pic' + i
             });
@@ -29,7 +28,7 @@ if (nsfw === 1){
                 }
             });
 
-            $('middle').grab(img); 
+            $('nsfw_blocker_containter').grab(img); 
 
             ++i;
         }
