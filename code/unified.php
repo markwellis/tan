@@ -729,7 +729,7 @@ if (defined('MAGIC')) {
 	            } elseif ($article && $kind === 'blog'){
 	            	$output .= "</div>";
                     $objectDetails['details'] = $this->bbcode_to_html($objectDetails['details']);
-	                $output .= "<div class='comment_wrapper'>{$objectDetails['details']}";
+	                $output .= "<div id='blog_wrapper' class='comment_wrapper'>{$objectDetails['details']}";
 	            }
 	            $output .= "</div>";
 	        } else if ($ispic){
@@ -920,13 +920,13 @@ ob_clean();
                 if ($user->isLoggedIn()){
                     $output .= "</span>";
                 }
-	            $output .= "</div></div><br />";
+	            $output .= "</div></div><div id='nsfw_blocker_containter'></div><br />";
 	        }
 
             // $_SESSION['nsfw'] is inverse, 1 means filter is off...
             $nsfw = $_SESSION['nsfw'] ? 0 : 1;
             $output .= "<script type='text/javascript'>var nsfw = {$nsfw};</script>";
-            $output .= '<script type="text/javascript" src="/sys/js/nsfw_comments.js?r=11"></script>';
+            $output .= '<script type="text/javascript" src="/sys/js/nsfw_comments.js?r=16"></script>';
             
 	        if ($user->isLoggedIn()){
 	            $output .= "<h2 id='lcomments'>Leave your comments</h2>"
