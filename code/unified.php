@@ -845,9 +845,26 @@ window.addEvent('domready', function(){
         var comment_id = title[1]; 
         
         var comment_name = 'actual_comment' + comment_id;
-        var quote = $(comment_name).innerHTML;
         
+        var quote_holder = new Element('div', {
+            'html': $(comment_name).get('html'),
+            'style': 'display:none;'
+        });
+        
+        quote_holder.getElements('img').each(function(el) {
+            if (el.hasClass('boob_blocker')){
+                el.dispose();
+            } else {
+                el.removeProperties('style');
+            }
+        });
+
+        var quote = quote_holder.get('html')
+
         comment = '[quote user="' + username + '"]' + quote + '[/quote]' + "\n<br /><br />";
+
+        quote_holder.dispose();
+        
         FCKeditorAPI.GetInstance('comment').InsertHtml(comment);
         return false;
     });
@@ -926,7 +943,7 @@ ob_clean();
             // $_SESSION['nsfw'] is inverse, 1 means filter is off...
             $nsfw = $_SESSION['nsfw'] ? 0 : 1;
             $output .= "<script type='text/javascript'>var nsfw = {$nsfw};</script>";
-            $output .= '<script type="text/javascript" src="/sys/js/nsfw_comments.js?r=16"></script>';
+            $output .= '<script type="text/javascript" src="/sys/js/nsfw_comments.js?r=18"></script>';
             
 	        if ($user->isLoggedIn()){
 	            $output .= "<h2 id='lcomments'>Leave your comments</h2>"

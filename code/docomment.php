@@ -1,6 +1,10 @@
 <?php
 
 if($_SERVER['REQUEST_METHOD']==='POST') {
+
+    $boob_blocker = '/\<img src=\"\/sys\/images\/mouseover\.png\?r=\d+?\" .*? class=\"boob_blocker\" id=\"nsfw_hid_pic\d+?\" alt=\"\" \/>/';
+    $_POST['comment'] = preg_replace($boob_blocker, '', $_POST['comment']);
+
 	define('MAGIC', true);
 
 	require_once('user.php');
