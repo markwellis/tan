@@ -11,6 +11,7 @@ if (nsfw === 1){
             var img = new Element('img', {
                 'src': '/sys/images/mouseover.png?r=8',
                 'style': 'display:none',
+                'class': 'boob_blocker',
                 'id': 'nsfw_hid_pic' + i
             });
             el.set('opacity','.001');
@@ -27,8 +28,7 @@ if (nsfw === 1){
                     e.stop();
                 }
             });
-
-            $('nsfw_blocker_containter').grab(img); 
+            el.getParent().grab(img);
 
             ++i;
         }
@@ -37,7 +37,7 @@ if (nsfw === 1){
 
 window.addEvent('load', function() {
     $$('#blog_wrapper img', '.comment img').each(function(el) {
-        if (el.src.indexOf('/sys/js/fckeditor/editor/images/smiley/') < 0){
+        if (el.src.indexOf('/sys/js/fckeditor/editor/images/smiley/') < 0 && !el.hasClass('boob_blocker')){
             var cords = el.getCoordinates();
 
             if (cords.width > 600){
@@ -60,7 +60,6 @@ window.addEvent('load', function() {
                     });
                 }
             }
-
             el.setStyles({
                 'position': 'relative',
                 'z-index': 2
