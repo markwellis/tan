@@ -195,8 +195,8 @@ if (defined('MAGIC')) {
 	        $user = &$this->user;
             $ad_code = $this->get_right_ad();
             $this->output .= '<body>'
-                .'<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/mootools/1.2.1/mootools-yui-compressed.js"></script>'
-                .'<script type="text/javascript" src="/sys/script/mootools-1.2-more.js"></script>'
+                .'<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/mootools/1.2.3/mootools-yui-compressed.js"></script>'
+                .'<script type="text/javascript" src="/sys/script/mootools-1.2.3.1-more.js"></script>'
 	            .'<script type="text/javascript" src="/sys/js/clientside.js?t=3"></script>'
 	            .'<div id="main">'
 	            .'<div id="top">'
@@ -310,12 +310,18 @@ if (defined('MAGIC')) {
 	            .'</div>';
             $this->output .= $this->get_bottom_ad();
             $this->output .= '</div>'
-	            .'<script src="http://www.google-analytics.com/ga.js" type="text/javascript"></script> '
-	            ."<script type='text/javascript'>//<![CDATA[ \n"
-	            .'var pageTracker = _gat._getTracker("UA-5148406-3"); '
-	            .'pageTracker._initData(); '
-	            ."pageTracker._trackPageview(); \n"
-	            ."//]]>\n</script> "
+	            ."<script type=\"text/javascript\">//<![CDATA[\n"
+                .'window.addEvent("domready", function() {'
+                .'    var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");'
+                .'    new Asset.javascript(gaJsHost + "google-analytics.com/ga.js", {'
+                .'        onload: function() {'
+                .'            var pageTracker = _gat._getTracker("UA-5148406-3");' 
+                .'            pageTracker._initData();'
+                .'            pageTracker._trackPageview();'
+                .'        }'
+                .'    });'
+                .'});'
+                .'//]]>\n</script> '
 	            .'</body></html>';
 	    }
 	

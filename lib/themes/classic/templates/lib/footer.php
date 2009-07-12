@@ -21,12 +21,18 @@
         ?>
     </div>
 </div>
-        <script src="http://www.google-analytics.com/ga.js" type="text/javascript"></script> 
         <script type="text/javascript"> 
         //<![CDATA[
-            var pageTracker = _gat._getTracker("UA-5148406-3"); 
-            pageTracker._initData(); 
-            pageTracker._trackPageview();
+            window.addEvent("domready", function() {
+                var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+                new Asset.javascript(gaJsHost + "google-analytics.com/ga.js", {
+                    onload: function() {
+                        var pageTracker = _gat._getTracker("UA-5148406-3"); // your id here
+                        pageTracker._initData();
+                        pageTracker._trackPageview();
+                    }
+                });
+            });
         //]]>
         </script>
     </body>
