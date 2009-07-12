@@ -1,71 +1,55 @@
-var i = 0;
-var j = 0;
+new Asset.image('/sys/images/mouseover.png?r=8');
 
-/*  
- * this isnt in a domready wrapper coz its directly after the images, so it'll be ok
- * and hopefully a little faster than a domready 
- */
 if (nsfw === 1){
-    $$('#blog_wrapper img', '.comment img').each(function(el) {
-        if (el.src.indexOf('/sys/js/fckeditor/editor/images/smiley/') < 0){
-            var img = new Element('img', {
-                'src': '/sys/images/mouseover.png?r=8',
-                'style': 'display:none',
-                'class': 'boob_blocker',
-                'id': 'nsfw_hid_pic' + i
-            });
-            el.set('opacity','.001');
+    $$('#blog_wrapper img', '.comment img').filter(function(el, index){
+        return (el.getProperty('src').indexOf('/sys/js/fckeditor/editor/images/smiley/') < 0);
+    }).each(function(el) {
+        el.addClass('boob_blocked');
+        el.setStyle('visibility', 'hidden');
+        
+        var image = Asset.image(el.getProperty('src'), {
+            'onload': function(image){
+                var el = image.retrieve('el');
 
-            el.addEvents({
-                'mouseover': function(e){
-                    img.fade('.001');
-                    this.fade('1');
-                    e.stop();
-                },
-                'mouseout': function(e){
-                    img.fade('1');
-                    this.fade('.001');
-                    e.stop();
-                }
-            });
-            el.getParent().grab(img);
+                resize_image(image, el);
+                el.setProperty('src', '/sys/images/mouseover.png?r=8');
+                el.setStyle('visibility', 'visible');
+                el.addEvents({
+                    'mouseover': function(e){
+                        e.stop();
+                        this.setProperty('src', this.retrieve('original_image').src);
+                    },
+                    'mouseout': function(e){
+                        e.stop();
+                        this.setProperty('src', '/sys/images/mouseover.png?r=8');
+                    }
+                });
+            }
+        });
 
-            ++i;
-        }
+        image.store('el', el);
+        el.store('original_image', image);
+        el.setProperty('src', '/sys/images/mouseover.png?r=8');
+    });
+} else {
+    window.addEvent('load', function() {
+        $$('#blog_wrapper img', '.comment img').filter(function(el, index){
+            return ((el.getProperty('src').indexOf('/sys/js/fckeditor/editor/images/smiley/') < 0) && (el.width > 600));
+        }).each(function(el) {
+            resize_image(el, el);
+        });
     });
 }
 
-window.addEvent('load', function() {
-    $$('#blog_wrapper img', '.comment img').each(function(el) {
-        if (el.src.indexOf('/sys/js/fckeditor/editor/images/smiley/') < 0 && !el.hasClass('boob_blocker')){
-            var cords = el.getCoordinates();
-
-            if (cords.width > 600){
-                el.width = 600;
-                el.height = 600 * (cords.height / cords.width);
-                var cords = el.getCoordinates();
-            }
-
-            if (nsfw === 1){
-                var img = $('nsfw_hid_pic' + j);
-                if (img){
-                    img.setStyles({
-                        'display': 'block',
-                        'position': 'absolute',
-                        'left': cords.left + 'px',
-                        'top': cords.top + 'px',
-                        'width': cords.width + 'px',
-                        'height': cords.height + 'px',
-                        'z-index': 1
-                    });
-                }
-            }
-            el.setStyles({
-                'position': 'relative',
-                'z-index': 2
-            });
-
-            ++j;
-        }
+function resize_image(image, el){
+    if (image.width > 600){
+        var width = image.width;
+        var height = image.height;
+        image.width = 600;
+        image.height = 600 * (height / width);
+    }
+    el.setStyles({
+        'width': image.width + 'px',
+        'height': image.height + 'px'
     });
-});
+}
