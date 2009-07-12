@@ -24,6 +24,12 @@ if (nsfw === 1){
                         this.setProperty('src', '/sys/images/mouseover.png?r=8');
                     }
                 });
+            },
+            'onerror': function(image){
+                var el = image.retrieve('el');
+                image.height = '0px';
+                image.width = '0px';
+                resize_image(image, el);
             }
         });
 

@@ -938,7 +938,7 @@ ob_clean();
             // $_SESSION['nsfw'] is inverse, 1 means filter is off...
             $nsfw = $_SESSION['nsfw'] ? 0 : 1;
             $output .= "<script type='text/javascript'>var nsfw = {$nsfw};</script>";
-            $output .= '<script type="text/javascript" src="/sys/js/nsfw_comments.js?r=24"></script>';
+            $output .= '<script type="text/javascript" src="/sys/js/nsfw_comments.js?r=25"></script>';
             
 	        if ($user->isLoggedIn()){
 	            $output .= "<h2 id='lcomments'>Leave your comments</h2>"
