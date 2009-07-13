@@ -8,19 +8,18 @@ $m_image = load_model('m_image');
 
 if (isset($filename)){
     $details = $m_image->get_by_filename($filename);
-
-    $details['title'] = url_title($details['title']);
-    $url = "http://{$_SERVER['HTTP_HOST']}/viewpic/{$details['picture_id']}/{$details['title']}/";
-
-    header("location: {$url}"); 
-}
-
-if (isset($id)){
+} elseif (isset($id)){
     $details = $m_image->get_by_id($id);
-
-    $details['title'] = url_title($details['title']);
-    $url = "http://{$_SERVER['HTTP_HOST']}/viewpic/{$details['picture_id']}/{$details['title']}/";
-
-    header("location: {$url}"); 
 }
+    
+if (!$details){
+    header('location: /error404');
+    exit();
+}
+
+$details['title'] = url_title($details['title']);
+$url = "http://{$_SERVER['HTTP_HOST']}/viewpic/{$details['picture_id']}/{$details['title']}/";
+
+header("location: {$url}"); 
+
 ?>

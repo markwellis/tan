@@ -14,6 +14,7 @@ if (!$user->isLoggedIn()){
 }
 
 $user_id = $user->getUserId();
+$middle ='';
 
 if ($_SERVER['REQUEST_METHOD']==='POST') {
     if ($user->isLoggedIn()){

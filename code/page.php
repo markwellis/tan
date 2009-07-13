@@ -219,7 +219,7 @@ if (defined('MAGIC')) {
                 $this->output .= '<a href="/user/' . $user->getUsername() . '/1/" class="menulink">My Comments</a> | <a href="/avatar/" class="menulink">Avatar</a> | ';
             }
 	
-	        if($_SESSION['nsfw']== 1){
+	        if(isset($_SESSION['nsfw']) && $_SESSION['nsfw'] === 1){
 	            $this->output .="<a href='/filteron/' class='menulink'>Enable NSFW filter</a>";
 	        } else {
 	            $this->output .="<a href='/filteroff/' class='menulink' onclick='return confirm(\"Are you sure you want to disable the NSFW work filter? There will be content which is not suitable for work\");'>Disable NSFW filter</a>";
@@ -314,10 +314,6 @@ if (defined('MAGIC')) {
 	    }
 	
 	    public function createPage($title,$header, $middle, $footer, $where, $type = -1, $sortby = null, $description = null){
-	        if ($_SESSION['filteroff']== 0) {
-	        //     $middle = $this->sfw($middle); 
-	         //    $title = $this->sfw($title); 
-	        }
 	        if (!$description) {
 	            $description = "We&#039;re the newest social news site. Ran by the community, for the community, no corporations involved.";
 	        }
