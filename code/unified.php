@@ -609,7 +609,7 @@ if (defined('MAGIC')) {
 		            ."(SELECT COUNT(*) FROM plus WHERE plus.{$id} = {$table}.{$id} and plus.user_id=$uid) AS meplus, "
 		            ."{$extraSql}  "
 		            ."(SELECT COUNT(*) FROM minus WHERE minus.{$id} = {$table}.{$id} and minus.user_id=$uid) AS meminus, "
-                    ."(SELECT COUNT(DISTINCT(ip)) FROM pi WHERE pi.id = {$table}.{$id} AND type = '{$this->kind_of_object}') as views1 "
+                    ."(SELECT COUNT(DISTINCT(session_id)) FROM pi WHERE pi.id = {$table}.{$id} AND type = '{$this->kind_of_object}') as views1 "
 		            ."FROM $table $conditions ORDER BY $order DESC LIMIT $page, $limit;";
 
 		        $sql1 = &$this->sql;
