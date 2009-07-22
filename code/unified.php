@@ -53,9 +53,6 @@ if (defined('MAGIC')) {
                 $this->sql = &$sql;
                 $this->user = &$user;
                 
-                require_once ($_SERVER['DOCUMENT_ROOT'] . '/lib/3rdparty/htmlpurifier/loader.php');
-                $this->purifier = &new purifier();
-                
 	        } else {
 	            header("Location: /");
 	            die("Error 404");
@@ -78,7 +75,7 @@ if (defined('MAGIC')) {
 	        }
 	        return -1;
 	    }
-	
+        
 	    function plus_to_minus_ratio($plus, $minus){
 	/*      creates a plus to minus ratio   */
 	        $x = $plus;
@@ -509,13 +506,35 @@ if (defined('MAGIC')) {
 	        	$min = $this->get_details_count($specific);
 	        	$cache_time = 45;
 	        }
+
+            /* massive hack alert */
+            $sql = &$this->sql;
+
+            require_once('code/user.php');
+            $user = &$this->user;
+            $uid = $user->getUserId();
+
+            $sql_args = array(
+                'ip' => isset($_SERVER['REMOTE_ADDR']) ? "'" . mysql_escape_string($_SERVER['REMOTE_ADDR']) . "'" : 'NULL',
+                'ua' => isset($_SERVER['HTTP_USER_AGENT']) ? "'" . mysql_escape_string($_SERVER['HTTP_USER_AGENT']) . "'" : 'NULL',
+                'url' => isset($_SERVER['REQUEST_URI']) ? "'" . mysql_escape_string($_SERVER['REQUEST_URI']) . "'" : 'NULL',
+                'referer' => isset($_SERVER['HTTP_REFERER']) ? "'" . mysql_escape_string($_SERVER['HTTP_REFERER']) . "'" : 'NULL',
+                'id' => isset($specific) ? (int)$specific : 'NULL',
+                'type' => isset($this->kind_of_object) ? "'" . $this->kind_of_object . "'" : 'NULL',
+                'session_id' => "'" . session_id() . "'",
+                'user_id' => isset($uid) ? (int)$uid : 'NULL'
+            );
+
+            $query = "INSERT INTO pi (ip, ua, url, referer, id, type, session_id, user_id, date) VALUES ({$sql_args['ip']}, {$sql_args['ua']}, {$sql_args['url']}, "
+                ."{$sql_args['referer']}, {$sql_args['id']}, {$sql_args['type']}, {$sql_args['session_id']}, {$sql_args['user_id']}, NOW())";
+
+            $sql->query($query, 'none');
 	        
 			$memcache_key = $this->kind_of_object . ":p:{$page}:b:{$below}:o:{$order}:u:{$username}:s:{$specific}:c:{$min['comments']}:p:{$min['plus']}:m:{$min['minus']}:l:{$limit}:r:{$random}";
 			@$memcache->connect('127.0.0.1', 11211);
 			$cached = @$memcache->get($memcache_key);
 			
 			if (!$cached){
-		        $sql = &$this->sql;
 		        $page = ($page * 27) -27;
 		        if (!$limit) {
 		            $limit = 27;
@@ -524,9 +543,6 @@ if (defined('MAGIC')) {
 		        if ($below === 0 && $order==='date'){
 		            $order = 'promoted';
 		        }
-		        
-		        require_once('code/user.php');
-		        $user = &$this->user;
 		        
 		        switch ($this->kind_of_object){
 		            case 'link':
@@ -576,26 +592,25 @@ if (defined('MAGIC')) {
 		            $conditions = "INNER JOIN {$ptable} ON ( {$table}.{$id} = {$ptable}.{$id} ) WHERE {$ptable}.user_id={$suserid} ";
 		            $order = "{$ptable}.date";
 		        }
-		
-		
-		        $uid = $user->getUserId();
-		        if (!$uid){ $uid = -1; }
+                
+                $uid = isset($uid) ? $uid : -1;
+
 		        if ($specific){
 		            $conditions = "WHERE {$table}.{$id} = $specific";
 		            $page = 0;
 		            $limit = 1;
 		            $order = 'date';
-		            $query = "UPDATE {$table} SET views=({$table}.views) + 1 WHERE {$table}.{$id} = $specific";
-		            $sql->query($query, 'none');
 		        }
 		        if ($random) {$order = 'RAND()';}
-		        $query = "SELECT *,(SELECT COUNT(*) FROM plus WHERE plus.$id = {$table}.{$id}) AS plus,
-		            (SELECT COUNT(*) FROM minus WHERE minus.$id = {$table}.{$id}) AS minus,
-		            (SELECT COUNT(*) FROM comments WHERE comments.{$id} = {$table}.{$id} AND deleted='N') AS comments,
-		            (SELECT COUNT(*) FROM plus WHERE plus.{$id} = {$table}.{$id} and plus.user_id=$uid) AS meplus,
-		            $extraSql
-		            (SELECT COUNT(*) FROM minus WHERE minus.{$id} = {$table}.{$id} and minus.user_id=$uid) AS meminus
-		            FROM $table $conditions ORDER BY $order DESC LIMIT $page, $limit;";
+		        $query = "SELECT *, (SELECT COUNT(*) FROM plus WHERE plus.$id = {$table}.{$id}) AS plus, "
+		            ."(SELECT COUNT(*) FROM minus WHERE minus.$id = {$table}.{$id}) AS minus, "
+		            ."(SELECT COUNT(*) FROM comments WHERE comments.{$id} = {$table}.{$id} AND deleted='N') AS comments, "
+		            ."(SELECT COUNT(*) FROM plus WHERE plus.{$id} = {$table}.{$id} and plus.user_id=$uid) AS meplus, "
+		            ."{$extraSql}  "
+		            ."(SELECT COUNT(*) FROM minus WHERE minus.{$id} = {$table}.{$id} and minus.user_id=$uid) AS meminus, "
+                    ."(SELECT COUNT(DISTINCT(session_id)) FROM pi WHERE pi.id = {$table}.{$id} AND type = '{$this->kind_of_object}') as views1 "
+		            ."FROM $table $conditions ORDER BY $order DESC LIMIT $page, $limit;";
+
 		        $sql1 = &$this->sql;
 		        $ret = $sql1->query($query, 'array');
 		        @$memcache->set($memcache_key, $ret, false, $cache_time);
@@ -622,12 +637,13 @@ if (defined('MAGIC')) {
                 if (!$_SESSION['nsfw']){
                     $nsfw = "WHERE NSFW='N'";
                 }
-                $query = "select *,(SELECT count(*) from plus where plus.picture_id = picture_details.picture_id) as plus,
-                    (SELECT count(*) from minus where minus.picture_id = picture_details.picture_id) as minus,
-                    (SELECT count(*) from comments WHERE comments.picture_id = picture_details.picture_id) as comments,
-                    (SELECT count(*) from plus where plus.picture_id = picture_details.picture_id and plus.user_id=$uid) as meplus,
-                    (SELECT count(*) from minus where minus.picture_id = picture_details.picture_id and minus.user_id=$uid) as meminus
-                    from picture_details {$nsfw} HAVING plus $oper ".$this->promoted_threashold." order by ($orderby) desc limit $limit;";
+                $query = "SELECT *,(SELECT count(*) from plus where plus.picture_id = picture_details.picture_id) as plus, "
+                    ."(SELECT count(*) from minus where minus.picture_id = picture_details.picture_id) as minus, "
+                    ."(SELECT count(*) from comments WHERE comments.picture_id = picture_details.picture_id) as comments, "
+                    ."(SELECT count(*) from plus where plus.picture_id = picture_details.picture_id and plus.user_id=$uid) as meplus, "
+                    ."(SELECT count(*) from minus where minus.picture_id = picture_details.picture_id and minus.user_id=$uid) as meminus, "
+                    ."(SELECT COUNT(DISTINCT(ip)) FROM pi WHERE pi.id = picture_details.picture_id AND type = 'picture') as views1 "
+                    ."FROM picture_details {$nsfw} HAVING plus $oper {$this->promoted_threashold} order by ($orderby) desc limit $limit;";
                 return $sql->query($query, 'array');
             }
             return -1;
@@ -713,7 +729,7 @@ if (defined('MAGIC')) {
 	            }
 	            $ratio = $this->plus_to_minus_ratio($objectDetails['plus'], $objectDetails['minus']);
 	            $output .= "<br /><a href='/view{$kind}/{$objectDetails[$kind.'_id']}/". $this->urlTitle($objectDetails['title'])."/#comments'>
-	                <img src='/sys/images/comment.png' style='height:15px;width:15px' alt=' ' /> {$objectDetails['comments']}</a> | {$objectDetails['views']} views";
+	                <img src='/sys/images/comment.png' style='height:15px;width:15px' alt=' ' /> {$objectDetails['comments']}</a> | {$objectDetails['views1']} views";
 	
 	            if ($ratio) {
 	                $output .= " | Ratio " . $ratio[0] . ":" . $ratio[1];
@@ -728,6 +744,10 @@ if (defined('MAGIC')) {
 	                $output .= "<a style='margin-right:70px;float:right;font-size:1.5em;' rel='external nofollow' href='".stripslashes($objectDetails['url'])."'>View Link</a><br/><br/>";
 	            } elseif ($article && $kind === 'blog'){
 	            	$output .= "</div>";
+
+                    require_once ($_SERVER['DOCUMENT_ROOT'] . '/lib/3rdparty/htmlpurifier/loader.php');
+                    $this->purifier = &new purifier();
+                    
                     $objectDetails['details'] = $this->bbcode_to_html($objectDetails['details']);
 	                $output .= "<div id='blog_wrapper' class='comment_wrapper'>{$objectDetails['details']}";
 	            }
@@ -765,7 +785,7 @@ if (defined('MAGIC')) {
 	            $output .= "<a class='user' href='/user/{$objectDetails['username']}/1/'>{$objectDetails['username']}</a> "
 	                ."<a href='/viewpic/{$objectDetails['picture_id']}/".user::cleanTitle($objectDetails['title']) ."/#comments'>"
 	                ."<img src='/sys/images/comment.png' alt=' ' />  {$objectDetails['comments']}</a>"
-	                ."| {$objectDetails['views']} views";
+	                ."| {$objectDetails['views1']} views";
 	            $ratio = $this->plus_to_minus_ratio($objectDetails['plus'], $objectDetails['minus']);
 	            if ($article){
 	                if ($ratio) {
@@ -813,7 +833,11 @@ if (defined('MAGIC')) {
 	                $type = 'picture';
 	                break;
 	        }
-	        require_once('user.php');
+            
+
+            require_once ($_SERVER['DOCUMENT_ROOT'] . '/lib/3rdparty/htmlpurifier/loader.php');
+            $this->purifier = &new purifier();
+
 	        $user = &$this->user;
 ob_start();
 ?>

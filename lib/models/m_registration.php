@@ -143,7 +143,7 @@ class m_registration{
     public function check_email($email){
         $query = "SELECT user_id FROM user_details WHERE LOWER(email) = ?";
         $result = $this->m_sql->query($query, 's', array($email));
-        return $result[0]['user_id'];
+        return isset($result[0]['user_id']) ? $result[0]['user_id'] : null;
     }
     
     public function change_password($user_id, $password){

@@ -58,34 +58,22 @@ if (defined('MAGIC')) {
             //]]>
             </script>
             <div id="navmenu_holder">
-                <span class='tab <?php echo $current_tab['link'] ?>' title='link' id='link_tab'>Links</span><span class='tab <?php echo $current_tab['blog'] ?>' title='blog' id='blog_tab'>Blogs</span><span class='tab <?php echo $current_tab['picture'] ?>' title='picture' id='picture_tab'>Pictures</span>
-                    <div id="navmenu_contents">
-                    <div id='link_menu' <?php echo $current_menu['link'] ?>>
-                        <ul>
-                            <li class='navmenu_option'><a href='/submit/link/' <?php echo $current_option['link'][2] ?>>Submit</a></li>
-                            <li class='navmenu_option'><a href='/random/link/'>Random</a></li>
-                            <li class='navmenu_option'><a href='/link/0/1/' <?php echo $current_option['link'][0] ?>>Promoted</a></li>
-                            <li class='navmenu_option'><a href='/link/1/1/' <?php echo $current_option['link'][1] ?>>Upcoming</a></li>
-                        </ul>
-                    </div>
-                    <div id='blog_menu' <?php echo $current_menu['blog'] ?>>
-                        <ul>
-                            <li class='navmenu_option'><a href='/submit/blog/' <?php echo $current_option['blog'][2] ?>>Submit</a></li>
-                            <li class='navmenu_option'><a href='/random/blog/'>Random</a></li>
-                            <li class='navmenu_option'><a href='/blog/0/1/' <?php echo $current_option['blog'][0] ?>>Promoted</a></li>
-                            <li class='navmenu_option'><a href='/blog/1/1/' <?php echo $current_option['blog'][1] ?>>Upcoming</a></li>
-                        </ul>
-                    </div>
-                    <div id='picture_menu' <?php echo $current_menu['picture'] ?>>
-                        <ul>
-                            <li class='navmenu_option'><a href='/submit/picture/' <?php echo $current_option['picture'][2] ?>>Submit</a></li>
-                            <li class='navmenu_option'><a href='/random/picture/'>Random</a></li>
-                            <li class='navmenu_option'><a href='/picture/0/1/' <?php echo $current_option['picture'][0] ?>>Promoted</a></li>
-                            <li class='navmenu_option'><a href='/picture/1/1/' <?php echo $current_option['picture'][1] ?>>Upcoming</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
+<?php foreach (array('Links' => 'link', 'Blogs' => 'blog', 'Pictures' => 'picture') as $key => $value) { ?>
+<span class='tab <?php echo isset($current_tab[$value]) ? $current_tab[$value] : '' ?>' title='<?php echo $value ?>' id='<?php echo $value ?>_tab'><?php echo $key ?></span><?php //null ?>
+<?php } ?>
+    <div id="navmenu_contents">
+    <?php foreach (array('Links' => 'link', 'Pictures' => 'picture', 'Blogs' => 'blog') as $value) { ?>
+        <div id='<?php echo $value ?>_menu' <?php echo isset($current_option[$value]) ? $current_option[$value] : '' ?>>
+            <ul>
+                <li class='navmenu_option'><a href='/submit/<?php echo $value ?>/' <?php echo isset($current_option[$value][2]) ? $current_option[$value][2] : '' ?>>Submit</a></li>
+                <li class='navmenu_option'><a href='/random/<?php echo $value ?>/'>Random</a></li>
+                <li class='navmenu_option'><a href='/<?php echo $value ?>/0/1/' <?php echo isset($current_option[$value][0]) ? $current_option[$value][0] : '' ?>>Promoted</a></li>
+                <li class='navmenu_option'><a href='/<?php echo $value ?>/1/1/' <?php echo isset($current_option[$value][1]) ? $current_option[$value][1] : '' ?>>Upcoming</a></li>
+            </ul>
+        </div>
+    <?php } ?> 
+    </div>
+</div>
         <?php
         $menu = ob_get_contents();
         ob_clean();
@@ -183,7 +171,7 @@ if (defined('MAGIC')) {
 	            .'<meta name="keywords" content="news community comments english lulz lol social lulzhq fun jokes '
 	            .'videos pictures share sharing lol lolz funny humour humur"/> '
 	            .'<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/> '
-	            .'<link rel="stylesheet" type="text/css" title="default" href="/css/default.css?2=25" /> '
+	            .'<link rel="stylesheet" type="text/css" title="default" href="/css/default.css?2=26" /> '
 	            .'<link rel="shortcut icon" href="/favicon.ico" /> '
 	            .$script
 	            .'</head> ';
@@ -231,7 +219,7 @@ if (defined('MAGIC')) {
                 $this->output .= '<a href="/user/' . $user->getUsername() . '/1/" class="menulink">My Comments</a> | <a href="/avatar/" class="menulink">Avatar</a> | ';
             }
 	
-	        if($_SESSION['nsfw']== 1){
+	        if(isset($_SESSION['nsfw']) && $_SESSION['nsfw'] === 1){
 	            $this->output .="<a href='/filteron/' class='menulink'>Enable NSFW filter</a>";
 	        } else {
 	            $this->output .="<a href='/filteroff/' class='menulink' onclick='return confirm(\"Are you sure you want to disable the NSFW work filter? There will be content which is not suitable for work\");'>Disable NSFW filter</a>";
@@ -326,10 +314,6 @@ if (defined('MAGIC')) {
 	    }
 	
 	    public function createPage($title,$header, $middle, $footer, $where, $type = -1, $sortby = null, $description = null){
-	        if ($_SESSION['filteroff']== 0) {
-	        //     $middle = $this->sfw($middle); 
-	         //    $title = $this->sfw($title); 
-	        }
 	        if (!$description) {
 	            $description = "We&#039;re the newest social news site. Ran by the community, for the community, no corporations involved.";
 	        }

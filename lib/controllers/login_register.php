@@ -55,13 +55,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'){
             $resp = recaptcha_check_answer(
                 RECAPTCHA_PRIVATE_KEY,
                 $_SERVER["REMOTE_ADDR"],
-                $_POST["recaptcha_challenge_field"],
-                $_POST["recaptcha_response_field"]
+                isset($_POST["recaptcha_challenge_field"]) ? $_POST["recaptcha_challenge_field"] : null,
+                isset($_POST["recaptcha_response_field"]) ? $_POST["recaptcha_response_field"] : null
             );
 
             if (!$resp->is_valid) {
-                $m_stash->flash('username', $username);
-                $m_stash->flash('email', $email);
+                if (isset($username)){
+                    $m_stash->flash('username', $username);
+                }
+                if (isset($email)){
+                    $m_stash->flash('email', $email);
+                }
                 $m_stash->add_message('Captcha words do not match');
                 header("location: /login/");
                 exit();

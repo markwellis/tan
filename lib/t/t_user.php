@@ -33,7 +33,7 @@ class tm_user extends UnitTestCase {
         $this->assertFalse($this->m_user->user_id());
         $this->assertFalse($this->m_user->login('mrbig4545', '12'));
         
-        $this->assertTrue($this->m_user->login('mrbig4545', 'un2por7'));
+        $this->assertTrue($this->m_user->login('mrbig4545', 'password'));
         $this->assertTrue($this->m_user->logged_in());
         $this->assertEqual($this->m_user->username(), 'mrbig4545');
         $this->assertEqual($this->m_user->user_id(), 1);
@@ -55,7 +55,7 @@ class tm_user extends UnitTestCase {
         $this->assertFalse($this->m_user->login('mrbig4545', '12'));
         
         
-        $this->assertTrue($this->m_user->login('mrbig4545', 'un2por7'));
+        $this->assertTrue($this->m_user->login('mrbig4545', 'password'));
         $this->assertTrue($this->m_user->logged_in());
         $this->assertEqual($this->m_user->username(), 'mrbig4545');
         $this->assertEqual($this->m_user->user_id(), 1);

@@ -11,6 +11,8 @@ $start = $time;
 $title = 'Welcome Home';
 $extraScript ='';
 $where = 'link';
-define('MAGIC', true);
+if (!defined('MAGIC')){
+    define('MAGIC', true);
+}
 require_once('user.php');
 ?>
