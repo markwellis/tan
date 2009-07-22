@@ -53,9 +53,6 @@ if (defined('MAGIC')) {
                 $this->sql = &$sql;
                 $this->user = &$user;
                 
-                require_once ($_SERVER['DOCUMENT_ROOT'] . '/lib/3rdparty/htmlpurifier/loader.php');
-                $this->purifier = &new purifier();
-                
 	        } else {
 	            header("Location: /");
 	            die("Error 404");
@@ -522,13 +519,15 @@ if (defined('MAGIC')) {
                 'ua' => isset($_SERVER['HTTP_USER_AGENT']) ? "'" . mysql_escape_string($_SERVER['HTTP_USER_AGENT']) . "'" : 'NULL',
                 'url' => isset($_SERVER['REQUEST_URI']) ? "'" . mysql_escape_string($_SERVER['REQUEST_URI']) . "'" : 'NULL',
                 'referer' => isset($_SERVER['HTTP_REFERER']) ? "'" . mysql_escape_string($_SERVER['HTTP_REFERER']) . "'" : 'NULL',
-                'id' => isset($specific) ? $specific : 'NULL',
+                'id' => isset($specific) ? (int)$specific : 'NULL',
                 'type' => isset($this->kind_of_object) ? "'" . $this->kind_of_object . "'" : 'NULL',
                 'session_id' => "'" . session_id() . "'",
-                'user_id' => isset($uid) ? $uid : 'NULL'
+                'user_id' => isset($uid) ? (int)$uid : 'NULL'
             );
+
             $query = "INSERT INTO pi (ip, ua, url, referer, id, type, session_id, user_id, date) VALUES ({$sql_args['ip']}, {$sql_args['ua']}, {$sql_args['url']}, "
                 ."{$sql_args['referer']}, {$sql_args['id']}, {$sql_args['type']}, {$sql_args['session_id']}, {$sql_args['user_id']}, NOW())";
+
             $sql->query($query, 'none');
 	        
 			$memcache_key = $this->kind_of_object . ":p:{$page}:b:{$below}:o:{$order}:u:{$username}:s:{$specific}:c:{$min['comments']}:p:{$min['plus']}:m:{$min['minus']}:l:{$limit}:r:{$random}";
@@ -745,6 +744,10 @@ if (defined('MAGIC')) {
 	                $output .= "<a style='margin-right:70px;float:right;font-size:1.5em;' rel='external nofollow' href='".stripslashes($objectDetails['url'])."'>View Link</a><br/><br/>";
 	            } elseif ($article && $kind === 'blog'){
 	            	$output .= "</div>";
+
+                    require_once ($_SERVER['DOCUMENT_ROOT'] . '/lib/3rdparty/htmlpurifier/loader.php');
+                    $this->purifier = &new purifier();
+                    
                     $objectDetails['details'] = $this->bbcode_to_html($objectDetails['details']);
 	                $output .= "<div id='blog_wrapper' class='comment_wrapper'>{$objectDetails['details']}";
 	            }
@@ -830,7 +833,11 @@ if (defined('MAGIC')) {
 	                $type = 'picture';
 	                break;
 	        }
-	        require_once('user.php');
+            
+
+            require_once ($_SERVER['DOCUMENT_ROOT'] . '/lib/3rdparty/htmlpurifier/loader.php');
+            $this->purifier = &new purifier();
+
 	        $user = &$this->user;
 ob_start();
 ?>
