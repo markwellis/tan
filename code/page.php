@@ -115,8 +115,8 @@ if (defined('MAGIC')) {
                     $comment_length = strlen($comment['details']);
                     $comment['ndetails'] = preg_replace("/\[quote\ user=[\"'](.+?)[\"']\](.*?)\[\/quote\]/miUs", '', $comment['details']);
                     $comment['ndetails'] = strip_tags(html_entity_decode($comment['ndetails'], ENT_QUOTES, 'UTF-8'));
-                    if ($comment['NSFW'] === 'Y' && !$_SESSION['nsfw']){
-                        $comment['ndetails'] = '[NSFW] - ' . $comment['ndetails'];
+                    if ($comment['NSFW'] === 'Y'){
+                        $comment['ndetails'] = '[NSFW] ' . $comment['ndetails'];
                     }
                     
                     $comment['short'] = htmlentities(mb_substr($comment['ndetails'], 0, 50, 'UTF-8'),ENT_QUOTES,'UTF-8');
@@ -138,16 +138,11 @@ if (defined('MAGIC')) {
                 ?>
                 <script type="text/javascript">//<![CDATA[
                     window.addEvent('domready', function() {  
-                       
-                        
-                        //store titles and text  
                         $$('a.recent_comments').each(function(element,index) {  
                             var content = element.get('title').split('::');  
                             element.store('tip:title', content[0]);  
                             element.store('tip:text', content[1]);  
                         });  
-    
-                        //create the tooltips  
                         var tips = new Tips('.recent_comments',{  
                             'className': 'recent_comments',  
                             'hideDelay': 50,  

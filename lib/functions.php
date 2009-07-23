@@ -44,7 +44,9 @@ function get_recent_comments(){
     if (!$cached){
         global $m_sql;
         $sql = &$m_sql;
-        $query = "SELECT details, comment_id, username, UNIX_TIMESTAMP(date) as date, blog_id, link_id, picture_id FROM comments WHERE deleted='N' ORDER BY date DESC LIMIT 20";
+        $query = "SELECT details, comment_id, username, UNIX_TIMESTAMP(date) as date, blog_id, link_id, picture_id, "
+            ."(SELECT NSFW FROM picture_details WHERE comments.picture_id = picture_details.picture_id) AS NSFW "
+            ."FROM comments WHERE deleted='N' ORDER BY date DESC LIMIT 20";
         $recent_comments = $sql->query($query, null, array(null));
         $m_cache->set($memcache_key, $recent_comments, 10);
         return $recent_comments;
