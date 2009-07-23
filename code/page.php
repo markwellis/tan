@@ -90,8 +90,20 @@ if (defined('MAGIC')) {
                 
             if (!$cached){
                 $sql = &$this->sql;
-                $query = "SELECT details, comment_id, username, UNIX_TIMESTAMP(date) as date, blog_id, link_id, picture_id FROM comments WHERE deleted='N' ORDER BY date DESC LIMIT 20";
+                $nsfw = $_SESSION['nsfw'] ? 0 : 1;
+                if ( $nsfw ){
+                    $sub_query = ", (SELECT NSFW FROM picture_details WHERE comments.picture_id = picture_details.picture_id) AS NSFW";
+                    $conditions = " HAVING NSFW = 'N' OR NSFW IS NULL";
+                } else {
+                    $conditions = null;
+                    $sub_query = null;
+                }
+                
+                $query = "SELECT details, comment_id, username, UNIX_TIMESTAMP(date) as date, blog_id, link_id, picture_id "
+                    ."{$sub_query} "
+                    ."FROM comments WHERE deleted='N' {$conditions} ORDER BY date DESC LIMIT 20";
                 $recent_comments = $sql->query($query, 'array');
+                
                 $tmp = '<div style="overflow:hidden;"><span>Recent Comments</span><ul style="list-style:none;margin:0px;padding:0px;" class="" >';
                 foreach ($recent_comments as $comment){
                     if ($comment['blog_id']) {
