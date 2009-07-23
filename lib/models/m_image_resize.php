@@ -35,25 +35,24 @@ class image_resize{
             }
 
             if ( !$usecache && $basefile && file_exists($filename) ){
-                $im = &new Imagick();
-                $im->readImage($filename);
+                $im = &new Imagick($filename);
 
                 $thumb_format = trim($im->getImageFormat());
                 if ($thumb_format != 'GIF' &&$thumb_format != 'PNG' ){
                     $im->setImageFormat('jpeg'); 
+                    $thumb_format = 'jpeg';
                 }
-                
-                foreach ($im as $frame) { 
-                    $im->thumbnailImage($newx,$newx,true);
-                    
+
+                $im = $im->coalesceImages();
+                foreach ($im as $frame) {
+                    $frame->thumbnailImage($newx, $newx, true);
                 }
+                $im->optimizeImageLayers();
 
                 $thumb_image = $im->getImagesBlob();
-                $thumb_format = $im->getImageFormat();
-
                 @mkdir(dirname($cacheimg));
-
                 $im->writeImages($cacheimg, 1);
+
                 $im->clear();
                 $im->destroy();
             }else {
@@ -72,8 +71,7 @@ class image_resize{
                             exit();
                     }
 
-                    $im = &new Imagick();
-                    $im->readImage($cacheimg);
+                    $im = &new Imagick($cacheimg);
                     $thumb_image = $im->getImagesBlob();
                     $thumb_format = $im->getImageFormat();
 
