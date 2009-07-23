@@ -23,7 +23,7 @@ class image_resize{
     function resize($id, $newx){
         $newx = abs($newx);
         $allowed_sizes = array(100, 150, 160, 200, 250, 300, 400, 500, 600);
-        if (in_array($newx, $allowed_sizes, TRUE)){
+        if (in_array($newx, $allowed_sizes, 1)){
             $cacheimg = $_SERVER['DOCUMENT_ROOT']."/images/cache/resize/$id/$newx";
 
             if (file_exists($cacheimg)){
@@ -39,19 +39,21 @@ class image_resize{
                 $im->readImage($filename);
 
                 $thumb_format = trim($im->getImageFormat());
-                $im->thumbnailImage($newx,$newx,true);
-                if ($thumb_format == 'GIF' || $thumb_format == 'PNG' ){
-                    $im->setImageFormat($thumb_format); 
-                } else {
+                if ($thumb_format != 'GIF' &&$thumb_format != 'PNG' ){
                     $im->setImageFormat('jpeg'); 
                 }
+                
+                foreach ($im as $frame) { 
+                    $im->thumbnailImage($newx,$newx,true);
+                    
+                }
 
-                $thumb_image = $im->getImageBlob();
+                $thumb_image = $im->getImagesBlob();
                 $thumb_format = $im->getImageFormat();
 
                 @mkdir(dirname($cacheimg));
 
-                $im->writeImage($cacheimg);
+                $im->writeImages($cacheimg, 1);
                 $im->clear();
                 $im->destroy();
             }else {
@@ -72,7 +74,7 @@ class image_resize{
 
                     $im = &new Imagick();
                     $im->readImage($cacheimg);
-                    $thumb_image = $im->getImageBlob();
+                    $thumb_image = $im->getImagesBlob();
                     $thumb_format = $im->getImageFormat();
 
                     $im->clear();
