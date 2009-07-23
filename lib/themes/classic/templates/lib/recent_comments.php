@@ -18,7 +18,7 @@
             $comment['ndetails'] = preg_replace("/\[quote\ user=[\"'](.+?)[\"']\](.*?)\[\/quote\]/miUs", '', $comment['details']);
             $comment['ndetails'] = strip_tags(html_entity_decode($comment['ndetails'], ENT_QUOTES, 'UTF-8'));
             if ($comment['NSFW'] === 'Y'){
-                $comment['ndetails'] = '[NSFW] - ' . $comment['ndetails'];
+                $comment['ndetails'] = '[NSFW] ' . $comment['ndetails'];
             }
 
             $comment['short'] = htmlentities(mb_substr($comment['ndetails'], 0, 50, 'UTF-8'),ENT_QUOTES,'UTF-8');
