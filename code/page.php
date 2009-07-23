@@ -91,17 +91,10 @@ if (defined('MAGIC')) {
             if (!$cached){
                 $sql = &$this->sql;
                 $nsfw = $_SESSION['nsfw'] ? 0 : 1;
-                if ( $nsfw ){
-                    $sub_query = ", (SELECT NSFW FROM picture_details WHERE comments.picture_id = picture_details.picture_id) AS NSFW";
-                    $conditions = " HAVING NSFW = 'N' OR NSFW IS NULL";
-                } else {
-                    $conditions = null;
-                    $sub_query = null;
-                }
                 
-                $query = "SELECT details, comment_id, username, UNIX_TIMESTAMP(date) as date, blog_id, link_id, picture_id "
-                    ."{$sub_query} "
-                    ."FROM comments WHERE deleted='N' {$conditions} ORDER BY date DESC LIMIT 20";
+                $query = "SELECT details, comment_id, username, UNIX_TIMESTAMP(date) as date, blog_id, link_id, picture_id, "
+                    ."(SELECT NSFW FROM picture_details WHERE comments.picture_id = picture_details.picture_id) AS NSFW "
+                    ."FROM comments WHERE deleted='N' ORDER BY date DESC LIMIT 20";
                 $recent_comments = $sql->query($query, 'array');
                 
                 $tmp = '<div style="overflow:hidden;"><span>Recent Comments</span><ul style="list-style:none;margin:0px;padding:0px;" class="" >';
@@ -122,13 +115,17 @@ if (defined('MAGIC')) {
                     $comment_length = strlen($comment['details']);
                     $comment['ndetails'] = preg_replace("/\[quote\ user=[\"'](.+?)[\"']\](.*?)\[\/quote\]/miUs", '', $comment['details']);
                     $comment['ndetails'] = strip_tags(html_entity_decode($comment['ndetails'], ENT_QUOTES, 'UTF-8'));
+                    if ($comment['NSFW'] === 'Y' && !$_SESSION['nsfw']){
+                        $comment['ndetails'] = '[NSFW] - ' . $comment['ndetails'];
+                    }
+                    
                     $comment['short'] = htmlentities(mb_substr($comment['ndetails'], 0, 50, 'UTF-8'),ENT_QUOTES,'UTF-8');
                     $comment['long'] = htmlentities(mb_substr($comment['ndetails'], 0, 400, 'UTF-8'),ENT_QUOTES,'UTF-8');
                     $comment['date'] = date( 'H:i:s', $comment['date']);
-                    if ( $comment['short'] !== $comment['details'] ){
+                    if ( $comment['short'] !== $comment['ndetails'] ){
                            $comment['short'] .= '...';
                     }
-                    if ( $comment['long'] !== $comment['details'] ) {
+                    if ( $comment['long'] !== $comment['ndetails'] ) {
                         $comment['long'] .= '...';
                     }
                     
