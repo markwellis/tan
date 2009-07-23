@@ -33,7 +33,7 @@ if (defined('MAGIC')) {
 	    private $max_picture_size = 2000000;
 	    private $blog_min = 20;
 
-	    public $sort_by = array('date', 'comments', 'plus', 'minus', 'views');
+	    public $sort_by = array('date', 'comments', 'plus', 'minus', 'views1');
 	
 	/*  cutoff for promoted stuff */
 	    private $promoted_threashold = 10;
@@ -57,6 +57,9 @@ if (defined('MAGIC')) {
 	            header("Location: /");
 	            die("Error 404");
 	        }
+            
+            // $_SESSION['nsfw'] is inverse, 1 means filter is off...
+            $this->nsfw = $_SESSION['nsfw'] ? 0 : 1;
 	    }
 	
 	    function move_uploaded($kindofpicture){
@@ -558,7 +561,7 @@ if (defined('MAGIC')) {
 		            case 'picture':
 		                $table = 'picture_details';
 		                $id ='picture_id';
-                        if ( !$_SESSION['nsfw'] ){
+                        if ( $this->nsfw ){
                             $conditions = " WHERE NSFW='N' ";
                         } 
 		                $extraSql ='';
@@ -634,7 +637,7 @@ if (defined('MAGIC')) {
                 if (isset($_SESSION['user_id'])){
                     $uid = $_SESSION['user_id'];
                 }
-                if (!$_SESSION['nsfw']){
+                if ($this->nsfw){
                     $nsfw = "WHERE NSFW='N'";
                 }
                 $query = "SELECT *,(SELECT count(*) from plus where plus.picture_id = picture_details.picture_id) as plus, "
@@ -959,9 +962,7 @@ ob_clean();
 	            $output .= "</div></div><div id='nsfw_blocker_containter'></div><br />";
 	        }
 
-            // $_SESSION['nsfw'] is inverse, 1 means filter is off...
-            $nsfw = $_SESSION['nsfw'] ? 0 : 1;
-            $output .= "<script type='text/javascript'>var nsfw = {$nsfw};</script>";
+            $output .= "<script type='text/javascript'>var nsfw = {$this->nsfw};</script>";
             $output .= '<script type="text/javascript" src="/sys/js/nsfw_comments.js?r=25"></script>';
             
 	        if ($user->isLoggedIn()){
