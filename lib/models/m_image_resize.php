@@ -51,9 +51,9 @@ class m_image_resize{
                     if ($thumb_format === 'gif'){
                         // gif
                         $sample = (string)null;
-                        
+                        $o_newx = (int)$newx;
+
                         if ($im_details['geometry']['width'] > $newx){
-                            $o_newx = $newx;
                             $newx = $newx * ($im_details['geometry']['width'] / $im_details['geometry']['height']);
                             $newx = ($newx > $o_newx) ? $o_newx : $newx;
     
@@ -61,8 +61,9 @@ class m_image_resize{
                             
                             $sample = "-sample {$newx}x{$newy}";
                         }
+                        $scene_limit = (int)($o_newx / 10);
                         
-                        $extra = ($scenes > 15) ? '[0-15]' : (string)null; 
+                        $extra = ($scenes > $scene_limit) ? "[0-{$scene_limit}]" : (string)null; 
                         $res = exec("convert {$filename}{$extra} -coalesce {$sample} -layers Optimize {$cacheimg}");
 
                         $im->destroy();
