@@ -24,7 +24,7 @@ if (defined('MAGIC')) {
     function createMenu($tab, $type){
         $current_menu = array($tab => 'style="display:block;"');
         $current_tab = array($tab => ' tab_selected');
-        $current_option = array($tab => array($type => 'class="navmenu_option_selected"' ));
+        $current_option = array($type => 'class="navmenu_option_selected"' );
 
         ob_start();
         ?>
