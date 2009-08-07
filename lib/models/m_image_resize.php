@@ -6,18 +6,18 @@
  * License is in the root directory, entitled LICENSE
  * @package package_name
  */
-class image_resize{
+class m_image_resize{
     
     function __construct(){
-        global $sql;
-        $this->sql = $sql;
+        global $m_sql;
+        $this->m_sql = $m_sql;
     }
     
     function id_to_filename($id){
         $id = (int)$id;
-        $query = "SELECT filename FROM picture_details WHERE picture_id=$id;";
-        $filename = $this->sql->query($query, 'row');
-        return $filename['filename'];
+        $query = "SELECT filename FROM picture_details WHERE picture_id = ?";
+        $filename = $this->m_sql->query($query, 'i', array($id));
+        return $filename[0]['filename'];
     }
     
     function resize($id, $newx){
@@ -35,25 +35,60 @@ class image_resize{
             }
 
             if ( !$usecache && $basefile && file_exists($filename) ){
-                $im = &new Imagick($filename);
-
-                $thumb_format = trim($im->getImageFormat());
-                if ($thumb_format != 'GIF' &&$thumb_format != 'PNG' ){
-                    $im->setImageFormat('jpeg'); 
-                    $thumb_format = 'jpeg';
-                }
-
-                $im = $im->coalesceImages();
-                foreach ($im as $frame) {
-                    $frame->thumbnailImage($newx, $newx, true);
-                }
-                $im->optimizeImageLayers();
-
-                $thumb_image = $im->getImagesBlob();
+                $im = new Imagick();
+                $im->pingImage($filename);
+                
+                // I don't like this, but 1 week later its the best i can come up with.
+                $im_details = $im->identifyImage(1);
+                $matches = (array)null;
+                preg_match('/Scene: \d+ of (\d+)/', $im_details['rawOutput'], &$matches);
+                $scenes = isset($matches[1]) ? (int)$matches[1] : 0;
+                $thumb_format = strtolower(preg_replace('/(\w+).*/', '$1', $im_details['format']));
+                
                 @mkdir(dirname($cacheimg));
-                $im->writeImages($cacheimg, 1);
 
-                $im->clear();
+                if (($im_details['geometry']['width'] > $newx) || ($thumb_format === 'gif' && $scenes)){
+                    if ($thumb_format === 'gif'){
+                        // gif
+                        $sample = (string)null;
+                        
+                        if ($im_details['geometry']['width'] > $newx){
+                            $o_newx = $newx;
+                            $newx = $newx * ($im_details['geometry']['width'] / $im_details['geometry']['height']);
+                            $newx = ($newx > $o_newx) ? $o_newx : $newx;
+    
+                            $newy = $newx * ($im_details['geometry']['height'] / $im_details['geometry']['width']);
+                            
+                            $sample = "-sample {$newx}x{$newy}";
+                        }
+                        
+                        $extra = ($scenes > 15) ? '[0-15]' : (string)null; 
+                        $res = exec("convert {$filename}{$extra} -coalesce {$sample} -layers Optimize {$cacheimg}");
+
+                        $im->destroy();
+                        if (file_exists($cacheimg)){
+                            $im->readImage($cacheimg);
+                        } else {
+                            error_log($res);
+                        }
+                        $thumb_image = $im->getImagesBlob();
+                    } else {
+                        // regular
+                        $im->readImage($filename);
+                        $thumb_format = 'jpeg';
+                        $im->setImageFormat($thumb_format); 
+                        $im->thumbnailImage($newx, $newx, true);
+                        $im->writeImage($cacheimg);
+                        $thumb_image = $im->getImageBlob();
+                    }
+                } else {
+                    $im->readImage($filename);
+                    
+                    $thumb_format = ($thumb_format === 'gif') ? 'gif' : 'jpeg';
+                    $im->setImageFormat($thumb_format); 
+                    $thumb_image = $im->getImageBlob();
+                }
+
                 $im->destroy();
             }else {
                 if (file_exists($cacheimg)){
@@ -71,11 +106,10 @@ class image_resize{
                             exit();
                     }
 
-                    $im = &new Imagick($cacheimg);
+                    $im = new Imagick($cacheimg);
                     $thumb_image = $im->getImagesBlob();
                     $thumb_format = $im->getImageFormat();
 
-                    $im->clear();
                     $im->destroy();
                 } else {
                     exit();
