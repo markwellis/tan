@@ -704,8 +704,12 @@ if (defined('MAGIC')) {
 	            $plusminusbox .= $this->CreatePlusMinusHTML($objectDetails[$kind.'_id'], $objectDetails['plus'],
 	            $objectDetails['minus'], $objectDetails['meplus'], $objectDetails['meminus'], null);
 	
-	            $output .= "<div class='news'><div style='background-image:url(/thumb/{$objectDetails['category']}/100/);'
-	                 class='newsImg' ><img src='/thumb/{$objectDetails['category']}/100/' alt='{$objectDetails['category']}' style='display:none;'/></div>$plusminusbox</div>";
+	            $output .= "<div class='news'>";
+                
+                $output .= "<div style='background-image:url(/thumb/{$objectDetails['category']}/100/);' class='newsImg' >"
+                    ."<img src='/thumb/{$objectDetails['category']}/100/' alt='{$objectDetails['category']}' style='display:none;'/>"
+                    ."</div>";
+                $output .= "{$plusminusbox}</div>";
 	            if ($article === 0){
 	                $output .= "<h1 style='display:inline;font-weight:normal;'>
 	                    <a class='title' href='/view{$kind}/{$objectid}/".$this->urlTitle($objectDetails['title'])."/'
@@ -744,7 +748,18 @@ if (defined('MAGIC')) {
 	
 	            $output .= "<br /><p>".nl2br(stripslashes($objectDetails['description']))."</p>";
 	            if ($article && $kind === 'link'){
-	                $output .= "<a style='margin-right:70px;float:right;font-size:1.5em;' rel='external nofollow' href='".stripslashes($objectDetails['url'])."'>View Link</a><br/><br/>";
+                    $matches = (array)null;
+                    //preg_match('/http\:\/\/www\.youtube\.com\/watch\?v=(.*?)(\&.*)?/', $objectDetails['url'], &$matches);
+                    preg_match('/http\:\/\/www\.youtube\.com\/watch\?v=(.*?)\&/', "{$objectDetails['url']}&", &$matches);
+
+                    if ($matches[1]){
+                        $youtube_id = $matches[1];
+                        $output .= "<object type='application/x-shockwave-flash' style='width:425px; height:350px;' "
+                            ."data='http://www.youtube.com/v/{$youtube_id}'><param name='wmode' value='transparent' />"
+                            ."<param name='movie' value='http://www.youtube.com/v/{$youtube_id}' /></object>";
+                    } else {
+    	                $output .= "<a style='margin-right:70px;float:right;font-size:1.5em;' rel='external nofollow' href='".stripslashes($objectDetails['url'])."'>View Link</a><br/><br/>";
+                    }
 	            } elseif ($article && $kind === 'blog'){
 	            	$output .= "</div>";
 
@@ -754,6 +769,7 @@ if (defined('MAGIC')) {
                     $objectDetails['details'] = $this->bbcode_to_html($objectDetails['details']);
 	                $output .= "<div id='blog_wrapper' class='comment_wrapper'>{$objectDetails['details']}";
 	            }
+
 	            $output .= "</div>";
 	        } else if ($ispic){
 	///////////////////
