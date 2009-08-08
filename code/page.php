@@ -24,7 +24,7 @@ if (defined('MAGIC')) {
     function createMenu($tab, $type){
         $current_menu = array($tab => 'style="display:block;"');
         $current_tab = array($tab => ' tab_selected');
-        $current_option = array($type => 'class="navmenu_option_selected"' );
+        $current_option = array($tab => array($type => 'class="navmenu_option_selected"' ));
 
         ob_start();
         ?>
@@ -63,7 +63,7 @@ if (defined('MAGIC')) {
 <?php } ?>
     <div id="navmenu_contents">
     <?php foreach (array('Links' => 'link', 'Pictures' => 'picture', 'Blogs' => 'blog') as $value) { ?>
-        <div id='<?php echo $value ?>_menu' <?php echo isset($current_option[$value]) ? $current_option[$value] : '' ?>>
+        <div id='<?php echo $value ?>_menu'>
             <ul>
                 <li class='navmenu_option'><a href='/submit/<?php echo $value ?>/' <?php echo isset($current_option[$value][2]) ? $current_option[$value][2] : '' ?>>Submit</a></li>
                 <li class='navmenu_option'><a href='/random/<?php echo $value ?>/'>Random</a></li>
