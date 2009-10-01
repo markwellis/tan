@@ -1,4 +1,4 @@
-[% avatar_http = c.config.avatar_path _ "/" _ object.user _ ".jpg" %]
+[% avatar_http = c.config.static_path _ c.config.avatar_path _ "/" _ object.user _ ".jpg" %]
 [% avatar_image = c.path_to('root') _ avatar_http %]
 [% avatar_exists = avatar_image | file_exists %]
 

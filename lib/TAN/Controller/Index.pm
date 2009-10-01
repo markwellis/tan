@@ -30,12 +30,6 @@ sub index :Path :Args(3) {
     $c->stash->{'page'} = $page;
     $c->stash->{'upcoming'} = $upcoming;
 
-#    push($this->f->stash->js_includes, $this->f->stash->theme_settings['js_path'] . '/picture_index.js');
-    push (@{ $c->stash->{'css_includes'} }, {
-        'file' => $c->config->{'static_path'} . '/themes/classic/css/default.css',
-        'media'=>'screen'
-    });
-    
     $c->stash->{'index_objects'} = [$c->model('MySQL::ObjectDetails')->index($location, $page, $upcoming)->all()];
 
     $c->stash->{'template'} = 'index.tt';

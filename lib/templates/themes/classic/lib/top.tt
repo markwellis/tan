@@ -1,24 +1,25 @@
 <body>
+<script type="text/javascript">
+//<![CDATA[
+    var mibbit_nick = '[% IF c.user; c.user.username; ELSE %]n00b[% END %]';
+//]]>
+</script>
     [% PROCESS 'lib/js_includes.tt' %]
     <div id="main">
         <div id="top">
             <div style="float:right;margin-top:5px;margin-right:5px;text-align:right;">
                 <a href="/chat/" class="top_link mibbit">Chat</a>
-<script type="text/javascript">
-//<![CDATA[
-    var mibbit_nick = '<?php echo $f->user->username() ? $f->user->username() : 'n00b' ?>';
-//]]>
-</script>
-                <?php if ($f->user->logged_in()){ ?>
+
+                [% IF c.user %]
                      | <a href='/logout/' class='top_link'>Logout</a>
-                <?php } ?>
+                [% END %]
                 <br/>
                 
-                <?php if (!$f->user->logged_in()){ ?>
+                [% IF c.user %]
+                    <a href="/user/[% c.user.username %]/1/" class="top_link">My Comments</a> | <a href="/avatar/" class="top_link">Avatar</a> | 
+                [% ELSE %]
                     <a href="/login/" class="top_link">Login/Register</a> | 
-                <?php } else { ?>
-                    <a href="/user/' . $user->getUsername() . '/1/" class="top_link">My Comments</a> | <a href="/avatar/" class="top_link">Avatar</a> | 
-                <?php } ?>
+                [% END %]
             
                 <?php if(isset($_SESSION['nsfw']) && $_SESSION['nsfw'] === 1){ ?>
                     <a href='/filter/' class='top_link'>Enable NSFW filter</a>

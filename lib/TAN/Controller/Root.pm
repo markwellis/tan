@@ -27,6 +27,13 @@ sub auto: Private{
     my ( $self, $c ) = @_;
 
     $c->stash->{'start_time'} = time();
+    
+    my $theme = 'classic'; 
+    $c->stash->{'theme_settings'} = {
+        'name' => $theme,
+        'path' => $c->config->{'static_path'} . "/themes/${theme}",
+    };
+    
     return 1;
 }
 
@@ -55,9 +62,9 @@ sub end : Private {
     if($c->debug) {
         my $time = $c->model('MySQL')->storage()->debugobj()->{total_time};
 
-        $c->log->debug("Queries this request " . $c->stash->{'sql_queries'} . ": $time seconds");
+        $c->log->debug("Queries this request " . $c->stash->{'sql_queries'} . ": $time seconds") if $c->stash->{'sql_queries'};
 
-        if($c->stash->{'sql_queries'} > 15) {
+        if($c->stash->{'sql_queries'} && $c->stash->{'sql_queries'} > 15) {
             $c->log->warn("****** Are you sure you need " . $c->stash->{'sql_queries'} . " queries? ******");
         }
 

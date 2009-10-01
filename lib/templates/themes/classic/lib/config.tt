@@ -1,0 +1,27 @@
+[%
+    theme_settings = {
+        'name' => 'classic',
+        'display_name' => 'Classic',
+        'description' => 'The classic grey theme',
+        'css_path' => "$theme_settings.path/css",
+        'js_path' => "$theme_settings.path/js",
+        'image_path' => "$theme_settings.path/images",
+    };
+
+    js_includes = [
+        'http://ajax.googleapis.com/ajax/libs/mootools/1.2.3/mootools-yui-compressed.js', 
+        "mootools-1-2-3-1-more",
+        "menu",
+    ];
+    
+    css_includes = [
+        {
+            'file' => "$theme_settings.css_path/default.css",
+            'media' => 'screen',
+        },
+    ];
+    
+    page_title = 'ThisAintNews :: Social News For Pirates';
+    page_meta_description = 'Social News For Pirates';
+    page_keywords = 'strange pirate news community comments english social fun jokes videos pictures share sharing lol lolz funny humour humor'
+%]

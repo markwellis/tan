@@ -14,7 +14,7 @@ __PACKAGE__->config({
     INCLUDE_PATH => [
         TAN->path_to( 'lib', 'templates', 'themes', 'classic' ),
     ],
-#    PRE_PROCESS  => 'lib/config.tt',
+    PRE_PROCESS  => 'lib/config.tt',
     WRAPPER      => 'lib/wrapper.tt',
     TIMER        => 0,
     TEMPLATE_EXTENSION => '.tt',
