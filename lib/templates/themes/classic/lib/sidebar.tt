@@ -1,0 +1,8 @@
+<div id="sidebar">
+<?php
+    $f->template('lib/menu');
+    $f->template('lib/order_by');
+    $f->template('lib/recent_comments');
+    $f->template('lib/ads/left');
+?> 
+</div>

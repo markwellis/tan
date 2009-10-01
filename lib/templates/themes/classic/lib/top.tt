@@ -1,0 +1,47 @@
+<body>
+    [% PROCESS 'lib/js_includes.tt' %]
+    <div id="main">
+        <div id="top">
+            <div style="float:right;margin-top:5px;margin-right:5px;text-align:right;">
+                <a href="/chat/" class="top_link mibbit">Chat</a>
+<script type="text/javascript">
+//<![CDATA[
+    var mibbit_nick = '<?php echo $f->user->username() ? $f->user->username() : 'n00b' ?>';
+//]]>
+</script>
+                <?php if ($f->user->logged_in()){ ?>
+                     | <a href='/logout/' class='top_link'>Logout</a>
+                <?php } ?>
+                <br/>
+                
+                <?php if (!$f->user->logged_in()){ ?>
+                    <a href="/login/" class="top_link">Login/Register</a> | 
+                <?php } else { ?>
+                    <a href="/user/' . $user->getUsername() . '/1/" class="top_link">My Comments</a> | <a href="/avatar/" class="top_link">Avatar</a> | 
+                <?php } ?>
+            
+                <?php if(isset($_SESSION['nsfw']) && $_SESSION['nsfw'] === 1){ ?>
+                    <a href='/filter/' class='top_link'>Enable NSFW filter</a>
+                <?php } else { ?>
+                    <a href='/filter/' class='top_link' onclick='return confirm("Are you sure you want to disable the NSFW work filter? There will be content which is not suitable for work");'>Disable NSFW filter</a>
+                <?php } ?>
+                <br />
+                <div style="float:right">
+                    <form action="http://www.google.com/cse" id="cse-search-box">
+                        <div>
+                            <input type="hidden" name="cx" value="017135894524023845720:-eqs9gh9cxm" />
+                            <input type="hidden" name="ie" value="UTF-8" />
+                            <input type="text" name="q" size="31" />
+                            <input type="submit" name="sa" value="Search" />
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="logoimg">
+                <a href="/" class="logo">
+                </a>
+            </div>
+            </div>
+        </div>
+        <div id='middle'>
+        [% PROCESS 'lib/ads/right.tt' %]

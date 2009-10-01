@@ -1,0 +1,38 @@
+<?php $f->stash->object['size'] = $f->filesize_h($f->stash->object['size']); ?>
+<a class="center_cell" href="/viewpicture/<?php echo $f->stash->object['id'] ?>/<?php echo $f->stash->object['url_title'] ?>/">
+    <img class="picture_thumb" src="/thumb/<?php echo $f->stash->object['id'] ?>/300/" alt=" "/>
+</a>
+
+<div class="container hidden" id="container_<?php echo $f->stash->object['id'] ?>">
+    <h1>
+        <a class="big_font" href="/viewpicture/<?php echo $f->stash->object['id'] ?>/<?php echo $f->stash->object['url_title'] ?>/">
+            <?php echo $f->stash->object['title'] ?><?php echo (isset($f->stash->object['NSFW']) && $f->stash->object['NSFW'] === 'Y') ? ' - NSFW' : '' ?>
+        </a>
+    </h1>
+    <br/>
+    <?php $f->stash->pm_box_style='float:right'; $f->template('lib/plus_minus_box') ?>
+    <a class="big_center_cell" href="<?php echo $f->config['IMAGE_HTTP'] .'/' . basename($f->stash->object['filename']) ?>">
+        <img class='big_picture' src="/thumb/<?php echo $f->stash->object['id'] ?>/300/" alt=" "/>
+    </a>
+
+    <a href="/viewpicture/<?php echo $f->stash->object['id'] ?>/<?php echo $f->url_title($f->stash->object['url_title']) ?>/#comments">
+        <img src="<?php echo $f->config['STATIC_HTTP'] ?>/images/comment.png" style="height:15px;width:15px" alt="" /> <?php echo $f->stash->object['comments'] ?></a> | <?php echo $f->stash->object['views'] ?> views
+     | <?php echo $f->stash->object['x'] ?>x<?php echo $f->stash->object['y'] ?> | <?php echo $f->stash->object['size'] ?>
+
+    <?php if (($f->user->user_id() == $f->stash->object['user_id']) || $f->user->admin()){ ?>
+        | <a href="/esubmit/<?php echo $f->stash->object['type'] ?>/<?php echo $f->stash->object['id'] ?>/">Edit</a>
+    <?php } ?>
+<br />
+    <?php if (!$f->stash->upcoming) { ?>
+        promoted <?php echo $f->stash->object['promoted'] ?> ago
+    <?php } else { ?>
+        posted <?php echo $f->stash->object['date'] ?> ago
+    <?php } ?>
+    
+    <br />
+    <img class="avatar" src="<?php echo $f->stash->avatar_http ?>?m=<?php echo (isset($f->stash->avatar_mtime)) ? $f->stash->avatar_mtime : 1 ?>" alt="<?php echo $f->stash->object['username'] ?>" />
+    Posted by <a class="user" href="/user/<?php echo $f->stash->object['username'] ?>/1/"><?php echo $f->stash->object['username'] ?></a>
+    <p>
+        <?php echo nl2br(stripslashes($f->stash->object['description'])) ?>
+    </p>
+</div>

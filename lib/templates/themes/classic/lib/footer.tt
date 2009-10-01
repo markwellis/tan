@@ -1,0 +1,18 @@
+[% PROCESS 'lib/sidebar.tt' %]
+
+    $query = $f->sql->query_count;
+    if ($query !== 1){
+        $query = "{$query} queries";
+    } else {
+        $query = "{$query} query";
+    }
+?>
+    <div id="bottom">
+        Page processed in [% end_time - start_time %] seconds, with [% sql_queries %] [% (sql_queries == 1) ? 'query' : 'queries' %]<br />
+        All User-generated content is licensed under a <a href="http://creativecommons.org/" rel='external nofollow'>Creative Commons Public Domain license</a><br />
+        Version <?php echo $f->config['VERSION'] ?>
+        <?php $f->template('lib/ads/bottom'); ?>
+    </div>
+</div>
+[% PROCESS 'lib/ga.tt' %]
+</body>

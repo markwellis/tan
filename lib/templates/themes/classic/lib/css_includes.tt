@@ -1,0 +1,3 @@
+[% FOREACH css_include = css_includes %]
+    <link type="text/css" rel="stylesheet" media="[% css_include.media %]" href="[% css_include.file %]" />
+[% END %]

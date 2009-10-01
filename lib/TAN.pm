@@ -52,7 +52,7 @@ L<TAN::Controller::Root>, L<Catalyst>
 
 =head1 AUTHOR
 
-root
+Catalyst developer
 
 =head1 LICENSE
 

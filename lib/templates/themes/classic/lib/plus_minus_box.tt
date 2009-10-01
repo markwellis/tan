@@ -1,0 +1,18 @@
+[% IF (object.meplus) %]
+    [% pclass = 'pselected' %]
+[% END %]
+
+[% IF (object.meminus) %]
+    [% mclass = 'mselected' %]
+[% END %]
+
+<div class="plusminus [% pm_box_class.defined ? pm_box_class : '' %]" [% pm_box_style.defined ? 'style="' _ pm_box_style _ '"' : '' %] >
+    <div class="plus" id="[% 'p' _ object.type _ '_' _ object.id %]">
+        [% object.plus %]
+        <a class="addPlus [% pclass.defined ? pclass : '' %]" href="#">IsNews</a>
+    </div>
+    <div class="minus" id="[% 'm' _ object.type _ '_' _ object.id %]" >
+        [% object.minus %]
+        <a class="addMinus [% mclass.defined ? mclass : '' %]" href="#">AintNews</a>
+    </div>
+</div>

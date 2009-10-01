@@ -4,6 +4,7 @@ use strict;
 use warnings;
 use parent 'Catalyst::Controller';
 
+use Time::HiRes qw(time);
 #
 # Sets the actions in this controller to be registered with no prefix
 # so they function identically to actions created in MyApp.pm
@@ -22,15 +23,17 @@ TAN::Controller::Root - Root Controller for TAN
 
 =cut
 
-=head2 index
+sub auto: Private{
+    my ( $self, $c ) = @_;
 
-=cut
+    $c->stash->{'start_time'} = time();
+    return 1;
+}
 
 sub index :Path :Args(0) {
     my ( $self, $c ) = @_;
 
-    # Hello World
-    $c->response->body( $c->welcome_message );
+    $c->forward('/index/index', ['all', 0, 1]);
 }
 
 sub default :Path {
@@ -39,17 +42,31 @@ sub default :Path {
     $c->response->status(404);
 }
 
-=head2 end
+sub render : ActionClass('RenderView') { }
 
-Attempt to render a view, if needed.
+sub end : Private {
+    my ( $self, $c ) = @_;
 
-=cut
+    $c->stash->{'end_time'} = time();
+    $c->stash->{'sql_queries'} = $c->model('MySQL')->get_query_count();
 
-sub end : ActionClass('RenderView') {}
+    $c->forward('render');
 
+    if($c->debug) {
+        my $time = $c->model('MySQL')->storage()->debugobj()->{total_time};
+
+        $c->log->debug("Queries this request " . $c->stash->{'sql_queries'} . ": $time seconds");
+
+        if($c->stash->{'sql_queries'} > 15) {
+            $c->log->warn("****** Are you sure you need " . $c->stash->{'sql_queries'} . " queries? ******");
+        }
+
+        $c->model('MySQL')->reset_count();
+    }
+}
 =head1 AUTHOR
 
-root
+Catalyst developer
 
 =head1 LICENSE
 

@@ -1,0 +1,3 @@
+[% FOREACH js_include = js_includes %]
+    <script type="text/javascript" src="[% js_include %]"></script>
+[% END %]
