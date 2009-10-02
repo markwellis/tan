@@ -3,8 +3,7 @@ package TAN::Controller::JsMin;
 use strict;
 use warnings;
 use parent 'Catalyst::Controller';
-use JavaScript::Minifier::XS qw(minify);
-use File::Path;
+
 
 =head2 index
 
@@ -21,33 +20,13 @@ sub index :Path :Args(1) {
 
     my $source_dir = $c->path_to('root', $c->config->{'static_path'}, 'themes', $c->stash->{'theme_settings'}->{'name'}, 'js');
     
-    my $theme_path = $c->config->{'cache_path'} . '/jsmin/' . $c->stash->{'theme_settings'}->{'name'};
+    my $theme_path = $c->config->{'cache_path'} . '/jsmin';
     
     my $out_dir = $c->path_to('root', $c->config->{'static_path'}) . $theme_path;
 
-    if (-e "${out_dir}_${out_file}"){
-        open(INFILE, "< ${out_dir}_${out_file}");
+    my $js = $c->model('JsMin')->minify_file("${source_dir}/${source_file}", "${out_dir}/${out_file}");
 
-        my $js; 
-        while (my $line = <INFILE>) {
-            $js .= $line;
-        }
-        $c->response->body($js);
-        $c->detach();        
-    } elsif (-e "${source_dir}/${source_file}"){
-        open(INFILE, "< ${source_dir}/${source_file}");
-        open(OUTFILE, "> ${out_dir}_${out_file}");
-        
-        my $js; 
-        while (my $line = <INFILE>) {
-            $js .= $line;
-        }
-        $js = minify($js);
-        print OUTFILE $js;
-        
-        close(INFILE);
-        close(OUTFILE);
-        
+    if ($js){
         $c->response->body($js);
         $c->detach();
     }

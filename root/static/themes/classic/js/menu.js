@@ -55,16 +55,5 @@ window.addEvent('domready', function(){
 });
 
 function pop_up(url,x,y) {
-    var conf = "toolbar=no," +
-        "location=no," +
-        "status=no," +
-        "menubar=no," +
-        "scrollbars=no," +
-        "resizable=yes," +
-        "width="+x+"," +
-        "height="+y+"," + 
-        "top=110," +
-        "left=110";
-    var mibbit = window.open(url,'mibbit',conf);
+    var mibbit = window.open(url,'mibbit',"toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=yes,width="+x+",height="+y+",top=110,left=110");
 }
-
