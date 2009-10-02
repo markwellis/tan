@@ -1,7 +1,7 @@
 [% PROCESS 'lib/xhtml_head.tt' %]
 [% IF (!overlay.defined) %]
     [% PROCESS 'lib/top.tt' %]
-    [% messages = c.flash('message') %]
+    [% messages = flash.message %]
     [% IF (messages) %]
         [% FOREACH message = messages %]
             <span class='message'>[% message %]</span>

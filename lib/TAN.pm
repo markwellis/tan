@@ -16,7 +16,10 @@ use Catalyst::Runtime 5.80;
 use parent qw/Catalyst/;
 use Catalyst qw/-Debug
                 ConfigLoader
-                Static::Simple/;
+                Session
+                Session::Store::FastMmap
+                Session::State::Cookie
+            /;
 our $VERSION = '0.01';
 
 # Configure the application.
@@ -33,7 +36,19 @@ __PACKAGE__->config( name => 'TAN' );
 # Start the application
 __PACKAGE__->setup();
 
-
+sub nsfw{
+    my ($c, $value) = @_;
+    
+    if (defined($value)){
+        $c->session->{'nsfw'} = $value
+    }
+    
+    if (defined($c->session->{'nsfw'}) && $c->session->{'nsfw'} == 1){
+        return 1;
+    }
+    
+    return 0;
+}
 =head1 NAME
 
 TAN - Catalyst based application

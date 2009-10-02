@@ -21,11 +21,11 @@
                     <a href="/login/" class="top_link">Login/Register</a> | 
                 [% END %]
             
-                <?php if(isset($_SESSION['nsfw']) && $_SESSION['nsfw'] === 1){ ?>
+                [% IF (c.nsfw) %]
                     <a href='/filter/' class='top_link'>Enable NSFW filter</a>
-                <?php } else { ?>
+                [% ELSE %]
                     <a href='/filter/' class='top_link' onclick='return confirm("Are you sure you want to disable the NSFW work filter? There will be content which is not suitable for work");'>Disable NSFW filter</a>
-                <?php } ?>
+                [% END %]
                 <br />
                 <div style="float:right">
                     <form action="http://www.google.com/cse" id="cse-search-box">
