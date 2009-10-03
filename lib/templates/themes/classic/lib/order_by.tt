@@ -1,4 +1,4 @@
-[% IF (index.defined) %]
+[% IF (index_objects.defined) %]
 Order by: <select id='order_by'>
     <option value="date" [% (order == 'date') ? 'selected="selected"' : '' %]>Date</option>
     <option value="comments" [% (order == 'comments') ? 'selected="selected"' : '' %]>Comments</option>

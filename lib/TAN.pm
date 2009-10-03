@@ -22,6 +22,9 @@ use Catalyst qw/-Debug
             /;
 our $VERSION = '0.01';
 
+
+__PACKAGE__->config(  );
+
 # Configure the application.
 #
 # Note that settings in tan.conf (or other external
@@ -31,7 +34,13 @@ our $VERSION = '0.01';
 # with an external configuration file acting as an override for
 # local deployment.
 
-__PACKAGE__->config( name => 'TAN' );
+__PACKAGE__->config( name => 'TAN', 
+    'Plugin::ConfigLoader' => {
+        driver => {
+            'General' => { -InterPolateVars => 1 }
+        }
+    }
+ );
 
 # Start the application
 __PACKAGE__->setup();

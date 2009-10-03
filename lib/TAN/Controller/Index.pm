@@ -21,6 +21,7 @@ sub index :Path :Args(3) {
     $upcoming ||= 0;
     $page ||= 1;
 
+    #redirect to somewhere sensible if someone has made up some random url...
     if ('/' . $c->req->path() ne "/index/${location}/${upcoming}/${page}/" && '/' . $c->req->path() ne '/'){
         $c->res->redirect("/index/${location}/${upcoming}/${page}/", 301 );
         $c->detach();
