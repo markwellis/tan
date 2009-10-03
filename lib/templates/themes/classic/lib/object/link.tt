@@ -13,8 +13,8 @@
     [% num = 0 %]
 [% END %]
 [% num = num + 1 %]
-    <div style="background-image:url(/static/thumb/[% object.$type.image %]/100/);" class="newsImg" >
-        <img src="/static/thumb/[% object.$type.image %]/100/" alt="[% object.$type.image %]" style="display:none;" />
+    <div style="background-image:url([% c.config.thumb_path _ '/' _ object.$type.image %]/100);" class="newsImg" >
+        <img src="[% c.config.thumb_path _ '/' _ object.$type.image %]/100" alt="[% object.$type.image %]" style="display:none;" />
    </div>
 [% PROCESS 'lib/plus_minus_box.tt' %]
 

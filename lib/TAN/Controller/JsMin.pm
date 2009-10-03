@@ -20,9 +20,11 @@ sub index :Path :Args(1) {
 
     my $source_dir = $c->path_to('root', $c->config->{'static_path'}, 'themes', $c->stash->{'theme_settings'}->{'name'}, 'js');
     
-    my $theme_path = $c->config->{'cache_path'} . '/jsmin';
+    my $theme_path = $c->config->{'jscache_path'};
     
-    my $out_dir = $c->path_to('root', $c->config->{'static_path'}) . $theme_path;
+    my $out_dir = $c->path_to('root') . $theme_path;
+
+warn "${source_dir}/${source_file}\n${out_dir}/${out_file}\n";
 
     my $js = $c->model('JsMin')->minify_file("${source_dir}/${source_file}", "${out_dir}/${out_file}");
 
