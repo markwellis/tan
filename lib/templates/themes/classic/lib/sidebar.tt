@@ -1,8 +1,6 @@
 <div id="sidebar">
-<?php
-    $f->template('lib/menu');
-    $f->template('lib/order_by');
-    $f->template('lib/recent_comments');
-    $f->template('lib/ads/left');
-?> 
+[% PROCESS 'lib/menu.tt';
+PROCESS 'lib/order_by.tt';
+PROCESS 'lib/recent_comments.tt';
+PROCESS 'lib/ads/left.tt' %]
 </div>

@@ -1,0 +1,54 @@
+[% 
+current_tab = {
+    $location => ' tab_selected',
+};
+current_option = {
+    $location => {
+        $upcoming => 'navmenu_option_selected',
+    }
+};
+
+menu_tabs = {
+    'All' => 'all',
+    'Links' => 'link',
+    'Blogs' => 'blog',
+    'Pics' => 'picture'
+} -%]
+
+<div id="navmenu_holder">
+
+[% FOREACH key = menu_tabs.keys.sort -%]
+[% value = menu_tabs.$key -%]
+<span class="tab [% (current_tab.$value.defined) ? current_tab.$value : '' %]" title="[% value %]" id="[% value %]_tab">[% key %]</span>[%# remove newline -%]
+[% END -%]
+    <div id="navmenu_contents">
+    [% FOREACH value = ['all', 'link', 'picture', 'blog'] -%]
+        [% current_menu = current_option.$value -%]
+        <div id='[% value %]_menu'>
+            <ul>
+                [% IF (value != 'all') %]
+                    <li class="navmenu_option [% IF (current_menu.2); current_menu.2; END %]"><a href="/submit/[% value %]/">Submit</a></li>
+                [% END %]
+                <li class="navmenu_option">
+                    <a class="menu_item" href="/random/[% value %]/">Random</a>
+                </li>
+                <li class="navmenu_option">
+                    <a class="menu_item [% IF (current_menu.0); current_menu.0; END %]" href="/index/[% value %]/0/1/">Promoted</a>
+                </li>
+                <li class="navmenu_option">
+                    <a class="menu_item [% IF (current_menu.1); current_menu.1; END %]" href="/index/[% value %]/1/1/">Upcoming</a>
+                </li>
+            </ul>
+        </div>
+    [% END %]
+    </div>
+</div>
+[% IF location.defined %]
+    <script type='text/javascript'>
+    //<![CDATA[
+        $('[% location %]_menu').style.display='block';
+        last_menu = '[% location %]_menu';
+        last_tab = $('[% location %]_tab');
+    //]]>
+    </script>
+[% END %]
