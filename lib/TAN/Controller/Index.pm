@@ -11,7 +11,7 @@ use parent 'Catalyst::Controller';
 sub index :Path :Args(3) {
     my ( $self, $c, $location, $upcoming, $page ) = @_;
 
-    if ($location !~ m/(all|link|blog|picture)/){
+    if ($location !~ m/^(all|link|blog|picture)$/){
         $location = 'all';
     }
 
@@ -20,6 +20,12 @@ sub index :Path :Args(3) {
 
     $upcoming ||= 0;
     $page ||= 1;
+    
+    
+    my $order = $c->req->param('order') || 'date';
+    if ($order !~ m/^(date|promoted|plus|minus|views|comments)$/){
+        $order = 'date';
+    }
 
     #redirect to somewhere sensible if someone has made up some random url...
     if ('/' . $c->req->path() ne "/index/${location}/${upcoming}/${page}/" && '/' . $c->req->path() ne '/'){
@@ -31,7 +37,7 @@ sub index :Path :Args(3) {
     $c->stash->{'page'} = $page;
     $c->stash->{'upcoming'} = $upcoming;
 
-    $c->stash->{'index_objects'} = [$c->model('MySQL::ObjectDetails')->index($location, $page, $upcoming)->all()];
+    $c->stash->{'index_objects'} = [$c->model('MySQL::ObjectDetails')->index($location, $page, $upcoming, $order)->all()];
 
     $c->stash->{'template'} = 'index.tt';
 }

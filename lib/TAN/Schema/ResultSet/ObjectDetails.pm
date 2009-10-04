@@ -17,7 +17,8 @@ sub index {
         $order ||= 'date'
     } else {
         $search = { '>' => 0 };
-        $order ||= 'promoted'
+        $order ||= 'promoted';
+        $order = 'promoted' if ($order eq 'date');
     }
  
     if ($location eq 'all'){
