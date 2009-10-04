@@ -1,7 +1,7 @@
 [%
 	PROCESS 'lib/sidebar.tt';
-	runtime =  end_time - start_time;
-	sql_queries = c.model('MySQL').get_query_count()
+	runtime =  time - start_time;
+	sql_queries = c.model('MySQL').get_query_count();
 %]
 
     <div id="bottom">

@@ -39,7 +39,7 @@ sub index :Path :Args(3) {
 
     $c->stash->{'index_objects'} = $c->model('MySQL::ObjectDetails')->index($location, $page, $upcoming, $order);
 
-    if ( !$c->stash->{'index_objects'}->count() ){
+    if ( !$c->stash->{'index_objects'} ){
         $c->forward('/default');
         $c->detach();
     }

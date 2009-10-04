@@ -54,7 +54,7 @@ sub render : ActionClass('RenderView') { }
 sub end : Private {
     my ( $self, $c ) = @_;
 
-    $c->stash->{'end_time'} = time();
+    $c->stash->{'time'} = sub { return time(); };
     my $sql_queries = $c->model('MySQL')->get_query_count();
 
     $c->forward('render');
