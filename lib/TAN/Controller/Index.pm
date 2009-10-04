@@ -36,10 +36,16 @@ sub index :Path :Args(3) {
     $c->stash->{'location'} = $location;
     $c->stash->{'page'} = $page;
     $c->stash->{'upcoming'} = $upcoming;
+    
+    my $index_objects = $c->model('MySQL::ObjectDetails')->index($location, $page, $upcoming, $order);
+    my @index = $index_objects->all;
 
-    $c->stash->{'index_objects'} = $c->model('MySQL::ObjectDetails')->index($location, $page, $upcoming, $order);
+    $c->stash->{'index_objects'} = {
+        'objects' => \@index,
+        'pager' => $index_objects->pager,
+    };
 
-    if ( !$c->stash->{'index_objects'} ){
+    if ( !$c->stash->{'index_objects'}->{'objects'} ){
         $c->forward('/default');
         $c->detach();
     }

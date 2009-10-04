@@ -5,7 +5,7 @@
 [% END %]
 
 <ul id="inside">
-[% FOREACH object = index_objects.all %]
+[% FOREACH object = index_objects.objects %]
     <li class="news[% IF (i % 2)  %] alternate[% END %]" id="[% object.type _ object.id %]">[% PROCESS 'lib/object.tt' %]</li>
     [% i = i + 1 %]
 [% END %]
