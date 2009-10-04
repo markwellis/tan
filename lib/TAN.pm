@@ -19,7 +19,7 @@ use Catalyst qw/ConfigLoader
                 Session::Store::FastMmap
                 Session::State::Cookie
             /;
-our $VERSION = '0.01';
+our $VERSION = '0.90';
 
 
 __PACKAGE__->config(  );

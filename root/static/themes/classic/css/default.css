@@ -451,7 +451,7 @@ a{
     margin:2px;
     padding:5px;
     height:20px;
-    width:20px;
+    min-width:20px;
     color:#3A44FF;
     background-color:#EFF8FC;
     display:block;

@@ -37,7 +37,7 @@ Posted by <a class="user" href="/user/[% object.user %]/1/">[% object.user %]</a
 <span class="object_type">[[% object.type %]]</span>
 
 <br />
-<a href='/view[% object.type %]/[% object.id %]/[% object.$type.title %]/#comments'>
+<a href='/view[% object.type %]/[% object.id %]/[% object.$type.title | url_title %]/#comments'>
 <img src="[% c.config.static_path %]/images/comment.png" style="height:15px;width:15px" alt="" /> [% object.comments.count %]</a> | [% object.pi.count%] views
 
 [% IF !1 %]

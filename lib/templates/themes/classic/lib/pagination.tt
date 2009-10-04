@@ -1,39 +1,40 @@
-<?php
-$total_pages = ceil(($f->stash->total_found / $f->config['INDEX_LIMIT']));
-$show_this_many = 6;
+[%
+total_pages = (index_objects.pager.total_entries / index_objects.pager.entries_per_page) + 1 | format("%d");
+show_this_many = 6;
+current_page = index_objects.pager.current_page;
 
-$lower=$f->stash->page - $show_this_many;
-$max=$f->stash->page + $show_this_many;
+lower = current_page - show_this_many;
+max = current_page + show_this_many;
 
-if ($lower <= 1) {
-    $lower = 1;
-    $max = $max + $show_this_many;
-}
+IF (lower <= 1);
+    lower = 1;
+    max = max + show_this_many;
+END;
 
-if ($max >= $total_pages) {
-    $lower = $total_pages - (2 * $show_this_many);
-    if ($lower <= 1) { $lower = 1; }
-    $max = $total_pages;
-}
+IF (max >= total_pages);
+    lower = total_pages - (2 * show_this_many);
+    IF (lower <= 1);
+        lower = 1;
+    END;
 
-$query_string = $f->html($f->query_string);
-if ($query_string) $query_string = '?' . $query_string;
-?>
+    max = total_pages;
+END %]
+
 <div id="page_no_holder">
-<?php if ($lower != 1) { ?>
-    <a class="pageNumber" href="/<?php echo "{$f->stash->location}/{$f->stash->upcoming}" ?>/1/<?php echo $query_string ?>">1</a>
+[% IF (lower != 1) %]
+    <a class="pageNumber" href="/index/[% "$location/$upcoming" %]/1/">1</a>
     <span class="pageNumber">...</span>
-<?php } ?>
+[% END %]
 
-<?php for ($i=$lower; $i<=$max; ++$i){ ?>
-    <a class="pageNumber<?php if ($i == $f->stash->page){ ?> thisPage<?php } ?>" href="/<?php echo "{$f->stash->location}/{$f->stash->upcoming}" ?>/<?php echo $i ?>/<?php echo $query_string ?>">
-        <?php echo $i ?>
+[% FOREACH page = [ lower .. max ] =%]
+    <a class="pageNumber[% IF (page == current_page) %] thisPage[% END %]" href="/index/[% "$location/$upcoming" %]/[% page %]/">
+        [% page -%]
     </a>
-<?php } ?>
+[% END %]
 
-<?php if ($max != $total_pages){ ?>
+[% IF (max != total_pages) %]
     <span class="pageNumber">...</span>
-    <a class="pageNumber" href="/<?php echo "{$f->stash->location}/{$f->stash->upcoming}" ?>/<?php echo $total_pages ?>/<?php echo $query_string ?>"><?php echo $total_pages ?></a>
-<?php } ?>
+    <a class="pageNumber" href="/index/[% "$location/$upcoming" %]/[% total_pages %]/">[% total_pages %]</a>
+[% END %]
 
 </div>

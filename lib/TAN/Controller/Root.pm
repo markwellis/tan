@@ -55,17 +55,17 @@ sub end : Private {
     my ( $self, $c ) = @_;
 
     $c->stash->{'end_time'} = time();
-    $c->stash->{'sql_queries'} = $c->model('MySQL')->get_query_count();
+    my $sql_queries = $c->model('MySQL')->get_query_count();
 
     $c->forward('render');
 
     if($c->debug) {
         my $time = $c->model('MySQL')->storage()->debugobj()->{total_time};
 
-        $c->log->debug("Queries this request " . $c->stash->{'sql_queries'} . ": $time seconds") if $c->stash->{'sql_queries'};
+        $c->log->debug("Queries this request " . $sql_queries . ": $time seconds") if $c->stash->{'sql_queries'};
 
-        if($c->stash->{'sql_queries'} && $c->stash->{'sql_queries'} > 15) {
-            $c->log->warn("****** Are you sure you need " . $c->stash->{'sql_queries'} . " queries? ******");
+        if($sql_queries && $sql_queries > 15) {
+            $c->log->warn("****** Are you sure you need " . $sql_queries . " queries? ******");
         }
 
         $c->model('MySQL')->reset_count();

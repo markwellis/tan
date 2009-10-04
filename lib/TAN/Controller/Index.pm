@@ -37,8 +37,12 @@ sub index :Path :Args(3) {
     $c->stash->{'page'} = $page;
     $c->stash->{'upcoming'} = $upcoming;
 
-    $c->stash->{'index_objects'} = [$c->model('MySQL::ObjectDetails')->index($location, $page, $upcoming, $order)->all()];
+    $c->stash->{'index_objects'} = $c->model('MySQL::ObjectDetails')->index($location, $page, $upcoming, $order);
 
+    if ( !$c->stash->{'index_objects'}->count() ){
+        $c->forward('/default');
+        $c->detach();
+    }
     $c->stash->{'template'} = 'index.tt';
 }
 
