@@ -9,7 +9,7 @@ $comment_details = $m_edit_comment->get();
 $comment_user_id = (int)$comment_details[0]['user_id'];
 
 if($_SERVER['REQUEST_METHOD'] === 'POST'){
-    if ($m_user->logged_in() && ($user_id === $comment_user_id) ){
+    if ($m_user->logged_in() && ($user_id === $comment_user_id)){
         if(isset($_POST['delete_comment'])){
             $m_edit_comment->delete();
         } else {

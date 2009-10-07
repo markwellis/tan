@@ -23,6 +23,9 @@ if (defined('MAGIC')) {
                if (isset($data[5]) && preg_match('/thisaintnews/', $data[5])){
                    return "Don't be daft.";
                }
+               if (isset($data[5]) && preg_match('/www\.linkive\.com/', $data[5])){
+                   return "No Spam.";
+               }
             }
             $this->data = $data;
             $is_valid = $this->is_valid();

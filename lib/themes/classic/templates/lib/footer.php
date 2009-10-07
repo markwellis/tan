@@ -23,7 +23,7 @@
 </div>
         <script type="text/javascript"> 
         //<![CDATA[
-            window.addEvent("domready", function() {
+            window.addEvent("load", function() {
                 var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
                 new Asset.javascript(gaJsHost + "google-analytics.com/ga.js", {
                     onload: function() {
