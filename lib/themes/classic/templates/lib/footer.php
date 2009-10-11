@@ -16,6 +16,10 @@
         Page processed in <?= $totaltime ?> seconds, with <?php echo $query ?><br />
         All User-generated content is licensed under a <a href="http://creativecommons.org/" rel='external nofollow'>Creative Commons Public Domain license</a><br />
         Version <?php echo VERSION ?>
+	<br />
+<div style="visibility:hidden">
+<script type='text/javascript' src='http://xslt.alexa.com/site_stats/js/t/a?url=thisaintnews.com'></script>
+</div>
         <?php
             load_template('/lib/ads/bottom');
         ?>
