@@ -1,26 +1,28 @@
-[% type = object.type %]
+[%-
+type = object.type;
 
-[% IF ( !article ) %]
-    [% title = object.$type.title | url_title %]
-    [% url = "/view" _ object.type _ '/' _ object.id _ '/' _ title _ '/' %]
-    [% rel = '' %]
-[% ELSE %] 
-    [% url = object.$type.url %]
-    [% rel = 'rel="external nofollow"' %]
-[% END %]
+IF ( !article );
+    title = object.$type.title | url_title;
+    url = "/view" _ object.type _ '/' _ object.id _ '/' _ title _ '/';
+    rel = '';
+ELSE;
+    url = object.$type.url;
+    rel = 'rel="external nofollow"';
+END;
 
-[% IF ( !num ) %]
-    [% num = 0 %]
-[% END %]
-[% num = num + 1 %]
+IF ( !num );
+    num = 0;
+END;
+num = num + 1 
+-%]
     <div style="background-image:url([% c.config.thumb_path _ '/' _ object.$type.image %]/100);" class="newsImg" >
         <img src="[% c.config.thumb_path _ '/' _ object.$type.image %]/100" alt="[% object.$type.image %]" style="display:none;" />
    </div>
-[% PROCESS 'lib/plus_minus_box.tt' %]
+[%- PROCESS 'lib/plus_minus_box.tt' -%]
 
 <h1>
     <a class="title" [% rel %] href="[% url  | html %]" >
-        [% object.$type.title | html %]
+        [%- object.$type.title | html -%]
     </a>
 </h1>
 
@@ -29,50 +31,51 @@
 <img class="avatar" src="[% avatar_http %]?m=[% avatar_mtime.defined ? avatar_mtime : '' %]" alt="[% object.user %]" />
 Posted by <a class="user" href="/user/[% object.user %]/1/">[% object.user %]</a>
 
-[% IF ( !upcoming ) %]
-    promoted [% object.promoted %] ago
-[% ELSE %]
-    [% object.date %] ago
-[% END %]
-<span class="object_type">[[% object.type %]]</span>
+[%- IF ( !upcoming ) -%]
+    promoted [% object.promoted -%] ago
+[%- ELSE -%]
+    [% object.date -%] ago
+[%- END -%]
+<span class="object_type"> [[%- object.type -%]]</span>
 
 <br />
 <a href='/view[% object.type %]/[% object.id %]/[% object.$type.title | url_title %]/#comments'>
-<img src="[% c.config.static_path %]/images/comment.png" style="height:15px;width:15px" alt="" /> [% object.comments.count %]</a> | [% object.pi.count%] views
+<img src="[% c.config.static_path %]/images/comment.png" style="height:15px;width:15px" alt="" /> [%- object.comments.count -%]</a> | [%- object.pi.count -%] views
 
-[% IF !1 %]
-[%# fixme! IF ($f->user->user_id() == $f->stash->object['user_id']) || $f->user->admin()) %]
-   | <a href='/esubmit/[% object.type %]/[% object.id %]/'>Edit</a>]
-[%# END %]
-[% END %]
+[%- IF !1 -%]
+	[%# fixme! IF ($f->user->user_id() == $f->stash->object['user_id']) || $f->user->admin()) %]
+	   | <a href='/esubmit/[%- object.type -%]/[%- object.id -%]/'>Edit</a>]
+	[%# END %]
+[%- END -%]
     
-    <br />
-    <p>
-        [% object.$type.description | html | nl2br %]
-    </p>
-    [% IF (article.defined && object.type == 'link') %]
-        [% url = object.$type.url _ '&' %]
-        [% matches = url.match('/http\:\/\/www\.youtube\.com\/watch\?v=(.*?)\&/i') %]
+<br />
+<p>
+    [%- object.$type.description | html | nl2br -%]
+</p>
+[%- IF (article.defined && object.type == 'link');
+    url = object.$type.url _ '&';
+    matches = url.match('/http\:\/\/www\.youtube\.com\/watch\?v=(.*?)\&/i');
     
-        [% IF (matches.0) %]
-            [% youtube_id = matches.0 %]
-            <object type="application/x-shockwave-flash" style="width:425px; height:350px;" data="http://www.youtube.com/v/[% youtube_id %]">
-                <param name="wmode" value="transparent" />
-                <param name="movie" value="http://www.youtube.com/v/[% youtube_id %]" />
-            </object>
-        [% ELSE %]
-            <a style="margin-right:70px;float:right;font-size:1.5em;" rel="external nofollow" href="[% object.$type.url %]">View Link</a>
-            <br />
-            <br />
-        [% END %] 
-    [% ELSIF  (article.defined && object.type == 'blog') %]
-        </div>
+    IF (matches.0);
+        youtube_id = matches.0 -%]
+        <object type="application/x-shockwave-flash" style="width:425px; height:350px;" data="http://www.youtube.com/v/[%- youtube_id -%]">
+            <param name="wmode" value="transparent" />
+            <param name="movie" value="http://www.youtube.com/v/[%- youtube_id -%]" />
+        </object>
+    [%- ELSE -%]
+        <a style="margin-right:70px;float:right;font-size:1.5em;" rel="external nofollow" href="[%- object.$type.url -%]">View Link</a>
+        <br />
+        <br />
+    [%- END;
+ELSIF  (article.defined && object.type == 'blog') -%]
+    </div>
     
-[%#    <?php 
-    if ( !issset($f->stash->purifier) ){
-        require_once (THIRD_PARTY_PATH . '/htmlpurifier/loader.php');
-        $f->stash->purifier = new purifier();
-    }
-    $f->stash->object['details'] = bbcode_to_html($f->stash->object['details']); ?> %]
-    <div id="blog_wrapper" class="comment_wrapper">[% object.$type.details %]
-[% END %]
+	[%#-    <?php 
+	    if ( !issset($f->stash->purifier) ){
+            require_once (THIRD_PARTY_PATH . '/htmlpurifier/loader.php');
+            $f->stash->purifier = new purifier();
+        }
+        $f->stash->object['details'] = bbcode_to_html($f->stash->object['details']); ?>
+	-%]
+	<div id="blog_wrapper" class="comment_wrapper">[%- object.$type.details -%]
+[%- END -%]

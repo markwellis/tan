@@ -1,19 +1,19 @@
-[% i = 0 %]
+[%- i = 0 -%]
 
-[% IF location == 'picture' %]
+[%- IF location == 'picture' -%]
 <div class="holder">
-[% END %]
+[%- END -%]
 
 <ul id="inside">
-[% FOREACH object = index_objects.objects %]
-    <li class="news[% IF (i % 2)  %] alternate[% END %]" id="[% object.type _ object.id %]">[% PROCESS 'lib/object.tt' %]</li>
-    [% i = i + 1 %]
-[% END %]
+[%- FOREACH object = index_objects.objects -%]
+    <li class="news[% IF (i % 2)  %] alternate[% END %]" id="[% object.type _ object.id %]">[%- PROCESS 'lib/object.tt' -%]</li>
+    [%- i = i + 1 -%]
+[%- END -%]
 </ul>
 <br class="clear" />
 
-[% IF location == 'picture' %]
+[%- IF location == 'picture' -%]
 </div>
-[% END %]
+[%- END -%]
 
-[% PROCESS 'lib/pagination.tt' %] 
+[%- PROCESS 'lib/pagination.tt' -%]
