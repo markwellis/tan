@@ -8,7 +8,7 @@ __PACKAGE__->config(
     schema_class => 'TAN::Schema',
     
     connect_info => {
-        dsn => 'dbi:mysql:database=thisaintnews;host=htdev',
+        dsn => 'dbi:mysql:database=thisaintnews;host=localhost;mysql_socket=/var/run/mysqld/mysqld.sock',
         user => 'haha',
         password => 'caBi2ieL',
     }
