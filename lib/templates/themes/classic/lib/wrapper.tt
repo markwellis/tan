@@ -1,3 +1,5 @@
-[% PROCESS 'lib/open_page.tt' %]
-    [% content %]
-[% PROCESS 'lib/close_page.tt' %]
+[%-
+PROCESS 'lib/open_page.tt';
+    content;
+PROCESS 'lib/close_page.tt'
+-%]

@@ -1,6 +1,6 @@
 <div id="sidebar">
-[% PROCESS 'lib/menu.tt';
+[%- PROCESS 'lib/menu.tt';
 PROCESS 'lib/order_by.tt';
 PROCESS 'lib/recent_comments.tt';
-PROCESS 'lib/ads/left.tt' %]
+PROCESS 'lib/ads/left.tt' -%]
 </div>

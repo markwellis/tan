@@ -1,9 +1,9 @@
-[% IF recent_comments.defined %]
+[%- IF recent_comments.defined -%]
 	<div style="overflow:hidden;">
 	    <span>Recent Comments</span>
 	    <ul style="list-style:none;margin:0px;padding:0px;">
 	
-	    [%
+	    [%-
 	        FOREACH comment = recent_comments;
 	            comment.ndetails = comment.details.replace("/\[quote\ user=[\"'](.+?)[\"']\](.*?)\[\/quote\]/miUsS", '');
 	            comment.ndetails = comment.ndetails | strip_tags;
@@ -22,11 +22,11 @@
 	            END;
 	            
 	            tip_title = comment.username  _ "@" _ comment.date _ "::" _ comment.long
-	    %]
+	    -%]
 		        <li>
-		            <a style='margin:0px;padding:3px;' class='recent_comment recent_comments' title="[% tip_title %]" href='/view[% comment.type %]/[% comment.object_id %]/#comment[% comment.comment_id %]'>[% comment.short %]</a>
+		            <a style='margin:0px;padding:3px;' class='recent_comment recent_comments' title="[%- tip_title -%]" href='/view[%- comment.type -%]/[%- comment.object_id -%]/#comment[%- comment.comment_id -%]'>[%- comment.short -%]</a>
 		        </li>
-			[% END %]
+			[%- END -%]
 	    </ul>
 	</div>
-[% END %]
+[%- END -%]

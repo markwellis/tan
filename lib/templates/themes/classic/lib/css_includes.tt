@@ -1,5 +1,5 @@
-[% FOREACH css_include = css_includes;
+[%- FOREACH css_include = css_includes;
     m_time = c.path_to('root') _ css_include.file | file_mtime
-%]
-<link type="text/css" rel="stylesheet" media="[% css_include.media %]" href="[% css_include.file %]?m=[% m_time %]" />
-[% END %]
+-%]
+<link type="text/css" rel="stylesheet" media="[%- css_include.media -%]" href="[%- css_include.file -%]?m=[%- m_time -%]" />
+[%- END -%]

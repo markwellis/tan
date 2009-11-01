@@ -4,28 +4,28 @@
     var mibbit_nick = '[% IF c.user; c.user.username; ELSE %]n00b[% END %]';
 //]]>
 </script>
-    [% PROCESS 'lib/js_includes.tt' %]
+    [%- PROCESS 'lib/js_includes.tt' -%]
     <div id="main">
         <div id="top">
             <div style="float:right;margin-top:5px;margin-right:5px;text-align:right;">
                 <a href="/chat/" class="top_link mibbit">Chat</a>
 
-                [% IF c.user %]
+                [%- IF c.user -%]
                      | <a href='/logout/' class='top_link'>Logout</a>
-                [% END %]
+                [%- END -%]
                 <br/>
                 
-                [% IF c.user %]
+                [%- IF c.user -%]
                     <a href="/user/[% c.user.username %]/1/" class="top_link">My Comments</a> | <a href="/avatar/" class="top_link">Avatar</a> | 
-                [% ELSE %]
+                [%- ELSE -%]
                     <a href="/login/" class="top_link">Login/Register</a> | 
-                [% END %]
+                [%- END -%]
             
-                [% IF (c.nsfw) %]
+                [%- IF (c.nsfw) -%]
                     <a href='/filter/' class='top_link'>Enable NSFW filter</a>
-                [% ELSE %]
+                [%- ELSE -%]
                     <a href='/filter/' class='top_link' onclick='return confirm("Are you sure you want to disable the NSFW work filter? There will be content which is not suitable for work");'>Disable NSFW filter</a>
-                [% END %]
+                [%- END -%]
                 <br />
                 <div style="float:right">
                     <form action="http://www.google.com/cse" id="cse-search-box">
@@ -45,4 +45,4 @@
             </div>
         </div>
         <div id='middle'>
-        [% PROCESS 'lib/ads/right.tt' %]
+        [%- PROCESS 'lib/ads/right.tt' -%]

@@ -1,4 +1,4 @@
-[% IF (!overlay.defined) %]
-    [% PROCESS 'lib/footer.tt' %]
-[% END %]
-[% PROCESS 'lib/xhtml_close.tt' %]
+[%- IF (!overlay.defined);
+    PROCESS 'lib/footer.tt';
+END;
+PROCESS 'lib/xhtml_close.tt' -%]

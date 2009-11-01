@@ -1,4 +1,4 @@
-[%
+[%-
     theme_settings = {
         'name' => 'classic',
         'display_name' => 'Classic',
@@ -24,4 +24,4 @@
     page_title = 'ThisAintNews :: Social News For Pirates';
     page_meta_description = 'Social News For Pirates';
     page_keywords = 'strange pirate news community comments english social fun jokes videos pictures share sharing lol lolz funny humour humor'
-%]
+-%]

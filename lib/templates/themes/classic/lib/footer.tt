@@ -1,15 +1,15 @@
-[%
+[%-
 	PROCESS 'lib/sidebar.tt';
 	runtime =  time - start_time;
 	sql_queries = c.model('MySQL').get_query_count();
-%]
+-%]
 
     <div id="bottom">
-        Page processed in [% runtime.substr(0, 6) %] seconds, with [% sql_queries %] [% (sql_queries == 1) ? 'query' : 'queries' %]<br />
+        Page processed in [%- runtime.substr(0, 6) -%] seconds, with [%- sql_queries -%] [%- (sql_queries == 1) ? 'query' : 'queries' -%]<br />
         All User-generated content is licensed under a <a href="http://creativecommons.org/" rel='external nofollow'>Creative Commons Public Domain license</a><br />
-        Version [% c.VERSION %]
-        [% PROCESS 'lib/ads/bottom.tt' %]
+        Version [%- c.VERSION -%]
+        [%- PROCESS 'lib/ads/bottom.tt' -%]
     </div>
 </div>
-[% PROCESS 'lib/ga.tt' %]
+[%- PROCESS 'lib/ga.tt' -%]
 </body>
