@@ -15,7 +15,8 @@ sub resize(){
         if ( -e $filename ){
             my $im = Image::Magick->new();
 
-            $im->Read($filename) || Catalyst::Exception->throw("Failed to read image ${filename}");
+            my $error = $im->Read($filename);
+            Catalyst::Exception->throw("Failed to read image ${filename}, error ${error}") if $error;
 
             my $magick = $im->Get('magick');
             $im->Set('magick' => 'jpeg') if ( ($magick ne 'jpeg') && ($magick ne 'png') );

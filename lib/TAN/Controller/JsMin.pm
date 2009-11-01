@@ -8,23 +8,28 @@ use parent 'Catalyst::Controller';
 =head2 index
 
 =cut
-
+my $alpha_reg = qr/[^a-z0-9\-_]/; 
+my $format_reg = qr/\w+_(.*)_\w+/;
+my $ext_reg = qr/js$/;
 sub index :Path :Args(1) {
     my ( $self, $c, $source_file ) = @_;
 
-    $source_file =~ s/[^a-z0-9\-\_]//g;
+    $source_file =~ s/$alpha_reg//g;
+    
+    if ($source_file !~ m/$format_reg/){
+        $c->forward('/default');
+        $c->detach();
+    }
+
     my $out_file = $source_file;
     
-    $out_file =~ s/js$/\.js/;
-    $source_file =~ s/.*_(.*)_.*/$1\.js/;
+    $out_file =~ s/$ext_reg/\.js/;
+    $source_file =~ s/$format_reg/$1\.js/;
 
     my $source_dir = $c->path_to('root', $c->config->{'static_path'}, 'themes', $c->stash->{'theme_settings'}->{'name'}, 'js');
-    
     my $theme_path = $c->config->{'jscache_path'};
-    
     my $out_dir = $c->path_to('root') . $theme_path;
 
-warn "${source_dir}/${source_file}\n${out_dir}/${out_file}\n";
 
     my $js = $c->model('JsMin')->minify_file("${source_dir}/${source_file}", "${out_dir}/${out_file}");
 
