@@ -29,16 +29,16 @@ sub index :Path :Args(2) {
     $id =~ s/$int//g;
     $x =~ s/$int//g;
 
-    my $filename = $c->model('MySQL::Pictures')->find({
+    my $row = $c->model('MySQL::Pictures')->find({
         'id' => $id,        
-    })->filename();
+    });
 
-    if ($filename){
+    if ( defined($row) && (my $filename = $row->filename()) ){
         my $orig_image = $c->path_to('root') . $c->config->{'pic_path'} . "/${filename}";
         my $cache_image = $c->path_to('root') . $c->config->{'thumb_path'} . "/${id}";
         mkpath($cache_image);
         $cache_image .= "/${x}";
-    
+
         my $image = $c->model('Thumb')->resize($orig_image, $cache_image, $x);
         if ($image){
             $c->response->headers->header('Content-Type' => 'image/jpeg');

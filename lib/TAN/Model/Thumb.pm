@@ -15,10 +15,10 @@ sub resize(){
         if ( -e $filename ){
             my $im = Image::Magick->new();
 
-            # regular
-            $im->Read($filename);
-            $im->Set('magick' => 'jpeg') if ($im->Get('magick') ne 'jpeg');
+            $im->Read($filename) || Catalyst::Exception->throw("Failed to read image ${filename}");
 
+            my $magick = $im->Get('magick');
+            $im->Set('magick' => 'jpeg') if ( ($magick ne 'jpeg') && ($magick ne 'png') );
             $im->Thumbnail("${newx}x${newx}");
             $im->Write($cacheimg);
             return $im->ImageToBlob();

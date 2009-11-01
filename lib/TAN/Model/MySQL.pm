@@ -6,7 +6,6 @@ use base 'Catalyst::Model::DBIC::Schema';
 
 __PACKAGE__->config(
     schema_class => 'TAN::Schema',
-    
     connect_info => {
         dsn => 'dbi:mysql:database=thisaintnews;host=localhost;mysql_socket=/var/run/mysqld/mysqld.sock',
         user => 'haha',

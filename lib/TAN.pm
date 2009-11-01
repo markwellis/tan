@@ -15,6 +15,7 @@ use Catalyst::Runtime 5.80;
 
 use parent qw/Catalyst/;
 use Catalyst qw/ConfigLoader
+                Unicode
                 Session
                 Session::Store::FastMmap
                 Session::State::Cookie
