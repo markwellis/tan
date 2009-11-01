@@ -1,6 +1,6 @@
 [%-
 total_pages = (index_objects.pager.total_entries / index_objects.pager.entries_per_page) + 1 | format("%d");
-show_this_many = 6;
+show_this_many = 5;
 current_page = index_objects.pager.current_page;
 
 lower = current_page - show_this_many;
