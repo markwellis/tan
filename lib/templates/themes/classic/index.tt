@@ -1,6 +1,6 @@
-[%- i = 0 -%]
+[%- i = 0;
 
-[%- IF location == 'picture' -%]
+IF location == 'picture' -%]
 <div class="holder">
 [%- END -%]
 

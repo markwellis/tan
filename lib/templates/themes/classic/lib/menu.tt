@@ -9,16 +9,17 @@ current_option = {
 };
 
 menu_tabs = {
-    'All' => 'all',
-    'Links' => 'link',
-    'Blogs' => 'blog',
-    'Pics' => 'picture'
+    '0All' => 'all',
+    '1Links' => 'link',
+    '2Blogs' => 'blog',
+    '3Pics' => 'picture'
 } -%]
 
 <div id="navmenu_holder">
 
 [%- FOREACH key = menu_tabs.keys.sort;
-value = menu_tabs.$key -%]
+value = menu_tabs.$key;
+key = key.replace('\d', '') -%]
 <span class="tab [%- (current_tab.$value.defined) ? current_tab.$value : '' -%]" title="[%- value -%]" id="[%- value -%]_tab">[%- key -%]</span>[%# remove newline -%]
 [%- END -%]
     <div id="navmenu_contents">

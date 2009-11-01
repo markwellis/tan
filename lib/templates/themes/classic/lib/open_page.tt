@@ -2,8 +2,9 @@
 PROCESS 'lib/xhtml_head.tt';
 IF (!overlay.defined);
     PROCESS 'lib/top.tt';
-    messages = flash.message;
+    messages = c.flash.message;
     IF (messages);
+        c.stash.no_page_cache = 1;
         FOREACH message = messages -%]
             <span class='message'>[%- message -%]</span>
         [% END;

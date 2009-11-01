@@ -28,11 +28,16 @@ sub auto: Private{
 
     $c->stash->{'start_time'} = time();
     
+## this shouldn't be here
     my $theme = 'classic'; 
     $c->stash->{'theme_settings'} = {
         'name' => $theme,
         'path' => $c->config->{'static_path'} . "/themes/${theme}",
     };
+## end
+    
+    # set a default location
+    $c->stash->{'location'} = 'all';
     
     return 1;
 }

@@ -18,10 +18,10 @@ use Catalyst qw/ConfigLoader
                 Unicode
                 Authentication
                 Cache::FastMmap
-                PageCache
                 Session
                 Session::Store::FastMmap
                 Session::State::Cookie
+                PageCache
             /;
 our $VERSION = '0.90';
 
@@ -53,10 +53,10 @@ __PACKAGE__->setup();
 sub check_cache{
     my $c = shift;
 
-    if ( $c->user_exists) {
-        return 0; # Don't cache
+    if ( $c->user_exists || $c->stash->{'no_page_cache'} ) {
+        return 0;
     }
-    return 1; # Cache
+    return 1;
 }
 
 sub nsfw{

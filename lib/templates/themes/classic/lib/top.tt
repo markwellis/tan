@@ -11,7 +11,7 @@
                 <a href="/chat/" class="top_link mibbit">Chat</a>
 
                 [%- IF c.user -%]
-                     | <a href='/logout/' class='top_link'>Logout</a>
+                     | <a href='/login/logout/' class='top_link'>Logout</a>
                 [%- END -%]
                 <br/>
                 

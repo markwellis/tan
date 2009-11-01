@@ -18,7 +18,7 @@ __PACKAGE__->config({
     WRAPPER      => 'lib/wrapper.tt',
     TIMER        => 0,
     TEMPLATE_EXTENSION => '.tt',
-    'COMPILE_DIR' => '/tmp/tan_cache',
+    'COMPILE_DIR' => '/tmp/tan_template_cache',
     DEBUG => 1,
     WARNINGS => 1,
     FILTERS => {
