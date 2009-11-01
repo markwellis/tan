@@ -11,6 +11,8 @@ use parent 'Catalyst::Controller';
 sub index :Path :Args(3) {
     my ( $self, $c, $location, $upcoming, $page ) = @_;
 
+    $c->cache_page( 120 );
+
     if ($location !~ m/^(all|link|blog|picture)$/){
         $location = 'all';
     }

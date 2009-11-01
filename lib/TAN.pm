@@ -16,6 +16,9 @@ use Catalyst::Runtime 5.80;
 use parent qw/Catalyst/;
 use Catalyst qw/ConfigLoader
                 Unicode
+                Authentication
+                Cache::FastMmap
+                PageCache
                 Session
                 Session::Store::FastMmap
                 Session::State::Cookie
@@ -23,7 +26,6 @@ use Catalyst qw/ConfigLoader
 our $VERSION = '0.90';
 
 
-__PACKAGE__->config(  );
 
 # Configure the application.
 #
@@ -39,11 +41,23 @@ __PACKAGE__->config( name => 'TAN',
         driver => {
             'General' => { -InterPolateVars => 1 }
         }
+    },
+    'Plugin::PageCache' => {
+        cache_hook => 'check_cache'
     }
  );
 
 # Start the application
 __PACKAGE__->setup();
+
+sub check_cache{
+    my $c = shift;
+
+    if ( $c->user_exists) {
+        return 0; # Don't cache
+    }
+    return 1; # Cache
+}
 
 sub nsfw{
     my ($c, $value) = @_;
