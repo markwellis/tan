@@ -54,17 +54,17 @@ sub default :Path {
     $c->response->status(404);
 }
 
-sub render : ActionClass('RenderView') { }
+sub render : ActionClass('RenderView') {}
 
 sub end : Private {
     my ( $self, $c ) = @_;
 
     $c->stash->{'time'} = sub { return time(); };
-    my $sql_queries = $c->model('MySQL')->get_query_count();
 
     $c->forward('render');
 
     if($c->debug) {
+        my $sql_queries = $c->model('MySQL')->get_query_count();
         my $time = $c->model('MySQL')->storage()->debugobj()->{total_time};
 
         $c->log->debug("Queries this request " . $sql_queries . ": $time seconds") if $c->stash->{'sql_queries'};

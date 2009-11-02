@@ -53,7 +53,11 @@ __PACKAGE__->setup();
 sub check_cache{
     my $c = shift;
 
-    if ( $c->user_exists || $c->stash->{'no_page_cache'} ) {
+# this is a hack so people who have messages dont hit the page cache
+# its here coz it no worko in the end/render
+    $c->stash->{'messages'} = $c->flash->{'message'};
+
+    if ( $c->user_exists || defined($c->stash->{'no_page_cache'}) || defined($c->stash->{'messages'}) ) {
         return 0;
     }
     return 1;
