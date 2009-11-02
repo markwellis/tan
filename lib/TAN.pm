@@ -43,7 +43,11 @@ __PACKAGE__->config( name => 'TAN',
         }
     },
     'Plugin::PageCache' => {
-        cache_hook => 'check_cache'
+        cache_hook => 'check_cache',
+        key_maker => sub {
+            my $c = shift;
+            return $c->req->path . $c->nsfw;
+        }
     }
  );
 

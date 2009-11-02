@@ -7,25 +7,27 @@ use parent 'Catalyst::Controller';
 =head2 index
 
 =cut
-
+my $location_reg = qr/^(all|link|blog|picture)$/;
+my $int_reg = qr/\D+/;
+my $order_reg = qr/^(date|promoted|plus|minus|views|comments)$/;
 sub index :Path :Args(3) {
     my ( $self, $c, $location, $upcoming, $page ) = @_;
 
     $c->cache_page( 120 );
 
-    if ($location !~ m/^(all|link|blog|picture)$/){
+    if ($location !~ m/$location_reg/){
         $location = 'all';
     }
 
-    $upcoming =~ s/\D+//g;
-    $page =~ s/\D+//g;
+    $upcoming =~ s/$int_reg//g;
+    $page =~ s/$int_reg//g;
 
     $upcoming ||= 0;
     $page ||= 1;
     
     
     my $order = $c->req->param('order') || 'date';
-    if ($order !~ m/^(date|promoted|plus|minus|views|comments)$/){
+    if ($order !~ m/$order_reg/){
         $order = 'date';
     }
 

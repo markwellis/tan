@@ -3,7 +3,7 @@ package TAN::Controller::Login;
 use strict;
 use warnings;
 use parent 'Catalyst::Controller';
-
+use Captcha::reCAPTCHA;
 
 sub index: Private{
     my ($self, $c) = @_;
@@ -54,6 +54,8 @@ sub logout: Local{
     if ($c->user_exists){
         $c->logout;
         $c->flash->{'message'} = "You have logged out";
+    } else {
+        $c->flash->{'message'} = "You weren't logged in!";
     }
 
     $c->res->redirect($ref);
