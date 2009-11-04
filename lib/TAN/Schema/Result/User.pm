@@ -1,4 +1,4 @@
-package TAN::Schema::Result::UserDetails;
+package TAN::Schema::Result::User;
 
 use strict;
 use warnings;
@@ -6,10 +6,10 @@ use warnings;
 use base 'DBIx::Class';
 
 __PACKAGE__->load_components("InflateColumn::DateTime", "Core");
-__PACKAGE__->table("user_details");
+__PACKAGE__->table("user");
 __PACKAGE__->add_columns(
   "user_id",
-  { data_type => "INT", default_value => undef, is_nullable => 0, size => 10 },
+  { data_type => "BIGINT", default_value => undef, is_nullable => 0, size => 20 },
   "username",
   {
     data_type => "VARCHAR",
@@ -21,13 +21,6 @@ __PACKAGE__->add_columns(
   {
     data_type => "TIMESTAMP",
     default_value => "CURRENT_TIMESTAMP",
-    is_nullable => 0,
-    size => 14,
-  },
-  "last_date",
-  {
-    data_type => "TIMESTAMP",
-    default_value => "0000-00-00 00:00:00",
     is_nullable => 0,
     size => 14,
   },
@@ -45,16 +38,36 @@ __PACKAGE__->add_columns(
     is_nullable => 0,
     size => 255,
   },
-  "deleted",
-  { data_type => "ENUM", default_value => "N", is_nullable => 0, size => 1 },
   "confirmed",
+  { data_type => "ENUM", default_value => "N", is_nullable => 0, size => 1 },
+  "deleted",
   { data_type => "ENUM", default_value => "N", is_nullable => 0, size => 1 },
 );
 __PACKAGE__->set_primary_key("user_id");
+__PACKAGE__->has_many(
+  "comments",
+  "TAN::Schema::Result::Comments",
+  { "foreign.user_id" => "self.user_id" },
+);
+__PACKAGE__->has_many(
+  "objects",
+  "TAN::Schema::Result::Object",
+  { "foreign.user_id" => "self.user_id" },
+);
+__PACKAGE__->has_many(
+  "user_tokens",
+  "TAN::Schema::Result::UserTokens",
+  { "foreign.user_id" => "self.user_id" },
+);
+__PACKAGE__->has_many(
+  "views",
+  "TAN::Schema::Result::Views",
+  { "foreign.user_id" => "self.user_id" },
+);
 
 
-# Created by DBIx::Class::Schema::Loader v0.04006 @ 2009-09-28 19:19:42
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:fVCCI8cfNGrmOcDR6UTCMw
+# Created by DBIx::Class::Schema::Loader v0.04006 @ 2009-11-04 00:45:28
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ad/tncDy5z9gcU2QnPr/NA
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

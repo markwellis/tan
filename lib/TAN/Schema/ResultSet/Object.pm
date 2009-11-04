@@ -1,4 +1,4 @@
-package TAN::Schema::ResultSet::ObjectDetails;
+package TAN::Schema::ResultSet::Object;
 
 use strict;
 use warnings;
