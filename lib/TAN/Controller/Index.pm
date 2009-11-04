@@ -9,7 +9,7 @@ use parent 'Catalyst::Controller';
 =cut
 my $location_reg = qr/^(all|link|blog|picture)$/;
 my $int_reg = qr/\D+/;
-my $order_reg = qr/^(date|promoted|plus|minus|views|comments)$/;
+my $order_reg = qr/^(promoted|plus|minus|views|comments)$/;
 sub index :Path :Args(3) {
     my ( $self, $c, $location, $upcoming, $page ) = @_;
 
@@ -26,9 +26,9 @@ sub index :Path :Args(3) {
     $page ||= 1;
     
     
-    my $order = $c->req->param('order') || 'date';
+    my $order = $c->req->param('order') || 'created';
     if ($order !~ m/$order_reg/){
-        $order = 'date';
+        $order = 'created';
     }
 
     #redirect to somewhere sensible if someone has made up some random url...
