@@ -35,21 +35,19 @@ __PACKAGE__->add_columns(
   },
 );
 __PACKAGE__->set_primary_key("blog_id");
-__PACKAGE__->belongs_to(
-  "blog_id",
-  "TAN::Schema::Result::Object",
-  { object_id => "blog_id" },
-);
-__PACKAGE__->belongs_to(
-  "picture_id",
-  "TAN::Schema::Result::Picture",
-  { picture_id => "picture_id" },
-);
-
 
 # Created by DBIx::Class::Schema::Loader v0.04006 @ 2009-11-04 20:07:34
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:BnbstlSbZyjsVsB2jmaaGA
 
+__PACKAGE__->belongs_to(
+  "object",
+  "TAN::Schema::Result::Object",
+  { object_id => "blog_id" },
+);
+__PACKAGE__->belongs_to(
+  "image",
+  "TAN::Schema::Result::Picture",
+  { picture_id => "picture_id" },
+);
 
-# You can replace this text with custom content, and it will be preserved on regeneration
 1;

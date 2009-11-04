@@ -25,17 +25,25 @@ __PACKAGE__->add_columns(
   },
 );
 __PACKAGE__->set_primary_key("object_tag_id");
-__PACKAGE__->belongs_to("tag_id", "TAN::Schema::Result::Tags", { tag_id => "tag_id" });
-__PACKAGE__->belongs_to(
-  "object_id",
-  "TAN::Schema::Result::Object",
-  { object_id => "object_id" },
-);
-
 
 # Created by DBIx::Class::Schema::Loader v0.04006 @ 2009-11-04 20:07:34
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:rDl0iYcuALecvL7ZC9rf5Q
 
+#im not sure this is needed
+__PACKAGE__->has_many("real_tags" =>
+     "TAN::Schema::Result::Tags",
+     "tag_id"
+ );
 
-# You can replace this text with custom content, and it will be preserved on regeneration
+__PACKAGE__->belongs_to(
+  "object",
+  "TAN::Schema::Result::Object",
+  { object_id => "object_id" },
+);
+
+__PACKAGE__->many_to_many(
+  "tags" => "tag_objects",
+  "real_tags" 
+);
+
 1;

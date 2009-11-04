@@ -34,51 +34,60 @@ __PACKAGE__->add_columns(
   { data_type => "INT", default_value => 0, is_nullable => 0, size => 11 },
 );
 __PACKAGE__->set_primary_key("object_id");
-__PACKAGE__->has_many(
-  "blogs",
+
+# Created by DBIx::Class::Schema::Loader v0.04006 @ 2009-11-04 20:07:34
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:7UBLwg+hmLS0fj+T1JwLsA
+__PACKAGE__->belongs_to(
+  "user",
+  "TAN::Schema::Result::User",
+  { user_id => "user_id" },
+);
+
+__PACKAGE__->might_have(
+  "blog",
   "TAN::Schema::Result::Blog",
   { "foreign.blog_id" => "self.object_id" },
 );
+
+__PACKAGE__->might_have(
+  "link",
+  "TAN::Schema::Result::Link",
+  { "foreign.link_id" => "self.object_id" },
+);
+
+__PACKAGE__->might_have(
+  "picture",
+  "TAN::Schema::Result::Picture",
+  { "foreign.picture_id" => "self.object_id" },
+);
+
+__PACKAGE__->might_have(
+  "old_lookup",
+  "TAN::Schema::Result::OldLookup",
+  { "foreign.new_id" => "self.object_id" },
+);
+
 __PACKAGE__->has_many(
   "comments",
   "TAN::Schema::Result::Comments",
   { "foreign.object_id" => "self.object_id" },
 );
-__PACKAGE__->has_many(
-  "links",
-  "TAN::Schema::Result::Link",
-  { "foreign.link_id" => "self.object_id" },
-);
-__PACKAGE__->belongs_to(
-  "user_id",
-  "TAN::Schema::Result::User",
-  { user_id => "user_id" },
-);
-__PACKAGE__->has_many(
-  "old_lookups",
-  "TAN::Schema::Result::OldLookup",
-  { "foreign.new_id" => "self.object_id" },
-);
-__PACKAGE__->has_many(
-  "pictures",
-  "TAN::Schema::Result::Picture",
-  { "foreign.picture_id" => "self.object_id" },
-);
-__PACKAGE__->has_many(
-  "tag_objects",
-  "TAN::Schema::Result::TagObjects",
-  { "foreign.object_id" => "self.object_id" },
-);
+
 __PACKAGE__->has_many(
   "views",
   "TAN::Schema::Result::Views",
   { "foreign.object_id" => "self.object_id" },
 );
 
+__PACKAGE__->has_many(
+  "tag_objects",
+  "TAN::Schema::Result::TagObjects",
+  { "foreign.object_id" => "self.object_id" },
+);
 
-# Created by DBIx::Class::Schema::Loader v0.04006 @ 2009-11-04 20:07:34
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:7UBLwg+hmLS0fj+T1JwLsA
+__PACKAGE__->many_to_many(
+  "tags" => "tag_objects",
+  "real_tags" 
+);
 
-
-# You can replace this text with custom content, and it will be preserved on regeneration
 1;

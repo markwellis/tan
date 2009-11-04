@@ -35,21 +35,19 @@ __PACKAGE__->add_columns(
   },
 );
 __PACKAGE__->set_primary_key("link_id");
-__PACKAGE__->belongs_to(
-  "picture_id",
-  "TAN::Schema::Result::Picture",
-  { picture_id => "picture_id" },
-);
-__PACKAGE__->belongs_to(
-  "link_id",
-  "TAN::Schema::Result::Object",
-  { object_id => "link_id" },
-);
-
 
 # Created by DBIx::Class::Schema::Loader v0.04006 @ 2009-11-04 20:07:34
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:f2mIjTlqe7amRjbRdDvC2A
 
+__PACKAGE__->belongs_to(
+  "image",
+  "TAN::Schema::Result::Picture",
+  { picture_id => "picture_id" },
+);
+__PACKAGE__->belongs_to(
+  "object",
+  "TAN::Schema::Result::Object",
+  { object_id => "link_id" },
+);
 
-# You can replace this text with custom content, and it will be preserved on regeneration
 1;
