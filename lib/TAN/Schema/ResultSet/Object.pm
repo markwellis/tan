@@ -14,7 +14,7 @@ sub index {
     
     if ($upcoming){
         $search = \'= 0';
-        $order ||= 'date'
+        $order ||= 'created'
     } else {
         $search = { '>' => 0 };
         $order ||= 'promoted';
