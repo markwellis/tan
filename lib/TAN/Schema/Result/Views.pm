@@ -39,8 +39,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("view_id");
 
 
-# Created by DBIx::Class::Schema::Loader v0.04006 @ 2009-11-04 20:07:34
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:bUzedblO+3wPt/YJAIoawA
+# Created by DBIx::Class::Schema::Loader v0.04006 @ 2009-11-04 22:01:20
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:lF3E02Bwvewu/kyyW2RvAw
 
 __PACKAGE__->belongs_to(
   "user",

@@ -36,8 +36,9 @@ __PACKAGE__->add_columns(
 );
 __PACKAGE__->set_primary_key("blog_id");
 
-# Created by DBIx::Class::Schema::Loader v0.04006 @ 2009-11-04 20:07:34
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:BnbstlSbZyjsVsB2jmaaGA
+
+# Created by DBIx::Class::Schema::Loader v0.04006 @ 2009-11-04 22:01:19
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:2yuJn4YdJ2YjHiMM992ceQ
 
 __PACKAGE__->belongs_to(
   "object",

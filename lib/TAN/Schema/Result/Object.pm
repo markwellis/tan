@@ -35,8 +35,10 @@ __PACKAGE__->add_columns(
 );
 __PACKAGE__->set_primary_key("object_id");
 
-# Created by DBIx::Class::Schema::Loader v0.04006 @ 2009-11-04 20:07:34
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:7UBLwg+hmLS0fj+T1JwLsA
+
+# Created by DBIx::Class::Schema::Loader v0.04006 @ 2009-11-04 22:01:20
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:zHtxjN50TOUzr4b7Jb877A
+
 __PACKAGE__->belongs_to(
   "user",
   "TAN::Schema::Result::User",

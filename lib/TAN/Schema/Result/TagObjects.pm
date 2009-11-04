@@ -26,10 +26,10 @@ __PACKAGE__->add_columns(
 );
 __PACKAGE__->set_primary_key("object_tag_id");
 
-# Created by DBIx::Class::Schema::Loader v0.04006 @ 2009-11-04 20:07:34
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:rDl0iYcuALecvL7ZC9rf5Q
 
-#im not sure this is needed
+# Created by DBIx::Class::Schema::Loader v0.04006 @ 2009-11-04 22:01:20
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:upRc1jLOcXGENJbhvwg+bA
+
 __PACKAGE__->has_many("real_tags" =>
      "TAN::Schema::Result::Tags",
      "tag_id"

@@ -32,12 +32,13 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("token_id");
 
 
-# Created by DBIx::Class::Schema::Loader v0.04006 @ 2009-11-04 20:07:34
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:G5zoXiJQXZtBCESiygmMzg
+# Created by DBIx::Class::Schema::Loader v0.04006 @ 2009-11-04 22:01:20
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:gMaKITagQn7KydycaZy9dA
 
 __PACKAGE__->belongs_to(
   "user",
   "TAN::Schema::Result::User",
   { user_id => "user_id" },
 );
+
 1;
