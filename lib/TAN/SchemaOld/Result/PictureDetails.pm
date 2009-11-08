@@ -5,7 +5,7 @@ use warnings;
 
 use base 'DBIx::Class';
 
-__PACKAGE__->load_components("InflateColumn::DateTime", "Core");
+__PACKAGE__->load_components("Core");
 __PACKAGE__->table("picture_details");
 __PACKAGE__->add_columns(
   "picture_id",
@@ -32,6 +32,7 @@ __PACKAGE__->add_columns(
     default_value => "CURRENT_TIMESTAMP",
     is_nullable => 0,
     size => 14,
+    datetime_undef_if_invalid => 1,
   },
   "promoted",
   {
@@ -39,6 +40,7 @@ __PACKAGE__->add_columns(
     default_value => "0000-00-00 00:00:00",
     is_nullable => 0,
     size => 14,
+    datetime_undef_if_invalid => 1,
   },
   "filename",
   {

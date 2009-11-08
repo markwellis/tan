@@ -28,7 +28,7 @@ num = num + 1
 
 <br />
 
-<img class="avatar" src="[% avatar_http %]?m=[% avatar_mtime.defined ? avatar_mtime : '' %]" alt="[% object.user %]" />
+<img class="avatar" src="[% avatar_http %]?m=[% avatar_mtime.defined ? avatar_mtime : '' %]" alt="[% object.user.username %]" />
 Posted by <a class="user" href="/user/[% object.user %]/1/">[% object.user %]</a>
 
 [%- IF ( !upcoming ) -%]

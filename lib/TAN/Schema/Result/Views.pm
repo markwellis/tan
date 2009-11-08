@@ -5,7 +5,7 @@ use warnings;
 
 use base 'DBIx::Class';
 
-__PACKAGE__->load_components("InflateColumn::DateTime", "Core");
+__PACKAGE__->load_components("Core");
 __PACKAGE__->table("views");
 __PACKAGE__->add_columns(
   "view_id",

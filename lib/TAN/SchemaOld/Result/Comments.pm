@@ -5,7 +5,7 @@ use warnings;
 
 use base 'DBIx::Class';
 
-__PACKAGE__->load_components("InflateColumn::DateTime", "Core");
+__PACKAGE__->load_components("Core");
 __PACKAGE__->table("comments");
 __PACKAGE__->add_columns(
   "comment_id",
@@ -25,6 +25,7 @@ __PACKAGE__->add_columns(
     default_value => "CURRENT_TIMESTAMP",
     is_nullable => 0,
     size => 14,
+    datetime_undef_if_invalid => 1,
   },
   "details",
   {
@@ -45,6 +46,7 @@ __PACKAGE__->add_columns(
     default_value => "0000-00-00 00:00:00",
     is_nullable => 0,
     size => 14,
+    datetime_undef_if_invalid => 1,
   },
   "deleted",
   { data_type => "ENUM", default_value => "N", is_nullable => 0, size => 1 },

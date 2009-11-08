@@ -5,7 +5,7 @@ use warnings;
 
 use base 'DBIx::Class';
 
-__PACKAGE__->load_components("InflateColumn::DateTime", "Core");
+__PACKAGE__->load_components("Core");
 __PACKAGE__->table("user_tokens");
 __PACKAGE__->add_columns(
   "token_id",
@@ -25,6 +25,7 @@ __PACKAGE__->add_columns(
     default_value => "CURRENT_TIMESTAMP",
     is_nullable => 0,
     size => 14,
+    datetime_undef_if_invalid => 1,
   },
   "type",
   { data_type => "ENUM", default_value => "reg", is_nullable => 0, size => 6 },

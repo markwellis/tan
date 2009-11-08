@@ -5,7 +5,7 @@ use warnings;
 
 use base 'DBIx::Class';
 
-__PACKAGE__->load_components("InflateColumn::DateTime", "Core");
+__PACKAGE__->load_components("Core");
 __PACKAGE__->table("tag_details");
 __PACKAGE__->add_columns(
   "td_id",
@@ -33,6 +33,7 @@ __PACKAGE__->add_columns(
     default_value => "CURRENT_TIMESTAMP",
     is_nullable => 0,
     size => 14,
+    datetime_undef_if_invalid => 1,
   },
 );
 __PACKAGE__->set_primary_key("td_id");
