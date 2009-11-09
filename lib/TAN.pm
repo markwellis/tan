@@ -57,6 +57,8 @@ __PACKAGE__->setup();
 sub check_cache{
     my $c = shift;
 
+return 0;
+
 # this is a hack so people who have messages dont hit the page cache
 # its here coz it no worko in the end/render
     $c->stash->{'messages'} = $c->flash->{'message'};

@@ -5,7 +5,8 @@ use lib '../../lib';
 use TAN::Model::MySQL;
 use TAN::Model::OldDB;
 
-use HTML::Entities; 
+use HTML::Entities;
+use File::Basename;
 
 #db connections
 my $newdb = new TAN::Model::MySQL;
@@ -54,12 +55,12 @@ foreach my $old_picture ($old_pictures->all){
         });
         
         $picture_lookup->{$old_picture->picture_id} = $new_object->id;
-    
+
         my $new_blog = $newdb->resultset('Picture')->create({
             'picture_id' => $new_object->id,
             'title' => decode_entities($old_picture->title),
             'description' => decode_entities($old_picture->description),
-            'filename' => $old_picture->filename,
+            'filename' => basename($old_picture->filename),
             'x' => $old_picture->x,
             'y' => $old_picture->y,
             'size' => $old_picture->size,

@@ -5,7 +5,7 @@ use warnings;
 
 use base 'DBIx::Class';
 
-__PACKAGE__->load_components("Core");
+__PACKAGE__->load_components('UTF8Columns', "Core");
 __PACKAGE__->table("pi");
 __PACKAGE__->add_columns(
   "ip",
@@ -58,7 +58,7 @@ __PACKAGE__->add_columns(
     datetime_undef_if_invalid => 1,
   },
 );
-
+__PACKAGE__->utf8_columns(qw/session_id referer url ua ip/);
 
 # Created by DBIx::Class::Schema::Loader v0.04006 @ 2009-11-08 15:18:48
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:S3Vn41xSfhOkaeY7BFEYiw

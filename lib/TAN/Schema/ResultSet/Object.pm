@@ -14,11 +14,11 @@ sub index {
     
     if ($upcoming){
         $search = \'= 0';
-        $order ||= 'created'
+        $order ||= 'object.created'
     } else {
         $search = { '>' => 0 };
-        $order ||= 'promoted';
-        $order = 'promoted' if ($order eq 'date');
+        $order ||= 'object.promoted';
+        $order = 'object.promoted' if ($order eq 'date');
     }
  
     if ($location eq 'all'){
@@ -31,11 +31,13 @@ sub index {
         'promoted' => $search,
         'type' => $type,
     },{
-        'order_by' => "${order} desc",
+        'order_by' => {
+            -desc => [$order],
+        },
         'page' => $page,
         'rows' => 27,
-        'join' => $type,
-        'prefetch' => $type,
+        'join' =>  [$type, 'user'],
+        'prefetch' => [$type, 'user'],
     });
 }
 

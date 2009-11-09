@@ -29,11 +29,13 @@ sub index :Path :Args(2) {
     $id =~ s/$int//g;
     $x =~ s/$int//g;
 
-    my $row = $c->model('MySQL::Pictures')->find({
-        'id' => $id,        
+    my $row = $c->model('MySQL::Object')->find({
+        'object_id' => $id,
+    },,{
+        'prefetch' => 'picture',
     });
 
-    if ( defined($row) && (my $filename = $row->filename()) ){
+    if ( defined($row) && (my $filename = $row->picture->filename()) ){
         my $orig_image = $c->path_to('root') . $c->config->{'pic_path'} . "/${filename}";
         my $cache_image = $c->path_to('root') . $c->config->{'thumb_path'} . "/${id}";
         mkpath($cache_image);

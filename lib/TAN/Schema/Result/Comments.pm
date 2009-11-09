@@ -5,7 +5,7 @@ use warnings;
 
 use base 'DBIx::Class';
 
-__PACKAGE__->load_components("Core");
+__PACKAGE__->load_components('UTF8Columns', "Core");
 __PACKAGE__->table("comments");
 __PACKAGE__->add_columns(
   "comment_id",
@@ -34,7 +34,7 @@ __PACKAGE__->add_columns(
   { data_type => "INT", default_value => 0, is_nullable => 0, size => 11 },
 );
 __PACKAGE__->set_primary_key("comment_id");
-
+__PACKAGE__->utf8_columns(qw/comment/);
 
 # Created by DBIx::Class::Schema::Loader v0.04006 @ 2009-11-04 22:01:20
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:1eFIzFs/gXnMuzdofLP07Q

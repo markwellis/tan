@@ -5,7 +5,7 @@ use warnings;
 
 use base 'DBIx::Class';
 
-__PACKAGE__->load_components("Core");
+__PACKAGE__->load_components('UTF8Columns', "Core");
 __PACKAGE__->table("blog");
 __PACKAGE__->add_columns(
   "blog_id",
@@ -35,7 +35,7 @@ __PACKAGE__->add_columns(
   },
 );
 __PACKAGE__->set_primary_key("blog_id");
-
+__PACKAGE__->utf8_columns(qw/details title description/);
 
 # Created by DBIx::Class::Schema::Loader v0.04006 @ 2009-11-04 22:01:19
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:2yuJn4YdJ2YjHiMM992ceQ

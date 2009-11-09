@@ -5,7 +5,7 @@ use warnings;
 
 use base 'DBIx::Class';
 
-__PACKAGE__->load_components("Core");
+__PACKAGE__->load_components('UTF8Columns', "Core");
 __PACKAGE__->table("user_tokens");
 __PACKAGE__->add_columns(
   "token_id",
@@ -31,7 +31,7 @@ __PACKAGE__->add_columns(
   { data_type => "ENUM", default_value => "reg", is_nullable => 0, size => 6 },
 );
 __PACKAGE__->set_primary_key("token_id");
-
+__PACKAGE__->utf8_columns(qw/token/);
 
 # Created by DBIx::Class::Schema::Loader v0.04006 @ 2009-11-08 15:18:49
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:FbemWuUupEvK0zl97tXTBw
