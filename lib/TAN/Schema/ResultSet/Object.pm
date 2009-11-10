@@ -16,7 +16,7 @@ sub index {
         $search = \'= 0';
         $order ||= 'object.created'
     } else {
-        $search = { '>' => 0 };
+        $search = { '!=' => 0 };
         $order ||= 'object.promoted';
         $order = 'object.promoted' if ($order eq 'date');
     }
@@ -31,13 +31,18 @@ sub index {
         'promoted' => $search,
         'type' => $type,
     },{
+        '+select' => [
+            { 'unix_timestamp' => 'created' },
+            { 'unix_timestamp' => 'promoted' },
+        ],
+        'as' => ['created', 'promoted'],
         'order_by' => {
             -desc => [$order],
         },
         'page' => $page,
         'rows' => 27,
-        'join' =>  [$type, 'user'],
-        'prefetch' => [$type, 'user'],
+#        'join' =>  [$type, 'user'],
+#        'prefetch' => [$type, 'user'],
     });
 }
 

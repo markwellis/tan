@@ -29,12 +29,12 @@ num = num + 1
 <br />
 
 <img class="avatar" src="[% avatar_http %]?m=[% avatar_mtime.defined ? avatar_mtime : '' %]" alt="[% object.user.username %]" />
-Posted by <a class="user" href="/user/[% object.user %]/1/">[% object.user %]</a>
+Posted by <a class="user" href="/user/[% object.user.username %]/1/">[% object.user.username %]</a>
 
 [%- IF ( !upcoming ) -%]
     promoted [% object.promoted -%] ago
 [%- ELSE -%]
-    [% object.date -%] ago
+    [% object.created -%] ago
 [%- END -%]
 <span class="object_type"> [[%- object.type -%]]</span>
 
