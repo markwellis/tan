@@ -32,9 +32,9 @@ num = num + 1
 Posted by <a class="user" href="/user/[% object.user.username %]/1/">[% object.user.username %]</a>
 
 [%- IF ( !upcoming ) -%]
-    promoted [% object.promoted -%] ago
+    promoted [% c.date_ago(object.promoted) -%] ago
 [%- ELSE -%]
-    [% object.created -%] ago
+    [% c.date_ago(object.created) -%] ago
 [%- END -%]
 <span class="object_type"> [[%- object.type -%]]</span>
 

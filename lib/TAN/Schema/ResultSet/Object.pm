@@ -14,13 +14,13 @@ sub index {
     
     if ($upcoming){
         $search = \'= 0';
-        $order ||= 'object.created'
+        $order ||= 'me.created'
     } else {
-        $search = { '!=' => 0 };
-        $order ||= 'object.promoted';
-        $order = 'object.promoted' if ($order eq 'date');
+        $search = \'!= 0';
+        $order ||= 'me.promoted';
+        $order = 'me.promoted' if ($order eq 'date');
     }
- 
+
     if ($location eq 'all'){
         $type = ['link', 'blog'];
     } else {
@@ -32,8 +32,8 @@ sub index {
         'type' => $type,
     },{
         '+select' => [
-            { 'unix_timestamp' => 'created' },
-            { 'unix_timestamp' => 'promoted' },
+            { 'unix_timestamp' => 'me.created' },
+            { 'unix_timestamp' => 'me.promoted' },
         ],
         '+as' => ['created', 'promoted'],
         'order_by' => {
@@ -42,7 +42,7 @@ sub index {
         'page' => $page,
         'rows' => 27,
 #        'join' =>  [$type, 'user'],
-#        'prefetch' => [$type, 'user'],
+#        'prefetch' => [$type, 'user', 'comments'],
     });
 }
 

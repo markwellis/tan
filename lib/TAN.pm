@@ -24,8 +24,8 @@ use Catalyst qw/ConfigLoader
                 PageCache
             /;
 our $VERSION = '0.90';
-
-
+use Time::HiRes qw/time/;
+use POSIX qw/floor/;
 
 # Configure the application.
 #
@@ -57,7 +57,9 @@ __PACKAGE__->setup();
 sub check_cache{
     my $c = shift;
 
+# don't commit this!!!
 return 0;
+# end
 
 # this is a hack so people who have messages dont hit the page cache
 # its here coz it no worko in the end/render
@@ -81,6 +83,57 @@ sub nsfw{
     }
     
     return 0;
+}
+
+sub date_ago{
+    my ($c, $date) = @_;
+
+    my $blocks = [
+        {
+            'name' => 'year',
+            'amount' => 60*60*24*365,
+        },
+        {
+            'name' => 'month',
+            'amount' => 60*60*24*31
+        },
+        {
+            'name' => 'day',
+            'amount' => 60*60*24,
+        },
+        {
+            'name' => 'hour',
+            'amount' => 60*60,
+        },
+        {
+            'name' => 'minute',
+            'amount' => 60,
+        },
+        {
+            'name' => 'second',
+            'amount' => 1,
+        },
+    ];
+   
+    my $diff = abs( $date - time );
+   
+    my $i = 0;
+    my @result;
+
+    foreach my $block (@{$blocks}) {
+        if ($i > 1) {
+            last;
+        }
+        if ($diff/$block->{'amount'} >= 1) {
+            ++$i;
+            my $amount = floor($diff/$block->{'amount'});
+            
+            my $plural = ($amount>1) ? 's' : '';
+            push(@result, "${amount} " . $block->{'name'} . $plural);
+            $diff -= $amount*$block->{'amount'};
+        }
+    }
+    return join(' ',@result);
 }
 =head1 NAME
 
