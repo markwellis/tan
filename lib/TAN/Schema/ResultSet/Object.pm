@@ -35,7 +35,7 @@ sub index {
             { 'unix_timestamp' => 'created' },
             { 'unix_timestamp' => 'promoted' },
         ],
-        'as' => ['created', 'promoted'],
+        '+as' => ['created', 'promoted'],
         'order_by' => {
             -desc => [$order],
         },
