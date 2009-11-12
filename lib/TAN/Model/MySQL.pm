@@ -17,7 +17,7 @@ sub BUILD{
     my $self = shift;
     $self->storage->debugobj( TAN::DBProfiler->new() );
     
-    $self->storage->debug( $ENV{'CATALYST_DEBUG'});
+    $self->storage->debug(1);
     return $self;
 }
 
