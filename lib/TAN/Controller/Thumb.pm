@@ -29,13 +29,16 @@ sub index :Path :Args(2) {
     $id =~ s/$int//g;
     $x =~ s/$int//g;
 
-    my $row = $c->model('MySQL::Object')->find({
-        'object_id' => $id,
-    },{
-        'prefetch' => 'picture',
+    if ($x != 100 && $x != 150 && $x != 160 && $x != 200 && $x != 250 && $x != 300 && $x != 400 && $x != 500 && $x != 600){
+        $c->forward('/default');
+        $c->detach();
+    }
+
+    my $row = $c->model('MySQL::Picture')->find({
+        'picture_id' => $id,
     });
     
-    my $filename = $row->picture->filename;
+    my $filename = $row->filename;
 
     if ( defined($row) && $filename ){
         my $orig_image = $c->path_to('root') . $c->config->{'pic_path'} . "/${filename}";
@@ -44,9 +47,8 @@ sub index :Path :Args(2) {
         $cache_image .= "/${x}";
 
         my $image = $c->model('Thumb')->resize($orig_image, $cache_image, $x);
-        if ($image){
-            $c->response->headers->header('Content-Type' => 'image/jpeg');
-            $c->response->body($image);
+        if (!$image){
+            $c->res->redirect("/static/cache/thumbs/${id}/${x}");
             $c->detach();
         }
     }

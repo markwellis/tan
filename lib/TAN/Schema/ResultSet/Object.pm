@@ -42,7 +42,7 @@ sub index {
         'page' => $page,
         'rows' => 27,
 #        'join' =>  [$type, 'user'],
-#        'prefetch' => [$type, 'user', 'comments'],
+        'prefetch' => [$type, 'user'],
     });
 }
 
