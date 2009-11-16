@@ -40,7 +40,7 @@ Posted by <a class="user" href="/user/[% object.user.username %]/1/">[% object.u
 
 <br />
 <a href='/view[% object.type %]/[% object.id %]/[% object.$type.title | url_title %]/#comments'>
-<img src="[% c.config.static_path %]/images/comment.png" style="height:15px;width:15px" alt="" /> [%#- object.comments.count -%]</a> | [%- object.pi.count -%] views
+<img src="[% c.config.static_path %]/images/comment.png" style="height:15px;width:15px" alt="" /> [%- object.get_column('comments') -%]</a> | [%- object.get_column('views') -%] views
 
 [%- IF !1 -%]
 	[%# fixme! IF ($f->user->user_id() == $f->stash->object['user_id']) || $f->user->admin()) %]

@@ -34,8 +34,10 @@ sub index {
         '+select' => [
             { 'unix_timestamp' => 'me.created' },
             { 'unix_timestamp' => 'me.promoted' },
+            \'(SELECT COUNT(*) FROM views WHERE views.object_id = me.object_id) views',
+            \'(SELECT COUNT(*) FROM comments WHERE comments.object_id = me.object_id) comments',
         ],
-        '+as' => ['created', 'promoted'],
+        '+as' => ['created', 'promoted', 'views', 'comments'],
         'order_by' => {
             -desc => [$order],
         },
