@@ -36,14 +36,15 @@ sub index {
             { 'unix_timestamp' => 'me.promoted' },
             \'(SELECT COUNT(*) FROM views WHERE views.object_id = me.object_id) views',
             \'(SELECT COUNT(*) FROM comments WHERE comments.object_id = me.object_id) comments',
+            \'(SELECT COUNT(*) FROM plus_minus WHERE plus_minus.object_id = me.object_id AND type="plus") plus',
+            \'(SELECT COUNT(*) FROM plus_minus WHERE plus_minus.object_id = me.object_id AND type="minus") minus',
         ],
-        '+as' => ['created', 'promoted', 'views', 'comments'],
+        '+as' => ['created', 'promoted', 'views', 'comments', 'plus', 'minus'],
         'order_by' => {
             -desc => [$order],
         },
         'page' => $page,
         'rows' => 27,
-#        'join' =>  [$type, 'user'],
         'prefetch' => [$type, 'user'],
     });
 }

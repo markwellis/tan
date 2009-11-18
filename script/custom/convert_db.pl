@@ -203,6 +203,58 @@ foreach my $old_comment ($old_comments->all){
 }
 print "converted " . $old_comments->count . " comments\n";
 
+#PLUS
+#   needs
+#       objects
+#       user
+my $old_pluss = $olddb->resultset('Plus');
+foreach my $old_plus ($old_pluss->all){
+    if ($user_lookup->{$old_plus->user_id}){
+        my $newid;
+        if ($old_plus->link_id){
+            $newid = $link_lookup->{$old_plus->link_id};
+        } elsif ($old_plus->blog_id){
+            $newid = $blog_lookup->{$old_plus->blog_id};
+        } elsif ($old_plus->picture_id){
+            $newid = $picture_lookup->{$old_plus->picture_id};
+        }
+        if ($newid){
+            my $new_plus = $newdb->resultset('PlusMinus')->create({
+                'user_id' => $user_lookup->{$old_plus->user_id},
+                'object_id' => $newid,
+                'type' => 'plus',
+            });
+        }
+    }
+}
+print "converted " . $old_pluss->count . " plus\n";
+
+#MINUS
+#   needs
+#       objects
+#       user
+my $old_minuss = $olddb->resultset('Minus');
+foreach my $old_plus ($old_minuss->all){
+    if ($user_lookup->{$old_plus->user_id}){
+        my $newid;
+        if ($old_plus->link_id){
+            $newid = $link_lookup->{$old_plus->link_id};
+        } elsif ($old_plus->blog_id){
+            $newid = $blog_lookup->{$old_plus->blog_id};
+        } elsif ($old_plus->picture_id){
+            $newid = $picture_lookup->{$old_plus->picture_id};
+        }
+        if ($newid){
+            my $new_plus = $newdb->resultset('PlusMinus')->create({
+                'user_id' => $user_lookup->{$old_plus->user_id},
+                'object_id' => $newid,
+                'type' => 'minus',
+            });
+        }
+    }
+}
+print "converted " . $old_minuss->count . " minus\n";
+
 #VIEWS
 #   needs
 #       objects

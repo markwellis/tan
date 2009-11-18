@@ -77,6 +77,12 @@ __PACKAGE__->has_many(
 );
 
 __PACKAGE__->has_many(
+  "plus_minus",
+  "TAN::Schema::Result::PlusMinus",
+  { "foreign.object_id" => "self.object_id" },
+);
+
+__PACKAGE__->has_many(
   "views",
   "TAN::Schema::Result::Views",
   { "foreign.object_id" => "self.object_id" },

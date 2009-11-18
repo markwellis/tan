@@ -50,6 +50,12 @@ __PACKAGE__->utf8_columns(qw/username email password/);
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:y1r+PaK7ykzu5OXwbRRICw
 
 __PACKAGE__->has_many(
+  "plus_minus",
+  "TAN::Schema::Result::PlusMinus",
+  { "foreign.user_id" => "self.user_id" },
+);
+
+__PACKAGE__->has_many(
   "comments",
   "TAN::Schema::Result::Comments",
   { "foreign.user_id" => "self.user_id" },
