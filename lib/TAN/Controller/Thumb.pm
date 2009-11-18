@@ -23,9 +23,10 @@ Catalyst Controller.
 =cut
 my $int = qr/\D+/;
 
-sub index :Path :Args(2) {
-    my ( $self, $c, $id, $x ) = @_;
-    
+sub index :Path :Args(3) {
+    my ( $self, $c, $mod, $id, $x ) = @_;
+
+    $mod =~ s/$int//g;
     $id =~ s/$int//g;
     $x =~ s/$int//g;
 
@@ -39,16 +40,15 @@ sub index :Path :Args(2) {
     });
     
     my $filename = $row->filename;
-
     if ( defined($row) && $filename ){
         my $orig_image = $c->path_to('root') . $c->config->{'pic_path'} . "/${filename}";
-        my $cache_image = $c->path_to('root') . $c->config->{'thumb_path'} . "/${id}";
+        my $cache_image = $c->path_to('root') . $c->config->{'thumb_path'} . "/${mod}/${id}";
         mkpath($cache_image);
         $cache_image .= "/${x}";
 
         my $image = $c->model('Thumb')->resize($orig_image, $cache_image, $x);
-        if (!$image){
-            $c->res->redirect("/static/cache/thumbs/${id}/${x}");
+        if (!$image && -e $cache_image){
+            $c->res->redirect("/static/cache/thumbs/${mod}/${id}/${x}");
             $c->detach();
         }
     }

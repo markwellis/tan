@@ -13,10 +13,11 @@ END;
 IF ( !num );
     num = 0;
 END;
-num = num + 1 
+num = num + 1;
+md = object.$type.picture_id - (object.$type.picture_id % 1000)
 -%]
-    <div style="background-image:url([% c.config.thumb_path _ '/' _ object.$type.picture_id %]/100);" class="newsImg" >
-        <img src="[% c.config.thumb_path _ '/' _ object.$type.picture_id %]/100" alt="[% object.$type.picture_id %]" style="display:none;" />
+    <div style="background-image:url([% c.config.thumb_path _ '/' _ md _ '/' _ object.$type.picture_id %]/100);" class="newsImg" >
+        <img src="[% c.config.thumb_path _  '/' _ md _ '/' _ object.$type.picture_id %]/100" alt="[% object.$type.picture_id %]" style="display:none;" />
    </div>
 [%- PROCESS 'lib/plus_minus_box.tt' -%]
 
