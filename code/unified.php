@@ -503,6 +503,10 @@ if (defined('MAGIC')) {
 	            $query = "select * from link_details where (SELECT count(*) from plus where plus.link_id = link_details.link_id) >= ".$this->threashold." 
 	            union select * from blog_details where (SELECT count(*) from plus where plus.blog_id = blog_details.blog_id) >= ".$this->threashold." 
 	            order by date desc limit $page, $limit;"; */
+            require_once('code/user.php');
+            $user = &$this->user;
+            $uid = $user->getUserId();
+
 	        $cache_time = 2;
 	        $memcache = new Memcache;
 	        if ($specific) {
@@ -514,9 +518,6 @@ if (defined('MAGIC')) {
             $sql = &$this->sql;
 
 
-            require_once('code/user.php');
-            $user = &$this->user;
-            $uid = $user->getUserId();
 
             $sql_args = array(
                 'ip' => isset($_SERVER['REMOTE_ADDR']) ? "'" . mysql_escape_string($_SERVER['REMOTE_ADDR']) . "'" : 'NULL',
@@ -535,8 +536,12 @@ if (defined('MAGIC')) {
             $sql->query($query, 'none');
 	        
 			$memcache_key = $this->kind_of_object . ":p:{$page}:b:{$below}:o:{$order}:u:{$username}:s:{$specific}:c:{$min['comments']}:p:{$min['plus']}:m:{$min['minus']}:l:{$limit}:r:{$random}";
-			@$memcache->connect('127.0.0.1', 11211);
-			$cached = @$memcache->get($memcache_key);
+			$cached = 0;
+            
+            if (!$uid){
+			    @$memcache->connect('127.0.0.1', 11211);
+                $cached = @$memcache->get($memcache_key);
+            }
 			
 			if (!$cached){
 		        $page = ($page * 27) -27;
