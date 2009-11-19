@@ -507,7 +507,7 @@ if (defined('MAGIC')) {
             $user = &$this->user;
             $uid = $user->getUserId();
 
-	        $cache_time = 2;
+	        $cache_time = 30;
 	        $memcache = new Memcache;
 	        if ($specific) {
 	        	$min = $this->get_details_count($specific);
@@ -621,7 +621,6 @@ if (defined('MAGIC')) {
 	            $query = "select * from link_details where (SELECT count(*) from plus where plus.link_id = link_details.link_id) >= ".$this->threashold." 
 	            union select * from blog_details where (SELECT count(*) from plus where plus.blog_id = blog_details.blog_id) >= ".$this->threashold." 
 	            order by date desc limit $page, $limit;"; */
-$cache_time = 30;
                     $query = "SELECT *, (SELECT COUNT(*) FROM plus WHERE plus.link_id = link_details.link_id) AS plus, "
                         ."(SELECT COUNT(*) FROM minus WHERE minus.link_id = link_details.link_id) AS minus, "
                         ."(SELECT COUNT(*) FROM comments WHERE comments.link_id = link_details.link_id AND deleted='N') AS comments, "
