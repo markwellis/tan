@@ -513,6 +513,7 @@ if (defined('MAGIC')) {
             /* massive hack alert */
             $sql = &$this->sql;
 
+
             require_once('code/user.php');
             $user = &$this->user;
             $uid = $user->getUserId();
@@ -605,20 +606,54 @@ if (defined('MAGIC')) {
 		            $order = 'date';
 		        }
 		        if ($random) {$order = 'RAND()';}
-		        $query = "SELECT *, (SELECT COUNT(*) FROM plus WHERE plus.$id = {$table}.{$id}) AS plus, "
-		            ."(SELECT COUNT(*) FROM minus WHERE minus.$id = {$table}.{$id}) AS minus, "
-		            ."(SELECT COUNT(*) FROM comments WHERE comments.{$id} = {$table}.{$id} AND deleted='N') AS comments, "
-		            ."(SELECT COUNT(*) FROM plus WHERE plus.{$id} = {$table}.{$id} and plus.user_id=$uid) AS meplus, "
-		            ."{$extraSql}  "
-		            ."(SELECT COUNT(*) FROM minus WHERE minus.{$id} = {$table}.{$id} and minus.user_id=$uid) AS meminus, "
-                    ."(SELECT COUNT(DISTINCT(session_id)) FROM pi WHERE pi.id = {$table}.{$id} AND type = '{$this->kind_of_object}') as views1 "
-		            ."FROM $table $conditions ORDER BY $order DESC LIMIT $page, $limit;";
 
-		        $sql1 = &$this->sql;
-		        $ret = $sql1->query($query, 'array');
-		        @$memcache->set($memcache_key, $ret, false, $cache_time);
-				return $ret;
-			}
+                if ($specific === null && $this->kind_of_object === 'link'){
+    /* this is naughty
+     but what needs to be needs to be done
+    */
+
+/* Old code, but has union select, will be needed later on for all!
+	            $query = "select * from link_details where (SELECT count(*) from plus where plus.link_id = link_details.link_id) >= ".$this->threashold." 
+	            union select * from blog_details where (SELECT count(*) from plus where plus.blog_id = blog_details.blog_id) >= ".$this->threashold." 
+	            order by date desc limit $page, $limit;"; */
+
+                    $query = "SELECT *, (SELECT COUNT(*) FROM plus WHERE plus.link_id = link_details.link_id) AS plus, "
+                        ."(SELECT COUNT(*) FROM minus WHERE minus.link_id = link_details.link_id) AS minus, "
+                        ."(SELECT COUNT(*) FROM comments WHERE comments.link_id = link_details.link_id AND deleted='N') AS comments, "
+                        ."(SELECT COUNT(*) FROM plus WHERE plus.link_id = link_details.link_id and plus.user_id=$uid) AS meplus, "
+                        ."(SELECT filename FROM picture_details WHERE picture_details.picture_id = link_details.category) AS catimg,  "
+                        ."(SELECT COUNT(*) FROM minus WHERE minus.link_id = link_details.link_id and minus.user_id=$uid) AS meminus, "
+                        ."(SELECT COUNT(DISTINCT(session_id)) FROM pi WHERE pi.id = link_details.link_id AND type = 'link') as views1 "
+                        ."FROM link_details "
+
+                        ."UNION SELECT *, (SELECT COUNT(*) FROM plus WHERE plus.blog_id = blog_details.blog_id) AS plus, "
+                        ."(SELECT COUNT(*) FROM minus WHERE minus.blog_id = blog_details.blog_id) AS minus, "
+                        ."(SELECT COUNT(*) FROM comments WHERE comments.blog_id = blog_details.blog_id AND deleted='N') AS comments, "
+                        ."(SELECT COUNT(*) FROM plus WHERE plus.blog_id = blog_details.blog_id and plus.user_id=$uid) AS meplus, "
+                        ."(SELECT filename FROM picture_details WHERE picture_details.picture_id = blog_details.category) AS catimg,  "
+                        ."(SELECT COUNT(*) FROM minus WHERE minus.blog_id = blog_details.blog_id and minus.user_id=$uid) AS meminus, "
+                        ."(SELECT COUNT(DISTINCT(session_id)) FROM pi WHERE pi.id = blog_details.blog_id AND type = 'blog') as views1 "
+                        ."FROM blog_details "
+
+                        
+                        ."$conditions ORDER BY $order DESC LIMIT $page, $limit;";
+                } else {
+                    $query = "SELECT *, (SELECT COUNT(*) FROM plus WHERE plus.$id = {$table}.{$id}) AS plus, "
+                        ."(SELECT COUNT(*) FROM minus WHERE minus.$id = {$table}.{$id}) AS minus, "
+                        ."(SELECT COUNT(*) FROM comments WHERE comments.{$id} = {$table}.{$id} AND deleted='N') AS comments, "
+                        ."(SELECT COUNT(*) FROM plus WHERE plus.{$id} = {$table}.{$id} and plus.user_id=$uid) AS meplus, "
+                        ."{$extraSql}  "
+                        ."(SELECT COUNT(*) FROM minus WHERE minus.{$id} = {$table}.{$id} and minus.user_id=$uid) AS meminus, "
+                        ."(SELECT COUNT(DISTINCT(session_id)) FROM pi WHERE pi.id = {$table}.{$id} AND type = '{$this->kind_of_object}') as views1 "
+                        ."FROM $table $conditions ORDER BY $order DESC LIMIT $page, $limit;";
+
+                }
+
+                $sql1 = &$this->sql;
+                $ret = $sql1->query($query, 'array');
+                @$memcache->set($memcache_key, $ret, false, $cache_time);
+                return $ret;
+            }
 			return $cached;
 	    }
         
@@ -686,19 +721,16 @@ if (defined('MAGIC')) {
 	    }
 	
 	    function CreateObjectHTML($objectDetails, $type, $article = 0){
-	        switch($this->kind_of_object){
-	            case 'link':
-	                $objectid = & $objectDetails['link_id'];
-	                $kind = 'link';
-	                break;
-	            case 'blog':
-	                $objectid = & $objectDetails['blog_id'];
-	                $kind = 'blog';
-	                break;
-	            case 'picture':
-	                $ispic = true;
-	                break;
-	        }
+            if ($objectDetails['link_id']){
+                $objectid = & $objectDetails['link_id'];
+                $kind = 'link';
+            } else if ($objectDetails['blog_id']){
+                $objectid = & $objectDetails['blog_id'];
+                $kind = 'blog';
+            } else if ($objectDetails['picture_id']){
+                $ispic = true;
+                $kind = 'picture';
+            }
 	        
 	        if (!$ispic){
 	            $plusminusbox .= $this->CreatePlusMinusHTML($objectDetails[$kind.'_id'], $objectDetails['plus'],
@@ -741,6 +773,8 @@ if (defined('MAGIC')) {
 	            if ($ratio) {
 	                $output .= " | Ratio " . $ratio[0] . ":" . $ratio[1];
 	            }
+
+                $output .= " - <span class='object_type'>[${kind}]</span>";
                 
                 if (($this->user->getUserId() == $objectDetails['user_id']) || $this->user->admin()){
                     $output .= " | <a href='/esubmit/{$this->kind_of_object}/{$objectDetails[$this->kind_of_object . '_id']}/'>Edit</a>";

@@ -126,9 +126,9 @@ switch($function){
         $links = $link->getPageObjects($page, $type, $link->sort_by[$sort]);
 
         foreach ($links as $linkdetails){
-            if ($linkdetails['link_id'] != 0){
+#            if ($linkdetails['link_id'] != 0){
                 $middle .= $link->CreateObjectHTML($linkdetails, $type);
-            }
+#            }
         }
 
         $pageCount = (int)ceil($link->getPlusMinusCount($type, 1) / 27);

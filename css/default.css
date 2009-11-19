@@ -829,3 +829,7 @@ ul#mainmenu li ul li{
     float:right;
     height:600px;
 }
+
+.object_type{
+    color:#326f24;
+}
