@@ -607,7 +607,7 @@ if (defined('MAGIC')) {
 		        }
 		        if ($random) {$order = 'RAND()';}
 
-                if ($specific === null && $this->kind_of_object === 'link'){
+                if ($specific === null && $this->kind_of_object === 'link' && !$below){
     /* this is naughty
      but what needs to be needs to be done
     */
