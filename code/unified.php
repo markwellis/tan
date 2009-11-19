@@ -651,7 +651,9 @@ $cache_time = 30;
 
                 $sql1 = &$this->sql;
                 $ret = $sql1->query($query, 'array');
-                @$memcache->set($memcache_key, $ret, false, $cache_time);
+                if ($uid != 1){
+                    @$memcache->set($memcache_key, $ret, false, $cache_time);
+                }
                 return $ret;
             }
 			return $cached;
