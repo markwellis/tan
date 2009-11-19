@@ -736,7 +736,7 @@ $cache_time = 30;
 	        
 	        if (!$ispic){
 	            $plusminusbox .= $this->CreatePlusMinusHTML($objectDetails[$kind.'_id'], $objectDetails['plus'],
-	            $objectDetails['minus'], $objectDetails['meplus'], $objectDetails['meminus'], null);
+	            $objectDetails['minus'], $objectDetails['meplus'], $objectDetails['meminus'], null, $kind);
 	
 	            $output .= "<div class='news'>";
                 
@@ -1174,18 +1174,20 @@ ob_clean();
 	        return $output;
 	    }
 	
-	    function CreatePlusMinusHTML($objectid, $plus, $minus, $meplus, $meminus, $style){
-	        switch($this->kind_of_object){
-	            case 'link':
-	                $type = 'link';
-	                break;
-	            case 'blog':
-	                $type = 'blog';
-	                break;
-	            case 'picture':
-	                $type = 'picture';
-	                break;
-	        }
+	    function CreatePlusMinusHTML($objectid, $plus, $minus, $meplus, $meminus, $style, $type = null){
+            if ($type === null){
+                switch($this->kind_of_object){
+                    case 'link':
+                        $type = 'link';
+                        break;
+                    case 'blog':
+                        $type = 'blog';
+                        break;
+                    case 'picture':
+                        $type = 'picture';
+                        break;
+                }
+            }
 	        $output = "<div class='plusminus' style='$style'>
 	            <div class='plus' id='plus{$objectid}'>{$plus}
 	            <a class='addPlus ";
