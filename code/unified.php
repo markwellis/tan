@@ -622,8 +622,8 @@ $cache_time = 30;
                         ."(SELECT COUNT(*) FROM comments WHERE comments.link_id = link_details.link_id AND deleted='N') AS comments, "
                         ."(SELECT COUNT(*) FROM plus WHERE plus.link_id = link_details.link_id and plus.user_id=$uid) AS meplus, "
                         ."(SELECT filename FROM picture_details WHERE picture_details.picture_id = link_details.category) AS catimg,  "
-                        ."(SELECT COUNT(*) FROM minus WHERE minus.link_id = link_details.link_id and minus.user_id=$uid) AS meminus, "
-                        ."(SELECT COUNT(DISTINCT(session_id)) FROM pi WHERE pi.id = link_details.link_id AND type = 'link') as views1 "
+                        ."(SELECT COUNT(*) FROM minus WHERE minus.link_id = link_details.link_id and minus.user_id=$uid) AS meminus "
+#                        ."(SELECT COUNT(DISTINCT(session_id)) FROM pi WHERE pi.id = link_details.link_id AND type = 'link') as views1 "
                         ."FROM link_details "
 
                         ."UNION SELECT *, (SELECT COUNT(*) FROM plus WHERE plus.blog_id = blog_details.blog_id) AS plus, "
@@ -631,8 +631,8 @@ $cache_time = 30;
                         ."(SELECT COUNT(*) FROM comments WHERE comments.blog_id = blog_details.blog_id AND deleted='N') AS comments, "
                         ."(SELECT COUNT(*) FROM plus WHERE plus.blog_id = blog_details.blog_id and plus.user_id=$uid) AS meplus, "
                         ."(SELECT filename FROM picture_details WHERE picture_details.picture_id = blog_details.category) AS catimg,  "
-                        ."(SELECT COUNT(*) FROM minus WHERE minus.blog_id = blog_details.blog_id and minus.user_id=$uid) AS meminus, "
-                        ."(SELECT COUNT(DISTINCT(session_id)) FROM pi WHERE pi.id = blog_details.blog_id AND type = 'blog') as views1 "
+                        ."(SELECT COUNT(*) FROM minus WHERE minus.blog_id = blog_details.blog_id and minus.user_id=$uid) AS meminus "
+#                        ."(SELECT COUNT(DISTINCT(session_id)) FROM pi WHERE pi.id = blog_details.blog_id AND type = 'blog') as views1 "
                         ."FROM blog_details "
 
                         
@@ -768,7 +768,11 @@ $cache_time = 30;
 	            }
 	            $ratio = $this->plus_to_minus_ratio($objectDetails['plus'], $objectDetails['minus']);
 	            $output .= "<br /><a href='/view{$kind}/{$objectDetails[$kind.'_id']}/". $this->urlTitle($objectDetails['title'])."/#comments'>
-	                <img src='/sys/images/comment.png' style='height:15px;width:15px' alt=' ' /> {$objectDetails['comments']}</a> | {$objectDetails['views1']} views";
+	                <img src='/sys/images/comment.png' style='height:15px;width:15px' alt=' ' /> {$objectDetails['comments']}</a>";
+                    
+                if ($article){
+                    $output .= " | {$objectDetails['views1']} views";
+                }
 	
 	            if ($ratio) {
 	                $output .= " | Ratio " . $ratio[0] . ":" . $ratio[1];
