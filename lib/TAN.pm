@@ -135,6 +135,12 @@ sub date_ago{
     }
     return join(' ',@result);
 }
+
+sub recent_comments{
+    my $c = shift;
+
+    return $c->model('MySQL::Comments')->recent_comments->all;
+}
 =head1 NAME
 
 TAN - Catalyst based application
