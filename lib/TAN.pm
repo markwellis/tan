@@ -15,7 +15,7 @@ use Catalyst::Runtime 5.80;
 
 use parent qw/Catalyst/;
 use Catalyst qw/ConfigLoader
-                Unicode
+                Unicode::Encoding
                 Authentication
                 Cache::FastMmap
                 Session

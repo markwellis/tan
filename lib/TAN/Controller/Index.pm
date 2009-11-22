@@ -30,6 +30,7 @@ sub index :Path :Args(3) {
     if ($order !~ m/$order_reg/){
         $order = 'created';
     }
+    $c->stash->{'order'} = $order;
 
     #redirect to somewhere sensible if someone has made up some random url...
     if ('/' . $c->req->path() ne "/index/${location}/${upcoming}/${page}/" && '/' . $c->req->path() ne '/'){
