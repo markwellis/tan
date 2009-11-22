@@ -4,6 +4,7 @@ use strict;
 use warnings;
 
 use Catalyst::Runtime 5.80;
+use Number::Format;
 
 # Set flags and add plugins for the application
 #
@@ -140,6 +141,16 @@ sub recent_comments{
     my $c = shift;
 
     return $c->model('MySQL::Comments')->recent_comments->all;
+}
+
+sub filesize_h{
+    my ($c, $size) = @_;
+
+    if ($size > 1024){
+        return Number::Format::format_number(($size / 1024)) . 'MB';
+    } else {
+        return Number::Format::format_number($size) . 'KB';
+    }
 }
 =head1 NAME
 

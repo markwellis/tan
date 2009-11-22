@@ -1,6 +1,14 @@
 [%- i = 0;
 
-IF location == 'picture' -%]
+IF location == 'picture';
+
+css_includes.push({
+    'file' => "$theme_settings.css_path/picture_index.css",
+    'media' => 'screen',
+});
+
+js_includes.push('picture-index');
+-%]
 <div class="holder">
 [%- END -%]
 
