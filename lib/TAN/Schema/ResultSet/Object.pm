@@ -49,4 +49,27 @@ sub index {
     });
 }
 
+sub random{
+    my ($self, $location) = @_;
+
+    my $search = {};
+    if ($location eq 'all'){
+        my $rand = int(rand(3));
+        my @types = ('link', 'blog', 'picture');
+        $location = $types[$rand];
+    }
+    $search->{'type'} = $location;
+
+    return $self->search(
+        $search,
+        {
+            'rows' => 1,
+            '+select' => \"(SELECT title FROM ${location} WHERE ${location}.${location}_id = me.object_id) title",
+            '+as' => 'title',
+            'order_by' => \'RAND()',
+        }
+    )->first;
+
+}
+
 1;

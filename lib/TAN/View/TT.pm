@@ -65,11 +65,11 @@ sub file_mtime{
 =head2 url_title
 makes a title url/seo safe
 =cut
-my $seo_reg = qr/\W+/;
+my $url_title = qr/\W+/;
 sub url_title{
     my $title = shift;
 
-    $title =~ s/$seo_reg/-/ig;
+    $title =~ s/$url_title/-/ig;
 
     return $title;
 }

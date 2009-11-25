@@ -152,6 +152,18 @@ sub filesize_h{
         return Number::Format::format_number($size) . 'KB';
     }
 }
+
+=head2 url_title
+makes a title url/seo safe
+=cut
+my $url_title = qr/\W+/;
+sub url_title{
+    my ($c, $title) = @_;
+
+    $title =~ s/$url_title/-/ig;
+
+    return $title;
+}
 =head1 NAME
 
 TAN - Catalyst based application
