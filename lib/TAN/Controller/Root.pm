@@ -50,7 +50,7 @@ sub index :Path :Args(0) {
 
 sub default :Path {
     my ( $self, $c ) = @_;
-    $c->response->body( 'Page not found' );
+    $c->stash->{'template'} = 'error404.tt';
     $c->response->status(404);
 }
 
