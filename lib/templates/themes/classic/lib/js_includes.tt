@@ -1,8 +1,8 @@
 [%- FOREACH js_include = js_includes;
     IF !js_include.match('(?i)^http');
         m_time = c.path_to('root') _ theme_settings.js_path _ '/' _ js_include _ '.js' | file_mtime -%]
-<script type="text/javascript" src="[%- c.config.jscache_path _ "/$theme_settings.name" _ "_$js_include" _ "_$m_time" _ '.js' -%]"></script>
-[%- ELSE -%]
+        <script type="text/javascript" src="[%- c.config.jscache_path _ "/$theme_settings.name" _ "_$js_include" _ "_$m_time" _ '.js' -%]"></script>
+    [%- ELSE -%]
         <script type="text/javascript" src="[% js_include %]"></script>
     [%- END;
 END -%]
