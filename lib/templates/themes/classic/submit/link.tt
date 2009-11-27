@@ -1,32 +1,32 @@
-<div class='news' style='padding-right:20px'>
-    <form action='<?php echo $_SERVER['REQUEST_URI'] ?>' id='submit_form' method='post'>
+<div class="news" style="padding-right:20px">
+    <form action="[% c.req.uri | html %]" id="submit_form" method="post">
         <fieldset>
             <ul>
                 <li>
-                    <input type='hidden' id='cat' name='cat' value='<?php echo isset($f->stash->details['category']) ? $f->stash->details['category'] : '' ?>' />
+                    <input type="hidden" id="cat" name="cat" value="[% IF details.category.defined(); details.category; END %]" />
                 </li>
                 <li>
-                    <label for='url'>Title</label>
+                    <label for="url">Title</label>
                 </li>
                 <li>
-                    <input type='text' name='title' id='title' class='text_input full_width' value='<?php echo isset($f->stash->details['title']) ? stripslashes($f->stash->details['title']) : '' ?>'/>
+                    <input type="text" name="title" id="title" class="text_input full_width" value="[% IF details.title.defined(); details.title; END %]"/>
                 </li>
                 <li>
                     <label for='url'>Url</label>
                 </li>
                 <li>
-                    <input type='text' name='url' id='url' class='text_input full_width' value='<?php echo isset($f->stash->details['url']) ? "{$f->stash->details['url']}' disabled='disabled" : '' ?>'/>
+                    <input type="text" name="url" id="url" class="text_input full_width" value="[% IF details.url.defined(); details.url _ ' disabled="disabled"'; END %]"/>
                 </li>
                 <li>
-                    <label for='description'>Description</label>
+                    <label for="description">Description</label>
                 </li>
                 <li>
-                    <textarea cols='1' rows='5' name='description' id='description' class='text_input full_width'><?php echo isset($f->stash->details['description']) ? stripslashes($f->stash->details['description']) : '' ?></textarea><br/>
+                    <textarea cols="1" rows="5" name="description" id="description" class="text_input full_width">[% IF details.description.defined(); details.description; END %]</textarea><br/>
                 </li>
             </ul>   
-            <?php $f->template('/lib/tag_thumb_browser'); ?>
+            [%- PROCESS 'lib/tag_thumb_browser.tt' -%]
 
-            <input type='submit' value='Submit Link'/>
+            <input type="submit" value="Submit Link"/>
         </fieldset>
     </form>
 </div>
