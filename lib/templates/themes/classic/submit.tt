@@ -1,3 +1,4 @@
+[% tmplt = 'submit/' _ location _ '.tt' %]
 <ul id="inside">
-    <li class="news" id="foo">[% location %][%#- PROCESS 'lib/object.tt' -%]</li>
+    <li class="news" id="foo">[%- PROCESS $tmplt -%]</li>
 </ul>
