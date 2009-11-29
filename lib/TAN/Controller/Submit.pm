@@ -23,6 +23,10 @@ sub index :Path :Args(1) {
     $c->stash->{'template'} = 'submit.tt';
 }
 
+sub submit: Path('submit'){
+    my ( $self, $c ) = @_;
+}
+
 
 =head1 AUTHOR
 

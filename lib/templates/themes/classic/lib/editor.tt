@@ -6,7 +6,7 @@ ckname = ckeditor.name.defined ? ckeditor.name : 'ckeditor';
 -%]
 <script type="text/javascript">
 //<![CDATA[
-CKEDITOR.config.customConfig = '/static/script/ckeditor.js';
+CKEDITOR.config.disableNativeSpellChecker = false;
 //]]>
 </script>
 <textarea class="ckeditor" style="height:[% ckheight %];width:[% ckwidth %]" id="[% ckname %]" name="[% ckname %]">
