@@ -1,5 +1,5 @@
 <div class="news" style="padding-right:20px">
-    <form action="[% c.req.uri | html %]" enctype="multipart/form-data" id="submit_form" method="post">
+    <form action="[% c.req.uri | html %]/submit" enctype="multipart/form-data" id="submit_form" method="post">
         <fieldset>
             <input type="hidden" name="MAX_FILE_SIZE" value="2000000" />
             <ul>
