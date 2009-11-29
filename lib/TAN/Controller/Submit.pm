@@ -12,7 +12,11 @@ my $int_reg = qr/\D+/;
 sub index :Path :Args(1) {
     my ( $self, $c, $location ) = @_;
 
-    $c->cache_page( 120 );
+    if (!$c->user){
+        $c->flash->{'message'} = 'Please login';
+        $c->res->redirect('/login/');
+        $c->detach();
+    }
 
     if ($location !~ m/$location_reg/){
         $c->forward('/default');
@@ -23,7 +27,7 @@ sub index :Path :Args(1) {
     $c->stash->{'template'} = 'submit.tt';
 }
 
-sub submit: Path('submit'){
+sub post: Path('post'){
     my ( $self, $c ) = @_;
 }
 

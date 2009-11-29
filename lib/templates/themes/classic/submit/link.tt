@@ -1,5 +1,5 @@
 <div class="news" style="padding-right:20px">
-    <form action="[% c.req.uri | html %]/submit" id="submit_form" method="post">
+    <form action="[% c.req.uri | html %]/post" id="submit_form" method="post">
         <fieldset>
             <ul>
                 <li>

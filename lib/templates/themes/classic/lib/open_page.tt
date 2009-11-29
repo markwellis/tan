@@ -1,10 +1,4 @@
 [%-
 PROCESS 'lib/xhtml_head.tt';
-IF (!overlay.defined);
-    PROCESS 'lib/top.tt';
-    IF (messages);
-        FOREACH message = messages -%]
-            <span class='message'>[%- message -%]</span>
-        [% END;
-    END;
-END -%]
+PROCESS 'lib/top.tt' -%]
+[% IF message.defined %]<span class='message'>[%- message -%]</span>[% END %]
