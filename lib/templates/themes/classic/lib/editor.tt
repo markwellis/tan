@@ -1,0 +1,14 @@
+[% 
+js_includes.push('/static/ckeditor/ckeditor.js');
+ckheight = ckeditor.height.defined ? ckeditor.height : '300px';
+ckwidth = ckeditor.width.defined ? ckeditor.width : '100%';
+ckname = ckeditor.name.defined ? ckeditor.name : 'ckeditor';
+-%]
+<script type="text/javascript">
+//<![CDATA[
+CKEDITOR.config.customConfig = '/static/script/ckeditor.js';
+//]]>
+</script>
+<textarea class="ckeditor" style="height:[% ckheight %];width:[% ckwidth %]" id="[% ckname %]" name="[% ckname %]">
+[% IF ckeditor.value.defined; ckeditor.value; END %]
+</textarea>
