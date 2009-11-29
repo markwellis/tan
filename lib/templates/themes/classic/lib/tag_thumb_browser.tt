@@ -1,23 +1,21 @@
-<?php
-if ($f->stash->location !== 'picture'){
-    array_push($f->stash->js_includes, $f->stash->theme_settings['js_path'] . '/tag_thumbs.js');
-}
-?>
-<label for='tags'>Tags</label>
-<input type='text' name='tags' id='tags' class='text_input full_width' value='<?php echo isset($f->stash->details['tags']) ? "{$f->stash->details['tags']}' disabled='disabled" : '' ?>'/>
-<?php if ($f->stash->location !== 'picture'){ ?>
-    <a href='#' class='refresh_thumbs'>Refresh</a>
-<?php } ?>
+[% IF (location != 'picture');
+    js_includes.push('tag-thumbs');
+END -%]
+<label for="tags">Tags</label>
+<input type="text" name="tags" id="tags" class="text_input full_width" value="[% IF details.tags.defined; details.tags _ '" disabled="disabled'; END %]"/>
+[% IF (location != 'picture') %]
+    <a href="#" class="refresh_thumbs">Refresh</a>
+[% END %]
 <br />
-<div id='thumb_tags'>
+<div id="thumb_tags">
     e.g.
-    <ul style='margin-left:25px'> 
+    <ul style="margin-left:25px"> 
         <li>nasa moon space</li>
         <li>car mini cooper classic</li>
     </ul>
 </div>
-<?php if(isset($f->stash->details)) { ?>
-<script type="text/javascript">
-get_thumbs( $('cat').value );
-</script>
-<?php } ?>
+[% IF details.defined %]
+    <script type="text/javascript">
+    get_thumbs( $('cat').value );
+    </script>
+[% END %]

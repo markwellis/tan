@@ -1,48 +1,49 @@
-<div class='news' style='padding-right:20px'>
-    <form action='<?php echo $_SERVER['REQUEST_URI'] ?>' enctype='multipart/form-data' id='submit_form' method='post'>
+<div class="news" style="padding-right:20px">
+    <form action="[% c.req.uri | html %]" enctype="multipart/form-data" id="submit_form" method="post">
         <fieldset>
-            <input type='hidden' name='MAX_FILE_SIZE' value='2000000' />
+            <input type="hidden" name="MAX_FILE_SIZE" value="2000000" />
             <ul>
                 <li>
-                    <label for='title'>Title</label>
+                    <label for="title">Title</label>
                 </li>
                 <li>
-                    <input type='text' name='title' id='title' class='text_input full_width' value='<?php echo isset($f->stash->details['title']) ? $f->stash->details['title'] : '' ?>'/>
+                    <input type="text" name="title" id="title" class="text_input full_width" value="[% IF details.title; details.title | html; END %]"/>
                 </li>
 
-                <?php if (isset($f->stash->details)) { ?>
+                [% IF details.defined;
+                    md = object.$type.picture_id - (object.$type.picture_id % 1000) %]
                     <li>
-                        <img src="/thumb/<?php echo $f->stash->details['picture_id'] ?>/600/" style="margin:auto;display:block;" alt="image" />
+                        <img src="/thumb/[% md %]/[% details.picture_id %]/600" style="margin:auto;display:block;" alt="image" />
                     </li>
-                <?php } else { ?>
+                [% ELSE %]
                     <li>
-                        <label for='pic'>Upload File</label>
-                    </li>
-                    <li>
-                        <input type='file' name='pic' id='pic' class='text_input full_width'/>
+                        <label for="pic">Upload File</label>
                     </li>
                     <li>
-                        <label for='pic_url'>Remote Upload</label>
+                        <input type="file" name="pic" id="pic" class="text_input full_width"/>
                     </li>
                     <li>
-                        <input type='input' name='pic_url' id='pic_url' class='text_input full_width'/>
+                        <label for="pic_url">Remote Upload</label>
                     </li>
-                <?php } ?>
+                    <li>
+                        <input type="input" name="pic_url" id="pic_url" class="text_input full_width"/>
+                    </li>
+                [% END %]
                 <li>
-                    <label for='pdescription'>Description (optional)</label>
+                    <label for="pdescription">Description (optional)</label>
                 </li>
                 <li>
-                    <textarea cols='1' rows='5' name='pdescription' id='pdescription' class='text_input full_width'><?php echo isset($f->stash->details['description']) ? $f->stash->details['description'] : '' ?></textarea>
+                    <textarea cols="1" rows="5" name="pdescription" id="pdescription" class="text_input full_width">[% IF details.description; details.description | html; END %]</textarea>
                 </li>
                 <li>
-                    <label for='nsfw'>Not Safe for Work?</label>
+                    <label for="nsfw">Not Safe for Work?</label>
                 </li>
                 <li>
-                    <input type='checkbox' name='nsfw' id='nsfw' <?php echo (isset($f->stash->details['NSFW']) && $f->stash->details['NSFW'] === 'Y') ? 'checked="checked"' : '' ?>/>
+                    <input type="checkbox" name="nsfw" id="nsfw" [% IF details.NSFW == 'Y'; 'checked="checked"'; END %]/>
                 </li>
             </ul>
-            <?php $f->template('/lib/tag_thumb_browser'); ?>
-            <input type='submit' value='Submit Picture'/>
+            [% PROCESS 'lib/tag_thumb_browser.tt' %]
+            <input type="submit" value="Submit Picture"/>
         </fieldset>
     </form>
 </div>
