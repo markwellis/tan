@@ -10,7 +10,7 @@ edname = editor.name.defined ? editor.name : 'editor';
 //<![CDATA[
     tiny_mce_config['width'] = "[% edwidth %]";
     tiny_mce_config['height'] = "[% edheight %]";
-    tiny_mce_config['name'] = "[% edname %]";
+    tiny_mce_config['editor_selector'] = "[% edname %]";
 
 	tinyMCE.init( tiny_mce_config );
 //]]>
