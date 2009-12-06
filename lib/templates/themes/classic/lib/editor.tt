@@ -1,34 +1,18 @@
 [% 
 js_includes.push('/static/tiny_mce/tiny_mce.js');
+js_includes.push('tiny-mce-config');
+
 edheight = editor.height.defined ? editor.height : '300px';
 edwidth = editor.width.defined ? editor.width : '100%';
 edname = editor.name.defined ? editor.name : 'editor';
 -%]
 <script type="text/javascript">
 //<![CDATA[
-	tinyMCE.init({
-        theme: "advanced",
+    tiny_mce_config['width'] = "[% edwidth %]";
+    tiny_mce_config['height'] = "[% edheight %]";
+    tiny_mce_config['name'] = "[% edname %]";
 
-        plugins: "safari,table,emotions,fullscreen,inlinepopups",
-        content_css : "[% theme_settings.css_path _ '/editor.css' %]",
-
-        theme_advanced_buttons1 : "code,|,undo,redo,|,bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull|,sub,sup,|,forecolor,backcolor,|,fontselect,fontsizeselect",
-        theme_advanced_buttons2 : "fullscreen,|,hr,bullist,numlist,|,link,unlink,image,emotions,|,tablecontrols,",
-        theme_advanced_buttons3 : "",
-        theme_advanced_buttons4 : "",
-        theme_advanced_toolbar_location : "top",
-        theme_advanced_toolbar_align : "left",
-        theme_advanced_statusbar_location : "bottom",
-        theme_advanced_resizing : true,
-
-        width: "[% edwidth %]",
-        height: "[% edheight %]",
-
-        mode:"specific_textareas",
-        editor_selector:"[% edname %]",
-
-        gecko_spellcheck:"1"
-	});
+	tinyMCE.init( tiny_mce_config );
 //]]>
 </script>
 <textarea class="[% edname %]" style="height:[% edheight %];width:[% edwidth %]" id="[% edname %]" name="[% edname %]">
