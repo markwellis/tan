@@ -21,7 +21,7 @@
                     <label for="blogmain">Blog</label>
                 </li>
                 <li>
-                    [% ckeditor = {
+                    [% editor = {
                         'name' => "blogmain",
                         'value' => details.details,
                         'height' => '600px',

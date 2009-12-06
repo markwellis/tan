@@ -100,7 +100,7 @@ sub validate: PathPart('') Chained('location') CaptureArgs(0){
             my $valid_url = Data::Validate::URI->new();
             my $url = $c->req->param('url');
 
-            if (!$valid_url->is_http_uri($url) && !$valid_url->is_https_uri($url)){
+            if ( !defined($valid_url->is_web_uri($url)) ){
                 #invalid url
                 $c->stash->{'error'} = $error_codes[6];                
             }
