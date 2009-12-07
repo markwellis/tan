@@ -12,6 +12,8 @@ __PACKAGE__->add_columns(
   { data_type => "BIGINT", default_value => undef, is_nullable => 0, size => 20 },
   "old_id",
   { data_type => "INT", default_value => undef, is_nullable => 0, size => 11 },
+  "type",
+  { data_type => "ENUM", default_value => undef, is_nullable => 0, size => 7 },
 );
 __PACKAGE__->set_primary_key("new_id");
 

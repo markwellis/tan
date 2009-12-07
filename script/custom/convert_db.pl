@@ -8,6 +8,8 @@ use TAN::Model::OldDB;
 use HTML::Entities;
 use File::Basename;
 
+use Data::Dumper;
+
 #db connections
 my $newdb = new TAN::Model::MySQL;
 my $olddb = new TAN::Model::OldDB;
@@ -21,7 +23,7 @@ my $tag_lookup = {};
 
 #USERS
 my $old_users = $olddb->resultset('UserDetails');
-foreach my $old_user ($old_users->all){
+while (my $old_user = $old_users->next){
     my $new_user = $newdb->resultset('User')->create({
         'username' => $old_user->username,
         'join_date' => $old_user->join_date,
@@ -39,7 +41,7 @@ print "converted " . $old_users->count . " users\n";
 #   needs
 #       user
 my $old_pictures = $olddb->resultset('PictureDetails');
-foreach my $old_picture ($old_pictures->all){
+while (my $old_picture = $old_pictures->next){
     if ($user_lookup->{$old_picture->user_id}){
         my $new_object = $newdb->resultset('Object')->create({
             'type' => 'picture',
@@ -52,6 +54,7 @@ foreach my $old_picture ($old_pictures->all){
         my $old_lookup = $newdb->resultset('OldLookup')->create({
             'new_id' => $new_object->id,
             'old_id' => $old_picture->picture_id,
+            'type' => 'picture',
         });
         
         $picture_lookup->{$old_picture->picture_id} = $new_object->id;
@@ -74,7 +77,7 @@ print "converted " . $old_pictures->count . " pictures\n";
 #       user
 #       picture
 my $old_blogs = $olddb->resultset('BlogDetails');
-foreach my $old_blog ($old_blogs->all){
+while (my $old_blog = $old_blogs->next){
     if ($user_lookup->{$old_blog->user_id}){
         my $new_object = $newdb->resultset('Object')->create({
             'type' => 'blog',
@@ -87,6 +90,7 @@ foreach my $old_blog ($old_blogs->all){
         my $old_lookup = $newdb->resultset('OldLookup')->create({
             'new_id' => $new_object->id,
             'old_id' => $old_blog->blog_id,
+            'type' => 'blog',
         });
         
         $blog_lookup->{$old_blog->blog_id} = $new_object->id;
@@ -107,7 +111,7 @@ print "converted " . $old_blogs->count . " blogs\n";
 #       user
 #       picture
 my $old_links = $olddb->resultset('LinkDetails');
-foreach my $old_link ($old_links->all){
+while (my $old_link = $old_links->next){
     if ($user_lookup->{$old_link->user_id}){
         my $new_object = $newdb->resultset('Object')->create({
             'type' => 'link',
@@ -120,6 +124,7 @@ foreach my $old_link ($old_links->all){
         my $old_lookup = $newdb->resultset('OldLookup')->create({
             'new_id' => $new_object->id,
             'old_id' => $old_link->link_id,
+            'type' => 'link',
         });
         
         $link_lookup->{$old_link->link_id} = $new_object->id;
@@ -137,7 +142,7 @@ print "converted " . $old_links->count . " links\n";
 
 #TAGS
 my $old_tags = $olddb->resultset('Tags');
-foreach my $old_tag ($old_tags->all){
+while (my $old_tag = $old_tags->next){
     my $new_tag = $newdb->resultset('Tags')->create({
         'tag' => $old_tag->tag,
     });
@@ -152,7 +157,7 @@ print "converted " . $old_tags->count . " tags\n";
 #       user
 #       tags
 my $old_tagds = $olddb->resultset('TagDetails');
-foreach my $old_tag ($old_tagds->all){
+while (my $old_tag = $old_tagds->next){
     if ($user_lookup->{$old_tag->user_id}){
         my $newid;
         if ($old_tag->link_id > 0){
@@ -180,7 +185,7 @@ print "converted " . $old_tagds->count . " tag details\n";
 #       objects
 #       user
 my $old_comments = $olddb->resultset('Comments');
-foreach my $old_comment ($old_comments->all){
+while (my $old_comment = $old_comments->next){
     if ($user_lookup->{$old_comment->user_id}){
         my $newid;
         if ($old_comment->link_id){
@@ -208,7 +213,7 @@ print "converted " . $old_comments->count . " comments\n";
 #       objects
 #       user
 my $old_pluss = $olddb->resultset('Plus');
-foreach my $old_plus ($old_pluss->all){
+while (my $old_plus = $old_pluss->next){
     if ($user_lookup->{$old_plus->user_id}){
         my $newid;
         if ($old_plus->link_id){
@@ -234,7 +239,7 @@ print "converted " . $old_pluss->count . " plus\n";
 #       objects
 #       user
 my $old_minuss = $olddb->resultset('Minus');
-foreach my $old_plus ($old_minuss->all){
+while (my $old_plus = $old_minuss->next){
     if ($user_lookup->{$old_plus->user_id}){
         my $newid;
         if ($old_plus->link_id){
@@ -260,24 +265,27 @@ print "converted " . $old_minuss->count . " minus\n";
 #       objects
 #       user
 my $old_pis = $olddb->resultset('Pi');
-foreach my $old_pi ($old_pis->all){
-    if ($user_lookup->{$old_pi->user_id}){
-        my $newid;
-        if ($old_pi->type eq 'link'){
-            $newid = $link_lookup->{$old_pi->id};
-        } elsif ($old_pi->type eq 'blog'){
-            $newid = $blog_lookup->{$old_pi->id};
-        } elsif ($old_pi->type eq 'picture'){
-            $newid = $picture_lookup->{$old_pi->id};
-        }
-        
-        my $new_view = $newdb->resultset('Views')->create({
-            'ip' => $old_pi->ip,
-            'object_id' => $newid,
-            'session_id' => $old_pi->session_id,
-            'user_id' => $old_pi->user_id,
-            'created' => $old_pi->date,
-        });
+while (my $old_pi = $old_pis->next){
+    my $newid = '';
+    if ($old_pi->type eq 'link'){
+        $newid = defined($old_pi->id) && defined($link_lookup->{$old_pi->id}) ? $link_lookup->{$old_pi->id} : '';
+    } elsif ($old_pi->type eq 'blog'){
+        $newid = defined($old_pi->id) && defined($blog_lookup->{$old_pi->id}) ? $blog_lookup->{$old_pi->id} : '';
+    } elsif ($old_pi->type eq 'picture'){
+        $newid = defined($old_pi->id) && defined($picture_lookup->{$old_pi->id}) ? $picture_lookup->{$old_pi->id} : '';
+    }
+    my $uid = (defined($old_pi->user_id) && defined($user_lookup->{$old_pi->user_id})) ? $user_lookup->{$old_pi->user_id} : '';
+
+my $params = {
+    'ip' => $old_pi->ip,
+    'object_id' => $newid,
+    'session_id' => $old_pi->session_id,
+    'user_id' => $uid,
+    'created' => $old_pi->date,
+};
+
+    if ($newid ne ''){
+        my $new_view = $newdb->resultset('Views')->create($params);
     }
 }
 print "converted " . $old_pis->count . " views\n";
