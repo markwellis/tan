@@ -14,7 +14,7 @@ my $int_reg = qr/\D+/;
 =head2 location
 checks the location is valid
 =cut
-sub location: Chained('/') PathPart('submit') CaptureArgs(1){
+sub location: PathPart('submit') Chained('/') CaptureArgs(1){
     my ( $self, $c, $location ) = @_;
 
     if (!$c->user_exists){
@@ -44,28 +44,29 @@ sub index : PathPart('') Chained('location') Args(0) {
 =head2 validate
 validates the upload
 =cut
+
+#no point redefining these on each request...
+my $title_min = 5;
+my $desc_min = 5;
+my $title_max = 100;
+my $desc_max = 1000;
+my $blog_min = 20;
+
+my @error_codes = (
+    'Title cannont be blank',
+    'Description cannot be blank',
+    "Title cannot be over ${title_max} characters",
+    "Description cannot be over ${desc_max} characters",
+    "Title must be over ${title_min} characters",
+    "Description must be over ${desc_min} characters",
+    'Url is invalid',
+    'This link has already been submitted',
+    "Blog must be over ${blog_min} characters",
+    "Please select an image",
+);
 sub validate: PathPart('') Chained('location') CaptureArgs(0){
     my ( $self, $c ) = @_;
 
-    my $title_min = 5;
-    my $desc_min = 5;
-    my $title_max = 100;
-    my $desc_max = 1000;
-    my $blog_min = 20;
-
-    my @error_codes = (
-        'Title cannont be blank',
-        'Description cannot be blank',
-        "Title cannot be over ${title_max} characters",
-        "Description cannot be over ${desc_max} characters",
-        "Title must be over ${title_min} characters",
-        "Description must be over ${desc_min} characters",
-        'Url is invalid',
-        'This link has already been submitted',
-        "Blog must be over ${blog_min} characters",
-    );
-
-    my $valid = 0;
     my $title = $c->req->param('title');
     my $description = $c->req->param('description');
 
@@ -86,10 +87,13 @@ sub validate: PathPart('') Chained('location') CaptureArgs(0){
         $c->stash->{'error'} = $error_codes[4];
 
     } else {
+        my $cat;
         if ($c->stash->{'location'} eq 'link'){
-            if ($description eq ''){
-                #link blank description
-                $c->stash->{'error'} = $error_codes[1];
+            $cat = $c->req->param('cat');
+            $cat =~s/$int_reg//g;
+            if (!defined($cat)){
+                #no image selected
+                $c->stash->{'error'} = $error_codes[9];
             }
 
             if (length($description) < $desc_min){
@@ -110,15 +114,29 @@ sub validate: PathPart('') Chained('location') CaptureArgs(0){
             });
 
             if ($link->count){
-                #already submitted
+               #already submitted
                 $c->stash->{'error'} = $error_codes[7];
             }
 
         } elsif ($c->stash->{'location'} eq 'blog') {
+            $cat = $c->req->param('cat');
+            $cat =~s/$int_reg//g;
+            if (!defined($cat)){
+                #no image selected
+                $c->stash->{'error'} = $error_codes[9];
+            }
 
-        } elsif ($c->stash->{'location'} eq 'picture') {
+            if (length($description) < $desc_min){
+                #desc too short
+                $c->stash->{'error'} = $error_codes[5];
+            }
 
+            if (length($c->req->param('blogmain')) < $blog_min) {
+                #blog too short
+                $c->stash->{'error'} = $error_codes[8];
+            }
         }
+        #no image validate here, yet...
     }
 }
 
