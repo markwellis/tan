@@ -104,7 +104,7 @@ sub validate: PathPart('') Chained('location') CaptureArgs(0){
             my $valid_url = Data::Validate::URI->new();
             my $url = $c->req->param('url');
 
-            if ( !defined($valid_url->is_web_uri($url)) ){
+            if ( !$valid_url->is_web_uri($url) ){
                 #invalid url
                 $c->stash->{'error'} = $error_codes[6];                
             }
@@ -135,8 +135,16 @@ sub validate: PathPart('') Chained('location') CaptureArgs(0){
                 #blog too short
                 $c->stash->{'error'} = $error_codes[8];
             }
+        } elsif ($c->stash->{'location'} eq 'picture') {
+            my $url = $c->req->param('pic_url');
+            if (defined($url)){
+                my $valid_url = Data::Validate::URI->new();
+                if ( !$valid_url->is_web_uri($url) ){
+                    #invalid url
+                    $c->stash->{'error'} = $error_codes[6];                
+                }
+            }
         }
-        #no image validate here, yet...
     }
 }
 
