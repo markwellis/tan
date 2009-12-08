@@ -185,7 +185,33 @@ sub post: PathPart('post') Chained('validate') Args(0){
         }
         $c->res->redirect('/index/all/1/1/');
         $c->detach();
-    }
+    }elsif ($c->stash->{'location'} eq 'blog'){
+        my $object = $c->model('MySQL::Object')->create({
+            'type' => $c->stash->{'location'},
+            'created' => \'NOW()',
+            'promoted' => 0,
+            'user_id' => $c->user->user_id,
+            'nsfw' => 'N',
+            'rev' => 0,
+            'blog' => {
+                'title' => $c->req->param('title'),
+                'description' => $c->req->param('description'),
+                'picture_id' => $c->req->param('cat'),
+                'details' => $c->req->param('blogmain'),
+            },
+            'plus_minus' => [{
+                'type' => 'plus',
+                'user_id' => $c->user->user_id,
+            }],
+        });
+
+        if (!$object->id){
+            $c->flash->{'message'} = 'Error submitting blog';
+        }
+        $c->res->redirect('/index/all/1/1/');
+        $c->detach();
+    } 
+
     # submit
     # redirect
 }
