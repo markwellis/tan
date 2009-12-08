@@ -162,7 +162,32 @@ sub post: PathPart('post') Chained('validate') Args(0){
 warn $c->stash->{'location'};
 warn Data::Dumper::Dumper($c->req->params);
 
-    # validate
+    if ($c->stash->{'location'} eq 'link'){
+        my $object = $c->model('MySQL::Object')->create({
+            'type' => $c->stash->{'location'},
+            'created' => \'NOW()',
+            'promoted' => 0,
+            'user_id' => $c->user->user_id,
+            'nsfw' => 'N',
+            'rev' => 0,
+            'link' => {
+                'title' => $c->req->param('title'),
+                'description' => $c->req->param('description'),
+                'picture_id' => $c->req->param('cat'),
+                'url' => $c->req->param('url'),
+            },
+            'plus_minus' => [{
+                'type' => 'plus',
+                'user_id' => $c->user->user_id,
+            }],
+        });
+
+        if (!$object->id){
+            $c->flash->{'message'} = 'Error submitting link';
+        }
+        $c->res->redirect('/index/all/1/1/');
+        $c->detach();
+    }
     # submit
     # redirect
 }
