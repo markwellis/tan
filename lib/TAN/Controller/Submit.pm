@@ -159,8 +159,6 @@ sub post: PathPart('post') Chained('validate') Args(0){
         $c->res->redirect('/submit/' . $c->stash->{'location'} . '/');
         $c->detach();
     }
-warn $c->stash->{'location'};
-warn Data::Dumper::Dumper($c->req->params);
 
     if ($c->stash->{'location'} eq 'link'){
         my $object = $c->model('MySQL::Object')->create({
