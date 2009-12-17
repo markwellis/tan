@@ -61,8 +61,8 @@ while (my $old_picture = $old_pictures->next){
 
         my $new_blog = $newdb->resultset('Picture')->create({
             'picture_id' => $new_object->id,
-            'title' => decode_entities($old_picture->title),
-            'description' => decode_entities($old_picture->description),
+            'title' => strip_slashes(decode_entities($old_picture->title)),
+            'description' => strip_slashes(decode_entities($old_picture->description)),
             'filename' => basename($old_picture->filename),
             'x' => $old_picture->x,
             'y' => $old_picture->y,
@@ -97,10 +97,10 @@ while (my $old_blog = $old_blogs->next){
     
         my $new_blog = $newdb->resultset('Blog')->create({
             'blog_id' => $new_object->id,
-            'title' => decode_entities($old_blog->title),
-            'description' => decode_entities($old_blog->description),
+            'title' => strip_slashes(decode_entities($old_blog->title)),
+            'description' => strip_slashes(decode_entities($old_blog->description)),
             'picture_id' => $picture_lookup->{$old_blog->category} || 1,
-            'details' => decode_entities($old_blog->details),
+            'details' => strip_slashes($old_blog->details),
         });
     }
 }
@@ -131,10 +131,10 @@ while (my $old_link = $old_links->next){
     
         my $new_link = $newdb->resultset('Link')->create({
             'link_id' => $new_object->id,
-            'title' => decode_entities($old_link->title),
-            'description' => decode_entities($old_link->description),
+            'title' => strip_slashes(decode_entities($old_link->title)),
+            'description' => strip_slashes(decode_entities($old_link->description)),
             'picture_id' => $picture_lookup->{$old_link->category} || 1,
-            'url' => decode_entities($old_link->url),
+            'url' => strip_slashes(decode_entities($old_link->url)),
         });
     }
 }
@@ -198,7 +198,7 @@ while (my $old_comment = $old_comments->next){
         if ($newid){
             my $new_comment = $newdb->resultset('Comments')->create({
                 'user_id' => $user_lookup->{$old_comment->user_id},
-                'comment' => $old_comment->details,
+                'comment' => strip_slashes($old_comment->details),
                 'created' => $old_comment->date,
                 'object_id' => $newid,
                 'deleted' => $old_comment->deleted,
@@ -289,3 +289,11 @@ my $params = {
     }
 }
 print "converted " . $old_pis->count . " views\n";
+
+sub strip_slashes{
+    my $string = shift;
+    if ($string){
+        $string =~ s/\\(\'|\"|\\)/$1/g;
+    }
+    return $string;
+}
