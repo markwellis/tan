@@ -9,7 +9,7 @@ use Time::HiRes qw(time);
 # Sets the actions in this controller to be registered with no prefix
 # so they function identically to actions created in MyApp.pm
 #
-__PACKAGE__->config->{namespace} = '';
+__PACKAGE__->config->{'namespace'} = '';
 
 =head1 NAME
 
@@ -65,12 +65,12 @@ sub end : Private {
 
     if($c->debug) {
         my $sql_queries = $c->model('MySQL')->get_query_count();
-        my $time = $c->model('MySQL')->storage()->debugobj()->{total_time};
+        my $time = $c->model('MySQL')->storage()->debugobj()->{'total_time'};
 
-        $c->log->debug("Queries this request " . $sql_queries . ": $time seconds") if $c->stash->{'sql_queries'};
+        $c->log->debug("Queries this request ${sql_queries}: ${time} seconds") if $c->stash->{'sql_queries'};
 
-        if($sql_queries && $sql_queries > 15) {
-            $c->log->warn("****** Are you sure you need " . $sql_queries . " queries? ******");
+        if( defined($sql_queries) && $sql_queries > 15) {
+            $c->log->warn("****** Are you sure you need ${sql_queries} queries? ******");
         }
 
         $c->model('MySQL')->reset_count();
