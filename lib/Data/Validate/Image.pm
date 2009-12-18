@@ -16,7 +16,7 @@ stuff goes here
 
 =head1 DESCRIPTION
 
-This function validates that a file is actually an image
+Confirms that an image is infact an image
 
 =head2 EXPORTS
 
