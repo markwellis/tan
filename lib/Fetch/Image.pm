@@ -38,6 +38,13 @@ modify it under the same terms as Perl v5.10.1 itself.
 
 =cut
 
+sub BUILD{
+    my ($self, $config) = @_;
+
+    $self->{'config'} = $config;
+    return 1;
+}
+
 # fetch
 # validte
 # clean / move
@@ -96,18 +103,56 @@ sub head{
     return $ua->head($url);
 }
 
+sub content_type{
+    my ($self, $content_type) = @_;
+
+# *********
+# this should be in COMPONENT!
+# *********
+    my $allowed_types;
+    if ( defined($self->{'config'}->{'allowed_types'}) ){
+        $allowed_types = $self->{'config'}->{'allowed_types'} 
+    } else {
+        $allowed_types = {
+            'image/png' => 1,
+            'image/jpg' => 1,
+            'image/jpeg' => 1,
+            'image/bmp' => 1,
+            'image/gif' => 1,
+        };
+    }
+# *******
+# end
+# *******
+
+    if ( defined($allowed_types->{$content_type}) ){
+        return 1;
+    }
+
+    return 0;
+}
+
 # checks HTTP:Response for image validity (error, format, size)
 sub validate_head{
     my ($self, $head) = @_;
 
-    #do things here
-    # check for errors
-    # check headers
-    #  content type
-    #  content-length
-    #  if invalid return false
-    # return true
-    0;
+    if ( $head->is_error ){
+    #some kind of http error
+        return 0;
+    }
+
+    my $content_type = $self->content_type($head->header('content-type'));
+    if ( !$content_type ){
+    # not an image
+        return 0;
+    }
+
+    if ( $head->header('content-length') > $self->{'config'}->{'max_filesize'} ){
+    #file too big
+        return 0;
+    }
+
+    return 1;
 }
 
 # returns a File::Temp copy of the requested url
@@ -121,6 +166,8 @@ sub save_tmp{
     #   if invalid clean up
     #    return false
     # return $tmp_file
+
+    1;
 }
 
 # returns filetype if File::Temp points to an image
@@ -132,6 +179,8 @@ sub is_image{
     #   undef $tmp_file;
     #   return 0
     # return $format_lookup->{$format}
+
+    1;
 }
 
 # moves the File::Temp and makes it permanent
@@ -140,6 +189,8 @@ sub move_image{
     # image is clean
     #  save image
     #   return true/false
+
+    1;
 }
 
 1;

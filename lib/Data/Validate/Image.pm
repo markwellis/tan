@@ -48,7 +48,7 @@ sub _validate{
 
     my $image_type = Image::Info::image_type($file);
     if ( defined($image_type->{'file_type'}) ){
-        return $image_type->{'file_type'};
+        return lc($image_type->{'file_type'});
     }
 
     return 0;

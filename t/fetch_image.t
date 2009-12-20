@@ -8,21 +8,46 @@ main();
 done_testing();
 
 sub main{
-# add in a config hash here
-# with things like max filesize
-# ???
-# profit
-    my $fetcher = new_ok('Fetch::Image' => [], 'fetcher');
-
-    my $url = 'http://thisaintnews.com/sys/images/logo.png';
-
+    my $fetcher_config = {
+        'max_filesize' => '2097152',
+    };
+    my $fetcher = new_ok('Fetch::Image' => [$fetcher_config], 'fetcher');
+    my $base_url = 'http://thisaintnews.com';
     my $ua = $fetcher->setup_ua();
     isa_ok($ua, 'LWPx::ParanoidAgent', 'ua');
-    my $head = $fetcher->head($ua, $url);
 
+    
+    my $head = $fetcher->head($ua, $base_url);
     isa_ok($head, 'HTTP::Response', 'head');
 
-    ok($fetcher->validate_head($head), 'validate_head passed');
+#this looks messy, because it is :(
+#
+# text fail
+    $head = $fetcher->head($ua, $base_url . '/tmp/fetch_image/text');
+    is($fetcher->validate_head($head), 0, 'not an image');
+
+# large file
+    $head = $fetcher->head($ua, $base_url . '/tmp/fetch_image/large');
+    is($fetcher->validate_head($head), 0, 'file too large');
+
+# 404
+    $head = $fetcher->head($ua, $base_url . '/thisfiledoesntexist');
+    is($fetcher->validate_head($head), 0, 'file doesnt exist');
+
+# example.com
+    $head = $fetcher->head($ua, 'http://example.com/thisfiledoesntexist');
+    is($fetcher->validate_head($head), 0, 'invalid domain');
+
+# allowed image
+    $head = $fetcher->head($ua, 'http://thisaintnews.com/sys/images/logo.png');
+    ok($fetcher->validate_head($head), 'proper image');
+
+    # tmp_save
+    # is_image
+    #  pass
+    #  fail
+    # move_image
+
 
 #real image
 #invalid domain
