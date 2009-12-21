@@ -14,7 +14,7 @@ __PACKAGE__->config(
 );
 
 sub BUILD{
-    my $self = shift;
+    my ($self) = @_;
     $self->storage->debugobj( TAN::DBProfiler->new() );
     
     $self->storage->debug(1);
@@ -22,7 +22,7 @@ sub BUILD{
 }
 
 sub reset_count {
-    my $self = shift;
+    my ($self) = @_;
     my $debugobj = $self->storage()->debugobj();
 
     if($debugobj) {
