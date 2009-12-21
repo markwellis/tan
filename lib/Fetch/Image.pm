@@ -6,6 +6,8 @@ use warnings;
 use Moose;
 use LWPx::ParanoidAgent;
 use Data::Validate::Image;
+use File::Temp;
+use File::Copy;
 
 =head1 NAME
 
@@ -40,17 +42,34 @@ modify it under the same terms as Perl v5.10.1 itself.
 
 sub BUILD{
     my ($self, $config) = @_;
+    
+    $self->{'image_validator'} = new Data::Validate::Image;
 
     $self->{'config'} = $config;
+
+    # setup some defaults
+    $self->{'config'}->{'max_filesize'} = 524_288 if ( !defined($self->{'config'}->{'max_filesize'}) );
+
+    # default allowed image types if none defined
+    if ( !defined($self->{'config'}->{'allowed_types'}) ){
+        $self->{'config'}->{'allowed_types'} = {
+            'image/png' => 1,
+            'image/jpg' => 1,
+            'image/jpeg' => 1,
+            'image/bmp' => 1,
+            'image/gif' => 1,
+        };
+    }
+
     return 1;
 }
 
-# fetch
-# validte
-# clean / move
-#
 sub fetch{
     my ($self, $url, $save_here) = @_;
+
+    if ( !defined($url) || !defined($save_here) ){
+        return 0;
+    }
     my $retval;
 
     my $ua = $self->setup_ua();
@@ -65,23 +84,15 @@ sub fetch{
             if ( my $image_format = $self->is_image($tmp_file) ){
             #is image
 
-                if ( $self->move_image($tmp_file, "${save_here}.${image_format}") ){
+                if ( $self->save_file($tmp_file, "${save_here}.${image_format}") ){
                 #image upload complete
-
-                } else {
-                #save failed
+                    return "${save_here}.${image_format}";
                 }
-
-            } else {
-            #not an image
-            undef $tmp_file;
             }
-        } else {
-        #failed to save tmp file
         }
-    } else {
-        $retval = 'Not an image';
     }
+
+    return 0;
 }
 
 #sets up the LWPx::ParanoidAgent
@@ -103,29 +114,11 @@ sub head{
     return $ua->head($url);
 }
 
+# checks whether content type is allowed
 sub content_type{
     my ($self, $content_type) = @_;
 
-# *********
-# this should be in COMPONENT!
-# *********
-    my $allowed_types;
-    if ( defined($self->{'config'}->{'allowed_types'}) ){
-        $allowed_types = $self->{'config'}->{'allowed_types'} 
-    } else {
-        $allowed_types = {
-            'image/png' => 1,
-            'image/jpg' => 1,
-            'image/jpeg' => 1,
-            'image/bmp' => 1,
-            'image/gif' => 1,
-        };
-    }
-# *******
-# end
-# *******
-
-    if ( defined($allowed_types->{$content_type}) ){
+    if ( defined($self->{'config'}->{'allowed_types'}->{$content_type}) ){
         return 1;
     }
 
@@ -159,38 +152,37 @@ sub validate_head{
 sub save_tmp{
     my ($self, $ua, $url) = @_;
 
-    # fetch file
-    #  save to tmp file 
-    #   use File::Temp
-    #  validate image
-    #   if invalid clean up
-    #    return false
-    # return $tmp_file
+    if ( my $temp_file = new File::Temp ){
+    # opened Temp::File
+        if ( my $response = $ua->get($url, ':content_file' => $temp_file->filename) ){
+        #file downloaded
+            return $temp_file;
+        }
+    }
 
-    1;
+    return 0;
 }
 
 # returns filetype if File::Temp points to an image
 sub is_image{
     my ($self, $tmp_file) = @_;
 
-    # my $format = check if $tmp_file->filename is image
-    # if fasle
-    #   undef $tmp_file;
-    #   return 0
-    # return $format_lookup->{$format}
+    if ( my $format = $self->{'image_validator'}->is_image($tmp_file->filename) ){
+        return $format;
+    }
 
-    1;
+    $tmp_file->DESTROY;
+    return 0;
 }
 
 # moves the File::Temp and makes it permanent
-sub move_image{
+sub save_file{
     my ($self, $tmp_file, $save_here) = @_;
-    # image is clean
-    #  save image
-    #   return true/false
 
-    1;
+    my $filecopy = File::Copy::copy($tmp_file->filename, $save_here);
+    $tmp_file->DESTROY;
+
+    return $filecopy;
 }
 
 1;

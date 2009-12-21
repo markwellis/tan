@@ -45,8 +45,8 @@ sub is_image{
 
 sub _validate{
     my ($self, $file) = @_;
-
     my $image_type = Image::Info::image_type($file);
+
     if ( defined($image_type->{'file_type'}) ){
         return lc($image_type->{'file_type'});
     }
