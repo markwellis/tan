@@ -10,6 +10,7 @@ sub resize(){
     my ($self, $filename, $cacheimg, $x) = @_;
 
     if ( -e $filename ){
+    
         my ($old_x, $old_y) = imgsize($filename);
         my ($new_x, $new_y);
 
@@ -21,6 +22,7 @@ sub resize(){
         $new_x = int($new_x);
         $new_y = int($new_y);
 
+warn "convert ${filename}[0-10] -coalesce -auto-orient -thumbnail ${new_x}x${new_y} -layers Optimize ${cacheimg} 2>&1";
         return `convert ${filename}[0-10] -coalesce -auto-orient -thumbnail ${new_x}x${new_y} -layers Optimize ${cacheimg} 2>&1`;
     }
     return 'error';

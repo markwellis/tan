@@ -120,7 +120,7 @@ isa_ok($ua, 'LWPx::ParanoidAgent', 'ua');
     my $ua = $fetcher->setup_ua();
     isa_ok($ua, 'LWPx::ParanoidAgent', 'ua');
 
-    ok(my $filename = $fetcher->fetch('http://thisaintnews.com/sys/images/logo.png', '/tmp/file'), "image accepted");
+    ok(my $filename = $fetcher->fetch('http://www.google.co.uk/images/firefox/sprite2.png', '/srv/http/TAN/root/static/user/pics/wibble'), "image accepted");
     ok( -f $filename, 'save file exists');
     unlink($filename);
     is( -f $filename, undef, 'test save file unlinked');
@@ -150,6 +150,15 @@ isa_ok($ua, 'LWPx::ParanoidAgent', 'ua');
     is($fetcher->fetch('http://thisaintnews.com/sys/images/logo.png'), 0, "no savefile");
     is($fetcher->fetch(undef, '/tmp/tmpfile'), 0, "no url");
     is( -f '/tmp/tmpfile.png', undef, 'save doesnt exist');
+}
+
+{ # itunes fail
+    my $fetcher = new_ok('Fetch::Image' => [$fetcher_config], 'fetcher');
+    my $ua = $fetcher->setup_ua();
+    isa_ok($ua, 'LWPx::ParanoidAgent', 'ua');
+
+    is($fetcher->fetch('http://appldnld.apple.com.edgesuite.net/content.info.apple.com/iTunes8/061-6664.20090608.dfrtg/iTunesSetup.exe', '/tmp/itunes'), 0, "itunes.exe rejected");
+    is( -f '/tmp/itunes*', undef, 'save doesnt exist');
 }
 
 done_testing();

@@ -56,6 +56,7 @@ sub BUILD{
             'image/png' => 1,
             'image/jpg' => 1,
             'image/jpeg' => 1,
+            'image/pjpeg' => 1,
             'image/bmp' => 1,
             'image/gif' => 1,
         };
@@ -70,6 +71,7 @@ sub fetch{
     if ( !defined($url) || !defined($save_here) ){
         return 0;
     }
+
     my $retval;
 
     my $ua = $self->setup_ua();
@@ -155,6 +157,8 @@ sub save_tmp{
     if ( my $temp_file = new File::Temp ){
     # opened Temp::File
         if ( my $response = $ua->get($url, ':content_file' => $temp_file->filename) ){
+use Data::Dumper;
+warn Dumper $response;
         #file downloaded
             return $temp_file;
         }

@@ -4,7 +4,7 @@ use strict;
 use warnings;
 use parent 'Catalyst::Controller';
 use Data::Validate::URI;
-
+use Time::HiRes qw/time/;
 =head2 index
 
 =cut
@@ -46,7 +46,7 @@ validates the upload
 =cut
 
 #no point redefining these on each request...
-my $title_min = 5;
+my $title_min = 3;
 my $desc_min = 5;
 my $title_max = 100;
 my $desc_max = 1000;
@@ -78,11 +78,11 @@ sub validate: PathPart('') Chained('location') CaptureArgs(0){
         #long title
         $c->stash->{'error'} = $error_codes[2];
 
-    } elsif ( length($c->req->param('description')) > $desc_max ) {
+    } elsif ( defined($c->req->param('description')) && length($c->req->param('description')) > $desc_max ) {
         #long description
         $c->stash->{'error'} = $error_codes[3];
 
-    } elsif ( length($title) < $title_min ) {
+    } elsif ( !defined($title) || length($title) < $title_min ) {
         #short title
         $c->stash->{'error'} = $error_codes[4];
 
@@ -185,7 +185,7 @@ sub post: PathPart('post') Chained('validate') Args(0){
         }
         $c->res->redirect('/index/all/1/1/');
         $c->detach();
-    }elsif ($c->stash->{'location'} eq 'blog'){
+    } elsif ($c->stash->{'location'} eq 'blog'){
         my $object = $c->model('MySQL::Object')->create({
             'type' => $c->stash->{'location'},
             'created' => \'NOW()',
@@ -210,7 +210,41 @@ sub post: PathPart('post') Chained('validate') Args(0){
         }
         $c->res->redirect('/index/all/1/1/');
         $c->detach();
-    } 
+    } elsif ($c->stash->{'location'} eq 'picture') {
+        my $title = $c->req->param('title');
+
+        my $url_title = $c->url_title($title);
+        my @path = split('/', 'root/' . $c->config->{'pic_path'} . '/' . time . '_' . $url_title);
+
+        if ( my $filepath = $c->model('FetchImage')->fetch($c->req->param('pic_url'), $c->path_to(@path)) ){
+warn $filepath;
+            my @path = split('/', $filepath);
+            my $filename = $path[-1];
+warn $filename;
+            my $object = $c->model('MySQL::Object')->create({
+                'type' => $c->stash->{'location'},
+                'created' => \'NOW()',
+                'promoted' => 0,
+                'user_id' => $c->user->user_id,
+                'nsfw' => defined($c->req->param('nsfw')) ? 'Y' : 'N',
+                'rev' => 0,
+                'picture' => {
+                    'title' => $title,
+                    'description' => $c->req->param('pdescription') || '',
+                    'filename' => $filename,
+                    'x' => 1,
+                    'y' => 1,
+                    'size' => 3,
+                },
+                'plus_minus' => [{
+                    'type' => 'plus',
+                    'user_id' => $c->user->user_id,
+                }],
+            });
+        } else {
+            $c->flash->{'message'} = 'Error submitting picture';
+        }
+    }
 
     # submit
     # redirect
