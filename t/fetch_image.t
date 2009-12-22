@@ -27,21 +27,25 @@ isa_ok($ua, 'LWPx::ParanoidAgent', 'ua');
 { # text fail
     my $head = $fetcher->head($ua, $base_url . '/tmp/fetch_image/text');
     is($fetcher->validate_head($head), 0, 'not an image');
+    is($fetcher->{'error'}, 'Invalid content-type', 'Invalid content-type');
 }
 
 { # large file
     my $head = $fetcher->head($ua, $base_url . '/tmp/fetch_image/large');
     is($fetcher->validate_head($head), 0, 'file too large');
+    is($fetcher->{'error'}, 'Filesize exceeded', 'Filesize exceeded');
 }
 
 { # 404
     my $head = $fetcher->head($ua, $base_url . '/thisfiledoesntexist');
     is($fetcher->validate_head($head), 0, 'file doesnt exist');
+    is($fetcher->{'error'}, 'Transfer error', 'Transfer error');
 }
 
 { # example.com
     my $head = $fetcher->head($ua, 'http://example.com/thisfiledoesntexist');
     is($fetcher->validate_head($head), 0, 'invalid domain');
+    is($fetcher->{'error'}, 'Transfer error', 'Transfer error');
 }
 
 { # allowed image
@@ -66,6 +70,7 @@ isa_ok($ua, 'LWPx::ParanoidAgent', 'ua');
 
     # check if is image, and temp::file is removed
     is($fetcher->is_image($temp_file), 0, "file isnt an image");
+    is($fetcher->{'error'}, 'Not an image', 'Not an image');
     is(-f $temp_filename, undef, 'Temp::File no longer exists');
 }
 
@@ -88,21 +93,25 @@ isa_ok($ua, 'LWPx::ParanoidAgent', 'ua');
 
 { # fetch failed (text file)
     is(my $filename = $fetcher->fetch($base_url, "${base_url}/tmp/fetch_image/text"), 0, "text file rejected");
+    is($fetcher->{'error'}, 'Invalid content-type', 'Invalid content-type');
     is( -f $filename, undef, 'save file doesnt exist');
 }
 
 { # fetch failed (large file)
-    is(my $filename = $fetcher->fetch($base_url, "${base_url}/tmp/fetch_image/large"), 0, "large file rejected");
+    is(my $filename = $fetcher->fetch("${base_url}/tmp/fetch_image/large", '/tmp/file'), 0, "large file rejected");
+    is($fetcher->{'error'}, 'Filesize exceeded', 'Filesize exceeded');
     is( -f $filename, undef, 'save file doesnt exist');
 }
 
 { # 404
-    is(my $filename = $fetcher->fetch($base_url, "${base_url}/thisfiledoesntexist"), 0, "large file rejected");
+    is(my $filename = $fetcher->fetch("${base_url}/thisfiledoesntexist", '/tmp/file'), 0, "404 file rejected");
+    is($fetcher->{'error'}, 'Transfer error', 'Transfer error');
     is( -f $filename, undef, 'save file doesnt exist');
 }
 
 { # example.com
-    is(my $filename = $fetcher->fetch('http://example.com/thisfiledoesntexist'), 0, "large file rejected");
+    is(my $filename = $fetcher->fetch('http://example.com/thisfiledoesntexist', '/tmp/file'), 0, "dns error rejected");
+    is($fetcher->{'error'}, 'Transfer error', 'Transfer error');
     is( -f $filename, undef, 'save file doesnt exist');
 }
 
@@ -138,6 +147,7 @@ isa_ok($ua, 'LWPx::ParanoidAgent', 'ua');
     isa_ok($ua, 'LWPx::ParanoidAgent', 'ua');
 
     is(my $filename = $fetcher->fetch('http://thisaintnews.com/sys/images/logo.png', '/tmp/file'), 0, "image type rejected");
+    is($fetcher->{'error'}, 'Invalid content-type', 'Invalid content-type');
     is( -f $filename, undef, 'save deoesnt exist');
 }
 
@@ -158,6 +168,7 @@ isa_ok($ua, 'LWPx::ParanoidAgent', 'ua');
     isa_ok($ua, 'LWPx::ParanoidAgent', 'ua');
 
     is($fetcher->fetch('http://appldnld.apple.com.edgesuite.net/content.info.apple.com/iTunes8/061-6664.20090608.dfrtg/iTunesSetup.exe', '/tmp/itunes'), 0, "itunes.exe rejected");
+    is($fetcher->{'error'}, 'Invalid content-type', 'Invalid content-type');
     is( -f '/tmp/itunes*', undef, 'save doesnt exist');
 }
 

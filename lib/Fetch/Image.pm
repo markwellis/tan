@@ -72,22 +72,17 @@ sub fetch{
         return 0;
     }
 
-    my $retval;
-
     my $ua = $self->setup_ua();
     my $head = $self->head($ua, $url);
 
     if ( $self->validate_head($head) ){
     #http response says image
-
         if ( my $tmp_file = $self->save_tmp($ua, $url) ){
         #tempory file saved
-
             if ( my $image_format = $self->is_image($tmp_file) ){
             #is image
-
                 if ( $self->save_file($tmp_file, "${save_here}.${image_format}") ){
-                #image upload complete
+                #image save complete
                     return "${save_here}.${image_format}";
                 }
             }
@@ -100,6 +95,7 @@ sub fetch{
 #sets up the LWPx::ParanoidAgent
 sub setup_ua{
     my ($self) = @_;
+
     my $ua = new LWPx::ParanoidAgent;
 
     $ua->agent($self->{'config'}->{'user_agent'}) if defined($self->{'config'}->{'user_agent'});
@@ -113,6 +109,7 @@ sub setup_ua{
 sub head{
     my ($self, $ua, $url) = @_;
 
+    $self->{'error'} = '';
     return $ua->head($url);
 }
 
@@ -133,17 +130,22 @@ sub validate_head{
 
     if ( $head->is_error ){
     #some kind of http error
+        $self->{'error'} = 'Transfer error';
         return 0;
     }
 
     my $content_type = $self->content_type($head->header('content-type'));
     if ( !$content_type ){
     # not an image
+        $self->{'error'} = 'Invalid content-type';
+
         return 0;
     }
 
     if ( $head->header('content-length') > $self->{'config'}->{'max_filesize'} ){
     #file too big
+        $self->{'error'} = 'Filesize exceeded';
+
         return 0;
     }
 
@@ -157,11 +159,13 @@ sub save_tmp{
     if ( my $temp_file = new File::Temp ){
     # opened Temp::File
         if ( my $response = $ua->get($url, ':content_file' => $temp_file->filename) ){
-use Data::Dumper;
-warn Dumper $response;
         #file downloaded
             return $temp_file;
+        } else {
+            $self->{'error'} = 'Download Failed';
         }
+    } else {
+        $self->{'error'} = 'Temp file save failed';
     }
 
     return 0;
@@ -174,6 +178,8 @@ sub is_image{
     if ( my $format = $self->{'image_validator'}->is_image($tmp_file->filename) ){
         return $format;
     }
+
+    $self->{'error'} = 'Not an image';
 
     $tmp_file->DESTROY;
     return 0;
