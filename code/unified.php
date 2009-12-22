@@ -1043,6 +1043,7 @@ ob_clean();
 	            
 					."<br/><input type='submit' value='Comment' id='submit_comment'/>"
                     ."<input type='button' value='Check Spelling' id='submit_comment_spell'/>"
+                    .'<a href="#top" style="float:right;margin-right:20px;">Back to top</a>'
 	                .'</p></form> ';
 	        } else {
 	            $output .="<span style='font-size:1.2em;padding-bottom:15px;display:block;'>" 
