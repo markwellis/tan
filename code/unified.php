@@ -1007,18 +1007,17 @@ ob_clean();
                 $user_id = (int)$user->getUserId();
                 $comment_user_id = (int)$comment['user_id'];
 
+                $output .= "<span style='display:block;float:right;'>"; 
+                $output .= "<a href='#comment{$comment['comment_id']}'>Link</a>";
                 if ($user->isLoggedIn()){
-                    $output .= "<span style='display:block;float:right;'>"; 
-                    $output .= "<a onclick='return false;' href='#' class='quote_link' title='{$comment['username']}::{$comment['comment_id']}'>Quote</a>";
+                    $output .= " | <a onclick='return false;' href='#' class='quote_link' title='{$comment['username']}::{$comment['comment_id']}'>Quote</a>";
                 }
 
                 if ($user->isLoggedIn() && ($user_id === $comment_user_id) ){
                     $output .= " | <a class='comment_edit' href='/edit_comment/{$comment['comment_id']}/'>Edit Comment</a>";
                 }
 
-                if ($user->isLoggedIn()){
-                    $output .= "</span>";
-                }
+                $output .= "</span>";
 	            $output .= "</div></div><div id='nsfw_blocker_containter'></div><br />";
 	        }
 
