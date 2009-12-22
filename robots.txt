@@ -4,6 +4,6 @@ Disallow: /filteron
 Disallow: /filteroff
 Disallow: /user
 Disallow: /random
-Disallow: /thumb
+Disallow: /thumb/
 
 Sitemap: http://thisaintnews.com/sitemaps/sitemap_index.xml
