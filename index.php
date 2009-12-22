@@ -51,7 +51,7 @@ switch($function){
             $middle .= "<div class='imgDiv' id='imgdiv{$i}'>
                 <a href='/viewpic/".$thumbs[$i]['picture_id']."/".stripslashes(str_replace(array(' ','%'),array('_',''),$thumbs[$i]['title']))."'>
                 <img alt='".$thumbs[$i]['title']."' class='Imgnormal' id='thumb$i' 
-                src='/thumb/".$thumbs[$i]['picture_id']."/150/' /></a>
+                src='/images/cache/resize/".$thumbs[$i]['picture_id']."/150' /></a>
                 <div style='background-color:#FBFDFF;opacity:0.8;filter:alpha(opacity=80);display:none;position:relative;top:-40px;height:45px;width:150px;' id='popup$i' >
                 <div class='plus' id='tplus".$thumbs[$i]['picture_id']."' style='float:left;'>$plus<a class='addPlus";
                 if ($pmyplus){

@@ -17,6 +17,16 @@ RewriteCond %{HTTP_USER_AGENT} !redditbot [NC]
 RewriteCond %{HTTP_USER_AGENT} !googlebot [NC]
 RewriteRule thumb/(.*)/.*$ lib/controllers/image_redirect.php?id=$1 [NC]
 
+RewriteCond %{HTTP_REFERER} !^http://thisaintnews.com [NC]
+RewriteCond %{HTTP_REFERER} !^http://beta.thisaintnews.com [NC]
+RewriteCond %{HTTP_REFERER} !^http://htdev.hub00.howmanykillings.com [NC]
+RewriteCond %{HTTP_USER_AGENT} !redditbot [NC]
+RewriteCond %{HTTP_USER_AGENT} !googlebot [NC]
+RewriteRule images/cache/resize/(.*)/.*$ lib/controllers/image_redirect.php?id=$1 [NC]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^images/cache/resize/([^/]+)/([^/]+) lib/controllers/thumb.php?id=$1&x=$2 [NC]
+
 ##login stuff
 RewriteRule ^login/$ lib/controllers/login_register.php [NC]
 RewriteRule ^logout/$ lib/controllers/login_register.php?logout=1 [NC]
@@ -32,8 +42,6 @@ RewriteRule ^submit/([^/]+)/$ lib/controllers/submit.php?location=$1 [NC]
 ##edit
 RewriteRule ^esubmit/([^/]+)/([^/]+)/$ lib/controllers/submit.php?location=$1&edit=$2 [NC]
 
-##thumb
-RewriteRule ^thumb/([^/]+)/([^/]+)/ lib/controllers/thumb.php?id=$1&x=$2 [NC]
 RewriteRule ^tagthumbs/([^/]+)/ lib/controllers/tagthumbs.php?tags=$1 [NC]
 
 

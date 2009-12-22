@@ -12,7 +12,7 @@
 
                 <?php if (isset($m_stash->details)) { ?>
                     <li>
-                        <img src="/thumb/<?php echo $m_stash->details['picture_id'] ?>/600/" style="margin:auto;display:block;" alt="image" />
+                        <img src="/images/cache/resize/<?php echo $m_stash->details['picture_id'] ?>/600" style="margin:auto;display:block;" alt="image" />
                     </li>
                 <?php } else { ?>
                     <li>

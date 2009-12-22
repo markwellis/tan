@@ -1,6 +1,6 @@
 <?php
 if ($m_stash->location !== 'picture'){
-    array_push($m_stash->js_includes, $m_stash->theme_settings['js_path'] . '/tag_thumbs.js');
+    array_push($m_stash->js_includes, $m_stash->theme_settings['js_path'] . '/tag_thumbs.js?2=3');
 }
 ?>
 <label for='tags'>Tags</label>

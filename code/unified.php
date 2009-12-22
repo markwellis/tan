@@ -744,8 +744,8 @@ if (defined('MAGIC')) {
 	
 	            $output .= "<div class='news'>";
                 
-                $output .= "<div style='background-image:url(/thumb/{$objectDetails['category']}/100/);' class='newsImg' >"
-                    ."<img src='/thumb/{$objectDetails['category']}/100/' alt='{$objectDetails['category']}' style='display:none;'/>"
+                $output .= "<div style='background-image:url(/images/cache/resize/{$objectDetails['category']}/100);' class='newsImg' >"
+                    ."<img src='/images/cache/resize/{$objectDetails['category']}/100' alt='{$objectDetails['category']}' style='display:none;'/>"
                     ."</div>";
                 $output .= "{$plusminusbox}</div>";
 	            if ($article === 0){
@@ -866,12 +866,12 @@ if (defined('MAGIC')) {
                     }
 
 	                $output .=" | {$meta[1][0]}x{$meta[1][1]} | {$size}{$plusminusbox}</div><div class='thumbPlace'><a href='/images/pics/".stripslashes(htmlentities(basename($objectDetails['filename']),ENT_QUOTES,'UTF-8'))."'>
-	                    <img class='picThumb' src='/thumb/{$objectDetails['picture_id']}/400/'
+	                    <img class='picThumb' src='/images/cache/resize/{$objectDetails['picture_id']}/400'
 	                    alt='".stripslashes($objectDetails['title'])."'/></a>
 	                    </div>".stripslashes($objectDetails['description'])."</div>";
 	            } else {
 	                $output .= "</div>
-	                    <div class='thumbPic' style='background-image:url(\"/thumb/".$objectDetails['picture_id']."/160/\");background-repeat:no-repeat;background-position:center center;'><a style='display:block;height:100%;width:100%;' href='/viewpic/{$objectDetails['picture_id']}/". user::cleanTitle($objectDetails['title']) ."/'></a></div></div>$plusminusbox";
+	                    <div class='thumbPic' style='background-image:url(\"/images/cache/resize/".$objectDetails['picture_id']."/160\");background-repeat:no-repeat;background-position:center center;'><a style='display:block;height:100%;width:100%;' href='/viewpic/{$objectDetails['picture_id']}/". user::cleanTitle($objectDetails['title']) ."/'></a></div></div>$plusminusbox";
 	            }
 	        }else {
 	        	header('Location: /');
