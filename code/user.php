@@ -6,7 +6,7 @@ if (defined('MAGIC')) {
 
         public function __construct() {
             $time = 60*60*24*90;
-            $name = '62duihsfd8923rj21ws';
+            $name = 'asj3hdkjhk';
             if ( !isset( $_SESSION ['ready'] ) ) {
                 session_name($name);
                 $domain = $_SERVER['HTTP_HOST'];

@@ -37,7 +37,7 @@ define('PROMOTED_CUTOFF', 10);
 define('SALT', '13f76tfvtf43x68fd');
 define('OBJECT_LIMIT', 27);
 define('MAGIC', true);
-define('SESSION_NAME', '62duihsfd8923rj21ws');
+define('SESSION_NAME', 'asj3hdkjhk');
 
 /**
  * Recaptcha settings
