@@ -44,9 +44,7 @@ sub index :Path :Args(3) {
     my $filename = $row->filename;
     if ( defined($row) && $filename ){
         my $orig_image = $c->path_to('root') . $c->config->{'pic_path'} . "/${filename}";
-warn $orig_image;
         my $cache_image = $c->path_to('root') . $c->config->{'thumb_path'} . "/${mod}/${id}";
-warn $cache_image;
 
         mkpath($cache_image);
         $cache_image .= "/${x}";

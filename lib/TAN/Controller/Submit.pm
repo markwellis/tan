@@ -218,10 +218,10 @@ sub post: PathPart('post') Chained('validate') Args(0){
 
         if ( 
             defined($c->req->param('pic_url')) 
-            && my $filepath = $c->model('FetchImage')->fetch($c->req->param('pic_url'), $c->path_to(@path))
+            && (my $fileinfo = $c->model('FetchImage')->fetch($c->req->param('pic_url'), $c->path_to(@path)))
         ){
         #remote image upload
-            my @path = split('/', $filepath);
+            my @path = split('/', $fileinfo->{'filename'});
             my $filename = $path[-1];
             my $object = $c->model('MySQL::Object')->create({
                 'type' => $c->stash->{'location'},
@@ -234,9 +234,9 @@ sub post: PathPart('post') Chained('validate') Args(0){
                     'title' => $title,
                     'description' => $c->req->param('pdescription') || '',
                     'filename' => $filename,
-                    'x' => 1,
-                    'y' => 1,
-                    'size' => 3,
+                    'x' => $fileinfo->{'x'},
+                    'y' => $fileinfo->{'y'},
+                    'size' => $fileinfo->{'size'},
                 },
                 'plus_minus' => [{
                     'type' => 'plus',
