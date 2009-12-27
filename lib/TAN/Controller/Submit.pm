@@ -71,19 +71,19 @@ sub validate: PathPart('') Chained('location') CaptureArgs(0){
     my $description = $c->req->param('description');
 
     if ( $title eq '' ) {
-        #blank title
+    #blank title
         $c->stash->{'error'} = $error_codes[0];
 
     } elsif ( length($title) > $title_max ) {
-        #long title
+    #long title
         $c->stash->{'error'} = $error_codes[2];
 
     } elsif ( defined($c->req->param('description')) && length($c->req->param('description')) > $desc_max ) {
-        #long description
+    #long description
         $c->stash->{'error'} = $error_codes[3];
 
     } elsif ( !defined($title) || length($title) < $title_min ) {
-        #short title
+    #short title
         $c->stash->{'error'} = $error_codes[4];
 
     } else {
@@ -92,12 +92,12 @@ sub validate: PathPart('') Chained('location') CaptureArgs(0){
             $cat = $c->req->param('cat');
             $cat =~s/$int_reg//g;
             if (!defined($cat)){
-                #no image selected
+            #no image selected
                 $c->stash->{'error'} = $error_codes[9];
             }
 
             if (length($description) < $desc_min){
-                #desc too short
+            #desc too short
                 $c->stash->{'error'} = $error_codes[5];
             }
 
@@ -105,7 +105,7 @@ sub validate: PathPart('') Chained('location') CaptureArgs(0){
             my $url = $c->req->param('url');
 
             if ( !defined($valid_url->is_web_uri($url)) ){
-                #invalid url
+            #invalid url
                 $c->stash->{'error'} = $error_codes[6];                
             }
 
@@ -114,7 +114,7 @@ sub validate: PathPart('') Chained('location') CaptureArgs(0){
             });
 
             if ($link->count){
-               #already submitted
+            #already submitted
                 $c->stash->{'error'} = $error_codes[7];
             }
 
@@ -122,17 +122,17 @@ sub validate: PathPart('') Chained('location') CaptureArgs(0){
             $cat = $c->req->param('cat');
             $cat =~s/$int_reg//g;
             if (!defined($cat)){
-                #no image selected
+            #no image selected
                 $c->stash->{'error'} = $error_codes[9];
             }
 
             if (length($description) < $desc_min){
-                #desc too short
+            #desc too short
                 $c->stash->{'error'} = $error_codes[5];
             }
 
             if (length($c->req->param('blogmain')) < $blog_min) {
-                #blog too short
+            #blog too short
                 $c->stash->{'error'} = $error_codes[8];
             }
         } elsif ($c->stash->{'location'} eq 'picture') {
@@ -140,7 +140,7 @@ sub validate: PathPart('') Chained('location') CaptureArgs(0){
             if (defined($url)){
                 my $valid_url = Data::Validate::URI->new();
                 if ( !defined($valid_url->is_web_uri($url)) ){
-                    #invalid url
+                #invalid url
                     $c->stash->{'error'} = $error_codes[6];                
                 }
             }
@@ -216,11 +216,13 @@ sub post: PathPart('post') Chained('validate') Args(0){
         my $url_title = $c->url_title($title);
         my @path = split('/', 'root/' . $c->config->{'pic_path'} . '/' . time . '_' . $url_title);
 
-        if ( my $filepath = $c->model('FetchImage')->fetch($c->req->param('pic_url'), $c->path_to(@path)) ){
-warn $filepath;
+        if ( 
+            defined($c->req->param('pic_url')) 
+            && my $filepath = $c->model('FetchImage')->fetch($c->req->param('pic_url'), $c->path_to(@path))
+        ){
+        #remote image upload
             my @path = split('/', $filepath);
             my $filename = $path[-1];
-warn $filename;
             my $object = $c->model('MySQL::Object')->create({
                 'type' => $c->stash->{'location'},
                 'created' => \'NOW()',
