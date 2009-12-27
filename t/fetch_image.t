@@ -5,7 +5,7 @@ use Test::More;
 use Fetch::Image;
 
 my $fetcher_config = {
-    'max_filesize' => '2097152',
+    'max_filesize' => '51200',
     'user_agent' => 'mozilla firefox yo',
 };
 
@@ -49,7 +49,7 @@ isa_ok($ua, 'LWPx::ParanoidAgent', 'ua');
 }
 
 { # allowed image
-    my $head = $fetcher->head($ua, 'http://thisaintnews.com/sys/images/logo.png');
+    my $head = $fetcher->head($ua, $base_url . '/tmp/fetch_image/ok');
     ok($fetcher->validate_head($head), 'proper image');
 }
 
@@ -57,8 +57,8 @@ isa_ok($ua, 'LWPx::ParanoidAgent', 'ua');
     ok(my $temp_file = $fetcher->save_tmp($ua, 'http://thisaintnews.com/sys/images/logo.png'), 'download to Temp::File');
     ok(-f $temp_file->filename, 'Temp::File ' . $temp_file->filename . ' exists');
 
-    my $format = $fetcher->is_image($temp_file);
-    ok($format, "Temp::File is a ${format}");
+    my $info = $fetcher->is_image($temp_file);
+    ok($info, "Temp::File is a " . $info->{'file_ext'});
 }
 
 { # save fake temp (should never happen)
@@ -81,14 +81,14 @@ isa_ok($ua, 'LWPx::ParanoidAgent', 'ua');
 
     my $temp_filename = $temp_file->filename;
 
-    my $format = $fetcher->is_image($temp_file);
-    ok($format, "Temp::File is a ${format}");
+    my $info = $fetcher->is_image($temp_file);
+    ok($info, "Temp::File is a " . $info->{'file_ext'});
 
-    ok ($fetcher->save_file($temp_file, "/tmp/tmp.${format}"), 'file saved' );
-    ok (-f "/tmp/tmp.${format}", 'save file exists');
+    ok ($fetcher->save_file($temp_file, "/tmp/tmp." . $info->{'file_ext'}), 'file saved' );
+    ok (-f "/tmp/tmp." . $info->{'file_ext'}, 'save file exists');
     is (-f $temp_filename , undef, 'temp file doesnt exist');
-    unlink("/tmp/tmp.${format}");
-    is( -f "/tmp/tmp.${format}", undef, 'test save file unlinked');
+    unlink("/tmp/tmp." . $info->{'file_ext'});
+    is( -f "/tmp/tmp." . $info->{'file_ext'}, undef, 'test save file unlinked');
 }
 
 { # fetch failed (text file)
@@ -116,10 +116,10 @@ isa_ok($ua, 'LWPx::ParanoidAgent', 'ua');
 }
 
 { # allowed image
-    ok(my $filename = $fetcher->fetch('http://thisaintnews.com/sys/images/logo.png', '/tmp/file'), "image accepted");
-    ok( -f $filename, 'save file exists');
-    unlink($filename);
-    is( -f $filename, undef, 'test save file unlinked');
+    ok(my $filename = $fetcher->fetch("${base_url}/tmp/fetch_image/ok", '/tmp/file'), "image accepted");
+    ok( -f $filename->{'filename'}, 'save file exists');
+    unlink($filename->{'filename'});
+    is( -f $filename->{'filename'}, undef, 'test save file unlinked');
 
 }
 
@@ -130,9 +130,9 @@ isa_ok($ua, 'LWPx::ParanoidAgent', 'ua');
     isa_ok($ua, 'LWPx::ParanoidAgent', 'ua');
 
     ok(my $filename = $fetcher->fetch('http://www.google.co.uk/images/firefox/sprite2.png', '/srv/http/TAN/root/static/user/pics/wibble'), "image accepted");
-    ok( -f $filename, 'save file exists');
-    unlink($filename);
-    is( -f $filename, undef, 'test save file unlinked');
+    ok( -f $filename->{'filename'}, 'save file exists');
+    unlink($filename->{'filename'});
+    is( -f $filename->{'filename'}, undef, 'test save file unlinked');
 }
 
 { # test allowed_types

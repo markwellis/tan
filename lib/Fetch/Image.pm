@@ -79,11 +79,13 @@ sub fetch{
     #http response says image
         if ( my $tmp_file = $self->save_tmp($ua, $url) ){
         #tempory file saved
-            if ( my $image_format = $self->is_image($tmp_file) ){
+            if ( my $image_info = $self->is_image($tmp_file) ){
             #is image
-                if ( $self->save_file($tmp_file, "${save_here}.${image_format}") ){
+                my $save_filename = "${save_here}." . $image_info->{'file_ext'};
+                if ( $self->save_file($tmp_file, $save_filename) ){
                 #image save complete
-                    return "${save_here}.${image_format}";
+                    $image_info->{'filename'} = $save_filename;
+                    return $image_info;
                 }
             }
         }
@@ -158,8 +160,11 @@ sub save_tmp{
 
     if ( my $temp_file = new File::Temp ){
     # opened Temp::File
-        if ( my $response = $ua->get($url, ':content_file' => $temp_file->filename) ){
+        if ( my $response = $ua->get($url) ){
         #file downloaded
+            $temp_file->print($response->content);
+            $temp_file->close;
+
             return $temp_file;
         } else {
             $self->{'error'} = 'Download Failed';
@@ -175,8 +180,9 @@ sub save_tmp{
 sub is_image{
     my ($self, $tmp_file) = @_;
 
-    if ( my $format = $self->{'image_validator'}->is_image($tmp_file->filename) ){
-        return $format;
+    my $image_info = $self->{'image_validator'}->is_image($tmp_file->filename);
+    if ( my $image_info = $self->{'image_validator'}->is_image($tmp_file->filename) ){
+        return $image_info;
     }
 
     $self->{'error'} = 'Not an image';
