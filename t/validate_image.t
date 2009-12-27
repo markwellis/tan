@@ -20,21 +20,27 @@ sub load_data{
     };
     return $filelist;
 }
+use Data::Dumper;
 
 #test real images
 sub test_image{
     my ($validator, $image) = @_;
 
-    my $image_type = $validator->is_image($image);
-    isnt($image_type, 0, "${image} is ${image_type}");
+    my $image_info = $validator->is_image($image);
+    isnt($image_info, 0, "${image} is " . $image_info->{'file_ext'});
+    ok($image_info->{'x'}, 'x defined ' . $image_info->{'x'});
+    ok($image_info->{'y'}, 'y defined ' . $image_info->{'y'});
+    ok($image_info->{'size'}, 'size defined ' . $image_info->{'size'});
+    ok($image_info->{'file_ext'}, 'mime type defined ' . $image_info->{'file_ext'});
+    ok($image_info->{'mime'}, 'file_ext defined ' . $image_info->{'mime'});
 }
 
 #test false images
 sub test_fake{
     my ($validator, $fake) = @_;
 
-    my $image_type = $validator->is_image($fake);
-    is($image_type, 0, "${fake} image_type is 0");
+    my $image_info = $validator->is_image($fake);
+    is($image_info, 0, "${fake} image_type is 0");
 }
 
 #entry point
