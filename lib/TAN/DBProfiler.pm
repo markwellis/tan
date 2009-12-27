@@ -10,12 +10,17 @@ my $start;
 
 sub query_start {
     if (defined($ENV{'CATALYST_DEBUG'})){
-        my $self = shift();
-        my $sql = shift();
-        my @params = @_;
+        my ( $self, $sql, @params ) = @_;
 
-        $self->{full_sql_with_params} = $sql . ': ' . join(', ', @params);
-        $self->{start_time} = time();
+        $self->{'start_time'} = time();
+
+        my $tmp_str = $sql;
+        my $regex = qr/\?/;
+        foreach my $param ( @params ){
+            $tmp_str =~ s/$regex/$param/;
+        }
+        $self->{'full_sql_with_params'} = $tmp_str;
+
     }
 }
 
