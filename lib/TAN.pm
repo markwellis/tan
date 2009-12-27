@@ -146,7 +146,11 @@ sub recent_comments{
 sub filesize_h{
     my ($c, $size) = @_;
 
-    if ($size > 1024){
+    if ( !defined($size) ){
+        return 0;
+    }
+
+    if ( $size > 1024 ){
         return Number::Format::format_number(($size / 1024)) . 'MB';
     } else {
         return Number::Format::format_number($size) . 'KB';

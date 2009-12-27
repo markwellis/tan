@@ -137,7 +137,7 @@ sub validate: PathPart('') Chained('location') CaptureArgs(0){
             }
         } elsif ($c->stash->{'location'} eq 'picture') {
             my $url = $c->req->param('pic_url');
-            if (defined($url)){
+            if ( $url ){
                 my $valid_url = Data::Validate::URI->new();
                 if ( !defined($valid_url->is_web_uri($url)) ){
                 #invalid url
@@ -213,15 +213,24 @@ sub post: PathPart('post') Chained('validate') Args(0){
         my @path = split('/', 'root/' . $c->config->{'pic_path'} . '/' . time . '_' . $url_title);
 
         my ( $fileinfo, $fetcher );
-        if ( defined($c->req->param('pic_url')) ){
+        if ( $c->req->param('pic_url') ){
         #remote image upload
             $fetcher = $c->model('FetchImage');
             $fileinfo = $fetcher->fetch($c->req->param('pic_url'), $c->path_to(@path));
         } else {
         #normal file upload
             #do something here...
+            if(my $upload = $c->request->upload('pic')){
+                $fileinfo = $c->model('ValidateImage')->is_image($upload->tempname);
+                if ( $fileinfo ){
+                #is an image
+                    $fileinfo->{'filename'} = $c->path_to(@path) . '.' . $fileinfo->{'file_ext'};
+                    $upload->copy_to($fileinfo->{'filename'});
+
+                }
+            }
         }
-        if ( !defined($fileinfo) ){
+        if ( !$fileinfo ){
         #upload failed
             if ( defined($fetcher) ){
             #remote failed
