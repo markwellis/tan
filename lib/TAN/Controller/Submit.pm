@@ -183,8 +183,6 @@ sub post: PathPart('post') Chained('validate') Args(0){
         if (!$object->id){
             $c->flash->{'message'} = 'Error submitting link';
         }
-        $c->res->redirect('/index/all/1/1/');
-        $c->detach();
     } elsif ($c->stash->{'location'} eq 'blog'){
         my $object = $c->model('MySQL::Object')->create({
             'type' => $c->stash->{'location'},
@@ -208,48 +206,60 @@ sub post: PathPart('post') Chained('validate') Args(0){
         if (!$object->id){
             $c->flash->{'message'} = 'Error submitting blog';
         }
-        $c->res->redirect('/index/all/1/1/');
-        $c->detach();
     } elsif ($c->stash->{'location'} eq 'picture') {
         my $title = $c->req->param('title');
 
         my $url_title = $c->url_title($title);
         my @path = split('/', 'root/' . $c->config->{'pic_path'} . '/' . time . '_' . $url_title);
 
-        if ( 
-            defined($c->req->param('pic_url')) 
-            && (my $fileinfo = $c->model('FetchImage')->fetch($c->req->param('pic_url'), $c->path_to(@path)))
-        ){
+        my ( $fileinfo, $fetcher );
+        if ( defined($c->req->param('pic_url')) ){
         #remote image upload
-            my @path = split('/', $fileinfo->{'filename'});
-            my $filename = $path[-1];
-            my $object = $c->model('MySQL::Object')->create({
-                'type' => $c->stash->{'location'},
-                'created' => \'NOW()',
-                'promoted' => 0,
-                'user_id' => $c->user->user_id,
-                'nsfw' => defined($c->req->param('nsfw')) ? 'Y' : 'N',
-                'rev' => 0,
-                'picture' => {
-                    'title' => $title,
-                    'description' => $c->req->param('pdescription') || '',
-                    'filename' => $filename,
-                    'x' => $fileinfo->{'x'},
-                    'y' => $fileinfo->{'y'},
-                    'size' => $fileinfo->{'size'},
-                },
-                'plus_minus' => [{
-                    'type' => 'plus',
-                    'user_id' => $c->user->user_id,
-                }],
-            });
+            $fetcher = $c->model('FetchImage');
+            $fileinfo = $fetcher->fetch($c->req->param('pic_url'), $c->path_to(@path));
         } else {
-            $c->flash->{'message'} = 'Error submitting picture';
+        #normal file upload
+            #do something here...
         }
+        if ( !defined($fileinfo) ){
+        #upload failed
+            if ( defined($fetcher) ){
+            #remote failed
+                $c->flash->{'message'} = $fetcher->{'error'};
+            } else {
+            #upload failed
+                $c->flash->{'message'} = 'upload failed';#do something here;
+            }
+            $c->res->redirect('/submit/' . $c->stash->{'location'} . '/');
+            $c->detach();
+        }
+
+        @path = split('/', $fileinfo->{'filename'});
+        my $filename = $path[-1];
+        my $object = $c->model('MySQL::Object')->create({
+            'type' => $c->stash->{'location'},
+            'created' => \'NOW()',
+            'promoted' => 0,
+            'user_id' => $c->user->user_id,
+            'nsfw' => defined($c->req->param('nsfw')) ? 'Y' : 'N',
+            'rev' => 0,
+            'picture' => {
+                'title' => $title,
+                'description' => $c->req->param('pdescription') || '',
+                'filename' => $filename,
+                'x' => $fileinfo->{'x'},
+                'y' => $fileinfo->{'y'},
+                'size' => $fileinfo->{'size'},
+            },
+            'plus_minus' => [{
+                'type' => 'plus',
+                'user_id' => $c->user->user_id,
+            }],
+        });
     }
 
-    # submit
-    # redirect
+    $c->res->redirect('/index/' . $c->stash->{'location'} . '/1/1/');
+    $c->detach();
 }
 
 
