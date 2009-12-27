@@ -14,19 +14,18 @@ sub query_start {
 
         $self->{'start_time'} = time();
 
-        my $tmp_str = $sql;
         my $regex = qr/\?/;
         foreach my $param ( @params ){
-            $tmp_str =~ s/$regex/$param/;
+            $sql =~ s/$regex/$param/;
         }
-        $self->{'full_sql_with_params'} = $tmp_str;
-
+        $self->{'full_sql_with_params'} = $sql;
     }
 }
 
 sub query_end {
-    my $self = shift;
-    $self->{_queries}++;
+    my ( $self ) = @_;
+
+    $self->{'_queries'}++;
     if (defined($ENV{'CATALYST_DEBUG'})){
         my $sql = shift;
         my @params = @_;
@@ -38,7 +37,7 @@ sub query_end {
         if ($time > 0.05) {
             $error .= "\n\n" . 'v='x18 . 'v SLOW v' . '=v'x18 . "\n\n";
         }
-        $error .= 'Query #' . $self->{_queries} . ': execution time = ' . $time . "\n" 
+        $error .= 'Query #' . $self->{'_queries'} . ": execution time = ${time}\n" 
             . Text::Wrap::wrap("\t","\t",$self->{'full_sql_with_params'}) . "\n\n";
         if ($time > 0.05) {
             $error .= "\n" . '^='x40 . "\n\n\n";
