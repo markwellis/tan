@@ -146,7 +146,7 @@ sub recent_comments{
 sub filesize_h{
     my ($c, $size) = @_;
 
-    if ( !defined($size) ){
+    if ( !$size ){
         return 0;
     }
 
