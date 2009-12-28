@@ -4,7 +4,6 @@ use strict;
 use warnings;
 use parent 'Catalyst::Controller';
 use Data::Validate::URI;
-use Time::HiRes qw/time/;
 =head2 index
 
 =cut
@@ -89,62 +88,133 @@ sub validate: PathPart('') Chained('location') CaptureArgs(0){
     } else {
         my $cat;
         if ($c->stash->{'location'} eq 'link'){
-            $cat = $c->req->param('cat');
-            $cat =~s/$int_reg//g;
-            if (!defined($cat)){
-            #no image selected
-                $c->stash->{'error'} = $error_codes[9];
-            }
+        #validate link specific details
 
-            if (length($description) < $desc_min){
-            #desc too short
-                $c->stash->{'error'} = $error_codes[5];
-            }
-
-            my $valid_url = Data::Validate::URI->new();
-            my $url = $c->req->param('url');
-
-            if ( !defined($valid_url->is_web_uri($url)) ){
-            #invalid url
-                $c->stash->{'error'} = $error_codes[6];                
-            }
-
-            my $link = $c->model('MySQL::Link')->search({
-                'url' => $url,
-            });
-
-            if ($link->count){
-            #already submitted
-                $c->stash->{'error'} = $error_codes[7];
-            }
+            $c->forward('validate_link');
 
         } elsif ($c->stash->{'location'} eq 'blog') {
-            $cat = $c->req->param('cat');
-            $cat =~s/$int_reg//g;
-            if (!defined($cat)){
-            #no image selected
-                $c->stash->{'error'} = $error_codes[9];
-            }
+        #validate blog specific details
 
-            if (length($description) < $desc_min){
-            #desc too short
-                $c->stash->{'error'} = $error_codes[5];
-            }
+            $c->forward('validate_blog');
 
-            if (length($c->req->param('blogmain')) < $blog_min) {
-            #blog too short
-                $c->stash->{'error'} = $error_codes[8];
-            }
         } elsif ($c->stash->{'location'} eq 'picture') {
-            my $url = $c->req->param('pic_url');
-            if ( $url ){
-                my $valid_url = Data::Validate::URI->new();
-                if ( !defined($valid_url->is_web_uri($url)) ){
-                #invalid url
-                    $c->stash->{'error'} = $error_codes[6];                
-                }
+        #validate picture specific details
+
+            $c->forward('validate_picture');
+        }
+    }
+}
+
+=head2 validate_link
+validates a link upload
+=cut
+sub validate_link: Private{
+    my ( $self, $c ) = @_;
+
+    my $description = $c->req->param('description');
+    my $cat = $c->req->param('cat');
+
+    $cat =~s/$int_reg//g;
+    if (!defined($cat)){
+    #no image selected
+        $c->stash->{'error'} = $error_codes[9];
+    }
+
+    if (length($description) < $desc_min){
+    #desc too short
+        $c->stash->{'error'} = $error_codes[5];
+    }
+
+    my $valid_url = Data::Validate::URI->new();
+    my $url = $c->req->param('url');
+
+    if ( !defined($valid_url->is_web_uri($url)) ){
+    #invalid url
+        $c->stash->{'error'} = $error_codes[6];                
+    }
+
+    my $link = $c->model('MySQL::Link')->search({
+        'url' => $url,
+    });
+
+    if ($link->count){
+    #already submitted
+        $c->stash->{'error'} = $error_codes[7];
+    }
+}
+
+
+=head2 validate_blog
+validates a blog upload
+=cut
+sub validate_blog: Private{
+    my ( $self, $c ) = @_;
+    
+    my $description = $c->req->param('description');
+    my $cat = $c->req->param('cat');
+
+    $cat =~ s/$int_reg//g;
+    if (!defined($cat)){
+    #no image selected
+        $c->stash->{'error'} = $error_codes[9];
+    }
+
+    if (length($description) < $desc_min){
+    #desc too short
+        $c->stash->{'error'} = $error_codes[5];
+    }
+
+    if (length($c->req->param('blogmain')) < $blog_min) {
+    #blog too short
+        $c->stash->{'error'} = $error_codes[8];
+    }
+}
+
+=head2 validate_pciture
+validates a picture upload
+=cut
+sub validate_picture: Private{
+    my ( $self, $c ) = @_;
+
+    my $title = $c->req->param('title');
+    my $url_title = $c->url_title($title);
+    my @path = split('/', 'root/' . $c->config->{'pic_path'} . '/' . time . '_' . $url_title);
+
+    my ( $fileinfo, $fetcher ) = (0, undef);
+
+    my $url = $c->req->param('pic_url');
+    if ( $url ){
+    #fetch
+        my $valid_url = Data::Validate::URI->new();
+        if ( !defined($valid_url->is_web_uri($url)) ){
+        #invalid url
+            $c->stash->{'error'} = $error_codes[6];                
+        } else {
+        #valid url, fetch and validate
+            $fetcher = $c->model('FetchImage');
+            $fileinfo = $fetcher->fetch($c->req->param('pic_url'), $c->path_to(@path));
+            if ( !$fileinfo ){
+                $c->stash->{'error'} = $fetcher->{'error'};
             }
         }
+    } elsif (my $upload = $c->request->upload('pic')) {
+    #upload
+        $fileinfo = $c->model('ValidateImage')->is_image($upload->tempname);
+        $fileinfo = $c->stash->{'fileinfo'};
+
+        if( $fileinfo ){
+        #is an image
+            $fileinfo->{'filename'} = $c->path_to(@path) . '.' . $fileinfo->{'file_ext'};
+            $upload->copy_to($fileinfo->{'filename'});
+        } else {
+            $c->stash->{'error'} = 'Invalid filetype';
+        }
+    } else {
+        $c->stash->{'error'} = 'No image';
+    }
+
+    if ( $fileinfo ) {
+        $c->stash->{'fileinfo'} = $fileinfo;
     }
 }
 
@@ -154,123 +224,125 @@ post logic
 sub post: PathPart('post') Chained('validate') Args(0){
     my ( $self, $c ) = @_;
 
-    if ($c->stash->{'error'}){
+    if ( $c->stash->{'error'} ){
         $c->flash->{'message'} = $c->stash->{'error'};
         $c->res->redirect('/submit/' . $c->stash->{'location'} . '/');
         $c->detach();
     }
 
     if ($c->stash->{'location'} eq 'link'){
-        my $object = $c->model('MySQL::Object')->create({
-            'type' => $c->stash->{'location'},
-            'created' => \'NOW()',
-            'promoted' => 0,
-            'user_id' => $c->user->user_id,
-            'nsfw' => 'N',
-            'rev' => 0,
-            'link' => {
-                'title' => $c->req->param('title'),
-                'description' => $c->req->param('description'),
-                'picture_id' => $c->req->param('cat'),
-                'url' => $c->req->param('url'),
-            },
-            'plus_minus' => [{
-                'type' => 'plus',
-                'user_id' => $c->user->user_id,
-            }],
-        });
+    #submit link
 
-        if (!$object->id){
-            $c->flash->{'message'} = 'Error submitting link';
-        }
+        $c->forward('submit_link');
+
     } elsif ($c->stash->{'location'} eq 'blog'){
-        my $object = $c->model('MySQL::Object')->create({
-            'type' => $c->stash->{'location'},
-            'created' => \'NOW()',
-            'promoted' => 0,
-            'user_id' => $c->user->user_id,
-            'nsfw' => 'N',
-            'rev' => 0,
-            'blog' => {
-                'title' => $c->req->param('title'),
-                'description' => $c->req->param('description'),
-                'picture_id' => $c->req->param('cat'),
-                'details' => $c->req->param('blogmain'),
-            },
-            'plus_minus' => [{
-                'type' => 'plus',
-                'user_id' => $c->user->user_id,
-            }],
-        });
+    #submit blog
 
-        if (!$object->id){
-            $c->flash->{'message'} = 'Error submitting blog';
-        }
+        $c->forward('submit_blog');
+
     } elsif ($c->stash->{'location'} eq 'picture') {
-        my $title = $c->req->param('title');
+    #submit picture
 
-        my $url_title = $c->url_title($title);
-        my @path = split('/', 'root/' . $c->config->{'pic_path'} . '/' . time . '_' . $url_title);
+        $c->forward('submit_picture');
 
-        my ( $fileinfo, $fetcher );
-        if ( $c->req->param('pic_url') ){
-        #remote image upload
-            $fetcher = $c->model('FetchImage');
-            $fileinfo = $fetcher->fetch($c->req->param('pic_url'), $c->path_to(@path));
-        } else {
-        #normal file upload
-            #do something here...
-            if(my $upload = $c->request->upload('pic')){
-                $fileinfo = $c->model('ValidateImage')->is_image($upload->tempname);
-                if ( $fileinfo ){
-                #is an image
-                    $fileinfo->{'filename'} = $c->path_to(@path) . '.' . $fileinfo->{'file_ext'};
-                    $upload->copy_to($fileinfo->{'filename'});
-
-                }
-            }
-        }
-        if ( !$fileinfo ){
-        #upload failed
-            if ( defined($fetcher) ){
-            #remote failed
-                $c->flash->{'message'} = $fetcher->{'error'};
-            } else {
-            #upload failed
-                $c->flash->{'message'} = 'upload failed';#do something here;
-            }
-            $c->res->redirect('/submit/' . $c->stash->{'location'} . '/');
-            $c->detach();
-        }
-
-        @path = split('/', $fileinfo->{'filename'});
-        my $filename = $path[-1];
-        my $object = $c->model('MySQL::Object')->create({
-            'type' => $c->stash->{'location'},
-            'created' => \'NOW()',
-            'promoted' => 0,
-            'user_id' => $c->user->user_id,
-            'nsfw' => defined($c->req->param('nsfw')) ? 'Y' : 'N',
-            'rev' => 0,
-            'picture' => {
-                'title' => $title,
-                'description' => $c->req->param('pdescription') || '',
-                'filename' => $filename,
-                'x' => $fileinfo->{'x'},
-                'y' => $fileinfo->{'y'},
-                'size' => $fileinfo->{'size'},
-            },
-            'plus_minus' => [{
-                'type' => 'plus',
-                'user_id' => $c->user->user_id,
-            }],
-        });
     }
 
     $c->res->redirect('/index/' . $c->stash->{'location'} . '/1/1/');
     $c->detach();
 }
 
+=head2 submit_link
+submits a link
+=cut
+sub submit_link: Private{
+    my ( $self, $c ) = @_;
+
+    my $object = $c->model('MySQL::Object')->create({
+        'type' => $c->stash->{'location'},
+        'created' => \'NOW()',
+        'promoted' => 0,
+        'user_id' => $c->user->user_id,
+        'nsfw' => 'N',
+        'rev' => 0,
+        'link' => {
+            'title' => $c->req->param('title'),
+            'description' => $c->req->param('description'),
+            'picture_id' => $c->req->param('cat'),
+            'url' => $c->req->param('url'),
+        },
+        'plus_minus' => [{
+            'type' => 'plus',
+            'user_id' => $c->user->user_id,
+        }],
+    });
+
+    if (!$object->id){
+        $c->flash->{'message'} = 'Error submitting link';
+    }
+}
+
+=head2 submit_blog
+submits a blog
+=cut
+sub submit_blog: Private{
+    my ( $self, $c ) = @_;
+
+    my $object = $c->model('MySQL::Object')->create({
+        'type' => $c->stash->{'location'},
+        'created' => \'NOW()',
+        'promoted' => 0,
+        'user_id' => $c->user->user_id,
+        'nsfw' => 'N',
+        'rev' => 0,
+        'blog' => {
+            'title' => $c->req->param('title'),
+            'description' => $c->req->param('description'),
+            'picture_id' => $c->req->param('cat'),
+            'details' => $c->req->param('blogmain'),
+        },
+        'plus_minus' => [{
+            'type' => 'plus',
+            'user_id' => $c->user->user_id,
+        }],
+    });
+
+    if (!$object->id){
+        $c->flash->{'message'} = 'Error submitting blog';
+    }
+}
+
+=head2 submit_picture
+submits a picture
+=cut
+sub submit_picture: Private{
+    my ( $self, $c ) = @_;
+
+    my $fileinfo = $c->stash->{'fileinfo'};
+
+    my @path = split('/', $fileinfo->{'filename'});
+    my $filename = $path[-1];
+
+    my $object = $c->model('MySQL::Object')->create({
+        'type' => $c->stash->{'location'},
+        'created' => \'NOW()',
+        'promoted' => 0,
+        'user_id' => $c->user->user_id,
+        'nsfw' => defined($c->req->param('nsfw')) ? 'Y' : 'N',
+        'rev' => 0,
+        'picture' => {
+            'title' => $c->req->param('title'),
+            'description' => $c->req->param('pdescription') || '',
+            'filename' => $filename,
+            'x' => $fileinfo->{'x'},
+            'y' => $fileinfo->{'y'},
+            'size' => $fileinfo->{'size'},
+        },
+        'plus_minus' => [{
+            'type' => 'plus',
+            'user_id' => $c->user->user_id,
+        }],
+    });
+}
 
 =head1 AUTHOR
 

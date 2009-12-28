@@ -51,7 +51,7 @@ sub _validate{
         return {
             'x' => $image_type->{'width'},
             'y' => $image_type->{'height'},
-            'size' => (-s $file),
+            'size' => (-s $file) / 1024,
             'mime' => $image_type->{'file_media_type'},
             'file_ext' => $image_type->{'file_ext'},
         };

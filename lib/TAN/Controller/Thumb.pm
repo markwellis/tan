@@ -39,10 +39,7 @@ sub index :Path :Args(3) {
         'picture_id' => $id,
     });
 
-
-
-    my $filename = $row->filename;
-    if ( defined($row) && $filename ){
+    if ( defined($row) && (my $filename = $row->filename) ){
         my $orig_image = $c->path_to('root') . $c->config->{'pic_path'} . "/${filename}";
         my $cache_image = $c->path_to('root') . $c->config->{'thumb_path'} . "/${mod}/${id}";
 
