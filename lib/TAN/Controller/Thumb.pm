@@ -3,22 +3,37 @@ package TAN::Controller::Thumb;
 use strict;
 use warnings;
 use parent 'Catalyst::Controller';
-use File::Path;
+use File::Path qw/mkpath/;
 
 =head1 NAME
 
-TAN::Controller::Thumb - Catalyst Controller
+TAN::Controller::Thumb
 
 =head1 DESCRIPTION
 
-Catalyst Controller.
+Gets an image and resizes it
+
+Webserver rule means should only be called if thumb doesn't exist in the filesystem already
+
+=head1 EXAMPLE
+
+''/thumb/$mod/$id/$newx''
+
+ * $mod => $id - ($id % 1000)
+ * $id  => picture_id
+ * $newx => the new x of the thumb
 
 =head1 METHODS
 
 =cut
 
-
 =head2 index
+
+'''@args = ($mod, $id, $new)'''
+
+ * validates the params as integers
+ * forwards to resize
+ * 404's (should only get here if thumb creation failed)
 
 =cut
 my $int = qr/\D+/;
@@ -35,6 +50,26 @@ sub index :Path :Args(3) {
         $c->detach();
     }
 
+    # if thumb resize works properly, then we'll be redirected back to this page
+    # with a time param, just to make sure we don't hit a cache
+    $c->forward('resize', [$mod, $id, $x]);    
+    $c->forward('/default');
+    $c->detach();
+}
+
+
+=head2 resize: Private
+
+'''@args = ($mod, $id, $new)'''
+
+ * finds the picture
+ * creates the thumb using convert
+ * redirects back to self (webserver should now handle file) if file exists
+
+=cut
+sub resize: Private {
+    my ( $self, $c, $mod, $id, $x ) = @_;
+
     my $row = $c->model('MySQL::Picture')->find({
         'picture_id' => $id,
     });
@@ -48,15 +83,11 @@ sub index :Path :Args(3) {
 
         my $image = $c->model('Thumb')->resize($orig_image, $cache_image, $x);
         if (!$image && -e $cache_image){
-            $c->res->redirect("/static/cache/thumbs/${mod}/${id}/${x}");
+            $c->res->redirect("/static/cache/thumbs/${mod}/${id}/${x}?" . int(rand(100)));
             $c->detach();
         }
     }
-    
-    $c->forward('/default');
-    $c->detach();
 }
-
 
 =head1 AUTHOR
 
