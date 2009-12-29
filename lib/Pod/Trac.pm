@@ -135,7 +135,7 @@ sub generate {
     $wiki_escaped =~ s/(\{|\}|\[|\]|\(|\)|\^|\$|\.|\||\*|\+|\?|\\)/\\$1/g;
 
     return if (decode_entities($response->content) =~ /$wiki_escaped/);
-warn "updating ${file}"; 
+warn $self->pod_url . "\n"; 
     # send data to trac
     $self->write_to_trac( $wiki );
 }

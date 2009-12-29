@@ -4,12 +4,39 @@ use strict;
 use warnings;
 use parent 'Catalyst::Controller';
 
-=head2 index
+=head1 NAME
+
+TAN::Controller::Index
+
+=head1 DESCRIPTION
+
+Main index page
+
+=head1 EXAMPLE
+
+''index/$location/$upcoming/$page/''
+
+ * $location => all|link|blog|picture 
+ * $upcoming  => boolean
+ * $page => page number
+
+=head1 METHODS
+
+=cut
+
+=head2 index: Path: Args(3)
+
+'''@args = ($location, $upcoming, $page)'''
+
+ * validates the params
+ * gets the index items
+ * loads index template
 
 =cut
 my $location_reg = qr/^(all|link|blog|picture)$/;
 my $int_reg = qr/\D+/;
 my $order_reg = qr/^(promoted|plus|minus|views|comments)$/;
+
 sub index :Path :Args(3) {
     my ( $self, $c, $location, $upcoming, $page ) = @_;
 

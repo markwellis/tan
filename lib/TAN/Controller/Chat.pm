@@ -4,10 +4,30 @@ use strict;
 use warnings;
 use parent 'Catalyst::Controller';
 
-=head2 index
+=head1 NAME
+
+TAN::Controller::Chat
+
+=head1 DESCRIPTION
+
+Mibbit iframe embedded in-page
+
+=head1 EXAMPLE
+
+''/chat''
+
+=head1 METHODS
 
 =cut
-sub index :Private {
+
+=head2 index: Path
+
+'''@args = undef'''
+
+loads chat template...
+
+=cut
+sub index :Path {
     my ( $self, $c ) = @_;
 
     $c->cache_page( 120 );

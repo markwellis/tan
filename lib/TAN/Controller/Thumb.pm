@@ -19,7 +19,7 @@ Webserver rule means should only be called if thumb doesn't exist in the filesys
 
 ''/thumb/$mod/$id/$newx''
 
- * $mod => $id - ($id % 1000)
+ * $mod => $id - ($id % 1000) 
  * $id  => picture_id
  * $newx => the new x of the thumb
 
@@ -27,23 +27,26 @@ Webserver rule means should only be called if thumb doesn't exist in the filesys
 
 =cut
 
-=head2 index
+=head2 index: Path: Args(3)
 
 '''@args = ($mod, $id, $new)'''
 
  * validates the params as integers
+ * re-calculates mod
  * forwards to resize
  * 404's (should only get here if thumb creation failed)
 
 =cut
 my $int = qr/\D+/;
 
-sub index :Path :Args(3) {
+sub index: Path: Args(3) {
     my ( $self, $c, $mod, $id, $x ) = @_;
 
-    $mod =~ s/$int//g;
     $id =~ s/$int//g;
     $x =~ s/$int//g;
+
+    #work out mod incase someone ddoses server by requesting random mods :\
+    $mod = $id - ($id % 1000);
 
     if ($x != 100 && $x != 150 && $x != 160 && $x != 200 && $x != 250 && $x != 300 && $x != 400 && $x != 500 && $x != 600){
         $c->forward('/default');

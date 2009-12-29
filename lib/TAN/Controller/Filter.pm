@@ -4,10 +4,31 @@ use strict;
 use warnings;
 use parent 'Catalyst::Controller';
 
-=head2 index
+=head1 NAME
+
+TAN::Controller::Filter
+
+=head1 DESCRIPTION
+
+Mibbit iframe embedded in-page
+
+=head1 EXAMPLE
+
+''/filter''
+
+=head1 METHODS
 
 =cut
-sub index :Private {
+
+=head2 index: Path
+
+'''@args = undef'''
+
+ * enables/disables NSFW filter
+ * redirects to referer or / 
+
+=cut
+sub index :Path {
     my ( $self, $c ) = @_;
 
     #bitwise ftw
