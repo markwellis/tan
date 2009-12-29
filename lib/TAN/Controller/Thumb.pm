@@ -17,6 +17,7 @@ Webserver rule means should only be called if thumb doesn't exist in the filesys
 
 =head1 EXAMPLE
 
+''/static/cache/thumbs/$mod/$id/$newx''
 ''/thumb/$mod/$id/$newx''
 
  * $mod => $id - ($id % 1000) 
@@ -67,7 +68,7 @@ sub index: Path: Args(3) {
 
  * finds the picture
  * creates the thumb using convert
- * redirects back to self (webserver should now handle file) if file exists
+ * redirects to the thumb (webserver should now handle file) if file exists
 
 =cut
 sub resize: Private {

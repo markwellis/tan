@@ -4,14 +4,43 @@ use strict;
 use warnings;
 use parent 'Catalyst::Controller';
 
+=head1 NAME
 
-=head2 index
+TAN::Controller::JsMin
+
+=head1 DESCRIPTION
+
+Minifies js and caches it
+
+Webserver rule means should only be called if cache doesn't exist in the filesystem already
+
+=head1 EXAMPLE
+
+''/static/cache/js/$theme_$file_$mtime.js''
+''/jsmin/$theme_$file_$mtime.js''
+
+ * $theme => theme name
+ * $file  => filename
+ * $mtime => filemtime
+
+=head1 METHODS
+
+=cut
+
+=head2 index: Path: Args(1)
+
+'''@args = ($source_file)'''
+
+ * splits $source_file into $theme, $file, $mtime
+ * uses JsMin model to minify js
+ * outputs js or 404's
 
 =cut
 my $alpha_reg = qr/[^a-z0-9\-_]/; 
 my $format_reg = qr/\w+_(.*)_\w+/;
 my $ext_reg = qr/js$/;
-sub index :Path :Args(1) {
+
+sub index: Path: Args(1) {
     my ( $self, $c, $source_file ) = @_;
 
     $source_file =~ s/$alpha_reg//g;
@@ -21,6 +50,7 @@ sub index :Path :Args(1) {
         $c->detach();
     }
 
+#this looks like some complex shit that needs some proper comments
     my $out_file = $source_file;
     
     $out_file =~ s/$ext_reg/\.js/;
@@ -30,10 +60,10 @@ sub index :Path :Args(1) {
     my $theme_path = $c->config->{'jscache_path'};
     my $out_dir = $c->path_to('root') . $theme_path;
 
-
     my $js = $c->model('JsMin')->minify_file("${source_dir}/${source_file}", "${out_dir}/${out_file}");
 
     if ($js){
+        $c->res->header('Content-Type' => 'application/x-javascript');
         $c->response->body($js);
         $c->detach();
     }
