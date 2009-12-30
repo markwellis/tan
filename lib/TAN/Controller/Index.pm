@@ -14,11 +14,13 @@ Main index page
 
 =head1 EXAMPLE
 
-''index/$location/$upcoming/$page/''
+''/index/$location/$upcoming/$page/''
 
- * $location => all|link|blog|picture 
- * $upcoming  => boolean
- * $page => page number
+ Args::
+
+  * $location => all|link|blog|picture 
+  * $upcoming  => boolean
+  * $page => page number
 
 =head1 METHODS
 
@@ -27,6 +29,8 @@ Main index page
 =head2 index: Path: Args(3)
 
 '''@args = ($location, $upcoming, $page)'''
+
+'''@params = (order)'''
 
  * validates the params
  * gets the index items

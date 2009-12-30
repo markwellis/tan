@@ -4,15 +4,44 @@ use strict;
 use warnings;
 use parent 'Catalyst::Controller';
 use Data::Validate::URI;
-=head2 index
+
+my $int_reg = qr/\D+/;
+
+=head1 NAME
+
+TAN::Controller::Submit
+
+=head1 DESCRIPTION
+
+Submit controller
+
+=head1 EXAMPLE
+
+''/submit/$location/''
+
+ * submission form
+
+''/submit/$location/post''
+
+ * post here
+
+ Args::
+
+  * $location => link|blog|picture 
+
+=head1 METHODS
+
+=cut
+
+=head2 location: PathPart('submit') Chained('/') CaptureArgs(1)
+
+'''@args = ($location)'''
+
+ * checks user is logged in
+ * checks the location is valid
 
 =cut
 my $location_reg = qr/^link|blog|picture$/;
-my $int_reg = qr/\D+/;
-
-=head2 location
-checks the location is valid
-=cut
 sub location: PathPart('submit') Chained('/') CaptureArgs(1){
     my ( $self, $c, $location ) = @_;
 
@@ -30,18 +59,29 @@ sub location: PathPart('submit') Chained('/') CaptureArgs(1){
 }
 
 
-=head2 index
-the submit page
+=head2 index: PathPart('') Chained('location') Args(0) 
+
+'''@args = undef'''
+
+ * loads the submit template
+
 =cut
-sub index : PathPart('') Chained('location') Args(0) {
+sub index: PathPart('') Chained('location') Args(0) {
     my ( $self, $c ) = @_;
 
     $c->stash->{'template'} = 'submit.tt';
 }
 
 
-=head2 validate
-validates the upload
+=head2 validate: PathPart('') Chained('location') CaptureArgs(0)
+
+'''@args = undef'''
+
+'''@params = (title, description)'''
+
+ * validates generic submission things (title etc)
+ * forwards to validate_$location
+
 =cut
 
 #no point redefining these on each request...
@@ -86,7 +126,6 @@ sub validate: PathPart('') Chained('location') CaptureArgs(0){
         $c->stash->{'error'} = $error_codes[4];
 
     } else {
-        my $cat;
         if ($c->stash->{'location'} eq 'link'){
         #validate link specific details
 
@@ -105,8 +144,14 @@ sub validate: PathPart('') Chained('location') CaptureArgs(0){
     }
 }
 
-=head2 validate_link
-validates a link upload
+=head2 validate_link: Private
+
+'''@args = undef'''
+
+'''@params = (description, cat, url)'''
+
+ * validates link specific details
+
 =cut
 sub validate_link: Private{
     my ( $self, $c ) = @_;
@@ -143,9 +188,14 @@ sub validate_link: Private{
     }
 }
 
+=head2 validate_blog: Private
 
-=head2 validate_blog
-validates a blog upload
+'''@args = undef'''
+
+'''@params = (description, cat, blogmain)'''
+
+ * validates blog specific details
+
 =cut
 sub validate_blog: Private{
     my ( $self, $c ) = @_;
@@ -170,8 +220,14 @@ sub validate_blog: Private{
     }
 }
 
-=head2 validate_pciture
-validates a picture upload
+=head2 validate_picture: Private
+
+'''@args = undef'''
+
+'''@params = (pic_url, pic)'''
+
+ * validates picture specific details
+
 =cut
 sub validate_picture: Private{
     my ( $self, $c ) = @_;
@@ -218,8 +274,13 @@ sub validate_picture: Private{
     }
 }
 
-=head2 post
-post logic
+=head2 post: PathPart('post') Chained('validate') Args(0)
+
+'''@args = undef'''
+
+ * checks stash for $error
+ * forwards to submit_$location
+
 =cut
 sub post: PathPart('post') Chained('validate') Args(0){
     my ( $self, $c ) = @_;
@@ -251,8 +312,14 @@ sub post: PathPart('post') Chained('validate') Args(0){
     $c->detach();
 }
 
-=head2 submit_link
-submits a link
+=head2 submit_link: Private
+
+'''@args = undef'''
+
+'''@params = (title, description, cat, url)'''
+
+ * submits a link
+
 =cut
 sub submit_link: Private{
     my ( $self, $c ) = @_;
@@ -281,8 +348,14 @@ sub submit_link: Private{
     }
 }
 
-=head2 submit_blog
-submits a blog
+=head2 submit_blog: Private
+
+'''@args = undef'''
+
+'''@params = (title, description, cat, blogmain)'''
+
+ * submits a blog
+
 =cut
 sub submit_blog: Private{
     my ( $self, $c ) = @_;
@@ -311,8 +384,14 @@ sub submit_blog: Private{
     }
 }
 
-=head2 submit_picture
-submits a picture
+=head2 submit_picture: Private
+
+'''@args = undef'''
+
+'''@params = (nsfw, title, pdescription)'''
+
+ * submits a picture
+
 =cut
 sub submit_picture: Private{
     my ( $self, $c ) = @_;

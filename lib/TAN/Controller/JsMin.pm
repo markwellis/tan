@@ -17,11 +17,18 @@ Webserver rule means should only be called if cache doesn't exist in the filesys
 =head1 EXAMPLE
 
 ''/static/cache/js/$theme_$file_$mtime.js''
-''/jsmin/$theme_$file_$mtime.js''
 
- * $theme => theme name
- * $file  => filename
- * $mtime => filemtime
+  * outside world access url (configurable)
+
+''/jsmin/$theme_$file_$mtime.js'' 
+
+  * Webserver internal redirect url
+
+ Args::
+
+  * $theme => theme name
+  * $file  => filename
+  * $mtime => filemtime
 
 =head1 METHODS
 

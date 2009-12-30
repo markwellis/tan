@@ -5,7 +5,41 @@ use warnings;
 use parent 'Catalyst::Controller';
 use Captcha::reCAPTCHA;
 
-sub index: Private{
+=head1 NAME
+
+TAN::Controller::Login
+
+=head1 DESCRIPTION
+
+User Login
+
+=head1 EXAMPLE
+
+''/login''
+
+ * show login form
+
+''/login/login'' 
+
+ * post here
+
+''/login/logout''
+
+ * logout url
+
+=head1 METHODS
+
+=cut
+
+=head2 index: Path: Args(0)
+
+'''@args = undef'''
+
+ * redirects to / if user logged in
+ * loads the login template
+
+=cut
+sub index: Path: Args(0){
     my ($self, $c) = @_;
     
     if ($c->user_exists){
@@ -19,6 +53,13 @@ sub index: Private{
     $c->stash->{'template'} = 'login.tt';
 }
 
+=head2 login: Local
+
+'''@params = (username, password)'''
+
+ * authenticates the user
+
+=cut
 sub login: Local{
     my ($self, $c) = @_;
     
@@ -26,23 +67,32 @@ sub login: Local{
     if (!defined($ref) || $ref =~ m/\/login\//){
         $ref = '/';
     }
-    
-    if (
-        $c->authenticate({
-            'username' => $c->req->param('username'),
-            'password' => $c->req->param('password'),
-        })
-    ){
-        $c->flash->{'message'} = 'You have logged in';
-    } else {
-        $ref = '/login/';
-        $c->flash->{'message'} = "Couldn't find you with that username and password";
+
+    if ( $c->req->method eq 'POST' ){
+        if (
+            $c->authenticate({
+                'username' => $c->req->param('username'),
+                'password' => $c->req->param('password'),
+            })
+        ){
+            $c->flash->{'message'} = 'You have logged in';
+        } else {
+            $ref = '/login/';
+            $c->flash->{'message'} = "Couldn't find you with that username and password";
+        }
     }
 
     $c->res->redirect($ref);
     $c->detach();
 }
 
+=head2 logout: Local
+
+'''@args = undef'''
+
+ * logs the user out
+
+=cut
 sub logout: Local{
     my ($self, $c) = @_;
     

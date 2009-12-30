@@ -18,11 +18,18 @@ Webserver rule means should only be called if thumb doesn't exist in the filesys
 =head1 EXAMPLE
 
 ''/static/cache/thumbs/$mod/$id/$newx''
+
+ * outside world url
+
 ''/thumb/$mod/$id/$newx''
 
- * $mod => $id - ($id % 1000) 
- * $id  => picture_id
- * $newx => the new x of the thumb
+ * internal webserver redirect url
+
+ Args::
+
+  * $mod => $id - ($id % 1000) 
+  * $id  => picture_id
+  * $newx => the new x of the thumb
 
 =head1 METHODS
 

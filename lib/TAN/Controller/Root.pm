@@ -11,18 +11,34 @@ use Time::HiRes qw(time);
 #
 __PACKAGE__->config->{'namespace'} = '';
 
+
 =head1 NAME
 
-TAN::Controller::Root - Root Controller for TAN
+TAN::Controller::Root
 
 =head1 DESCRIPTION
 
-[enter your description here]
+Root controller
+
+=head1 EXAMPLE
+
+''/''
+
+ * forwards to /index/all/0/1/
 
 =head1 METHODS
 
 =cut
 
+=head2 auto: Private
+
+'''@args = undef'''
+
+ * stashes the start time in start_time
+ * sets up the theme settings ''SHOULDNT BE HERE''
+ * sets default location to all
+
+=cut
 sub auto: Private{
     my ( $self, $c ) = @_;
 
@@ -42,13 +58,27 @@ sub auto: Private{
     return 1;
 }
 
-sub index :Path :Args(0) {
+=head2 index: Path: Args(0)
+
+'''@args = undef'''
+
+ * forwards to /index/all/0/1/
+
+=cut
+sub index: Path: Args(0) {
     my ( $self, $c ) = @_;
 
     $c->forward('/index/index', ['all', 0, 1]);
 }
 
-sub default :Path {
+=head2 default: Path 
+
+'''@args = undef'''
+
+ * loads error 404 template
+
+=cut
+sub default: Path {
     my ( $self, $c ) = @_;
 
     $c->stash->{'error_404'} = 1;
@@ -56,9 +86,24 @@ sub default :Path {
     $c->response->status(404);
 }
 
-sub render : ActionClass('RenderView') {}
+=head2 render: ActionClass('RenderView') 
 
-sub end : Private {
+'''@args = undef'''
+
+ * RenderView
+
+=cut
+sub render: ActionClass('RenderView') {}
+
+=head2 end: Private 
+
+'''@args = undef'''
+
+ * forwards to render
+ * if debug warns sql output
+
+=cut
+sub end: Private {
     my ( $self, $c ) = @_;
 
     $c->stash->{'time'} = sub { return time(); };

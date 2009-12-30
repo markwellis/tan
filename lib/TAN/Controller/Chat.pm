@@ -24,7 +24,7 @@ Mibbit iframe embedded in-page
 
 '''@args = undef'''
 
-loads chat template...
+ * loads chat template...
 
 =cut
 sub index :Path {
