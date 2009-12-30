@@ -4,8 +4,28 @@ use strict;
 use warnings;
 use base 'DBIx::Class::ResultSet';
 
+=head1 NAME
+
+TAN::Schema::ResultSet::Comments
+
+=head1 DESCRIPTION
+
+Comments ResultSet
+
+=head1 METHODS
+
+=cut
+
 =head2 index
+
+B<@args = ($location, $page, $upcoming, $order)>
+
+=over
+
 gets the stuff for the index
+
+=back
+
 =cut
 sub index {
     my ($self, $location, $page, $upcoming, $order) = @_;
@@ -49,6 +69,17 @@ sub index {
     });
 }
 
+=head2 random
+
+B<@args = ($location)>
+
+=over
+
+gets a random article
+
+=back
+
+=cut
 sub random{
     my ($self, $location) = @_;
 
@@ -71,5 +102,16 @@ sub random{
     )->first;
 
 }
+
+=head1 AUTHOR
+
+A clever guy
+
+=head1 LICENSE
+
+This library is free software. You can redistribute it and/or modify
+it under the same terms as Perl itself.
+
+=cut
 
 1;

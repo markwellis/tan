@@ -30,8 +30,28 @@ __PACKAGE__->config({
     },
 });
 
-=head2 nl2br
+=head1 NAME
+
+TAN::View::TT
+
+=head1 DESCRIPTION
+
+Template Toolkit view
+
+=head1 FILTERS
+
+=cut
+
+=head2 nl2br_reg
+
+B<@args = ($text)>
+
+=over
+
 converts \n's to <br />'s
+
+=back
+
 =cut
 my $nl2br_reg = qr/\n/;
 sub nl2br{
@@ -44,7 +64,15 @@ sub nl2br{
 }
 
 =head2 file_exists
+
+B<@args = ($file)>
+
+=over
+
 true if a file exists
+
+=back
+
 =cut
 sub file_exists{
     my $file = shift;
@@ -53,7 +81,15 @@ sub file_exists{
 }
 
 =head2 file_mtime
+
+B<@args = ($file)>
+
+=over
+
 returns file mtime
+
+=back
+
 =cut
 sub file_mtime{
     my $file = shift;
@@ -63,7 +99,15 @@ sub file_mtime{
 }
 
 =head2 url_title
+
+B<@args = ($title)>
+
+=over
+
 makes a title url/seo safe
+
+=back
+
 =cut
 my $url_title = qr/\W+/;
 sub url_title{
@@ -75,7 +119,15 @@ sub url_title{
 }
 
 =head2 strip_tags
-strips the html tags out of a passed in string.
+
+B<@args = ($text)>
+
+=over
+
+strips the html tags out of a passed in string
+
+=back
+
 =cut
 sub strip_tags{
     my $text = shift;
@@ -95,21 +147,13 @@ sub strip_tags{
 }
 
 
-=head1 NAME
-
-TAN::View::TT - TT View for TAN
-
-=head1 DESCRIPTION
-
-TT View for TAN.
-
 =head1 SEE ALSO
 
 L<TAN>
 
 =head1 AUTHOR
 
-root
+A clever guy
 
 =head1 LICENSE
 

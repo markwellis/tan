@@ -14,6 +14,18 @@ use Number::Format;
 # Static::Simple: will serve static files from the application's root
 #                 directory
 
+=head1 NAME
+
+TAN
+
+=head1 DESCRIPTION
+
+Main catalyst application
+
+=head1 METHODS
+
+=cut
+
 use parent qw/Catalyst/;
 use Catalyst qw/ConfigLoader
                 Unicode::Encoding
@@ -55,6 +67,19 @@ __PACKAGE__->config( name => 'TAN',
 # Start the application
 __PACKAGE__->setup();
 
+=head2 check_cache
+
+B<@args = undef>
+
+=over
+
+doesn't cache if user is logged in
+
+doesn't cache if user has a flash message
+
+=back
+
+=cut
 sub check_cache{
     my $c = shift;
 
@@ -66,12 +91,25 @@ sub check_cache{
 return 0;
 # end
 
-    if ( $c->user_exists || defined($c->stash->{'no_page_cache'}) || defined($c->stash->{'messages'}) ) {
+    if ( $c->user_exists || defined($c->stash->{'no_page_cache'}) || defined($c->stash->{'message'}) ) {
         return 0;
     }
     return 1;
 }
 
+=head2 nsfw
+
+B<@args = ($value)>
+
+=over
+
+returns the current nsfw value (filter is B<OFF> if 1)
+
+sets the nsfw to value
+
+=back
+
+=cut
 sub nsfw{
     my ($c, $value) = @_;
     
@@ -86,6 +124,17 @@ sub nsfw{
     return 0;
 }
 
+=head2 date_ago
+
+B<@args = ($date)>
+
+=over
+
+returns how long aog a unix date was in the format x days x hours etc
+
+=back
+
+=cut
 sub date_ago{
     my ($c, $date) = @_;
 
@@ -137,12 +186,34 @@ sub date_ago{
     return join(' ',@result);
 }
 
+=head2 recent_comments
+
+B<@args = undef>
+
+=over
+
+returns the 20 most recent comments
+
+=back
+
+=cut
 sub recent_comments{
     my $c = shift;
 
     return $c->model('MySQL::Comments')->recent_comments->all;
 }
 
+=head2 filesize_h
+
+B<@args = ($size)>
+
+=over
+
+takes a size (KB) and converts it to a human readable format
+
+=back
+
+=cut
 sub filesize_h{
     my ($c, $size) = @_;
 
@@ -157,8 +228,16 @@ sub filesize_h{
     }
 }
 
-=head2 url_title
+=head2 url_tile
+
+B<@args = ($title)>
+
+=over
+
 makes a title url/seo safe
+
+=back
+
 =cut
 my $url_title = qr/\W+/;
 sub url_title{
@@ -168,6 +247,7 @@ sub url_title{
 
     return $title;
 }
+
 =head1 NAME
 
 TAN - Catalyst based application
@@ -176,17 +256,13 @@ TAN - Catalyst based application
 
     script/tan_server.pl
 
-=head1 DESCRIPTION
-
-[enter your description here]
-
 =head1 SEE ALSO
 
 L<TAN::Controller::Root>, L<Catalyst>
 
 =head1 AUTHOR
 
-Catalyst developer
+A clever guy
 
 =head1 LICENSE
 
