@@ -22,9 +22,13 @@ Root controller
 
 =head1 EXAMPLE
 
-''/''
+I</>
 
- * forwards to /index/all/0/1/
+=over
+
+forwards to /index/all/0/1/
+
+=back
 
 =head1 METHODS
 
@@ -32,11 +36,17 @@ Root controller
 
 =head2 auto: Private
 
-'''@args = undef'''
+B<@args = undef>
 
- * stashes the start time in start_time
- * sets up the theme settings ''SHOULDNT BE HERE''
- * sets default location to all
+=over
+
+stashes the start time in start_time
+
+sets up the theme settings B<*SHOULDNT BE HERE*>
+
+sets default location to all
+
+=back
 
 =cut
 sub auto: Private{
@@ -60,9 +70,13 @@ sub auto: Private{
 
 =head2 index: Path: Args(0)
 
-'''@args = undef'''
+B<@args = undef>
 
- * forwards to /index/all/0/1/
+=over
+
+forwards to /index/all/0/1/
+
+=back
 
 =cut
 sub index: Path: Args(0) {
@@ -73,9 +87,13 @@ sub index: Path: Args(0) {
 
 =head2 default: Path 
 
-'''@args = undef'''
+B<@args = undef>
 
- * loads error 404 template
+=over
+
+loads error 404 template
+
+=back
 
 =cut
 sub default: Path {
@@ -88,19 +106,28 @@ sub default: Path {
 
 =head2 render: ActionClass('RenderView') 
 
-'''@args = undef'''
+B<@args = undef>
 
- * RenderView
+=over
+
+RenderView
+
+=back
 
 =cut
 sub render: ActionClass('RenderView') {}
 
 =head2 end: Private 
 
-'''@args = undef'''
+B<@args = undef>
 
- * forwards to render
- * if debug warns sql output
+=over
+
+forwards to render
+
+if debug warns sql output
+
+=back
 
 =cut
 sub end: Private {

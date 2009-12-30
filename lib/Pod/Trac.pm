@@ -113,7 +113,7 @@ sub generate {
     my ( $parser, $wiki );
 
     # convert the pod to wiki syntax
-    $parser = Pod::Simple::Wiki->new('kwiki');
+    $parser = Pod::Simple::Wiki->new('moinmoin');
     $parser->output_string( \$wiki );
     $parser->parse_file( $file );
 

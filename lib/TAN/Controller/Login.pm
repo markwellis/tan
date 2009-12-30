@@ -15,17 +15,29 @@ User Login
 
 =head1 EXAMPLE
 
-''/login''
+I</login>
 
- * show login form
+=over
 
-''/login/login'' 
+show login form
 
- * post here
+=back
 
-''/login/logout''
+I</login/login>
 
- * logout url
+=over
+
+post here
+
+=back
+
+I</login/logout>
+
+=over
+
+logout url
+
+=back
 
 =head1 METHODS
 
@@ -33,10 +45,15 @@ User Login
 
 =head2 index: Path: Args(0)
 
-'''@args = undef'''
+B<@args = undef>
 
- * redirects to / if user logged in
- * loads the login template
+=over
+
+redirects to / if user logged in
+
+loads the login template
+
+=back
 
 =cut
 sub index: Path: Args(0){
@@ -55,9 +72,13 @@ sub index: Path: Args(0){
 
 =head2 login: Local
 
-'''@params = (username, password)'''
+B<@params = (username, password)>
 
- * authenticates the user
+=over
+
+authenticates the user
+
+=back
 
 =cut
 sub login: Local{
@@ -88,9 +109,13 @@ sub login: Local{
 
 =head2 logout: Local
 
-'''@args = undef'''
+B<@args = undef>
 
- * logs the user out
+=over
+
+logs the user out
+
+=back
 
 =cut
 sub logout: Local{

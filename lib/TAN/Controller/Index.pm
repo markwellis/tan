@@ -14,13 +14,17 @@ Main index page
 
 =head1 EXAMPLE
 
-''/index/$location/$upcoming/$page/''
+I</index/$location/$upcoming/$page/>
 
- Args::
+=over
 
-  * $location => all|link|blog|picture 
-  * $upcoming  => boolean
-  * $page => page number
+$location => all|link|blog|picture 
+
+$upcoming  => boolean
+
+$page => page number
+
+=back
 
 =head1 METHODS
 
@@ -28,13 +32,18 @@ Main index page
 
 =head2 index: Path: Args(3)
 
-'''@args = ($location, $upcoming, $page)'''
+B<@args = ($location, $upcoming, $page)>
+B<@params = (order)>
 
-'''@params = (order)'''
+=over
 
- * validates the params
- * gets the index items
- * loads index template
+validates the params
+
+gets the index items
+
+loads index template
+
+=back
 
 =cut
 my $location_reg = qr/^(all|link|blog|picture)$/;

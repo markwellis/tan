@@ -17,17 +17,27 @@ Submit controller
 
 =head1 EXAMPLE
 
-''/submit/$location/''
+I</submit/$location/>
 
- * submission form
+=over
 
-''/submit/$location/post''
+submission form
 
- * post here
+=over
 
- Args::
+$location => link|blog|picture
 
-  * $location => link|blog|picture 
+=back
+
+=back
+
+I</submit/$location/post>
+
+=over
+
+post here
+
+=back
 
 =head1 METHODS
 
@@ -35,10 +45,15 @@ Submit controller
 
 =head2 location: PathPart('submit') Chained('/') CaptureArgs(1)
 
-'''@args = ($location)'''
+B<@args = ($location)>
 
- * checks user is logged in
- * checks the location is valid
+=over
+
+checks user is logged in
+
+checks the location is valid
+
+=back
 
 =cut
 my $location_reg = qr/^link|blog|picture$/;
@@ -61,9 +76,13 @@ sub location: PathPart('submit') Chained('/') CaptureArgs(1){
 
 =head2 index: PathPart('') Chained('location') Args(0) 
 
-'''@args = undef'''
+B<@args = undef>
 
- * loads the submit template
+=over
+
+loads the submit template
+
+=back
 
 =cut
 sub index: PathPart('') Chained('location') Args(0) {
@@ -75,12 +94,17 @@ sub index: PathPart('') Chained('location') Args(0) {
 
 =head2 validate: PathPart('') Chained('location') CaptureArgs(0)
 
-'''@args = undef'''
+B<@args = undef>
 
-'''@params = (title, description)'''
+B<@params = (title, description)>
 
- * validates generic submission things (title etc)
- * forwards to validate_$location
+=over
+
+validates generic submission things (title etc)
+
+forwards to validate_$location
+
+=back
 
 =cut
 
@@ -146,11 +170,15 @@ sub validate: PathPart('') Chained('location') CaptureArgs(0){
 
 =head2 validate_link: Private
 
-'''@args = undef'''
+B<@args = undef>
 
-'''@params = (description, cat, url)'''
+B<@params = (description, cat, url)>
 
- * validates link specific details
+=over
+
+validates link specific details
+
+=back
 
 =cut
 sub validate_link: Private{
@@ -190,11 +218,15 @@ sub validate_link: Private{
 
 =head2 validate_blog: Private
 
-'''@args = undef'''
+B<@args = undef>
 
-'''@params = (description, cat, blogmain)'''
+B<@params = (description, cat, blogmain)>
 
- * validates blog specific details
+=over
+
+validates blog specific details
+
+=back
 
 =cut
 sub validate_blog: Private{
@@ -222,11 +254,15 @@ sub validate_blog: Private{
 
 =head2 validate_picture: Private
 
-'''@args = undef'''
+B<@args = undef/>
 
-'''@params = (pic_url, pic)'''
+B<@params = (pic_url, pic)>
 
- * validates picture specific details
+=over
+
+validates picture specific details
+
+=back
 
 =cut
 sub validate_picture: Private{
@@ -276,10 +312,15 @@ sub validate_picture: Private{
 
 =head2 post: PathPart('post') Chained('validate') Args(0)
 
-'''@args = undef'''
+B<@args = undef>
 
- * checks stash for $error
- * forwards to submit_$location
+=over
+
+checks stash for $error
+
+forwards to submit_$location
+
+=back
 
 =cut
 sub post: PathPart('post') Chained('validate') Args(0){
@@ -314,11 +355,15 @@ sub post: PathPart('post') Chained('validate') Args(0){
 
 =head2 submit_link: Private
 
-'''@args = undef'''
+B<@args = undef>
 
-'''@params = (title, description, cat, url)'''
+B<@params = (title, description, cat, url)>
 
- * submits a link
+=over
+
+submits a link
+
+=back
 
 =cut
 sub submit_link: Private{
@@ -350,11 +395,15 @@ sub submit_link: Private{
 
 =head2 submit_blog: Private
 
-'''@args = undef'''
+B<@args = undef>
 
-'''@params = (title, description, cat, blogmain)'''
+B<@params = (title, description, cat, blogmain)>
 
- * submits a blog
+=over
+
+submits a blog
+
+=back
 
 =cut
 sub submit_blog: Private{
@@ -386,11 +435,15 @@ sub submit_blog: Private{
 
 =head2 submit_picture: Private
 
-'''@args = undef'''
+B<@args = undef>
 
-'''@params = (nsfw, title, pdescription)'''
+B<@params = (nsfw, title, pdescription)>
 
- * submits a picture
+=over
+
+submits a picture
+
+=back
 
 =cut
 sub submit_picture: Private{

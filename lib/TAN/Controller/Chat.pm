@@ -14,7 +14,7 @@ Mibbit iframe embedded in-page
 
 =head1 EXAMPLE
 
-''/chat''
+I</chat>
 
 =head1 METHODS
 
@@ -22,9 +22,13 @@ Mibbit iframe embedded in-page
 
 =head2 index: Path
 
-'''@args = undef'''
+B<@args = undef>
 
- * loads chat template...
+=over
+
+loads chat template... 
+
+=back
 
 =cut
 sub index :Path {

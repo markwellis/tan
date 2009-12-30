@@ -14,7 +14,7 @@ Mibbit iframe embedded in-page
 
 =head1 EXAMPLE
 
-''/filter''
+I</filter>
 
 =head1 METHODS
 
@@ -22,10 +22,15 @@ Mibbit iframe embedded in-page
 
 =head2 index: Path
 
-'''@args = undef'''
+B<@args = undef>
 
- * enables/disables NSFW filter
- * redirects to referer or / 
+=over
+
+enables/disables NSFW filter
+
+redirects to referer or / 
+
+=back
 
 =cut
 sub index :Path {

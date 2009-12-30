@@ -14,9 +14,13 @@ Redirect to a random page
 
 =head1 EXAMPLE
 
-''/random/$location''
+I</random/$location>
 
- * $location => type of object
+=over
+
+$location => type of object
+
+=back
 
 =head1 METHODS
 
@@ -24,11 +28,17 @@ Redirect to a random page
 
 =head2 index: Path: Args(1)
 
-'''@args = ($location)'''
+B<@args = ($location)>
 
- * validates params
- * loads a random object (based on $location) and redirects to it
- * 404's
+=over
+
+validates params
+
+loads a random object (based on $location) and redirects to it
+
+404's
+
+=back
 
 =cut
 my $location_reg = qr/^(all|link|blog|picture)$/;

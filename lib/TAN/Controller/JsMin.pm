@@ -16,19 +16,31 @@ Webserver rule means should only be called if cache doesn't exist in the filesys
 
 =head1 EXAMPLE
 
-''/static/cache/js/$theme_$file_$mtime.js''
+I</static/cache/js/$theme_$file_$mtime.js>
 
-  * outside world access url (configurable)
+=over
 
-''/jsmin/$theme_$file_$mtime.js'' 
+outside world access url (configurable)
 
-  * Webserver internal redirect url
+=over
 
- Args::
+$theme => theme name
 
-  * $theme => theme name
-  * $file  => filename
-  * $mtime => filemtime
+$file  => filename
+
+$mtime => filemtime
+
+=back
+
+=back
+
+I</jsmin/$theme_$file_$mtime.js>
+
+=over
+
+Webserver internal redirect url
+
+=back
 
 =head1 METHODS
 
@@ -36,11 +48,17 @@ Webserver rule means should only be called if cache doesn't exist in the filesys
 
 =head2 index: Path: Args(1)
 
-'''@args = ($source_file)'''
+B<@args = ($source_file)>
 
- * splits $source_file into $theme, $file, $mtime
- * uses JsMin model to minify js
- * outputs js or 404's
+=over
+
+splits $source_file into $theme, $file, $mtime
+
+uses JsMin model to minify js
+
+outputs js or 404's
+
+=back
 
 =cut
 my $alpha_reg = qr/[^a-z0-9\-_]/; 

@@ -17,19 +17,31 @@ Webserver rule means should only be called if thumb doesn't exist in the filesys
 
 =head1 EXAMPLE
 
-''/static/cache/thumbs/$mod/$id/$newx''
+I</static/cache/thumbs/$mod/$id/$newx>
 
- * outside world url
+=over
 
-''/thumb/$mod/$id/$newx''
+outside world url
 
- * internal webserver redirect url
+=over
 
- Args::
+$mod => $id - ($id % 1000)
 
-  * $mod => $id - ($id % 1000) 
-  * $id  => picture_id
-  * $newx => the new x of the thumb
+$id  => picture_id
+
+$newx => the new x of the thumb
+
+=back
+
+=back
+
+I</thumb/$mod/$id/$newx>
+
+=over
+
+internal webserver redirect url
+
+=back
 
 =head1 METHODS
 
@@ -37,12 +49,19 @@ Webserver rule means should only be called if thumb doesn't exist in the filesys
 
 =head2 index: Path: Args(3)
 
-'''@args = ($mod, $id, $new)'''
+B<@args = ($mod, $id, $new)>
 
- * validates the params as integers
- * re-calculates mod
- * forwards to resize
- * 404's (should only get here if thumb creation failed)
+=over
+
+validates the params as integers
+
+re-calculates mod
+
+forwards to resize
+
+404's (should only get here if thumb creation failed)
+
+=back
 
 =cut
 my $int = qr/\D+/;
@@ -71,11 +90,17 @@ sub index: Path: Args(3) {
 
 =head2 resize: Private
 
-'''@args = ($mod, $id, $new)'''
+B<@args = ($mod, $id, $new)>
 
- * finds the picture
- * creates the thumb using convert
- * redirects to the thumb (webserver should now handle file) if file exists
+=over
+
+finds the picture
+
+creates the thumb using convert
+
+redirects to the thumb (webserver should now handle file) if file exists
+
+=back
 
 =cut
 sub resize: Private {
