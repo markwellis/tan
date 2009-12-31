@@ -30,20 +30,16 @@ __PACKAGE__->set_primary_key("object_tag_id");
 # Created by DBIx::Class::Schema::Loader v0.04006 @ 2009-11-04 22:01:20
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:upRc1jLOcXGENJbhvwg+bA
 
-__PACKAGE__->has_many("real_tags" =>
-     "TAN::Schema::Result::Tags",
-     "tag_id"
- );
-
 __PACKAGE__->belongs_to(
   "object",
   "TAN::Schema::Result::Object",
   { object_id => "object_id" },
 );
 
-__PACKAGE__->many_to_many(
-  "tags" => "tag_objects",
-  "real_tags" 
+__PACKAGE__->belongs_to(
+  "tag",
+  "TAN::Schema::Result::Tags",
+  { tag_id => "tag_id" },
 );
 
 1;

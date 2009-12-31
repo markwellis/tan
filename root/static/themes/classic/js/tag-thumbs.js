@@ -60,11 +60,12 @@ function select_img(img){
 
 function add_thumbs(thumbs) {
 	thumbs.each(function(thumb) {
+        var mod = thumb['object_id'] - (thumb['object_id'] % 1000);
 		var img = new Element('img', {
-			'src': '/thumb/' + thumb['picture_id'] + '/100/',
+			'src': '/static/cache/thumbs/' + mod + '/' + thumb['object_id'] + '/100',
 			'class': 'tag_thumb_img',
 			'style': 'margin:5px;',
-			'id': 'pic' + thumb['picture_id']
+			'id': 'pic' + thumb['object_id']
 		});
 		img.addEvent('click',function(e){
 			select_img(this);

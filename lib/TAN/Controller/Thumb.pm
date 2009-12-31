@@ -82,7 +82,7 @@ sub index: Path: Args(3) {
 
     # if thumb resize works properly, then we'll be redirected back to this page
     # with a time param, just to make sure we don't hit a cache
-    $c->forward('resize', [$mod, $id, $x]);    
+    $c->forward('resize', [$mod, $id, $x]);
     $c->forward('/default');
     $c->detach();
 }
