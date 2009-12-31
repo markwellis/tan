@@ -25,7 +25,6 @@ Main catalyst application
 =head1 METHODS
 
 =cut
-
 use parent qw/Catalyst/;
 use Catalyst qw/ConfigLoader
                 Unicode::Encoding
@@ -247,10 +246,6 @@ sub url_title{
 
     return $title;
 }
-
-=head1 NAME
-
-TAN - Catalyst based application
 
 =head1 SYNOPSIS
 

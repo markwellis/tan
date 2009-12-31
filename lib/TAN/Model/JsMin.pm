@@ -6,6 +6,29 @@ use parent 'Catalyst::Model';
 
 use JavaScript::Minifier::XS;
 
+=head1 NAME
+
+TAN::Model::JsMin
+
+=head1 DESCRIPTION
+
+Minifies js and caches it
+
+=head1 METHODS
+
+=cut
+
+=head2 minify_file
+
+B<@args = ($infile, $outfile)>
+
+=over
+
+minifies $infile and returns & caches it in $outfile
+
+=back
+
+=cut
 sub minify_file{
     my ($self, $infile, $outfile) = @_;
     my $js;
@@ -37,14 +60,6 @@ sub minify_file{
 
     return $js;
 }
-
-=head1 NAME
-
-TAN::Model::JsMin - Catalyst Model
-
-=head1 DESCRIPTION
-
-Catalyst Model.
 
 =head1 AUTHOR
 

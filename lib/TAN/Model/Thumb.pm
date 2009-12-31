@@ -6,7 +6,30 @@ use parent 'Catalyst::Model';
 
 use Image::Size;
 
-sub resize(){
+=head1 NAME
+
+TAN::Model::Thumb
+
+=head1 DESCRIPTION
+
+Resizes an image
+
+=head1 METHODS
+
+=cut
+
+=head2 resize
+
+B<@args = ($filename, $cacheimg, $x)>
+
+=over
+
+resizes $filename to $x, writes it to $cacheimg
+
+=back
+
+=cut
+sub resize{
     my ($self, $filename, $cacheimg, $x) = @_;
 
     if ( -e $filename ){
@@ -26,14 +49,6 @@ sub resize(){
     }
     return 'error';
 }
-
-=head1 NAME
-
-TAN::Model::Thumb - Catalyst Model
-
-=head1 DESCRIPTION
-
-Catalyst Model.
 
 =head1 AUTHOR
 
