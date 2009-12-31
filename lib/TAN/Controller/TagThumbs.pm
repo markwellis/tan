@@ -7,6 +7,8 @@ use parent 'Catalyst::Controller';
 use JSON;
 use DBIx::Class::ResultClass::HashRefInflator;
 
+my $int = qr/\D+/;
+
 =head1 NAME
 
 TAN::Controller::TagThumbs
@@ -47,18 +49,38 @@ sub index :Path: Args(1) {
            'tag' => $tag,
         });
     
-        my $res = $found_tags->tag_objects->search_related('object', {
+        if ( defined($found_tags) ){
+            my $res = $found_tags->tag_objects->search_related('object', {
+                'type' => 'picture',
+                'nsfw' => 'N',
+            }, {
+                'select' => ['object.object_id', 'object.nsfw'],
+            });
+            $res->result_class('DBIx::Class::ResultClass::HashRefInflator');
+
+            push(@found, $res->all);
+        }
+    }
+
+    my $random = $c->req->param('random');
+    $random =~ s/$int//g;
+
+    if ( defined($random) ){
+        #little security
+        $random = ($random > 50) ? 50 : $random;
+
+        my $res = $c->model('MySQL::Object')->search({
             'type' => 'picture',
             'nsfw' => 'N',
         }, {
-            'select' => ['object.object_id', 'object.nsfw'],
+            'order_by' => \'RAND()',
+            'rows' => $random,
+            'select' => ['object_id', 'nsfw'],
         });
         $res->result_class('DBIx::Class::ResultClass::HashRefInflator');
 
         push(@found, $res->all);
     }
-
-#some error checking goes here
 
     $c->res->header('Content-Type' => 'application/json');
     $c->res->body( to_json(\@found) );

@@ -19,14 +19,10 @@ window.addEvent('domready', function() {
 });
 
 function get_thumbs(id){
-	if (id){
-		idstr = ' !' + id;
-	} else {
-		idstr = '';
-	}
+
 	if ($('tags').value){
 	    var req = new Request.JSON({
-	    	url:'/tagthumbs/' + $('tags').value + idstr + '/?time=' + $time(), 
+	    	url:'/tagthumbs/' + $('tags').value + '/?random=20', 
 	    	onRequest:function(){
 	    		$('thumb_tags').fade(0);
 	    	},
