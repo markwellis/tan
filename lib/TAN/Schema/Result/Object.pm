@@ -91,11 +91,11 @@ __PACKAGE__->has_many(
 __PACKAGE__->has_many(
   "tag_objects",
   "TAN::Schema::Result::TagObjects",
-  { "foreign.tag_id" => "self.tag_id" },
+  { "foreign.object_id" => "self.object_id" },
 );
 
 __PACKAGE__->many_to_many(
-  "tags" => "tag_details",
+  "tags" => "tag_objects",
   "tag" 
 );
 

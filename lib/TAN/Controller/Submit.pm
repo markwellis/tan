@@ -6,6 +6,7 @@ use parent 'Catalyst::Controller';
 use Data::Validate::URI;
 
 my $int_reg = qr/\D+/;
+my $tag_reg = qr/[^a-zA-Z0-9]/;
 
 =head1 NAME
 
@@ -388,7 +389,9 @@ sub submit_link: Private{
         }],
     });
 
-    if (!$object->id){
+    $c->forward('add_tags', [$object]) if ( defined($object) );
+
+    if ( !defined($object) || !$object->id ){
         $c->flash->{'message'} = 'Error submitting link';
     }
 }
@@ -428,7 +431,9 @@ sub submit_blog: Private{
         }],
     });
 
-    if (!$object->id){
+    $c->forward('add_tags', [$object]) if ( defined($object) );
+
+    if ( !defined($object) || !$object->id ){
         $c->flash->{'message'} = 'Error submitting blog';
     }
 }
@@ -474,6 +479,40 @@ sub submit_picture: Private{
             'user_id' => $c->user->user_id,
         }],
     });
+
+    $c->forward('add_tags', [$object]) if ( defined($object) );
+
+    if ( !defined($object) || !$object->id ){
+        $c->flash->{'message'} = 'Error submitting picture';
+    }
+}
+
+=head2 add_tags: Private
+
+B<@args = ($object)>
+
+B<@params = (tags)>
+
+=over
+
+adds tags to $object
+
+=back
+
+=cut
+sub add_tags: Private {
+    my ( $self, $c, $object ) = @_;
+
+    my @tags = split(/ /, lc($c->req->param('tags')));
+    foreach my $tag ( @tags ){
+        $tag =~ s/$tag_reg//g;
+
+        if ( defined($tag) ){
+            $object->add_to_tags({
+                'tag' => $tag,
+            });
+        }
+    }
 }
 
 =head1 AUTHOR
