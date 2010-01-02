@@ -3,7 +3,7 @@ type = object.type;
 
 IF ( !article );
     title = object.$type.title | url_title;
-    url = "/view" _ object.type _ '/' _ object.id _ '/' _ title _ '/';
+    url = "/view/" _ object.type _ '/' _ object.id _ '/' _ title;
     rel = '';
 ELSE;
     url = object.$type.url;
@@ -40,7 +40,7 @@ Posted by <a class="user" href="/user/[% object.user.username %]/1/">[% object.u
 <span class="object_type"> [[%- object.type -%]]</span>
 
 <br />
-<a href='/view[% object.type %]/[% object.id %]/[% object.$type.title | url_title %]/#comments'>
+<a href='[% url %]/#comments'>
     <img src="[% c.config.static_path %]/images/comment.png" style="height:15px;width:15px" alt="" /> [%- object.get_column('comments') -%]
 </a> | [%- object.get_column('views') -%] views
 
