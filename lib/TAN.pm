@@ -249,7 +249,7 @@ sub url_title{
     return $title;
 }
 
-=head2 url_tile
+=head2 finalize_error
 
 B<@args = undef>
 
