@@ -249,6 +249,19 @@ sub url_title{
     return $title;
 }
 
+=head2 url_tile
+
+B<@args = undef>
+
+=over
+
+handles catalyst 500 errors
+
+sends email to tan.webmaster@thisaintnews.com if not in debug mode
+
+=back
+
+=cut
 sub finalize_error {
     my ($c) = @_;
 
