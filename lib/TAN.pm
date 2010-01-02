@@ -5,6 +5,7 @@ use warnings;
 
 use Catalyst::Runtime 5.80;
 use Number::Format;
+use Data::Dumper;
 
 # Set flags and add plugins for the application
 #
@@ -31,6 +32,7 @@ use Catalyst qw/ConfigLoader
                 Authentication
                 Cache::FastMmap
                 Session
+                Email
                 Session::Store::FastMmap
                 Session::State::Cookie
                 PageCache
@@ -245,6 +247,88 @@ sub url_title{
     $title =~ s/$url_title/-/ig;
 
     return $title;
+}
+
+sub finalize_error {
+    my ($c) = @_;
+
+    if ( $c->debug ) {
+        $c->SUPER::finalize_error($c);
+    } else {
+        $c->response->content_type('text/html; charset=utf-8');
+
+        $c->response->body( $c->view('TT')->render( $c, 'errors/500.tt' ) );
+        $c->response->status(500);
+
+        my $error = join '', map {"$_\n"} @{ $c->error };
+
+        # Don't show context in the dump
+        delete $c->req->{'_context'};
+        delete $c->res->{'_context'};
+
+        # Don't show body parser in the dump
+        delete $c->req->{'_body'};
+
+        # Don't show response header state in dump
+        delete $c->res->{'_finalized_headers'};
+
+        my $to      = 'tan.webmaster@thisaintnews.com';
+        my $subject = 'TAN 500 Error: ' . $error;
+        $subject =~ s/\s+/ /g;
+        $subject = substr( $subject, 0, 200 );
+        my $from = $ENV{'ADMIN_EMAIL'} || 'tan.webmaster@thisaintnews.com';
+
+        my $req = {};
+        $req->{'uri'} = $c->req->uri || '';
+        $req->{'referer'} = $c->req->referer || '';
+        $req->{'address'} = $c->req->address || '';
+
+        my $body
+            = "Error:\n"
+            . $error
+            . "\n\nURL:\n"
+            . $req->{'uri'}
+            . "\n\nReferer:\n"
+            . $req->{'referer'}
+            . "\n\nClient IP:\n"
+            . $req->{'address'};
+
+        $c->email(
+            header => [
+                'To'      => $to,
+                'From'    => $from,
+                'Subject' => $subject,
+            ],
+            parts => [
+                Email::MIME->create(
+                    'attributes' => {
+                        'content_type' => 'text/plain',
+                        'disposition'  => 'inline',
+                        'charset'      => 'UTF-8',
+                    },
+                    'body' => $body,
+                ),
+                Email::MIME->create(
+                    'attributes' => {
+                        'filename'     => 'request.txt',
+                        'content_type' => 'text/plain',
+                        'disposition'  => 'attachment',
+                        'charset'      => 'UTF-8',
+                    },
+                    'body' => Dumper( $c->req ),
+                ),
+                Email::MIME->create(
+                    'attributes' => {
+                        'filename'     => 'stash.txt',
+                        'content_type' => 'text/plain',
+                        'disposition'  => 'attachment',
+                        'charset'      => 'UTF-8',
+                    },
+                    'body' => Dumper( $c->stash ),
+                ),
+            ],
+        );
+    }
 }
 
 =head1 SYNOPSIS

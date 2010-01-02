@@ -85,6 +85,11 @@ sub index: Path: Args(0) {
     $c->forward('/index/index', ['all', 0, 1]);
 }
 
+sub wibble: Local {
+    my ( $self, $c ) = @_;
+
+}
+
 =head2 default: Path 
 
 B<@args = undef>
@@ -100,7 +105,7 @@ sub default: Path {
     my ( $self, $c ) = @_;
 
     $c->stash->{'error_404'} = 1;
-    $c->stash->{'template'} = 'error404.tt';
+    $c->stash->{'template'} = 'errors/404.tt';
     $c->response->status(404);
 }
 
