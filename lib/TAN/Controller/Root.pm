@@ -85,11 +85,6 @@ sub index: Path: Args(0) {
     $c->forward('/index/index', ['all', 0, 1]);
 }
 
-sub wibble: Local {
-    my ( $self, $c ) = @_;
-
-}
-
 =head2 default: Path 
 
 B<@args = undef>
