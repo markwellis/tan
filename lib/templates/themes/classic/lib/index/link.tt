@@ -1,8 +1,9 @@
 [%-
 type = object.type;
 
-url = object.$type.url;
-rel = 'rel="external nofollow"';
+title = object.$type.title | url_title;
+url = "/view/" _ object.type _ '/' _ object.id _ '/' _ title;
+rel = '';
 
 IF ( !num );
     num = 0;
@@ -34,8 +35,9 @@ Posted by <a class="user" href="/user/[% object.user.username %]/1/">[% object.u
 <span class="object_type"> [[%- object.type -%]]</span>
 
 <br />
-<img src="[% c.config.static_path %]/images/comment.png" style="height:15px;width:15px" alt="" /> [%- object.get_column('comments') -%] 
- | [%- object.get_column('views') -%] views
+<a href='[% url %]/#comments'>
+    <img src="[% c.config.static_path %]/images/comment.png" style="height:15px;width:15px" alt="" /> [%- object.get_column('comments') -%]
+</a> | [%- object.get_column('views') -%] views
 
 [%- IF !1 -%]
 	[%# fixme! IF ($f->user->user_id() == $f->stash->object['user_id']) || $f->user->admin()) %]
@@ -47,18 +49,3 @@ Posted by <a class="user" href="/user/[% object.user.username %]/1/">[% object.u
 <p>
     [%- object.$type.description | html | nl2br -%]
 </p>
-[%
-url = object.$type.url _ '&';
-matches = url.match('/http\:\/\/www\.youtube\.com\/watch\?v=(.*?)\&/i');
-
-IF (matches.0);
-    youtube_id = matches.0 -%]
-    <object type="application/x-shockwave-flash" style="width:425px; height:350px;" data="http://www.youtube.com/v/[%- youtube_id -%]">
-        <param name="wmode" value="transparent" />
-        <param name="movie" value="http://www.youtube.com/v/[%- youtube_id -%]" />
-    </object>
-[%- ELSE -%]
-    <a style="margin-right:70px;float:right;font-size:1.5em;" rel="external nofollow" href="[%- object.$type.url -%]">View Link</a>
-    <br />
-    <br />
-[%- END %]
