@@ -4,6 +4,10 @@ use warnings;
 
 use base qw/ Parse::BBCode /;
 
+use URI;
+use URI::QueryParam;
+use Data::Validate::URI qw/ is_uri /;
+
 our $VERSION = '0.01';
 
 =head1 NAME
@@ -44,6 +48,7 @@ The following tags are supported
 =back
 
 =cut
+my $youtube_validate_reg = qr/^[a-zA-Z0-9-_]{11}$/;
 sub new {
     my ( $class ) = @_;
 
@@ -52,6 +57,31 @@ sub new {
             'quote' => 'block:<div class="quote_holder"><span class="quoted_username">%{user}attr wrote:</span>'
                 .'<div class="quote">%s</div></div>',
             '' => sub { return $_[2]; },
+            'youtube' => 'block:%{youtube}s',
+        },
+        'escapes' => {
+            'youtube' => sub {
+                my ( $parser, $tag, $text ) = @_;
+
+                my $youtube_id;
+
+                if ( is_uri($text) ){
+                    my $youtube_uri = URI->new($text);
+
+                    $youtube_id = $youtube_uri->query_param('v');
+                } else {
+                    $youtube_id = $text;
+                }
+
+                if ( defined($youtube_id) && $youtube_id =~ m/$youtube_validate_reg/ ) {
+                    return '<object data="http://www.youtube.com/v/' . $youtube_id . '" '
+                            .'style="width: 425px; height: 350px;" type="application/x-shockwave-flash">'
+                        .'<param value="transparent" name="wmode" />'
+                        .'<param value="http://www.youtube.com/v/' . $youtube_id . '" name="movie" /></object>';
+                }
+
+                return '';
+            },
         },
         'tag_validation' => qr/^([^\]]*)?]/, 
     });
