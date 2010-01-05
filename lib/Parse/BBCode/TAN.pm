@@ -2,7 +2,7 @@ package Parse::BBCode::TAN;
 use strict;
 use warnings;
 
-use base qw/ Parse::BBCode /;
+use Parse::BBCode;
 
 use URI;
 use URI::QueryParam;
@@ -45,14 +45,22 @@ The following tags are supported
 
 =back
 
+=item *
+
+[youtube]youtube_id OR youtube_url[/youtube]
+
+=over
+
+<object data="http://www.youtube.com/v/KmDmyM97_EA" style="width: 425px; height: 350px;" type="application/x-shockwave-flash"><param value="transparent" name="wmode" /><param value="http://www.youtube.com/v/KmDmyM97_EA" name="movie" /></object>
+
+=back
+
 =back
 
 =cut
 my $youtube_validate_reg = qr/^[a-zA-Z0-9-_]{11}$/;
 sub new {
-    my ( $class ) = @_;
-
-    my $self = $class->SUPER::new({
+    return Parse::BBCode->new({
         'tags' => {
             'quote' => 'block:<div class="quote_holder"><span class="quoted_username">%{user}attr wrote:</span>'
                 .'<div class="quote">%s</div></div>',
@@ -66,9 +74,7 @@ sub new {
                 my $youtube_id;
 
                 if ( is_uri($text) ){
-                    my $youtube_uri = URI->new($text);
-
-                    $youtube_id = $youtube_uri->query_param('v');
+                    $youtube_id = URI->new($text)->query_param('v');
                 } else {
                     $youtube_id = $text;
                 }
@@ -85,8 +91,6 @@ sub new {
         },
         'tag_validation' => qr/^([^\]]*)?]/, 
     });
-
-    return $self;
 }
 
 1;
