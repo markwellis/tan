@@ -44,7 +44,14 @@ sub recent_comments {
             '-desc' => 'me.created',
         },
         'rows' => 20,
-        'prefetch' => ['user', 'object'],
+        'prefetch' => {
+            'user' => [],
+            'object' => [
+                'link',
+                'picture',
+                'blog',
+            ],
+        },
     });
 }
 
