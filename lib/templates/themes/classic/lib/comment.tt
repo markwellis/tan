@@ -1,0 +1,37 @@
+[%-
+avatar_http = c.config.avatar_path _ "/" _ comment.user_id _ ".jpg";
+avatar_image = c.path_to('root') _ avatar_http;
+avatar_exists = avatar_image | file_exists;
+
+IF (avatar_exists);
+    avatar_mtime = avatar_image | file_mtime;
+ELSE;
+    avatar_http = c.config.static_path _ '/images/_user.png';
+END -%]
+
+<div style="margin-left:5px;" id="comment[% comment.comment_id %]">
+    <img class="avatar user_avatar" src="[% avatar_http %]?m=[% avatar_mtime %]" alt="[% comment.user.username %]" />
+    <div style="font-size:.8em;">[% comment.user.username %], on [% comment.created %]
+        <br />
+        Total Comments: [%# comment.total_comments %], Joined on: [% comment.user.join_date %]
+    </div>
+    <div class="comment">
+        <div id="actual_comment[% comment.comment_id %]">
+            [% comment.comment %]
+            <br />
+        </div>
+        <span style="display:block;float:right;">
+            <a class="quote_link" href="/view/[% object.type %]/[% object.object_id %]/[% object.title | url_title %]/#[% comment.comment_id %]">Link</a>
+        
+            <?php if ( $f->user->logged_in() ){ ?>
+            | <a href="#" class="quote_link" title="<?php echo $f->stash->comment['username'] ?>::<?php echo $f->stash->comment['comment_id'] ?>">Quote</a>
+            <?php } ?>
+            
+            <?php if ($f->user->logged_in() && ( (int)$f->user->user_id() === (int)$f->stash->comment['user_id']) ){ ?>
+            | <a class="comment_edit" href="/edit_comment/<?php echo $f->stash->comment['comment_id'] ?>/">Edit Comment</a>
+            <?php } ?>
+        </span>
+    
+    </div>
+</div>
+<div id="nsfw_blocker_containter"></div>

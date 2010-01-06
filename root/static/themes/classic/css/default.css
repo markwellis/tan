@@ -72,11 +72,7 @@ img {
 
 .comment_wrapper{
     padding:5px;
-    margin-top:5px;
-    -moz-border-radius: 5px;
-    -webkit-border-radius:5px;
-    background-color: #F7FAFF;
-    margin-right:125px;
+    color:#535353 !important;
 }
 
 .recent_comment{
@@ -134,7 +130,7 @@ img {
 	padding:7px;
 }
 
-.news p {
+.news .p {
 	font-size:12px;
 	border:0px;
 	color:#222222;
@@ -143,7 +139,7 @@ img {
     margin-left:115px;
 }
 
-.news a {
+.news .a {
 	font-size:15px;
 }
 
@@ -783,4 +779,12 @@ fieldset label{
 
 .alternate{
     background-color:#ddd;
+}
+
+.please_login{
+	font-size:1.2em !important;
+}
+
+.please_login a{
+	font-size:inherit;
 }

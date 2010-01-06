@@ -16,7 +16,7 @@ md = object.$type.picture_id - (object.$type.picture_id % 1000)
 [%- PROCESS 'lib/plus_minus_box.tt' -%]
 
 <h1>
-    <a class="title" [% rel %] href="[% url  | html %]" >
+    <a class="a title" [% rel %] href="[% url  | html %]" >
         [%- object.$type.title | html -%]
     </a>
 </h1>
@@ -24,7 +24,7 @@ md = object.$type.picture_id - (object.$type.picture_id % 1000)
 <br />
 
 <img class="avatar" src="[% avatar_http %]?m=[% avatar_mtime.defined ? avatar_mtime : '' %]" alt="[% object.user.username %]" />
-Posted by <a class="user" href="/user/[% object.user.username %]/1/">[% object.user.username %]</a>
+Posted by <a class="a user" href="/user/[% object.user.username %]/1/">[% object.user.username %]</a>
 
 [%- IF ( !upcoming ) -%]
     promoted [% c.date_ago(object.promoted) -%] ago
@@ -39,12 +39,12 @@ Posted by <a class="user" href="/user/[% object.user.username %]/1/">[% object.u
 
 [%- IF !1 -%]
 	[%# fixme! IF ($f->user->user_id() == $f->stash->object['user_id']) || $f->user->admin()) %]
-	   | <a href='/esubmit/[%- object.type -%]/[%- object.id -%]/'>Edit</a>]
+	   | <a href="/esubmit/[%- object.type -%]/[%- object.id -%]/" class="a">Edit</a>]
 	[%# END %]
 [%- END -%]
     
 <br />
-<p>
+<p class="p">
     [%- object.$type.description | html | nl2br -%]
 </p>
 [%
@@ -52,7 +52,7 @@ url = object.$type.url _ '&';
 matches = url.match('/http\:\/\/www\.youtube\.com\/watch\?v=(.*?)\&/i');
 
 IF (matches.0);
-    youtube_id = matches.0 -%]
+    youtube_id = matches.0 | html -%]
     <object type="application/x-shockwave-flash" style="width:425px; height:350px;" data="http://www.youtube.com/v/[%- youtube_id -%]">
         <param name="wmode" value="transparent" />
         <param name="movie" value="http://www.youtube.com/v/[%- youtube_id -%]" />

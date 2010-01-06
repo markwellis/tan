@@ -97,10 +97,16 @@ sub index: PathPart('') Chained('location') Args(2) {
                 \'(SELECT COUNT(*) FROM plus_minus WHERE plus_minus.object_id = me.object_id AND type="minus") minus',
             ],
             '+as' => ['created', 'promoted', 'views', 'comments', 'plus', 'minus'],
-            'prefetch' => [$c->stash->{'location'}, 'user', 'comments'],
+            'prefetch' => [$c->stash->{'location'}, 'user'],
             'order_by' => '',
         });
         $c->stash->{'object'} = $object;
+
+        @{$c->stash->{'comments'}} = $c->model('MySQL::Comments')->search({
+            'object_id' => $id,
+        },{
+            'prefetch' => ['user'],
+        })->all;
 
         $c->stash->{'template'} = 'view.tt';
     } 

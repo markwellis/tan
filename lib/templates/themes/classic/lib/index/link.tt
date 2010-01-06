@@ -17,7 +17,7 @@ md = object.$type.picture_id - (object.$type.picture_id % 1000)
 [%- PROCESS 'lib/plus_minus_box.tt' -%]
 
 <h1>
-    <a class="title" [% rel %] href="[% url  | html %]" >
+    <a class="a title" [% rel %] href="[% url  | html %]" >
         [%- object.$type.title | html -%]
     </a>
 </h1>
@@ -25,7 +25,7 @@ md = object.$type.picture_id - (object.$type.picture_id % 1000)
 <br />
 
 <img class="avatar" src="[% avatar_http %]?m=[% avatar_mtime.defined ? avatar_mtime : '' %]" alt="[% object.user.username %]" />
-Posted by <a class="user" href="/user/[% object.user.username %]/1/">[% object.user.username %]</a>
+Posted by <a class="a user" href="/user/[% object.user.username %]/1/">[% object.user.username %]</a>
 
 [%- IF ( !upcoming ) -%]
     promoted [% c.date_ago(object.promoted) -%] ago
@@ -35,7 +35,7 @@ Posted by <a class="user" href="/user/[% object.user.username %]/1/">[% object.u
 <span class="object_type"> [[%- object.type -%]]</span>
 
 <br />
-<a href='[% url %]/#comments'>
+<a href="[% url %]/#comments" class="a">
     <img src="[% c.config.static_path %]/images/comment.png" style="height:15px;width:15px" alt="" /> [%- object.get_column('comments') -%]
 </a> | [%- object.get_column('views') -%] views
 
@@ -46,6 +46,6 @@ Posted by <a class="user" href="/user/[% object.user.username %]/1/">[% object.u
 [%- END -%]
     
 <br />
-<p>
+<p class="p">
     [%- object.$type.description | html | nl2br -%]
 </p>

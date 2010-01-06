@@ -12,5 +12,6 @@ END;
 tmplt = 'lib/object/' _ location _ '.tt' %]
 <ul id="inside">
     <li class="news">[%- PROCESS $tmplt -%]</li>
+    <li class="news comment_wrapper">[%- PROCESS 'lib/comments.tt' -%]</li>
 </ul>
 <br class="clear" />
