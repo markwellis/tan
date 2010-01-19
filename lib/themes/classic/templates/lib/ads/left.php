@@ -1,3 +1,4 @@
+<?php /*
 <div id="left_ad">
     <script type="text/javascript"> 
             //<![CDATA[
@@ -8,3 +9,4 @@
             //]]>
     </script>
 </div>
+*/ ?>

@@ -1,4 +1,6 @@
-<div id="bottom_ad">
+<?php
+
+/*<div id="bottom_ad">
     <script type="text/javascript"> 
             //<![CDATA[
                 window.addEvent("load", function() {
@@ -8,3 +10,5 @@
             //]]>
     </script>
 </div>
+*/
+?>

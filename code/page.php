@@ -299,9 +299,6 @@ if (defined('MAGIC')) {
 	            ."<span style='display:block;margin-bottom:10px;'>"
 	            ."$footer , All User-generated content is licensed under a " 
 				.'<a href="http://creativecommons.org/">Creative Commons Public Domain license</a></span> '
-		.'<div style="visibility:hidden">'
-		."<script type='text/javascript' src='http://xslt.alexa.com/site_stats/js/t/a?url=thisaintnews.com'></script>"
-		.'</div>'
 	            .'</div>';
             $this->output .= $this->get_bottom_ad();
             $this->output .= '</div>'
