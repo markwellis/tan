@@ -30,7 +30,7 @@
                 <?php if (!$m_stash->m_user->logged_in()){ ?>
                     <a href="/login/" class="top_link">Login/Register</a> | 
                 <?php } else { ?>
-                    <a href="/user/' . $user->getUsername() . '/1/" class="top_link">My Comments</a> | <a href="/avatar/" class="top_link">Avatar</a> | 
+                    <a href="/user/<?php echo $m_stash->m_user->username() ?>/1/" class="top_link">My Comments</a> | <a href="/avatar/" class="top_link">Avatar</a> | 
                 <?php } ?>
             
                 <?php if(isset($_SESSION['nsfw'])){ ?>

@@ -44,6 +44,8 @@ RewriteRule ^esubmit/([^/]+)/([^/]+)/$ lib/controllers/submit.php?location=$1&ed
 
 RewriteRule ^tagthumbs/([^/]+)/ lib/controllers/tagthumbs.php?tags=$1 [NC]
 
+#admin
+RewriteRule ^admin$ lib/controllers/admin.php [NC]
 
 
 RewriteRule ^link/([^/]+)/([^/]+)/ ./index.php?function=0&type=$1&page=$2 [NC]

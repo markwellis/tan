@@ -3,6 +3,13 @@ if (defined('MAGIC')) {
     class m_user {
 
         public function __construct() {
+            $this->init();
+            
+            global $m_sql;
+            $this->m_sql = &$m_sql;
+        }
+
+        private function init(){
             $time = 60*60*24*90;
 
             if ( !isset( $_SESSION ['ready'] ) ) {
@@ -17,10 +24,22 @@ if (defined('MAGIC')) {
             if (isset($_COOKIE[SESSION_NAME])){
                 @setcookie(SESSION_NAME, $_COOKIE[SESSION_NAME], time() + $time, "/");
             }
-            
-            global $m_sql;
-            $this->m_sql = &$m_sql;
+        }
 
+        public function banned_ip(){
+            $query = "SELECT * FROM banned_ips WHERE ip = ?";
+            $banned = $this->m_sql->query($query, 's', array($_SERVER['REMOTE_ADDR']));
+            if ( isset($banned[0]['ip']) ){
+                $this->logout();
+
+                #we want to set a flash message, so reinit session
+                $this->init();
+
+                global $m_stash;
+                $m_stash->add_message('This ip is banned');
+                header('location: /');
+                exit();
+            }
         }
 
         public function logged_in() {
@@ -66,7 +85,9 @@ if (defined('MAGIC')) {
             return $this->m_sql->query($query, 'i', array($user_id), 'count');
         }
 
-        public function login($username, $password) { 
+        public function login($username, $password) {
+            $this->banned_ip();
+            
             if (!$this->logged_in()) {
                 $enc_password = hash('sha512',$password);
                 $query = "SELECT * FROM user_details WHERE lower(username) = ?";
@@ -74,6 +95,12 @@ if (defined('MAGIC')) {
                 if (isset($row[0]['password']) && $row[0]['password'] === $enc_password){
                     if ($row[0]['confirmed'] === 'N'){
                         return null;
+                    }
+                    if ($row[0]['deleted'] === 'Y'){
+                        global $m_stash;
+                        $m_stash->add_message('User is banned');
+                        header('location: /');
+                        exit;
                     }
                     $_SESSION['time'] = time();
                     $_SESSION['username'] = $row[0]['username'];
