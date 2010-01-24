@@ -1,17 +1,15 @@
-[% IF comments %]
-    <h2 id="comments">Comments</h2>
+[% IF object.comments %]
+    [% FOREACH comment=comments;
+        PROCESS 'lib/comment.tt';
+    END %]
+
+    <script type='text/javascript'>//<![CDATA[
+    var nsfw = [% c.nsfw %];
+    //]]>
+    </script>
+
+    [% PROCESS 'lib/js_includes.tt' inline='nsfw-comments' %]
 [% END %]
-
-[% FOREACH comment=comments;
-    PROCESS 'lib/comment.tt';
-END %]
-
-<script type='text/javascript'>//<![CDATA[
-var nsfw = [% c.nsfw %];
-//]]>
-</script>
-
-[% PROCESS 'lib/js_includes.tt' inline='nsfw-comments' %]
 
 [% IF c.user_exists %]
     <h2 id="lcomments">Leave your comments</h2>

@@ -788,3 +788,8 @@ fieldset label{
 .please_login a{
 	font-size:inherit;
 }
+
+.user_avatar{
+    height:64px;
+    width:64px;
+}

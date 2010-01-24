@@ -4,6 +4,8 @@ use strict;
 use warnings;
 
 use base 'DBIx::Class';
+use Parse::BBCode::TAN;
+my $bbcode = new Parse::BBCode::TAN;
 
 __PACKAGE__->load_components('UTF8Columns', "Core");
 __PACKAGE__->table("comments");
@@ -18,6 +20,7 @@ __PACKAGE__->add_columns(
     default_value => undef,
     is_nullable => 0,
     size => 16777215,
+    accessor => '_comment',
   },
   "created",
   {
@@ -38,6 +41,13 @@ __PACKAGE__->utf8_columns(qw/comment/);
 
 # Created by DBIx::Class::Schema::Loader v0.04006 @ 2009-11-04 22:01:20
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:1eFIzFs/gXnMuzdofLP07Q
+
+sub comment{
+    my ( $row ) = @_;
+
+#do some caching shit here...
+return $bbcode->render($row->_comment);
+}
 
 __PACKAGE__->belongs_to(
   "user",

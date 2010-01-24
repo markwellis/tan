@@ -156,7 +156,7 @@ sub _compile_def {
                 if ($type eq 'attr' and @$attributes > 1) {
                     my $name = shift @$escapes;
                     for my $item (@$attributes[1 .. $#$attributes]) {
-                        if ($item->[0] eq $name) {
+                        if (defined($name) && $item->[0] eq $name) {
                             $var = $item->[1];
                             last;
                         }

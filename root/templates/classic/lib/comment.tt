@@ -21,15 +21,16 @@ END -%]
             <br />
         </div>
         <span style="display:block;float:right;">
-            <a class="quote_link" href="/view/[% object.type %]/[% object.object_id %]/[% object.title | url_title %]/#[% comment.comment_id %]">Link</a>
+            [% type = object.type %]
+            <a class="quote_link" href="/view/[% object.type %]/[% object.object_id %]/[% object.$type.title | url_title %]#comment[% comment.comment_id %]">Link</a>
         
-            <?php if ( $f->user->logged_in() ){ ?>
-            | <a href="#" class="quote_link" title="<?php echo $f->stash->comment['username'] ?>::<?php echo $f->stash->comment['comment_id'] ?>">Quote</a>
-            <?php } ?>
+            [% IF c.user_exists %]
+                | <a href="#" class="quote_link" title="[% comment.user.username %]::[% comment.comment_id %]">Quote</a>
+            [% END %]
             
-            <?php if ($f->user->logged_in() && ( (int)$f->user->user_id() === (int)$f->stash->comment['user_id']) ){ ?>
-            | <a class="comment_edit" href="/edit_comment/<?php echo $f->stash->comment['comment_id'] ?>/">Edit Comment</a>
-            <?php } ?>
+            [% IF (c.user_exists) && ( c.user.user_id == comment.user_id ) %]
+                | <a class="comment_edit" href="/edit_comment/[% comment.comment_id %]/">Edit Comment</a>
+            [% END %]
         </span>
     
     </div>

@@ -49,7 +49,7 @@ Posted by <a class="a user" href="/user/[% object.user.username %]/1/">[% object
 </p>
 [%
 url = object.$type.url _ '&';
-matches = url.match('/http\:\/\/www\.youtube\.com\/watch\?v=(.*?)\&/i');
+matches = url.match('http\:\/\/www\.youtube\.com\/watch\?v=(.*?)\&');
 
 IF (matches.0);
     youtube_id = matches.0 | html -%]
@@ -62,3 +62,4 @@ IF (matches.0);
     <br />
     <br />
 [%- END %]
+<hr style="color:#C5D0D9" />
