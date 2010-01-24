@@ -19,7 +19,64 @@ class m_admin{
         $user_info = $this->m_sql->query($query, 's', array($username));
         return isset($user_info[0]) ? $user_info[0] : null;
     }
+
+    function get_link($link_id){
+        return $this->get_object($link_id, 'link');
+    }
+
+    function get_blog($blog_id){
+        return $this->get_object($blog_id, 'blog');
+    }
+
+    function get_pic($picture_id){
+        return $this->get_object($picture_id, 'picture');
+    }
+
+    function get_object($id, $type){
+        $query = "SELECT * FROM {$type}_details WHERE {$type}_id = ?";
+        $object_info = $this->m_sql->query($query, 'i', array($id));
+        return isset($object_info[0]) ? $object_info[0] : null;
+    }
+
+    function delete_link($id){
+        $this->delete_object($id, 'link');
+    }
     
+    function delete_blog($id){
+        $this->delete_object($id, 'blog');
+    }
+
+    function delete_pic($id){
+        $this->delete_object($id, 'picture');
+    }
+
+    function delete_object($id, $type){
+        #delete object
+        $query = "DELETE FROM {$type}_details WHERE {$type}_id = ?";
+
+        $this->m_sql->query($query, 'i', array($id), 'insert');
+
+        #delete plus
+        $query = "DELETE FROM plus WHERE {$type}_id = ?";
+        $this->m_sql->query($query, 'i', array($id), 'insert');
+
+        #delete minus
+        $query = "DELETE FROM minus WHERE {$type}_id = ?";
+        $this->m_sql->query($query, 'i', array($id), 'insert');
+
+        #delete comments
+        $query = "DELETE FROM comments WHERE {$type}_id = ?";
+        $this->m_sql->query($query, 'i', array($id), 'insert');
+
+        #delete tag_details
+        $query = "DELETE FROM tag_details WHERE {$type}_id = ?";
+        $this->m_sql->query($query, 'i', array($id), 'insert');
+
+        #deted pi
+        $query = "DELETE FROM pi WHERE id = ? AND type = ?";
+        $this->m_sql->query($query, 'is', array($id, $type), 'insert');
+    }
+
     function ban_user($user_id){
         # delete session_id(s)
         # update user_detail table set banned
