@@ -7,6 +7,7 @@ use TAN::Model::OldDB;
 
 use HTML::Entities;
 use File::Basename;
+use File::Copy;
 
 use Data::Dumper;
 
@@ -21,6 +22,9 @@ my $blog_lookup = {};
 my $picture_lookup = {};
 my $tag_lookup = {};
 
+my $old_avatar_path = '/srv/http/thisaintnews.com/images/old';
+my $new_avatar_path = '/srv/http/thisaintnews.com/images/avatar';
+
 #USERS
 my $old_users = $olddb->resultset('UserDetails');
 while (my $old_user = $old_users->next){
@@ -34,6 +38,15 @@ while (my $old_user = $old_users->next){
     });
 
     $user_lookup->{$old_user->user_id} = $new_user->id;
+
+    #convert avatar
+    my $old_avatar = $old_avatar_path . '/' . $old_user->user_id . '.jpg';
+    my $new_avatar = $new_avatar_path . '/' . $new_user->user_id . '.jpg';
+warn $old_avatar . "\n";
+warn $new_avatar . "\n";
+    if ( -f $old_avatar ){
+        copy($old_avatar, $new_avatar) or warn 'error';
+    }
 }
 print "converted " . $old_users->count . " users\n";
 

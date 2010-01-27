@@ -13,14 +13,10 @@
 
 [% IF c.user_exists %]
     <h2 id="lcomments">Leave your comments</h2>
-        <form style="margin-left:15px;" action="/comment" method="post">
+        <form style="margin-left:15px;" action="comment" method="post">
             <fieldset>
-                <input name="id" type="hidden" value="<?php echo $f->stash->id ?>" />
-                <input name="type" type="hidden" value="<?php echo $f->stash->location ?>" />
-                
                 [% editor = {
                     'name' => "comment",
-                    'value' => details.details,
                     'height' => '300px',
                 };
                         

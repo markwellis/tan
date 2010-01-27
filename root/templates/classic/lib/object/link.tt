@@ -47,6 +47,14 @@ Posted by <a class="a user" href="/user/[% object.user.username %]/1/">[% object
 <p class="p">
     [%- object.$type.description | html | nl2br -%]
 </p>
+
+<span class="tags">
+    [%- FOREACH tag = object.tags -%]
+        [%- IF loop.count > 1 %], [% END -%]
+        <a href="/tag/[% tag.tag %]">[% tag.tag %]</a>
+    [%- END -%]
+</span>
+
 [%
 url = object.$type.url _ '&';
 matches = url.match('http\:\/\/www\.youtube\.com\/watch\?v=(.*?)\&');
@@ -62,4 +70,4 @@ IF (matches.0);
     <br />
     <br />
 [%- END %]
-<hr style="color:#C5D0D9" />
+<div class="hr" />
