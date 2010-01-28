@@ -21,7 +21,7 @@
         },
     ];
     
-    page_title = 'ThisAintNews :: Social News For Internet Pirates';
+#    page_title = 'ThisAintNews :: Social News For Internet Pirates';
     page_meta_description = 'Social News For Internet Pirates';
     page_keywords = 'strange pirate news community comments english social fun jokes videos pictures share sharing lol lolz funny humour humor'
 -%]

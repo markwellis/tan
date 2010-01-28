@@ -104,8 +104,10 @@ sub index: PathPart('') Chained('location') Args(1) {
         'order_by' => '',
     });
 
+
     #horrible use of eval here
     my $proper_title = eval('$object->' . $c->stash->{'location'} . '->title');
+    $c->stash->{'page_title'} = $proper_title;
     my $proper_url = '/view/' . $c->stash->{'location'} . '/' . $object->id . '/' . $c->url_title($proper_title);
 
     if ( $c->req->uri->path ne $proper_url ){
