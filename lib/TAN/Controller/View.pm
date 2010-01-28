@@ -51,26 +51,26 @@ checks the location is valid
 =cut
 my $location_reg = qr/^link|blog|picture$/;
 sub location: PathPart('view') Chained('/') CaptureArgs(2){
-    my ( $self, $c, $location, $id ) = @_;
+    my ( $self, $c, $location, $object_id ) = @_;
 
     if ($location !~ m/$location_reg/){
         $c->forward('/default');
         $c->detach();
     }
 
-    $id =~ s/$int_reg//g;
-    if ( !$id ){
+    $object_id =~ s/$int_reg//g;
+    if ( !$object_id ){
         $c->forward('/default');
         $c->detach();
     }
 
-    $c->stash->{'id'} = $id;
+    $c->stash->{'object_id'} = $object_id;
     $c->stash->{'location'} = $location;
 }
 
 =head2 index: PathPart('') Chained('location') Args(2) 
 
-B<@args = ($id, $title)>
+B<@args = ($title)>
 
 =over
 
@@ -83,13 +83,13 @@ sub index: PathPart('') Chained('location') Args(1) {
     my ( $self, $c, $title ) = @_;
 
 #check
-# id is valid
+# object_id is valid
 # url matches (seo n that)
 # display article
 # load comments etc
     
     my $object = $c->model('MySQL::Object')->find({
-        'object_id' => $c->stash->{'id'},
+        'object_id' => $c->stash->{'object_id'},
     },{
         '+select' => [
             { 'unix_timestamp' => 'me.created' },
@@ -103,12 +103,23 @@ sub index: PathPart('') Chained('location') Args(1) {
         'prefetch' => [$c->stash->{'location'}, 'user'],
         'order_by' => '',
     });
+
+    #horrible use of eval here
+    my $proper_title = eval('$object->' . $c->stash->{'location'} . '->title');
+    my $proper_url = '/view/' . $c->stash->{'location'} . '/' . $object->id . '/' . $c->url_title($proper_title);
+
+    if ( $c->req->uri->path ne $proper_url ){
+        $c->res->redirect( $proper_url, 301 );
+        $c->detach();
+    }
+
     $c->stash->{'object'} = $object;
 
     @{$c->stash->{'comments'}} = $c->model('MySQL::Comments')->search({
-        'object_id' => $c->stash->{'id'},
+        'object_id' => $c->stash->{'object_id'},
     },{
         'prefetch' => ['user'],
+        'order_by' => 'created',
     })->all;
 
     $c->stash->{'template'} = 'view.tt';
@@ -119,9 +130,9 @@ sub index: PathPart('') Chained('location') Args(1) {
     }
 }
 
-=head2 comment: PathPart('') Chained('location') Args(1)
+=head2 comment: PathPart('comment') Chained('location') Args(0)
 
-B<@args = ($id)>
+B<@args = undef>
 
 =over
 
@@ -133,26 +144,43 @@ comments on an article
 sub comment: PathPart('comment') Chained('location') Args(0) {
     my ( $self, $c ) = @_;
 
-#check if user is logged in or not etc
+    my $comment_id;
+    if ( $c->user_exists ){
+    #logged in, post
+        if ( my $comment = $c->req->param('comment') ){
+            my $comment_rs = $c->model('MySQL::Comments')->create_comment( $c->stash->{'object_id'}, $c->user->user_id, $comment );
 
-    if ( my $comment = $c->req->param('comment') ){
-        my $comment_rs = $c->model('MySQL::Comments')->create({
-            'user_id' => $c->user->user_id,
-            'comment' => $comment,
-            'created' => \'NOW()',
-            'object_id' => $c->stash->{'id'},
-            'rev' => 0,
-        });
+            $comment_id = $comment_rs->comment_id;
+        }
+    } else {
+    #save for later
+        if ( my $comment = $c->req->param('comment') ){
+        # save comment in session for later
+            push( @{$c->session->{'comments'}}, {
+                'object_id' => $c->stash->{'object_id'},
+                'comment'   => $comment,
+            });
+        }
     }
 
     my $type = $c->stash->{'location'};
-    my $title;
+    my $object_rs = $c->model('MySQL::' . ucfirst($type) )->find( $c->stash->{'object_id'} );
 
-#needs some validation
-    $title = $c->model('MySQL::' . (ucfirst($type)) )->find( $c->stash->{'id'} )->title;
+    if ( defined($object_rs) && (my $title = $object_rs->title) ){
+    #redirect to the object
+        $title = $c->url_title( $title );
 
-    $c->res->redirect( '/view/' . $type . '/' . $c->stash->{'id'} . '/' . $title );
-    $c->detach();
+        if ( defined($comment_id) ){
+            $title .= "#comment${comment_id}";
+        }
+
+        $c->res->redirect( '/view/' . $type . '/' . $c->stash->{'object_id'} . '/' . $title );
+        $c->detach();
+    } else {
+    #no object, redirect to /
+        $c->res->redirect( '/' );
+        $c->detach();
+    }
 }
 
 =head1 AUTHOR

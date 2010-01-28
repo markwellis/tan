@@ -1,57 +1,45 @@
-<?php
+[%- 
+object_size = c.filesize_h(object.picture.size);
+md = object.id - (object.id % 1000);
 
-$f->stash->object['size'] = $filesize_h(m_stash->object['size']);
+filename = c.config.pic_path _ '/' _ object.picture.filename;
+-%]
 
-$avatar_image = PROFILE_PICTURE_UPLOAD_PATH . "/{$f->stash->object['user_id']}.jpg";
-$avatar_http = AVATAR_HTTP . "/{$f->stash->object['user_id']}.jpg";
-
-$avatar_mtime = (int)null;
-
-if (file_exists($avatar_image)){
-    $avatar_mtime = filemtime($avatar_image); 
-} else {
-    $avatar_http = STATIC_HTTP . '/images/_user.png';
-}
-
-?>
-<div class='news'>
     <h1>
-        <a class="title" href="<? echo IMAGE_HTTP . '/' . basename($f->stash->object['filename']) ?>" >
-            <?php echo $f->stash->object['title'] ?>
+        <a class="big_font" href="[% filename %]">
+            [% object.picture.title | html %][% IF object.nsfw == 'Y' %] - NSFW[% END %]
         </a>
     </h1>
-    <? if ($f->stash->object['NSFW'] === 'Y'){ ?>
-        <strong>NSFW</strong>
-    <? } ?>
+    <br/>
+    
+    <a class="user" href="/user/[% object.user.username %]/1/">
+        <img class="avatar" src="[% avatar_http %]?m=[% avatar_mtime %]" alt="[% object.user_id %]" />
+        [% object.user.username %]
+    </a>
+    <a href="/view/picture/[% object.id %]/[% url_title %]#comments">
+        <img src="[% c.config.static_path %]/images/comment.png" style="height:15px;width:15px" alt="" /> [% object.get_column('comments') %]</a> | [% object.get_column('views') %] views
+     | [% object.picture.x %]x[% object.picture.y %] | [% object_size %]
+
+    [% IF c.user && c.user.user_id == object.user_id %]
+        | <a href="/esubmit/[% object.type %]/<[% object.id %]/">Edit</a>
+    [% END %]
     <br />
-    
-    <img class="avatar" src="<?php echo $avatar_http ?>?m=<?php echo $avatar_mtime ?>" alt="<?php echo $f->stash->object['username'] ?>" />
-    Posted by <a class="user" href="/user/<?php echo $f->stash->object['username'] ?>/1/"><?php echo $f->stash->object['username'] ?></a>
-    
-    <?php if (!$f->stash->upcoming) { ?>
-        promoted <?php echo $f->stash->object['promoted'] ?> ago
-    <?php } else { ?>
-        <?php echo $f->stash->object['date'] ?> ago
-    <?php } ?>
-     <span class="object_type">[<?php echo $f->stash->object['type'] ?>]</span>
-    
-    <br />
-    <a href='/view<?php echo $f->stash->object['type'] ?>/<?php echo $f->stash->object['id'] ?>/<?php echo $f->stash->object['url_title'] ?>/#comments'>
-    <img src="<?php echo STATIC_HTTP ?>/images/comment.png" style="height:15px;width:15px" alt="" /> <?php echo $f->stash->object['comments'] ?></a> | <?php echo $f->stash->object['views'] ?> views
-
-    | <?php echo $f->stash->object['x'] ?>x<?php echo $f->stash->object['y'] ?> | <?php echo $f->stash->object['size'] ?>
-
-    <?php if (($f->user->user_id() == $f->stash->object['user_id']) || $f->user->admin()){ ?>
-        | <a href="/esubmit/<?php echo $f->stash->object['type'] ?>/<?php echo $f->stash->object['id'] ?>/">Edit</a>
-    <?php } ?>
-
-    <?php $f->template('lib/plus_minus_box') ?>
+    [%- IF ( object.promoted ) -%]
+        promoted [% c.date_ago(object.promoted) -%] ago
+    [%- ELSE -%]
+        [% c.date_ago(object.created) -%] ago
+    [%- END -%]
     
     <br />
 
-    <div style="text-align:center;">
-        <a href="/viewpic/<?php echo $f->stash->object['id'] ?>/<?php echo $f->stash->object['url_title'] ?>/" >
-            <img src="/thumb/<?php echo $f->stash->object['id'] ?>/200/" alt="<?php echo $f->stash->object['title'] ?>"/>
-        </a>
-    </div>
-</div>
+        [% object.description | strip_tags | nl2br %]
+    </p>
+
+
+
+    [%- PROCESS 'lib/plus_minus_box.tt' pm_box_style='float:right' -%]
+    <a class="big_center_cell" href="[% filename %]">
+        <img class='big_picture' src="[% c.config.thumb_path _  '/' _ md _ '/' _ object.picture.id %]/600" alt=" "/>
+    </a>
+
+    <div class="hr" /> 

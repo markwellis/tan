@@ -55,38 +55,28 @@ sub recent_comments {
     });
 }
 
-=head2 fetch
+=head2 create_comment
 
-B<@args = ($comment_id)>
+B<@args = ($object_id, $user_id, $comment, $rev = 0)>
 
 =over
 
-fetches a comment from the cache
-
-if comment not in cache, fetch comment, bbcode parse it, cache and return
-
+creates a comment 
 =back
 
 =cut
-sub fetch {
-    my ( $self, $comment_id ) = @_;
+sub create_comment {
+    my ( $self, $object_id, $user_id, $comment, $rev ) = @_;
 
-    my $comment = $cache->get($comment_id);
+    my $comment_rs = $self->create({
+        'user_id' => $user_id,
+        'comment' => $comment,
+        'created' => \'NOW()',
+        'object_id' => $object_id,
+        'rev' => $rev || 0,
+    });
 
-    if ( !defined($comment) ) {
-    # parse comment etc
-        my $comment_rs = $self->find( $comment_id );
-        $comment_rs->result_class('DBIx::Class::ResultClass::HashRefInflator');
-
-        my $comment = $comment_rs->all;
-
-#looking for something?
-        $comment->{'comment'} = 'wibble';
-
-        $cache->set($comment_id, $comment);
-    }
-
-    return $comment;    
+    return $comment_rs;
 }
 
 =head1 AUTHOR

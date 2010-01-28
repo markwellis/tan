@@ -14,9 +14,16 @@ ELSE;
     avatar_http = c.config.static_path _ '/images/_user.png';
 END;
 
-tmplt = 'lib/object/' _ location _ '.tt' %]
+
+SWITCH (object.type);
+    CASE ['link', 'blog'];
+        tmplt = 'lib/object/link.tt' index=1;
+    CASE 'picture';
+        tmplt = 'lib/object/picture.tt';
+END
+%]
 <ul id="inside">
     <li class="news">[%- PROCESS $tmplt -%]</li>
-    <li class="news comment_wrapper">[%- PROCESS 'lib/comments.tt' -%]</li>
+    <li id="comments" class="news comment_wrapper">[%- PROCESS 'lib/comments.tt' -%]</li>
 </ul>
 <br class="clear" />

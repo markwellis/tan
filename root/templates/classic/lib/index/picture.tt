@@ -1,4 +1,5 @@
-[%- object_size = c.filesize_h(object.picture.size)
+[%- 
+object_size = c.filesize_h(object.picture.size);
 md = object.id - (object.id % 1000);
 url_title = object.picture.title | url_title;
 IF object.nsfw == 'Y';
@@ -12,7 +13,7 @@ END;
 
 <div class="container hidden" id="container_[% object.type _ object.id %]">
     <h1>
-        <a class="big_font" href="/view/picture/[% object.id %]/[% url_title %]">
+        <a class="big_font" href="[% c.config.pic_path %]/[% object.picture.filename %]">
             [% object.picture.title | html %][% IF object.nsfw == 'Y' %] - NSFW[% END %]
         </a>
     </h1>
@@ -21,7 +22,7 @@ END;
         pm_box_style='float:right'; 
         PROCESS 'lib/plus_minus_box.tt'
     -%]
-    <a class="big_center_cell" href="[% c.config.pic_path %]/[% object.picture.filename %]">
+    <a class="big_center_cell" href="/view/picture/[% object.id %]/[% url_title %]">
         <img class='big_picture' src="[% c.config.thumb_path _  '/' _ md _ '/' _ object.picture.id %]/300" alt=" "/>
     </a>
 
