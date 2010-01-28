@@ -41,6 +41,13 @@ sub index :Path: Args(1) {
 
     my @split_tags = split(/ /, $tags);
 
+    #remove duplicate tags
+    my %split_tags_clean;
+    foreach my $split_tag ( @split_tags ){
+        $split_tags_clean{$split_tag} = 1;
+    }
+    @split_tags = keys( %split_tags_clean );
+
 # can't use search with many to many realtionship
 # probably a better way to do this
     my @found;
