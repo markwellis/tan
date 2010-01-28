@@ -23,7 +23,6 @@
                 PROCESS 'lib/editor.tt' %]
            
                 <br/><input type='submit' value='Comment' id='submit_comment'/>
-                <input type='button' value='Check Spelling' id='submit_comment_spell'/>
             </fieldset>
         </form>
 [% ELSE %]

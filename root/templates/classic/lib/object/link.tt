@@ -1,15 +1,15 @@
 [%-
 type = object.type;
 
-url = object.$type.url;
-
 title = object.$type.title | url_title;
 
-IF type == 'blog';
+IF index;
     url = "/view/" _ object.type _ '/' _ object.id _ '/' _ title;
+ELSE;
+    url = '/redirect/' _ object.id;
 END;
 
-comment_url = "/view/" _ object.type _ '/' _ object.id _ '/' _ title _ '#comments';
+comment_url = url _ '#comments';
 rel = 'rel="external nofollow"';
 
 IF ( !num );
@@ -69,8 +69,8 @@ Posted by <a class="a user" href="/user/[% object.user.username %]/1/">[% object
         [%- END -%]
     </p>
 
-    [% url = object.$type.url _ '&';
-    matches = url.match('http\:\/\/www\.youtube\.com\/watch\?v=(.*?)\&');
+    [% object_url = object.$type.url _ '&';
+    matches = object_url.match('http\:\/\/www\.youtube\.com\/watch\?v=(.*?)\&');
 
     IF (matches.0);
         youtube_id = matches.0 | html -%]
@@ -79,7 +79,7 @@ Posted by <a class="a user" href="/user/[% object.user.username %]/1/">[% object
             <param name="movie" value="http://www.youtube.com/v/[%- youtube_id -%]" />
         </object>
     [%- ELSE -%]
-        <a style="margin-right:70px;float:right;font-size:1.5em;" rel="external nofollow" href="[%- object.$type.url -%]">View Link</a>
+        <a class="view_link" rel="external nofollow" href="[%- url -%]">View Link</a>
         <br />
         <br />
     [%- END %]
