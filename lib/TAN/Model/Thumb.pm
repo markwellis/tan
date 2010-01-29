@@ -45,7 +45,7 @@ sub resize{
         $new_x = int($new_x);
         $new_y = int($new_y);
 
-        if ( $old_x < $x ){
+        if ( ($old_x < $x) && ($old_y < $x) ){
             #return original image or something
             return `cp '${filename}' '${cacheimg}'`;
         }
