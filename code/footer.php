@@ -10,7 +10,7 @@ if (!isset($type)){
 if ($middle){
     require_once($_SERVER['DOCUMENT_ROOT'] . '/code/page.php');
     $pageobj = new page();
-    $html = $pageobj->createPage("ThisAintNews.com :: $title",$extraScript, $middle,
+    $html = $pageobj->createPage("This Aint News - $title",$extraScript, $middle,
                 "Page processed in $totaltime seconds" , $where, $type, isset($sort_by) ? $sort_by : null, isset($description) ? $description : null);
     echo $html;
 }
