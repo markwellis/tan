@@ -1,8 +1,8 @@
+<div id="comments">
 [% IF object.comments %]
     [% FOREACH comment=comments;
         PROCESS 'lib/comment.tt';
     END %]
-
     <script type='text/javascript'>//<![CDATA[
     var nsfw = [% c.nsfw %];
     //]]>
@@ -10,22 +10,18 @@
 
     [% PROCESS 'lib/js_includes.tt' inline='nsfw-comments' %]
 [% END %]
+</div>
 
-[% IF c.user_exists %]
-    <h2 id="lcomments">Leave your comments</h2>
-        <form style="margin-left:15px;" action="comment" method="post">
-            <fieldset>
-                [% editor = {
-                    'name' => "comment",
-                    'height' => '300px',
-                };
-                        
-                PROCESS 'lib/editor.tt' %]
-           
-                <br/><input type='submit' value='Comment' id='submit_comment'/>
-            </fieldset>
-        </form>
-[% ELSE %]
-<span class="please_login">
-    Please <a href="/login/">login/register</a> to leave comments</span>
-[% END %]
+<h2 id="lcomments">Leave your comments</h2>
+<form id="comment_form" style="margin-left:15px;" action="comment" method="post">
+    <fieldset>
+        [% editor = {
+            'name' => "comment",
+            'height' => '300px',
+        };
+                
+        PROCESS 'lib/editor.tt' %]
+   
+        <br/><input type='submit' value='Comment' id='submit_comment'/>
+    </fieldset>
+</form>

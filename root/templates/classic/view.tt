@@ -4,6 +4,8 @@ css_includes.push({
     'media' => 'screen',
 });
 
+js_includes.push('comment');
+
 avatar_http = c.config.avatar_path _ "/" _ object.user_id _ ".jpg";
 avatar_image = c.path_to('root') _ avatar_http;
 avatar_exists = avatar_image | file_exists;
@@ -24,6 +26,6 @@ END
 %]
 <ul id="inside">
     <li class="news">[%- PROCESS $tmplt -%]</li>
-    <li id="comments" class="news comment_wrapper">[%- PROCESS 'lib/comments.tt' -%]</li>
+    <li class="news comment_wrapper">[%- PROCESS 'lib/comments.tt' -%]</li>
 </ul>
 <br class="clear" />

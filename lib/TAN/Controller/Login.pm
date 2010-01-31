@@ -96,6 +96,9 @@ sub login: Local{
                 'password' => $c->req->param('password'),
             })
         ){
+            #post any saved comments
+            $c->forward('/view/post_saved_comments');
+
             $c->flash->{'message'} = 'You have logged in';
         } else {
             $ref = '/login/';

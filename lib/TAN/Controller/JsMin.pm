@@ -61,7 +61,7 @@ outputs js or 404's
 =back
 
 =cut
-my $alpha_reg = qr/[^a-z0-9\-_]/; 
+my $alpha_reg = qr/[^a-zA-Z0-9\-_]/; 
 my $format_reg = qr/\w+_(.*)_\w+/;
 my $ext_reg = qr/js$/;
 

@@ -4,7 +4,7 @@
     var mibbit_nick = '[% IF c.user; c.user.username; ELSE %]n00b[% END %]';
 //]]>
 </script>
-    [%- PROCESS 'lib/js_includes.tt' -%]
+[% PROCESS 'lib/js_includes.tt' -%]
     <div id="main">
         <div id="top">
             <div style="float:right;margin-top:5px;margin-right:5px;text-align:right;">

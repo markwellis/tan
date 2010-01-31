@@ -3,6 +3,7 @@ package TAN::Controller::View;
 use strict;
 use warnings;
 use parent 'Catalyst::Controller';
+use JSON;
 
 my $int_reg = qr/\D+/;
 
@@ -150,9 +151,10 @@ sub comment: PathPart('comment') Chained('location') Args(0) {
     if ( $c->user_exists ){
     #logged in, post
         if ( my $comment = $c->req->param('comment') ){
-            my $comment_rs = $c->model('MySQL::Comments')->create_comment( $c->stash->{'object_id'}, $c->user->user_id, $comment );
-
-            $comment_id = $comment_rs->comment_id;
+            if ( defined($comment) ){
+                my $comment_rs = $c->model('MySQL::Comments')->create_comment( $c->stash->{'object_id'}, $c->user->user_id, $comment );
+                $comment_id = $comment_rs->comment_id;
+            }
         }
     } else {
     #save for later
@@ -162,26 +164,109 @@ sub comment: PathPart('comment') Chained('location') Args(0) {
                 'object_id' => $c->stash->{'object_id'},
                 'comment'   => $comment,
             });
+            $c->flash->{'message'} = 'Your comment has been saved, please login/register';
+
+            if ( !defined($c->req->param('ajax')) ){
+                $c->res->redirect( '/login/' );
+            } else {
+                $c->res->output("login");
+            }
+            $c->detach();
         }
     }
 
-    my $type = $c->stash->{'location'};
-    my $object_rs = $c->model('MySQL::' . ucfirst($type) )->find( $c->stash->{'object_id'} );
+    if ( !defined($c->req->param('ajax')) ){
+    #not an ajax request
+        my $type = $c->stash->{'location'};
+        my $object_rs = $c->model('MySQL::' . ucfirst($type) )->find( $c->stash->{'object_id'} );
 
-    if ( defined($object_rs) && (my $title = $object_rs->title) ){
-    #redirect to the object
-        $title = $c->url_title( $title );
+        if ( defined($object_rs) && (my $title = $object_rs->title) ){
+        #redirect to the object
+            $title = $c->url_title( $title );
 
-        if ( defined($comment_id) ){
-            $title .= "#comment${comment_id}";
+            if ( defined($comment_id) ){
+                $title .= "#comment${comment_id}";
+            }
+
+            $c->res->redirect( '/view/' . $type . '/' . $c->stash->{'object_id'} . '/' . $title );
+            $c->detach();
+        } else {
+        #no object, redirect to /
+            $c->res->redirect( '/' );
+            $c->detach();
         }
-
-        $c->res->redirect( '/view/' . $type . '/' . $c->stash->{'object_id'} . '/' . $title );
-        $c->detach();
     } else {
-    #no object, redirect to /
-        $c->res->redirect( '/' );
+    #ajax 
+        #return the comment, filtered and all that
+        my $comment_rs = $c->model('MySQL::Comments')->find($comment_id);
+
+        #better add some validation in
+        if ( !defined($comment_rs) ){
+            $c->res->output("error");
+            $c->detach();
+        }
+        
+        #construct object, no point doing extra sql
+        $c->stash->{'comment'} = {
+            'created' => $comment_rs->created,
+            'comment' => $comment_rs->comment,
+            'comment_id' => $comment_rs->comment_id,
+            'user' => {
+                'user_id' => $c->user->user_id,
+                'username' => $c->user->username,
+                'join_date' => $c->user->join_date,
+            }
+        };
+
+        my $object_type = $comment_rs->object->type;
+        my $title = eval('$comment_rs->object->' . $object_type . '->title');
+
+        $c->stash->{'object'} = {
+            'type' => $object_type,
+            'object_id' => $comment_rs->object_id,
+            $object_type => {
+                'title' => $title,
+            }
+        };
+
+#        $c->res->header('Content-Type' => 'application/json');
+#        $c->res->body( 
+#            to_json({
+#                'comment' => $comment,
+#                'object' => $object,
+#            })
+#        );
+        $c->stash->{'template'} = 'lib/comment.tt';
+        $c->forward( $c->view('NoWrapper') );
+        
         $c->detach();
+    }
+}
+
+=head2 post_saved_comments: Private
+
+B<@args = undef>
+
+=over
+
+used by on login to post any saved comments, in this controller because its 
+where the comment stuff is
+
+=back
+
+=cut
+sub post_saved_comments: Private{
+    my ( $self, $c ) = @_;
+
+    if ( $c->user_exists ){
+    #logged in, post
+        foreach my $saved_comment ( @{$c->session->{'comments'}} ){
+            my $comment_rs = $c->model('MySQL::Comments')->create_comment( 
+                $saved_comment->{'object_id'}, 
+                $c->user->user_id, 
+                $saved_comment->{'comment'} 
+            );
+        }
     }
 }
 

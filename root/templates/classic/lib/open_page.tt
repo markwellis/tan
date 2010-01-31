@@ -1,4 +1,10 @@
 [%-
 PROCESS 'lib/xhtml_head.tt';
-PROCESS 'lib/top.tt' -%]
-[% IF message.defined %]<span class='message'>[%- message -%]</span>[% END %]
+PROCESS 'lib/top.tt';
+IF message.defined -%]
+    <script type="text/javascript">
+    //<![CDATA[
+    TAN.log("[%- message -%]");
+    //]]>
+    </script>
+[%- END -%]

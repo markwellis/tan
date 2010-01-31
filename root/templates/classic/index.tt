@@ -8,8 +8,8 @@ IF location == 'picture';
     });
 
     js_includes.push('picture-index');
-    -%]
-    <div class="holder">
+-%]
+<div class="holder">
 [%- END -%]
 
 <ul id="inside">

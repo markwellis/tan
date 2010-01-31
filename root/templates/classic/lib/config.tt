@@ -11,6 +11,7 @@
     js_includes = [
         'http://ajax.googleapis.com/ajax/libs/mootools/1.2.3/mootools-yui-compressed.js', 
         "mootools-1-2-3-1-more",
+        'TAN',
         "menu",
     ];
     

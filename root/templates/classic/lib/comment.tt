@@ -1,5 +1,5 @@
 [%-
-avatar_http = c.config.avatar_path _ "/" _ comment.user_id _ ".jpg";
+avatar_http = c.config.avatar_path _ "/" _ comment.user.user_id _ ".jpg";
 avatar_image = c.path_to('root') _ avatar_http;
 
 avatar_exists = avatar_image | file_exists;
@@ -9,7 +9,6 @@ IF (avatar_exists);
 ELSE;
     avatar_http = c.config.static_path _ '/images/_user.png';
 END -%]
-
 <div style="margin-left:5px;" id="comment[% comment.comment_id %]">
     <img class="avatar user_avatar" src="[% avatar_http %]?m=[% avatar_mtime %]" alt="[% comment.user.username %]" />
     <div style="font-size:.8em;">[% comment.user.username %], on [% comment.created %]
@@ -18,22 +17,20 @@ END -%]
     </div>
     <div class="comment">
         <div id="actual_comment[% comment.comment_id %]">
-            [% comment.comment %]
+            [%- comment.comment -%]
             <br />
         </div>
         <span style="display:block;float:right;">
-            [% type = object.type %]
+            [%- type = object.type -%]
             <a class="quote_link" href="/view/[% object.type %]/[% object.object_id %]/[% object.$type.title | url_title %]#comment[% comment.comment_id %]">Link</a>
         
-            [% IF c.user_exists %]
+            [%- IF c.user_exists -%]
                 | <a href="#" class="quote_link" title="[% comment.user.username %]::[% comment.comment_id %]">Quote</a>
-            [% END %]
+            [%- END -%]
             
-            [% IF (c.user_exists) && ( c.user.user_id == comment.user_id ) %]
+            [%- IF (c.user_exists) && ( c.user.user_id == comment.user_id ) -%]
                 | <a class="comment_edit" href="/edit_comment/[% comment.comment_id %]/">Edit Comment</a>
-            [% END %]
+            [%- END -%]
         </span>
-    
     </div>
 </div>
-<div id="nsfw_blocker_containter"></div>
