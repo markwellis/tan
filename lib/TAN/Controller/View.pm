@@ -3,7 +3,6 @@ package TAN::Controller::View;
 use strict;
 use warnings;
 use parent 'Catalyst::Controller';
-use JSON;
 
 my $int_reg = qr/\D+/;
 

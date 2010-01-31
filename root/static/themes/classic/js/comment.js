@@ -18,12 +18,13 @@ window.addEvent('load', function() {
                             $('comments').adopt(response_comment);
                             tinyMCE.activeEditor.setContent('');
                         }
+                        $('submit_comment').disabled = 0;
                     },
                     'onFailure': function(){
                         TAN.log('fail');
-                        $('submit_comment').disabled = 1;
+                        $('submit_comment').disabled = 0;
                     }
-                }).get({
+                }).post({
                     'comment': input_comment
                 });
 
