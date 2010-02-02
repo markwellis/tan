@@ -199,7 +199,7 @@ if (defined('MAGIC')) {
                 
                 window.addEvent('domready', function() {
                     $$('.mibbit').addEvent('click', function(e) {
-                        popUpWindow("https://widget.mibbit.com/?server=thisaintnews.com%3A%2B6697&chatOutputShowTimes=true"
+                        popUpWindow("https://widget.mibbit.com/?server=irc.thisaintnews.com%3A%2B6697&chatOutputShowTimes=true"
                   	  +"&channel=%23thisaintnews&settings=8a8a5ac18a22e7eecd04026233c3df93&autoConnect=true"
                 	  +"&nick=<?= $user->getUsername() ?>", 720, 400);
                 	e.stop();
