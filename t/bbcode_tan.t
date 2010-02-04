@@ -16,6 +16,12 @@ my @tests = (
         'expected' => '<div class="quote_holder"><span class="quoted_username">username wrote:</span><div class="quote">some quoted <br /> text</div></div> <br />',
     },
     {
+        'name' => '2 quotes',
+        'input' => '[quote user=username1]text1[/quote] <br />[quote user=username2]text2[/quote]',
+        'expected' => '<div class="quote_holder"><span class="quoted_username">username1 wrote:</span><div class="quote">text1</div></div> <br />'
+            .'<div class="quote_holder"><span class="quoted_username">username2 wrote:</span><div class="quote">text2</div></div>',
+    },
+    {
         'name' => 'standard bbcode disabled',
         'input' => '[i]not italic[/i] [b]not bold[/b] [url=http://google.com]not a url[/url] <br />',
         'expected' => '[i]not italic[/i] [b]not bold[/b] [url=http://google.com]not a url[/url] <br />',

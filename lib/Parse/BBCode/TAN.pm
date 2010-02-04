@@ -62,8 +62,19 @@ my $youtube_validate_reg = qr/^[a-zA-Z0-9-_]{11}$/;
 sub new {
     return Parse::BBCode->new({
         'tags' => {
-            'quote' => 'block:<div class="quote_holder"><span class="quoted_username">%{user}attr wrote:</span>'
-                .'<div class="quote">%s</div></div>',
+            'quote' => {
+                'code' => sub {
+                    my ($parser, $attr, $content, $attribute_fallback, $tag_tree) = @_;
+                    # for some reason, $attr isnt set right :/
+                    # but it is now!
+                    $attr = $tag_tree->get_attr->[1]->[1];
+
+                    return '<div class="quote_holder"><span class="quoted_username">' . $attr . ' wrote:</span>'
+                        .'<div class="quote">' . ${$content} . '</div></div>';
+                },
+                'class' => 'block',
+                'parse' => 0,
+            },
             '' => sub { return $_[2]; },
             'youtube' => 'block:%{youtube}s',
         },
@@ -89,7 +100,7 @@ sub new {
                 return '';
             },
         },
-        'tag_validation' => qr/^([^\]]*)?]/, 
+        'tag_validation' => qr/^([^\]]*)?]/,
     });
 }
 

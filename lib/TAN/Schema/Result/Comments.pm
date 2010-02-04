@@ -6,6 +6,8 @@ use warnings;
 use base 'DBIx::Class';
 use Parse::BBCode::TAN;
 
+my $bbcode = new Parse::BBCode::TAN;
+
 __PACKAGE__->load_components('UTF8Columns', "Core");
 __PACKAGE__->table("comments");
 __PACKAGE__->add_columns(
@@ -44,7 +46,6 @@ __PACKAGE__->utf8_columns(qw/comment/);
 sub comment{
     my ( $row ) = @_;
 
-my $bbcode = new Parse::BBCode::TAN;
 #do some caching shit here...
 return $bbcode->render($row->_comment);
 }
