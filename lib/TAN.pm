@@ -235,18 +235,15 @@ B<@args = ($title)>
 
 =over
 
-makes a title url/seo safe
+shortcut to TAN::View::TT::url_title
 
 =back
 
 =cut
-my $url_title = qr/\W+/;
 sub url_title{
     my ($c, $title) = @_;
 
-    $title =~ s/$url_title/-/ig;
-
-    return $title;
+    return TAN::View::TT::url_title($title);
 }
 
 =head2 finalize_error

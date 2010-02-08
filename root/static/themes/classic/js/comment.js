@@ -32,4 +32,31 @@ window.addEvent('load', function() {
             }
 		}
 	});
+
+    $$('.quote_link').addEvent('click', function(e) {
+        e.stop();
+
+        var title = this.title.split('::');
+        var username = title[0]; 
+        var comment_id = title[1]; 
+        var comment_name = 'actual_comment' + comment_id;
+        var comment = $(comment_name);
+        var src;
+
+        comment.getElements('.boob_blocked').each(function(el) {
+            src = el.getProperty('src');
+            el.setProperty('src', el.retrieve('original_image').src);
+        });
+
+        var quote = $(comment_name).get('html');
+
+        comment.getElements('.boob_blocked').each(function(el) {
+            el.setProperty('src', src);
+        });
+
+        comment = '[quote user="' + username + '"]' + quote + '[/quote]' + "\n<br /><br />";
+
+        tinyMCE.activeEditor.execCommand("mceInsertContent", false, comment);
+
+    });
 });

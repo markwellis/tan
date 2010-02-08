@@ -109,11 +109,11 @@ makes a title url/seo safe
 =back
 
 =cut
-my $url_title = qr/\W+/;
+my $url_title = qr/[^a-zA-Z0-9]/;
 sub url_title{
     my $title = shift;
 
-    $title =~ s/$url_title/-/ig;
+    $title =~ s/$url_title/-/g;
 
     return $title;
 }

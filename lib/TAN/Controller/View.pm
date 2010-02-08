@@ -4,6 +4,8 @@ use strict;
 use warnings;
 use parent 'Catalyst::Controller';
 
+use JSON;
+
 my $int_reg = qr/\D+/;
 
 =head1 NAME
@@ -66,6 +68,7 @@ sub location: PathPart('view') Chained('/') CaptureArgs(2){
 
     $c->stash->{'object_id'} = $object_id;
     $c->stash->{'location'} = $location;
+
 }
 
 =head2 index: PathPart('') Chained('location') Args(2) 
@@ -150,10 +153,9 @@ sub comment: PathPart('comment') Chained('location') Args(0) {
     if ( $c->user_exists ){
     #logged in, post
         if ( my $comment = $c->req->param('comment') ){
-            if ( defined($comment) ){
-                my $comment_rs = $c->model('MySQL::Comments')->create_comment( $c->stash->{'object_id'}, $c->user->user_id, $comment );
-                $comment_id = $comment_rs->comment_id;
-            }
+        #comment
+            my $comment_rs = $c->model('MySQL::Comments')->create_comment( $c->stash->{'object_id'}, $c->user->user_id, $comment );
+            $comment_id = $comment_rs->comment_id;
         }
     } else {
     #save for later
@@ -217,24 +219,6 @@ sub comment: PathPart('comment') Chained('location') Args(0) {
             }
         };
 
-        my $object_type = $comment_rs->object->type;
-        my $title = eval('$comment_rs->object->' . $object_type . '->title');
-
-        $c->stash->{'object'} = {
-            'type' => $object_type,
-            'object_id' => $comment_rs->object_id,
-            $object_type => {
-                'title' => $title,
-            }
-        };
-
-#        $c->res->header('Content-Type' => 'application/json');
-#        $c->res->body( 
-#            to_json({
-#                'comment' => $comment,
-#                'object' => $object,
-#            })
-#        );
         $c->stash->{'template'} = 'lib/comment.tt';
         $c->forward( $c->view('NoWrapper') );
         
@@ -242,6 +226,57 @@ sub comment: PathPart('comment') Chained('location') Args(0) {
     }
 }
 
+sub plus: PathPart('_plus') Chained('location') Args(0) {
+    my ( $self, $c ) = @_;
+
+    my $plus = $c->model('MySQL::PlusMinus')->add(
+        'plus', $c->stash->{'object_id'}, $c->user->user_id
+    );
+
+    if ( defined($c->req->param('json')) ){
+    #json
+        $c->res->header('Content-Type' => 'application/json');
+        $c->res->body( to_json({
+            'count' => $plus,
+        }) );
+        $c->detach();
+    } else {
+    #redirect
+    ####
+    ##
+    ## MAKE THIS A FUNCTION (TITLE)
+    ##
+    ####
+        $c->res->redirect( $c->req->referer );
+        $c->detach();
+    }
+}
+
+sub minus: PathPart('_minus') Chained('location') Args(0) {
+    my ( $self, $c ) = @_;
+
+    my $minus = $c->model('MySQL::PlusMinus')->add(
+        'minus', $c->stash->{'object_id'}, $c->user->user_id
+    );
+
+    if ( defined($c->req->param('json')) ){
+    #json
+        $c->res->header('Content-Type' => 'application/json');
+        $c->res->body( to_json({
+            'count' => $minus,
+        }) );
+        $c->detach();
+    } else {
+    #redirect
+    ####
+    ##
+    ## MAKE THIS A FUNCTION (TITLE)
+    ##
+    ####
+        $c->res->redirect( $c->req->referer );
+        $c->detach();
+    }
+}
 =head2 post_saved_comments: Private
 
 B<@args = undef>
@@ -266,6 +301,7 @@ sub post_saved_comments: Private{
                 $saved_comment->{'comment'} 
             );
         }
+        $c->session->{'comments'} = undef;
     }
 }
 

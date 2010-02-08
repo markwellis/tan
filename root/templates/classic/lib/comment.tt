@@ -20,17 +20,19 @@ END -%]
             [%- comment.comment -%]
             <br />
         </div>
-        <span style="display:block;float:right;">
-            [%- type = object.type -%]
-            <a class="quote_link" href="/view/[% object.type %]/[% object.object_id %]/[% object.$type.title | url_title %]#comment[% comment.comment_id %]">Link</a>
-        
-            [%- IF c.user_exists -%]
-                | <a href="#" class="quote_link" title="[% comment.user.username %]::[% comment.comment_id %]">Quote</a>
-            [%- END -%]
+        [% IF object.defined %]
+            <span style="display:block;float:right;">
+                [%- type = object.type -%]
+                <a class="quote_link" href="/view/[% object.type %]/[% object.object_id %]/[% object.$type.title | url_title %]#comment[% comment.comment_id %]">Link</a>
             
-            [%- IF (c.user_exists) && ( c.user.user_id == comment.user_id ) -%]
-                | <a class="comment_edit" href="/edit_comment/[% comment.comment_id %]/">Edit Comment</a>
-            [%- END -%]
-        </span>
+                [%- IF c.user_exists -%]
+                    | <a href="#" class="quote_link" title="[% comment.user.username %]::[% comment.comment_id %]">Quote</a>
+                [%- END -%]
+                
+                [%- IF (c.user_exists) && ( c.user.user_id == comment.user_id ) -%]
+                    | <a class="comment_edit" href="/edit_comment/[% comment.comment_id %]/">Edit Comment</a>
+                [%- END -%]
+            </span>
+        [% END %]
     </div>
 </div>
