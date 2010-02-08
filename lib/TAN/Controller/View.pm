@@ -68,7 +68,6 @@ sub location: PathPart('view') Chained('/') CaptureArgs(2){
 
     $c->stash->{'object_id'} = $object_id;
     $c->stash->{'location'} = $location;
-
 }
 
 =head2 index: PathPart('') Chained('location') Args(2) 
@@ -90,8 +89,14 @@ sub index: PathPart('') Chained('location') Args(1) {
 # url matches (seo n that)
 # display article
 # load comments etc
-    
-    my $object = $c->model('MySQL::Object')->find({
+
+    my $url_title = $c->forward('object_title');
+    if ( $c->req->uri->path ne $url_title ){
+        $c->res->redirect( $url_title, 301 );
+        $c->detach();
+    }
+
+    $c->stash->{'object'} = $c->model('MySQL::Object')->find({
         'object_id' => $c->stash->{'object_id'},
     },{
         '+select' => [
@@ -107,18 +112,10 @@ sub index: PathPart('') Chained('location') Args(1) {
         'order_by' => '',
     });
 
-
-    #horrible use of eval here
-    my $proper_title = eval('$object->' . $c->stash->{'location'} . '->title');
-    $c->stash->{'page_title'} = $proper_title;
-    my $proper_url = '/view/' . $c->stash->{'location'} . '/' . $object->id . '/' . $c->url_title($proper_title);
-
-    if ( $c->req->uri->path ne $proper_url ){
-        $c->res->redirect( $proper_url, 301 );
+    if ( !defined($c->stash->{'object'}) ){
+        $c->foward('/default');
         $c->detach();
     }
-
-    $c->stash->{'object'} = $object;
 
     @{$c->stash->{'comments'}} = $c->model('MySQL::Comments')->search({
         'object_id' => $c->stash->{'object_id'},
@@ -128,11 +125,6 @@ sub index: PathPart('') Chained('location') Args(1) {
     })->all;
 
     $c->stash->{'template'} = 'view.tt';
-    
-    if ( !defined($c->stash->{'template'}) ){
-        $c->foward('/default');
-        $c->detach();
-    }
 }
 
 =head2 comment: PathPart('comment') Chained('location') Args(0)
@@ -183,13 +175,7 @@ sub comment: PathPart('comment') Chained('location') Args(0) {
 
         if ( defined($object_rs) && (my $title = $object_rs->title) ){
         #redirect to the object
-            $title = $c->url_title( $title );
-
-            if ( defined($comment_id) ){
-                $title .= "#comment${comment_id}";
-            }
-
-            $c->res->redirect( '/view/' . $type . '/' . $c->stash->{'object_id'} . '/' . $title );
+            $c->res->redirect( $c->forward('object_title') );
             $c->detach();
         } else {
         #no object, redirect to /
@@ -226,56 +212,88 @@ sub comment: PathPart('comment') Chained('location') Args(0) {
     }
 }
 
+=head2 plus: PathPart('_plus') Chained('location') Args(0)
+
+B<@args = undef>
+
+=over
+
+forwards to add_plus_minus('plus')
+
+=back
+
+=cut
 sub plus: PathPart('_plus') Chained('location') Args(0) {
     my ( $self, $c ) = @_;
 
-    my $plus = $c->model('MySQL::PlusMinus')->add(
-        'plus', $c->stash->{'object_id'}, $c->user->user_id
-    );
-
-    if ( defined($c->req->param('json')) ){
-    #json
-        $c->res->header('Content-Type' => 'application/json');
-        $c->res->body( to_json({
-            'count' => $plus,
-        }) );
-        $c->detach();
-    } else {
-    #redirect
-    ####
-    ##
-    ## MAKE THIS A FUNCTION (TITLE)
-    ##
-    ####
-        $c->res->redirect( $c->req->referer );
-        $c->detach();
-    }
+    $c->forward('add_plus_minus', ['plus']);
 }
 
+=head2 minus: PathPart('_minus') Chained('location') Args(0)
+
+B<@args = undef>
+
+=over
+
+forwards to add_plus_minus('minus')
+
+=back
+
+=cut
 sub minus: PathPart('_minus') Chained('location') Args(0) {
     my ( $self, $c ) = @_;
 
-    my $minus = $c->model('MySQL::PlusMinus')->add(
-        'minus', $c->stash->{'object_id'}, $c->user->user_id
-    );
+    $c->forward('add_plus_minus', ['minus']);
+}
 
-    if ( defined($c->req->param('json')) ){
-    #json
-        $c->res->header('Content-Type' => 'application/json');
-        $c->res->body( to_json({
-            'count' => $minus,
-        }) );
-        $c->detach();
+=head2 add_plus_minus: Private
+
+B<@args = ($type)>
+
+=over
+
+adds/removes a plus/minus
+
+set ?json=1 for json
+
+else redirects to article
+
+=back
+
+=cut
+sub add_plus_minus: Private{
+    my ( $self, $c, $type ) = @_;
+
+    if ( $c->user_exists ){
+    # valid user, do work
+        my $count = $c->model('MySQL::PlusMinus')->add(
+            $type, $c->stash->{'object_id'}, $c->user->user_id
+        );
+
+        if ( defined($c->req->param('json')) ){
+        #json
+            $c->res->header('Content-Type' => 'application/json');
+            $c->res->body( to_json({
+                'count' => $count,
+            }) );
+        } else {
+        #redirect
+            $c->res->redirect( $c->forward('object_title') );
+        }
     } else {
-    #redirect
-    ####
-    ##
-    ## MAKE THIS A FUNCTION (TITLE)
-    ##
-    ####
-        $c->res->redirect( $c->req->referer );
-        $c->detach();
+    #prompt for login
+        if ( defined($c->req->param('json')) ){
+        #json
+            $c->res->header('Content-Type' => 'application/json');
+            $c->res->body( to_json({
+                'login' => 1,
+            }) );
+        } else {
+        #redirect
+            $c->res->redirect( '/login/' );
+        }
     }
+    $c->detach();
 }
 =head2 post_saved_comments: Private
 
@@ -305,6 +323,16 @@ sub post_saved_comments: Private{
     }
 }
 
+sub object_title: Private{
+    my ( $self, $c ) = @_;
+    my $object_meta_rs = $c->model('MySQL::' . ucfirst( $c->stash->{'location'} ))->find( $c->stash->{'object_id'} );
+    
+    if ( !defined($object_meta_rs) ){
+        return;
+    }
+    
+    return "/view/" . $c->stash->{'location'} . '/' . $c->stash->{'object_id'} .'/' . $c->url_title( $object_meta_rs->title );
+}
 =head1 AUTHOR
 
 A clever guy

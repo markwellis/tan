@@ -13,7 +13,7 @@ window.addEvent('load', function() {
                         if ( responseHTML === 'error' ){
                             TAN.log('fail');
                         } else if ( responseHTML === 'login' ){
-                            window.location = '/login/';
+                            TAN.login();
                         } else {
                             $('comments').adopt(response_comment);
                             tinyMCE.activeEditor.setContent('');

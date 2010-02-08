@@ -12,10 +12,10 @@ END
 <div class="plusminus [% pm_box_class.defined ? pm_box_class : '' %]" [%- pm_box_style.defined ? 'style="' _ pm_box_style _ '"' : '' -%] >
     <div class="plus" id="[%- 'p' _ object.type _ '_' _ object.id -%]">
         <span class="plusminus_holder">[%- object.get_column('plus') -%]</span>
-        <a class="addPlus [%- pclass.defined ? pclass : '' -%]" href="_plus">IsNews</a>
+        <a class="addPlus [%- pclass.defined ? pclass : '' -%]" href="/view/[% object.type %]/[% object.id %]/_plus">IsNews</a>
     </div>
     <div class="minus" id="[%- 'm' _ object.type _ '_' _ object.id -%]" >
         <span class="plusminus_holder">[%- object.get_column('minus') -%]</span>
-        <a class="addMinus [%- mclass.defined ? mclass : '' -%]" href="_minus">AintNews</a>
+        <a class="addMinus [%- mclass.defined ? mclass : '' -%]" href="/view/[% object.type %]/[% object.id %]/_minus">AintNews</a>
     </div>
 </div>
