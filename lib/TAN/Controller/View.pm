@@ -127,7 +127,7 @@ sub index: PathPart('') Chained('location') Args(1) {
     $c->stash->{'template'} = 'view.tt';
 }
 
-=head2 comment: PathPart('comment') Chained('location') Args(0)
+=head2 comment: PathPart('_comment') Chained('location') Args(0)
 
 B<@args = undef>
 
@@ -138,7 +138,7 @@ comments on an article
 =back
 
 =cut
-sub comment: PathPart('comment') Chained('location') Args(0) {
+sub comment: PathPart('_comment') Chained('location') Args(0) {
     my ( $self, $c ) = @_;
 
     my $comment_id;

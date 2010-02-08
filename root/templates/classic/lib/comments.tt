@@ -13,7 +13,7 @@
 </div>
 
 <h2 id="lcomments">Leave your comments</h2>
-<form id="comment_form" style="margin-left:15px;" action="comment" method="post">
+<form id="comment_form" style="margin-left:15px;" action="_comment" method="post">
     <fieldset>
         [% editor = {
             'name' => "comment",
