@@ -6,7 +6,7 @@
 
     <div id="bottom">
         Page processed in [%- runtime.substr(0, 6) -%] seconds, with [% sql_queries %] [% (sql_queries == 1) ? 'query' : 'queries' -%]<br />
-        All User-generated content is licensed under a <a href="http://creativecommons.org/" rel='external nofollow'>Creative Commons Public Domain license</a><br />
+        All User-generated content is licensed under a <a href="http://creativecommons.org/" rel="external nofollow">Creative Commons Public Domain license</a><br />
         Version [%- c.VERSION -%]
         [%- PROCESS 'lib/ads/bottom.tt' -%]
     </div>

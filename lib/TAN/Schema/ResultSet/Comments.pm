@@ -62,6 +62,7 @@ B<@args = ($object_id, $user_id, $comment, $rev = 0)>
 =over
 
 creates a comment 
+
 =back
 
 =cut

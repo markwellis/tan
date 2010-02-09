@@ -3,7 +3,7 @@
     [% FOREACH comment=comments;
         PROCESS 'lib/comment.tt';
     END %]
-    <script type='text/javascript'>//<![CDATA[
+    <script type="text/javascript">//<![CDATA[
     var nsfw = [% c.nsfw %];
     //]]>
     </script>
@@ -22,6 +22,6 @@
                 
         PROCESS 'lib/editor.tt' %]
    
-        <br/><input type='submit' value='Comment' id='submit_comment'/>
+        <br/><input type="submit" value="Comment" id="submit_comment" />
     </fieldset>
 </form>

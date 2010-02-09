@@ -25,7 +25,7 @@ key = key.replace('\d', '') -%]
     <div id="navmenu_contents">
     [%- FOREACH value = ['all', 'link', 'picture', 'blog'];
         current_menu = current_option.$value -%]
-        <div id='[% value %]_menu'>
+        <div id="[% value %]_menu">
             <ul>
                 [%- IF (value != 'all') %]
                     <li class="navmenu_option [%- IF (current_menu.2); current_menu.2; END -%]"><a href="/submit/[%- value -%]/">Submit</a></li>
@@ -45,7 +45,7 @@ key = key.replace('\d', '') -%]
     </div>
 </div>
 [%- IF location.defined -%]
-    <script type='text/javascript'>
+    <script type="text/javascript">
     //<![CDATA[
         $('[% location %]_menu').style.display='block';
         last_menu = '[% location %]_menu';

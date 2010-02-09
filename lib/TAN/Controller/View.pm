@@ -331,6 +331,7 @@ sub object_title: Private{
         return;
     }
     
+    $c->stash->{'page_title'} = $object_meta_rs->title;
     return "/view/" . $c->stash->{'location'} . '/' . $c->stash->{'object_id'} .'/' . $c->url_title( $object_meta_rs->title );
 }
 =head1 AUTHOR
