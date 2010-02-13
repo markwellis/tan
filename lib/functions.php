@@ -61,4 +61,15 @@ function check_referer(){
 function url_title($text){
     return preg_replace("/[^a-zA-Z0-9_]/", "", str_replace(' ','_', html_entity_decode(trim($text),ENT_QUOTES,'UTF-8')));
 }
+
+function print_json($data){
+    header("Cache-Control: no-cache, must-revalidate");
+    header("Expires: Sat, 26 Jul 1997 05:00:00 GMT");
+    header ("Pragma: no-cache");
+    header('Content-type: application/json');
+
+    print json_encode($data);
+    exit();
+}
+
 ?>

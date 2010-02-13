@@ -77,7 +77,9 @@ if (defined('MAGIC')) {
         }
 
         public function admin(){
-            return ($this->user_id() === 1 && $this->username() === 'mrbig4545');
+            if ( ($this->user_id() === 1) && ($this->username() === 'mrbig4545') ){
+                return 1;
+            }
         }
 
         public function total_comments($user_id) {

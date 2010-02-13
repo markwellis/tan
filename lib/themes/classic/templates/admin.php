@@ -2,24 +2,19 @@
     <fieldset>
         <ul>
             <li>
-                <label for='username' class="login_label">Username</label>
-                <input type='text' name='username' id='username' class='text_input' style="width:50%;margin-left:10px;" />
-                <input type='submit' id='lookup_user' value='Find'/>
-            </li>
-            <li>
                 <label for='link' class="login_label">Link</label>
                 <input type='text' name='link_id' id='link_id' class='text_input' style="width:50%;margin-left:10px;" />
-                <input type='submit' id='lookup_link' value='Find'/>
+                <input type='submit' id='lookup_link' class="lookup" value='Find'/>
             </li>
             <li>
                 <label for='blog' class="login_label">Blog</label>
                 <input type='text' name='blog_id' id='blog_id' class='text_input' style="width:50%;margin-left:10px;" />
-                <input type='submit' id='lookup_blog' value='Find'/>
+                <input type='submit' id='lookup_blog' class="lookup" value='Find'/>
             </li>
             <li>
                 <label for='pic' class="login_label">Picture</label>
-                <input type='text' name='pic_id' id='pic_id' class='text_input' style="width:50%;margin-left:10px;" />
-                <input type='submit' id='lookup_pic' value='Find'/>
+                <input type='text' name='picture_id' id='picture_id' class='text_input' style="width:50%;margin-left:10px;" />
+                <input type='submit' id='lookup_picture' class="lookup" value='Find'/>
             </li>
         </ul>   
         <br />

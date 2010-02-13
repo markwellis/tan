@@ -1,4 +1,5 @@
 <?php
+
 if (defined('MAGIC')) {
     require_once("validator.php");
     require_once("sql.php");

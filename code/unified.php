@@ -289,7 +289,6 @@ if (defined('MAGIC')) {
 	            $query = "INSERT INTO $table $columns VALUES {$values};";
 	            $retval = $sql->query($query, 'none');
 	            $retval = $sql->query(null, 'id');
-	            $this->add_to_log($username, $userid, $retval, 'submitted');
 	        } else {
 	            $retval = -1;
 	        }
@@ -348,36 +347,8 @@ if (defined('MAGIC')) {
 	            VALUES ('$username', $userid, NOW(), '$comment', $picture_id, $blog_id, $link_id);";
 	        $retval = $sql->query($query, 'none');
 	        $retval = $sql->query(null, 'id');
-	        if ($retval>0) {
-	        	$this->add_to_log($username, $userid, $id, 'comment', $retval);
-	        }
 	        return $retval;
 	    }
-	
-        function add_to_log($username, $userid, $id, $type, $comment_id = null) {
-			$sql = &$this->sql;
-			$link_id = 0;
-			$blog_id = 0;
-			$picture_id = 0;
-
-			switch ($this->kind_of_object){
-	            case 'link':
-	                $link_id = $id;
-	                break;
-	            case 'blog':
-	                $blog_id = $id;
-	                break;
-	            case 'picture':
-	                $picture_id = $id;
-	                break;
-	        }
-            if ($comment_id==null){
-                $comment_id=0;
-            }
-			$query = "INSERT INTO log (username, user_id, date, link_id, blog_id, picture_id, type, comment_id) VALUES ('$username', $userid, NOW(), $link_id, $blog_id, $picture_id, '$type', $comment_id)";
-			$sql->query($query, 'none');
-			return null;
-		}
 	
 	    function addPlusMinus($id, $plus){
 	        $sql = &$this->sql;
@@ -419,10 +390,8 @@ if (defined('MAGIC')) {
 	                if ($table === 'plus'){
 	                $count = $this->getPlusMinus($id, 1);
 	                    if ( ($count['count'] == $this->promoted_threashold) && (!$count['promoted']) ){
-	                        $sql1 = &$this->sql;
 	                        $query = "UPDATE $dtable SET promoted=NOW() WHERE $conditions;";
-	                        $sql1->query($query, 'none');
-	                        $this->add_to_log($username, $userid, $id, 'promoted');
+	                        $sql->query($query, 'none');
 	                    }
 	                }
 	                return $res;
