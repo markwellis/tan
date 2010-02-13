@@ -80,6 +80,16 @@ if (defined('MAGIC')) {
             if ( ($this->user_id() === 1) && ($this->username() === 'mrbig4545') ){
                 return 1;
             }
+
+            if ( ($this->user_id() === 17) && ($this->username() === 'Scobiewan') ){
+                return 1;
+            }
+
+            if ( ($this->user_id() === 144) && ($this->username() === 'AntiPsi') ){
+                return 1;
+            }
+
+            return 0;
         }
 
         public function total_comments($user_id) {
