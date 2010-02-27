@@ -1,0 +1,32 @@
+[%-
+IF ad == 'bottom';
+# bottom
+    height = 90;
+    width = 728;
+    slid = 102831;
+ELSIF ad == 'left';
+# left
+    height = 600;
+    width = 160;
+    slid = 102791;
+ELSIF ad == 'right';
+# right
+    height = 600;
+    width = 120;
+    slid = 101951;
+END;
+-%]
+
+<div id="[% ad %]_ad">
+    <script type="text/javascript">//<![CDATA[
+        window.addEvent("load", function() {
+            var timestamp = new Date().getTime();
+            var html = '<iframe width="[[% width %]]" height="[% height %]" name="AdSpace[% slid %]" '
+                + 'src="http://hosting.adjug.com/AdJugSearch/PageBuilder.aspx?ivi=V3.0+IF&aid=1572'
+                + '&slid=[% slid %]&height=[% height %]&width=[% width %]&CacheBuster=' + timestamp + '&HTMLOP=True" '
+                + 'frameborder="0" marginwidth="0" marginheight="0" vspace="0" hspace="0" '
+                +'allowtransparency="true" scrolling="no"></iframe>';
+            $('bottom_ad').set('html', html);
+         });
+    //]]></script>
+</div>

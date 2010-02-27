@@ -45,4 +45,4 @@
             </div>
         </div>
         <div id="middle">
-        [%- PROCESS 'lib/ads/right.tt' -%]
+        [%- PROCESS 'lib/ad.tt' ad = 'top' -%]
