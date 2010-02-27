@@ -13,7 +13,8 @@ window.addEvent('load', function() {
                         if ( responseHTML === 'error' ){
                             TAN.log('fail');
                         } else if ( responseHTML === 'login' ){
-                            TAN.login();
+                            TAN.login("Your comment has been saved. "
+                                + "You need to login or register before it's posted");
                         } else {
                             $('comments').adopt(response_comment);
                             tinyMCE.activeEditor.setContent('');

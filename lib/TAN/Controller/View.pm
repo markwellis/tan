@@ -112,6 +112,20 @@ sub index: PathPart('') Chained('location') Args(1) {
         'order_by' => '',
     });
 
+    if ( $c->user_exists ){
+        my $meplus_minus_rs = $c->stash->{'object'}->plus_minus->search({
+            'user_id' => $c->user->user_id,
+        });
+
+        foreach my $meplus_minus ( $meplus_minus_rs->all ){
+            if ( $meplus_minus->type eq 'plus' ){
+                $c->stash->{'object'}->{'meplus'} = 1;
+            } elsif ( $meplus_minus->type eq 'minus' ){
+                $c->stash->{'object'}->{'meminus'} = 1;  
+            }
+        }
+    }
+
     if ( !defined($c->stash->{'object'}) ){
         $c->foward('/default');
         $c->detach();
@@ -157,9 +171,9 @@ sub comment: PathPart('_comment') Chained('location') Args(0) {
                 'object_id' => $c->stash->{'object_id'},
                 'comment'   => $comment,
             });
-            $c->flash->{'message'} = 'Your comment has been saved, please login/register';
 
             if ( !defined($c->req->param('ajax')) ){
+                $c->flash->{'message'} = 'Your comment has been saved, please login/register';
                 $c->res->redirect( '/login/' );
             } else {
                 $c->res->output("login");
