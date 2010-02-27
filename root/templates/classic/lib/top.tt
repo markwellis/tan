@@ -10,12 +10,12 @@
             <div style="float:right;margin-top:5px;margin-right:5px;text-align:right;">
                 <a href="/chat/" class="top_link mibbit">Chat</a>
 
-                [%- IF c.user -%]
+                [%- IF c.user_exists -%]
                      | <a href="/login/logout/" class="top_link">Logout</a>
                 [%- END -%]
                 <br/>
                 
-                [%- IF c.user -%]
+                [%- IF c.user_exists -%]
                     <a href="/user/[% c.user.username %]/1/" class="top_link">My Comments</a> | <a href="/avatar/" class="top_link">Avatar</a> | 
                 [%- ELSE -%]
                     <a href="/login/" class="top_link">Login/Register</a> | 
@@ -45,4 +45,4 @@
             </div>
         </div>
         <div id="middle">
-        [%- PROCESS 'lib/ad.tt' ad = 'top' -%]
+        [%- PROCESS 'lib/ad.tt' ad = 'right' -%]
