@@ -81,6 +81,42 @@ sub add{
     return $count;
 }
 
+=head2 meplus_minus
+
+B<@args = $user_id, $id>
+
+=over
+
+gets meplus or meminus for self, id or array of ids
+
+=back
+
+=cut
+sub meplus_minus{
+    my ( $self, $user_id, $id ) = @_;
+
+    return undef if ( !defined($user_id) );
+
+    my $search_params = {
+        'user_id' => $user_id,
+    };
+
+    # if id is defined
+    if ( defined($id) ) {
+        $search_params->{'object_id'} = $id;
+    }
+    my $meplus_minus_rs = $self->search( $search_params );
+
+    my $ret_meplus_minus = {};
+
+    foreach my $meplus_minus ( $meplus_minus_rs->all ){
+
+        $ret_meplus_minus->{ $meplus_minus->object_id }->{ $meplus_minus->type } = 1;
+    }
+    return $ret_meplus_minus;
+}
+
+
 =head1 AUTHOR
 
 A clever guy

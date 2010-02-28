@@ -113,16 +113,14 @@ sub index: PathPart('') Chained('location') Args(1) {
     });
 
     if ( $c->user_exists ){
-        my $meplus_minus_rs = $c->stash->{'object'}->plus_minus->search({
-            'user_id' => $c->user->user_id,
-        });
+        #get me plus info
+        my $meplus_minus = $c->stash->{'object'}->plus_minus->meplus_minus( $c->user->user_id );
 
-        foreach my $meplus_minus ( $meplus_minus_rs->all ){
-            if ( $meplus_minus->type eq 'plus' ){
-                $c->stash->{'object'}->{'meplus'} = 1;
-            } elsif ( $meplus_minus->type eq 'minus' ){
-                $c->stash->{'object'}->{'meminus'} = 1;  
-            }
+        if ( defined($meplus_minus->{ $c->stash->{'object'}->object_id }->{'plus'}) ){
+            $c->stash->{'object'}->{'meplus'} = 1;
+        }
+        if ( defined($meplus_minus->{ $c->stash->{'object'}->object_id }->{'minus'}) ){
+            $c->stash->{'object'}->{'meminus'} = 1;  
         }
     }
 
@@ -160,7 +158,11 @@ sub comment: PathPart('_comment') Chained('location') Args(0) {
     #logged in, post
         if ( my $comment = $c->req->param('comment') ){
         #comment
-            my $comment_rs = $c->model('MySQL::Comments')->create_comment( $c->stash->{'object_id'}, $c->user->user_id, $comment );
+            my $comment_rs = $c->model('MySQL::Comments')->create_comment( 
+                $c->stash->{'object_id'}, 
+                $c->user->user_id, 
+                $comment
+            );
             $comment_id = $comment_rs->comment_id;
         }
     } else {
@@ -339,14 +341,17 @@ sub post_saved_comments: Private{
 
 sub object_title: Private{
     my ( $self, $c ) = @_;
-    my $object_meta_rs = $c->model('MySQL::' . ucfirst( $c->stash->{'location'} ))->find( $c->stash->{'object_id'} );
+    my $object_meta_rs = $c->model('MySQL::' 
+        . ucfirst( $c->stash->{'location'} ))->find( $c->stash->{'object_id'} );
     
     if ( !defined($object_meta_rs) ){
         return;
     }
     
     $c->stash->{'page_title'} = $object_meta_rs->title;
-    return "/view/" . $c->stash->{'location'} . '/' . $c->stash->{'object_id'} .'/' . $c->url_title( $object_meta_rs->title );
+    return "/view/" . $c->stash->{'location'} . '/' 
+        . $c->stash->{'object_id'} .'/' 
+        . $c->url_title( $object_meta_rs->title );
 }
 =head1 AUTHOR
 

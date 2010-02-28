@@ -7,6 +7,7 @@
     [%- PROCESS 'lib/ad.tt' ad = 'bottom' -%]
 </div>
 <div id="footer">
+    [%- runtime.substr(0, 4) -%] seconds, [% sql_queries %] [% (sql_queries == 1) ? 'query' : 'queries' -%]
     <a href="#top" id="back_to_top">Top</a>
 </div>
 [%- PROCESS 'lib/ga.tt' -%]

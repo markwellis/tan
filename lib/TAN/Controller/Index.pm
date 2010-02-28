@@ -85,6 +85,20 @@ sub index :Path :Args(3) {
     my $index_objects = $c->model('MySQL::Object')->index($location, $page, $upcoming, $order);
     my @index = $index_objects->all;
 
+    if ( $c->user_exists ){
+        my @ids = map($_->object_id, @index);
+        my $meplus_minus = $c->model('MySQL::PlusMinus')->meplus_minus($c->user->user_id, \@ids);
+
+        foreach my $object ( @index ){
+            if ( defined($meplus_minus->{ $object->object_id }->{'plus'}) ){
+                $object->{'meplus'} = 1;
+            } 
+            if ( defined($meplus_minus->{ $object->object_id }->{'minus'}) ){
+                $object->{'meminus'} = 1;  
+            }
+        }
+    }
+
     $c->stash->{'index_objects'} = {
         'objects' => \@index,
         'pager' => $index_objects->pager,
@@ -96,7 +110,6 @@ sub index :Path :Args(3) {
     }
     $c->stash->{'template'} = 'index.tt';
 }
-
 
 =head1 AUTHOR
 
