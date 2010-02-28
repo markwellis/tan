@@ -20,9 +20,13 @@
             'file' => "$theme_settings.css_path/default.css",
             'media' => 'screen',
         },
+        {
+            'file' => "$theme_settings.css_path/shared.css",
+            'media' => 'screen',
+        },
     ];
     
-#    page_title = 'ThisAintNews :: Social News For Internet Pirates';
+    page_title ='Social News For Internet Pirates - ' _ page_title;
     page_meta_description = 'Social News For Internet Pirates';
     page_keywords = 'strange pirate news community comments english social fun jokes videos pictures share sharing lol lolz funny humour humor'
 -%]

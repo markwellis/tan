@@ -5,11 +5,11 @@ md = object.id - (object.id % 1000);
 filename = c.config.pic_path _ '/' _ object.picture.filename;
 -%]
 
-    <h1>
+    <h2>
         <a class="big_font" href="[% filename %]">
             [% object.picture.title | html %][% IF object.nsfw == 'Y' %] - NSFW[% END %]
         </a>
-    </h1>
+    </h2>
     <br/>
     
     <a class="user" href="/user/[% object.user.username %]/1/">

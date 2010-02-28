@@ -132,6 +132,10 @@ sub index: PathPart('') Chained('location') Args(1) {
     @{$c->stash->{'comments'}} = $c->model('MySQL::Comments')->search({
         'object_id' => $c->stash->{'object_id'},
     },{
+        '+select' => [
+            { 'unix_timestamp' => 'me.created' },
+        ],
+        '+as' => ['created'],
         'prefetch' => ['user'],
         'order_by' => 'created',
     })->all;

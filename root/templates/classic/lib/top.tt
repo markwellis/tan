@@ -38,10 +38,9 @@
                     </form>
                 </div>
             </div>
-            <div class="logoimg">
-                <a href="/" class="logo">
-                </a>
-            </div>
+            <h1 class="logoimg">
+                <a title="This Aint News" href="/" class="logo">This Aint News</a>
+            </h1>
             </div>
         </div>
         <div id="middle">

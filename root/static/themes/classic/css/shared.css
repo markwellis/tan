@@ -1,0 +1,39 @@
+.avatar{
+    height:32px;
+    width:32px;
+    float:left;
+    margin-right:5px;
+    margin-top:5px;
+    padding:0px;
+}
+
+.user{
+	color:#595959;
+	font-size:1.3em;
+	font-weight:bold;
+}
+
+.user:hover {
+	text-decoration:underline;
+}
+
+.clear{
+    clear: both;
+    height:0px;
+}
+
+/* footer bar */
+
+#footer{
+    position:fixed;
+    bottom:0px;
+    left:0px;
+    right:0px;
+    height:20px;
+    padding:2px;
+    background-color:#333;
+}
+
+#back_to_top{
+    float:right;
+}

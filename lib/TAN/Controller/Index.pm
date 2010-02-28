@@ -108,6 +108,7 @@ sub index :Path :Args(3) {
         $c->forward('/default');
         $c->detach();
     }
+    
     $c->stash->{'template'} = 'index.tt';
 }
 

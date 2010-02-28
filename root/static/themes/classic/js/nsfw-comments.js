@@ -1,7 +1,7 @@
 new Asset.image('/static/images/mouseover.png?r=8');
 
 if (nsfw === 0){
-    $$('#blog_wrapper img', '.comment img').filter(function(el, index){
+    $$('#blog_wrapper img', '.comment_inner img').filter(function(el, index){
         return (el.getProperty('src').indexOf('/static/fckeditor/editor/images/smiley/') < 0);
     }).each(function(el) {
         el.addClass('boob_blocked');
@@ -39,8 +39,8 @@ if (nsfw === 0){
     });
 } else {
     window.addEvent('load', function() {
-        $$('#blog_wrapper img', '.comment img').filter(function(el, index){
-            return ((el.getProperty('src').indexOf('/static/fckeditor/editor/images/smiley/') < 0) && (el.width > 600));
+        $$('#blog_wrapper img', '.comment_inner img').filter(function(el, index){
+            return (el.getProperty('src').indexOf('/static/fckeditor/editor/images/smiley/') < 0);
         }).each(function(el) {
             resize_image(el, el);
         });

@@ -25,8 +25,6 @@ img {
 }
 
 #top .logoimg{
-    display:block;
-    float:left;
     height:75px;
     width:400px;
     position:absolute;
@@ -35,11 +33,11 @@ img {
     background-image: url('/static/images/logo.png');
     background-repeat: no-repeat;
     text-indent:-1000px;
+    margin:0px;
 }
 
 #top .logo{
 	display:block;
-	font-size:4em;
 	height:100%;
 	width:100%;
 }
@@ -170,16 +168,7 @@ img {
 	text-decoration:underline;
 }
 
-.user{
-	color:#595959;
-	font-size:13px;
-	text-decoration:none;
-	font-weight:bold;
-}
 
-.user:hover {
-	text-decoration:underline;
-}
 
 .news .newsImg{
 	height:100px;
@@ -191,7 +180,7 @@ img {
     background-position: center center;
 }
 
-.news h1{
+.news h2{
     font-size:25px;
     margin:0px;
     font-weight: normal;
@@ -271,15 +260,6 @@ img {
 
 .mselected{
     background-color:#000000;   
-}
-
-.avatar{
-	height:30px;
-	width:30px;
-	padding:0px;
-	float:left;
-    margin-right:5px;
-    margin-top:5px;
 }
 
 #thumbs{
@@ -373,18 +353,7 @@ a{
     border:none;
 }
 
-.comment {
-    overflow:hidden;
-    font-size:0.8em;
-    margin: 10px;
-    padding: 5px;
-    padding-left: 10px;
-    border-top:1px solid #C5D0D9;
-}
 
-.comment p{
-    margin-left:0px;
-}
 
 .bold {
 	font-weight: bold;
@@ -556,9 +525,7 @@ ul#mainmenu li ul li{
 .hidden{
     display: none;
 }
-.clear{
-    clear: both;
-}
+
 
 .tip { 
 	width:250px;
@@ -790,23 +757,3 @@ fieldset label{
 	font-size:inherit;
 }
 
-.user_avatar{
-    height:64px;
-    width:64px;
-}
-
-/* footer bar */
-
-#footer{
-    position:fixed;
-    bottom:0px;
-    left:0px;
-    right:0px;
-    height:20px;
-    padding:2px;
-    background-color:#333;
-}
-
-#back_to_top{
-    float:right;
-}

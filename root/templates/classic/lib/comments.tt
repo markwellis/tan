@@ -1,27 +1,29 @@
 <div id="comments">
-[% IF object.comments %]
-    [% FOREACH comment=comments;
-        PROCESS 'lib/comment.tt';
-    END %]
+[%- IF object.comments;
+    FOREACH comment=comments;
+        PROCESS 'lib/comment.tt' -%]
+        <div class="hr"></div>
+    [%- END -%]
     <script type="text/javascript">//<![CDATA[
     var nsfw = [% c.nsfw %];
     //]]>
     </script>
 
-    [% PROCESS 'lib/js_includes.tt' inline='nsfw-comments' %]
-[% END %]
+    [%- PROCESS 'lib/js_includes.tt' inline='nsfw-comments';
+END -%]
 </div>
 
 <h2 id="lcomments">Leave your comments</h2>
 <form id="comment_form" style="margin-left:15px;" action="_comment" method="post">
     <fieldset>
-        [% editor = {
+        [%-
+        editor = {
             'name' => "comment",
             'height' => '300px',
         };
                 
-        PROCESS 'lib/editor.tt' %]
-   
-        <br/><input type="submit" value="Comment" id="submit_comment" />
+        PROCESS 'lib/editor.tt' -%]
+        <br />
+        <input type="submit" value="Comment" id="submit_comment" />
     </fieldset>
 </form>

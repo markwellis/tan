@@ -1,4 +1,4 @@
-[%-
+[%
 type = object.type;
 
 title = object.$type.title | url_title;
@@ -23,11 +23,11 @@ md = object.$type.picture_id - (object.$type.picture_id % 1000)
    </div>
 [%- PROCESS 'lib/plus_minus_box.tt' -%]
 
-<h1>
-    <a class="a title" [% rel %] href="[% url  | html %]" >
+<h2>
+    <a class="a title" [% rel %] title="[% object.$type.title  | html %]" href="[% url  | html %]" >
         [%- object.$type.title | html -%]
     </a>
-</h1>
+</h2>
 
 <br />
 
@@ -42,15 +42,14 @@ Posted by <a class="a user" href="/user/[% object.user.username %]/1/">[% object
 <span class="object_type"> [[%- object.type -%]]</span>
 
 <br />
-[% IF index %]
+[%- IF index -%]
     <a href="[% comment_url | html %]">
-[% END %]
+[%- END -%]
 <img src="[% c.config.static_path %]/images/comment.png" style="height:15px;width:15px" alt="" /> [%- object.get_column('comments') -%] 
 [% IF index %]
     </a>
-[% END %]
+[%- END -%]
  | [%- object.get_column('views') -%] views
-
 [%- IF !1 -%]
 	[%# fixme! IF ($f->user->user_id() == $f->stash->object['user_id']) || $f->user->admin()) %]
 	   | <a href="/esubmit/[%- object.type -%]/[%- object.id -%]/" class="a">Edit</a>]
@@ -69,7 +68,7 @@ Posted by <a class="a user" href="/user/[% object.user.username %]/1/">[% object
         [%- END -%]
     </p>
 
-    [% IF location == 'link' %]
+    [%- IF location == 'link' -%]
         [% object_url = object.$type.url _ '&';
         matches = object_url.match('http\:\/\/www\.youtube\.com\/watch\?v=(.*?)\&');
 
@@ -85,12 +84,12 @@ Posted by <a class="a user" href="/user/[% object.user.username %]/1/">[% object
             <a class="view_link" rel="external nofollow" href="[%- url -%]">View Link</a>
             <br />
             <br />
-        [%- END %]
-    [% ELSE %]
-        <div class="hr" />
+        [%- END;
+    ELSE -%]
+        <div class="hr"></div>
         <div id="blog_wrapper" class="comment_wrapper">
             [% object.blog.details %]
         </div>
-    [% END %]
-    <div class="hr" />
-[% END %]
+    [%- END -%]
+    <div class="hr"></div>
+[%- END -%]

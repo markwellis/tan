@@ -12,11 +12,11 @@ END;
 </a>
 
 <div class="container hidden" id="container_[% object.type _ object.id %]">
-    <h1>
+    <h2>
         <a class="big_font" href="[% c.config.pic_path %]/[% object.picture.filename %]">
             [% object.picture.title | html %][% IF object.nsfw == 'Y' %] - NSFW[% END %]
         </a>
-    </h1>
+    </h2>
     <br/>
     [%-
         pm_box_style='float:right'; 
