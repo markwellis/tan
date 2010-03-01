@@ -17,19 +17,22 @@
 .comment_holder{
     margin-left:5px;
     margin-top:10px;
-    min-height:200px;
+    min-height:222px;
 }
 .comment_infobar{
     font-size:.8em;
     float:left;
 }
 
+.comment_tools{
+    font-size:1.3em;
+}
 .comment_avatar{
     height:128px;
     width:128px;
 }
 
 .comment_inner{
-    margin-left:132px;
+    margin-left:145px;
 }
 

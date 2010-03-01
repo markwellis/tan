@@ -26,7 +26,9 @@
         },
     ];
     
-    page_title ='Social News For Internet Pirates - ' _ page_title;
+    IF !page_title.defined;
+        page_title ='Social News For Internet Pirates';
+    END;
     page_meta_description = 'Social News For Internet Pirates';
     page_keywords = 'strange pirate news community comments english social fun jokes videos pictures share sharing lol lolz funny humour humor'
 -%]

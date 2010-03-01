@@ -4,10 +4,10 @@
     [%-
     page_title = page_title | html;
     IF page_title;
-        page_title = ' - ' _ page_title;
+        page_title = page_title _ ' - ';
     END
     %]
-    <title>This Aint News[% page_title %]</title>
+    <title>[% page_title %]This Aint News</title>
     <meta name="Description" content="[% page_meta_description %]"/>
     <meta name="keywords" content="[% page_keywords %]"/>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
