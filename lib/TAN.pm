@@ -157,11 +157,11 @@ sub date_ago{
             'amount' => 60*60,
         },
         {
-            'name' => 'min',
+            'name' => 'minute',
             'amount' => 60,
         },
         {
-            'name' => 'sec',
+            'name' => 'second',
             'amount' => 1,
         },
     ];

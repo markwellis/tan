@@ -76,6 +76,8 @@ B<@args = ($title)>
 
 =over
 
+$title is never used, lol
+
 loads the article
 
 =back
@@ -89,13 +91,6 @@ sub index: PathPart('') Chained('location') Args(1) {
 # url matches (seo n that)
 # display article
 # load comments etc
-
-    my $url_title = $c->forward('object_title');
-    if ( $c->req->uri->path ne $url_title ){
-        $c->res->redirect( $url_title, 301 );
-        $c->detach();
-    }
-
     $c->stash->{'object'} = $c->model('MySQL::Object')->find({
         'object_id' => $c->stash->{'object_id'},
     },{
@@ -112,6 +107,17 @@ sub index: PathPart('') Chained('location') Args(1) {
         'order_by' => '',
     });
 
+    if ( !defined($c->stash->{'object'}) ){
+        $c->foward('/default');
+        $c->detach();
+    }
+
+    my $url = $c->stash->{'object'}->url;
+    if ( $c->req->uri->path ne $url ){
+        $c->res->redirect( $url, 301 );
+        $c->detach();
+    }
+
     if ( $c->user_exists ){
         #get me plus info
         my $meplus_minus = $c->stash->{'object'}->plus_minus->meplus_minus( $c->user->user_id );
@@ -122,11 +128,6 @@ sub index: PathPart('') Chained('location') Args(1) {
         if ( defined($meplus_minus->{ $c->stash->{'object'}->object_id }->{'minus'}) ){
             $c->stash->{'object'}->{'meminus'} = 1;  
         }
-    }
-
-    if ( !defined($c->stash->{'object'}) ){
-        $c->foward('/default');
-        $c->detach();
     }
 
     @{$c->stash->{'comments'}} = $c->model('MySQL::Comments')->search({
@@ -195,7 +196,7 @@ sub comment: PathPart('_comment') Chained('location') Args(0) {
 
         if ( defined($object_rs) && (my $title = $object_rs->title) ){
         #redirect to the object
-            $c->res->redirect( $c->forward('object_title') );
+            $c->res->redirect( $c->forward('object_url') );
             $c->detach();
         } else {
         #no object, redirect to /
@@ -298,7 +299,7 @@ sub add_plus_minus: Private{
             }) );
         } else {
         #redirect
-            $c->res->redirect( $c->forward('object_title') );
+            $c->res->redirect( $c->forward('object_url') );
         }
     } else {
     #prompt for login
@@ -343,20 +344,6 @@ sub post_saved_comments: Private{
     }
 }
 
-sub object_title: Private{
-    my ( $self, $c ) = @_;
-    my $object_meta_rs = $c->model('MySQL::' 
-        . ucfirst( $c->stash->{'location'} ))->find( $c->stash->{'object_id'} );
-    
-    if ( !defined($object_meta_rs) ){
-        return;
-    }
-    
-    $c->stash->{'page_title'} = $object_meta_rs->title;
-    return "/view/" . $c->stash->{'location'} . '/' 
-        . $c->stash->{'object_id'} .'/' 
-        . $c->url_title( $object_meta_rs->title );
-}
 =head1 AUTHOR
 
 A clever guy

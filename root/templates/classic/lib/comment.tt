@@ -24,7 +24,7 @@ END -%]
             <ul class="no_list comment_tools">
                 [%- type = object.type -%]
                 <li>
-                    <a class="quote_link" href="/view/[% object.type %]/[% object.object_id %]/[% object.$type.title | url_title %]#comment[% comment.comment_id %]">Link</a>
+                    <a class="quote_link" href="[% object.url %]#comment[% comment.comment_id %]">Link</a>
                     | <a href="#" class="quote_link" title="[% comment.user.username %]::[% comment.comment_id %]">Quote</a>
                 </li>
                 

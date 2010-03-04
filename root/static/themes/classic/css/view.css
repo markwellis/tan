@@ -1,5 +1,7 @@
 .tags{
     font-style: italic;
+    margin-left:115px;
+    float:left;
 }
 
 .hr {
@@ -16,12 +18,13 @@
 .comment_holder{
     margin-left:5px;
     padding-top:10px;
-    min-height:185px;
+    min-height:200px;
 }
 .comment_left{
     font-size:.8em;
     float:left;
     padding-right: 3px;
+    width:120px;
 }
 
 .comment_tools{
@@ -35,4 +38,9 @@
 
 .comment_inner{
     margin-left:135px;
+    margin-top:20px;
+}
+
+.comment_inner p{
+    margin:0px;
 }

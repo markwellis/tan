@@ -25,7 +25,7 @@
             type = comment.object.type;
     -%]
             <li>
-                <a style="margin:0px;padding:3px;" class="recent_comment recent_comments" title="[%- tip_title | html-%]" href="/view/[%- comment.object.type -%]/[%- comment.object_id -%]/[%- comment.object.$type.title | url_title -%]#comment[%- comment.comment_id -%]">[%- comment.short | html-%]</a>
+                <a style="margin:0px;padding:3px;" class="recent_comment recent_comments" title="[%- tip_title | html-%]" href="[%- comment.object.url -%]#comment[%- comment.comment_id -%]">[%- comment.short | html-%]</a>
             </li>
         [%- END -%]
     </ul>

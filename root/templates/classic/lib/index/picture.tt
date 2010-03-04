@@ -1,7 +1,7 @@
 [%- 
 object_size = c.filesize_h(object.picture.size);
 md = object.id - (object.id % 1000);
-url_title = object.picture.title | url_title;
+url_title = object.url_title;
 IF object.nsfw == 'Y';
     url_title = url_title _ '-NSFW';
 END;

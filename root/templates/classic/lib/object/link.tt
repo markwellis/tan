@@ -1,7 +1,7 @@
 [%
 type = object.type;
 
-title = object.$type.title | url_title;
+title = object.url_title;
 
 IF index;
     url = "/view/" _ object.type _ '/' _ object.id _ '/' _ title;
@@ -61,12 +61,12 @@ Posted by <a class="a user" href="/user/[% object.user.username %]/1/">[% object
     [%- object.$type.description | html | nl2br -%]
 </p>
 [% IF !index %]
-    <p class="tags">
+    <span class="tags">
         [%- FOREACH tag = object.tags -%]
             [%- IF loop.count > 1 %], [% END -%]
             <a href="/tag/[% tag.tag %]">[% tag.tag %]</a>
         [%- END -%]
-    </p>
+    </span>
 
     [%- IF location == 'link' -%]
         [% object_url = object.$type.url _ '&';

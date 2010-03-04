@@ -99,4 +99,19 @@ __PACKAGE__->many_to_many(
   "tag" 
 );
 
+sub url_title{
+    my ( $self ) = @_;
+
+    my $object_meta = eval ( '$self->' . $self->type );
+    return TAN::View::TT::url_title($object_meta->title);
+}
+
+sub url{
+    my ( $self ) = @_;
+
+    return "/view/" . $self->type . '/' 
+        . $self->object_id .'/' 
+        . $self->url_title;
+}
+
 1;

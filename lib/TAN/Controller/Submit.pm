@@ -113,21 +113,19 @@ forwards to validate_$location
 my $title_min = 3;
 my $desc_min = 5;
 my $title_max = 100;
-my $desc_max = 1000;
 my $blog_min = 20;
 
-my @error_codes = (
-    'Title cannont be blank',
-    'Description cannot be blank',
-    "Title cannot be over ${title_max} characters",
-    "Description cannot be over ${desc_max} characters",
-    "Title must be over ${title_min} characters",
-    "Description must be over ${desc_min} characters",
-    'Url is invalid',
-    'This link has already been submitted',
-    "Blog must be over ${blog_min} characters",
-    "Please select an image",
-);
+my $error_codes = {
+    'blank_title' => 'Title cannont be blank',
+    'blank_desc' => 'Description cannot be blank',
+    'short_title' => "Title must be over ${title_min} characters",
+    'short_desc' => "Description must be over ${desc_min} characters",
+    'short_blog' => "Blog must be over ${blog_min} characters",
+    'long_title' => "Title cannot be over ${title_max} characters",
+    'invalid_url' => 'Url is invalid',
+    'already_submitted' => 'This link has already been submitted',
+    'no_image' => "Please select an image",
+};
 sub validate: PathPart('') Chained('location') CaptureArgs(0){
     my ( $self, $c ) = @_;
 
@@ -136,34 +134,27 @@ sub validate: PathPart('') Chained('location') CaptureArgs(0){
 
     if ( $title eq '' ) {
     #blank title
-        $c->stash->{'error'} = $error_codes[0];
-
-    } elsif ( length($title) > $title_max ) {
-    #long title
-        $c->stash->{'error'} = $error_codes[2];
-
-    } elsif ( defined($c->req->param('description')) && length($c->req->param('description')) > $desc_max ) {
-    #long description
-        $c->stash->{'error'} = $error_codes[3];
+        $c->stash->{'error'} = $error_codes->{'blank_title'};
 
     } elsif ( !defined($title) || length($title) < $title_min ) {
     #short title
-        $c->stash->{'error'} = $error_codes[4];
+        $c->stash->{'error'} = $error_codes->{'short_title'};
+
+    } elsif ( length($title) > $title_max ) {
+    #long title
+        $c->stash->{'error'} = $error_codes->{'long_title'};
 
     } else {
         if ($c->stash->{'location'} eq 'link'){
         #validate link specific details
-
             $c->forward('validate_link');
 
         } elsif ($c->stash->{'location'} eq 'blog') {
         #validate blog specific details
-
             $c->forward('validate_blog');
 
         } elsif ($c->stash->{'location'} eq 'picture') {
         #validate picture specific details
-
             $c->forward('validate_picture');
         }
     }
@@ -191,12 +182,12 @@ sub validate_link: Private{
     $cat =~s/$int_reg//g;
     if (!defined($cat)){
     #no image selected
-        $c->stash->{'error'} = $error_codes[9];
+        $c->stash->{'error'} = $error_codes->{'no_image'};
     }
 
     if (length($description) < $desc_min){
     #desc too short
-        $c->stash->{'error'} = $error_codes[5];
+        $c->stash->{'error'} = $error_codes->{'short_desc'};
     }
 
     my $valid_url = Data::Validate::URI->new();
@@ -204,7 +195,7 @@ sub validate_link: Private{
 
     if ( !defined($valid_url->is_web_uri($url)) ){
     #invalid url
-        $c->stash->{'error'} = $error_codes[6];                
+        $c->stash->{'error'} = $error_codes->{'invalid_url'};                
     }
 
     my $link = $c->model('MySQL::Link')->search({
@@ -213,7 +204,8 @@ sub validate_link: Private{
 
     if ($link->count){
     #already submitted
-        $c->stash->{'error'} = $error_codes[7];
+        $c->stash->{'error'} = $error_codes->{'already_submitted'};
+        $c->stash->{'link_id'} = $link->link_id;
     }
 }
 
@@ -239,17 +231,17 @@ sub validate_blog: Private{
     $cat =~ s/$int_reg//g;
     if (!defined($cat)){
     #no image selected
-        $c->stash->{'error'} = $error_codes[9];
+        $c->stash->{'error'} = $error_codes->{'no_image'};
     }
 
     if (length($description) < $desc_min){
     #desc too short
-        $c->stash->{'error'} = $error_codes[5];
+        $c->stash->{'error'} = $error_codes->{'short_desc'};
     }
 
     if (length($c->req->param('blogmain')) < $blog_min) {
     #blog too short
-        $c->stash->{'error'} = $error_codes[8];
+        $c->stash->{'error'} = $error_codes->{'short_blog'};
     }
 }
 
@@ -281,7 +273,7 @@ sub validate_picture: Private{
         my $valid_url = Data::Validate::URI->new();
         if ( !defined($valid_url->is_web_uri($url)) ){
         #invalid url
-            $c->stash->{'error'} = $error_codes[6];                
+            $c->stash->{'error'} = $error_codes->{'invalid_url'};                
         } else {
         #valid url, fetch and validate
             $fetcher = $c->model('FetchImage');
@@ -329,23 +321,23 @@ sub post: PathPart('post') Chained('validate') Args(0){
 
     if ( $c->stash->{'error'} ){
         $c->flash->{'message'} = $c->stash->{'error'};
+        if ( defined($c->stash->{'link_id'}) ){
+            #redirect to the object_url
+        }
         $c->res->redirect('/submit/' . $c->stash->{'location'} . '/');
         $c->detach();
     }
 
     if ($c->stash->{'location'} eq 'link'){
     #submit link
-
         $c->forward('submit_link');
 
     } elsif ($c->stash->{'location'} eq 'blog'){
     #submit blog
-
         $c->forward('submit_blog');
 
     } elsif ($c->stash->{'location'} eq 'picture') {
     #submit picture
-
         $c->forward('submit_picture');
 
     }

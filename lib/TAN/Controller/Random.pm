@@ -52,7 +52,7 @@ sub index: Path: Args(1) {
     my $object = $c->model('MySQL::Object')->random($location);
 
     if ($object){
-        $c->res->redirect('/view/' . $object->type . '/' . $object->id . '/' . $c->url_title($object->get_column('title')));
+        $c->res->redirect($object->url);
         $c->detach();
     }
 

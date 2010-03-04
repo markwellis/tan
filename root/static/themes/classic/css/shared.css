@@ -26,6 +26,16 @@
     padding:0px;
 }
 
+/* object */
+
+.news .p {
+	font-size:0.8em;
+	color:#222222;
+	margin-right:65px;
+    margin-left:115px;
+}
+
+
 /* footer bar */
 
 #footer{
