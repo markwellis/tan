@@ -4,7 +4,6 @@
 
 .hr {
     border-top: 1px solid #C5D0D9;
-    margin: 0px 9px 0px 9px;
 }
 
 .view_link{
@@ -16,23 +15,24 @@
 
 .comment_holder{
     margin-left:5px;
-    margin-top:10px;
-    min-height:222px;
+    padding-top:10px;
+    min-height:185px;
 }
-.comment_infobar{
+.comment_left{
     font-size:.8em;
     float:left;
+    padding-right: 3px;
 }
 
 .comment_tools{
     font-size:1.3em;
 }
 .comment_avatar{
-    height:128px;
-    width:128px;
+    height:100px;
+    width:100px;
+    float:none;
 }
 
 .comment_inner{
-    margin-left:145px;
+    margin-left:135px;
 }
-

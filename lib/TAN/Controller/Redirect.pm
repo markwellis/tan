@@ -14,7 +14,7 @@ redirects to a objects url
 
 =head1 EXAMPLE
 
-I<//redirect/45990>
+I</redirect/45990>
 
 =head1 METHODS
 

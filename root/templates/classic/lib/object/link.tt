@@ -82,8 +82,6 @@ Posted by <a class="a user" href="/user/[% object.user.username %]/1/">[% object
             <br />
         [%- ELSE -%]
             <a class="view_link" rel="external nofollow" href="[%- url -%]">View Link</a>
-            <br />
-            <br />
         [%- END;
     ELSE -%]
         <div class="hr"></div>
@@ -91,5 +89,5 @@ Posted by <a class="a user" href="/user/[% object.user.username %]/1/">[% object
             [% object.blog.details %]
         </div>
     [%- END -%]
-    <div class="hr"></div>
+    <br />
 [%- END -%]

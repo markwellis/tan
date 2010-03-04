@@ -42,7 +42,7 @@ END;
     
     <br />
     <img class="avatar" src="[% avatar_http %]?m=[% avatar_mtime %]" alt="[% object.user_id %]" />
-    Posted by <a class="user" href="/user/[% object.user.username %]/1/">[% object.user.username %]</a>
+    Posted by <a class="a user" href="/user/[% object.user.username %]/1/">[% object.user.username %]</a>
     <p>
         [% object.description | strip_tags | nl2br %]
     </p>

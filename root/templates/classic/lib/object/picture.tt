@@ -12,7 +12,7 @@ filename = c.config.pic_path _ '/' _ object.picture.filename;
     </h2>
     <br/>
     
-    <a class="user" href="/user/[% object.user.username %]/1/">
+    <a class="a user" href="/user/[% object.user.username %]/1/">
         <img class="avatar" src="[% avatar_http %]?m=[% avatar_mtime %]" alt="[% object.user_id %]" />
         [% object.user.username %]
     </a>

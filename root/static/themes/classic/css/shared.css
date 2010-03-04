@@ -18,8 +18,12 @@
 }
 
 .clear{
-    clear: both;
-    height:0px;
+    clear:both;
+}
+
+.no_list{
+    list-style:none;
+    padding:0px;
 }
 
 /* footer bar */

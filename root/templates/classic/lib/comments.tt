@@ -2,7 +2,6 @@
 [%- IF object.comments;
     FOREACH comment=comments;
         PROCESS 'lib/comment.tt' -%]
-        <div class="hr"></div>
     [%- END -%]
     <script type="text/javascript">//<![CDATA[
     var nsfw = [% c.nsfw %];

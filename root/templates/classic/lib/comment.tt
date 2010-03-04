@@ -9,32 +9,33 @@ IF (avatar_exists);
 ELSE;
     avatar_http = c.config.static_path _ '/images/_user.png';
 END -%]
-<div class="comment_holder" id="comment[% comment.comment_id %]">
-    <div class="comment_infobar">
-        <a href="/user/[% comment.user.username | html %]" class="user">[% comment.user.username | html %]</a>
-
-        <br />
-        [% c.date_ago(comment.created) %] ago
-        <br />
-
-        <img class="avatar comment_avatar" src="[% avatar_http %]?m=[% avatar_mtime %]" alt="[% comment.user.username | html %]" />
-<br />
+<div class="comment_holder hr" id="comment[% comment.comment_id %]">
+    <ul class="no_list comment_left">
+        <li>
+            <a href="/user/[% comment.user.username | html %]" class="user">[% comment.user.username | html %]</a>
+        </li>
+        <li>
+            [% c.date_ago(comment.created) %] ago
+        </li>
+        <li>
+            <img class="avatar comment_avatar" src="[% avatar_http %]?m=[% avatar_mtime %]" alt="[% comment.user.username | html %]" />
+        </li>
         [%- IF object.defined -%]
-            <span class="comment_tools">
+            <ul class="no_list comment_tools">
                 [%- type = object.type -%]
-                <a class="quote_link" href="/view/[% object.type %]/[% object.object_id %]/[% object.$type.title | url_title %]#comment[% comment.comment_id %]">Link</a>
-            
-                [%- IF c.user_exists -%]
+                <li>
+                    <a class="quote_link" href="/view/[% object.type %]/[% object.object_id %]/[% object.$type.title | url_title %]#comment[% comment.comment_id %]">Link</a>
                     | <a href="#" class="quote_link" title="[% comment.user.username %]::[% comment.comment_id %]">Quote</a>
-                [%- END -%]
+                </li>
                 
                 [%- IF (c.user_exists) && ( c.user.user_id == comment.user_id ) -%]
-                    <br />
-                    <a class="comment_edit" href="/edit_comment/[% comment.comment_id %]/">Edit Comment</a>
+                    <li>
+                        <a class="comment_edit" href="/edit_comment/[% comment.comment_id %]/">Edit Comment</a>
+                    </li>
                 [%- END -%]
-            </span>
+            </ul>
         [%- END -%]
-    </div>
+    </ul>
     <div id="actual_comment[% comment.comment_id %]" class="comment_inner">
         [%- comment.comment -%]
         <br />
