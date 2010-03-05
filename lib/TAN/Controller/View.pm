@@ -206,7 +206,14 @@ sub comment: PathPart('_comment') Chained('location') Args(0) {
     } else {
     #ajax 
         #return the comment, filtered and all that
-        my $comment_rs = $c->model('MySQL::Comments')->find($comment_id);
+        my $comment_rs = $c->model('MySQL::Comments')->find({
+            'comment_id' => $comment_id,
+        },{
+            '+select' => [
+                { 'unix_timestamp' => 'me.created' },
+            ],
+            '+as' => ['created'],
+        });
 
         #better add some validation in
         if ( !defined($comment_rs) ){
@@ -216,7 +223,7 @@ sub comment: PathPart('_comment') Chained('location') Args(0) {
         
         #construct object, no point doing extra sql
         $c->stash->{'comment'} = {
-            'created' => $comment_rs->created,
+            'created' => $comment_rs->get_column('created'),
             'comment' => $comment_rs->comment,
             'comment_id' => $comment_rs->comment_id,
             'user' => {
