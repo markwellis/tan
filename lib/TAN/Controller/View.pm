@@ -141,6 +141,8 @@ sub index: PathPart('') Chained('location') Args(1) {
         'order_by' => 'created',
     })->all;
 
+    my $title = eval("$c->stash->{'object'}->" . $c->stash->{'object'}->type . "->title");
+    $c->stash->{'page_title'} = $title;
     $c->stash->{'template'} = 'view.tt';
 }
 
