@@ -74,12 +74,11 @@ Posted by <a class="a user" href="/user/[% object.user.username %]/1/">[% object
 
         IF (matches.0);
             youtube_id = matches.0 | html -%]
+            <br />
             <object type="application/x-shockwave-flash" style="width:425px; height:350px;" data="http://www.youtube.com/v/[%- youtube_id -%]">
                 <param name="wmode" value="transparent" />
                 <param name="movie" value="http://www.youtube.com/v/[%- youtube_id -%]" />
             </object>
-            <br />
-            <br />
         [%- ELSE -%]
             <a class="view_link" rel="external nofollow" href="[%- url -%]">View Link</a>
         [%- END;

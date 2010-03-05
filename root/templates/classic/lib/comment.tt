@@ -14,9 +14,11 @@ END -%]
         <li>
             <a href="/user/[% comment.user.username | html %]" class="user">[% comment.user.username | html %]</a>
         </li>
+        [%- IF comment.created.defined() -%]
         <li>
             [% c.date_ago(comment.created) %] ago
         </li>
+        [%- END -%]
         <li>
             <img class="avatar comment_avatar" src="[% avatar_http %]?m=[% avatar_mtime %]" alt="[% comment.user.username | html %]" />
         </li>

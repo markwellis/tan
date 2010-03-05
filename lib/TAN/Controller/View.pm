@@ -223,7 +223,6 @@ sub comment: PathPart('_comment') Chained('location') Args(0) {
         
         #construct object, no point doing extra sql
         $c->stash->{'comment'} = {
-            'created' => $comment_rs->get_column('created'),
             'comment' => $comment_rs->comment,
             'comment_id' => $comment_rs->comment_id,
             'user' => {
