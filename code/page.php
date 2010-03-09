@@ -201,7 +201,7 @@ if (defined('MAGIC')) {
 <input type="hidden" name="tax" value="0">
 <input type="image" src="https://www.paypal.com/images/x-click-but04.gif" 
        border="0"
-name="submit" alt="Make payments with PayPal - its fast, free and secure!">
+name="submit" alt="SEND ME MONIES!1!!">
 </form>';
                 ob_start();
                 ?>
@@ -220,7 +220,10 @@ name="submit" alt="Make payments with PayPal - its fast, free and secure!">
                 <?php
                 $this->output .= ob_get_contents();
                 ob_clean();
-            $this->output .= '<a href="http://www.cafepress.com/thisaintnews" class="menulink">Shop</a> |'
+            if ( $user->admin() ){
+                $this->output .= '<a href="/admin" class="menulink">Admin</a> | ';
+            }
+            $this->output .= '<a href="http://www.cafepress.com/thisaintnews" class="menulink">Shop</a> | '
                 .'<a href="/chat/" class="menulink mibbit">Chat</a>';
     
             if ($user->isLoggedIn()){

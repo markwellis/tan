@@ -22,11 +22,21 @@ if ( isset($_GET['link_id']) ){
 #picture
     $get_id = $_GET['picture_id'];
     $get_type = 'picture';
+} elseif ( isset($_GET['user_id']) ){
+#user
+    $get_id = $_GET['user_id'];
+    $get_type = 'user';
 }
+
+
 
 if ( isset($get_type) && isset($get_id) ){
 #get and print
-    $details = $m_admin->get_object($get_id, $get_type);
+    if ( $get_type === 'user' ){
+        $details = $m_admin->get_user($get_id);
+    } else {
+        $details = $m_admin->get_object($get_id, $get_type);
+    }
     print_json($details);
 }
 
@@ -43,13 +53,25 @@ if ( isset($_POST['link_id']) ){
 #picture
     $del_id = $_POST['picture_id'];
     $del_type = 'picture';
+} elseif ( isset($_POST['user_id']) ){
+#user
+    $del_id = $_POST['user_id'];
+    $delete_comments = isset($_POST['delete_comments']) ? 1 : 0;
+
+    $del_type = 'user';
 }
 
 if ( isset($del_type) && isset($del_id)){
 #we're deleting something
 
     if ( ($reason =  $_POST['reason']) && isset($reason) ){
-        $m_admin->delete_object($del_id, $del_type);
+        if ( $del_type === 'user' ){
+#deleting user
+            $m_admin->ban_user($del_id, $delete_comments);
+        } else {
+#deleting object
+            $m_admin->delete_object($del_id, $del_type);
+        }
         $m_admin->add_to_log($m_user->user_id(), $del_id, $del_type, $reason);
 
         $m_stash->add_message("${del_type} deleted");
@@ -61,7 +83,7 @@ if ( isset($del_type) && isset($del_id)){
 }
 
 #boring shit...
-array_push($m_stash->js_includes, $m_stash->theme_settings['js_path'] . '/admin.js');
+array_push($m_stash->js_includes, $m_stash->theme_settings['js_path'] . '/admin.js?1=2');
 
 ob_start();
 load_template("admin");

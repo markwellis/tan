@@ -17,7 +17,7 @@
 <input type="hidden" name="tax" value="0">
 <input type="image" src="https://www.paypal.com/images/x-click-but04.gif" 
        border="0"
-name="submit" alt="Make payments with PayPal - its fast, free and secure!">
+name="submit" alt="SEND ME MONIES!1!!">
 </form>
                 <script type="text/javascript">
                     //<![CDATA[
@@ -31,6 +31,10 @@ name="submit" alt="Make payments with PayPal - its fast, free and secure!">
                         });
                     //]]>
                 </script>
+                <?php if ( $m_stash->m_user->admin() ){ ?>
+                    <a href="/admin" class="top_link">Admin</a> |
+                <?php } ?>
+ 
                 <a href="http://www.cafepress.com/thisaintnews" class="top_link">Shop</a> | <a href="/chat/" class="top_link mibbit">Chat</a>
                 <?php if ($m_stash->m_user->logged_in()){ ?>
                      | <a href='/logout/' class='top_link'>Logout</a>

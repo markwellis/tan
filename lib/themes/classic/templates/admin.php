@@ -2,6 +2,11 @@
     <fieldset>
         <ul>
             <li>
+                <label for='user' class="login_label">User</label>
+                <input type='text' name='user_id' id='user_id' class='text_input' style="width:50%;margin-left:10px;" />
+                <input type='submit' id='lookup_user' class="lookup" value='Find'/>
+            </li>
+            <li>
                 <label for='link' class="login_label">Link</label>
                 <input type='text' name='link_id' id='link_id' class='text_input' style="width:50%;margin-left:10px;" />
                 <input type='submit' id='lookup_link' class="lookup" value='Find'/>
