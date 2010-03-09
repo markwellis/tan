@@ -31,7 +31,7 @@ define('PROFILE_PICTURE_UPLOAD_PATH', BASE_PATH . '/sys/users/avatar');
 define('VERSION', '0.84.10');
 
 define('DEBUG', false);
-define('DEBUG_SQL', true);
+define('DEBUG_SQL', false);
 
 define('PROMOTED_CUTOFF', 10);
 define('SALT', '13f76tfvtf43x68fd');
