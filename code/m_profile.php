@@ -59,7 +59,7 @@ class m_profile{
         }
         $page = $page * OBJECT_LIMIT;
         $limit = OBJECT_LIMIT;
-        $query = "SELECT SQL_CALC_FOUND_ROWS *, UNIX_TIMESTAMP(date) AS date FROM comments WHERE user_id = {$this->user_id} ORDER BY date DESC LIMIT {$page}, {$limit}";
+        $query = "SELECT SQL_CALC_FOUND_ROWS *, UNIX_TIMESTAMP(date) AS date FROM comments WHERE user_id = {$this->user_id} AND deleted = 'N' ORDER BY date DESC LIMIT {$page}, {$limit}";
 //        $query = "SELECT SQL_CALC_FOUND_ROWS * FROM comments WHERE user_id = {$this->user_id} ORDER BY date DESC LIMIT {$page}, {$limit}";
         $comments = $sql->query($query, 'array');
         $query = "SELECT FOUND_ROWS() as total_rows";

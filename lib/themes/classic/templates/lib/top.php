@@ -8,7 +8,17 @@
     <?php load_template('lib/js_includes'); ?>
     <div id="main">
         <div id="top">
-            <div style="float:right;margin-top:5px;margin-right:5px;text-align:right;">
+            <div style="float:right;margin-top:5px;margin-right:5px;text-align:right;width:380px;">
+<form action="https://www.paypal.com/cgi-bin/webscr" method="post" style="float:right;margin-left:5px;">
+<input type="hidden" name="cmd" value="_xclick">
+<input type="hidden" name="business" value="donate@thisaintnews.com">
+<input type="hidden" name="item_name" value="TAN Donation">
+<input type="hidden" name="currency_code" value="GBP">
+<input type="hidden" name="tax" value="0">
+<input type="image" src="https://www.paypal.com/images/x-click-but04.gif" 
+       border="0"
+name="submit" alt="Make payments with PayPal - its fast, free and secure!">
+</form>
                 <script type="text/javascript">
                     //<![CDATA[
                         window.addEvent('domready', function() {
