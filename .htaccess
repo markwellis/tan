@@ -65,8 +65,6 @@ RewriteRule ^user/([^/]+)/([^/]+)/ ./user_comments.php?username=$1&page=$2 [NC]
 RewriteRule ^chat/?$ /chat.php [NC]
 RewriteRule ^shop/ /shop.php [NC]
 
-RewriteRule ^tagcloud/ ./index.php?function=13 [NC]
-
 RewriteRule ^filteron/$ ./code/filter.php [NC]
 RewriteRule ^filteroff/$ ./code/filter.php [NC]
 

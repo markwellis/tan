@@ -61,23 +61,6 @@ if (defined('MAGIC')) {
             // $_SESSION['nsfw'] is inverse, 1 means filter is off...
             $this->nsfw = $_SESSION['nsfw'] ? 0 : 1;
 	    }
-	
-	    function move_uploaded($kindofpicture){
-	        if ($this->kind_of_object === 'picture'){
-	            if ($kindofpicture === 'picture'){
-	                $uploaddir = $this->rootimagedir .'/pics/';
-	            }
-	            $now = time();
-	            $newname = strtolower(preg_replace("/[^a-zA-Z0-9\.]/", "_", $_FILES['pic']['name']));
-	            while(file_exists($this->uploadFilename = $uploaddir.$now.'-'.$newname)) {
-	                $now++;                                                                                }
-	            if (!move_uploaded_file($_FILES['pic']['tmp_name'], $this->uploadFilename)) {
-	                return 'receiving directory insuffiecient permission';
-	            }
-	            return array(null, $this->uploadFilename);
-	        }
-	        return -1;
-	    }
         
 	    function plus_to_minus_ratio($plus, $minus){
 	/*      creates a plus to minus ratio   */
@@ -185,115 +168,6 @@ if (defined('MAGIC')) {
             $text = str_replace('<a ', '<a rel="external nofollow" ', $text);
             return $text;
         }
-	
-	    function isValid($data, $title, $description){
-	/*   Does a few checks on whats being submitted */
-	        $sql = &$this->sql;
-	        $user = &$this->user;
-	        switch ($this->kind_of_object) {
-	            case 'link':
-                    if (!$user->isLoggedIn()){ return "Please login"; }
-	                $link_error_codes = array(0 => 'Title cannont be blank',
-	                    1 => 'Description cannot be blank',
-	                    2 => "Title cannot be over {$this->title_max} characters",
-	                    3 => "Description cannot be over {$this->desc_max} characters",
-	                    4 => "Title must be over {$this->title_min} characters",
-	                    5 => "Description must be over {$this->desc_min} characters",
-	                    6 => 'Url is invalid',
-	                    7 => 'This link has already been submitted');
-	                if ($title === '') { return $link_error_codes[0]; }
-	                if ($description === '') { return $link_error_codes[1]; }
-	                if (strlen($title) > $this->title_max) { return $link_error_codes[2]; }
-	                if (strlen($description) > $this->desc_max) { return $link_error_codes[3]; }
-	                if (strlen($title) < $this->title_min) { return $link_error_codes[4]; }
-	                if (strlen($description) < $this->desc_min) { return $link_error_codes[5]; }
-	                if (!preg_match('/^(http|https|ftp):\/\/([A-Z0-9][A-Z0-9_-]*(?:\.[A-Z0-9][A-Z0-9_-]*)+):?(\d+)?\/?/i', $data)) { return $link_error_codes[6]; }
-	
-	                $query = "SELECT link_id FROM link_details WHERE url='$data';";
-	                $res = $sql->query($query, 'count'); 
-	                if ($res){ return $link_error_codes[7]; }
-
-	                return null;
-	                break;
-	            case 'picture':
-	                $picture_error_codes = array(0 => 'Only image uploads are allowed',
-	                    1 => 'Filesize exceeded1',
-	                    2 => 'Filesize exceeded',
-	                    3 => 'File upload was only partial',
-	                    4 => 'No file attached',
-	                    5 => 'Filesize exceeded5',
-	                    6 => 'Form not completed');
-	                if ($_FILES['pic']['size'] > $this->max_picture_size){ return $picture_error_codes[2]; }
-	                if ($title === '') { return $picture_error_codes[6]; }
-	                if ($_FILES['pic']['error'] !== 0) { return $picture_error_codes[$_FILES['pic']['error']]; }
-	                if (!@is_uploaded_file($_FILES['pic']['tmp_name'])){ return $picture_error_codes[5]; }
-	                $res = @getimagesize($_FILES['pic']['tmp_name']);
-	                if (!$res){ return $picture_error_codes[0]; }
-	                if (!$user->isLoggedIn()){ return "Please login"; }
-	                return array(null, ($_FILES['pic']['size'] / 1024), array($res[0], $res[1]));
-	                break;
-	            case 'blog':
-	                $blog_error_codes = array(0 => 'Title cannont be blank',
-	                    1 => 'Description cannot be blank',
-	                    2 => "Title cannot be over {$this->title_max} characters",
-	                    3 => "Description cannot be over {$this->desc_max} characters",
-	                    4 => "Title must be over {$this->title_min} characters",
-	                    5 => "Description must be over {$this->desc_min} characters",
-	                    6 => "Blog must be over {$this->blog_min} characters");
-	                if ($title === '') { return $blog_error_codes[0]; }
-	                if ($description === '') { return $blog_error_codes[1]; }
-	                if (strlen($title) > $this->title_max) { return $blog_error_codes[2]; }
-	                if (strlen($description) > $this->desc_max) { return $blog_error_codes[3]; }
-	                if (strlen($title) < $this->title_min) { return $blog_error_codes[4]; }
-	                if (strlen($description) < $this->desc_min) { return $blog_error_codes[5]; }
-	                if (strlen($data) < $this->blog_min) { return $blog_error_codes[6]; }
-	                if (!$user->isLoggedIn()){ return "Please login"; }
-	                return null;
-	                break;
-	        } 
-	    }
-	
-	    function addtoDatabase($data, $title, $description, $cat, $meta = null, $ised = 0){
-	/*      Adds stuff to the database
-	/*      $data should be the url, blog text, image filename etc
-	/*      returns the newly added objects id */
-	
-	        $sql = &$this->sql;
-	        $user = &$this->user;
-	        $userid = $user->getUserId();
-	        $username = $user->getUserName();
-	        switch ($this->kind_of_object) {
-	            case 'link':
-	                $idtype = "link_id";
-	                $table = "link_details";
-	                $columns = "(link_id, title, description, user_id, username, date, promoted, url, views, category, blog_id, ised, details)";
-	                $values = "('', '$title',  '$description', $userid,'$username', NOW(), '', '$data', '', $cat, '', '', '')";
-	                break;
-	            case 'blog':
-	                $idtype = "blog_id";
-	                $table = "blog_details";
-	                $columns = "(link_id, title, description, user_id, username, date, promoted, url, views, category, blog_id, ised, details)";
-	                $values = "('', '$title', '$description', $userid, '$username', NOW(),'','', '', $cat,'', $ised, '$data')";
-	                break;
-	            case 'picture':
-	                $idtype = "picture_id";
-	                $table = "picture_details";
-                    if (!$ised){
-                        $ised = 'N';
-                    }
-	                $columns = "(picture_id, title, description, user_id, date, promoted, filename, views, category, username, x, y, size, nsfw)";
-	                $values = "('', '$title',  '$description', $userid, NOW(), '', '$data', '', $cat, '$username', {$meta[1][0]}, {$meta[1][1]}, {$meta[0]}, '{$ised}')";
-	                break;
-	        }
-	        if ($idtype && $user->isLoggedIn()){ 
-	            $query = "INSERT INTO $table $columns VALUES {$values};";
-	            $retval = $sql->query($query, 'none');
-	            $retval = $sql->query(null, 'id');
-	        } else {
-	            $retval = -1;
-	        }
-	        return $retval;
-	    }
 	
 	    function getComments($id){
 	    	$memcache = new Memcache;
