@@ -57,7 +57,7 @@ class m_admin{
     }
 
 #delete user :(
-    function ban_user($user_id, $delete_comments){
+    function ban_user($user_id, $delete_comments, $delete_objects){
         # delete session_id(s)
         # update user_detail table set banned
         $query = "SELECT ip, session_id FROM pi WHERE user_id = ? GROUP BY session_id";
@@ -90,6 +90,20 @@ class m_admin{
         #delete users comments
             $query = "UPDATE comments SET deleted = 'Y' WHERE user_id = ?";
             $retval = $this->m_sql->query($query, 'i', array($user_id), 'insert');
+        }
+
+        if ( $delete_objects === 1 ){
+        #remove user submitted objects
+
+        #links
+            $query = "DELETE FROM link_details WHERE user_id = ?";
+            $this->m_sql->query($query, 'i', array($user_id), 'insert');
+        #blogs
+            $query = "DELETE FROM blog_details WHERE user_id = ?";
+            $this->m_sql->query($query, 'i', array($user_id), 'insert');
+        #pics
+            $query = "DELETE FROM picture_details WHERE user_id = ?";
+            $this->m_sql->query($query, 'i', array($user_id), 'insert');
         }
 
         return $session_info;

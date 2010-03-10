@@ -57,6 +57,7 @@ if ( isset($_POST['link_id']) ){
 #user
     $del_id = $_POST['user_id'];
     $delete_comments = isset($_POST['delete_comments']) ? 1 : 0;
+    $delete_objects = isset($_POST['delete_objects']) ? 1 : 0;
 
     $del_type = 'user';
 }
@@ -67,7 +68,7 @@ if ( isset($del_type) && isset($del_id)){
     if ( ($reason =  $_POST['reason']) && isset($reason) ){
         if ( $del_type === 'user' ){
 #deleting user
-            $m_admin->ban_user($del_id, $delete_comments);
+            $m_admin->ban_user($del_id, $delete_comments, $delete_objects);
         } else {
 #deleting object
             $m_admin->delete_object($del_id, $del_type);
@@ -83,7 +84,7 @@ if ( isset($del_type) && isset($del_id)){
 }
 
 #boring shit...
-array_push($m_stash->js_includes, $m_stash->theme_settings['js_path'] . '/admin.js?1=2');
+array_push($m_stash->js_includes, $m_stash->theme_settings['js_path'] . '/admin.js?1=4');
 
 ob_start();
 load_template("admin");
