@@ -25,8 +25,8 @@ if($_SERVER['REQUEST_METHOD']==='POST') {
             require_once('unified.php');
             $id = (int)$_POST['id'];
             $object = new unified($type);
-            $object->leaveComment($id, $comment);
-            header("location: ".$_SERVER['HTTP_REFERER']);
+            $comment_id = $object->leaveComment($id, $comment);
+            header("location: {$_SERVER['HTTP_REFERER']}#comment{$comment_id}");
             exit();
 	    } else {
 	    	header("Location: /");
