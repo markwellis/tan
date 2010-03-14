@@ -1,6 +1,6 @@
 package TAN;
-use Moose;
-use namespace::autoclean;
+use strict;
+use warnings;
 
 use Catalyst::Runtime 5.80;
 use Number::Format;
@@ -25,6 +25,8 @@ Main catalyst application
 =head1 METHODS
 
 =cut
+use parent 'Catalyst';
+
 use Catalyst qw/
     ConfigLoader
     Unicode::Encoding
@@ -36,8 +38,6 @@ use Catalyst qw/
     Session::State::Cookie
     PageCache
 /;
-
-extends 'Catalyst';
 
 our $VERSION = '0.90';
 use Time::HiRes qw/time/;

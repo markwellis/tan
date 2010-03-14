@@ -1,6 +1,6 @@
 package Data::Validate::Image;
-use Moose;
-use namespace::autoclean;
+use strict;
+use warnings;
 
 use Image::Info;
 
@@ -35,6 +35,16 @@ modify it under the same terms as Perl v5.10.1 itself.
 
 =cut
 
+sub new {
+    my $invocant = shift;
+
+    my $class = ref($invocant) || $invocant;
+    my $self = { };
+    bless($self,$class);
+
+    return $self;
+}
+
 sub is_image{
     my ($self, $file) = @_;
 
@@ -57,7 +67,5 @@ sub _validate{
 
     return 0;
 }
-
-__PACKAGE__->meta->make_immutable;
 
 1;

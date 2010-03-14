@@ -1,6 +1,6 @@
 package Fetch::Image;
-use Moose;
-use namespace::autoclean;
+use strict;
+use warnings;
 
 use LWPx::ParanoidAgent;
 use Data::Validate::Image;
@@ -38,8 +38,12 @@ modify it under the same terms as Perl v5.10.1 itself.
 
 =cut
 
-sub BUILD{
-    my ($self, $config) = @_;
+sub new{
+    my ($invocant, $config) = @_;
+
+    my $class = ref($invocant) || $invocant;
+    my $self = { };
+    bless($self, $class);
     
     $self->{'image_validator'} = new Data::Validate::Image;
 
@@ -60,7 +64,7 @@ sub BUILD{
         };
     }
 
-    return 1;
+    return $self;
 }
 
 sub fetch{
@@ -198,7 +202,5 @@ sub save_file{
 
     return $filecopy;
 }
-
-__PACKAGE__->meta->make_immutable;
 
 1;

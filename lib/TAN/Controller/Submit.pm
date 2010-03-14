@@ -1,8 +1,8 @@
 package TAN::Controller::Submit;
-use Moose;
-use namespace::autoclean;
+use strict;
+use warnings;
 
-BEGIN { extends 'Catalyst::Controller' }
+use parent 'Catalyst::Controller';
 
 use Data::Validate::URI;
 
@@ -518,7 +518,5 @@ This library is free software. You can redistribute it and/or modify
 it under the same terms as Perl itself.
 
 =cut
-
-__PACKAGE__->meta->make_immutable;
 
 1;
