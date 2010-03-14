@@ -67,7 +67,7 @@ forwards to resize
 =cut
 my $int = qr/\D+/;
 
-sub index: Path: Args(3) {
+sub index: Path('/static/cache/thumbs') Args(3) {
     my ( $self, $c, $mod, $id, $x ) = @_;
 
     $id =~ s/$int//g;

@@ -65,7 +65,7 @@ my $alpha_reg = qr/[^a-zA-Z0-9\-_]/;
 my $format_reg = qr/\w+_(.*)_\w+/;
 my $ext_reg = qr/js$/;
 
-sub index: Path: Args(1) {
+sub index: Path('/static/cache/js/') Args(1) {
     my ( $self, $c, $source_file ) = @_;
 
     $source_file =~ s/$alpha_reg//g;
