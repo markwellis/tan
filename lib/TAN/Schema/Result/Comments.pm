@@ -5,10 +5,10 @@ use warnings;
 
 use base 'DBIx::Class';
 use Parse::BBCode::TAN;
-my $bbcode = new Parse::BBCode::TAN;
-
 use HTML::Scrubber::StripScripts;
 
+#initilise these here for performance reasons
+my $bbcode = new Parse::BBCode::TAN;
 my $hss = HTML::Scrubber::StripScripts->new(
   Allow_src      => 1,
   Allow_href     => 1,
