@@ -1,8 +1,8 @@
 package TAN::Controller::View;
+use Moose;
+use namespace::autoclean;
 
-use strict;
-use warnings;
-use parent 'Catalyst::Controller';
+BEGIN { extends 'Catalyst::Controller' }
 
 use JSON;
 
@@ -141,8 +141,10 @@ sub index: PathPart('') Chained('location') Args(1) {
         'order_by' => 'created',
     })->all;
 
-    my $title = eval("$c->stash->{'object'}->" . $c->stash->{'object'}->type . "->title");
+
+    $title = eval('$c->stash->{"object"}->' . $c->stash->{'object'}->type . "->title");
     $c->stash->{'page_title'} = $title;
+
     $c->stash->{'template'} = 'view.tt';
 }
 
@@ -196,9 +198,9 @@ sub comment: PathPart('_comment') Chained('location') Args(0) {
         my $type = $c->stash->{'location'};
         my $object_rs = $c->model('MySQL::' . ucfirst($type) )->find( $c->stash->{'object_id'} );
 
-        if ( defined($object_rs) && (my $title = $object_rs->title) ){
+        if ( defined($object_rs) ){
         #redirect to the object
-            $c->res->redirect( $c->forward('object_url') );
+            $c->res->redirect( $object_rs->object_url );
             $c->detach();
         } else {
         #no object, redirect to /
@@ -295,9 +297,10 @@ sub add_plus_minus: Private{
 
     if ( $c->user_exists ){
     # valid user, do work
-        my $count = $c->model('MySQL::PlusMinus')->add(
+        my $plusminus_rs = $c->model('MySQL::PlusMinus')->add(
             $type, $c->stash->{'object_id'}, $c->user->user_id
         );
+        my $count = $plusminus_rs->count;
 
         if ( defined($c->req->param('json')) ){
         #json
@@ -307,7 +310,7 @@ sub add_plus_minus: Private{
             }) );
         } else {
         #redirect
-            $c->res->redirect( $c->forward('object_url') );
+            $c->res->redirect( $c->model('MySQL::Object')->find( $c->stash->{'object_id'} )->url_title );
         }
     } else {
     #prompt for login
@@ -362,5 +365,7 @@ This library is free software. You can redistribute it and/or modify
 it under the same terms as Perl itself.
 
 =cut
+
+__PACKAGE__->meta->make_immutable;
 
 1;

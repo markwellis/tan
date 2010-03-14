@@ -77,7 +77,7 @@ sub add{
     my $count = $self->search({
         'object_id' => $object_id,
         'type' => $type,
-    })->count;
+    });
     return $count;
 }
 

@@ -1,9 +1,7 @@
 package Fetch::Image;
-
-use strict;
-use warnings;
-
 use Moose;
+use namespace::autoclean;
+
 use LWPx::ParanoidAgent;
 use Data::Validate::Image;
 use File::Temp;
@@ -69,7 +67,7 @@ sub fetch{
     my ($self, $url, $save_here) = @_;
 
     if ( !defined($url) || !defined($save_here) ){
-        return 0;
+return 0;
     }
 
     my $ua = $self->setup_ua();
@@ -200,5 +198,7 @@ sub save_file{
 
     return $filecopy;
 }
+
+__PACKAGE__->meta->make_immutable;
 
 1;

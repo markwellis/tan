@@ -1,7 +1,6 @@
 package TAN;
-
-use strict;
-use warnings;
+use Moose;
+use namespace::autoclean;
 
 use Catalyst::Runtime 5.80;
 use Number::Format;
@@ -26,17 +25,20 @@ Main catalyst application
 =head1 METHODS
 
 =cut
-use parent qw/Catalyst/;
-use Catalyst qw/ConfigLoader
-                Unicode::Encoding
-                Authentication
-                Cache::FastMmap
-                Session
-                Email
-                Session::Store::FastMmap
-                Session::State::Cookie
-                PageCache
-            /;
+use Catalyst qw/
+    ConfigLoader
+    Unicode::Encoding
+    Authentication
+    Cache::FastMmap
+    Session
+    Email
+    Session::Store::FastMmap
+    Session::State::Cookie
+    PageCache
+/;
+
+extends 'Catalyst';
+
 our $VERSION = '0.90';
 use Time::HiRes qw/time/;
 use POSIX qw/floor/;

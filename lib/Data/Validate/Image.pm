@@ -1,9 +1,7 @@
 package Data::Validate::Image;
-
-use strict;
-use warnings;
-
 use Moose;
+use namespace::autoclean;
+
 use Image::Info;
 
 =head1 NAME
@@ -59,5 +57,7 @@ sub _validate{
 
     return 0;
 }
+
+__PACKAGE__->meta->make_immutable;
 
 1;

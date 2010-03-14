@@ -1,8 +1,8 @@
 package TAN::Controller::Filter;
+use Moose;
+use namespace::autoclean;
 
-use strict;
-use warnings;
-use parent 'Catalyst::Controller';
+BEGIN { extends 'Catalyst::Controller' };
 
 =head1 NAME
 
@@ -59,5 +59,7 @@ This library is free software. You can redistribute it and/or modify
 it under the same terms as Perl itself.
 
 =cut
+
+__PACKAGE__->meta->make_immutable;
 
 1;
