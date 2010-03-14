@@ -865,7 +865,7 @@ ob_clean();
 	        }
 
             $output .= "<script type='text/javascript'>var nsfw = {$this->nsfw};</script>";
-            $output .= '<script type="text/javascript" src="/sys/js/nsfw_comments.js?r=25"></script>';
+            $output .= '<script type="text/javascript" src="/sys/js/nsfw_comments.js?r=27"></script>';
             
 	        if ($user->isLoggedIn()){
 	            $output .= "<h2 id='lcomments'>Leave your comments</h2>"
