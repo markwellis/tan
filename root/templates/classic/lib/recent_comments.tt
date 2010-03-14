@@ -19,13 +19,14 @@
             IF ( comment.long != comment.comment );
                 comment.long = comment.long _ '...';
             END;
+            comment.long = comment.long | html;
             
             tip_title = comment.user.username  _ "@" _ comment.created _ "::" _ comment.long;
 
             type = comment.object.type;
     -%]
             <li>
-                <a style="margin:0px;padding:3px;" class="recent_comment recent_comments" title="[%- tip_title | html-%]" href="[%- comment.object.url -%]#comment[%- comment.comment_id -%]">[%- comment.short | html-%]</a>
+                <a style="margin:0px;padding:3px;" class="recent_comment recent_comments" title="[%- tip_title | html -%]" href="[%- comment.object.url -%]#comment[%- comment.comment_id -%]">[%- comment.short | html-%]</a>
             </li>
         [%- END -%]
     </ul>
