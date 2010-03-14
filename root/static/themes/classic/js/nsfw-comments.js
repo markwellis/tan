@@ -3,7 +3,10 @@ new Asset.image( image_src );
 
 if (nsfw === 0){
     $$('#blog_wrapper img', '.comment_inner img').filter(function(el, index){
-        return (el.getProperty('src').indexOf('/static/fckeditor/editor/images/smiley/') < 0);
+        if ( el.getProperty('src') ){
+            return (el.getProperty('src').indexOf('/static/fckeditor/editor/images/smiley/') < 0);
+        }
+        return false;
     }).each(function(el) {
         el.addClass('boob_blocked');
         el.setStyle('visibility', 'hidden');
@@ -43,7 +46,10 @@ if (nsfw === 0){
 } else {
     window.addEvent('load', function() {
         $$('#blog_wrapper img', '.comment_inner img').filter(function(el, index){
-            return (el.getProperty('src').indexOf('/static/fckeditor/editor/images/smiley/') < 0);
+            if ( el.getProperty('src') ){
+                return (el.getProperty('src').indexOf('/static/fckeditor/editor/images/smiley/') < 0);
+            }
+            return false;
         }).each(function(el) {
             resize_image(el, el);
         });
