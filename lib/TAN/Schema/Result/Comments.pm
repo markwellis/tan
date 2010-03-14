@@ -5,8 +5,15 @@ use warnings;
 
 use base 'DBIx::Class';
 use Parse::BBCode::TAN;
-
 my $bbcode = new Parse::BBCode::TAN;
+
+use HTML::Scrubber::StripScripts;
+
+my $hss = HTML::Scrubber::StripScripts->new(
+  Allow_src      => 1,
+  Allow_href     => 1,
+  Allow_a_mailto => 1,
+);
 
 __PACKAGE__->load_components('UTF8Columns', "Core");
 __PACKAGE__->table("comments");
@@ -46,8 +53,10 @@ __PACKAGE__->utf8_columns(qw/comment/);
 sub comment{
     my ( $row ) = @_;
 
+    my $comment = $hss->scrub( $row->_comment );
+
 #do some caching shit here...
-return $bbcode->render($row->_comment);
+    return $bbcode->render( $comment );
 }
 
 __PACKAGE__->belongs_to(
