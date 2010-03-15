@@ -85,6 +85,7 @@ Posted by <a class="a user" href="/user/[% object.user.username %]/1/">[% object
             <a class="view_link" rel="external nofollow" href="[%- url -%]">View Link</a>
         [%- END;
     ELSE -%]
+        <br />
         </li>
         <li class="news comment_wrapper hr">
         <div id="blog_wrapper">
