@@ -60,8 +60,8 @@ function resize_image(image, el){
     if (image.width > 600){
         var width = image.width;
         var height = image.height;
-        image.width = 600;
-        image.height = 600 * (height / width);
+        image.width = 550;
+        image.height = 550 * (height / width);
     }
     el.setStyles({
         'width': image.width + 'px',

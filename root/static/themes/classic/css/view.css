@@ -13,6 +13,10 @@
     font-size:1.5em;
 }
 
+.video{
+    text-align:center;
+}
+
 /* comment */
 
 .comment_holder{
@@ -39,6 +43,7 @@
 .comment_inner{
     margin-left:135px;
     margin-top:20px;
+    font-size: 0.8em;
 }
 
 .comment_inner p{
