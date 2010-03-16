@@ -55,7 +55,7 @@ window.addEvent('load', function() {
             el.setProperty('src', src);
         });
 
-        comment = '[quote user="' + username + '"]' + quote + '[/quote]' + "\n<br /><br />";
+        comment = '[quote user=' + username + ']' + quote + '[/quote]' + "\n<br /><br />";
 
         tinyMCE.activeEditor.execCommand("mceInsertContent", false, comment);
 

@@ -33,6 +33,15 @@ sub init{
             'BanList'     => {
                 'script'  => 1
             },
+            'Rules' => {
+                'a' => sub {
+                    my ( $filter,$element ) = @_;
+
+                    #inject rel=nofollow
+                    $element->{'attr'}{'rel'} = 'external nofollow';
+                    return 1;
+                },
+            },
         },
         'strict_comment'  => 1,
         'strict_names'    => 1,
