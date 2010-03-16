@@ -41,24 +41,13 @@ __PACKAGE__->utf8_columns(qw/details title description/);
 # Created by DBIx::Class::Schema::Loader v0.04006 @ 2009-11-04 22:01:19
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:2yuJn4YdJ2YjHiMM992ceQ
 
-use Parse::HTML;
-use Parse::BBCode::TAN;
-use HTML::Scrubber::StripScripts;
-
-#initilise these here for performance reasons
-my $bbcode = new Parse::BBCode::TAN;
-
-my $hss = HTML::Scrubber::StripScripts->new(
-  Allow_src      => 1,
-  Allow_href     => 1,
-);
-
-my $p = new Parse::HTML;
+use Parse::TAN;
+my $parser = new Parse::TAN;
 
 sub details{
     my ( $row ) = @_;
 
-    my $blog = $p->parse( $bbcode->render( $hss->scrub( $row->_details ) ) );
+    my $blog = $parser->parse( $row->_details );
 
 #do some caching shit here...
     return $blog;

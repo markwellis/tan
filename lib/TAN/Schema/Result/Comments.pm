@@ -5,19 +5,8 @@ use warnings;
 
 use base 'DBIx::Class';
 
-use Parse::HTML;
-use Parse::BBCode::TAN;
-use HTML::Scrubber::StripScripts;
-
-#initilise these here for performance reasons
-my $bbcode = new Parse::BBCode::TAN;
-
-my $hss = HTML::Scrubber::StripScripts->new(
-  Allow_src      => 1,
-  Allow_href     => 1,
-);
-
-my $p = new Parse::HTML;
+use Parse::TAN;
+my $parser = new Parse::TAN;
 
 __PACKAGE__->load_components('UTF8Columns', "Core");
 __PACKAGE__->table("comments");
@@ -57,7 +46,7 @@ __PACKAGE__->utf8_columns(qw/comment/);
 sub comment{
     my ( $row ) = @_;
 
-    my $comment = $p->parse( $bbcode->render( $hss->scrub( $row->_comment ) ) );
+    my $comment = $parser->parse( $row->_comment );
 
 #do some caching shit here...
     return $comment;
