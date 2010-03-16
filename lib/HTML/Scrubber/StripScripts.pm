@@ -1,5 +1,6 @@
 package HTML::Scrubber::StripScripts;
 use strict;
+use warnings;
 
 use vars qw($VERSION);
 $VERSION = '0.02';
@@ -86,14 +87,14 @@ presents no XSS hazard.
 
 =cut
 
-require 5.005; # for qr//
 use HTML::Scrubber;
 
-use vars qw(%re);
-%re = (
+my %re = (
   size      => qr#^[+-]?\d+(?:\./d+)?[%*]?$#,
   color     => qr#^(?:\w{2,20}|\#[\da-fA-F]{6})$#,
   word      => qw#^\w*$#,
+  style     => qr#^[\w:\-;\s]+$#,
+  class     => qr#^[\w\-\ ]+$#,
   wordlist  => qr#(?:[\w\-\, ]{1,200})$#,
   text      => qr#^[^\0]*$#,
   url       => qr# (?:^ (?:https?|ftp) :// ) | (?:^ [\w\.,/-\?]+ $) #ix,
@@ -124,6 +125,8 @@ sub new {
 
     my %texta_attr = (
       'align' => $re{'word'},
+      'style' => $re{'style'},
+      'class'=> $re{'class'},
     );
 
     my %cellha_attr = (
