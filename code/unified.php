@@ -637,7 +637,7 @@ if (defined('MAGIC')) {
 	            if ($article && $kind === 'link'){
                     $matches = (array)null;
 
-                    if ( preg_match('/http\:\/\/www\.youtube\.com\/watch\?v=(.*?)\&/', "{$objectDetails['url']}&", &$matches) && $matches[1] ){
+                    if ( preg_match('/\.youtube\.com\/watch\?v=(.*?)\&/', "{$objectDetails['url']}&", &$matches) && $matches[1] ){
                     #youtube
                         $youtube_id = $matches[1];
                         $output .= "<object type='application/x-shockwave-flash' style='width:425px; height:350px;' "
