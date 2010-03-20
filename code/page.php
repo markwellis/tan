@@ -175,7 +175,7 @@ if (defined('MAGIC')) {
 	            .'<meta name="keywords" content="news community comments english lulz lol social lulzhq fun jokes '
 	            .'videos pictures share sharing lol lolz funny humour humur"/> '
 	            .'<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/> '
-	            .'<link rel="stylesheet" type="text/css" title="default" href="/css/default.css?2=34" /> '
+	            .'<link rel="stylesheet" type="text/css" title="default" href="/css/default.css?5=0" /> '
 	            .'<link rel="shortcut icon" href="/favicon.ico" /> '
 	            .$script
 	            .'</head> ';
@@ -185,33 +185,39 @@ if (defined('MAGIC')) {
 	    
 	    private function createBody($where, $type, $sortby = null){
 	        $user = &$this->user;
+            $username = $user->getUsername();
+            if ( !$username ){
+                $username = 'n00b';
+            }
             $ad_code = $this->get_right_ad();
-            $this->output .= '<body>'
-                .'<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/mootools/1.2.3/mootools-yui-compressed.js"></script>'
-                .'<script type="text/javascript" src="/sys/script/mootools-1.2.3.1-more.js"></script>'
-	            .'<script type="text/javascript" src="/sys/js/clientside.js?t=3"></script>'
-	            .'<div id="main">'
-	            .'<div id="top">'
-				.'<div style="width:380px;float:right;margin-top:5px;margin-right:5px;text-align:right;">'
-			.'<form action="https://www.paypal.com/cgi-bin/webscr" method="post" style="float:right;margin-left:5px;">
-<input type="hidden" name="cmd" value="_xclick">
-<input type="hidden" name="business" value="donate@thisaintnews.com">
-<input type="hidden" name="item_name" value="TAN Donation">
-<input type="hidden" name="currency_code" value="GBP">
-<input type="hidden" name="tax" value="0">
-<input type="image" src="https://www.paypal.com/images/x-click-but04.gif" 
-       border="0"
-name="submit" alt="SEND ME MONIES!1!!">
-</form>';
-                ob_start();
-                ?>
+            ob_start();
+            ?>
+
+<body>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/mootools/1.2.3/mootools-yui-compressed.js"></script>
+<script type="text/javascript" src="/sys/script/mootools-1.2.3.1-more.js"></script>
+<script type="text/javascript" src="/sys/js/clientside.js?t=3"></script>
+<div id="main">
+<div id="top">
+<div style="width:380px;float:right;margin-top:5px;margin-right:5px;text-align:right;">
+<form action="https://www.paypal.com/cgi-bin/webscr" method="post" style="float:right;margin-left:5px;">
+<fieldset>
+<input type="hidden" name="cmd" value="_xclick" />
+<input type="hidden" name="business" value="donate@thisaintnews.com" />
+<input type="hidden" name="item_name" value="TAN Donation" />
+<input type="hidden" name="item_number" value=" <?= $username ?>" />
+<input type="hidden" name="currency_code" value="GBP" />
+<input type="hidden" name="tax" value="0" />
+<input type="image" src="https://www.paypal.com/images/x-click-but04.gif" name="submit" alt="Donate" />
+</fieldset>
+</form>
                 <script type="text/javascript">//<![CDATA[
                 
                 window.addEvent('domready', function() {
                     $$('.mibbit').addEvent('click', function(e) {
                         popUpWindow("https://widget.mibbit.com/?server=irc.thisaintnews.com%3A%2B6697&chatOutputShowTimes=true"
                   	  +"&channel=%23thisaintnews&settings=8a8a5ac18a22e7eecd04026233c3df93&autoConnect=true"
-                	  +"&nick=<?= $user->getUsername() ?>", 720, 400);
+                	  +"&nick=<?= $username ?>", 720, 400);
                 	e.stop();
                     });
                 });

@@ -833,3 +833,13 @@ ul#mainmenu li ul li{
 .object_type{
     color:#326f24;
 }
+
+.video{
+    text-align: center;
+}
+
+fieldset{
+    border:0px;
+    margin:0px;
+    padding:0px;
+}

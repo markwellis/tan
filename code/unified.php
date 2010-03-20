@@ -640,13 +640,14 @@ if (defined('MAGIC')) {
                     if ( preg_match('/youtube\.com\/watch\?v=(.*?)\&/', "{$objectDetails['url']}&", &$matches) && $matches[1] ){
                     #youtube
                         $youtube_id = $matches[1];
-                        $output .= "<object type='application/x-shockwave-flash' style='width:425px; height:350px;' "
+                        $output .= "<br /><div class='video'><object type='application/x-shockwave-flash' style='width:450px; height:370px;' "
                             ."data='http://www.youtube.com/v/{$youtube_id}'><param name='wmode' value='transparent' />"
-                            ."<param name='movie' value='http://www.youtube.com/v/{$youtube_id}' /></object>";
+                            ."<param name='movie' value='http://www.youtube.com/v/{$youtube_id}' /></object></div>";
                     } elseif ( preg_match('/http:\/\/www\.liveleak\.com\/view\?i=(.*?)\&/', "{$objectDetails['url']}&", &$matches) && $matches[1] ) {
                     #live leak
                         $leak_id = $matches[1];
-                        $output .= '<object width="450" height="370">'
+                        $output .= '<br /><div class="video">'
+                            .'<object width="450" height="370">'
                             .'<param name="movie" '
                             .' value="http://www.liveleak.com/e/' 
                             . $leak_id . '"></param><param name="wmode"'
@@ -656,7 +657,21 @@ if (defined('MAGIC')) {
                             . $leak_id . '" '
                             .' type="application/x-shockwave-flash"'
                             .' wmode="transparent" width="450" height="370">'
-                            .'</embed></object>';
+                            .'</embed></object>'
+                            .'</div>';
+                    } elseif ( preg_match('/http:\/\/video\.google\.com\/videoplay\?docid=(.*?)\&/', "{$objectDetails['url']}&", &$matches) && $matches[1] ) {
+                    #google
+                        $google_id = $matches[1];
+                        $output .= '<br /><div class="video">'
+                            .'<embed id="VideoPlayback"'
+                            .' src="http://video.google.com/googleplayer.swf?'
+                            .'docid=' . $google_id 
+                            .'&hl=en&fs=true" style="width:450px;height:370px"'
+                            .' allowFullScreen="true"'
+                            .' allowScriptAccess="always"'
+                            .' type="application/x-shockwave-flash">'
+                            .'</embed>'
+                            .'</div>';
                     } else {
     	                $output .= "<a style='margin-right:70px;float:right;font-size:1.5em;' rel='external nofollow' href='".stripslashes($objectDetails['url'])."'>View Link</a><br/><br/>";
                     }

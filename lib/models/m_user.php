@@ -55,7 +55,10 @@ if (defined('MAGIC')) {
         }
 
         public function user_id() {
-            return $_SESSION['user_id'];
+            if ( isset($_SESSION['user_id']) ){
+                return $_SESSION['user_id'];
+            }
+            return null;
         }
         
         public function user_id_to_username($user_id) {
