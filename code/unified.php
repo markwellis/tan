@@ -649,7 +649,7 @@ if (defined('MAGIC')) {
                         $output .= '<object width="450" height="370">'
                             .'<param name="movie" '
                             .' value="http://www.liveleak.com/e/' 
-                            . $leak_id . '></param><param name="wmode"'
+                            . $leak_id . '"></param><param name="wmode"'
                             .' value="transparent">'
                             .'</param>'
                             .'<embed src="http://www.liveleak.com/e/' 
