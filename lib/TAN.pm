@@ -117,7 +117,8 @@ sub nsfw{
     my ($c, $value) = @_;
     
     if (defined($value)){
-        $c->session->{'nsfw'} = $value
+        $c->session->{'nsfw'} = $value;
+        return $value;
     }
     
     if (defined($c->session->{'nsfw'}) && $c->session->{'nsfw'} == 1){

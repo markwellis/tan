@@ -28,7 +28,7 @@ gets the stuff for the index
 
 =cut
 sub index {
-    my ($self, $location, $page, $upcoming, $order) = @_;
+    my ($self, $location, $page, $upcoming, $order, $nsfw) = @_;
     
     my ($type, $search, $prefetch);
     
@@ -46,10 +46,16 @@ sub index {
     } else {
         $type = $location;
     }
-
+    
+    my %nsfw_opts;
+    if ( !defined($nsfw) || !$nsfw ){
+        $nsfw_opts{'nsfw'} = 'N';
+    }
+    
     return $self->search({
         'promoted' => $search,
         'type' => $type,
+        %nsfw_opts
     },{
         '+select' => [
             { 'unix_timestamp' => 'me.created' },

@@ -98,7 +98,7 @@ sub index: PathPart('') Chained('location') Args(1) {
             { 'unix_timestamp' => 'me.created' },
             { 'unix_timestamp' => 'me.promoted' },
             \'(SELECT COUNT(*) FROM views WHERE views.object_id = me.object_id) views',
-            \'(SELECT COUNT(*) FROM comments WHERE comments.object_id = me.object_id) comments',
+            \'(SELECT COUNT(*) FROM comments WHERE comments.object_id = me.object_id AND deleted = "N") comments',
             \'(SELECT COUNT(*) FROM plus_minus WHERE plus_minus.object_id = me.object_id AND type="plus") plus',
             \'(SELECT COUNT(*) FROM plus_minus WHERE plus_minus.object_id = me.object_id AND type="minus") minus',
         ],
@@ -132,6 +132,7 @@ sub index: PathPart('') Chained('location') Args(1) {
 
     @{$c->stash->{'comments'}} = $c->model('MySQL::Comments')->search({
         'object_id' => $c->stash->{'object_id'},
+        'me.deleted' => 'N',
     },{
         '+select' => [
             { 'unix_timestamp' => 'me.created' },

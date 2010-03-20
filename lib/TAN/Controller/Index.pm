@@ -82,7 +82,7 @@ sub index :Path :Args(3) {
     $c->stash->{'page'} = $page;
     $c->stash->{'upcoming'} = $upcoming;
     
-    my $index_objects = $c->model('MySQL::Object')->index($location, $page, $upcoming, $order);
+    my $index_objects = $c->model('MySQL::Object')->index( $location, $page, $upcoming, $order, $c->nsfw );
     my @index = $index_objects->all;
 
     if ( $c->user_exists ){

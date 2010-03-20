@@ -26,6 +26,15 @@
     padding:0px;
 }
 
+.alert_box{
+    padding: 5px;
+    font-size:2em;
+    right:0px;
+    top:0px;
+    position:fixed;
+    background-color:#000;
+}
+
 /* object */
 
 .news .p {
