@@ -82,15 +82,29 @@ if (defined('MAGIC')) {
         public function admin(){
             $user_id = $this->user_id();
             $username = $this->username();
+
             if ( ($user_id === 1) && ($username === 'mrbig4545') ){
+            #me
                 return 1;
             }
 
             if ( ($user_id === 17) && ($username === 'Scobiewan') ){
+            #scobie
                 return 1;
             }
 
             if ( ($user_id === 144) && ($username === 'AntiPsi') ){
+            #anti
+                return 1;
+            }
+
+            if ( ($user_id === 21) && ($username === 'psidust42') ){
+            #psidust42
+                return 1;
+            }
+
+            if ( ($user_id === 47) && ($username === 'ConeOfSilence') ){
+            #ConeOfSilence
                 return 1;
             }
 
