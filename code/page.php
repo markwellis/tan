@@ -229,7 +229,7 @@ if (defined('MAGIC')) {
             if ( $user->admin() ){
                 $this->output .= '<a href="/admin" class="menulink">Admin</a> | ';
             }
-            $this->output .= '<a href="http://www.cafepress.com/thisaintnews" class="menulink">Shop</a> | '
+            $this->output .= '<a href="http://stats.thisaintnews.com" class="menulink">Stats</a> | '
                 .'<a href="/chat/" class="menulink mibbit">Chat</a>';
     
             if ($user->isLoggedIn()){

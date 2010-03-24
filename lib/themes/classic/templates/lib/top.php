@@ -35,7 +35,7 @@ name="submit" alt="SEND ME MONIES!1!!">
                     <a href="/admin" class="top_link">Admin</a> |
                 <?php } ?>
  
-                <a href="http://www.cafepress.com/thisaintnews" class="top_link">Shop</a> | <a href="/chat/" class="top_link mibbit">Chat</a>
+                <a href="http://stats.thisaintnews.com" class="top_link">Stats</a> | <a href="/chat/" class="top_link mibbit">Chat</a>
                 <?php if ($m_stash->m_user->logged_in()){ ?>
                      | <a href='/logout/' class='top_link'>Logout</a>
                 <?php } ?>
