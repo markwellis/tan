@@ -16,7 +16,7 @@ IF location == 'picture';
 [%- FOREACH object = index_objects.objects -%]
     <li class="news[% IF (i % 2)  %] alternate[% END %]" id="[% object.type _ object.id %]">
     [%- 
-        avatar_http = c.config.avatar_path _ "/" _ object.user_id _ ".jpg";
+        avatar_http = c.config.avatar_path _ "/" _ object.user_id;
         avatar_image = c.path_to('root') _ avatar_http;
         avatar_exists = avatar_image | file_exists;
 

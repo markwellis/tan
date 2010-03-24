@@ -16,15 +16,15 @@
                 <br/>
                 
                 [%- IF c.user_exists -%]
-                    <a href="/user/[% c.user.username %]/1/" class="top_link">My Comments</a> | <a href="/avatar/" class="top_link">Avatar</a> | 
+                    <a href="/user/[% c.user.username %]/1/" class="top_link">My Comments</a> | <a href="/profile/avatar" class="top_link">Avatar</a> | 
                 [%- ELSE -%]
                     <a href="/login/" class="top_link">Login/Register</a> | 
                 [%- END -%]
             
                 [%- IF (c.nsfw) -%]
-                    <a href="/filter/" class="top_link">Enable NSFW filter</a>
+                    <a href="/filter/" class="top_link">Enable filter</a>
                 [%- ELSE -%]
-                    <a href="/filter/" class="top_link" onclick="return confirm("Are you sure you want to disable the NSFW work filter? There will be content which is not suitable for work");">Disable NSFW filter</a>
+                    <a href="/filter/" class="top_link" onclick="return confirm("Are you sure you want to disable the NSFW work filter? There will be content which is not suitable for work");">Disable filter</a>
                 [%- END -%]
                 <br />
                 <div style="float:right">

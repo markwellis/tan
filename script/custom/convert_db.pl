@@ -41,7 +41,7 @@ while (my $old_user = $old_users->next){
 
     #convert avatar
     my $old_avatar = $old_avatar_path . '/' . $old_user->user_id . '.jpg';
-    my $new_avatar = $new_avatar_path . '/' . $new_user->user_id . '.jpg';
+    my $new_avatar = $new_avatar_path . '/' . $new_user->user_id;
 warn $old_avatar . "\n";
 warn $new_avatar . "\n";
     if ( -f $old_avatar ){

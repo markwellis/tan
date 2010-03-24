@@ -1,0 +1,69 @@
+[%-
+avatar_http = c.config.avatar_path _ "/" _ c.user.user_id;
+avatar_image = c.path_to('root') _ avatar_http;
+avatar_exists = avatar_image | file_exists;
+
+IF (avatar_exists);
+    avatar_mtime = avatar_image | file_mtime;
+ELSE;
+    avatar_http = c.config.static_path _ '/images/_user.png';
+END;
+
+css_includes.push({
+    'file' => "$theme_settings.css_path/profile.css",
+    'media' => 'screen',
+});
+
+js_includes.push('Lasso');
+js_includes.push('Lasso-Crop');
+
+
+-%]
+
+<ul id="inside">
+    [% IF !crop %]
+        <li class="news left" >
+            <img alt="[% c.user.username %]" src="[% avatar_http %]?m=[% avatar_mtime.defined ? avatar_mtime : '' %]" class="avatar">
+        </li>
+        <li class="news">
+            <h2>
+                Upload new avatar
+            </h2>
+
+            <form method="post" action="/profile/upload_avatar" enctype="multipart/form-data" class="avatar_upload">
+                <fieldset>
+                    <input type="file" name="avatar" id="avatar" />
+                    <input type="submit" value="Upload" />
+                </fieldset>
+            </form>
+        </li>
+    [% ELSE %]
+        <li class="news" >
+            <img src="[% avatar_http %].no_crop?m=[% avatar_image _ '.no_crop' | file_mtime %]" id="cropper" />
+            <form method="post" action="/profile/crop_avatar" class="avatar_upload">
+                <fieldset>
+                    <input type="hidden" name="cords" id="cords" />
+                    <input type="submit" value="Crop" />
+                </fieldset>
+            </form>
+
+            <script type="text/javascript">
+                new Lasso.Crop('cropper',{
+                    ratio : [1,1],
+                    preset : [1,1,100,100],
+                    min : [50,50],
+                    handleSize : 4,
+                    opacity : .6,
+                    color : '#7389AE',
+                    border : '/images/crop.gif',
+                    onResize: function(cords){
+//                       alert( cords );
+                        $('cords').value = JSON.encode(cords);
+                    }
+                });
+
+            </script>
+        </li>
+    [% END %]
+</ul>
+<br class="clear" />

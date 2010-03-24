@@ -286,7 +286,6 @@ sub validate_picture: Private{
     } elsif (my $upload = $c->request->upload('pic')) {
     #upload
         $fileinfo = $c->model('ValidateImage')->is_image($upload->tempname);
-        $fileinfo = $c->stash->{'fileinfo'};
 
         if( $fileinfo ){
         #is an image
