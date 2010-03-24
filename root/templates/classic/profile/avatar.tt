@@ -29,8 +29,11 @@ js_includes.push('Lasso-Crop');
             <h2>
                 Upload new avatar
             </h2>
+            <p>
+                Keep your avatar safe for work
+            </p>
 
-            <form method="post" action="/profile/upload_avatar" enctype="multipart/form-data" class="avatar_upload">
+            <form method="post" action="/profile/avatar/upload" enctype="multipart/form-data">
                 <fieldset>
                     <input type="file" name="avatar" id="avatar" />
                     <input type="submit" value="Upload" />
@@ -40,7 +43,7 @@ js_includes.push('Lasso-Crop');
     [% ELSE %]
         <li class="news" >
             <img src="[% avatar_http %].no_crop?m=[% avatar_image _ '.no_crop' | file_mtime %]" id="cropper" />
-            <form method="post" action="/profile/crop_avatar" class="avatar_upload">
+            <form method="post" action="/profile/avatar/crop">
                 <fieldset>
                     <input type="hidden" name="cords" id="cords" />
                     <input type="submit" value="Crop" />
@@ -48,6 +51,7 @@ js_includes.push('Lasso-Crop');
             </form>
 
             <script type="text/javascript">
+            window.addEvent('load', function() {
                 new Lasso.Crop('cropper',{
                     ratio : [1,1],
                     preset : [1,1,100,100],
@@ -55,12 +59,11 @@ js_includes.push('Lasso-Crop');
                     handleSize : 4,
                     opacity : .6,
                     color : '#7389AE',
-                    border : '/images/crop.gif',
                     onResize: function(cords){
-//                       alert( cords );
                         $('cords').value = JSON.encode(cords);
                     }
                 });
+            });
 
             </script>
         </li>

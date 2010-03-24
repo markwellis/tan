@@ -55,6 +55,29 @@ sub resize{
     return 'error';
 }
 
+=head2 crope
+
+B<@args = ($infile, $outfile, $x, $y, $w, $h)>
+
+=over
+
+crops and resizes $infile to 100x100
+
+writes to $outfile
+
+=back
+
+=cut
+sub crop{
+    my ( $self, $infile, $outfile, $x, $y, $w, $h ) = @_;
+
+    if (!`convert '${infile}'[0-10] -coalesce -crop ${w}x${h}+${x}+${y} -thumbnail 100x100 -layers Optimize ${outfile}`) {
+    #exit code 0 is success :/
+        return 1;
+    }
+    return 0;
+}
+
 =head1 AUTHOR
 
 A clever guy

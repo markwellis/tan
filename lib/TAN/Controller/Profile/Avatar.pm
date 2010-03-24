@@ -1,16 +1,19 @@
-package TAN::Controller::Profile;
+package TAN::Controller::Profile::Avatar;
 use strict;
 use warnings;
 
 use parent 'Catalyst::Controller';
 use JSON;
+
+my $int_reg = qr/\D+/;
+
 =head1 NAME
 
-TAN::Controller::Profile
+TAN::Controller::Profile::Avatar
 
 =head1 DESCRIPTION
 
-Profile page
+Avatar upload pages
 
 =head1 EXAMPLE
 
@@ -20,7 +23,7 @@ I</chat>
 
 =cut
 
-=head2 avatar: Path(avatar)
+=head2 index: Path()
 
 B<@args = undef>
 
@@ -44,7 +47,7 @@ sub auto: Private{
     return 1;
 }
 
-sub avatar: Local {
+sub index: Path() {
     my ( $self, $c ) = @_;
 
     if ( $c->req->param('crop') ){
@@ -54,7 +57,7 @@ sub avatar: Local {
     $c->stash->{'template'} = 'profile/avatar.tt';
 }
 
-sub upload_avatar: Local{
+sub upload: Local{
     my ( $self, $c ) = @_;
 
     if (my $upload = $c->request->upload('avatar')) {
@@ -72,46 +75,92 @@ sub upload_avatar: Local{
             }
 
             my $image = $c->model('Thumb')->resize($upload->tempname, $fileinfo->{'filename'}, 640);
+            undef $upload;
             if ( !$image && -e $fileinfo->{'filename'} ){
             # upload success
 #redirect back to avatar upload page
             
-                $c->res->redirect('/profile/avatar?crop=true');
+                $c->res->redirect('/profile/avatar/?crop=true');
                 $c->detach();
             } else {
-                $c->flash->{'error'} = 'Upload Error';
+                $c->flash->{'message'} = 'Upload Error';
                 $c->res->redirect('/profile/avatar');
                 $c->detach();
             }
-
-            undef $upload;
         } else {
-            $c->flash->{'error'} = 'Not an image';
+            $c->flash->{'message'} = 'Not an image';
             $c->res->redirect('/profile/avatar');
             $c->detach();
         }
     }
 
 #shouldnt get ehre
-    $c->flash->{'error'} = 'Upload Error';
+    $c->flash->{'message'} = 'Upload Error';
     $c->res->redirect('/profile/avatar');
     $c->detach();
 
 }
 
-sub crop_avatar: Local{
+sub crop: Local{
     my ( $self, $c ) = @_;
 
     my $json = $c->req->param('cords');
 
     if ( !defined($json) ){
 #ERROR HERE
+        $c->flash->{'message'} = 'Crop error';
+        $c->res->redirect('/profile/avatar?crop=true');
         $c->detach();
     }
     my $cords = from_json( $json );
-    use Data::Dumper;
 
-    warn Dumper $cords; 
+    if ( ref($cords) ne 'HASH' ){
+#ERROR HERE
+        $c->flash->{'message'} = 'Crop error';
+        $c->res->redirect('/profile/avatar?crop=true');
+        $c->detach();
+    }
+
+    my ($x, $y, $w, $h) = (
+        $cords->{'x'},
+        $cords->{'y'},
+        $cords->{'w'},
+        $cords->{'h'},
+    );
+    $x =~ s/$int_reg//g;
+    $y =~ s/$int_reg//g;
+    $w =~ s/$int_reg//g;
+    $h =~ s/$int_reg//g;
+
+    if ( !$x || !$y || !$w || !$h ){
+#ERROR HERE
+        $c->flash->{'message'} = 'Crop error';
+        $c->res->redirect('/profile/avatar?crop=true');
+        $c->detach();
+    }
+
+    my @path = split('/', 'root/' . $c->config->{'avatar_path'} . '/' . $c->user->user_id);
+    my $filename = $c->path_to(@path);
+
+    my $crop_res = $c->model('Thumb')->crop($filename . '.no_crop', $filename, $x, $y, $w, $h);
+
+    if ( $crop_res ){
+# SUCCESS
+        $c->flash->{'message'} = 'Upload complete';
+
+        if ( -e $filename . '.no_crop' ){
+        #delete pre-crop
+            unlink( $filename . '.no_crop' );
+        }
+
+        $c->res->redirect('/profile/avatar');
+    } else {
+#ERROR HERE
+        $c->flash->{'message'} = 'Crop error';
+        $c->res->redirect('/profile/avatar?crop=true');
+    }
+    
+    $c->detach();
 }
 
 =head1 AUTHOR
