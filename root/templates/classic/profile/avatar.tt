@@ -16,7 +16,7 @@ css_includes.push({
 
 js_includes.push('Lasso');
 js_includes.push('Lasso-Crop');
-
+js_includes.push('avatar-upload');
 
 -%]
 
@@ -51,37 +51,5 @@ js_includes.push('Lasso-Crop');
             </form>
         </li>
     [% END %]
-    <script type="text/javascript">
-        window.addEvent('load', function() {
-            [%- IF crop -%]
-                new Lasso.Crop('cropper',{
-                    ratio : [1,1],
-                    preset : [1,1,100,100],
-                    min : [50,50],
-                    handleSize : 4,
-                    opacity : .6,
-                    color : '#7389AE',
-                    onResize: function(cords){
-                        $('cords').value = JSON.encode(cords);
-                    }
-                });
-            [% ELSE %]
-                $('avatar').addEvent('change',function(e){
-                    this.getParent().getElement('input:[type="submit"]').disabled = 0;
-                });
-            [%- END -%]
-
-            $('crop_form').addEvent('submit',function(e){
-                if ( $('avatar') && !$('avatar').value ){
-                    TAN.alert('Please select an image to upload');
-                    return false;
-                }
-                e.target.getElement('input:[type="submit"]').disabled = 1;
-            });
-
-
-
-        });
-    </script>
 </ul>
 <br class="clear" />
