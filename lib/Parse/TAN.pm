@@ -64,15 +64,17 @@ sub init{
 
 
 sub parse{
-    my ( $self, $input_text ) = @_;
+    my ( $self, $input_text, $no_bbcode ) = @_;
 
     my $output_text;
 #strip XSS
     $output_text = $self->{'hss'}->filter_html( $input_text );
 
-# do bbcode stuff
-# has to be after XSS striping or the embeds will get stripped!
-    $output_text = $self->{'bbcode'}->render( $output_text );
+    if ( !$no_bbcode ){
+    # do bbcode stuff
+    # has to be after XSS striping or the embeds will get stripped!
+        $output_text = $self->{'bbcode'}->render( $output_text );
+    }
 
     return $output_text;
 }

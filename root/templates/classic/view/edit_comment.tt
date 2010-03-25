@@ -1,0 +1,7 @@
+[% editor = {
+    'name' => "comment",
+    'value' => comment,
+    'height' => '600px',
+};
+    
+PROCESS 'lib/editor.tt' %]

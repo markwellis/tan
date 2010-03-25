@@ -52,6 +52,15 @@ sub comment{
     return $comment;
 }
 
+sub comment_nobb{
+    my ( $row ) = @_;
+
+    my $comment = $parser->parse( $row->_comment, 1 );
+
+#do some caching shit here...
+    return $comment;
+}
+
 __PACKAGE__->belongs_to(
   "user",
   "TAN::Schema::Result::User",

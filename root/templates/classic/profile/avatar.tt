@@ -33,7 +33,7 @@ js_includes.push('Lasso-Crop');
                 Keep your avatar safe for work
             </p>
 
-            <form method="post" action="/profile/avatar/upload" enctype="multipart/form-data">
+            <form method="post" action="/profile/avatar/upload" enctype="multipart/form-data" id="crop_form">
                 <fieldset>
                     <input type="file" name="avatar" id="avatar" />
                     <input type="submit" value="Upload" />
@@ -43,15 +43,17 @@ js_includes.push('Lasso-Crop');
     [% ELSE %]
         <li class="news" >
             <img src="[% avatar_http %].no_crop?m=[% avatar_image _ '.no_crop' | file_mtime %]" id="cropper" />
-            <form method="post" action="/profile/avatar/crop">
+            <form method="post" action="/profile/avatar/crop" id="crop_form">
                 <fieldset>
                     <input type="hidden" name="cords" id="cords" />
                     <input type="submit" value="Crop" />
                 </fieldset>
             </form>
-
-            <script type="text/javascript">
-            window.addEvent('load', function() {
+        </li>
+    [% END %]
+    <script type="text/javascript">
+        window.addEvent('load', function() {
+            [%- IF crop -%]
                 new Lasso.Crop('cropper',{
                     ratio : [1,1],
                     preset : [1,1,100,100],
@@ -63,10 +65,21 @@ js_includes.push('Lasso-Crop');
                         $('cords').value = JSON.encode(cords);
                     }
                 });
+            [%- END -%]
+
+            $('crop_form').addEvent('submit',function(e){
+                if ( !$('avatar').value ){
+                    TAN.alert('Please select an image to upload');
+                    return false;
+                }
+                e.target.getElement('input:[type="submit"]').disabled = 1;
             });
 
-            </script>
-        </li>
-    [% END %]
+            $('avatar').addEvent('change',function(e){
+                this.getParent().getElement('input:[type="submit"]').disabled = 0;
+            });
+
+        });
+    </script>
 </ul>
 <br class="clear" />

@@ -1,6 +1,9 @@
 var TAN_class = new Class({
-    log: function (log_text){
+    alert: function (log_text){
         alert(log_text);
+    },
+    log: function (log_text){
+        this.alert("Depricated: TAN.log called\n" + log_text);
     },
     login: function (message){
         // do some login logic here...

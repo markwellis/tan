@@ -244,6 +244,45 @@ sub comment: PathPart('_comment') Chained('location') Args(0) {
     }
 }
 
+sub edit_comment: PathPart('_edit_comment') Args(1) {
+    my ( $self, $c, $comment_id ) = @_;
+
+    $comment_id =~ s/$int_reg//g;
+    if ( !$comment_id) ){
+#FAIL (no comment id)
+        $c->detach();
+    }
+
+    my $comment_rs = $c->model('MySQL::Comments')->find( $comment_id );
+
+    if ( !defined($comment_rs) ){
+#FAIL (no comment)
+        $c->detach();
+    }
+
+    if ( $comment_rs->user_id ne $c->user->user_id ){
+#FAIL (comment not users)        
+        $c->detach();
+    }
+
+    if ( $c->req->method eq 'POST' ){
+#UPDATE comment
+        $comment_rs->update({
+            'comment' => $c->req->param('comment'),
+        });
+        $c->res->redirect( $comment_rs->object->url . '#comment' . $comment_rs->comment_id);
+        $c->detach();
+    }
+
+    $c->stash->{'comment'} = $comment_rs->comment_nobb;
+    $c->stash->{'template'} = 'view/edit_comment.tt';
+
+    if ( $c->req->param('ajax') ){
+        $c->forward( $c->view('NoWrapper') );
+        $c->detach();
+    }
+}
+
 =head2 plus: PathPart('_plus') Chained('location') Args(0)
 
 B<@args = undef>
