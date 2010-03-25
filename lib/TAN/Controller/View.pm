@@ -248,7 +248,7 @@ sub edit_comment: PathPart('_edit_comment') Args(1) {
     my ( $self, $c, $comment_id ) = @_;
 
     $comment_id =~ s/$int_reg//g;
-    if ( !$comment_id) ){
+    if ( !$comment_id ){
 #FAIL (no comment id)
         $c->detach();
     }

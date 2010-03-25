@@ -65,19 +65,21 @@ js_includes.push('Lasso-Crop');
                         $('cords').value = JSON.encode(cords);
                     }
                 });
+            [% ELSE %]
+                $('avatar').addEvent('change',function(e){
+                    this.getParent().getElement('input:[type="submit"]').disabled = 0;
+                });
             [%- END -%]
 
             $('crop_form').addEvent('submit',function(e){
-                if ( !$('avatar').value ){
+                if ( $('avatar') && !$('avatar').value ){
                     TAN.alert('Please select an image to upload');
                     return false;
                 }
                 e.target.getElement('input:[type="submit"]').disabled = 1;
             });
 
-            $('avatar').addEvent('change',function(e){
-                this.getParent().getElement('input:[type="submit"]').disabled = 0;
-            });
+
 
         });
     </script>
