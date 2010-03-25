@@ -106,15 +106,20 @@ sub crop: Local{
 
     my $json = $c->req->param('cords');
 
-    if ( !defined($json) ){
+    if ( !$json ){
 #ERROR HERE
         $c->flash->{'message'} = 'Crop error';
         $c->res->redirect('/profile/avatar?crop=true');
         $c->detach();
     }
-    my $cords = from_json( $json );
+    my $cords;
+    
+#errors if $json isnt json :|
+    eval{
+        $cords = from_json( $json );
+    };
 
-    if ( ref($cords) ne 'HASH' ){
+    if ( $@ || ref($cords) ne 'HASH' ){
 #ERROR HERE
         $c->flash->{'message'} = 'Crop error';
         $c->res->redirect('/profile/avatar?crop=true');

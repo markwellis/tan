@@ -45,7 +45,7 @@ js_includes.push('avatar-upload');
             <img src="[% avatar_http %].no_crop?m=[% avatar_image _ '.no_crop' | file_mtime %]" id="cropper" />
             <form method="post" action="/profile/avatar/crop" id="crop_form">
                 <fieldset>
-                    <input type="hidden" name="cords" id="cords" />
+                    <input type="hidden" name="cords" id="cords" value="{&quot;x&quot;:1,&quot;y&quot;:1,&quot;w&quot;:99,&quot;h&quot;:99}" />
                     <input type="submit" value="Crop" />
                 </fieldset>
             </form>
