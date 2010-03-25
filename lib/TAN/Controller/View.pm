@@ -244,7 +244,7 @@ sub comment: PathPart('_comment') Chained('location') Args(0) {
     }
 }
 
-sub edit_comment: PathPart('_edit_comment') Args(1) {
+sub edit_comment: PathPart('_edit_comment') Chained('location') Args(1) {
     my ( $self, $c, $comment_id ) = @_;
 
     $comment_id =~ s/$int_reg//g;
@@ -267,13 +267,16 @@ sub edit_comment: PathPart('_edit_comment') Args(1) {
 
     if ( $c->req->method eq 'POST' ){
 #UPDATE comment
+
+    #ADD some checking in here
         $comment_rs->update({
-            'comment' => $c->req->param('comment'),
+            'comment' => $c->req->param("edit_comment_${comment_id}"),
         });
         $c->res->redirect( $comment_rs->object->url . '#comment' . $comment_rs->comment_id);
         $c->detach();
     }
 
+    $c->stash->{'comment_id'} = $comment_id;
     $c->stash->{'comment'} = $comment_rs->comment_nobb;
     $c->stash->{'template'} = 'view/edit_comment.tt';
 

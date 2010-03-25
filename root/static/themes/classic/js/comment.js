@@ -60,4 +60,21 @@ window.addEvent('load', function() {
         tinyMCE.activeEditor.execCommand("mceInsertContent", false, comment);
 
     });
+
+    $$('.comment_edit').addEvent('click', function(e){
+        e.stop();
+        var comment_holder = this.getParent().getParent().getParent().getParent();
+        var comment_id = comment_holder.id.replace(/\D+/g, '');
+
+        var req = new Request.HTML({
+            'url' : this.href + '?ajax=1',
+            'evalScripts': false,
+            'noCache': true,
+            'onSuccess': function(responseTree, responseElements, responseHTML, responseJavaScript) {
+                comment_holder.empty();
+                comment_holder.adopt( responseTree );
+                tinyMCE.execCommand('mceAddControl', false, 'edit_comment_' + comment_id);
+            }
+        }).get();
+    });
 });

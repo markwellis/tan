@@ -1,7 +1,13 @@
+<form method="post" action="[% c.req.uri %]">
+    <fieldset>
 [% editor = {
-    'name' => "comment",
+    'name' => "edit_comment_$comment_id",
     'value' => comment,
     'height' => '600px',
 };
     
 PROCESS 'lib/editor.tt' %]
+        <input type="submit" value="Edit" name="edit" />
+        <input type="submit" value="Delete" name="delete" />
+    </fieldset>
+</form>

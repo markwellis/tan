@@ -32,7 +32,7 @@ END -%]
                 
                 [%- IF (c.user_exists) && ( c.user.user_id == comment.user_id ) -%]
                     <li>
-                        <a class="comment_edit" href="/edit_comment/[% comment.comment_id %]/">Edit Comment</a>
+                        <a class="comment_edit" href="_edit_comment/[% comment.comment_id %]">Edit Comment</a>
                     </li>
                 [%- END -%]
             </ul>
