@@ -74,6 +74,24 @@ window.addEvent('load', function() {
                 comment_holder.empty();
                 comment_holder.adopt( responseTree );
                 tinyMCE.execCommand('mceAddControl', false, 'edit_comment_' + comment_id);
+
+                comment_holder.getElement('form').addEvent('submit', function(e){
+                    e.stop();
+
+    // this is all bollix, it needs to be a request.HTML
+    // also, it doesnt work in the slightest for delete
+                    this.set('send', {
+                        'url': this.action + '?ajax=1',
+                        'onComplete': function(response) { 
+                            var comment = new Element(response);
+                            comment.replace(comment_holder);
+                            if ( response !== '_deleted_comment' ){
+                                comment_holder.set('html', response);
+                            }
+                        }
+                    });
+                    this.send();
+                });
             }
         }).get();
     });

@@ -213,11 +213,6 @@ sub comment: PathPart('_comment') Chained('location') Args(0) {
         #return the comment, filtered and all that
         my $comment_rs = $c->model('MySQL::Comments')->find({
             'comment_id' => $comment_id,
-        },{
-            '+select' => [
-                { 'unix_timestamp' => 'me.created' },
-            ],
-            '+as' => ['created'],
         });
 
         #better add some validation in
@@ -227,21 +222,26 @@ sub comment: PathPart('_comment') Chained('location') Args(0) {
         }
         
         #construct object, no point doing extra sql
-        $c->stash->{'comment'} = {
-            'comment' => $comment_rs->comment,
-            'comment_id' => $comment_rs->comment_id,
-            'user' => {
-                'user_id' => $c->user->user_id,
-                'username' => $c->user->username,
-                'join_date' => $c->user->join_date,
-            }
-        };
-
-        $c->stash->{'template'} = 'lib/comment.tt';
-        $c->forward( $c->view('NoWrapper') );
-        
-        $c->detach();
+        $c->forward('ajax_comment', [$comment_rs]);
     }
+}
+
+sub ajax_comment: Private{
+    my ( $self, $c, $comment_rs ) = @_;
+
+    $c->stash->{'comment'} = {
+        'comment' => $comment_rs->comment,
+        'comment_id' => $comment_rs->comment_id,
+        'user' => {
+            'user_id' => $c->user->user_id,
+            'username' => $c->user->username,
+        }
+    };
+
+    $c->stash->{'template'} = 'lib/comment.tt';
+    $c->forward( $c->view('NoWrapper') );
+    
+    $c->detach();
 }
 
 sub edit_comment: PathPart('_edit_comment') Chained('location') Args(1) {
@@ -272,8 +272,13 @@ sub edit_comment: PathPart('_edit_comment') Chained('location') Args(1) {
         $comment_rs->update({
             'comment' => $c->req->param("edit_comment_${comment_id}"),
         });
-        $c->res->redirect( $comment_rs->object->url . '#comment' . $comment_rs->comment_id);
-        $c->detach();
+        if ( !defined($c->req->param('ajax')) ){
+            $c->res->redirect( $comment_rs->object->url . '#comment' . $comment_rs->comment_id);
+            $c->detach();
+        } else {
+# RETURN COMMENT HERE
+            $c->forward('ajax_comment', [$comment_rs]);
+        }
     }
 
     $c->stash->{'comment_id'} = $comment_id;
