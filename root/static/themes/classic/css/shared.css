@@ -3,11 +3,16 @@
 }
 
 .left{
-    float:left;
+    float:left !important;
 }
 
 .right{
-    float:right;
+    float:right !important;
+}
+
+.centre{
+    text-align:center;
+    margin:auto;
 }
 
 .avatar{
@@ -17,6 +22,8 @@
     margin-right:5px;
     margin-top:5px;
     padding:0px;
+    background-position:center center;
+    background-repeat:no-repeat;
 }
 
 .user{
@@ -43,6 +50,15 @@
     background-color:#000;
 }
 
+#inside{
+    list-style-type: none;
+    margin:0px;
+    padding:0px;
+    margin-right:125px; 
+    background-color: #fff;
+    overflow: hidden;
+}
+
 /* object */
 
 .news {
@@ -63,7 +79,6 @@
     margin-left:115px;
 }
 
-
 /* footer bar */
 
 #footer{
@@ -78,6 +93,30 @@
 
 #back_to_top{
     float:right;
+}
+
+/* form stuff */
+
+input[type=text]{
+    border:1px solid #000;
+}
+
+fieldset ul, fieldset li{
+    border:0px;
+    margin:0px;
+    padding:0px;
+    list-style:none;
+}
+
+fieldset li{
+    clear:both;
+	list-style:none;
+	padding-bottom:10px;
+}
+
+fieldset label{
+    float:left;
+    font-weight:bold;
 }
 
 fieldset{

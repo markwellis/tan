@@ -665,24 +665,6 @@ ul#mainmenu li ul li{
     float:right;
 }
 
-fieldset ul, fieldset li{
-    border:0px;
-    margin:0px;
-    padding:0px;
-    list-style:none;
-}
-
-fieldset li{
-    clear:both;
-	list-style:none;
-	padding-bottom:10px;
-}
-
-fieldset label{
-    float:left;
-    font-weight:bold;
-}
-
 .login_label{
     width:180px;
 }
@@ -713,23 +695,3 @@ fieldset label{
     height:200px;
     float:left;
 }
-
-#inside{
-    list-style-type: none;
-    margin:0px;
-    padding:0px;
-    margin-right:125px; 
-}
-
-.clear{
-    clear:both;
-}
-
-.please_login{
-	font-size:1.2em !important;
-}
-
-.please_login a{
-	font-size:inherit;
-}
-

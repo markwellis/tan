@@ -101,10 +101,13 @@ sub upload: Local{
 
 }
 
-sub crop: Local{
+sub preview_crop: Local{
     my ( $self, $c ) = @_;
 
     my $json = $c->req->param('cords');
+    my $colour = $c->req->param('bgcolour');
+
+#VALIDATE COLOUR IS HEX COLOUR!!
 
     if ( !$json ){
 #ERROR HERE
@@ -147,18 +150,21 @@ sub crop: Local{
     my @path = split('/', 'root/' . $c->config->{'avatar_path'} . '/' . $c->user->user_id);
     my $filename = $c->path_to(@path);
 
-    my $crop_res = $c->model('Thumb')->crop($filename . '.no_crop', $filename, $x, $y, $w, $h);
+    my $crop_res = $c->model('Thumb')->crop("${filename}.no_crop", "${filename}_preview", $x, $y, $w, $h, $colour);
 
     if ( $crop_res ){
 # SUCCESS
-        $c->flash->{'message'} = 'Upload complete';
+        $c->res->output( 1 );
+#DO SOMETHING FOR NONE JS USERS
+#        $c->flash->{'message'} = 'Upload complete';
 
-        if ( -e $filename . '.no_crop' ){
-        #delete pre-crop
-            unlink( $filename . '.no_crop' );
-        }
+#DO THIS ON THE FINAL CROP
+#        if ( -e $filename . '.no_crop' ){
+#        #delete pre-crop
+#            unlink( $filename . '.no_crop' );
+#        }
 
-        $c->res->redirect('/profile/avatar');
+#        $c->res->redirect('/profile/avatar');
     } else {
 #ERROR HERE
         $c->flash->{'message'} = 'Crop error';

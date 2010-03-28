@@ -50,7 +50,7 @@ sub resize{
             return `cp '${filename}' '${cacheimg}'`;
         }
 
-        return `convert '${filename}'[0-10] -coalesce -auto-orient -thumbnail ${new_x}x${new_y} -layers Optimize '${cacheimg}' 2>&1`;
+        return `convert '${filename}'[0-10] -coalesce -auto-orient -thumbnail '${new_x}x${new_y}>' -layers Optimize '${cacheimg}' 2>&1`;
     }
     return 'error';
 }
@@ -69,9 +69,9 @@ writes to $outfile
 
 =cut
 sub crop{
-    my ( $self, $infile, $outfile, $x, $y, $w, $h ) = @_;
+    my ( $self, $infile, $outfile, $x, $y, $w, $h, $colour ) = @_;
 
-    if (!`convert '${infile}'[0-10] -coalesce -crop ${w}x${h}+${x}+${y} -thumbnail 100x100 -layers Optimize ${outfile}`) {
+    if (!`convert -background '${colour}' '${infile}'[0-10] -coalesce -crop '${w}x${h}+${x}+${y}!' -thumbnail '100x100' -gravity center -extent 100x100 -layers Optimize ${outfile}`) {
     #exit code 0 is success :/
         return 1;
     }
