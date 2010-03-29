@@ -65,7 +65,7 @@ sub upload: Local{
         my $fileinfo = $c->model('ValidateImage')->is_image($upload->tempname);
         if( $fileinfo ){
         #is an image
-            my @path = split('/', 'root/' . $c->config->{'avatar_path'} . '/' . $c->user->user_id . '.gif.no_crop');
+            my @path = split('/', 'root/' . $c->config->{'avatar_path'} . '/' . $c->user->user_id . '.no_crop');
 
             $fileinfo->{'filename'} = $c->path_to(@path);
 
@@ -137,17 +137,18 @@ sub crop: Local{
     $w =~ s/$int_reg//g;
     $h =~ s/$int_reg//g;
 
-    if ( !$x || !$y || !$w || !$h ){
+#x, y can be 0,0!
+    if ( !$w || !$h ){
 #ERROR HERE
         $c->flash->{'message'} = 'Crop error';
         $c->res->redirect('/profile/avatar?crop=true');
         $c->detach();
     }
 
-    my @path = split('/', 'root/' . $c->config->{'avatar_path'} . '/' . $c->user->user_id . '.gif');
+    my @path = split('/', 'root/' . $c->config->{'avatar_path'} . '/' . $c->user->user_id);
     my $filename = $c->path_to(@path);
 
-    my $crop_res = $c->model('Thumb')->crop("${filename}.no_crop", "${filename}", $x, $y, $w, $h);
+    my $crop_res = $c->model('Thumb')->crop("${filename}.no_crop", $filename, $x, $y, $w, $h);
 
     if ( $crop_res ){
 # SUCCESS

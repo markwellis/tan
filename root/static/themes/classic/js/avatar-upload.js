@@ -11,7 +11,7 @@ window.addEvent('load', function() {
         });
 
     } else {
-        $('avatar').addEvent('change',function(e){
+        $('avatar').addEvent('click',function(e){
             this.getParent().getElement('input:[type="submit"]').disabled = 0;
         });
     }
