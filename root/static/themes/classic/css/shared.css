@@ -97,8 +97,18 @@
 
 /* form stuff */
 
-input[type=text]{
-    border:1px solid #000;
+input[type=text], input[type=password], textarea{
+    border:1px solid #808080;
+    background-color:#d6d6d6;
+}
+
+input[type=text]:focus, input[type=password]:focus, textarea:focus{
+    border:1px solid #0000ff;
+}
+
+input[type=text]:hover, input[type=password]:hover, textarea:hover{
+    border:1px solid #404040;
+    background-color:#b6b6b6;
 }
 
 fieldset ul, fieldset li{
