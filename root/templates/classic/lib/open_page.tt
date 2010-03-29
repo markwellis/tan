@@ -4,7 +4,9 @@ PROCESS 'lib/top.tt';
 IF message.defined -%]
     <script type="text/javascript">
     //<![CDATA[
-    TAN.log("[%- message -%]");
+    window.addEvent('domready', function(){
+        TAN.alert("[%- message -%]");
+    });
     //]]>
     </script>
 [%- END -%]

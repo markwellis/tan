@@ -11,7 +11,7 @@ window.addEvent('load', function() {
                     'onSuccess': function(response_comment, responseElements, responseHTML) {
                         $('submit_comment').disabled = 0;
                         if ( responseHTML === 'error' ){
-                            TAN.log('fail');
+                            TAN.alert('fail');
                         } else if ( responseHTML === 'login' ){
                             TAN.login("Your comment has been saved. "
                                 + "You need to login or register before it's posted");
@@ -22,7 +22,7 @@ window.addEvent('load', function() {
                         $('submit_comment').disabled = 0;
                     },
                     'onFailure': function(){
-                        TAN.log('fail');
+                        TAN.alert('fail');
                         $('submit_comment').disabled = 0;
                     }
                 }).post({
