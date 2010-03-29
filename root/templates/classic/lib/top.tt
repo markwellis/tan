@@ -8,6 +8,7 @@
     <div id="main">
         <div id="top">
             <div style="float:right;margin-top:5px;margin-right:5px;text-align:right;">
+                <a href="http://stats.thisaintnews.com" class="top_link">Stats</a> |
                 <a href="/chat/" class="top_link mibbit">Chat</a>
 
                 [%- IF c.user_exists -%]
