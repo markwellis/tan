@@ -69,9 +69,9 @@ writes to $outfile
 
 =cut
 sub crop{
-    my ( $self, $infile, $outfile, $x, $y, $w, $h, $colour ) = @_;
+    my ( $self, $infile, $outfile, $x, $y, $w, $h ) = @_;
 
-    if (!`convert -background '${colour}' '${infile}'[0-10] -coalesce -crop '${w}x${h}+${x}+${y}!' -thumbnail '100x100' -gravity center -extent 100x100 -layers Optimize ${outfile}`) {
+    if (!`convert -background transparent '${infile}'[0-10] -coalesce -crop '${w}x${h}+${x}+${y}!' -thumbnail '100x100' -gravity center -extent 100x100 -layers Optimize ${outfile}`) {
     #exit code 0 is success :/
         return 1;
     }

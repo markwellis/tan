@@ -1,12 +1,12 @@
 [%-
-avatar_http = c.config.avatar_path _ "/" _ c.user.user_id;
+avatar_http = c.config.avatar_path _ "/" _ c.user.user_id _ '.gif';
 avatar_image = c.path_to('root') _ avatar_http;
 avatar_exists = avatar_image | file_exists;
 
 IF (avatar_exists);
     avatar_mtime = avatar_image | file_mtime;
 ELSE;
-    avatar_http = c.config.static_path _ '/images/_user.png';
+    no_avatar_http = c.config.static_path _ '/images/_user.png';
 END;
 
 css_includes.push({
@@ -26,7 +26,6 @@ css_includes.push({
 
 js_includes.push('Lasso');
 js_includes.push('Lasso-Crop');
-js_includes.push('mooRainbow-1-2b2');
 js_includes.push('avatar-upload');
 
 -%]
@@ -35,7 +34,7 @@ js_includes.push('avatar-upload');
     [% IF !crop %]
     [%-# upload page -%]
         <li class="news left" >
-            <img alt="[% c.user.username %]" src="[% avatar_http %]?m=[% avatar_mtime.defined ? avatar_mtime : '' %]" class="avatar">
+            <img alt="[% c.user.username %]" src="[% IF no_avatar_http; no_avatar_http; ELSE; avatar_http; END%]?m=[% avatar_mtime.defined ? avatar_mtime : '' %]" class="avatar">
         </li>
         <li class="news">
             <h2>
@@ -56,38 +55,13 @@ js_includes.push('avatar-upload');
     [%-# crop page -%]
         <li class="news">
             <img src="[% avatar_http %].no_crop?m=[% avatar_image _ '.no_crop' | file_mtime %]" id="cropper"/>
-        </li>
-        <li class="news left">
-            <form method="post" action="/profile/avatar/preview_crop" id="crop_form">
+
+            <form method="post" action="/profile/avatar/crop" id="crop_form">
                 <fieldset>
-                    <ul>
-                        <li>
-                            <label for="width">Width</label>
-                            <input type="text" name="width" id="width" />
-                        </li>
-                        <li>
-                            <label for="height">Height</label>
-                            <input type="text" name="height" id="height" />
-                        </li>
-                        <li>
-                            <label for="bgcolour">Background Colour</label>
-                            <input type="text" name="bgcolour" id="bgcolour" value="#ffffff"/>
-                        </li>
-                        <li>
-                            <input type="hidden" name="cords" id="cords" value="{&quot;x&quot;:1,&quot;y&quot;:1,&quot;w&quot;:99,&quot;h&quot;:99}" />
-                            <input type="submit" value="Preview" class="right" />
-                        </li>
-                    </ul>
+                    <input type="hidden" name="cords" id="cords" />
+                    <input type="submit" value="Crop"/>
                 </fieldset>
             </form>        
-        </li>
-        <li>
-            <form method="post" action="/profile/avatar/save_crop" id="save_form" class="left">
-                <fieldset>
-                    <input type="submit" value="Save" />
-                </fieldset>
-            </form>
-            <div id="preview" class="avatar avatar_preview"> </div>
         </li>
     [% END %]
 </ul>

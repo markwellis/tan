@@ -7,17 +7,3 @@ label{
     width:100px;
     float:none;
 }
-
-.avatar_preview{
-    margin-left:400px;
-    border:1px solid #000;
-}
-
-#bgcolour{
-    color: #fff;
-    background-color: #fff;
-}
-
-#save_form{
-    margin-left: 140px;
-}
