@@ -8,7 +8,7 @@
 </div>
 <div id="footer">
     [%- runtime.substr(0, 4) -%] seconds, [% sql_queries %] [% (sql_queries == 1) ? 'query' : 'queries' -%]
-    <a href="#top" id="back_to_top">Top</a>
+    <span id="jump"><a href="#top">Up</a>&nbsp;<a href="#bottom_ad">Down</a></span>
 </div>
 [%- PROCESS 'lib/ga.tt' -%]
 </body>
