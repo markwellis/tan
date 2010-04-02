@@ -3,12 +3,12 @@ window.addEvent('load', function() {
 		submit: function(e) {
             e.stop();
 
-            var input_comment = tinyMCE.activeEditor.getContent();
+            var input_comment = tinyMCE.get('comment').getContent();
             
             if ( input_comment ){
                 var req = new Request.HTML({
                     'url' : this.action + '?ajax=1',
-                    'onSuccess': function(response_comment) {
+                    'onSuccess': function(response_comment, responseHTML) {
                         $('submit_comment').disabled = 0;
                         if ( responseHTML === 'error' ){
                             TAN.alert('fail');
@@ -17,7 +17,7 @@ window.addEvent('load', function() {
                                 + "You need to login or register before it's posted");
                         } else {
                             $('comments').adopt(response_comment);
-                            tinyMCE.activeEditor.setContent('');
+                            tinyMCE.get('comment').getContent('');
                         }
                         $('submit_comment').disabled = 0;
                     },
@@ -57,7 +57,7 @@ window.addEvent('load', function() {
 
         comment = '[quote user=' + username + ']' + quote + '[/quote]' + "\n<br /><br />";
 
-        tinyMCE.activeEditor.execCommand("mceInsertContent", false, comment);
+        tinyMCE.get('comment').execCommand("mceInsertContent", false, comment);
 
     });
 
@@ -89,9 +89,10 @@ window.addEvent('load', function() {
                         'noCache': true,
                         'data': data,
                         'onSuccess': function(responseTree, responseElements, responseHTML, responseJavaScript) {
-                            var comments = comment_holder.getParent();
+                            // can't use responseTree coz its not an element, its a Tree!
+                            // but we can use esponseElements[0] coz everything is inside a div! :D
+                            responseElements[0].inject(comment_holder, 'after');
                             comment_holder.dispose();
-                            comments.adopt(responseTree);
                         }
                     }).post();
                 });
