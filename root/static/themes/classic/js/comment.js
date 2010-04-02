@@ -8,7 +8,7 @@ window.addEvent('load', function() {
             if ( input_comment ){
                 var req = new Request.HTML({
                     'url' : this.action + '?ajax=1',
-                    'onSuccess': function(response_comment, responseElements, responseHTML) {
+                    'onSuccess': function(response_comment) {
                         $('submit_comment').disabled = 0;
                         if ( responseHTML === 'error' ){
                             TAN.alert('fail');
@@ -70,27 +70,30 @@ window.addEvent('load', function() {
             'url' : this.href + '?ajax=1',
             'evalScripts': false,
             'noCache': true,
-            'onSuccess': function(responseTree, responseElements, responseHTML, responseJavaScript) {
+            'onSuccess': function(responseTree) {
                 comment_holder.empty();
                 comment_holder.adopt( responseTree );
                 tinyMCE.execCommand('mceAddControl', false, 'edit_comment_' + comment_id);
 
-                comment_holder.getElement('form').addEvent('submit', function(e){
+                //submit edit comment
+                comment_holder.getElement('#edit').addEvent('click', function(e){
                     e.stop();
 
-    // this is all bollix, it needs to be a request.HTML
-    // also, it doesnt work in the slightest for delete
-                    this.set('send', {
-                        'url': this.action + '?ajax=1',
-                        'onComplete': function(response) { 
-                            var comment = new Element(response);
-                            comment.replace(comment_holder);
-                            if ( response !== '_deleted_comment' ){
-                                comment_holder.set('html', response);
-                            }
+                    var editor_id = 'edit_comment_' + comment_id;
+                    //js is tarded and cant use varible as a object key coz it accepts barewords keys :/
+                    var data = {};
+                    data['ajax'] = 1;
+                    data[editor_id] = tinyMCE.get(editor_id).getContent();
+                    var edit_comment_submit = new Request.HTML({
+                        'url': this.getParent().getParent().action,
+                        'noCache': true,
+                        'data': data,
+                        'onSuccess': function(responseTree, responseElements, responseHTML, responseJavaScript) {
+                            var comments = comment_holder.getParent();
+                            comment_holder.dispose();
+                            comments.adopt(responseTree);
                         }
-                    });
-                    this.send();
+                    }).post();
                 });
             }
         }).get();
