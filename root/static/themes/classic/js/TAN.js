@@ -1,9 +1,14 @@
 var TAN_class = new Class({
     initialize: function(){
+        /*
+            The TAN class is only called on domready, so 
+            we don't need to wrap anything
+        */
         this.roar = new Roar({
             position: 'upperRight',
             duration: 5000
         });
+
     },
     alert: function (log_text){
         this.roar.alert('Alert', log_text);
@@ -18,6 +23,11 @@ var TAN_class = new Class({
 });
 
 var TAN;
+/*
+IMPORTANT
+make sure TAN is created in a domready or else 
+it'll not work too good!
+*/
 window.addEvent('domready', function(){
     TAN = new TAN_class();
 });

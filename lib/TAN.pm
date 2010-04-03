@@ -183,7 +183,7 @@ sub date_ago{
             my $amount = floor($diff/$block->{'amount'});
             
             my $plural = ($amount>1) ? 's' : '';
-            push(@result, "${amount} " . $block->{'name'} . $plural);
+            push(@result, "${amount}&nbsp;" . $block->{'name'} . $plural);
             $diff -= $amount*$block->{'amount'};
         }
     }
