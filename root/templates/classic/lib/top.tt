@@ -33,11 +33,7 @@
                     <a href="/login/" class="top_link">Login/Register</a> | 
                 [%- END -%]
             
-                [%- IF (c.nsfw) -%]
-                    <a href="/filter/" class="top_link">Enable filter</a>
-                [%- ELSE -%]
-                    <a href="/filter/" class="top_link nsfw_filter">Disable filter</a>
-                [%- END -%]
+                <a href="/filter/" class="top_link nsfw_filter">[%- IF (c.nsfw) %]Enable[% ELSE %]Disable[% END %] filter</a>
                 <br />
                 <div style="float:right">
                     <form action="http://www.google.com/cse" id="cse-search-box">

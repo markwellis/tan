@@ -8,7 +8,6 @@ var TAN_class = new Class({
             position: 'upperRight',
             duration: 5000
         });
-
     },
     alert: function (log_text){
         this.roar.alert('Alert', log_text);
@@ -19,6 +18,18 @@ var TAN_class = new Class({
             message = 'Please login';
         }
         this.alert(message);
+    },
+    nsfw: function(value){
+        if ( $chk(value) ){
+            //delete old cookie
+            Cookie.dispose('nsfw');
+            Cookie.write('nsfw', value, {
+                'path': '/'
+            });
+            return value;
+        }
+
+        return parseInt(Cookie.read('nsfw')) || 0;
     }
 });
 

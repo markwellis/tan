@@ -39,6 +39,24 @@ window.addEvent('domready', function(){
         e.stop();
     });
 
+    $$('.nsfw_filter').addEvent('click', function(e){
+        e.stop();
+        var nsfw = TAN.nsfw();
+        if ( nsfw === 0 ){
+            var disable = confirm(
+                "Are you sure you want to disable the NSFW work filter?"
+                +"\nThere will be content which is not suitable for work"
+            );
+
+            if ( disable == false ){
+                return 0;
+            }
+        }
+        TAN.nsfw( nsfw ^ 1 );
+        window.location.reload();
+    });
+
+
     if ( $defined($('order_by')) ){
         $('order_by').addEvent('change', function(e) {
             var oper = (window.location.toString().indexOf('?') !== -1) ? '&' : '?';

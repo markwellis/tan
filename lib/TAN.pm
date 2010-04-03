@@ -117,15 +117,20 @@ sub nsfw{
     my ($c, $value) = @_;
     
     if (defined($value)){
-        $c->session->{'nsfw'} = $value;
+        $c->res->cookies->{'nsfw'} = {
+            'value' => $value,
+        };
+
         return $value;
     }
-    
-    if (defined($c->session->{'nsfw'}) && $c->session->{'nsfw'} == 1){
-        return 1;
-    }
-    
-    return 0;
+
+    my $nsfw_res = $c->res->cookies->{'nsfw'};
+    my $nsfw_req = $c->req->cookies->{'nsfw'};
+
+    my $nsfw_res_val = $nsfw_res->value if ( defined($nsfw_res) );
+    my $nsfw_req_val = $nsfw_req->value if ( defined($nsfw_req) );
+
+    return $nsfw_res_val || $nsfw_req_val || 0;
 }
 
 =head2 date_ago
