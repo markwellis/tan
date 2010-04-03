@@ -34,9 +34,15 @@ filename = c.config.pic_path _ '/' _ object.picture.filename;
 
     [% object.description | strip_tags | nl2br %]
 
-
-
     [%- PROCESS 'lib/plus_minus_box.tt' pm_box_style='float:right' -%]
     <a class="big_center_cell" href="[% filename %]">
         <img class='big_picture' src="[% c.config.thumb_path _  '/' _ md _ '/' _ object.picture.id %]/600" alt=" "/>
     </a>
+    <br />
+    <span class="tags" style="margin-left:0px">
+        [%- FOREACH tag = object.tags -%]
+            [%- IF loop.count > 1 %], [% END -%]
+            [% tag.tag %]
+        [%- END -%]
+    </span>
+    <br />

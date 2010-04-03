@@ -64,7 +64,7 @@ Posted by <a class="a user" href="/user/[% object.user.username %]/1/">[% object
     <span class="tags">
         [%- FOREACH tag = object.tags -%]
             [%- IF loop.count > 1 %], [% END -%]
-            <a href="/tag/[% tag.tag %]">[% tag.tag %]</a>
+            [% tag.tag %]
         [%- END -%]
     </span>
 
