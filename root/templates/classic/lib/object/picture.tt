@@ -40,5 +40,3 @@ filename = c.config.pic_path _ '/' _ object.picture.filename;
     <a class="big_center_cell" href="[% filename %]">
         <img class='big_picture' src="[% c.config.thumb_path _  '/' _ md _ '/' _ object.picture.id %]/600" alt=" "/>
     </a>
-
-    <div class="hr" /> 

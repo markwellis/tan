@@ -22,11 +22,14 @@ END -%]
         <li>
             <img class="avatar comment_avatar" src="[% avatar_http %]?m=[% avatar_mtime %]" alt="[% comment.user.username | html %]" />
         </li>
+        <li>
+            Comment #[% comment.number %]
+        </li>
         [%- IF object.defined -%]
             <ul class="no_list comment_tools">
                 [%- type = object.type -%]
                 <li>
-                    <a class="quote_link" href="[% object.url %]#comment[% comment.comment_id %]">Link</a>
+                    <a href="[% object.url %]#comment[% comment.comment_id %]">Link</a>
                     | <a href="#" class="quote_link" title="[% comment.user.username %]::[% comment.comment_id %]">Quote</a>
                 </li>
                 

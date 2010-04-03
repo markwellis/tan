@@ -232,6 +232,7 @@ sub ajax_comment: Private{
     $c->stash->{'comment'} = {
         'comment' => $comment_rs->comment,
         'comment_id' => $comment_rs->comment_id,
+        'number' => $comment_rs->number,
         'user' => {
             'user_id' => $c->user->user_id,
             'username' => $c->user->username,

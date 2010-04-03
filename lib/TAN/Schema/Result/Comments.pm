@@ -15,6 +15,8 @@ __PACKAGE__->add_columns(
   { data_type => "BIGINT", default_value => undef, is_nullable => 0, size => 20 },
   "user_id",
   { data_type => "BIGINT", default_value => undef, is_nullable => 0, size => 20 },
+  "number",
+  { data_type => "BIGINT", default_value => undef, is_nullable => 0, size => 20 },
   "comment",
   {
     data_type => "MEDIUMTEXT",

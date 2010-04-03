@@ -17,7 +17,7 @@ window.addEvent('load', function() {
                                 + "You need to login or register before it's posted");
                         } else {
                             $('comments').adopt(response_comment);
-                            tinyMCE.get('comment').getContent('');
+                            tinyMCE.get('comment').setContent('');
                         }
                         $('submit_comment').disabled = 0;
                     },

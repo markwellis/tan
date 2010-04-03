@@ -69,12 +69,17 @@ creates a comment
 sub create_comment {
     my ( $self, $object_id, $user_id, $comment, $rev ) = @_;
 
+    my $comment_no = $self->search({
+        'user_id' => $user_id,
+    })->count;
+
     my $comment_rs = $self->create({
         'user_id' => $user_id,
         'comment' => $comment,
         'created' => \'NOW()',
         'object_id' => $object_id,
         'rev' => $rev || 0,
+        'number' => $comment_no || 1,
     });
 
     return $comment_rs;

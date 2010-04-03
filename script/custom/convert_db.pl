@@ -21,6 +21,7 @@ my $link_lookup = {};
 my $blog_lookup = {};
 my $picture_lookup = {};
 my $tag_lookup = {};
+my $user_comment_no = {};
 
 my $old_avatar_path = '/srv/http/thisaintnews.com/images/old';
 my $new_avatar_path = '/srv/http/thisaintnews.com/images/avatar';
@@ -47,6 +48,13 @@ warn $new_avatar . "\n";
     if ( -f $old_avatar ){
         copy($old_avatar, $new_avatar) or warn 'error';
     }
+
+    my $old_lookup = $newdb->resultset('OldLookup')->create({
+        'new_id' => $new_user->user_id,
+        'old_id' => $old_user->user_id,
+        'type' => 'user',
+    });
+
 }
 print "converted " . $old_users->count . " users\n";
 
@@ -208,6 +216,14 @@ while (my $old_comment = $old_comments->next){
         } elsif ($old_comment->picture_id){
             $newid = $picture_lookup->{$old_comment->picture_id};
         }
+
+        if ( defined($user_comment_no->{ $user_lookup->{$old_comment->user_id} }) ){
+            ++$user_comment_no->{ $user_lookup->{$old_comment->user_id} };
+        } else {
+            $user_comment_no->{ $user_lookup->{$old_comment->user_id} } = 1;
+        }
+
+
         if ($newid){
             my $new_comment = $newdb->resultset('Comments')->create({
                 'user_id' => $user_lookup->{$old_comment->user_id},
@@ -215,6 +231,7 @@ while (my $old_comment = $old_comments->next){
                 'created' => $old_comment->date,
                 'object_id' => $newid,
                 'deleted' => $old_comment->deleted,
+                'number' => $user_comment_no->{ $user_lookup->{$old_comment->user_id} },
             });
         }
     }
