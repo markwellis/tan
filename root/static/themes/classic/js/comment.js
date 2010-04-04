@@ -63,7 +63,8 @@ window.addEvent('load', function() {
 
     $$('.comment_edit').addEvent('click', function(e){
         e.stop();
-        var comment_holder = this.getParent().getParent().getParent().getParent();
+        // LOL
+        var comment_holder = this.getParent().getParent().getParent().getParent().getParent();
         var comment_id = comment_holder.id.replace(/\D+/g, '');
 
         var req = new Request.HTML({

@@ -26,6 +26,7 @@ END -%]
             Comment #[% comment.number %]
         </li>
         [%- IF object.defined -%]
+            <li>
             <ul class="no_list comment_tools">
                 [%- type = object.type -%]
                 <li>
@@ -39,6 +40,7 @@ END -%]
                     </li>
                 [%- END -%]
             </ul>
+            </li>
         [%- END -%]
     </ul>
     <div id="actual_comment[% comment.comment_id %]" class="comment_inner">
