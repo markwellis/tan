@@ -1,14 +1,9 @@
 <div id="comments">
 [%- IF object.comments;
     FOREACH comment=comments;
-        PROCESS 'lib/comment.tt' -%]
-    [%- END -%]
-    <script type="text/javascript">//<![CDATA[
-    var nsfw = [% c.nsfw %];
-    //]]>
-    </script>
-
-    [%- PROCESS 'lib/js_includes.tt' inline='nsfw-comments';
+        PROCESS 'lib/comment.tt';
+    END;
+    js_includes.push('nsfw-comments');
 END -%]
 </div>
 
