@@ -7,7 +7,7 @@
 };
     
 PROCESS 'lib/editor.tt' %]
-        <input type="submit" value="Edit" id="edit" name="edit" />
-        <input type="submit" value="Delete" id="delete" name="delete" />
+        <input type="submit" value="Edit" id="edit[% comment_id %]" name="edit[% comment_id %]" />
+        <input type="submit" value="Delete" id="delete[% comment_id %]" name="delete[% comment_id %]" />
     </fieldset>
 </form>

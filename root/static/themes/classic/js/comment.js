@@ -68,7 +68,10 @@ window.addEvent('load', function() {
         var comment_id = comment_holder.id.replace(/\D+/g, '');
 
         var req = new Request.HTML({
-            'url' : this.href + '?ajax=1',
+            'url' : this.href,
+            'data': {
+                'ajax': 1
+            },
             'evalScripts': false,
             'noCache': true,
             'onSuccess': function(responseTree) {
@@ -77,7 +80,7 @@ window.addEvent('load', function() {
                 tinyMCE.execCommand('mceAddControl', false, 'edit_comment_' + comment_id);
 
                 //submit edit comment
-                comment_holder.getElement('#edit').addEvent('click', function(e){
+                comment_holder.getElement('#edit' + comment_id).addEvent('click', function(e){
                     e.stop();
 
                     var editor_id = 'edit_comment_' + comment_id;
@@ -94,6 +97,32 @@ window.addEvent('load', function() {
                             // but we can use esponseElements[0] coz everything is inside a div! :D
                             responseElements[0].inject(comment_holder, 'after');
                             comment_holder.dispose();
+                        },
+                        'onFailure': function(xhr){
+                            TAN.alert( xhr.responseText );
+                        }
+                    }).post();
+                });
+
+                //delete comment
+                comment_holder.getElement('#delete' + comment_id).addEvent('click', function(e){
+                    e.stop();
+                    if ( !confirm('Are you sure you want to delete this comment?') ){
+                        return false;
+                    }
+                    var edit_comment_submit = new Request.HTML({
+                        'url': this.getParent().getParent().action,
+                        'noCache': true,
+                        'data': {
+                            'ajax': 1,
+                            'delete': 1
+                        },
+                        'onSuccess': function(responseTree, responseElements, responseHTML, responseJavaScript) {
+                            TAN.alert( responseHTML );
+                            comment_holder.dispose();
+                        },
+                        'onFailure': function(xhr){
+                            TAN.alert( xhr.responseText );
                         }
                     }).post();
                 });

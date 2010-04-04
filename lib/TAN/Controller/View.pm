@@ -223,6 +223,7 @@ sub comment: PathPart('_comment') Chained('location') Args(0) {
         
         #construct object, no point doing extra sql
         $c->forward('ajax_comment', [$comment_rs]);
+        $c->detach();
     }
 }
 
@@ -241,8 +242,6 @@ sub ajax_comment: Private{
 
     $c->stash->{'template'} = 'lib/comment.tt';
     $c->forward( $c->view('NoWrapper') );
-    
-    $c->detach();
 }
 
 sub edit_comment: PathPart('_edit_comment') Chained('location') Args(1) {
@@ -293,20 +292,32 @@ sub edit_comment: PathPart('_edit_comment') Chained('location') Args(1) {
     }
 
     if ( $c->req->method eq 'POST' ){
-#UPDATE comment
-
-    #ADD some checking in here
-        if ( defined($c->req->param("edit_comment_${comment_id}")) ){
+        if ( defined($c->req->param('delete')) ){
+#DELETE comment
             $comment_rs->update({
-                'comment' => $c->req->param("edit_comment_${comment_id}"),
+                'deleted' => 'Y',
             });
-        }
-        if ( !defined($c->req->param('ajax')) ){
-            $c->res->redirect( $comment_rs->object->url . '#comment' . $comment_rs->comment_id);
+            if ( !defined($c->req->param('ajax')) ){
+                $c->flash->{'message'} = 'Comment deleted';
+                $c->res->redirect( $comment_rs->object->url );
+            } else {
+                $c->res->output("Comment deleted");
+            }
             $c->detach();
         } else {
+#UPDATE comment
+            if ( defined($c->req->param("edit_comment_${comment_id}")) ){
+                $comment_rs->update({
+                    'comment' => $c->req->param("edit_comment_${comment_id}"),
+                });
+            }
+            if ( !defined($c->req->param('ajax')) ){
+                $c->res->redirect( $comment_rs->object->url . '#comment' . $comment_rs->comment_id);
+            } else {
 # RETURN COMMENT HERE
-            $c->forward('ajax_comment', [$comment_rs]);
+                $c->forward('ajax_comment', [$comment_rs]);
+            }
+            $c->detach();
         }
     }
 
