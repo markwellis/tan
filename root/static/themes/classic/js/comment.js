@@ -96,6 +96,9 @@ window.addEvent('load', function() {
                         }
                     }).post();
                 });
+            },
+            'onFailure': function(xhr){
+                TAN.alert( xhr.responseText );
             }
         }).get();
     });

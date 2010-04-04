@@ -249,20 +249,46 @@ sub edit_comment: PathPart('_edit_comment') Chained('location') Args(1) {
     my ( $self, $c, $comment_id ) = @_;
 
     $comment_id =~ s/$int_reg//g;
+    my $object_rs = $c->model('MySQL::Object')->find({
+        'object_id' => $c->stash->{'object_id'},
+    });
+
     if ( !$comment_id ){
 #FAIL (no comment id)
+        if ( !defined($c->req->param('ajax')) ){
+            $c->flash->{'message'} = 'No comment Id';
+            $c->res->redirect( $object_rs->url );
+        } else {
+            $c->res->output("No comment Id");
+            $c->res->status(400);
+        }
         $c->detach();
     }
 
     my $comment_rs = $c->model('MySQL::Comments')->find( $comment_id );
 
     if ( !defined($comment_rs) ){
-#FAIL (no comment)
+#FAIL (comment not found)
+        if ( !defined($c->req->param('ajax')) ){
+            $c->flash->{'message'} = 'Comment not found';
+            $c->res->redirect( $object_rs->url );
+        } else {
+            $c->res->output("Comment not found");
+            $c->res->status(404);
+        }
         $c->detach();
     }
 
-    if ( $comment_rs->user_id ne $c->user->user_id ){
-#FAIL (comment not users)        
+    if ( $comment_rs->user_id != $c->user->user_id ){
+#FAIL (comment not users)
+        if ( !defined($c->req->param('ajax')) ){
+            $c->flash->{'message'} = 'Not your comment';
+            $c->res->redirect( $comment_rs->object->url );
+        } else {
+            $c->res->output("Not your comment");
+            $c->res->status(403);
+        }
+
         $c->detach();
     }
 
@@ -270,9 +296,11 @@ sub edit_comment: PathPart('_edit_comment') Chained('location') Args(1) {
 #UPDATE comment
 
     #ADD some checking in here
-        $comment_rs->update({
-            'comment' => $c->req->param("edit_comment_${comment_id}"),
-        });
+        if ( defined($c->req->param("edit_comment_${comment_id}")) ){
+            $comment_rs->update({
+                'comment' => $c->req->param("edit_comment_${comment_id}"),
+            });
+        }
         if ( !defined($c->req->param('ajax')) ){
             $c->res->redirect( $comment_rs->object->url . '#comment' . $comment_rs->comment_id);
             $c->detach();
