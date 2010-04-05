@@ -31,14 +31,14 @@ sub index {
     my ($self, $location, $page, $upcoming, $order, $nsfw) = @_;
     
     my ($type, $search, $prefetch);
-    
+
     if ($upcoming){
         $search = \'= 0';
         $order ||= 'me.created'
     } else {
         $search = \'!= 0';
         $order ||= 'me.promoted';
-        $order = 'me.promoted' if ($order eq 'date');
+        $order = 'me.promoted' if ($order eq 'created');
     }
 
     if ($location eq 'all'){
@@ -107,6 +107,26 @@ sub random{
         }
     )->first;
 
+}
+
+=head2 promote
+
+B<@args = (undef)>
+
+=over
+
+promotes object
+
+=back
+
+=cut
+sub promote{
+    my ( $self ) = @_;
+#so somethings been updated, do some tiwtter shit n that
+
+    $self->update({
+        'promoted' => \'NOW()',
+    });
 }
 
 =head1 AUTHOR

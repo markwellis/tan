@@ -385,10 +385,9 @@ sub add_plus_minus: Private{
 
     if ( $c->user_exists ){
     # valid user, do work
-        my $plusminus_rs = $c->model('MySQL::PlusMinus')->add(
+        my $count = $c->model('MySQL::PlusMinus')->add(
             $type, $c->stash->{'object_id'}, $c->user->user_id
         );
-        my $count = $plusminus_rs->count;
 
         if ( defined($c->req->param('json')) ){
         #json
