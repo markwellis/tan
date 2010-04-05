@@ -114,4 +114,24 @@ sub url{
         . $self->url_title;
 }
 
+=head2 promote
+
+B<@args = (undef)>
+
+=over
+
+promotes object
+
+=back
+
+=cut
+sub promote{
+    my ( $self ) = @_;
+#so somethings been updated, do some tiwtter shit n that
+
+    $self->update({
+        'promoted' => \'NOW()',
+    });
+}
+
 1;
