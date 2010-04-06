@@ -57,7 +57,7 @@ loads the login template
 =back
 
 =cut
-sub index: Path: Args(0){
+sub index: Path Args(0){
     my ($self, $c) = @_;
     
     if ($c->user_exists){

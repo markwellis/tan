@@ -23,8 +23,8 @@ my $picture_lookup = {};
 my $tag_lookup = {};
 my $user_comment_no = {};
 
-my $old_avatar_path = '/srv/http/thisaintnews.com/images/old';
-my $new_avatar_path = '/srv/http/thisaintnews.com/images/avatar';
+my $old_avatar_path = '/mnt/stuff/images/old';
+my $new_avatar_path = '/mnt/stuff/images/avatar';
 
 #USERS
 my $old_users = $olddb->resultset('UserDetails');

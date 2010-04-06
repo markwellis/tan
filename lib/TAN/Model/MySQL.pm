@@ -4,6 +4,16 @@ use strict;
 use TAN::DBProfiler;
 use base 'Catalyst::Model::DBIC::Schema';
 
+             
+__PACKAGE__->config(         
+    schema_class => 'TAN::Schema',           
+    connect_info => {        
+        dsn => 'dbi:mysql:tan',          
+        user => 'thisaintnews',          
+        password => 'caBi2ieL',          
+    }        
+); 
+
 =head1 NAME
 
 TAN::Model::MySQL
