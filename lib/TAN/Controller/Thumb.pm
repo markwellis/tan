@@ -124,6 +124,8 @@ sub resize: Private {
             $c->detach();
         }
     }
+    $c->res->output(' ');
+    $c->detach();
 }
 
 =head1 AUTHOR
