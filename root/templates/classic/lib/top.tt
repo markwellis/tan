@@ -12,7 +12,7 @@
 [% PROCESS 'lib/js_includes.tt' -%]
 <div id="main">
     <div id="top">
-        <div style="float:right;margin-top:5px;margin-right:5px;text-align:right;">
+        <div class="menu_top_right">
             <form action="https://www.paypal.com/cgi-bin/webscr" method="post" style="float:right;margin-left:5px;">
                 <fieldset>
                     <input type="hidden" name="cmd" value="_xclick" />

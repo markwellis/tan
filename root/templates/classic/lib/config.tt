@@ -22,7 +22,7 @@
             'media' => 'screen',
         },
         {
-            'file' => "$theme_settings.css_path/shared.css",
+            'file' => "$theme_settings.css_path/shared.css?r=1",
             'media' => 'screen',
         },
         {
