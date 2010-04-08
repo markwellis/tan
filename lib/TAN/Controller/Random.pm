@@ -49,7 +49,7 @@ sub index: Path: Args(1) {
         $location = 'all';
     }
 
-    my $object = $c->model('MySQL::Object')->random($location);
+    my $object = $c->model('MySQL::Object')->random($location, $c->nsfw);
 
     if ($object){
         $c->res->redirect($object->url);

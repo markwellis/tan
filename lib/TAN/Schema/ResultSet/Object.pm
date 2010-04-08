@@ -77,7 +77,7 @@ sub index {
 
 =head2 random
 
-B<@args = ($location)>
+B<@args = ($location, $nsfw)>
 
 =over
 
@@ -87,7 +87,7 @@ gets a random article
 
 =cut
 sub random{
-    my ($self, $location) = @_;
+    my ($self, $location, $nsfw) = @_;
 
     my $search = {};
     if ($location eq 'all'){
@@ -96,6 +96,10 @@ sub random{
         $location = $types[$rand];
     }
     $search->{'type'} = $location;
+    my %nsfw_opts;
+    if ( !defined($nsfw) || !$nsfw ){
+        $search->{'nsfw'} = 'N';
+    }
 
     return $self->search(
         $search,
