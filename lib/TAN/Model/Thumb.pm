@@ -64,17 +64,23 @@ sub resize{
         $new_x = int($new_x);
         $new_y = int($new_y);
 
-        if ( ($image_info->{'x'} < $x) && ($image_info->{'y'} < $x) ){
+        if ( ($image_info->{'x'} < $x) && ($image_info->{'y'} < $x) && ($image_info->{'mime'} ne 'image/gif') ){
             #return original image or something
             return `cp '${filename}' '${cacheimg}'`;
         }
 
+        my $retval;
         if ( $image_info->{'mime'} eq 'image/gif' ){
         #GIF
-            return `convert '${filename}'[0-10] -coalesce -thumbnail '${new_x}x${new_y}>' -layers Optimize '${cacheimg}' 2>&1`;
+            $retval = `convert '${filename}'[0-10] -coalesce -thumbnail '${new_x}x${new_y}>' -layers Optimize '${cacheimg}' 2>&1`;
         } else {
-            return `convert '${filename}' -thumbnail '${new_x}x${new_y}' '${cacheimg}' 2>&1`;
+            $retval = `convert '${filename}' -thumbnail '${new_x}x${new_y}' '${cacheimg}' 2>&1`;
         }
+        if ( (-s $filename) < (-s $cacheimg) ){
+        #thumbnail is bigger than original :/
+            return `cp '${filename}' '${cacheimg}'`;
+        }
+        return $retval;
     }
     return 'error';
 }
