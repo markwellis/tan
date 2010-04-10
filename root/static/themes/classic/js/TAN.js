@@ -17,7 +17,7 @@ var TAN_class = new Class({
         if ( !$defined(message) ){
             message = 'Please login';
         }
-        this.alert(message);
+        this.alert('<a href="/login/">' + message + '</a>');
     },
     nsfw: function(value){
         if ( $chk(value) ){

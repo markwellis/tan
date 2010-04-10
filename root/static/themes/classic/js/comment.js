@@ -8,15 +8,15 @@ window.addEvent('load', function() {
             if ( input_comment ){
                 var req = new Request.HTML({
                     'url' : this.action + '?ajax=1',
-                    'onSuccess': function(response_comment, responseHTML) {
+                    'onSuccess': function(responseTree, responseElements, responseHTML, responseJavaScript) {
                         $('submit_comment').disabled = 0;
-                        if ( responseHTML === 'error' ){
+                        if ( responseHTML == 'error' ){
                             TAN.alert('fail');
-                        } else if ( responseHTML === 'login' ){
+                        } else if ( responseHTML == 'login' ){
                             TAN.login("Your comment has been saved. "
                                 + "You need to login or register before it's posted");
                         } else {
-                            $('comments').adopt(response_comment);
+                            $('comments').adopt(responseTree);
                             tinyMCE.get('comment').setContent('');
                         }
                         $('submit_comment').disabled = 0;

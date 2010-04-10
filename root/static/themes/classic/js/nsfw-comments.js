@@ -1,11 +1,14 @@
 var image_src = '/static/images/mouseover.png?r=13';
 new Asset.image( image_src );
 
+// long regex :\
+var safe_reg = /\/static\/fckeditor\/editor\/images\/smiley\/|\/static\/smilies\/|\/sys\/js\/fckeditor\/editor\/images\/smiley\/smileys\//;
+
 window.addEvent('domready', function(){
     if (TAN.nsfw() === 0){
         $$('#blog_wrapper img', '.comment_inner img').filter(function(el, index){
             if ( el.getProperty('src') ){
-                return (el.getProperty('src').indexOf('/static/fckeditor/editor/images/smiley/') < 0);
+                return ( !el.getProperty('src').match(safe_reg) );
             }
             return false;
         }).each(function(el) {
@@ -48,7 +51,7 @@ window.addEvent('domready', function(){
         window.addEvent('load', function() {
             $$('#blog_wrapper img', '.comment_inner img').filter(function(el, index){
                 if ( el.getProperty('src') ){
-                    return (el.getProperty('src').indexOf('/static/fckeditor/editor/images/smiley/') < 0);
+                    return ( !el.getProperty('src').match(safe_reg) );
                 }
                 return false;
             }).each(function(el) {
