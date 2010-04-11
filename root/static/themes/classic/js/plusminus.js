@@ -23,7 +23,7 @@ window.addEvent('domready', function() {
                         TAN.login();
                     }
                 },
-                'noCache': true,
+                'noCache': true
             }).get();
 		}
 	});

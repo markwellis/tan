@@ -65,7 +65,7 @@ sub resize{
         $new_y = int($new_y);
 
         if ( ($image_info->{'x'} < $x) && ($image_info->{'y'} < $x) && ($image_info->{'mime'} ne 'image/gif') ){
-            #return original image or something
+        #return original image or something if smaller than thumb (NOT FOR GIFS!)
             return `cp '${filename}' '${cacheimg}'`;
         }
 

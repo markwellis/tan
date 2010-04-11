@@ -133,9 +133,14 @@ if debug warns sql output
 sub end: Private {
     my ( $self, $c ) = @_;
 
-    $c->stash->{'time'} = sub { return time(); };
+    if ( !$c->res->output || ($c->res->status < 300) ){
+    #dont render if redirect or ajax etc
+        $c->stash->{'time'} = sub { return time(); };
 
-    $c->forward('render');
+        $c->forward('check_cache');
+    
+        $c->forward('render');
+    }
 
     if($c->debug) {
         my $sql_queries = $c->model('MySQL')->get_query_count();
@@ -148,6 +153,24 @@ sub end: Private {
         }
 
         $c->model('MySQL')->reset_count();
+    }
+}
+
+sub check_cache: Private{
+    my ( $self, $c ) = @_;
+
+    $c->stash->{'message'} = $c->flash->{'message'};
+
+    if ( 
+        $c->user_exists 
+        || defined($c->stash->{'no_page_cache'}) 
+        || defined($c->stash->{'message'}) 
+        || !$c->stash->{'cache_time'}
+        || scalar(@{ $c->error })
+    ) {
+        $c->res->header('Cache-Control' => 'no-cache');
+    } else {
+        $c->res->header('Cache-Control' => 'max-age=' . $c->stash->{'cache_time'});
     }
 }
 =head1 AUTHOR
