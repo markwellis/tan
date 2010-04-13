@@ -111,12 +111,13 @@ sub resize: Private {
         'picture_id' => $id,
     });
 
+    #def this here coz we might need it if the image dont exist
+    my $cache_image = $c->path_to('root') . $c->config->{'thumb_path'} . "/${mod}/${id}";
+    mkpath($cache_image);
+    $cache_image .= "/${x}";
+
     if ( defined($row) && (my $filename = $row->filename) ){
         my $orig_image = $c->path_to('root') . $c->config->{'pic_path'} . "/${filename}";
-        my $cache_image = $c->path_to('root') . $c->config->{'thumb_path'} . "/${mod}/${id}";
-
-        mkpath($cache_image);
-        $cache_image .= "/${x}";
 
         my $image = $c->model('Thumb')->resize($orig_image, $cache_image, $x);
         if (!$image && -e $cache_image){
@@ -124,7 +125,11 @@ sub resize: Private {
             $c->detach();
         }
     }
-    $c->res->output(' ');
+#if we get here somethings gone wrong
+    my $cp_command = 'cp ' . $c->path_to(qw/root static images blank.png/) . " ${cache_image}";
+    warn $cp_command;
+    `${cp_command}`;
+    $c->res->redirect("/static/cache/thumbs/${mod}/${id}/${x}?" . int(rand(100)));
     $c->detach();
 }
 
