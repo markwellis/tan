@@ -53,7 +53,7 @@ my $order_reg = qr/^(promoted|plus|minus|views|comments)$/;
 sub index :Path :Args(3) {
     my ( $self, $c, $location, $upcoming, $page ) = @_;
 
-    $c->stash->{'cache_time'} = 120;
+    $c->cache_page( 120 );
 
     if ($location !~ m/$location_reg/){
         $location = 'all';

@@ -31,11 +31,11 @@ use Catalyst qw/
     ConfigLoader
     Unicode::Encoding
     Authentication
-    Cache::FastMmap
     Session
     Email
     Session::Store::FastMmap
     Session::State::Cookie
+    Cache
     PageCache
 /;
 
@@ -55,14 +55,17 @@ use POSIX qw/floor/;
 __PACKAGE__->config( name => 'TAN', 
     'Plugin::ConfigLoader' => {
         driver => {
-            'General' => { -InterPolateVars => 1 }
+            'General' => { 
+                -InterPolateVars => 1,
+            }
         }
     },
     'Plugin::PageCache' => {
         cache_hook => 'check_cache',
         key_maker => sub {
             my $c = shift;
-            return $c->req->path . $c->nsfw;
+            my $path = $c->req->path || 'index';
+            return $path . $c->nsfw;
         }
     }
  );
@@ -91,10 +94,15 @@ sub check_cache{
     $c->stash->{'message'} = $c->flash->{'message'};
 
 # don't commit this!!!
-return 0;
+#return 0;
 # end
 
-    if ( $c->user_exists || defined($c->stash->{'no_page_cache'}) || defined($c->stash->{'message'}) ) {
+    if ( 
+        $c->user_exists 
+        || defined($c->stash->{'no_page_cache'}) 
+        || defined($c->stash->{'message'}) 
+        || ($c->res->status > 300))
+    {
         return 0;
     }
     return 1;

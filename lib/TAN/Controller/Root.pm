@@ -115,7 +115,11 @@ RenderView
 =back
 
 =cut
-sub render: ActionClass('RenderView') {}
+sub render: ActionClass('RenderView') {
+    my ( $self, $c ) = @_;
+
+    $c->stash->{'time'} = sub { return time(); };
+}
 
 =head2 end: Private 
 
@@ -135,10 +139,7 @@ sub end: Private {
 
     if ( !$c->res->output || ($c->res->status < 300) ){
     #dont render if redirect or ajax etc
-        $c->stash->{'time'} = sub { return time(); };
 
-        $c->forward('check_cache');
-    
         $c->forward('render');
     }
 
@@ -156,23 +157,6 @@ sub end: Private {
     }
 }
 
-sub check_cache: Private{
-    my ( $self, $c ) = @_;
-
-    $c->stash->{'message'} = $c->flash->{'message'};
-
-    if ( 
-        $c->user_exists 
-        || defined($c->stash->{'no_page_cache'}) 
-        || defined($c->stash->{'message'}) 
-        || !$c->stash->{'cache_time'}
-        || scalar(@{ $c->error })
-    ) {
-        $c->res->header('Cache-Control' => 'no-cache');
-    } else {
-        $c->res->header('Cache-Control' => 'max-age=' . $c->stash->{'cache_time'});
-    }
-}
 =head1 AUTHOR
 
 Catalyst developer
