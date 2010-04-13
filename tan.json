@@ -1,0 +1,51 @@
+{
+    "name": "TAN",
+    "default_view": "TT",
+    "encoding": "UTF-8",
+
+    "static_path": "/static",
+    "avatar_path": "/static/user/avatar",
+    "pic_path": "/static/user/pics",
+
+    "cache_path": "/static/cache",
+    "jscache_path": "/static/cache/js",
+    "thumb_path": "/static/cache/thumbs",
+
+    "promotion_cutoff": 10,
+
+    "Plugin::Authentication": {
+        "use_session": 1,
+        "default": {
+            "credential": {
+                "class": "Password",
+                "password_type": "hashed",
+                "password_hash_type": "SHA-512"
+            },
+            "store": {
+                "class": "DBIx::Class",
+                "user_model": "MySQL::User",
+                "use_userdata_from_session": 1
+            }
+        }
+    },
+
+    "Model::FetchImage": {
+        "max_filesize": 2097152,
+        "user_agent": "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.16) Gecko/2009120208 Firefox/3.0.16 (.NET CLR 3.5.30729)"
+    },
+
+    "Plugin::Cache": {
+        "backend": {
+            "class": "Cache::Memcached::libmemcached",
+            "debug": 2,
+            "servers": [
+                "127.0.0.1:11211"
+            ]
+        }
+    },
+
+    "Plugin::Session": {
+        "expires": 1209600,
+        "storage": "/tmp/tan_session_cache"
+    }
+}
