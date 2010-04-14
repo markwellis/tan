@@ -93,16 +93,35 @@ sub check_cache{
 # its here coz it no worko in the end/render
     $c->stash->{'message'} = $c->flash->{'message'};
 
-# don't commit this!!!
-#return 0;
-# end
+#recored p.i.
+    if ( ($c->action eq 'view/index') && (!$c->stash->{'pi_recorded'}) ){
+        my @params = split('/', $c->req->path);
+        my $object_id = $params[2];
+        my $session_id = $c->sessionid;
 
+        if ( $object_id  && $session_id ){
+            my $user_id = $c->user_exists ? $c->user->user_id : 0;
+
+            $c->model('MySQL::Views')->update_or_create({
+                'session_id' => $session_id,
+                'object_id' => $object_id,
+                'user_id' => $user_id,
+                'ip' => $c->req->address,
+                'created' => \'NOW()',
+            },{
+                'key' => 'session_objectid',
+            });
+        }
+        #stop duplicate recordings
+        $c->stash->{'pi_recorded'} = 1;
+    }
+    
     if ( 
-        $c->user_exists 
-        || defined($c->stash->{'no_page_cache'}) 
-        || defined($c->stash->{'message'}) 
-        || ($c->res->status > 300))
-    {
+        $c->user_exists
+        || defined($c->stash->{'no_page_cache'})
+        || defined($c->stash->{'message'})
+        || ($c->res->status > 300)
+    ){
         return 0;
     }
     return 1;
