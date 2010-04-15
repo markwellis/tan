@@ -23,7 +23,7 @@ window.addEvent('domready', function() {
 					        }
 					        break;
 						case 'blogmain':
-					        if (FCKeditorAPI.GetInstance('blogmain').GetHTML().length < 26){
+					        if (tinyMCE.get('blogmain').getContent().length < 26){
 					            alert("The blog must be atleast 20 letters");
 					            e.stop();
 					        }

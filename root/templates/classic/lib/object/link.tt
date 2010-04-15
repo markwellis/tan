@@ -3,7 +3,7 @@ type = object.type;
 
 title = object.url_title;
 
-IF index;
+IF index || ( type == 'blog' );
     url = "/view/" _ object.type _ '/' _ object.id _ '/' _ title;
 ELSE;
     url = '/redirect/' _ object.id;

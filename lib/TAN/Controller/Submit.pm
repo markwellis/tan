@@ -342,6 +342,7 @@ sub post: PathPart('post') Chained('validate') Args(0){
 
     }
 
+    $c->flash->{'message'} = 'Submission complete';
     $c->res->redirect('/index/' . $c->stash->{'location'} . '/1/1/');
     $c->detach();
 }

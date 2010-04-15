@@ -7,7 +7,8 @@ window.addEvent('load', function() {
             
             if ( input_comment ){
                 var req = new Request.HTML({
-                    'url' : this.action + '?ajax=1',
+                    'url' : this.action,
+                    'noCache': true,
                     'onSuccess': function(responseTree, responseElements, responseHTML, responseJavaScript) {
                         $('submit_comment').disabled = 0;
                         if ( responseHTML == 'error' ){
@@ -15,6 +16,7 @@ window.addEvent('load', function() {
                         } else if ( responseHTML == 'login' ){
                             TAN.login("Your comment has been saved. "
                                 + "You need to login or register before it's posted");
+                            tinyMCE.get('comment').setContent('');
                         } else {
                             $('comments').adopt(responseTree);
                             tinyMCE.get('comment').setContent('');
@@ -26,7 +28,8 @@ window.addEvent('load', function() {
                         $('submit_comment').disabled = 0;
                     }
                 }).post({
-                    'comment': input_comment
+                    'comment': input_comment,
+                    'ajax': 1
                 });
 
                 $('submit_comment').disabled = 1;
@@ -66,12 +69,8 @@ window.addEvent('load', function() {
         // LOL
         var comment_holder = this.getParent().getParent().getParent().getParent().getParent();
         var comment_id = comment_holder.id.replace(/\D+/g, '');
-
         var req = new Request.HTML({
             'url' : this.href,
-            'data': {
-                'ajax': 1
-            },
             'evalScripts': false,
             'noCache': true,
             'onSuccess': function(responseTree) {
@@ -82,7 +81,6 @@ window.addEvent('load', function() {
                 //submit edit comment
                 comment_holder.getElement('#edit' + comment_id).addEvent('click', function(e){
                     e.stop();
-
                     var editor_id = 'edit_comment_' + comment_id;
                     //js is tarded and cant use varible as a object key coz it accepts barewords keys :/
                     var data = {};
@@ -91,7 +89,6 @@ window.addEvent('load', function() {
                     var edit_comment_submit = new Request.HTML({
                         'url': this.getParent().getParent().action,
                         'noCache': true,
-                        'data': data,
                         'onSuccess': function(responseTree, responseElements, responseHTML, responseJavaScript) {
                             // can't use responseTree coz its not an element, its a Tree!
                             // but we can use esponseElements[0] coz everything is inside a div! :D
@@ -101,7 +98,7 @@ window.addEvent('load', function() {
                         'onFailure': function(xhr){
                             TAN.alert( xhr.responseText );
                         }
-                    }).post();
+                    }).post(data);
                 });
 
                 //delete comment
@@ -113,10 +110,6 @@ window.addEvent('load', function() {
                     var edit_comment_submit = new Request.HTML({
                         'url': this.getParent().getParent().action,
                         'noCache': true,
-                        'data': {
-                            'ajax': 1,
-                            'delete': 1
-                        },
                         'onSuccess': function(responseTree, responseElements, responseHTML, responseJavaScript) {
                             TAN.alert( responseHTML );
                             comment_holder.dispose();
@@ -124,12 +117,17 @@ window.addEvent('load', function() {
                         'onFailure': function(xhr){
                             TAN.alert( xhr.responseText );
                         }
-                    }).post();
+                    }).post({
+                        'ajax': 1,
+                        'delete': 1
+                    });
                 });
             },
             'onFailure': function(xhr){
                 TAN.alert( xhr.responseText );
             }
-        }).get();
+        }).get({
+            'ajax': 1    
+        });
     });
 });

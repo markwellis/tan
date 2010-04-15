@@ -1,4 +1,4 @@
-<form method="post" action="[% c.req.uri %]">
+<form method="post" action="/[% c.req.path %]">
     <fieldset>
 [% editor = {
     'name' => "edit_comment_$comment_id",

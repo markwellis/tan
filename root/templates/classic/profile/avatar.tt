@@ -19,11 +19,6 @@ css_includes.push({
     'media' => 'screen',
 });
 
-css_includes.push({
-    'file' => "$theme_settings.css_path/mooRainbow.css",
-    'media' => 'screen',
-});
-
 js_includes.push('Lasso');
 js_includes.push('Lasso-Crop');
 js_includes.push('avatar-upload');

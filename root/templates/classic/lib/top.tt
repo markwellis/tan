@@ -1,6 +1,6 @@
 <script type="text/javascript">
 //<![CDATA[
-    [%- IF message.defined -%]
+    [%- IF message.defined %]
     window.addEvent('domready', function(){
         TAN.alert("[%- message -%]");
     });
