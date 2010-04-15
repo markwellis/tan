@@ -1,4 +1,4 @@
-window.addEvent('load', function() {
+window.addEvent('domready', function() {
 	$('comment_form').addEvents({
 		submit: function(e) {
             e.stop();
