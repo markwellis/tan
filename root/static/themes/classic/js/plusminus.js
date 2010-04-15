@@ -14,7 +14,8 @@ window.addEvent('domready', function() {
             }
 
             var plus_minus_jsonreq = new Request.JSON({
-                'url': this.href + '?json=1',
+                'url': this.href,
+                'noCache': true,
                 'onSuccess': function(value){
                     if ( !$defined(value.login) ){
                         update_me.set('html', value.count);
@@ -23,8 +24,9 @@ window.addEvent('domready', function() {
                         TAN.login();
                     }
                 },
-                'noCache': true
-            }).get();
+            }).get({
+                'json': 1
+            });
 		}
 	});
 });

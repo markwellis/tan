@@ -22,11 +22,12 @@ function get_thumbs(id){
 
 	if ($('tags').value){
 	    var req = new Request.JSON({
-	    	url:'/tagthumbs/' + $('tags').value + '/?random=20', 
-	    	onRequest:function(){
+	    	'url':'/tagthumbs/' + $('tags').value + '/',
+            'noCache': 1,
+	    	'onRequest': function(){
 	    		$('thumb_tags').fade(0);
 	    	},
-	    	onComplete:function(json_data){
+	    	'onSuccess': function(json_data){
 	    		$('thumb_tags').set('html', '<label>Picture</label><br /><br />');
 	    		add_thumbs(json_data);
 	    		$('thumb_tags').fade(1);
@@ -34,8 +35,9 @@ function get_thumbs(id){
 	    			select_img($('pic' + id));
 	    		}
 	    	},
-	        noCache: true
-	    }).get();
+	    }).get({
+            'random': 20
+        });
 	}
 }
 
