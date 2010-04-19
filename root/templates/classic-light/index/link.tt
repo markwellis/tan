@@ -15,14 +15,16 @@ num = num + 1;
 md = object.$type.picture_id - (object.$type.picture_id % 1000)
 -%]
 
+
+[%- js_includes.push('plusminus') -%]
 <div class="TAN-plusminus right">
     <div class="TAN-plus">
         <span>[% object.get_column('plus') %]</span>
-        <a href="/view/link/[% object.$type.id %]/_plus" class="add-plus">IsNews</a>
+        <a href="/view/link/[% object.$type.id %]/_plus" [%- IF object.meplus %]class="TAN-plus-selected"[% END %]>IsNews</a>
     </div>
     <div class="TAN-minus">
         <span>[% object.get_column('minus') %]</span>
-        <a href="/view/link/[% object.$type.id %]/_minus" class="add-minus">AintNews</a>
+        <a href="/view/link/[% object.$type.id %]/_minus" [%- IF object.meplus %]class="TAN-minus-selected"[% END %]>AintNews</a>
     </div>
 </div>
 <div class="TAN-news-image left">

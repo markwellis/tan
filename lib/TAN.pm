@@ -238,7 +238,7 @@ returns the 20 most recent comments
 sub recent_comments{
     my $c = shift;
 
-    return $c->model('MySQL::Comments')->recent_comments->all;
+    return $c->model('MySQL::Comments')->recent_comments(60)->all;
 }
 
 =head2 filesize_h

@@ -35,7 +35,7 @@ gets the 20 most recent comments
 
 =cut
 sub recent_comments {
-    my ( $self ) = @_;
+    my ( $self, $count ) = @_;
 
     return $self->search({
         'me.deleted' => 'N'
@@ -43,7 +43,7 @@ sub recent_comments {
         'order_by' =>  {
             '-desc' => 'me.created',
         },
-        'rows' => 20,
+        'rows' => $count,
         'prefetch' => {
             'user' => [],
             'object' => [

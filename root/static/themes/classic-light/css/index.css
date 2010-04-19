@@ -98,6 +98,10 @@
     background-color:#4582BE;
 }
 
+.TAN-plus-selected{
+    background-color:#5A9E4A;
+}
+
 .TAN-minus{
     margin-top:10px;
 }
@@ -108,6 +112,10 @@
 
 .TAN-minus a{
     background-color:#CC6A00;
+}
+
+.TAN-minus-selected{
+    background-color:#000000;
 }
 
 /* pagination */
