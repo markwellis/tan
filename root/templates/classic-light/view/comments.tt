@@ -3,6 +3,7 @@
         PROCESS 'view/comment.tt';
     END;
     js_includes.push('nsfw-comments');
+    js_includes.push('comment');
 END -%]
 
 <form id="comment_form" action="_comment" method="post">
