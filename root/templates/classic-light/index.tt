@@ -1,6 +1,6 @@
 [%
 css_includes.push({
-    'file' => "$theme_settings.css_path/index.css",
+    'file' => "$theme_settings.css_path/news.css",
     'media' => 'screen',
 });
 

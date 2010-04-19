@@ -7,7 +7,7 @@
     background-color:#fff;
 }
 
-.TAN-news a{
+.TAN-news > a{
     text-decoration:none;
 }
 
@@ -30,19 +30,19 @@
     overflow:hidden;
 }
 
-.TAN-news-image img{
+.TAN-news-image > img{
     display:block;
     margin:auto;
 }
 
-.TAN-news p, .TAN-news h2{
+.TAN-news > p, .TAN-news > h2{
     margin:0px;
     font-weight:normal;
     margin:0px 65px 5px 105px;
 
 }
 
-.TAN-news p{
+.TAN-news > p{
     font-size:0.75em;
 }
 
@@ -64,7 +64,7 @@
 
 /* plus minus */
 
-.TAN-plusminus div{
+.TAN-plusminus > div{
     background-color:#fff;
     border:1px solid #808080;
     width:50px;
@@ -72,14 +72,14 @@
     position:relative;
 }
 
-.TAN-plusminus div span{
+.TAN-plusminus > div > span{
     font-size:1.5em;
     font-weight:bold;
     text-align:center;
     display:block;
 }
 
-.TAN-plusminus div a{
+.TAN-plusminus > div > a{
     text-align:center;
     color:#fff;
     display:block;
@@ -90,11 +90,11 @@
     position:absolute;
 }
 
-.TAN-plus span{
+.TAN-plus > span{
     color:#4582BE;
 }
 
-.TAN-plus a{
+.TAN-plus > a{
     background-color:#4582BE;
 }
 
@@ -106,11 +106,11 @@
     margin-top:10px;
 }
 
-.TAN-minus span{
+.TAN-minus > span{
     color:#CC6A00;
 }
 
-.TAN-minus a{
+.TAN-minus > a{
     background-color:#CC6A00;
 }
 

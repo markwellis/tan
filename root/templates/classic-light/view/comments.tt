@@ -1,0 +1,20 @@
+[%- IF object.comments;
+    FOREACH comment=comments;
+        PROCESS 'view/comment.tt';
+    END;
+    js_includes.push('nsfw-comments');
+END -%]
+
+<form id="comment_form" action="_comment" method="post">
+    <fieldset>
+        [%-
+        editor = {
+            'name' => "comment",
+            'height' => '300px',
+        };
+                
+        PROCESS 'lib/editor.tt' -%]
+        <br />
+        <input type="submit" value="Comment" id="submit_comment" />
+    </fieldset>
+</form>
