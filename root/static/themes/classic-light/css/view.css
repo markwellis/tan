@@ -64,3 +64,20 @@
 .TAN-comment_inner p{
     margin:0px;
 }
+
+/* quote stuff */
+
+.quoted_username{
+    font-weight:bold;
+}
+
+.quote_holder{
+	padding:5px;
+    background-color:#e1ebf2;
+    border: #bebebe 1px solid;
+}
+
+.quote{
+	padding-left:15px;
+    font-style:italic;
+}

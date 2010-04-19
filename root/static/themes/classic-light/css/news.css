@@ -7,6 +7,10 @@
     background-color:#fff;
 }
 
+.TAN-news > ul > li{
+    list-style:none;
+}
+
 .TAN-news > a{
     text-decoration:none;
 }
