@@ -85,7 +85,7 @@ sub resize{
     return 'error';
 }
 
-=head2 crope
+=head2 crop
 
 B<@args = ($infile, $outfile, $x, $y, $w, $h)>
 
@@ -101,7 +101,7 @@ writes to $outfile
 sub crop{
     my ( $self, $infile, $outfile, $x, $y, $w, $h ) = @_;
 
-    if (!`convert -background transparent '${infile}'[0-10] -coalesce -crop '${w}x${h}+${x}+${y}!' -thumbnail '100x100' -gravity center -extent 100x100 -layers Optimize gif:${outfile}`) {
+    if (!`convert -background transparent '${infile}'[0-10] -coalesce -crop '${w}x${h}+${x}+${y}!' -thumbnail '100x100' -gravity center -extent 100x100 -layers Optimize gif:'${outfile}'  2>&1`) {
     #exit code 0 is success :/
         return 1;
     }

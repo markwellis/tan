@@ -12,7 +12,7 @@ __PACKAGE__->config(TEMPLATE_EXTENSION => '.tt');
 __PACKAGE__->config({
     CATALYST_VAR => 'c',
     INCLUDE_PATH => [
-        TAN->path_to( 'root', 'templates', 'classic' ),
+        TAN->path_to( 'root', 'templates', 'classic-light' ),
     ],
     PRE_PROCESS  => 'lib/config.tt',
     WRAPPER      => 'lib/wrapper.tt',

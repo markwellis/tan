@@ -1,0 +1,318 @@
+body{
+    color:#535353;
+    cursor:default;
+    font-family:Arial,sans-serif;
+    font-weight:normal;
+    height:100%;
+    margin:0px;
+    min-width:1005px;
+}
+
+/* form stuff */
+
+input[type=text], input[type=password], textarea{
+    border:1px solid #808080;
+    background-color:#d6d6d6;
+}
+
+input[type=text]:focus, input[type=password]:focus, textarea:focus{
+    border:1px solid #0000ff;
+}
+
+input[type=text]:hover, input[type=password]:hover, textarea:hover{
+    border:1px solid #404040;
+    background-color:#b6b6b6;
+}
+
+fieldset, img{
+    border:0px;
+}
+
+fieldset{
+    padding:2px;
+}
+
+.left{
+    float:left;
+}
+
+.right{
+    float:right;
+}
+
+.clear{
+    clear:both;
+}
+
+.clear_left{
+    clear:right;
+}
+
+.clear_right{
+    clear:right;
+}
+
+.TAN-header, .TAN-main{
+    padding:5px;
+    overflow:hidden;
+}
+.TAN-header{
+    background-image:url("../images/top.jpg");
+    background-color:#999;
+    background-repeat:no-repeat;
+    background-position:center;
+}
+
+.TAN-main{
+    background-color:#888;
+}
+
+.TAN-logo{
+    background-image:url("../../../images/logo.png");
+    height:75px;
+    width:400px;
+    text-indent:-1000px;
+    float:left;
+    margin:0px;
+}
+
+.TAN-logo a{
+    display:block;
+    height:100%;
+}
+
+.TAN-menu-top{
+    text-align:right;
+    width:400px;
+}
+
+.TAN-menu-top form, .TAN-menu-top p{
+    margin:0px;
+}
+
+.TAN-menu-top a{
+    font-size:0.8em;
+    font-weight:bold;
+    text-decoration:none;
+    color:#4582BE;
+}
+
+.TAN-menu-top-search{
+    padding-top:3px;
+}
+
+/* menu */
+
+.TAN-menu-ad-holder{
+    overflow:hidden;
+    position:relative;
+    width:100%;
+}
+
+.TAN-menu{
+    clear:both;
+    position:absolute;
+    bottom:0px;
+}
+
+.TAN-menu ul{
+    clear:left;
+    padding:0px;
+    margin:0px;
+    font-size:1em;
+    display:none;
+}
+
+.TAN-menu-tab-holder{
+    display:block !important;
+}
+
+.TAN-menu ul li{
+    float:left;
+    list-style:none;
+    border-right:1px solid #BEBEBE;
+}
+
+.TAN-menu ul li a{
+    background-color:#EDEDED;
+    text-decoration:none;
+    width:100%;
+    margin:0px;
+    padding:0px 5px;
+}
+
+.TAN-menu ul li a:hover{
+    color:#fff !important;
+}
+
+.TAN-menu-last{
+    border:medium none !important;
+}
+
+.TAN-menu-tab{
+    background-color:transparent !important;
+    padding:0px 5px;
+}
+
+/* all */
+
+.TAN-type-all, .TAN-menu-all li a{
+    color:#333;
+}
+
+.TAN-type-all:hover, .TAN-menu-tab-all-selected, .TAN-menu-all li a:hover{
+    color:#fff !important;
+    background-color:#333 !important;
+}
+
+/* link */
+
+.TAN-type-link, .TAN-menu-link li a{
+    color:#d61d00;
+}
+
+.TAN-type-link:hover, .TAN-menu-tab-link-selected, .TAN-menu-link li a:hover{
+    color:#fff !important;
+    background-color:#d61d00 !important;
+}
+
+/* blog */
+
+.TAN-type-blog, .TAN-menu-blog li a{
+    color:#008000;
+}
+
+.TAN-type-blog:hover, .TAN-menu-tab-blog-selected, .TAN-menu-blog li a:hover{
+    color:#fff !important;
+    background-color:#008000 !important;
+}
+
+/* picture */
+
+.TAN-type-picture, .TAN-menu-picture li a{
+    color:#066ec9;
+}
+
+.TAN-type-picture:hover, .TAN-menu-tab-picture-selected, .TAN-menu-picture li a:hover{
+    color:#fff !important;
+    background-color:#066ec9 !important;
+}
+
+/* ads */
+
+.TAN-top-ad, .TAN-right1-ad, .TAN-right2-ad, .TAN-left-ad, .TAN-bottom-ad{
+    background-color:#fff;
+}
+
+.TAN-top-ad{
+    height:60px;
+    width:468px;
+    float:right;
+}
+
+.TAN-right1-ad{
+    height:600px;
+    width:120px;
+}
+
+.TAN-right2-ad{
+    margin-top:50px;
+    height:600px;
+    width:120px;
+}
+
+.TAN-left-ad{
+    height:600px;
+    width:160px;
+    margin-top:20px;
+}
+
+.TAN-bottom-ad{
+    height:90px;
+    width:728px;
+    margin:0px auto;
+}
+
+/* main */
+
+.TAN-main ul{
+    margin:0px;
+    padding:0px;
+}
+
+.TAN-main ul li{
+    list-style:none;
+}
+
+/* recent comments */
+
+.TAN-recent-comments{
+    padding:2px !important;
+    width:162px;
+    overflow:hidden;
+    background-color:#ccc;
+}
+
+.TAN-recent-comments a{
+    display:block;
+    text-decoration:none;
+    font-size:0.8em;
+}
+
+.TAN-recent-comments ul{
+    padding-left:10px;
+}
+
+.TAN-recent-comments ul li a{
+    color:#333;
+    padding:2px 0px;
+}
+
+.TAN-recent-comments ul li a:hover{
+    color:#fff;
+    background-color:#333;
+}
+
+.TAN-recent-comment-tip{
+    background:#fff;
+	width:300px;
+	padding:5px;
+	border:1px solid #999;
+
+}
+
+.TAN-recent-comment-tip .tip-text p{
+    padding:0px;
+    margin: 0px 0px 0px 5px;
+}
+
+/* inside */
+
+.TAN-inside{
+    margin-left:170px !important;
+    margin-right:125px !important;
+}
+
+/* bottom */
+
+#TAN-bottom{
+    overflow:hidden;
+    background-color:#555;
+    margin-bottom:24px;
+    padding:5px 0px;
+}
+
+.TAN-footer{
+    background-color:#333;
+    bottom:0;
+    height:20px;
+    left:0;
+    padding:2px;
+    position:fixed;
+    right:0;
+}
+
+.TAN-footer a{
+    color:#396A9C;
+    text-decoration:none;
+}

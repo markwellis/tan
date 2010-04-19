@@ -127,7 +127,6 @@ sub resize: Private {
     }
 #if we get here somethings gone wrong
     my $cp_command = 'cp ' . $c->path_to(qw/root static images blank.png/) . " ${cache_image}";
-    warn $cp_command;
     `${cp_command}`;
     $c->res->redirect("/static/cache/thumbs/${mod}/${id}/${x}?" . int(rand(100)));
     $c->detach();

@@ -1,0 +1,36 @@
+[%
+css_includes.push({
+    'file' => "$theme_settings.css_path/index.css",
+    'media' => 'screen',
+});
+
+i = 0;
+%]
+<ul class="TAN-inside">
+[%- FOREACH object = index_objects.objects -%]
+    <li class="TAN-news[% IF (i % 2)  %] TAN-news-alternate[% END %]">
+    [%- 
+        avatar_http = c.config.avatar_path _ "/" _ object.user_id;
+        avatar_image = c.path_to('root') _ avatar_http;
+        avatar_exists = avatar_image | file_exists;
+
+        IF (avatar_exists);
+            avatar_mtime = avatar_image | file_mtime;
+        ELSE;
+            avatar_http = c.config.static_path _ '/images/_user.png';
+        END;
+
+        SWITCH (object.type);
+            CASE ['link', 'blog'];
+                PROCESS 'index/link.tt';
+            CASE 'picture';
+                PROCESS 'index/picture.tt';
+        END 
+    -%]
+    </li>
+    [%- i = i + 1;
+END -%]
+    <li>
+        [% PROCESS 'index/pagination.tt' %]
+    </li>
+</ul>

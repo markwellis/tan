@@ -1,0 +1,53 @@
+[%
+type = object.type;
+
+title = object.url_title;
+
+url = "/view/" _ object.type _ '/' _ object.id _ '/' _ title;
+
+comment_url = url _ '#comments';
+rel = 'rel="external nofollow"';
+
+IF ( !num );
+    num = 0;
+END;
+num = num + 1;
+md = object.$type.picture_id - (object.$type.picture_id % 1000)
+-%]
+
+<div class="TAN-plusminus right">
+    <div class="TAN-plus">
+        <span>[% object.get_column('plus') %]</span>
+        <a href="/view/link/[% object.$type.id %]/_plus" class="add-plus">IsNews</a>
+    </div>
+    <div class="TAN-minus">
+        <span>[% object.get_column('minus') %]</span>
+        <a href="/view/link/[% object.$type.id %]/_minus" class="add-minus">AintNews</a>
+    </div>
+</div>
+<div class="TAN-news-image left">
+    <img alt="[% object.$type.picture_id %]" src="[% c.config.thumb_path _ '/' _ md _ '/' _ object.$type.picture_id %]/100"/>
+</div>
+<h2>
+    <a href="[% url %]" class="TAN-type-[% type %]" title="[% title %]">[%- object.$type.title | html -%]</a>
+</h2>
+<img alt="[% object.user.username | html %]" src="[% avatar_http %]?m=[% avatar_mtime.defined ? avatar_mtime : '' %]" class="TAN-news-avatar left" />
+<ul>
+    <li>
+        Posted by <a href="/user/[% object.user.username | html %]/1/" class="TAN-news-user">[% object.user.username | html %]</a>
+        [%- IF ( object.promoted ) -%]
+            promoted [% c.date_ago(object.promoted) -%] ago
+        [%- ELSE -%]
+            [% c.date_ago(object.created) -%] ago
+        [%- END -%]
+        <span class="TAN-type-[% type %]"> [[% type %]]</span>
+    </li>
+    <li>
+        <a href="[% comment_url %]" class="TAN-news-comment">
+            <img alt="" class="TAN-news-comment-image" src="/static/images/comment.png" /> [%- object.get_column('comments') %]
+        </a> | [%- object.get_column('views') -%] views
+    </li>
+</ul>
+<p>
+    [%- object.$type.description | html | nl2br -%]
+</p>

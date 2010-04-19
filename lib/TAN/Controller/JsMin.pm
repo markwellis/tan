@@ -62,14 +62,14 @@ outputs js or 404's
 
 =cut
 my $alpha_reg = qr/[^a-zA-Z0-9\-_]/; 
-my $format_reg = qr/\w+_(.*)_\w+/;
+my $format_reg = qr/[a-zA-Z0-9\-]+_(.*)_\w+/;
 my $ext_reg = qr/js$/;
 
 sub index: Path Args(1) {
     my ( $self, $c, $source_file ) = @_;
 
     $source_file =~ s/$alpha_reg//g;
-    
+
     if ($source_file !~ m/$format_reg/){
         $c->forward('/default');
         $c->detach();

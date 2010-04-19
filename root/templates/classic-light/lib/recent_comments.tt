@@ -1,0 +1,55 @@
+[%
+USE Dumper;
+#Dumper.dump_html(c.recent_comments);
+grouped_comments = {};
+FOREACH comment = c.recent_comments;
+    object_id = comment.object_id;
+    IF !grouped_comments.$object_id.defined();
+        grouped_comments.$object_id = [];
+    END;
+
+    grouped_comments.$object_id.push(comment);
+END;
+
+%]
+<ul class="TAN-recent-comments left">
+[% FOREACH object_id = grouped_comments.keys() %]
+    <li>
+        [%- 
+        count = (loop.count - 1);
+        type = grouped_comments.$object_id.$count.object.type;
+        title = grouped_comments.$object_id.$count.object.$type.title | html;
+        -%]
+        <a href="[% grouped_comments.$object_id.$count.object.url %]" class="TAN-type-blog" title="[% title %]::">[% title %]</a>
+        <ul>
+        [% FOREACH comment = grouped_comments.$object_id %]
+            <li>
+                [%-
+                comment.ndetails = comment.comment | strip_tags;
+                IF (comment.object.NSFW == 'Y');
+                    comment.ndetails = '[NSFW] ' _ comment.ndetails;
+                END;
+
+                comment.short = comment.ndetails.substr(0, 50);
+                comment.long = comment.ndetails.substr(0, 400);
+
+                IF ( comment.short != comment.comment );
+                       comment.short = comment.short _ '...';
+                END;
+                IF ( comment.long != comment.comment );
+                    comment.long = comment.long _ '...';
+                END;
+                comment.long = comment.long | html;
+                
+                tip_title = comment.user.username _ "::" _ comment.long;
+                -%]
+                <a href="[%- comment.object.url -%]#comment[%- comment.comment_id -%]" title="[%- tip_title | html -%]">[%- comment.short | html-%]</a>
+            </li>
+        [% END %]
+        </ul>
+    </li>
+[% END %]
+    <li>
+        [% PROCESS 'lib/ad.tt' ad = 'left' %]
+    </li>
+</ul>
