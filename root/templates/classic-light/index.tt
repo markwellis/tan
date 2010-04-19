@@ -4,6 +4,15 @@ css_includes.push({
     'media' => 'screen',
 });
 
+IF (location == 'picture');
+    css_includes.push({
+        'file' => "$theme_settings.css_path/picture-index.css",
+        'media' => 'screen',
+    });
+
+    js_includes.push('picture-index');
+END;
+
 i = 0;
 %]
 <ul class="TAN-inside">

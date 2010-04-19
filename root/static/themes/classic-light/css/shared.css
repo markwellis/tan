@@ -8,6 +8,10 @@ body{
     min-width:1005px;
 }
 
+a{
+    color:#4582BE;
+}
+
 /* form stuff */
 
 input[type=text], input[type=password], textarea{
@@ -94,7 +98,6 @@ fieldset{
     font-size:0.8em;
     font-weight:bold;
     text-decoration:none;
-    color:#4582BE;
 }
 
 .TAN-menu-top-search{
