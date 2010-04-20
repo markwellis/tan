@@ -45,7 +45,7 @@
                 </form>
                 <p>
                     <a href="http://stats.thisaintnews.com">Stats</a> |
-                    <a class="mibbit" href="/chat/">Chat</a> |
+                    <a class="mibbit" href="/chat/">Chat</a>
                     [%- IF c.user_exists -%]
                         | <a href="/login/logout/">Logout</a>
                     [%- END -%]

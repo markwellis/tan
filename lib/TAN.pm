@@ -89,11 +89,11 @@ doesn't cache if user has a flash message
 sub check_cache{
     my $c = shift;
 
-return 0;
-
 # this is a hack so people who have messages dont hit the page cache
 # its here coz it no worko in the end/render
     $c->stash->{'message'} = $c->flash->{'message'};
+
+return 0;
 
 #recored p.i.
     if ( ($c->action eq 'view/index') && (!$c->stash->{'pi_recorded'}) ){

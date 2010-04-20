@@ -20,7 +20,7 @@ END;
         type = grouped_comments.$object_id.$count.object.type;
         title = grouped_comments.$object_id.$count.object.$type.title | html;
         -%]
-        <a href="[% grouped_comments.$object_id.$count.object.url %]" class="TAN-type-blog" title="[% title %]::">[% title %]</a>
+        <a href="[% grouped_comments.$object_id.$count.object.url %]#comments" class="TAN-type-blog" title="[% title %]::">[% title %]</a>
         <ul>
         [% FOREACH comment = grouped_comments.$object_id %]
             <li>
