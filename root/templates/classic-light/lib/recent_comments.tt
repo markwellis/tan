@@ -1,26 +1,12 @@
-[%
-USE Dumper;
-#Dumper.dump_html(c.recent_comments);
-grouped_comments = {};
-FOREACH comment = c.recent_comments;
-    object_id = comment.object_id;
-    IF !grouped_comments.$object_id.defined();
-        grouped_comments.$object_id = [];
-    END;
-
-    grouped_comments.$object_id.push(comment);
-END;
-
-%]
 <ul class="TAN-recent-comments left">
-[% FOREACH object_id = grouped_comments.keys() %]
+[% grouped_comments = c.recent_comments;
+FOREACH object_id = grouped_comments.keys() %]
     <li>
         [%- 
-        count = (loop.count - 1);
-        type = grouped_comments.$object_id.$count.object.type;
-        title = grouped_comments.$object_id.$count.object.$type.title | html;
+        type = grouped_comments.$object_id.0.object.type;
+        title = grouped_comments.$object_id.0.object.$type.title | html;
         -%]
-        <a href="[% grouped_comments.$object_id.$count.object.url %]#comments" class="TAN-type-blog" title="[% title %]::">[% title %]</a>
+        <a href="[% grouped_comments.$object_id.0.object.url %]#comments" class="TAN-type-[% type %]" title="[% title %]::">[% title %]</a>
         <ul>
         [% FOREACH comment = grouped_comments.$object_id %]
             <li>

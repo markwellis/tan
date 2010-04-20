@@ -18,12 +18,12 @@ ELSIF ad == 'right2';
 # right2
     height = 600;
     width = 120;
-#    slid = 101951;
+    slid = 114042;
 ELSIF ad == 'top';
 # top
-    height = 600;
-    width = 120;
-#    slid = 101951;
+    height = 60;
+    width = 468;
+    slid = 114041;
 END;
 -%]
 

@@ -26,7 +26,7 @@ END;
     </a>
 
     <a href="/view/picture/[% object.id %]/[% url_title %]#comments">
-        <img src="[% c.config.static_path %]/images/comment.png"  class="TAN-news-comment"/> [% object.get_column('comments') %]</a> | [% object.get_column('views') %] views
+        <img src="[% c.config.static_path %]/images/comment.png" alt="" class="TAN-news-comment"/> [% object.get_column('comments') %]</a> | [% object.get_column('views') %] views
      | [% object.picture.x %]x[% object.picture.y %] | [% object_size %]
 
     [% IF c.user && c.user.user_id == object.user_id %]

@@ -372,6 +372,7 @@ fieldset{
 
 .TAN-news > p{
     font-size:0.75em;
+    min-height:30px;
 }
 
 .TAN-news-avatar{

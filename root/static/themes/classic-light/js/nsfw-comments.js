@@ -6,7 +6,7 @@ var safe_reg = /\/static\/fckeditor\/editor\/images\/smiley\/|\/static\/smilies\
 
 window.addEvent('domready', function(){
     if (TAN.nsfw() === 0){
-        $$('#blog_wrapper img', '.TAN-comment_inner img').filter(function(el, index){
+        $$('.TAN-blog_wrapper img', '.TAN-comment_inner img').filter(function(el, index){
             if ( el.getProperty('src') ){
                 return ( !el.getProperty('src').match(safe_reg) );
             }
@@ -49,7 +49,7 @@ window.addEvent('domready', function(){
         });
     } else {
         window.addEvent('load', function() {
-            $$('#blog_wrapper img', '.TAN-comment_inner img').filter(function(el, index){
+            $$('.TAN-blog_wrapper img', '.TAN-comment_inner img').filter(function(el, index){
                 if ( el.getProperty('src') ){
                     return ( !el.getProperty('src').match(safe_reg) );
                 }

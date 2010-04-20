@@ -3,7 +3,11 @@ type = object.type;
 
 title = object.url_title;
 
-url = "/view/" _ object.type _ '/' _ object.id _ '/' _ title;
+IF !article || ( type == 'blog' );
+    url = "/view/" _ object.type _ '/' _ object.id _ '/' _ title;
+ELSE;
+    url = '/redirect/' _ object.id;
+END;
 
 comment_url = url _ '#comments';
 rel = 'rel="external nofollow"';
@@ -43,3 +47,12 @@ PROCESS 'lib/plus_minus_box.tt';
 <p>
     [%- object.$type.description | html | nl2br -%]
 </p>
+[%- IF (article) && (type == 'link') -%]
+    <p>
+        <a class="TAN-view_link TAN-type-link" href="[% url %]">View Link</a>
+    </p>
+[%- ELSIF (article) && (type == 'blog') -%]
+    <p class="TAN-blog_wrapper TAN-hr">
+        [% object.blog.details %]
+    </p>
+[%- END -%]
