@@ -62,7 +62,7 @@ window.addEvent('domready', function(){
 });
 
 function resize_image(image, el){
-    if (image.width > 600){
+    if (image.width > 550){
         var width = image.width;
         var height = image.height;
         image.width = 550;

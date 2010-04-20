@@ -3,7 +3,7 @@
     overflow:hidden;
 }
 
-.TAN-inside li{
+.TAN-inside > li{
     margin:15px;
     float:left;
     height:150px;

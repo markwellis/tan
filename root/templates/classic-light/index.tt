@@ -34,7 +34,5 @@ i = 0;
     </li>
     [%- i = i + 1;
 END -%]
-    <li style="border:0px;height:50px;">
-        [% PROCESS 'index/pagination.tt' %]
-    </li>
 </ul>
+[% PROCESS 'index/pagination.tt' %]
