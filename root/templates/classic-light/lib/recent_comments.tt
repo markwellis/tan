@@ -5,31 +5,33 @@ FOREACH object_id = grouped_comments.keys() %]
         [%- 
         type = grouped_comments.$object_id.0.object.type;
         title = grouped_comments.$object_id.0.object.$type.title | html;
+        IF grouped_comments.$object_id.0.object.nsfw == 'Y';
+            title = "[NSFW] ${title}";
+        END;
         -%]
         <a href="[% grouped_comments.$object_id.0.object.url %]#comments" class="TAN-type-[% type %]" title="[% title %]::">[% title %]</a>
         <ul>
         [% FOREACH comment = grouped_comments.$object_id %]
             <li>
                 [%-
-                comment.ndetails = comment.comment | strip_tags;
-                IF (comment.object.NSFW == 'Y');
-                    comment.ndetails = '[NSFW] ' _ comment.ndetails;
+                orig_comment = comment.comment | strip_tags;
+                IF (comment.object.nsfw == 'Y');
+                    orig_comment = '[NSFW] ' _ orig_comment;
                 END;
 
-                comment.short = comment.ndetails.substr(0, 50);
-                comment.long = comment.ndetails.substr(0, 400);
+                short_comment = orig_comment.substr(0, 50);
+                long_comment = orig_comment.substr(0, 400);
 
-                IF ( comment.short != comment.comment );
-                       comment.short = comment.short _ '...';
+                IF ( short_comment != orig_comment );
+                       short_comment = short_comment _ '...';
                 END;
-                IF ( comment.long != comment.comment );
-                    comment.long = comment.long _ '...';
+                IF ( long_comment != orig_comment );
+                    long_comment = long_comment _ '...';
                 END;
-                comment.long = comment.long | html;
                 
-                tip_title = comment.user.username _ "::" _ comment.long;
+                tip_title = comment.user.username _ "::" _ long_comment;
                 -%]
-                <a href="[%- comment.object.url -%]#comment[%- comment.comment_id -%]" title="[%- tip_title | html -%]">[%- comment.short | html-%]</a>
+                <a href="[%- comment.object.url -%]#comment[%- comment.comment_id -%]" title="[%- tip_title | html -%]">[%- short_comment | html-%]</a>
             </li>
         [% END %]
         </ul>

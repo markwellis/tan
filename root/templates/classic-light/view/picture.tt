@@ -24,7 +24,7 @@ type = 'picture';
         <span class="TAN-type-picture"> [picture]</span>
     </li>
     <li>
-        <a href="[% comment_url %]" class="TAN-news-comment">
+        <a href="[% comment_url %]#comments" class="TAN-news-comment">
             <img alt="" class="TAN-news-comment-image" src="/static/images/comment.png" /> [%- object.get_column('comments') %]
         </a> | [%- object.get_column('views') -%] views | [% object.picture.x %]x[% object.picture.y %] | [% object_size %]
     </li>

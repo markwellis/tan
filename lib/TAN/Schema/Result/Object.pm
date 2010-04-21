@@ -105,7 +105,7 @@ sub url_title{
     my $object_meta = eval ( '$self->' . $self->type );
 
     my $title = $object_meta->title;
-    if ( $self->nsfw == 'Y' ){
+    if ( $self->nsfw eq 'Y' ){
         $title .= '-NSFW';
     }
 
