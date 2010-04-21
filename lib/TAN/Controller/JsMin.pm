@@ -61,8 +61,8 @@ outputs js or 404's
 =back
 
 =cut
-my $alpha_reg = qr/[^a-zA-Z0-9\-_]/; 
-my $format_reg = qr/[a-zA-Z0-9\-]+_(.*)_\w+/;
+my $alpha_reg = qr/[^a-zA-Z0-9\-_@]/; 
+my $format_reg = qr/[a-zA-Z0-9\-@]+_(.*)_\w+/;
 my $ext_reg = qr/js$/;
 
 sub index: Path Args(1) {
@@ -80,6 +80,9 @@ sub index: Path Args(1) {
     
     $out_file =~ s/$ext_reg/\.js/;
     $source_file =~ s/$format_reg/$1\.js/;
+
+#replace @ with / for dirs
+$source_file =~ s|@|/|g;
 
     my $source_dir = $c->path_to('root', $c->config->{'static_path'}, 'themes', $c->stash->{'theme_settings'}->{'name'}, 'js');
     my $theme_path = $c->config->{'jscache_path'};

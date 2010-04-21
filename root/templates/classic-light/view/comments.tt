@@ -1,3 +1,4 @@
+<div class="TAN-comment_wrapper">
 [%- IF object.comments;
     FOREACH comment=comments;
         PROCESS 'view/comment.tt';
@@ -5,6 +6,7 @@
     js_includes.push('nsfw-comments');
     js_includes.push('comment');
 END -%]
+</div>
 
 <form id="comment_form" action="_comment" method="post">
     <fieldset>

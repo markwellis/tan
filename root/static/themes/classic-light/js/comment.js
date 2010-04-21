@@ -18,7 +18,7 @@ window.addEvent('domready', function() {
                                 + "You need to login or register before it's posted");
                             tinyMCE.get('comment').setContent('');
                         } else {
-                            $('comments').adopt(responseTree);
+                            $$('.TAN-comment_wrapper').adopt(responseTree);
                             tinyMCE.get('comment').setContent('');
                         }
                         $('submit_comment').disabled = 0;

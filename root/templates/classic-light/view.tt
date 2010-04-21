@@ -27,5 +27,5 @@ END
     <li class="TAN-news">
         [%- PROCESS $tmplt article=1 -%]
     </li>
-    <li class="TAN-news TAN-comment_wrapper" id="comments">[%- PROCESS 'view/comments.tt' -%]</li>
+    <li class="TAN-news" id="comments">[%- PROCESS 'view/comments.tt' -%]</li>
 </ul>
