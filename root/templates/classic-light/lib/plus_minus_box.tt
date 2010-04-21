@@ -6,6 +6,6 @@
     </div>
     <div class="TAN-minus">
         <span>[% object.get_column('minus') %]</span>
-        <a href="/view/[% type %]/[% object.$type.id %]/_minus" [%- IF object.meplus %]class="TAN-minus-selected"[% END %]>AintNews</a>
+        <a href="/view/[% type %]/[% object.$type.id %]/_minus" [%- IF object.meminus %]class="TAN-minus-selected"[% END %]>AintNews</a>
     </div>
 </div>

@@ -240,7 +240,7 @@ sub ajax_comment: Private{
         }
     };
 
-    $c->stash->{'template'} = 'lib/comment.tt';
+    $c->stash->{'template'} = 'view/comment.tt';
     $c->forward( $c->view('NoWrapper') );
 }
 

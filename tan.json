@@ -29,6 +29,7 @@
         }
     },
 
+
     "Model::FetchImage": {
         "max_filesize": 2097152,
         "user_agent": "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.16) Gecko/2009120208 Firefox/3.0.16 (.NET CLR 3.5.30729)"

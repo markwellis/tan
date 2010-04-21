@@ -428,7 +428,7 @@ fieldset{
 }
 
 .TAN-plus-selected{
-    background-color:#5A9E4A;
+    background-color:#5A9E4A !important;
 }
 
 .TAN-minus{
@@ -444,7 +444,7 @@ fieldset{
 }
 
 .TAN-minus-selected{
-    background-color:#000000;
+    background-color:#000000 !important;
 }
 
 /* pagination */

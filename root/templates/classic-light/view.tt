@@ -16,7 +16,6 @@ ELSE;
     avatar_http = c.config.static_path _ '/images/_user.png';
 END;
 
-
 SWITCH (object.type);
     CASE ['link', 'blog'];
         tmplt = 'index/link.tt';

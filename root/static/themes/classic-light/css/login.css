@@ -1,0 +1,20 @@
+label{
+    width:180px;
+    float:left;
+}
+
+.TAN-news ul li{
+    list-style:none;
+    padding-bottom:10px;
+}
+
+.TAN-news img{
+    float:left;
+    height:100px;
+    padding-right:15px;
+    width:100px;
+}
+
+.TAN-news h2{
+    margin:0px 0px 10px 0px;
+}

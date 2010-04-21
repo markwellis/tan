@@ -34,7 +34,7 @@ use Catalyst qw/
     Authentication
     Session
     Email
-    Session::Store::FastMmap
+    Session::Store::File
     Session::State::Cookie
     Cache
     PageCache

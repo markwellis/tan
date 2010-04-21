@@ -49,6 +49,7 @@ sub add{
         return undef;
     }
 
+    my $deleted;
 #transaction
 # prevents race condition (apparently....)
     eval{
@@ -62,6 +63,7 @@ sub add{
             if ( defined($plusminus_rs) ){
             #found, delete
                 $plusminus_rs->delete;
+                $deleted = 1;
             } else {
             #not found, create
                 $plusminus_rs = $self->create({
@@ -81,15 +83,19 @@ sub add{
 
     #if count > promotion cut off, then promote
     my $count = $plusminus_rs->count;
-    my $object_rs = $plusminus_rs->first->object;
+    my $first = $plusminus_rs->first;
 
-    #HACK - this probably isnt that nice!!
-    # not impotant coz will be gone when #53 is complete
-    if ( 
-        ($object_rs->promoted eq '0000-00-00 00:00:00') 
-        && ($count >= TAN->config->{'promotion_cutoff'})
-    ){
-        $object_rs->promote;
+    if ( !$deleted && defined($first) ){
+        my $object_rs = $first->object;
+
+        #HACK - this probably isnt that nice!!
+        # not impotant coz will be gone when #53 is complete
+        if ( 
+            ($object_rs->promoted eq '0000-00-00 00:00:00') 
+            && ($count >= TAN->config->{'promotion_cutoff'})
+        ){
+            $object_rs->promote;
+        }
     }
 
     return $count;
@@ -124,7 +130,6 @@ sub meplus_minus{
     my $ret_meplus_minus = {};
 
     foreach my $meplus_minus ( $meplus_minus_rs->all ){
-
         $ret_meplus_minus->{ $meplus_minus->object_id }->{ $meplus_minus->type } = 1;
     }
     return $ret_meplus_minus;
