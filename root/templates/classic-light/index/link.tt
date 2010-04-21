@@ -48,11 +48,13 @@ PROCESS 'lib/plus_minus_box.tt';
     [%- object.$type.description | html | nl2br -%]
 </p>
 [% IF article -%]
-    <p class="TAN-tags">
+    <p>
+        <span class="TAN-tags">
         [%- FOREACH tag = object.tags -%]
             [%- IF loop.count > 1 %], [% END -%]
             [% tag.tag %]
         [%- END -%]
+        </span>
     [%- IF type == 'blog' -%]</p>[% END -%]
     [%- IF type == 'link' -%]
             [% object_url = object.$type.url _ '&';
@@ -60,7 +62,7 @@ PROCESS 'lib/plus_minus_box.tt';
 
             IF (matches.0);
                 youtube_id = matches.0 | html -%]
-                <div class="video">
+                <div class="TAN-video">
                     <object type="application/x-shockwave-flash" style="width:425px; height:350px;" data="http://www.youtube.com/v/[%- youtube_id -%]">
                         <param name="wmode" value="transparent" />
                         <param name="movie" value="http://www.youtube.com/v/[%- youtube_id -%]" />

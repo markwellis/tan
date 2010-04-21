@@ -103,7 +103,13 @@ sub url_title{
     my ( $self ) = @_;
 
     my $object_meta = eval ( '$self->' . $self->type );
-    return TAN::View::TT::url_title($object_meta->title);
+
+    my $title = $object_meta->title;
+    if ( $self->nsfw == 'Y' ){
+        $title .= '-NSFW';
+    }
+
+    return TAN::View::TT::url_title($title);
 }
 
 sub url{

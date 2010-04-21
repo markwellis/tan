@@ -2,13 +2,10 @@
 type = 'picture';
 object_size = c.filesize_h(object.picture.size);
 md = object.id - (object.id % 1000);
-url_title = object.url_title;
-IF object.nsfw == 'Y';
-    url_title = url_title _ '-NSFW';
-END;
+url = object.url;
 -%]
 
-<a class="center_cell" href="/view/picture/[% object.id %]/[% url_title %]">
+<a class="center_cell" href="[% url %]">
     <img class="picture_thumb" src="[% c.config.thumb_path _  '/' _ md _ '/' _ object.id %]/300" alt=" "/>
 </a>
 
@@ -21,11 +18,11 @@ END;
     [%-
         PROCESS 'lib/plus_minus_box.tt'
     -%]
-    <a class="big_center_cell" href="/view/picture/[% object.id %]/[% url_title %]">
+    <a class="big_center_cell" href="[% url %]">
         <img class='big_picture' src="[% c.config.thumb_path _  '/' _ md _ '/' _ object.picture.id %]/300" alt=" "/>
     </a>
 
-    <a href="/view/picture/[% object.id %]/[% url_title %]#comments">
+    <a href="[% url %]#comments">
         <img src="[% c.config.static_path %]/images/comment.png" alt="" class="TAN-news-comment"/> [% object.get_column('comments') %]</a> | [% object.get_column('views') %] views
      | [% object.picture.x %]x[% object.picture.y %] | [% object_size %]
 
