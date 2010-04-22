@@ -1,0 +1,5 @@
+[% tmplt = 'submit/' _ location _ '.tt';
+js_includes.push('submit') -%]
+<ul class="TAN-inside">
+    <li class="TAN-news">[%- PROCESS $tmplt -%]</li>
+</ul>

@@ -1,0 +1,30 @@
+<form action="post" id="submit_form" method="post">
+    <fieldset>
+        <ul>
+            <li>
+                <input type="hidden" id="cat" name="cat" value="[% IF details.category.defined(); details.category; END %]" />
+            </li>
+            <li>
+                <label for="url">Title</label>
+            </li>
+            <li>
+                <input type="text" name="title" id="title" class="text_input full_width" value="[% IF details.title.defined(); details.title; END %]"/>
+            </li>
+            <li>
+                <label for='url'>Url</label>
+            </li>
+            <li>
+                <input type="text" name="url" id="url" class="text_input full_width" value="[% IF details.url.defined(); details.url _ ' disabled="disabled"'; END %]"/>
+            </li>
+            <li>
+                <label for="description">Description</label>
+            </li>
+            <li>
+                <textarea cols="1" rows="5" name="description" id="description" class="text_input full_width">[% IF details.description.defined(); details.description; END %]</textarea><br/>
+            </li>
+        </ul>   
+        [%- PROCESS 'lib/tag_thumb_browser.tt' -%]
+
+        <input type="submit" value="Submit Link"/>
+    </fieldset>
+</form>

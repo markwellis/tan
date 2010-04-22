@@ -60,4 +60,3 @@ js_includes.push('profile@avatar');
         </li>
     [% END %]
 </ul>
-<br class="clear" />
