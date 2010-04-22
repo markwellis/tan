@@ -4,7 +4,7 @@ END -%]
 <label for="tags">Tags</label>
 <input type="text" name="tags" id="tags" class="text_input full_width" value="[% IF details.tags.defined; details.tags _ '" disabled="disabled'; END %]"/>
 [% IF (location != 'picture') %]
-    <a href="#" class="refresh_thumbs">Refresh</a>
+    <a href="#" class="refresh_thumbs right">Refresh</a>
 [% END %]
 <br />
 <div id="thumb_tags">

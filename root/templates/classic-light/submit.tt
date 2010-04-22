@@ -1,5 +1,10 @@
-[% tmplt = 'submit/' _ location _ '.tt';
-js_includes.push('submit') -%]
+[% 
+js_includes.push('submit');
+css_includes.push({
+    'file' => "$theme_settings.css_path/submit.css",
+    'media' => 'screen',
+});
+-%]
 <ul class="TAN-inside">
-    <li class="TAN-news">[%- PROCESS $tmplt -%]</li>
+    <li class="TAN-news">[%- PROCESS "submit/${location}.tt" -%]</li>
 </ul>

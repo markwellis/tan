@@ -3,8 +3,6 @@
         <ul>
             <li>
                 <input type="hidden" id="cat" name="cat" value="[% IF details.category.defined(); details.category; END %]" />
-            </li>
-            <li>
                 <label for="url">Title</label>
             </li>
             <li>
