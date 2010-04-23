@@ -94,8 +94,6 @@ sub check_cache{
 # its here coz it no worko in the end/render
     $c->stash->{'message'} = $c->flash->{'message'};
 
-return 0;
-
 #recored p.i.
     if ( ($c->action eq 'view/index') && (!$c->stash->{'pi_recorded'}) ){
         my @params = split('/', $c->req->path);
