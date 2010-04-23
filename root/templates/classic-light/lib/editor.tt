@@ -19,5 +19,5 @@ edname = editor.name.defined ? editor.name : 'editor';
 </script>
 
 <textarea class="[% edname %]" style="height:[% edheight %];width:[% edwidth %]" id="[% edname %]" name="[% edname %]" rows="80" cols="20">
-[%- IF editor.value.defined; editor.value; END -%]
+[%- IF editor.value.defined; editor.value | html; END -%]
 </textarea>

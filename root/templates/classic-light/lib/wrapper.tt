@@ -89,7 +89,7 @@
         -%]
         <div class="TAN-footer">
             [%- runtime.substr(0, 4) -%] seconds, [% sql_queries %] [% (sql_queries == 1) ? 'query' : 'queries' -%]
-            <span class="right"><a href="#">Up</a>&nbsp;<a href="#TAN-bottom">Down</a></span>
+            <span class="right"><a href="#">Up</a>&#160;<a href="#TAN-bottom">Down</a></span>
         </div>
     </body>
 </html>

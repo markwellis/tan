@@ -16,7 +16,7 @@ END -%]
         </li>
         [%- IF comment.created.defined() -%]
         <li>
-            [% c.date_ago(comment.created) %]&nbsp;ago
+            [% c.date_ago(comment.created) %]&#160;ago
         </li>
         [%- END -%]
         <li>

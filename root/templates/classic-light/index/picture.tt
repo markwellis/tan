@@ -14,7 +14,7 @@ url = object.url;
     <ul>
         <li>
             <a href="[% url %]#comments">
-                <img src="[% c.config.static_path %]/images/comment.png" alt="" class="TAN-news-comment left"/>&nbsp;[% object.get_column('comments') %]
+                <img src="[% c.config.static_path %]/images/comment.png" alt="" class="TAN-news-comment left"/>&#160;[% object.get_column('comments') %]
             </a>
         </li>
         <li>
