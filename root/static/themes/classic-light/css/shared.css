@@ -69,7 +69,7 @@ fieldset{
 }
 
 .TAN-main{
-    background-color:#888;
+    background-color:#222;
 }
 
 .TAN-logo{
@@ -250,7 +250,7 @@ fieldset{
 
 .TAN-recent-comments{
     padding:2px !important;
-    width:162px;
+    width:161px;
     overflow:hidden;
     background-color:#ccc;
 }
