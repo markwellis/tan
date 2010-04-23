@@ -4,41 +4,29 @@ object_size = c.filesize_h(object.picture.size);
 md = object.id - (object.id % 1000);
 url = object.url;
 -%]
-
-<a class="center_cell" href="[% url %]">
-    <img class="picture_thumb" src="[% c.config.thumb_path _  '/' _ md _ '/' _ object.id %]/300" alt=" "/>
-</a>
-
-<div class="container hidden">
     <h2>
         <a class="TAN-type-picture big_font" href="[% c.config.pic_path %]/[% object.picture.filename %]">
             [% object.picture.title | html %][% IF object.nsfw == 'Y' %] - NSFW[% END %]
         </a>
     </h2>
-    [%-
-        PROCESS 'lib/plus_minus_box.tt'
-    -%]
-    <a class="big_center_cell" href="[% url %]">
-        <img class='big_picture' src="[% c.config.thumb_path _  '/' _ md _ '/' _ object.picture.id %]/300" alt=" "/>
-    </a>
 
-    <a href="[% url %]#comments">
-        <img src="[% c.config.static_path %]/images/comment.png" alt="" class="TAN-news-comment"/> [% object.get_column('comments') %]</a> | [% object.get_column('views') %] views
-     | [% object.picture.x %]x[% object.picture.y %] | [% object_size %]
-
-    [% IF c.user && c.user.user_id == object.user_id %]
-        | <a href="/esubmit/[% object.type %]/<[% object.id %]/">Edit</a>
-    [% END %]
     <img alt="[% object.user.username | html %]" src="[% avatar_http %]?m=[% avatar_mtime.defined ? avatar_mtime : '' %]" class="TAN-news-avatar left" />
-    <p>
-        Posted by <a href="/user/[% object.user.username | html %]/1/" class="TAN-news-user">[% object.user.username | html %]</a>
-        [%- IF ( object.promoted ) -%]
-            promoted [% c.date_ago(object.promoted) -%] ago
-        [%- ELSE -%]
-            [% c.date_ago(object.created) -%] ago
-        [%- END -%]
-    </p>
-    <p>
-        [%- object.$type.description | html | nl2br -%]
-    </p>
-</div>
+    <ul>
+        <li>
+            <a href="[% url %]#comments">
+                <img src="[% c.config.static_path %]/images/comment.png" alt="" class="TAN-news-comment left"/>&nbsp;[% object.get_column('comments') %]
+            </a>
+        </li>
+        <li>
+            [% object.get_column('views') %] views 
+        </li>
+        <li class="TAN-menu-last">
+            [% object.picture.x %]x[% object.picture.y %]
+        </li>
+    </ul>
+    <div>
+        [% PROCESS 'lib/plus_minus_box.tt' %]
+        <a class="left" href="[% url %]">
+            <img src="[% c.config.thumb_path _  '/' _ md _ '/' _ object.picture.id %]/160" alt=" "/>
+        </a>
+    </div>

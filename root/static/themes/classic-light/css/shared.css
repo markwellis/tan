@@ -50,7 +50,7 @@ fieldset{
 }
 
 .clear_left{
-    clear:right;
+    clear:left;
 }
 
 .clear_right{

@@ -72,14 +72,14 @@ sub resize{
         my $retval;
         if ( $image_info->{'mime'} eq 'image/gif' ){
         #GIF
-            $retval = `convert '${filename}'[0-10] -coalesce -thumbnail '${new_x}x${new_y}>' -layers Optimize '${cacheimg}' 2>&1`;
+            $retval = `convert -background transparent '${filename}'[0-10] -coalesce -thumbnail '${new_x}x${new_y}' -layers Optimize '${cacheimg}' 2>&1`;
         } else {
             $retval = `convert '${filename}' -thumbnail '${new_x}x${new_y}' '${cacheimg}' 2>&1`;
         }
-        if ( (-s $filename) < (-s $cacheimg) ){
-        #thumbnail is bigger than original :/
-            return `cp '${filename}' '${cacheimg}'`;
-        }
+#        if ( (-s $filename) < (-s $cacheimg) ){
+#        #thumbnail is bigger than original :/
+#            return `cp '${filename}' '${cacheimg}'`;
+#        }
         return $retval;
     }
     return 'error';
