@@ -4,8 +4,6 @@ IF (location == 'picture');
         'file' => "$theme_settings.css_path/index/picture.css",
         'media' => 'screen',
     });
-
-    js_includes.push('index@picture');
 END;
 
 i = 0;
