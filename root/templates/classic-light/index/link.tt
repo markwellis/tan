@@ -2,14 +2,21 @@
 type = object.type;
 
 title = object.url_title;
+object_url = object.url;
 
 IF !article || ( type == 'blog' );
-    url = "/view/" _ object.type _ '/' _ object.id _ '/' _ title;
+    url = object_url;
+    IF (type == 'link');
+        title_url = '/redirect/' _ object.id;
+    ELSE;
+        title_url = url;
+    END;
 ELSE;
     url = '/redirect/' _ object.id;
+    title_url = url;
 END;
 
-comment_url = url _ '#comments';
+comment_url = object_url _ '#comments';
 rel = 'rel="external nofollow"';
 
 IF ( !num );
@@ -25,7 +32,7 @@ PROCESS 'lib/plus_minus_box.tt';
     <img alt="[% object.$type.picture_id %]" src="[% c.config.thumb_path _ '/' _ md _ '/' _ object.$type.picture_id %]/100"/>
 </div>
 <h2>
-    <a href="[% url %]" class="TAN-type-[% type %]" title="[% title %]">[%- object.$type.title | html -%]</a>
+    <a href="[% title_url %]" class="TAN-type-[% type %]" title="[% title %]">[%- object.$type.title | html -%]</a>
 </h2>
 <img alt="[% object.user.username | html %]" src="[% avatar_http %]?m=[% avatar_mtime.defined ? avatar_mtime : '' %]" class="TAN-news-avatar left" />
 <ul>
