@@ -20,7 +20,7 @@ IF (max >= total_pages);
     max = total_pages;
 END -%]
 
-<div class="TAN-news-pagination">
+<div class="clear TAN-news-pagination">
 [%- IF (lower != 1) -%]
     <a class="TAN-news-page-number" href="/index/[%- "$location/$upcoming" -%]/1/">1</a>
     <span class="TAN-news-page-number">...</span>
