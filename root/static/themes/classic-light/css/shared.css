@@ -62,14 +62,14 @@ fieldset{
     overflow:hidden;
 }
 .TAN-header{
-    background-image:url("../images/top.jpg?r=1");
-    background-color:#222;
+    background-image:url("../images/top.jpg?r=2");
+    background-color:#444;
     background-repeat:no-repeat;
     background-position:center;
 }
 
 .TAN-main{
-    background-color:#444;
+    background-color:#666;
 }
 
 .TAN-logo{
@@ -159,12 +159,12 @@ fieldset{
 /* all */
 
 .TAN-type-all, .TAN-menu-all > li > a{
-    color:#333;
+    color:#777;
 }
 
 .TAN-type-all:hover, .TAN-menu-tab-all-selected, .TAN-menu-all > li > a:hover{
     color:#fff !important;
-    background-color:#333 !important;
+    background-color:#777 !important;
 }
 
 /* link */
