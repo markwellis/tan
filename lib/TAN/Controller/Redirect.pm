@@ -35,6 +35,11 @@ my $int_reg = qr/\D+/;
 sub index :Path {
     my ( $self, $c, $id ) = @_;
 
+    if ( !$id ){
+        $c->res->redirect('/');
+        $c->detach;
+    }
+
     $id =~ s/$int_reg//g;
 
     my $object_rs = $c->model('MySQL::Object')->find($id);

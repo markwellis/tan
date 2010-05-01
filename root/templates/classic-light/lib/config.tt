@@ -19,7 +19,7 @@
     
     css_includes = [
         {
-            'file' => "$theme_settings.css_path/shared.css?r=5",
+            'file' => "$theme_settings.css_path/shared.css?r=6",
             'media' => 'screen',
         },
         {

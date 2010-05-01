@@ -1,13 +1,16 @@
 .TAN-inside > li{
     float:left;
-    width:250px;
+    width:230px;
     height:250px;
-    margin:0px 0px 5px 5px;
+    margin:0px 0px 2px 2px;
+}
+.TAN-news{
+    padding:10px 1px;
 }
 
 .TAN-news > h2{
     font-size:1.2em;
-    margin:0px;
+    margin:0 0 2px;
 }
 
 .TAN-news > div{
