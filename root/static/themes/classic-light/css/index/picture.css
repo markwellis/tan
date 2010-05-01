@@ -4,6 +4,7 @@
     height:250px;
     margin:0px 0px 2px 2px;
 }
+
 .TAN-news{
     padding:10px 1px;
 }
@@ -41,5 +42,6 @@
     float:left;
     border-right:1px solid #BEBEBE;
     padding:0px 5px;
+    height:20px;
 }
 

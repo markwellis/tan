@@ -72,7 +72,7 @@ sub resize{
         my $retval;
         if ( $image_info->{'mime'} eq 'image/gif' ){
         #GIF
-            $retval = `convert -background transparent '${filename}'[0-10] -coalesce -thumbnail '${new_x}x${new_y}' -layers Optimize '${cacheimg}' 2>&1`;
+            $retval = `convert -background transparent '${filename}'[0-10] -coalesce -thumbnail '${new_x}x${new_y}' -layers OptimizePlus '${cacheimg}' 2>&1`;
         } else {
             $retval = `convert '${filename}' -thumbnail '${new_x}x${new_y}' '${cacheimg}' 2>&1`;
         }
@@ -101,7 +101,7 @@ writes to $outfile
 sub crop{
     my ( $self, $infile, $outfile, $x, $y, $w, $h ) = @_;
 
-    if (!`convert -background transparent '${infile}'[0-10] -coalesce -crop '${w}x${h}+${x}+${y}!' -thumbnail '100x100' -gravity center -extent 100x100 -layers Optimize gif:'${outfile}'  2>&1`) {
+    if (!`convert -background transparent '${infile}'[0-10] -coalesce -crop '${w}x${h}+${x}+${y}!' -thumbnail '100x100' -gravity center -extent 100x100 -layers OptimizePlus gif:'${outfile}'  2>&1`) {
     #exit code 0 is success :/
         return 1;
     }
