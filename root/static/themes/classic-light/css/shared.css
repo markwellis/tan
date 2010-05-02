@@ -156,10 +156,13 @@ fieldset{
     padding:0px 5px;
 }
 
-.TAN-menu-order{
-    display:block;
+.TAN-order-by{
+    margin:0 2px 10px 2px;
 }
 
+.TAN-order-by select{
+    float:right;
+}
 /* all */
 
 .TAN-type-all, .TAN-menu-all > li > a{
