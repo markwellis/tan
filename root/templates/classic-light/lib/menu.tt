@@ -34,6 +34,32 @@ menu_tabs = {
         </li>
     </ul>
     [%- END -%]
+    <ul class="TAN-menu-order">
+        [%- IF (index_objects.defined);
+            order_uri = c.req.path;
+            IF ( matches = order_uri.match('\?') );
+                order_uri = order_uri _ '&order=';
+            ELSE;
+                order_uri = order_uri _ '?order=';
+            END;
+        %]
+            <li>
+                <a href="/[% order_uri %]date" [%- (order == 'date') ? 'selected="selected"' : '' -%]>Date</a>
+            </li>
+            <li>
+                <a href="/[% order_uri %]comments">Comments</a>
+            </li>
+            <li>
+                <a href="/[% order_uri %]plus">IsNews</a>
+            </li>
+            <li>
+                <a href="/[% order_uri %]minus">AintNews</a>
+            </li>
+            <li>
+                <a href="/[% order_uri %]views">Views</a>
+            </li>
+        [%- END -%]
+    </ul>
 </div>
 <script type="text/javascript">
 //<![CDATA[

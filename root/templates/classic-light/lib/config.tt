@@ -18,14 +18,8 @@
     ];
     
     css_includes = [
-        {
-            'file' => "$theme_settings.css_path/shared.css?r=9",
-            'media' => 'screen',
-        },
-        {
-            'file' => "$theme_settings.css_path/Roar.css",
-            'media' => 'screen',
-        },
+       'shared',
+        'Roar',
     ];
     
     IF !page_title.defined;

@@ -1,8 +1,5 @@
 [%-
-css_includes.push({
-    'file' => "$theme_settings.css_path/login.css",
-    'media' => 'screen',
-});
+css_includes.push('login');
 -%]
 <ul class="TAN-inside">
     <li class="TAN-news">

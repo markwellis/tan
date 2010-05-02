@@ -37,20 +37,6 @@ window.addEvent('domready', function() {
           +"&nick=" + mibbit_nick, 720, 400);
         e.stop();
     });
-
-    if ( $defined($('order_by')) ){
-        $('order_by').addEvent('change', function(e) {
-            var oper = (window.location.toString().indexOf('?') !== -1) ? '&' : '?';
-            var order = 'order=' + this.value;
-
-            if (window.location.toString().indexOf('order=') !== -1){
-                window.location = window.location.toString().replace(/order\=\w+/, order);
-            } else {
-                window.location = window.location + oper + order;
-            }
-            e.stop();
-        });
-    }
 });
 
 function pop_up(url,x,y) {

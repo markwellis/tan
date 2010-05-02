@@ -1,37 +1,38 @@
-package TAN::Model::JsMin;
+package TAN::Model::Minifier;
 
 use strict;
 use warnings;
 use parent 'Catalyst::Model';
 
 use JavaScript::Minifier::XS;
+use CSS::Minifier::XS;
 
 =head1 NAME
 
-TAN::Model::JsMin
+TAN::Model::Minifier
 
 =head1 DESCRIPTION
 
-Minifies js and caches it
+Minifies css or js and caches it
 
 =head1 METHODS
 
 =cut
 
-=head2 minify_file
+=head2 minify
 
-B<@args = ($infile, $outfile)>
+B<@args = ($type, $infile, $outfile)>
 
 =over
 
-minifies $infile and returns & caches it in $outfile
+minifies $infile of $type and writes to $outfile
 
 =back
 
 =cut
-sub minify_file{
-    my ($self, $infile, $outfile) = @_;
-    my $js;
+sub minify{
+    my ($self, $type, $infile, $outfile) = @_;
+    my $text;
 
     if (-e $outfile){
         # use cached file if avaible, really though, this should be handled in the webserver
@@ -40,25 +41,29 @@ sub minify_file{
         open(INFILE, $outfile);
 
         while (my $line = <INFILE>) {
-            $js .= $line;
+            $text .= $line;
         }
     } elsif (-e $infile){
         open(INFILE, "< ${infile}");
         open(OUTFILE, "> ${outfile}");
         
         while (my $line = <INFILE>) {
-            $js .= $line;
+            $text .= $line;
         }
 
-        $js = JavaScript::Minifier::XS::minify($js);
+        if ( $type eq 'css' ){
+            $text = CSS::Minifier::XS::minify($text);
+        } elsif ( $type eq 'js' ){
+            $text = JavaScript::Minifier::XS::minify($text);
+        }
 
-        print OUTFILE $js;
+        print OUTFILE $text;
 
         close(INFILE);
         close(OUTFILE);
     }
 
-    return $js;
+    return $text;
 }
 
 =head1 AUTHOR

@@ -8,9 +8,11 @@
     "pic_path": "/static/user/pics",
 
     "cache_path": "/static/cache",
+    "csscache_path": "/static/cache/css",
     "jscache_path": "/static/cache/js",
     "thumb_path": "/static/cache/thumbs",
 
+    "recent_comments": 20,
     "promotion_cutoff": 10,
 
     "Plugin::Authentication": {

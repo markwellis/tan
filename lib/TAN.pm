@@ -237,7 +237,7 @@ returns the 20 most recent comments
 sub recent_comments{
     my $c = shift;
 
-    my @recent_comments = $c->model('MySQL::Comments')->recent_comments(40)->all;
+    my @recent_comments = $c->model('MySQL::Comments')->recent_comments( $c->config->{'recent_comments'} )->all;
 
 # Tie::Hash::Indexed
 # must be serialized using storable!

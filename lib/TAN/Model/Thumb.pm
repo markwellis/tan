@@ -76,10 +76,6 @@ sub resize{
         } else {
             $retval = `convert '${filename}' -thumbnail '${new_x}x${new_y}' '${cacheimg}' 2>&1`;
         }
-        if ( (-s $filename) < (-s $cacheimg) ){
-        #thumbnail is bigger than original :/
-            return `cp '${filename}' '${cacheimg}'`;
-        }
         return $retval;
     }
     return 'error';

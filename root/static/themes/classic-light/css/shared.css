@@ -62,7 +62,7 @@ fieldset{
     overflow:hidden;
 }
 .TAN-header{
-    background-image:url("../images/top.jpg?r=2");
+    background-image:url("/static/themes/classic-light/images/top.jpg?r=2");
     background-color:#444;
     background-repeat:no-repeat;
     background-position:center;
@@ -73,7 +73,7 @@ fieldset{
 }
 
 .TAN-logo{
-    background-image:url("../../../images/logo.png");
+    background-image:url("/static/images/logo.png");
     height:75px;
     width:400px;
     text-indent:-1000px;
@@ -154,6 +154,10 @@ fieldset{
 .TAN-menu-tab{
     background-color:transparent !important;
     padding:0px 5px;
+}
+
+.TAN-menu-order{
+    display:block;
 }
 
 /* all */

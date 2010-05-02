@@ -9,15 +9,8 @@ ELSE;
     no_avatar_http = c.config.static_path _ '/images/_user.png';
 END;
 
-css_includes.push({
-    'file' => "$theme_settings.css_path/view.css",
-    'media' => 'screen',
-});
-
-css_includes.push({
-    'file' => "$theme_settings.css_path/profile/avatar.css",
-    'media' => 'screen',
-});
+css_includes.push('view');
+css_includes.push('profile@avatar');
 
 js_includes.push('Lasso');
 js_includes.push('Lasso-Crop');

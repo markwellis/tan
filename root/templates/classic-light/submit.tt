@@ -1,9 +1,6 @@
 [% 
 js_includes.push('submit');
-css_includes.push({
-    'file' => "$theme_settings.css_path/submit.css",
-    'media' => 'screen',
-});
+css_includes.push('submit');
 -%]
 <ul class="TAN-inside">
     <li class="TAN-news">[%- PROCESS "submit/${location}.tt" -%]</li>

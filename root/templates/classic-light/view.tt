@@ -1,8 +1,5 @@
 [%-
-css_includes.push({
-    'file' => "$theme_settings.css_path/view.css",
-    'media' => 'screen',
-});
+css_includes.push('view');
 
 js_includes.push('comment');
 

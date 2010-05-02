@@ -1,9 +1,6 @@
 [%
 IF (location == 'picture');
-    css_includes.push({
-        'file' => "$theme_settings.css_path/index/picture.css",
-        'media' => 'screen',
-    });
+    css_includes.push('index@picture');
 END;
 
 i = 0;
