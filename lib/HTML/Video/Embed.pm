@@ -9,11 +9,14 @@ use LWPx::ParanoidAgent;
 
 my $int_reg = qr/\d+/;
 sub new{
-    my ( $invocant ) = @_;
+    my ( $invocant, $config ) = @_;
 
     my $class = ref($invocant) || $invocant;
     my $self = { };
     bless($self, $class);
+
+    $self->{'width'} = $config->{'width'} || 450;
+    $self->{'height'} = $config->{'height'} || 370;
     
     $self->{'supported'} = {
         'youtube' => {
@@ -25,7 +28,7 @@ sub new{
 
                 if ( ($youtube_id = $uri->query_param('v')) && ($youtube_id =~ m/$validate_reg/) ){
                     return '<object data="http://www.youtube.com/v/' . $youtube_id . '" '
-                        .'style="width: 450px; height: 370px;" type="application/x-shockwave-flash">'
+                        .'style="width: ' . $self->{'width'} . 'px; height: ' . $self->{'height'} . 'px;" type="application/x-shockwave-flash">'
                         .'<param value="transparent" name="wmode" />'
                         .'<param value="http://www.youtube.com/v/' . $youtube_id . '" name="movie" /></object>';
                 }
@@ -41,11 +44,11 @@ sub new{
                 my $leak_id;
 
                 if ( ($leak_id = $uri->query_param('i')) && ($leak_id =~ m/$validate_reg/) ){
-                    return '<object width="450" height="370">'
+                    return '<object width="' . $self->{'width'} . '/" height="' . $self->{'height'} . '">'
                         .'<param name="movie" value="http://www.liveleak.com/e/' . $leak_id . '" />'
                         .'<param name="wmode" value="transparent" />'
                         .'<embed src="http://www.liveleak.com/e/' . $leak_id . '" type="application/x-shockwave-flash"'
-                        .' wmode="transparent" width="450" height="370">'
+                        .' wmode="transparent" width="' . $self->{'width'} . '" height="' . $self->{'height'} . '">'
                         .'</embed></object>';
                 }
 
@@ -63,7 +66,7 @@ sub new{
                     return '<embed id="VideoPlayback"'
                         .' src="http://video.google.com/googleplayer.swf?'
                         .'docid=' . $google_id 
-                        .'&hl=en&fs=true" style="width:450px;height:370px"'
+                        .'&hl=en&fs=true" style="width:' . $self->{'width'} . 'px;height:' . $self->{'height'} . 'px"'
                         .' allowFullScreen="true"'
                         .' type="application/x-shockwave-flash">'
                         .'</embed>';
@@ -84,14 +87,14 @@ sub new{
                         return undef;
                     }
 
-                    return '<object width="450" height="370">'
+                    return '<object width="' . $self->{'width'} . '" height="' . $self->{'height'} . '">'
                         .'<param name="movie" value="http://d.yimg.com/static.video.yahoo.com/yep/YV_YEP.swf?ver=2.2.46" />'
                        .'<param name="allowFullScreen" value="true" />'
                         .'<param name="bgcolor" value="#000000" /><param name="flashVars" '
                         .'value="id=' . $id . '&vid=' . $vid 
                         .'&lang=en-gb&intl=uk&embed=1" />'
                         .'<embed src="http://d.yimg.com/static.video.yahoo.com/yep/YV_YEP.swf?ver=2.2.46" '
-                        .'type="application/x-shockwave-flash" width="450" height="370" allowFullScreen="true" '
+                        .'type="application/x-shockwave-flash" width="' . $self->{'width'} . '" height="' . $self->{'height'} . '" allowFullScreen="true" '
                         .'bgcolor="#000000" '
                         .'flashVars="id=' . $id . '&vid=' . $vid 
                         .'&lang=en-gb&intl=uk&embed=1" ></embed></object>';
@@ -113,8 +116,8 @@ sub new{
 
                     return '<embed src="http://www.spikedhumor.com/player/vcplayer.swf?file=http://www.spikedhumor.com/videocodes/'
                         . $vid . '/data.xml&auto_play=false" quality="high" '
-                        .'scale="noscale" bgcolor="#000000" width="450" '
-                        .'height="370" align="middle" '
+                        .'scale="noscale" bgcolor="#000000" width="' . $self->{'width'} . '" '
+                        .'height="' . $self->{'height'} . '" align="middle" '
                         .'type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" />';
                 }
                 
@@ -134,12 +137,12 @@ sub new{
 
                     return '<object type="application/x-shockwave-flash" '
                         .'data="http://www.collegehumor.com/moogaloop/moogaloop.swf?clip_id=' . $vid . '&fullscreen=1" '
-                        .'width="450" height="370" ><param name="allowfullscreen" value="true"/>'
+                        .'width="' . $self->{'width'} . '" height="' . $self->{'height'} . '" ><param name="allowfullscreen" value="true"/>'
                         .'<param name="wmode" value="transparent"/>'
                         .'<param name="movie" quality="best" value="http://www.collegehumor.com/moogaloop/moogaloop.swf?clip_id='
                         . $vid . '&fullscreen=1"/>'
                         .'<embed src="http://www.collegehumor.com/moogaloop/moogaloop.swf?clip_id=' . $vid . '&fullscreen=1" '
-                        .'type="application/x-shockwave-flash" wmode="transparent" width="450" height="370"></embed></object>';
+                        .'type="application/x-shockwave-flash" wmode="transparent" width="' . $self->{'width'} . '" height="' . $self->{'height'} . '"></embed></object>';
                 }
                 
                 return undef;
@@ -156,11 +159,11 @@ sub new{
                         return undef;
                     }
 
-                    return '<object width="450" height="370" id="ordie_player_' . $vid . '">'
+                    return '<object width="' . $self->{'width'} . '" height="' . $self->{'height'} . '" id="ordie_player_' . $vid . '">'
                         .'<param name="movie" value="http://player.ordienetworks.com/flash/fodplayer.swf" />'
                         .'<param name="flashvars" value="key=' . $vid . '" />'
                         .'<param name="allowfullscreen" value="true" />'
-                        .'<embed width="450" height="370" flashvars="key=' . $vid . '" allowfullscreen="true" '
+                        .'<embed width="' . $self->{'width'} . '" height="' . $self->{'height'} . '" flashvars="key=' . $vid . '" allowfullscreen="true" '
                         .'quality="high" src="http://player.ordienetworks.com/flash/fodplayer.swf" '
                         .'name="ordie_player_' . $vid . '" type="application/x-shockwave-flash"></embed></object>';
                 }
@@ -179,8 +182,8 @@ sub new{
                         return undef;
                     }
 
-                    return '<embed src="http://www.metacafe.com/fplayer/' . $vid . '/unimportant_info_i_hope.swf" width="450" '
-                        .'height="370" wmode="transparent" pluginspage="http://www.macromedia.com/go/getflashplayer" '
+                    return '<embed src="http://www.metacafe.com/fplayer/' . $vid . '/unimportant_info_i_hope.swf" width="' . $self->{'width'} . '" '
+                        .'height="' . $self->{'height'} . '" wmode="transparent" pluginspage="http://www.macromedia.com/go/getflashplayer" '
                         .'type="application/x-shockwave-flash" allowFullScreen="true" name="Metacafe_' . $vid . '"></embed>';
                 }
                 
@@ -198,12 +201,12 @@ sub new{
                         return undef;
                     }
 
-                    return '<object width="450" height="370">'
+                    return '<object width="' . $self->{'width'} . '" height="' . $self->{'height'} . '">'
                         .'<param name="movie" value="http://www.dailymotion.com/swf/video/xbrozz" />'
                         .'<param name="allowFullScreen" value="true" />'
                         .'<embed type="application/x-shockwave-flash" '
-                        .'src="http://www.dailymotion.com/swf/video/xbrozz" width="450" '
-                        .'height="370" allowfullscreen="true"></embed></object>';
+                        .'src="http://www.dailymotion.com/swf/video/xbrozz" width="' . $self->{'width'} . '" '
+                        .'height="' . $self->{'height'} . '" allowfullscreen="true"></embed></object>';
                 }
                 
                 return undef;

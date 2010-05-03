@@ -160,7 +160,10 @@ interface to L<HTML::Video::Embed>->url_to_embed( $url )
 =back
 
 =cut
-my $embedder = new HTML::Video::Embed;
+my $embedder = new HTML::Video::Embed({
+    'width' => 500,
+    'height' => 410,
+});
 sub embed_url{
     return $embedder->url_to_embed( shift );
 }

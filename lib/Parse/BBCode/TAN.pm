@@ -69,7 +69,10 @@ see L<HTML::Embed::Video>
 =cut
 my $youtube_validate_reg = qr/^[a-zA-Z0-9-_]{11}$/;
 sub new {
-    my $embedder = new HTML::Video::Embed;
+    my $embedder = new HTML::Video::Embed({
+        'width' => 500,
+        'height' => 410,
+    });;
 
     return Parse::BBCode->new({
         'tags' => {

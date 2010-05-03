@@ -5,8 +5,8 @@ use Test::More;
 use HTML::Video::Embed;
 
 my $embeder = new HTML::Video::Embed({
-    'width' => 470,
-    'height' => 350,
+    'width' => 450,
+    'height' => 370,
 });
 
 #youtube
