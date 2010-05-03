@@ -187,6 +187,28 @@ sub new{
                 return undef;
             }
         },
+        'dailymotion' => {
+            'domain_reg' => qr/dailymotion\.com/,
+            'validate_reg' => qr/^\/video\/(\w+)_.*/,
+            'embed' => sub{
+                my ( $validate_reg, $uri ) = @_;
+
+                if ( my ($vid) = $uri->path =~ m/$validate_reg/ ){
+                    if ( (!$vid) ){
+                        return undef;
+                    }
+
+                    return '<object width="450" height="370">'
+                        .'<param name="movie" value="http://www.dailymotion.com/swf/video/xbrozz" />'
+                        .'<param name="allowFullScreen" value="true" />'
+                        .'<embed type="application/x-shockwave-flash" '
+                        .'src="http://www.dailymotion.com/swf/video/xbrozz" width="450" '
+                        .'height="370" allowfullscreen="true"></embed></object>';
+                }
+                
+                return undef;
+            }
+        },
     };
     return $self;
 }
