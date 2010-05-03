@@ -3,6 +3,7 @@
 use strict;
 use warnings;
 use Pod::Trac;
+use Cwd 'abs_path';
 
 #does stuff to take the pod from TAN and inject it into trac
 
@@ -18,7 +19,8 @@ my $trac = Pod::Trac->new({
     'passwd' => "Iek7Dohp",
 });
 
+my $cwd = abs_path();
 $trac->from_path({
-    'path' => "/srv/http/TAN/lib",
+    'path' => "${cwd}/../../lib",
     'filter' => ["pm"],
 });

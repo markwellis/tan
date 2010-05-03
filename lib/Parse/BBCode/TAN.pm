@@ -54,8 +54,6 @@ if just a youtube id, converts to url for use with HTML::Video::Embed
 
 =back
 
-=back
-
 =item *
 
 [video]url to L<HTML::Embed::Video> supported video[/video]

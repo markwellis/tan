@@ -123,7 +123,7 @@ sub generate {
 #make sure there's some changes rather than blindly updating everything
     $file =~ s/(\.\.\/)//g;
 	#hack to remove full path
-	$file =~ s/\/srv\/http\/TAN\/lib\///;
+	$file =~ s/\/var\/www\/thisaintnews\.com\/htdocs\/script\/custom\/lib\///;
     $self->pod_url( $self->{ trac_url } . "/wiki/" . $file );
 
     my $req = HTTP::Request->new( GET => $self->pod_url . '?action=edit');
