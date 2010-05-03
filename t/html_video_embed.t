@@ -134,7 +134,7 @@ is( $embeder->url_to_embed('http://www.dailymotion.com/video/xbrozz_the-worst-5-
 
     '<object width="450" height="370"><param name="movie" value="http://www.dailymotion.com/swf/video/xbrozz" /><param name="allowFullScreen" value="true" /><embed type="application/x-shockwave-flash" src="http://www.dailymotion.com/swf/video/xbrozz" width="450" height="370" allowfullscreen="true"></embed></object>',
 
-    ' embed works'
+    'dailymotion embed works'
 );
 
 is( $embeder->url_to_embed('http://www.dailymotion.com/videoxbrozz_the-worst-5-things-to-say-policemen_fun'), undef, 'invalid url');
