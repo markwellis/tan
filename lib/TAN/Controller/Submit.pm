@@ -206,7 +206,7 @@ sub validate_link: Private{
     if ($link->count){
     #already submitted
         $c->stash->{'error'} = $error_codes->{'already_submitted'};
-        $c->stash->{'link_id'} = $link->link_id;
+        $c->stash->{'link_id'} = $link->first->link_id;
     }
 }
 

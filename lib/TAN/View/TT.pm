@@ -5,6 +5,8 @@ use warnings;
 use HTML::TreeBuilder;
 use HTML::FormatText;
 
+use HTML::Video::Embed;
+
 use base 'Catalyst::View::TT';
 
 __PACKAGE__->config(TEMPLATE_EXTENSION => '.tt');
@@ -27,6 +29,7 @@ __PACKAGE__->config({
         'strip_tags' => sub { return strip_tags(shift); },
         'file_mtime' => sub { return file_mtime(shift); },
         'url_title' => sub { return url_title(shift); },
+        'embed_url' => sub { return embed_url(shift); },
     },
 });
 
@@ -146,6 +149,21 @@ sub strip_tags{
     return $text;
 }
 
+=head2 embed_url
+
+B<@args = ($url)>
+
+=over
+
+interface to L<HTML::Video::Embed>->url_to_embed( $url )
+
+=back
+
+=cut
+my $embedder = new HTML::Video::Embed;
+sub embed_url{
+    return $embedder->url_to_embed( shift );
+}
 
 =head1 SEE ALSO
 

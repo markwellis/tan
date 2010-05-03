@@ -63,22 +63,16 @@ PROCESS 'lib/plus_minus_box.tt';
         [%- END -%]
         </span>
     [%- IF type == 'blog' -%]</p>[% END -%]
-    [%- IF type == 'link' -%]
-            [% object_url = object.$type.url _ '&';
-            matches = object_url.match('http\:\/\/www\.youtube\.com\/watch\?v=(.*?)\&');
-
-            IF (matches.0);
-                youtube_id = matches.0 | html -%]
-                <div class="TAN-video">
-                    <object type="application/x-shockwave-flash" style="width:425px; height:350px;" data="http://www.youtube.com/v/[%- youtube_id -%]">
-                        <param name="wmode" value="transparent" />
-                        <param name="movie" value="http://www.youtube.com/v/[%- youtube_id -%]" />
-                    </object>
-                </div>
-            [%- ELSE -%]
+    [%- IF type == 'link';
+        embed_code = object.$type.url | embed_url;
+        IF embed_code.defined() %]
+            <div class="TAN-video">
+                [% embed_code %]
+            </div>
+        [%- ELSE -%]
                 <a class="TAN-view_link TAN-type-link" href="[% url %]">View Link</a>
-            [%- END -%]
-        </p>
+        [%- END -%]
+    </p>
     [%- ELSIF type == 'blog' -%]
         <p class="TAN-blog_wrapper TAN-hr">
             [% object.blog.details %]
