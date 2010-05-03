@@ -74,13 +74,11 @@ sub new{
         },
         'yahoo' => {
             'domain_reg' => qr/video\.yahoo\.com/,
-            'validate_reg' => qr/(\d+)\/(\d+)/,
+            'validate_reg' => qr/^\/watch\/(\d+)\/(\d+)/,
             'embed' => sub{
                 my ( $validate_reg, $uri ) = @_;
 
-                if ( $uri->path =~ m/$validate_reg/ ){
-                    my $vid = $1;
-                    my $id = $2;
+                if ( my ($vid, $id) = $uri->path =~ m/$validate_reg/ ){
 
                     if ( (!$vid) || (!$id) ){
                         return undef;
@@ -104,13 +102,11 @@ sub new{
         },
         'spikedhumor' => {
             'domain_reg' => qr/spikedhumor\.com/,
-            'validate_reg' => qr/articles\/(\d+)\/.*$/,
+            'validate_reg' => qr/^\/articles\/(\d+)\/.*$/,
             'embed' => sub{
                 my ( $validate_reg, $uri ) = @_;
 
-                if ( $uri->path =~ m/$validate_reg/ ){
-                    my $vid = $1;
-
+                if ( my ($vid) = $uri->path =~ m/$validate_reg/ ){
                     if ( (!$vid) ){
                         return undef;
                     }
@@ -127,13 +123,11 @@ sub new{
         },
         'colleghumor' => {
             'domain_reg' => qr/collegehumor\.com/,
-            'validate_reg' => qr/video:(\d+)/,
+            'validate_reg' => qr/^\/video:(\d+)/,
             'embed' => sub{
                 my ( $validate_reg, $uri ) = @_;
 
-                if ( $uri->path =~ m/$validate_reg/ ){
-                    my $vid = $1;
-
+                if ( my ($vid) = $uri->path =~ m/$validate_reg/ ){
                     if ( (!$vid) ){
                         return undef;
                     }
@@ -146,6 +140,29 @@ sub new{
                         . $vid . '&fullscreen=1"/>'
                         .'<embed src="http://www.collegehumor.com/moogaloop/moogaloop.swf?clip_id=' . $vid . '&fullscreen=1" '
                         .'type="application/x-shockwave-flash" wmode="transparent" width="450" height="370"></embed></object>';
+                }
+                
+                return undef;
+            }
+        },
+        'funnyordie' => {
+            'domain_reg' => qr/funnyordie\.com/,
+            'validate_reg' => qr/^\/videos\/(\w+)\/.*/,
+            'embed' => sub{
+                my ( $validate_reg, $uri ) = @_;
+
+                if ( my ($vid) = $uri->path =~ m/$validate_reg/ ){
+                    if ( (!$vid) ){
+                        return undef;
+                    }
+
+                    return '<object width="450" height="370" id="ordie_player_' . $vid . '">'
+                        .'<param name="movie" value="http://player.ordienetworks.com/flash/fodplayer.swf" />'
+                        .'<param name="flashvars" value="key=' . $vid . '" />'
+                        .'<param name="allowfullscreen" value="true" />'
+                        .'<embed width="450" height="370" flashvars="key=' . $vid . '" allowfullscreen="true" '
+                        .'quality="high" src="http://player.ordienetworks.com/flash/fodplayer.swf" '
+                        .'name="ordie_player_' . $vid . '" type="application/x-shockwave-flash"></embed></object>';
                 }
                 
                 return undef;

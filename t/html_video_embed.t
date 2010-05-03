@@ -8,8 +8,7 @@ my $embeder = new HTML::Video::Embed;
 
 #youtube
 diag('youtube');
-is( $embeder->url_to_embed(
-    'http://www.youtube.com/watch?v=xExSdzkZZB0'),  
+is( $embeder->url_to_embed('http://www.youtube.com/watch?v=xExSdzkZZB0'),  
 
     '<object data="http://www.youtube.com/v/xExSdzkZZB0" '
         .'style="width: 450px; height: 370px;" type="application/x-shockwave-flash">'
@@ -25,8 +24,7 @@ is( $embeder->url_to_embed('http://www.y0utube.com/watch?h=xExxSdzkZZB0'), undef
 
 #liveleak
 diag('liveleak');
-is( $embeder->url_to_embed(
-    'http://www.liveleak.com/view?i=ffc_1272800490'),
+is( $embeder->url_to_embed('http://www.liveleak.com/view?i=ffc_1272800490'),
 
     '<object width="450" height="370"><param name="movie" value="http://www.liveleak.com/e/ffc_1272800490" />'
         .'<param name="wmode" value="transparent" />'
@@ -42,8 +40,7 @@ is( $embeder->url_to_embed('http://www.l1veleak.com/view?i=ffc_12728004900'), un
 
 #google
 diag('google');
-is( $embeder->url_to_embed(
-    'http://video.google.com/videoplay?docid=-2912878405399014351#'),
+is( $embeder->url_to_embed('http://video.google.com/videoplay?docid=-2912878405399014351#'),
 
     '<embed id="VideoPlayback"'
         .' src="http://video.google.com/googleplayer.swf?'
@@ -63,8 +60,7 @@ is( $embeder->url_to_embed('http://video.g0ogle.com/videoplay?docid=-29128784053
 
 #yahooo
 diag('yahoo');
-is( $embeder->url_to_embed(
-    'http://uk.video.yahoo.com/watch/6421277/16650873'),
+is( $embeder->url_to_embed('http://uk.video.yahoo.com/watch/6421277/16650873'),
 
     '<object width="450" height="370"><param name="movie" value="http://d.yimg.com/static.video.yahoo.com/yep/YV_YEP.swf?ver=2.2.46" /><param name="allowFullScreen" value="true" /><param name="bgcolor" value="#000000" /><param name="flashVars" value="id=16650873&vid=6421277&lang=en-gb&intl=uk&embed=1" /><embed src="http://d.yimg.com/static.video.yahoo.com/yep/YV_YEP.swf?ver=2.2.46" type="application/x-shockwave-flash" width="450" height="370" allowFullScreen="true" bgcolor="#000000" flashVars="id=16650873&vid=6421277&lang=en-gb&intl=uk&embed=1" ></embed></object>',
 
@@ -77,8 +73,7 @@ is( $embeder->url_to_embed('http://uk.video.yah0o.com/watch/6421277/16650873'), 
 
 #spiked
 diag('spikedhumor');
-is( $embeder->url_to_embed(
-    'http://www.spikedhumor.com/articles/204009/Maher-You-Don-t-Care-About-the-Debt.html'),
+is( $embeder->url_to_embed('http://www.spikedhumor.com/articles/204009/Maher-You-Don-t-Care-About-the-Debt.html'),
 
     '<embed src="http://www.spikedhumor.com/player/vcplayer.swf?file=http://www.spikedhumor.com/videocodes/204009/data.xml&auto_play=false" quality="high" scale="noscale" bgcolor="#000000" width="450" height="370" align="middle" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" />',
 
@@ -91,8 +86,7 @@ is( $embeder->url_to_embed('http://www.sp1kedhumor.com/articles/204009/Maher-You
 
 #college
 diag('collegehumor');
-is( $embeder->url_to_embed(
-    'http://www.collegehumor.com/video:1930495'),
+is( $embeder->url_to_embed('http://www.collegehumor.com/video:1930495'),
 
     '<object type="application/x-shockwave-flash" data="http://www.collegehumor.com/moogaloop/moogaloop.swf?clip_id=1930495&fullscreen=1" width="450" height="370" ><param name="allowfullscreen" value="true"/><param name="wmode" value="transparent"/><param name="movie" quality="best" value="http://www.collegehumor.com/moogaloop/moogaloop.swf?clip_id=1930495&fullscreen=1"/><embed src="http://www.collegehumor.com/moogaloop/moogaloop.swf?clip_id=1930495&fullscreen=1" type="application/x-shockwave-flash" wmode="transparent" width="450" height="370"></embed></object>',
 
@@ -102,6 +96,19 @@ is( $embeder->url_to_embed(
 is( $embeder->url_to_embed('http://www.collegehumor.com/vdeo:1930495'), undef, 'invalid url');
 is( $embeder->url_to_embed('http://www.collegehumor.com/video:'), undef, 'no video id');
 is( $embeder->url_to_embed('http://www.c0llegehumor.com/video:1930495'), undef, 'c0llegehumor, not c0llegehumor');
+
+#funnyordie
+diag('funnyordie');
+is( $embeder->url_to_embed('http://www.funnyordie.com/videos/1ab8850305/spook-hunters'),
+
+    '<object width="450" height="370" id="ordie_player_1ab8850305"><param name="movie" value="http://player.ordienetworks.com/flash/fodplayer.swf" /><param name="flashvars" value="key=1ab8850305" /><param name="allowfullscreen" value="true" /><embed width="450" height="370" flashvars="key=1ab8850305" allowfullscreen="true" quality="high" src="http://player.ordienetworks.com/flash/fodplayer.swf" name="ordie_player_1ab8850305" type="application/x-shockwave-flash"></embed></object>',
+
+    'funnyordie embed works'
+);
+
+is( $embeder->url_to_embed('http://www.funnyordie.com/video/1ab8850305/spook-hunters'), undef, 'invalid url');
+is( $embeder->url_to_embed('http://www.funnyordie.com/videos//spook-hunters'), undef, 'no video id');
+is( $embeder->url_to_embed('http://www.funny0rdie.com/videos/1ab8850305/spook-hunters'), undef, 'funny0rdie, not funnyordie');
 
 
 done_testing();
