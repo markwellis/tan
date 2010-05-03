@@ -168,6 +168,25 @@ sub new{
                 return undef;
             }
         },
+        'metacafe' => {
+            'domain_reg' => qr/metacafe\.com/,
+            'validate_reg' => qr/^\/watch\/(\d+)\/.*/,
+            'embed' => sub{
+                my ( $validate_reg, $uri ) = @_;
+
+                if ( my ($vid) = $uri->path =~ m/$validate_reg/ ){
+                    if ( (!$vid) ){
+                        return undef;
+                    }
+
+                    return '<embed src="http://www.metacafe.com/fplayer/' . $vid . '/unimportant_info_i_hope.swf" width="450" '
+                        .'height="370" wmode="transparent" pluginspage="http://www.macromedia.com/go/getflashplayer" '
+                        .'type="application/x-shockwave-flash" allowFullScreen="true" name="Metacafe_' . $vid . '"></embed>';
+                }
+                
+                return undef;
+            }
+        },
     };
     return $self;
 }
