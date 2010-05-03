@@ -50,7 +50,6 @@ is( $embeder->url_to_embed(
         .'docid=-2912878405399014351' 
         .'&hl=en&fs=true" style="width:450px;height:370px"'
         .' allowFullScreen="true"'
-        .' allowScriptAccess="always"'
         .' type="application/x-shockwave-flash">'
         .'</embed>'
     ,
@@ -67,7 +66,7 @@ diag('yahoo');
 is( $embeder->url_to_embed(
     'http://uk.video.yahoo.com/watch/6421277/16650873'),
 
-    '<object width="450" height="370"><param name="movie" value="http://d.yimg.com/static.video.yahoo.com/yep/YV_YEP.swf?ver=2.2.46" /><param name="allowFullScreen" value="true" /><param name="AllowScriptAccess" VALUE="always" /><param name="bgcolor" value="#000000" /><param name="flashVars" value="id=16650873&vid=6421277&lang=en-gb&intl=uk&embed=1" /><embed src="http://d.yimg.com/static.video.yahoo.com/yep/YV_YEP.swf?ver=2.2.46" type="application/x-shockwave-flash" width="450" height="370" allowFullScreen="true" AllowScriptAccess="always" bgcolor="#000000" flashVars="id=16650873&vid=6421277&lang=en-gb&intl=uk&embed=1" ></embed></object>',
+    '<object width="450" height="370"><param name="movie" value="http://d.yimg.com/static.video.yahoo.com/yep/YV_YEP.swf?ver=2.2.46" /><param name="allowFullScreen" value="true" /><param name="bgcolor" value="#000000" /><param name="flashVars" value="id=16650873&vid=6421277&lang=en-gb&intl=uk&embed=1" /><embed src="http://d.yimg.com/static.video.yahoo.com/yep/YV_YEP.swf?ver=2.2.46" type="application/x-shockwave-flash" width="450" height="370" allowFullScreen="true" bgcolor="#000000" flashVars="id=16650873&vid=6421277&lang=en-gb&intl=uk&embed=1" ></embed></object>',
 
     'yahoo embed works'
 );
@@ -81,7 +80,7 @@ diag('spikedhumor');
 is( $embeder->url_to_embed(
     'http://www.spikedhumor.com/articles/204009/Maher-You-Don-t-Care-About-the-Debt.html'),
 
-    '<embed src="http://www.spikedhumor.com/player/vcplayer.swf?file=http://www.spikedhumor.com/videocodes/204009/data.xml&auto_play=false" quality="high" scale="noscale" bgcolor="#000000" width="450" height="370" align="middle" allowScriptAccess="sameDomain" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" />',
+    '<embed src="http://www.spikedhumor.com/player/vcplayer.swf?file=http://www.spikedhumor.com/videocodes/204009/data.xml&auto_play=false" quality="high" scale="noscale" bgcolor="#000000" width="450" height="370" align="middle" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" />',
 
     'spikedhumor embed works'
 );
@@ -89,5 +88,20 @@ is( $embeder->url_to_embed(
 is( $embeder->url_to_embed('http://www.spikedhumor.com/watch/6420873'), undef, 'invalid url');
 is( $embeder->url_to_embed('http://www.sp1kedhumor.com/articles//Maher-You-Don-t-Care-About-the-Debt.html'), undef, 'no video id');
 is( $embeder->url_to_embed('http://www.sp1kedhumor.com/articles/204009/Maher-You-Don-t-Care-About-the-Debt.html'), undef, 'sp1kedhumor, not spikedhumor');
+
+#college
+diag('collegehumor');
+is( $embeder->url_to_embed(
+    'http://www.collegehumor.com/video:1930495'),
+
+    '<object type="application/x-shockwave-flash" data="http://www.collegehumor.com/moogaloop/moogaloop.swf?clip_id=1930495&fullscreen=1" width="450" height="370" ><param name="allowfullscreen" value="true"/><param name="wmode" value="transparent"/><param name="movie" quality="best" value="http://www.collegehumor.com/moogaloop/moogaloop.swf?clip_id=1930495&fullscreen=1"/><embed src="http://www.collegehumor.com/moogaloop/moogaloop.swf?clip_id=1930495&fullscreen=1" type="application/x-shockwave-flash" wmode="transparent" width="450" height="370"></embed></object>',
+
+    'collegehumor embed works'
+);
+
+is( $embeder->url_to_embed('http://www.collegehumor.com/vdeo:1930495'), undef, 'invalid url');
+is( $embeder->url_to_embed('http://www.collegehumor.com/video:'), undef, 'no video id');
+is( $embeder->url_to_embed('http://www.c0llegehumor.com/video:1930495'), undef, 'c0llegehumor, not c0llegehumor');
+
 
 done_testing();

@@ -65,7 +65,6 @@ sub new{
                         .'docid=' . $google_id 
                         .'&hl=en&fs=true" style="width:450px;height:370px"'
                         .' allowFullScreen="true"'
-                        .' allowScriptAccess="always"'
                         .' type="application/x-shockwave-flash">'
                         .'</embed>';
                 }
@@ -89,13 +88,13 @@ sub new{
 
                     return '<object width="450" height="370">'
                         .'<param name="movie" value="http://d.yimg.com/static.video.yahoo.com/yep/YV_YEP.swf?ver=2.2.46" />'
-                       .'<param name="allowFullScreen" value="true" /><param name="AllowScriptAccess" VALUE="always" />'
+                       .'<param name="allowFullScreen" value="true" />'
                         .'<param name="bgcolor" value="#000000" /><param name="flashVars" '
                         .'value="id=' . $id . '&vid=' . $vid 
                         .'&lang=en-gb&intl=uk&embed=1" />'
                         .'<embed src="http://d.yimg.com/static.video.yahoo.com/yep/YV_YEP.swf?ver=2.2.46" '
                         .'type="application/x-shockwave-flash" width="450" height="370" allowFullScreen="true" '
-                        .'AllowScriptAccess="always" bgcolor="#000000" '
+                        .'bgcolor="#000000" '
                         .'flashVars="id=' . $id . '&vid=' . $vid 
                         .'&lang=en-gb&intl=uk&embed=1" ></embed></object>';
                 }
@@ -119,8 +118,34 @@ sub new{
                     return '<embed src="http://www.spikedhumor.com/player/vcplayer.swf?file=http://www.spikedhumor.com/videocodes/'
                         . $vid . '/data.xml&auto_play=false" quality="high" '
                         .'scale="noscale" bgcolor="#000000" width="450" '
-                        .'height="370" align="middle" allowScriptAccess="sameDomain" '
+                        .'height="370" align="middle" '
                         .'type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" />';
+                }
+                
+                return undef;
+            }
+        },
+        'colleghumor' => {
+            'domain_reg' => qr/collegehumor\.com/,
+            'validate_reg' => qr/video:(\d+)/,
+            'embed' => sub{
+                my ( $validate_reg, $uri ) = @_;
+
+                if ( $uri->path =~ m/$validate_reg/ ){
+                    my $vid = $1;
+
+                    if ( (!$vid) ){
+                        return undef;
+                    }
+
+                    return '<object type="application/x-shockwave-flash" '
+                        .'data="http://www.collegehumor.com/moogaloop/moogaloop.swf?clip_id=' . $vid . '&fullscreen=1" '
+                        .'width="450" height="370" ><param name="allowfullscreen" value="true"/>'
+                        .'<param name="wmode" value="transparent"/>'
+                        .'<param name="movie" quality="best" value="http://www.collegehumor.com/moogaloop/moogaloop.swf?clip_id='
+                        . $vid . '&fullscreen=1"/>'
+                        .'<embed src="http://www.collegehumor.com/moogaloop/moogaloop.swf?clip_id=' . $vid . '&fullscreen=1" '
+                        .'type="application/x-shockwave-flash" wmode="transparent" width="450" height="370"></embed></object>';
                 }
                 
                 return undef;
