@@ -5,6 +5,7 @@ use warnings;
 use URI;
 use URI::QueryParam;
 use Data::Validate::URI qw/ is_uri /;
+use LWPx::ParanoidAgent;
 
 my $int_reg = qr/\d+/;
 sub new{
@@ -86,7 +87,6 @@ sub new{
                         return undef;
                     }
 
-                    #extract id
                     return '<object width="450" height="370">'
                         .'<param name="movie" value="http://d.yimg.com/static.video.yahoo.com/yep/YV_YEP.swf?ver=2.2.46" />'
                        .'<param name="allowFullScreen" value="true" /><param name="AllowScriptAccess" VALUE="always" />'
@@ -98,6 +98,29 @@ sub new{
                         .'AllowScriptAccess="always" bgcolor="#000000" '
                         .'flashVars="id=' . $id . '&vid=' . $vid 
                         .'&lang=en-gb&intl=uk&embed=1" ></embed></object>';
+                }
+                
+                return undef;
+            }
+        },
+        'spikedhumor' => {
+            'domain_reg' => qr/spikedhumor\.com/,
+            'validate_reg' => qr/articles\/(\d+)\/.*$/,
+            'embed' => sub{
+                my ( $validate_reg, $uri ) = @_;
+
+                if ( $uri->path =~ m/$validate_reg/ ){
+                    my $vid = $1;
+
+                    if ( (!$vid) ){
+                        return undef;
+                    }
+
+                    return '<embed src="http://www.spikedhumor.com/player/vcplayer.swf?file=http://www.spikedhumor.com/videocodes/'
+                        . $vid . '/data.xml&auto_play=false" quality="high" '
+                        .'scale="noscale" bgcolor="#000000" width="450" '
+                        .'height="370" align="middle" allowScriptAccess="sameDomain" '
+                        .'type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" />';
                 }
                 
                 return undef;
