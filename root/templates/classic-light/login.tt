@@ -51,7 +51,7 @@ css_includes.push('login');
                         <input id='rpassword1' name='rpassword1' type='password' class='text_input'/>
                     </li>
                     <li>
-                        <?php echo $f->stash->recaptcha_html ?>
+                        [% recaptcha_html %]
                     </li>
                     <li>
                         <input type='submit' value='Register'/>

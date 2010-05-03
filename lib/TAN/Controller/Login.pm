@@ -58,14 +58,18 @@ loads the login template
 
 =cut
 sub index: Path Args(0){
-    my ($self, $c) = @_;
+    my ( $self, $c ) = @_;
     
-    if ($c->user_exists){
+    if ( $c->user_exists ){
         $c->flash->{'message'} = 'You are already logged in';
         $c->res->redirect('/');
         $c->detach();
     }
     
+    my $recaptcha = Captcha::reCAPTCHA->new;
+    $c->stash->{'recaptcha_html'} = $recaptcha->get_html( $c->config->{'recaptcha_public_key'}, undef, undef, {
+        'theme' => 'blackglass',
+    });
     $c->flash->{'ref'} = defined($c->req->referer) ? $c->req->referer : '/';
     
     $c->stash->{'template'} = 'login.tt';
@@ -83,7 +87,7 @@ authenticates the user
 
 =cut
 sub login: Local{
-    my ($self, $c) = @_;
+    my ( $self, $c ) = @_;
     
     my $ref = $c->flash->{'ref'};
     if (!defined($ref) || $ref =~ m/\/login\//){
@@ -123,14 +127,14 @@ logs the user out
 
 =cut
 sub logout: Local{
-    my ($self, $c) = @_;
+    my ( $self, $c ) = @_;
     
     my $ref = $c->req->referer;
-    if (!defined($ref)){
+    if ( !defined($ref) ){
         $ref = '/';
     }
 
-    if ($c->user_exists){
+    if ( $c->user_exists ){
         $c->logout;
         $c->flash->{'message'} = "You have logged out";
     } else {
@@ -141,6 +145,21 @@ sub logout: Local{
     $c->detach();
 }
 
+=head2 register: Local
+
+B<@args = undef>
+
+=over
+
+registers a user
+
+=back
+
+=cut
+sub register: Local{
+    my ( $self, $c ) = @_;
+    
+}
 =head1 AUTHOR
 
 A clever guy

@@ -15,6 +15,9 @@
     "recent_comments": 20,
     "promotion_cutoff": 10,
 
+    "recaptcha_public_key": "6LfOtQIAAAAAAKjR5kiq9YLFjG80_bLST2fB696F",
+    "recaptcha_private_key": "6LfOtQIAAAAAAK0DnRYVGRWVP0aBtfG158_OYGok",
+
     "Plugin::Authentication": {
         "use_session": 1,
         "default": {
@@ -30,7 +33,6 @@
             }
         }
     },
-
 
     "Model::FetchImage": {
         "max_filesize": 2097152,

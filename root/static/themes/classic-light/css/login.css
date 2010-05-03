@@ -8,7 +8,11 @@ label{
     padding-bottom:10px;
 }
 
-.TAN-news img{
+.TAN-news{
+    max-height:none !important;
+}
+
+.TAN-news .newsImg{
     float:left;
     height:100px;
     padding-right:15px;
