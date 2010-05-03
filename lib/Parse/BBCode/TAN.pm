@@ -4,8 +4,7 @@ use warnings;
 
 use Parse::BBCode;
 
-use URI;
-use URI::QueryParam;
+use HTML::Video::Embed;
 use Data::Validate::URI qw/ is_uri /;
 
 our $VERSION = '0.01';
@@ -51,7 +50,19 @@ The following tags are supported
 
 =over
 
-<object data="http://www.youtube.com/v/KmDmyM97_EA" style="width: 425px; height: 350px;" type="application/x-shockwave-flash"><param value="transparent" name="wmode" /><param value="http://www.youtube.com/v/KmDmyM97_EA" name="movie" /></object>
+if just a youtube id, converts to url for use with HTML::Video::Embed
+
+=back
+
+=back
+
+=item *
+
+[video]url to L<HTML::Embed::Video> supported video[/video]
+
+=over
+
+see L<HTML::Embed::Video>
 
 =back
 
@@ -60,6 +71,8 @@ The following tags are supported
 =cut
 my $youtube_validate_reg = qr/^[a-zA-Z0-9-_]{11}$/;
 sub new {
+    my $embedder = new HTML::Video::Embed;
+
     return Parse::BBCode->new({
         'tags' => {
             'quote' => {
@@ -77,27 +90,26 @@ sub new {
             },
             '' => sub { return $_[2]; },
             'youtube' => 'block:%{youtube}s',
+            'video' => 'block:%{video}s',
         },
         'escapes' => {
             'youtube' => sub {
                 my ( $parser, $tag, $text ) = @_;
 
-                my $youtube_id;
-
-                if ( is_uri($text) ){
-                    $youtube_id = URI->new($text)->query_param('v');
-                } else {
-                    $youtube_id = $text;
+                if ( !is_uri($text) ){
+                    if ( $text =~ m/$youtube_validate_reg/ ){
+                        $text = "http://www.youtube.com/watch?v=${text}";
+                    } else {
+                        return '';
+                    }
                 }
 
-                if ( defined($youtube_id) && $youtube_id =~ m/$youtube_validate_reg/ ) {
-                    return '<object data="http://www.youtube.com/v/' . $youtube_id . '" '
-                            .'style="width: 425px; height: 350px;" type="application/x-shockwave-flash">'
-                        .'<param value="transparent" name="wmode" />'
-                        .'<param value="http://www.youtube.com/v/' . $youtube_id . '" name="movie" /></object>';
-                }
+                return $embedder->url_to_embed($text) || '';
+            },
+            'video' => sub {
+                my ( $parser, $tag, $text ) = @_;
 
-                return '';
+                return $embedder->url_to_embed($text) || '';
             },
         },
         'tag_validation' => qr/^([^\]]*)?]/,
