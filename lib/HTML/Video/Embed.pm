@@ -202,10 +202,10 @@ sub new{
                     }
 
                     return '<object width="' . $self->{'width'} . '" height="' . $self->{'height'} . '">'
-                        .'<param name="movie" value="http://www.dailymotion.com/swf/video/xbrozz" />'
+                        .'<param name="movie" value="http://www.dailymotion.com/swf/video/' . $vid . '" />'
                         .'<param name="allowFullScreen" value="true" />'
                         .'<embed type="application/x-shockwave-flash" '
-                        .'src="http://www.dailymotion.com/swf/video/xbrozz" width="' . $self->{'width'} . '" '
+                        .'src="http://www.dailymotion.com/swf/video/' . $vid . '" width="' . $self->{'width'} . '" '
                         .'height="' . $self->{'height'} . '" allowfullscreen="true"></embed></object>';
                 }
                 
