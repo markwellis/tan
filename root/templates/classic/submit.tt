@@ -1,6 +1,0 @@
-[% tmplt = 'submit/' _ location _ '.tt';
-js_includes.push('submit') -%]
-<ul id="inside">
-    <li class="news">[%- PROCESS $tmplt -%]</li>
-</ul>
-<br class="clear" />

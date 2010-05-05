@@ -1,9 +1,0 @@
-[%- IF (index_objects.defined) -%]
-Order by: <select id="order_by">
-    <option value="date" [%- (order == 'date') ? 'selected="selected"' : '' -%]>Date</option>
-    <option value="comments" [%- (order == 'comments') ? 'selected="selected"' : '' -%]>Comments</option>
-    <option value="plus" [%- (order == 'plus') ? 'selected="selected"' : '' -%]>IsNews</option>
-    <option value="minus" [%- (order == 'minus') ? 'selected="selected"' : '' -%]>AintNews</option>
-    <option value="views" [%- (order == 'views') ? 'selected="selected"' : '' -%]>Views</option>
-</select>
-[%- END -%]

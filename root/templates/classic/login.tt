@@ -1,5 +1,0 @@
-<ul id="inside">
-    <li class="news">[%- PROCESS 'lib/login_box.tt' -%]</li>
-    <li class="news">[%- PROCESS 'lib/register_box.tt' -%]</li>
-</ul>
-<br class="clear" />
