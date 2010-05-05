@@ -1,8 +1,8 @@
 [%-
     theme_settings = {
-        'name' => 'classic-light',
-        'display_name' => 'Classic Light',
-        'description' => 'Like the classic theme, only lighter',
+        'name' => 'classic',
+        'display_name' => 'Classic',
+        'description' => 'The classic theme v2',
         'css_path' => "$theme_settings.path/css",
         'js_path' => "$theme_settings.path/js",
         'image_path' => "$theme_settings.path/images",
