@@ -62,7 +62,7 @@ fieldset{
     overflow:hidden;
 }
 .TAN-header{
-    background-image:url("/static/themes/classic-light/images/top.jpg?r=2");
+    background-image:url("/static/themes/classic/images/top.jpg?r=2");
     background-color:#444;
     background-repeat:no-repeat;
     background-position:center;
