@@ -18,6 +18,8 @@
     "recaptcha_public_key": "6LfOtQIAAAAAAKjR5kiq9YLFjG80_bLST2fB696F",
     "recaptcha_private_key": "6LfOtQIAAAAAAK0DnRYVGRWVP0aBtfG158_OYGok",
 
+    "email": ["Sendmail"],
+
     "Plugin::Authentication": {
         "use_session": 1,
         "default": {

@@ -4,6 +4,8 @@ use warnings;
 
 use URI;
 use URI::QueryParam;
+use URI::Escape::XS;
+
 use Data::Validate::URI qw/ is_uri /;
 use LWPx::ParanoidAgent;
 
@@ -221,7 +223,8 @@ sub url_to_embed{
 
     return undef if ( !is_uri($url) );
 
-    my $uri = URI->new( $url );
+#un uri encode url here!
+    my $uri = URI->new( URI::Escape::XS::uri_unescape($url) );
 
     foreach my $domain ( keys(%{ $self->{'supported'} }) ){
 #figure out if url is supported

@@ -26,7 +26,7 @@ __PACKAGE__->add_columns(
     is_nullable => 0,
     size => 14,
   },
-  "token_type",
+  "type",
   { data_type => "ENUM", default_value => undef, is_nullable => 0, size => 6 },
 );
 __PACKAGE__->set_primary_key("token_id");

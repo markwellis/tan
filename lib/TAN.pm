@@ -6,6 +6,8 @@ use Catalyst::Runtime 5.80;
 use Number::Format;
 use Data::Dumper;
 use Tie::Hash::Indexed;
+use Time::HiRes qw/time/;
+use POSIX qw/floor/;
 
 # Set flags and add plugins for the application
 #
@@ -41,8 +43,6 @@ use Catalyst qw/
 /;
 
 our $VERSION = '0.90';
-use Time::HiRes qw/time/;
-use POSIX qw/floor/;
 
 # Configure the application.
 #
@@ -99,15 +99,21 @@ sub check_cache{
         my @params = split('/', $c->req->path);
         my $object_id = $params[2];
         my $session_id = $c->sessionid;
+        my $ip_address = $c->req->address;
+
+warn "object id: ${object_id}";
+warn "session id: ${session_id}";
+warn "ip address: ${ip_address}";
 
         if ( $object_id  && $session_id ){
             my $user_id = $c->user_exists ? $c->user->user_id : 0;
+warn "user id: ${user_id}";
 
             $c->model('MySQL::Views')->update_or_create({
                 'session_id' => $session_id,
                 'object_id' => $object_id,
                 'user_id' => $user_id,
-                'ip' => $c->req->address,
+                'ip' => $ip_address,
                 'created' => \'NOW()',
             },{
                 'key' => 'session_objectid',

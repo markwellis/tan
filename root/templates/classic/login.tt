@@ -7,7 +7,6 @@ css_includes.push('login');
         <img class='newsImg' src='[%- theme_settings.image_path -%]/login.png' alt='Login' />
         <form id='loginform' method='post' action='/login/login'>
             <fieldset>
-                <input type='hidden' name='location' value='login' />
                 <ul>
                     <li>
                         <label for='username' class='login_label'>Username </label>
@@ -32,15 +31,14 @@ css_includes.push('login');
         <img class='newsImg' src='[%- theme_settings.image_path -%]/register.png' alt='Register' />
         <form action='/login/register' id='regform' method='post'>
             <fieldset>
-                <input type='hidden' name='location' value='register' />
                 <ul>
                     <li>
                         <label for='rusername' class='login_label'>Username </label>
                         <input id='rusername' name='rusername' type='text' value='[%- c.flash.username | html -%]' class='text_input'/>
                     </li>
                     <li>
-                        <label for='email' class='login_label'>Email address </label>
-                        <input id='email' name='email' type='text' value='[%- c.flash.email | html -%]' class='text_input'/>
+                        <label for='remail' class='login_label'>Email address </label>
+                        <input id='remail' name='remail' type='text' value='[%- c.flash.email | html -%]' class='text_input'/>
                     </li>
                     <li>
                         <label for='rpassword0' class='login_label'>Password </label>

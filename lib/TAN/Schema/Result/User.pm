@@ -66,7 +66,7 @@ __PACKAGE__->has_many(
   { "foreign.user_id" => "self.user_id" },
 );
 __PACKAGE__->has_many(
-  "user_tokens",
+  "tokens",
   "TAN::Schema::Result::UserTokens",
   { "foreign.user_id" => "self.user_id" },
 );
