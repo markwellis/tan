@@ -1,43 +1,42 @@
-package TAN::Schema::ResultSet::User;
+package TAN::Schema::ResultSet::UserTokens;
 
 use strict;
 use warnings;
 use base 'DBIx::Class::ResultSet';
 
-use Digest::SHA;
-use Time::HiRes qw/time/;
-
 =head1 NAME
 
-TAN::Schema::ResultSet::User
+TAN::Schema::ResultSet::UserTokens
 
 =head1 DESCRIPTION
 
-User ResultSet
+UserTokens ResultSet
 
 =head1 METHODS
 
 =cut
 
-=head2 username_exists
+=head2 compare
 
-B<@args = ($username)
+B<@args = ($user_id, $token, $token_type)
 
 =over
 
-returns true if a username exists
+returns true if $token for $user_id of $type matches
 
 =back
 
 =cut
 
-sub username_exists{
-    my ( $self, $username ) = @_;
+sub compare{
+    my ( $self, $user_id, $token, $type ) = @_;
     
+    return undef if ( !$user_id || !$token || !$type );
+
     return $self->search({
-        'username' => {
-            'like' => $username
-        },
+        'user_id' => $user_id,
+        'token' => $token,
+        'type' => $type,
     })->count || undef;
 }
 
@@ -74,6 +73,7 @@ registers a new user
 =back
 
 =cut
+
 sub new_user{
     my ( $self, $username, $password, $email ) = @_;
     
@@ -87,12 +87,10 @@ sub new_user{
         'password' => Digest::SHA::sha512_hex($password),
     });
 
-    return undef if ( !defined($new_user) );
     my $token = Digest::SHA::sha512_hex( '4234fdgg$£dsfsdf$$"%£SDFsdfxcv@@;~/.' . ( rand(30) * time() ) );
     $new_user->tokens->create({
         'token' => $token,
         'type' => 'reg',
-        'user_id' => $new_user->id,
         'expires' => \'DATE_ADD(NOW(), INTERVAL 5 DAY)',
     });
 

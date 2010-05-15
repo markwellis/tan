@@ -65,9 +65,14 @@ sub index: Path Args(0){
         $c->detach();
     }
     
-    $c->stash->{'recaptcha_html'} = $c->model('reCAPTCHA')->get_html( $c->config->{'recaptcha_public_key'}, undef, undef, {
-        'theme' => 'blackglass',
-    });
+    $c->stash->{'recaptcha_html'} = $c->model('reCAPTCHA')->get_html( 
+        $c->config->{'recaptcha_public_key'},
+        undef,
+        undef,
+        {
+            'theme' => 'blackglass',
+        }
+    );
 
     $c->flash->{'ref'} = defined($c->req->referer) ? $c->req->referer : '/';
     
@@ -100,10 +105,15 @@ sub login: Local{
                 'password' => $c->req->param('password'),
             })
         ){
-            #post any saved comments
-            $c->forward('/view/post_saved_comments');
-
-            $c->flash->{'message'} = 'You have logged in';
+            if ( $c->user->confirmed eq 'N' ){
+                $ref = '/login/';
+                $c->logout;
+                $c->flash->{'message'} = "You need to confirm your email address";
+            } else {
+                #post any saved comments
+                $c->forward('/view/post_saved_comments');
+                $c->flash->{'message'} = 'You have logged in';
+            }
         } else {
             $ref = '/login/';
             $c->flash->{'message'} = "Couldn't find you with that username and password";
@@ -156,6 +166,7 @@ sub register: Local{
 
 # do some security shit here, perhaps add a nonce
 
+#check recaptcha
     my $result = $c->model('reCAPTCHA')->check_answer(
         $c->config->{'recaptcha_private_key'}, 
         $c->req->address, 
@@ -171,35 +182,33 @@ sub register: Local{
     my $error;
     if ( !$result->{'is_valid'} ){
     # recaptcha failed
-        $c->flash->{'username'} = $c->req->param('rusername');
-        $c->flash->{'email'} = $c->req->param('remail');
-
-        $c->flash->{'message'} = "Captcha words do not match";
-
-        my $ref = $c->req->referer || '/';
-        $c->res->redirect( $ref);
-        $c->detach();
-    }
-    
-    if ( !$password0  || !$password1 || !$email || !$username ){
+        $error = "Captcha words do not match";
+    } elsif ( !$password0  || !$password1 || !$email || !$username ){
+    #form incomplete
         $error = 'Please complete the form';
     } elsif ( !Data::Validate::Email::is_email($email) ){
+    #invalid email address
         $error = 'Not an valid email address';
     } elsif ( $password0 ne $password1 ){
+    #passwords dont match
         $error = 'Passwords do not match';
     } elsif ( length($password0) < 5  ){
+    #password  short
         $error = 'Password needs to be atleast 6 letters';
     } elsif ( $username =~ m/\W+/g ){
+    #username cantains invalid chars
         $error = 'Username can only contain letters or numbers';
     } elsif ( $c->model('MySQL::User')->username_exists($username) ) {
+    #username exists
         $error = 'Username already exists';
     } elsif ( $c->model('MySQL::User')->email_exists($email) ) {
+    #email exists
        $error = 'Email address already exists';
     }
 
     if ( $error ){
-        $c->flash->{'username'} = $c->req->param('rusername');
-        $c->flash->{'email'} = $c->req->param('remail');
+        $c->flash->{'username'} = $username;
+        $c->flash->{'email'} = $email;
 
         $c->flash->{'message'} = $error;
         $c->res->redirect( '/login' );
@@ -208,8 +217,7 @@ sub register: Local{
 
 #return new user object or error
     my $new_user = $c->model('MySQL::User')->new_user($username, $password0, $email);
-    if ( !ref( $new_user ) ){
-    # blank ref, aka an actual scalar
+    if ( !$new_user ){
         $c->flash->{'username'} = $c->req->param('rusername');
         $c->flash->{'email'} = $c->req->param('remail');
 
@@ -222,14 +230,15 @@ sub register: Local{
 # mail token to user
     $c->stash->{'token'} = $new_user->tokens->find({
         'type' => 'reg',
-    });
+    })->token;
     $c->stash->{'user_id'} = $new_user->id;
 
     $c->email(
         'header' => [
             'From'    => 'noreply@thisaintnews.com',
             'To'      => $email,
-            'Subject' => 'Confirm email address'
+            'Subject' => 'Confirm email address',
+            'Content-Type' => 'text/html',
         ],
         'body' => $c->view('NoWrapper')->render( $c, 'login/email_confirm.tt' ),
     );
@@ -243,20 +252,36 @@ sub register: Local{
     $c->res->redirect($ref);
 }
 
-sub test: Local{
-    my ($self, $c) = @_;
+=head2 confirm: Local
 
-    $c->email(
-        'header' => [
-            'From'    => 'noreply@thisaintnews.com',
-            'To'      => 'shit@thisaintnews.com',
-            'Subject' => 'Confirm email address',
-            'Content-Type' => 'text/html',
-        ],
-        'body' => $c->view('NoWrapper')->render( $c, 'login/email_confirm.tt' ),
-    );
-    $c->res->output('email sent');
+B<@args = (user_id, token)>
+
+=over
+
+registers a user
+
+=back
+
+=cut
+sub confirm: Local{
+    my ( $self, $c, $user_id, $token ) = @_;
+
+    if ( $c->model('MySQL::UserTokens')->compare($user_id, $token, 'reg') ){
+        my $user = $c->model('MySQL::User')->find({
+            'user_id' => $user_id,
+        });
+        if ( $user ){
+            $user->confirm;
+            $c->flash->{'message'} = 'Your email has been confirmed, please login';
+        } else {
+            $c->flash->{'message'} = 'Shit el problemo';
+        }
+    } else {
+        $c->flash->{'message'} = 'There has been a problem';
+    }
+    $c->res->redirect('/login');
 }
+
 =head1 AUTHOR
 
 A clever guy

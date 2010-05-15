@@ -76,4 +76,23 @@ __PACKAGE__->has_many(
   { "foreign.user_id" => "self.user_id" },
 );
 
+=head2 confirm
+
+B<@args = (undef)
+
+=over
+
+confirms a users token
+
+=back
+
+=cut
+sub confirm{
+    my ( $self ) = @_;
+
+    $self->update({
+        'confirmed' => 'Y',
+    });
+}
+
 1;

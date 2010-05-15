@@ -3,6 +3,8 @@
     "default_view": "TT",
     "encoding": "UTF-8",
 
+    "using_frontend_proxy": 1,
+
     "static_path": "/static",
     "avatar_path": "/static/user/avatar",
     "pic_path": "/static/user/pics",
