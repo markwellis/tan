@@ -16,7 +16,7 @@ window.addEvent('domready', function() {
                 } else {
                     TAN.login();
                 }
-            },
+            }
         }).get({
             'json': 1
         });

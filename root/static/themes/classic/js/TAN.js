@@ -4,13 +4,53 @@ var TAN_class = new Class({
             The TAN class is only called on domready, so 
             we don't need to wrap anything
         */
-        this.roar = new Roar({
-            position: 'upperRight',
-            duration: 5000
+        this.overlay = new Element('div', {
+            "styles": {
+                "position": "fixed",
+                "left": "0px",
+                "right": "0px",
+                "top": "0px",
+                "bottom": "0px",
+                "background-color": "#000",
+                "opacity": 0.7,
+                "display": "none",
+                "visibility": "hidden"
+            },
+            'events': {
+                "click": function(){
+                    this.set('styles', {
+                        "display": "none",
+                        "visibility": "hidden"
+                    });
+                }
+            }
         });
+
+        this.box = new Element('div', {
+            "html": "wibble",
+            "styles": {
+                "position": "relative",
+                "top": "40%",
+                "text-align": "center",
+                "margin": "0px auto",
+                "width": "450px",
+                "padding": "5px",
+                "border": "1px solid #000",
+                "background-color": "#fff",
+                "font-size": "1.2em"
+            }
+        });
+
+        this.overlay.grab(this.box);
+
+        $$("body").grab(this.overlay);
     },
     alert: function (log_text){
-        this.roar.alert('Alert', log_text);
+        this.box.set('html', log_text);
+        this.overlay.set('styles', {
+            "display": "block",
+            "visibility": "visible"
+        });
     },
     login: function (message){
         // do some login logic here...
