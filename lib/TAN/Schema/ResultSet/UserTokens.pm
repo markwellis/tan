@@ -33,68 +33,48 @@ sub compare{
     
     return undef if ( !$user_id || !$token || !$type );
 
-    return $self->search({
+    my $token_rs = $self->search({
         'user_id' => $user_id,
         'token' => $token,
         'type' => $type,
-    })->count || undef;
+        'expires' => {
+            '>' => \'NOW()',
+        },
+    });
+
+    #clean expired tokens
+    $self->clean();
+
+    if ( $token_rs->count ){
+        #delete token
+        $token_rs->delete;
+
+        return 1;
+    } else {
+        return undef;
+    }
 }
 
-=head2 email_exists
+=head2 clean
 
-B<@args = ($email)
+B<@args = (undef)
 
 =over
 
-returns true if the email exists
+deletes expired tokens
 
 =back
 
 =cut
 
-sub email_exists{
-    my ( $self, $email ) = @_;
+sub clean{
+    my ( $self ) = @_;
     
     return $self->search({
-        'email' => {
-            'like' => $email
+        'expires' => {
+            '<' => \'NOW()',
         },
-    })->count || undef;
-}
-
-=head2 new_user
-
-B<@args = ($username, $password, $email)
-
-=over
-
-registers a new user
-
-=back
-
-=cut
-
-sub new_user{
-    my ( $self, $username, $password, $email ) = @_;
-    
-# create new user
-# create tokens
-# return new user
-    my $new_user = $self->create({
-        'username' => $username,
-        'join_date' => \'NOW()',
-        'email' => $email,
-        'password' => Digest::SHA::sha512_hex($password),
-    });
-
-    my $token = Digest::SHA::sha512_hex( '4234fdgg$£dsfsdf$$"%£SDFsdfxcv@@;~/.' . ( rand(30) * time() ) );
-    $new_user->tokens->create({
-        'token' => $token,
-        'type' => 'reg',
-        'expires' => \'DATE_ADD(NOW(), INTERVAL 5 DAY)',
-    });
-
-    return $new_user;
+    })->delete;
 }
 
 =head1 AUTHOR
