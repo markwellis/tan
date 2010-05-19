@@ -7,7 +7,7 @@ css_includes.push('login');
         <h2>Forgotten details</h2>
         <img class="newsImg" src="[%- theme_settings.image_path -%]/forgot_password.jpg" alt="Forgot" />
         <p>
-            Please enter your email address, you will be mailed your information
+            Please enter your email address, you will be emailed your information
         </p>
         <form method="post" action="">
             <fieldset>
