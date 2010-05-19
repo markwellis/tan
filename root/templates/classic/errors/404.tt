@@ -1,5 +1,10 @@
+[%
+css_includes.push('errors');
+%]
+
 <ul class="TAN-inside">
-    <li>
-       <h2>404 Page not found</h2> 
+    <li class="TAN-news">
+        <h2 class="TAN-type-link">Page Not found (404)</h2> 
+        <img src="[% theme_settings.image_path %]/mokey_facepalm.jpg" width="279" height="412" alt="Monkey" />
     </li>
 </ul>
