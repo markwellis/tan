@@ -17,7 +17,7 @@ css_includes.push('login');
                         <input id='password' name='password' type='password' class='text_input'/>
                     </li>
                     <li>
-                        <a href='/forgot_mail/'>Forgot username/password?</a>
+                        <a href='/login/forgot/'>Forgot username/password?</a>
                     </li>
                     <li>
                         <input type='submit' value='Login' />
