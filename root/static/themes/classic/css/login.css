@@ -22,3 +22,7 @@ label{
 .TAN-news h2{
     margin:0px 0px 10px 0px;
 }
+
+.TAN-news > form > fieldset > ul{
+    padding-left:0px;
+}
