@@ -11,8 +11,7 @@ var TAN_class = new Class({
                 "right": "0px",
                 "top": "0px",
                 "bottom": "0px",
-                "background-color": "#000",
-                "opacity": 0.7,
+                "background": "transparent url('/static/images/overlay.png') repeat left top",
                 "display": "none",
                 "visibility": "hidden"
             },
@@ -27,7 +26,6 @@ var TAN_class = new Class({
         });
 
         this.box = new Element('div', {
-            "html": "wibble",
             "styles": {
                 "position": "relative",
                 "top": "40%",
