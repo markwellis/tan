@@ -54,6 +54,33 @@ sub index: Path Args(0){
     $c->stash->{'template'} = 'login/forgot/index.tt';
 }
 
+=head2 step1: Path: Args(0)
+
+B<@args = undef>
+
+=over
+
+finds user by email, then emails them a reset token
+
+=back
+
+=cut
+sub step1: Local{
+    my ( $self, $c ) = @_;
+   
+    if ( $c->req->method ne 'POST' || !defined($c->req->param('email')) ){
+        $c->res->redirect('/login/forgot');
+        $c->detach();
+    }
+
+    my $user = $c->model('MySQL::User')->by_email($c->req->param('email'));
+    if ( !defined($user) ){
+        $c->flash->{'message'} = 'Not a valid email';
+        $c->res->redirect('/login/forgot');
+        $c->detach();
+    }
+}
+
 =head1 AUTHOR
 
 A clever guy

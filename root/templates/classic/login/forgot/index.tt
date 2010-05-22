@@ -1,6 +1,6 @@
-[%
+[%-
 css_includes.push('login');
-%]
+-%]
 
 <ul class="TAN-inside">
     <li class="TAN-news">
@@ -9,7 +9,7 @@ css_includes.push('login');
         <p>
             Please enter your email address, you will be emailed your information
         </p>
-        <form method="post" action="">
+        <form method="post" action="/login/forgot/step1">
             <fieldset>
                 <ul>
                     <li>

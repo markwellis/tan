@@ -63,6 +63,26 @@ sub email_exists{
     })->count || undef;
 }
 
+=head2 by_email
+
+B<@args = ($email)
+
+=over
+
+returns a user by email
+
+=back
+
+=cut
+
+sub by_email{
+    my ( $self, $email ) = @_;
+    
+    return $self->find({
+        'email' => $email,
+    }) || undef;
+}
+
 =head2 new_user
 
 B<@args = ($username, $password, $email)
