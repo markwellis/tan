@@ -112,6 +112,33 @@ sub new_user{
     return $new_user;
 }
 
+=head2 change_password
+
+B<@args = ($user_id, $password)
+
+=over
+
+changes a users password
+
+=back
+
+=cut
+sub change_password{
+    my ( $self, $user_id, $password ) = @_;
+
+    my $user = $self->find({
+        'user_id' => $user_id,
+    });
+
+    return undef if ( !defined($user) );
+
+    $user->update({
+        'password' => Digest::SHA::sha512_hex($password),
+    });
+
+    return 1;
+}
+
 =head1 AUTHOR
 
 A clever guy
