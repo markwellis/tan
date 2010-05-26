@@ -54,7 +54,7 @@ sub index: Path Args(0){
     $c->stash->{'template'} = 'login/forgot/index.tt';
 }
 
-=head2 step1: Path: Args(0)
+=head2 step1: Local
 
 B<@args = undef>
 
@@ -68,17 +68,91 @@ finds user by email, then emails them a reset token
 sub step1: Local{
     my ( $self, $c ) = @_;
    
-    if ( $c->req->method ne 'POST' || !defined($c->req->param('email')) ){
+    my $email = $c->req->param('email');
+    if ( $c->req->method ne 'POST' || !defined($email) ){
         $c->res->redirect('/login/forgot');
         $c->detach();
     }
 
-    my $user = $c->model('MySQL::User')->by_email($c->req->param('email'));
+    my $user = $c->model('MySQL::User')->by_email($email);
     if ( !defined($user) ){
         $c->flash->{'message'} = 'Not a valid email';
         $c->res->redirect('/login/forgot');
         $c->detach();
     }
+
+#create user token
+#send email
+    $c->stash->{'user'} = $user;
+    $c->stash->{'token'} = $user->tokens->new_token($user->id, 'forgot');
+
+    $c->email(
+        'header' => [
+            'From'    => 'noreply@thisaintnews.com',
+            'To'      => $email,
+            'Subject' => 'User Details',
+            'Content-Type' => 'text/html',
+        ],
+        'body' => $c->view('NoWrapper')->render( $c, 'login/forgot/email.tt' ),
+    );
+
+#add a message and redirect user somewhere...
+    $c->flash->{'message'} = 'Email sent';
+    $c->res->redirect('/');
+    $c->detach();
+}
+
+=head2 step2: Local Args(2)
+
+B<@args = $user_id, $token>
+
+=over
+
+lets a user change their password
+
+=back
+
+=cut
+sub step2: Local Args(2){
+    my ( $self, $c, $user_id, $token ) = @_;
+
+    my $token_rs = $c->model('MySQL::UserTokens')->compare($user_id, $token, 'forgot', 1);
+
+    if ( !defined($token_rs) ){
+    #token doesn't match
+        $c->flash->{'message'} = 'There has been a problem';
+        $c->res->redirect('/');
+        $c->detach();
+    }
+
+    if ( $c->req->method eq 'POST' ){
+        my $password0 = $c->req->param('password0');
+        my $password1 = $c->req->param('password1');
+        if ( $password0 eq $password1 ){
+            if ( length($password0) > 5 ){
+                #good stuff
+                $c->model('MySQL::User')->change_password($user_id, $password0);
+                #delete the token since we're done with it now
+                $token_rs->delete;
+
+                $c->flash->{'message'} = 'Your password has been changed';
+                $c->res->redirect('/login/');
+                $c->detach();
+            } else {
+                #why stash not flash?
+                # coz flash is transfered to stash in $c->check_cache, 
+                # but we don't hit that here or below coz we jump into the render
+                $c->stash->{'message'} = 'Password needs to be at least 6 letters';
+            }
+        } else {
+            #see note above
+            $c->stash->{'message'} = 'Passwords do not match';
+        }
+    }
+
+    $c->stash->{'token'} = $token;
+    $c->stash->{'user_id'} = $user_id;
+    $c->stash->{'template'} = 'login/forgot/step2.tt';
 }
 
 =head1 AUTHOR

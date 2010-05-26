@@ -1,0 +1,31 @@
+[%-
+css_includes.push('login');
+-%]
+
+<ul class="TAN-inside">
+    <li class="TAN-news">
+        <h2>Reset Password</h2>
+        <img class="newsImg" src="[%- theme_settings.image_path -%]/forgot_password.jpg" alt="Forgot" />
+        <p>
+            Enter your new password and click confirm
+        </p>
+        <form method="post" action="/login/forgot/step2/[% user_id %]/[% token %]">
+            <fieldset>
+                <ul>
+                    <li>
+                        <label for="password0">Password</label>
+                        <input id="password0" name="password0" type="password" />
+                    </li>
+                    <li>
+                        <label for="password1">Password again</label>
+                        <input id="password1" name="password1" type="password" />
+                    </li>
+
+                    <li>
+                        <input type="submit" value="Confirm" />
+                    </li>
+                </ul>
+            </fieldset>
+        </form>
+    </li>
+</ul>

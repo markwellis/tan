@@ -5,7 +5,6 @@ use warnings;
 use base 'DBIx::Class::ResultSet';
 
 use Digest::SHA;
-use Time::HiRes qw/time/;
 
 =head1 NAME
 
@@ -108,13 +107,7 @@ sub new_user{
     });
 
     return undef if ( !defined($new_user) );
-    my $token = Digest::SHA::sha512_hex( '4234fdgg$£dsfsdf$$"%£SDFsdfxcv@@;~/.' . ( rand(30) * time() ) );
-    $new_user->tokens->create({
-        'token' => $token,
-        'type' => 'reg',
-        'user_id' => $new_user->id,
-        'expires' => \'DATE_ADD(NOW(), INTERVAL 5 DAY)',
-    });
+    my $token = $new_user->tokens->new_token($new_user->id, 'reg');
 
     return $new_user;
 }
