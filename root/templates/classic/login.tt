@@ -30,7 +30,7 @@ css_includes.push("login");
     <li class="TAN-news TAN-news-alternate">
         <h2>Register</h2>
         <img class="newsImg" src="[%- theme_settings.image_path -%]/register.png" alt="Register" />
-        <form action="/login/register" id="regform" method="post">
+        <form action="/login/registration" id="regform" method="post">
             <fieldset>
                 <ul>
                     <li>
