@@ -126,6 +126,7 @@ my $error_codes = {
     'invalid_url' => 'Url is invalid',
     'already_submitted' => 'This link has already been submitted',
     'no_image' => "Please select an image",
+    'too_large' => "Filesize exceeded",
 };
 sub validate: PathPart('') Chained('location') CaptureArgs(0){
     my ( $self, $c ) = @_;
@@ -274,7 +275,7 @@ sub validate_picture: Private{
         my $valid_url = Data::Validate::URI->new();
         if ( !defined($valid_url->is_web_uri($url)) ){
         #invalid url
-            $c->stash->{'error'} = $error_codes->{'invalid_url'};                
+            $c->stash->{'error'} = $error_codes->{'invalid_url'};
         } else {
         #valid url, fetch and validate
             $fetcher = $c->model('FetchImage');
@@ -285,14 +286,18 @@ sub validate_picture: Private{
         }
     } elsif (my $upload = $c->request->upload('pic')) {
     #upload
-        $fileinfo = $c->model('ValidateImage')->is_image($upload->tempname);
-
-        if( $fileinfo ){
-        #is an image
-            $fileinfo->{'filename'} = $c->path_to(@path) . '.' . $fileinfo->{'file_ext'};
-            $upload->copy_to($fileinfo->{'filename'});
+        if ( $upload->size > $c->config->{'Model::FetchImage'}->{'max_filesize'} ){
+            $c->stash->{'error'} = $error_codes->{'too_large'};
         } else {
-            $c->stash->{'error'} = 'Invalid filetype';
+            $fileinfo = $c->model('ValidateImage')->is_image($upload->tempname);
+
+            if( $fileinfo ){
+            #is an image
+                $fileinfo->{'filename'} = $c->path_to(@path) . '.' . $fileinfo->{'file_ext'};
+                $upload->copy_to($fileinfo->{'filename'});
+            } else {
+                $c->stash->{'error'} = 'Invalid filetype';
+            }
         }
     } else {
         $c->stash->{'error'} = 'No image';

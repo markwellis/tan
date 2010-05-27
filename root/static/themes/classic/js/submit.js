@@ -5,8 +5,8 @@ window.addEvent('domready', function() {
 				function (el){
 					switch (el.id){
 						case 'title':
-							if (el.value.length < 5){
-	            				alert("Title must be longer than 5 letters");
+							if (el.value.length < 3){
+	            				alert("Title must be longer than 3 letters");
 	            				e.stop();
 							}
 							break;
