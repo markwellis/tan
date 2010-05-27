@@ -75,7 +75,6 @@ sub location: PathPart('submit') Chained('/') CaptureArgs(1){
     $c->stash->{'location'} = $location;
 }
 
-
 =head2 index: PathPart('') Chained('location') Args(0) 
 
 B<@args = undef>

@@ -48,7 +48,12 @@ PROCESS 'lib/plus_minus_box.tt';
     <li>
         <a href="[% comment_url %]" class="TAN-news-comment">
             <img alt="" class="TAN-news-comment-image" src="/static/images/comment.png" /> [%- object.get_column('comments') %]
-        </a> | [%- object.get_column('views') -%] views
+        </a> | [%- object.get_column('views') -%] views 
+        [%- IF c.user_exists && (c.user.admin || c.user.id == object.user_id) -%]
+            | <a href="/submit/[% object.type %]/edit/[% object.id %]" class="TAN-news-comment">
+                Edit
+            </a>
+        [%- END -%]
     </li>
 </ul>
 <p>

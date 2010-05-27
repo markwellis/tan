@@ -2,7 +2,7 @@
     js_includes.push('tag-thumbs');
 END -%]
 <label for="tags">Tags</label>
-<input type="text" name="tags" id="tags" class="text_input full_width" value="[% IF details.tags.defined; details.tags _ '" disabled="disabled'; END %]"/>
+<input type="text" name="tags" id="tags" class="text_input full_width" value="[% FOREACH tag=object.tags; IF loop.count > 1; " "; END; tag.tag; END %]"/>
 [% IF (location != 'picture') %]
     <a href="#" class="refresh_thumbs right">Refresh</a>
 [% END %]
@@ -14,7 +14,7 @@ END -%]
         <li>car mini cooper classic</li>
     </ul>
 </div>
-[% IF details.defined %]
+[% IF object.defined %]
     <script type="text/javascript">
     get_thumbs( $('cat').value );
     </script>

@@ -1,6 +1,7 @@
 <form action="post" enctype="multipart/form-data" id="submit_form" method="post">
     <fieldset>
-        <input type="hidden" name="MAX_FILE_SIZE" value="2000000" />
+        [% fs_key = "Model::FetchImage" %]
+        <input type="hidden" name="MAX_FILE_SIZE" value="[% c.config.$fs_key.max_filesize %]" />
         <ul>
             <li>
                 <label for="title">Title</label>

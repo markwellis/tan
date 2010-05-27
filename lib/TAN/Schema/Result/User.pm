@@ -95,4 +95,27 @@ sub confirm{
     });
 }
 
+=head2 admin
+
+B<@args = (undef)
+
+=over
+
+returns true if the user is an admin (aka me)
+
+=back
+
+=cut
+sub admin{
+    my ( $self ) = @_;
+
+    if ( 
+        ($self->username eq 'mrbig4545') 
+        && ($self->id == 1)
+    ){
+        return 1;
+    }
+    return undef;
+}
+
 1;
