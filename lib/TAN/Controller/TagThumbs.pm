@@ -52,11 +52,19 @@ sub index :Path: Args(1) {
 # probably a better way to do this
     my @found;
     foreach my $tag ( @split_tags ){
-        my $found_tags = $c->model('MySQL::Tags')->find({
-           'tag' => $tag,
-        });
+        if ( $tag =~ m/^\!(\d+)$/ ){
+        #picture_id
+            push(@found, {
+                'nsfw' => 'N',
+                'object_id' => $1,
+            });
+        } else {
+            my $found_tags = $c->model('MySQL::Tags')->find({
+               'tag' => $tag,
+            });
     
-        if ( defined($found_tags) ){
+            next if ( !defined($found_tags) );
+
             my $res = $found_tags->tag_objects->search_related('object', {
                 'type' => 'picture',
                 'nsfw' => 'N',
@@ -70,7 +78,7 @@ sub index :Path: Args(1) {
     }
 
     my $random = $c->req->param('random');
-    $random =~ s/$int//g;
+    $random =~ s/$int//g if ( defined($random) );
 
     if ( defined($random) ){
         #little security
