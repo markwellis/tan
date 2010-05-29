@@ -6,8 +6,15 @@ edheight = editor.height.defined ? editor.height : '300px';
 edwidth = editor.width.defined ? editor.width : '100%';
 edname = editor.name.defined ? editor.name : 'editor';
 -%]
+
+
+<textarea class="[% edname %]" style="height:[% edheight %];width:[% edwidth %]" id="[% edname %]" name="[% edname %]" rows="80" cols="20">
+[%- IF editor.value.defined; editor.value | html; END -%]
+</textarea>
+
 <script type="text/javascript">
 //<![CDATA[
+    var tiny_mce_config;
     tiny_mce_config['width'] = "[% edwidth %]";
     tiny_mce_config['height'] = "[% edheight %]";
     tiny_mce_config['editor_selector'] = "[% edname %]";
@@ -17,7 +24,3 @@ edname = editor.name.defined ? editor.name : 'editor';
 	tinyMCE.init( tiny_mce_config );
 //]]>
 </script>
-
-<textarea class="[% edname %]" style="height:[% edheight %];width:[% edwidth %]" id="[% edname %]" name="[% edname %]" rows="80" cols="20">
-[%- IF editor.value.defined; editor.value | html; END -%]
-</textarea>
