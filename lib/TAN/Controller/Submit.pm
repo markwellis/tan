@@ -116,7 +116,7 @@ my $title_max = 100;
 my $blog_min = 20;
 
 my $error_codes = {
-    'blank_title' => 'Title cannont be blank',
+    'blank_title' => 'Title cannot be blank',
     'blank_desc' => 'Description cannot be blank',
     'short_title' => "Title must be over ${title_min} characters",
     'short_desc' => "Description must be over ${desc_min} characters",
@@ -206,7 +206,7 @@ sub validate_link: Private{
     if ($link->count){
     #already submitted
         $c->stash->{'error'} = $error_codes->{'already_submitted'};
-        $c->stash->{'link_id'} = $link->first->link_id;
+        $c->stash->{'link'} = $link->first;
     }
 }
 
@@ -299,7 +299,10 @@ sub validate_picture: Private{
             }
         }
     } else {
-        $c->stash->{'error'} = 'No image';
+        #not edit mode
+        if ( !defined($c->stash->{'object'}) ){
+            $c->stash->{'error'} = 'No image';
+        }
     }
 
     if ( $fileinfo ) {
@@ -325,8 +328,10 @@ sub post: PathPart('post') Chained('validate') Args(0){
 
     if ( $c->stash->{'error'} ){
         $c->flash->{'message'} = $c->stash->{'error'};
-        if ( defined($c->stash->{'link_id'}) ){
+        if ( defined($c->stash->{'link'}) ){
             #redirect to the object_url
+            $c->res->redirect( "/view/link/" . $c->stash->{'link'}->id . "/" . $c->stash->{'link'}->object->url_title );
+            $c->detach();
         }
         $c->res->redirect('/submit/' . $c->stash->{'location'} . '/');
         $c->detach();

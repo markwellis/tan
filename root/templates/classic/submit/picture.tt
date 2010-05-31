@@ -7,13 +7,13 @@
                 <label for="title">Title</label>
             </li>
             <li>
-                <input type="text" name="title" id="title" class="text_input full_width" value="[% IF details.title; details.title | html; END %]"/>
+                <input type="text" name="title" id="title" class="text_input full_width" value="[% object.$location.title | html %]"/>
             </li>
 
-            [% IF details.defined;
-                md = object.$type.picture_id - (object.$type.picture_id % 1000) %]
+            [% IF object.defined;
+                md = object.$location.picture_id - (object.$location.picture_id % 1000) %]
                 <li>
-                    <img src="/thumb/[% md %]/[% details.picture_id %]/600" style="margin:auto;display:block;" alt="image" />
+                    <img alt="[% object.$location.picture_id %]" src="[% c.config.thumb_path _ '/' _ md _ '/' _ object.$location.picture_id %]/600"/>
                 </li>
             [% ELSE %]
                 <li>
@@ -33,13 +33,13 @@
                 <label for="pdescription">Description (optional)</label>
             </li>
             <li>
-                <textarea cols="1" rows="5" name="pdescription" id="pdescription" class="text_input full_width">[% IF details.description; details.description | html; END %]</textarea>
+                <textarea cols="1" rows="5" name="pdescription" id="pdescription" class="text_input full_width">[% object.$location.description | html %]</textarea>
             </li>
             <li>
                 <label for="nsfw">Not Safe for Work?</label>
             </li>
             <li>
-                <input type="checkbox" name="nsfw" id="nsfw" [% IF details.NSFW == 'Y'; 'checked="checked"'; END %]/>
+                <input type="checkbox" name="nsfw" id="nsfw" [% IF object.nsfw == 'Y'; 'checked="checked"'; END %]/>
             </li>
         </ul>
         [% PROCESS 'lib/tag_thumb_browser.tt' %]

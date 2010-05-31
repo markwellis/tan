@@ -16,17 +16,6 @@
     </head>
     <body>
         [%- PROCESS 'lib/js_includes.tt' -%]
-        <script type="text/javascript">
-        //<![CDATA[
-            [%- IF message.defined %]
-            window.addEvent('domready', function(){
-                TAN.alert("[%- message -%]");
-            });
-            [%- END -%]
-
-            var mibbit_nick = '[% IF c.user; c.user.username; ELSE %]n00b[% END %]';
-        //]]>
-        </script>
         <div class="TAN-header">
             <h1 class="TAN-logo">
                 <a title="This Aint News" href="/">This Aint News</a>
@@ -78,6 +67,22 @@
                 [% PROCESS 'lib/ad.tt' ad = 'right1' %]
                 [% PROCESS 'lib/ad.tt' ad = 'right2' %]
             </div>
+            <script type="text/javascript">
+            //<![CDATA[
+                [%- IF message.defined %]
+                window.addEvent('domready', function(){
+                    TAN.alert("[%- message -%]");
+                });
+                [%- END -%]
+
+                var mibbit_nick = '[% IF c.user; c.user.username; ELSE %]n00b[% END %]';
+            //]]>
+            </script>
+            [%- IF message.defined %]
+                <noscript>
+                    <h1>[%- message -%]</h1>
+                </noscript>
+            [%- END -%]
             [% content %]
         </div>
         <div id="TAN-bottom">

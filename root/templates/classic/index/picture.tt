@@ -20,6 +20,12 @@ url = object.url;
         <li>
             [% object.get_column('views') %] views 
         </li>
+
+        [%- IF c.user_exists && (c.user.admin || c.user.id == object.user_id) -%]
+            <li>
+                <a href="/submit/[% object.type %]/edit/[% object.id %]/" class="TAN-news-comment">Edit</a>
+            </li>
+        [%- END -%]
         <li class="TAN-menu-last">
             [% object.picture.x %]x[% object.picture.y %]
         </li>

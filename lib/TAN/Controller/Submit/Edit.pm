@@ -3,6 +3,7 @@ use strict;
 use warnings;
 
 use parent 'Catalyst::Controller';
+my $tag_reg = qr/[^a-zA-Z0-9]/;
 
 =head1 NAME
 
@@ -61,9 +62,9 @@ sub validate_user: PathPart('edit') Chained('/submit/location') CaptureArgs(1){
     }
 }
 
-=head2 index: PathPart('') Chained('location') Args(1) 
+=head2 index: PathPart('') Chained('location') Args() 
 
-B<@args = $object_id>
+B<@args = undef>
 
 =over
 
@@ -76,6 +77,60 @@ sub index: PathPart('') Chained('validate_user') Args() {
     my ( $self, $c ) = @_;
 
     $c->stash->{'template'} = 'submit.tt';
+}
+
+=head2 post: PathPart('post') Chained('validate_user') Args(0) 
+
+B<@args = undef>
+
+=over
+
+edits something
+
+=back
+
+=cut
+sub post: PathPart('post') Chained('validate_user') Args(0) {
+    my ( $self, $c ) = @_;
+
+    #can't chain coz of some bullshit
+    $c->forward('/submit/validate');
+    if ( $c->stash->{'error'} ){
+        if ( !defined($c->stash->{'link'}) ){
+            $c->flash->{'message'} = $c->stash->{'error'};
+            $c->res->redirect('/submit/' . $c->stash->{'location'} . '/edit/' . $c->stash->{'object'}->id . '/');
+            $c->detach();
+        }
+    }
+
+    if ( $c->stash->{'location'} eq 'link' ){
+        $c->stash->{"object"}->link->update({
+            'title' => $c->req->param('title'),
+            'description' => $c->req->param('description'),
+            'picture_id' => $c->req->param('cat'),
+            'url' => $c->req->param('url'),
+        });
+    } elsif ( $c->stash->{'location'} eq 'blog' ){
+        $c->stash->{"object"}->blog->update({
+            'title' => $c->req->param('title'),
+            'description' => $c->req->param('description'),
+            'picture_id' => $c->req->param('cat'),
+            'details' => $c->req->param('blogmain'),
+        });
+    } elsif ( $c->stash->{'location'} eq 'picture' ){
+        $c->stash->{"object"}->picture->update({
+            'title' => $c->req->param('title'),
+            'description' => $c->req->param('pdescription'),
+        });
+    }
+
+    #seems not very nice
+    $c->stash->{'object'}->tag_objects->delete();
+    $c->forward('/submit/add_tags', [$c->stash->{'object'}]);
+
+    $c->flash->{'message'} = 'Edit complete';
+    $c->res->redirect( "/view/" . $c->stash->{'location'} . "/" . $c->stash->{'object'}->id . "/" . $c->stash->{'object'}->url_title );
+    $c->detach();
 }
 
 =head1 AUTHOR

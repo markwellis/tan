@@ -50,7 +50,7 @@ PROCESS 'lib/plus_minus_box.tt';
             <img alt="" class="TAN-news-comment-image" src="/static/images/comment.png" /> [%- object.get_column('comments') %]
         </a> | [%- object.get_column('views') -%] views 
         [%- IF c.user_exists && (c.user.admin || c.user.id == object.user_id) -%]
-            | <a href="/submit/[% object.type %]/edit/[% object.id %]" class="TAN-news-comment">
+            | <a href="/submit/[% object.type %]/edit/[% object.id %]/" class="TAN-news-comment">
                 Edit
             </a>
         [%- END -%]
@@ -69,8 +69,8 @@ PROCESS 'lib/plus_minus_box.tt';
         </span>
     [%- IF type == 'blog' -%]</p>[% END -%]
     [%- IF type == 'link';
-        embed_code = object.$type.url | embed_url;
-        IF embed_code.defined() %]
+        embed_code = object.$type.url | embed_url; 
+        IF (embed_code) %]
             <div class="TAN-video">
                 [% embed_code %]
             </div>
