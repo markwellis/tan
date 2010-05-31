@@ -96,11 +96,9 @@ sub post: PathPart('post') Chained('validate_user') Args(0) {
     #can't chain coz of some bullshit
     $c->forward('/submit/validate');
     if ( $c->stash->{'error'} ){
-        if ( !defined($c->stash->{'link'}) ){
-            $c->flash->{'message'} = $c->stash->{'error'};
-            $c->res->redirect('/submit/' . $c->stash->{'location'} . '/edit/' . $c->stash->{'object'}->id . '/');
-            $c->detach();
-        }
+        $c->flash->{'message'} = $c->stash->{'error'};
+        $c->res->redirect('/submit/' . $c->stash->{'location'} . '/edit/' . $c->stash->{'object'}->id . '/');
+        $c->detach();
     }
 
     if ( $c->stash->{'location'} eq 'link' ){

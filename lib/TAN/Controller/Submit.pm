@@ -199,14 +199,17 @@ sub validate_link: Private{
         $c->stash->{'error'} = $error_codes->{'invalid_url'};                
     }
 
-    my $link = $c->model('MySQL::Link')->search({
-        'url' => $url,
-    });
+    #edit mode
+    if ( !defined($c->stash->{'object'}) ){
+        my $link = $c->model('MySQL::Link')->search({
+            'url' => $url,
+        });
 
-    if ($link->count){
-    #already submitted
-        $c->stash->{'error'} = $error_codes->{'already_submitted'};
-        $c->stash->{'link'} = $link->first;
+        if ($link->count){
+        #already submitted
+            $c->stash->{'error'} = $error_codes->{'already_submitted'};
+            $c->stash->{'link'} = $link->first;
+        }
     }
 }
 
