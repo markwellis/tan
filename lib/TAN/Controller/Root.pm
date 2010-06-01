@@ -104,6 +104,23 @@ sub default: Path {
     $c->response->status(404);
 }
 
+=head2 error404: Local 
+
+B<@args = undef>
+
+=over
+
+loads error 404 template
+
+=back
+
+=cut
+sub error404: Local{
+    my ( $self, $c ) = @_;
+
+    $c->forward('/default');
+}
+
 =head2 render: ActionClass('RenderView') 
 
 B<@args = undef>
