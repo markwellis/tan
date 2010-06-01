@@ -57,7 +57,7 @@ sub recent_comments {
 
 =head2 create_comment
 
-B<@args = ($object_id, $user_id, $comment, $rev = 0)>
+B<@args = ($object_id, $user_id, $comment)>
 
 =over
 
@@ -67,7 +67,7 @@ creates a comment
 
 =cut
 sub create_comment {
-    my ( $self, $object_id, $user_id, $comment, $rev ) = @_;
+    my ( $self, $object_id, $user_id, $comment ) = @_;
 
     my $comment_no = $self->search({
         'user_id' => $user_id,
@@ -78,7 +78,6 @@ sub create_comment {
         'comment' => $comment,
         'created' => \'NOW()',
         'object_id' => $object_id,
-        'rev' => $rev || 0,
         'number' => $comment_no || 1,
     });
 

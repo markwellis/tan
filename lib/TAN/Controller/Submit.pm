@@ -381,7 +381,6 @@ sub submit_link: Private{
         'promoted' => 0,
         'user_id' => $c->user->user_id,
         'nsfw' => 'N',
-        'rev' => 0,
         'link' => {
             'title' => $c->req->param('title'),
             'description' => $c->req->param('description'),
@@ -423,7 +422,6 @@ sub submit_blog: Private{
         'promoted' => 0,
         'user_id' => $c->user->user_id,
         'nsfw' => 'N',
-        'rev' => 0,
         'blog' => {
             'title' => $c->req->param('title'),
             'description' => $c->req->param('description'),
@@ -470,7 +468,6 @@ sub submit_picture: Private{
         'promoted' => 0,
         'user_id' => $c->user->user_id,
         'nsfw' => defined($c->req->param('nsfw')) ? 'Y' : 'N',
-        'rev' => 0,
         'picture' => {
             'title' => $c->req->param('title'),
             'description' => $c->req->param('pdescription') || '',
