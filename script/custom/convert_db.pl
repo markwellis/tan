@@ -201,11 +201,7 @@ print "converted " . $old_tags->count . " tags\n";
 #       objects
 #       user
 #       tags
-my $old_tagds = $olddb->resultset('TagDetails')->search({},{
-    'order_by' => {
-        '-desc' => 'td_id'
-    }
-});
+my $old_tagds = $olddb->resultset('TagDetails');
 while (my $old_tag = $old_tagds->next){
     my $newid;
     if ($old_tag->link_id > 0){
