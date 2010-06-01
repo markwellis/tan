@@ -27,7 +27,11 @@ my $old_avatar_path = '/mnt/stuff/images/old';
 my $new_avatar_path = '/mnt/stuff/images/avatar';
 
 #USERS
-my $old_users = $olddb->resultset('UserDetails');
+my $old_users = $olddb->resultset('UserDetails')->search({},{
+    'order_by' => {
+        '-desc' => 'user_id'
+    }
+});
 while (my $old_user = $old_users->next){
     my $new_user = $newdb->resultset('User')->create({
         'username' => $old_user->username,
@@ -61,35 +65,37 @@ print "converted " . $old_users->count . " users\n";
 #PICTURES
 #   needs
 #       user
-my $old_pictures = $olddb->resultset('PictureDetails');
-while (my $old_picture = $old_pictures->next){
-    if ($user_lookup->{$old_picture->user_id}){
-        my $new_object = $newdb->resultset('Object')->create({
-            'type' => 'picture',
-            'created' => $old_picture->date,
-            'promoted' => $old_picture->promoted || 0,
-            'user_id' => $user_lookup->{$old_picture->user_id},
-            'nsfw' => $old_picture->nsfw,
-        });
-
-        my $old_lookup = $newdb->resultset('OldLookup')->create({
-            'new_id' => $new_object->id,
-            'old_id' => $old_picture->picture_id,
-            'type' => 'picture',
-        });
-        
-        $picture_lookup->{$old_picture->picture_id} = $new_object->id;
-
-        my $new_blog = $newdb->resultset('Picture')->create({
-            'picture_id' => $new_object->id,
-            'title' => strip_slashes(decode_entities($old_picture->title)),
-            'description' => strip_slashes(decode_entities($old_picture->description)),
-            'filename' => basename($old_picture->filename),
-            'x' => $old_picture->x,
-            'y' => $old_picture->y,
-            'size' => $old_picture->size,
-        });
+my $old_pictures = $olddb->resultset('PictureDetails')->search({},{
+    'order_by' => {
+        '-desc' => 'picture_id'
     }
+});
+while (my $old_picture = $old_pictures->next){
+    my $new_object = $newdb->resultset('Object')->create({
+        'type' => 'picture',
+        'created' => $old_picture->date,
+        'promoted' => $old_picture->promoted || 0,
+        'user_id' => $user_lookup->{$old_picture->user_id} || 1, #assign things from none users to me!
+        'nsfw' => $old_picture->nsfw,
+    });
+
+    my $old_lookup = $newdb->resultset('OldLookup')->create({
+        'new_id' => $new_object->id,
+        'old_id' => $old_picture->picture_id,
+        'type' => 'picture',
+    });
+    
+    $picture_lookup->{$old_picture->picture_id} = $new_object->id;
+
+    my $new_blog = $newdb->resultset('Picture')->create({
+        'picture_id' => $new_object->id,
+        'title' => strip_slashes(decode_entities($old_picture->title)),
+        'description' => strip_slashes(decode_entities($old_picture->description)),
+        'filename' => basename($old_picture->filename),
+        'x' => $old_picture->x,
+        'y' => $old_picture->y,
+        'size' => $old_picture->size,
+    });
 }
 print "converted " . $old_pictures->count . " pictures\n";
 
@@ -97,14 +103,17 @@ print "converted " . $old_pictures->count . " pictures\n";
 #   needs
 #       user
 #       picture
-my $old_blogs = $olddb->resultset('BlogDetails');
+my $old_blogs = $olddb->resultset('BlogDetails')->search({},{
+    'order_by' => {
+        '-desc' => 'blog_id'
+    }
+});
 while (my $old_blog = $old_blogs->next){
-    if ($user_lookup->{$old_blog->user_id}){
         my $new_object = $newdb->resultset('Object')->create({
             'type' => 'blog',
             'created' => $old_blog->date,
             'promoted' => $old_blog->promoted || 0,
-            'user_id' => $user_lookup->{$old_blog->user_id},
+            'user_id' => $user_lookup->{$old_blog->user_id} || 1, #assign things from none users to me!
             'nsfw' => 'N',
         });
 
@@ -116,14 +125,17 @@ while (my $old_blog = $old_blogs->next){
         
         $blog_lookup->{$old_blog->blog_id} = $new_object->id;
     
+        my $new_pic_id = $picture_lookup->{$old_blog->category};
+        if ( !$new_pic_id ){
+            warn 'blog: missing pic old_id: ' . $old_blog->category . ' :blog_id: ' . $old_blog->id;
+        }
         my $new_blog = $newdb->resultset('Blog')->create({
             'blog_id' => $new_object->id,
             'title' => strip_slashes(decode_entities($old_blog->title)),
             'description' => strip_slashes(decode_entities($old_blog->description)),
-            'picture_id' => $picture_lookup->{$old_blog->category} || 1,
+            'picture_id' => $new_pic_id || 1,
             'details' => strip_slashes($old_blog->details),
         });
-    }
 }
 print "converted " . $old_blogs->count . " blogs\n";
 
@@ -131,14 +143,18 @@ print "converted " . $old_blogs->count . " blogs\n";
 #   needs
 #       user
 #       picture
-my $old_links = $olddb->resultset('LinkDetails');
+my $old_links = $olddb->resultset('LinkDetails')->search({},{
+    'order_by' => {
+        '-desc' => 'link_id'
+    }
+});
 while (my $old_link = $old_links->next){
     if ($user_lookup->{$old_link->user_id}){
         my $new_object = $newdb->resultset('Object')->create({
             'type' => 'link',
             'created' => $old_link->date,
             'promoted' => $old_link->promoted || 0,
-            'user_id' => $user_lookup->{$old_link->user_id},
+            'user_id' => $user_lookup->{$old_link->user_id} || 1, #assign things from none users to me!
             'nsfw' => 'N',
         });
         
@@ -150,11 +166,15 @@ while (my $old_link = $old_links->next){
         
         $link_lookup->{$old_link->link_id} = $new_object->id;
     
+        my $new_pic_id = $picture_lookup->{$old_link->category};
+        if ( !$new_pic_id ){
+            warn 'link: missing pic old_id: ' . $old_link->category . ' :link_id: ' . $old_link->id;
+        }
         my $new_link = $newdb->resultset('Link')->create({
             'link_id' => $new_object->id,
             'title' => strip_slashes(decode_entities($old_link->title)),
             'description' => strip_slashes(decode_entities($old_link->description)),
-            'picture_id' => $picture_lookup->{$old_link->category} || 1,
+            'picture_id' => $new_pic_id || 1,
             'url' => strip_slashes(decode_entities($old_link->url)),
         });
     }
@@ -162,7 +182,11 @@ while (my $old_link = $old_links->next){
 print "converted " . $old_links->count . " links\n";
 
 #TAGS
-my $old_tags = $olddb->resultset('Tags');
+my $old_tags = $olddb->resultset('Tags')->search({},{
+    'order_by' => {
+        '-desc' => 'tag_id'
+    }
+});
 while (my $old_tag = $old_tags->next){
     my $new_tag = $newdb->resultset('Tags')->create({
         'tag' => $old_tag->tag,
@@ -177,26 +201,28 @@ print "converted " . $old_tags->count . " tags\n";
 #       objects
 #       user
 #       tags
-my $old_tagds = $olddb->resultset('TagDetails');
+my $old_tagds = $olddb->resultset('TagDetails')->search({},{
+    'order_by' => {
+        '-desc' => 'td_id'
+    }
+});
 while (my $old_tag = $old_tagds->next){
-    if ($user_lookup->{$old_tag->user_id}){
-        my $newid;
-        if ($old_tag->link_id > 0){
-            $newid = $link_lookup->{$old_tag->link_id};
-        } elsif ($old_tag->blog_id > 0){
-            $newid = $blog_lookup->{$old_tag->blog_id};
-        } elsif ($old_tag->picture_id > 0){
-            $newid = $picture_lookup->{$old_tag->picture_id};
-        }
-        
-        if ($newid){
-            my $new_tag = $newdb->resultset('TagObjects')->create({
-                'tag_id' => $tag_lookup->{$old_tag->tag_id},
-                'user_id' => $user_lookup->{$old_tag->user_id},
-                'object_id' => $newid,
-                'created' => $old_tag->date,
-            });
-        }
+    my $newid;
+    if ($old_tag->link_id > 0){
+        $newid = $link_lookup->{$old_tag->link_id};
+    } elsif ($old_tag->blog_id > 0){
+        $newid = $blog_lookup->{$old_tag->blog_id};
+    } elsif ($old_tag->picture_id > 0){
+        $newid = $picture_lookup->{$old_tag->picture_id};
+    }
+    
+    if ($newid){
+        my $new_tag = $newdb->resultset('TagObjects')->create({
+            'tag_id' => $tag_lookup->{$old_tag->tag_id},
+            'user_id' => $user_lookup->{$old_tag->user_id} || 1, #assign things from none users to me!
+            'object_id' => $newid,
+            'created' => $old_tag->date,
+        });
     }
 }
 print "converted " . $old_tagds->count . " tag details\n";
@@ -205,7 +231,11 @@ print "converted " . $old_tagds->count . " tag details\n";
 #   needs
 #       objects
 #       user
-my $old_comments = $olddb->resultset('Comments');
+my $old_comments = $olddb->resultset('Comments')->search({},{
+    'order_by' => {
+        '-desc' => 'comment_id'
+    }
+});
 while (my $old_comment = $old_comments->next){
     if ($user_lookup->{$old_comment->user_id}){
         my $newid;
@@ -242,7 +272,11 @@ print "converted " . $old_comments->count . " comments\n";
 #   needs
 #       objects
 #       user
-my $old_pluss = $olddb->resultset('Plus');
+my $old_pluss = $olddb->resultset('Plus')->search({},{
+    'order_by' => {
+        '-desc' => 'plus_id'
+    }
+});
 while (my $old_plus = $old_pluss->next){
     if ($user_lookup->{$old_plus->user_id}){
         my $newid;
@@ -268,7 +302,11 @@ print "converted " . $old_pluss->count . " plus\n";
 #   needs
 #       objects
 #       user
-my $old_minuss = $olddb->resultset('Minus');
+my $old_minuss = $olddb->resultset('Minus')->search({},{
+    'order_by' => {
+        '-desc' => 'minus_id'
+    }
+});
 while (my $old_plus = $old_minuss->next){
     if ($user_lookup->{$old_plus->user_id}){
         my $newid;
@@ -294,7 +332,11 @@ print "converted " . $old_minuss->count . " minus\n";
 #   needs
 #       objects
 #       user
-my $old_pis = $olddb->resultset('Pi');
+my $old_pis = $olddb->resultset('Pi')->search({},{
+    'order_by' => {
+        '-desc' => 'td_id'
+    }
+});
 while (my $old_pi = $old_pis->next){
     my $newid = '';
     if ($old_pi->type eq 'link'){
