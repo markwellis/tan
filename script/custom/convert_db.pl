@@ -328,11 +328,7 @@ print "converted " . $old_minuss->count . " minus\n";
 #   needs
 #       objects
 #       user
-my $old_pis = $olddb->resultset('Pi')->search({},{
-    'order_by' => {
-        '-desc' => 'td_id'
-    }
-});
+my $old_pis = $olddb->resultset('Pi');
 while (my $old_pi = $old_pis->next){
     my $newid = '';
     if ($old_pi->type eq 'link'){
