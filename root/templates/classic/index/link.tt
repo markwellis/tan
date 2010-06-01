@@ -7,12 +7,12 @@ object_url = object.url;
 IF !article || ( type == 'blog' );
     url = object_url;
     IF (type == 'link');
-        title_url = '/redirect/' _ object.id;
+        title_url = '/redirect/external/' _ object.id;
     ELSE;
         title_url = url;
     END;
 ELSE;
-    url = '/redirect/' _ object.id;
+    url = '/redirect/external/' _ object.id;
     title_url = url;
 END;
 

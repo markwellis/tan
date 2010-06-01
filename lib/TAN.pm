@@ -115,6 +115,7 @@ warn "user id: ${user_id}";
                 'user_id' => $user_id,
                 'ip' => $ip_address,
                 'created' => \'NOW()',
+                'type' => 'internal',
             },{
                 'key' => 'session_objectid',
             });
