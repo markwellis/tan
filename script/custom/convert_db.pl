@@ -28,9 +28,7 @@ my $new_avatar_path = '/mnt/stuff/images/avatar';
 
 #USERS
 my $old_users = $olddb->resultset('UserDetails')->search({},{
-    'order_by' => {
-        '-desc' => 'user_id'
-    }
+    'order_by' => 'user_id',
 });
 while (my $old_user = $old_users->next){
     my $new_user = $newdb->resultset('User')->create({
