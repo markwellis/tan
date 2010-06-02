@@ -40,7 +40,9 @@
                     [%- END -%]
                 </p>
                 <p>
-                [%- IF !c.user_exists -%]
+                [%- IF c.user_exists -%]
+                    <a href="/profile/avatar">Avatar</a> | 
+                [%- ELSE -%]
                     <a href="/login/">Login/Register</a> | 
                 [%- END -%]
                     <a href="/filter/" class="nsfw_filter">[%- IF (c.nsfw) %]Enable[% ELSE %]Disable[% END %] filter</a>
