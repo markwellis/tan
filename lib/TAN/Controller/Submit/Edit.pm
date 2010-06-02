@@ -127,7 +127,7 @@ sub post: PathPart('post') Chained('validate_user') Args(0) {
     $c->forward('/submit/add_tags', [$c->stash->{'object'}]);
 
     $c->flash->{'message'} = 'Edit complete';
-    $c->res->redirect( "/view/" . $c->stash->{'location'} . "/" . $c->stash->{'object'}->id . "/" . $c->stash->{'object'}->url_title );
+    $c->res->redirect($c->stash->{'object'}->url);
     $c->detach();
 }
 

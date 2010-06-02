@@ -3,6 +3,8 @@ use strict;
 use warnings;
 
 use parent 'Catalyst::Controller';
+my $not_int_reg = qr/\D+/;
+my $is_int_reg = qr/\d+/;
 
 =head1 NAME
 
@@ -14,6 +16,8 @@ redirects to a objects url
 
 =head1 EXAMPLE
 
+I</redirect/internal/45990>
+I</redirect/internal/234234_sdfsdf.jpg>
 I</redirect/external/45990>
 I</redirect/old/$type/$id>
 
@@ -21,7 +25,50 @@ I</redirect/old/$type/$id>
 
 =cut
 
-=head2 index: Path
+=head2 internal: Local Args(1)
+
+B<@args = source>
+
+=over
+
+for images. accepts id or filename and redirects to object url
+
+=back
+
+=cut
+sub internal: Local Args(1){
+    my ( $self, $c, $source ) = @_;
+
+    my $url;
+    if ( $source =~ m/^$is_int_reg$/ ){
+    #id
+        my $object = $c->model('MySQL::Object')->find({
+            'object_id' => $source,
+        });
+
+        if ( $object ){
+            $url = $object->url;
+        }
+    } else {
+    #filename
+        my $picture = $c->model('MySQL::Picture')->find({
+            'filename' => $source,
+        });
+
+        if ( $picture ){
+            $url = $picture->object->url;
+        }
+    }
+
+    if ( $url ){
+        $c->res->redirect($url);
+    } else {
+        $c->forward('/default');
+    }
+    $c->detach();
+}
+
+=head2 external: Local Args(1)
 
 B<@args = object_id>
 
@@ -32,8 +79,7 @@ redirects to object url
 =back
 
 =cut
-my $int_reg = qr/\D+/;
-sub external: Local{
+sub external: Local Args(1){
     my ( $self, $c, $object_id ) = @_;
 
     if ( !$object_id ){
@@ -41,7 +87,7 @@ sub external: Local{
         $c->detach;
     }
 
-    $object_id =~ s/$int_reg//g;
+    $object_id =~ s/$not_int_reg//g;
 
     my $object_rs = $c->model('MySQL::Object')->find($object_id);
     my $url;
@@ -102,7 +148,7 @@ sub old:Local Args(2){
             'object_id' => $lookup->new_id,
         });
 
-        $c->res->redirect( "/view/" . $object->type . "/" . $object->id . "/" . $object->url_title, 301);
+        $c->res->redirect($object->url, 301);
         $c->detach();
     }
 

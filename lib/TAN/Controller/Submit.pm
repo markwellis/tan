@@ -333,7 +333,7 @@ sub post: PathPart('post') Chained('validate') Args(0){
         $c->flash->{'message'} = $c->stash->{'error'};
         if ( defined($c->stash->{'link'}) ){
             #redirect to the object_url
-            $c->res->redirect( "/view/link/" . $c->stash->{'link'}->id . "/" . $c->stash->{'link'}->object->url_title );
+            $c->res->redirect($c->stash->{'link'}->object->url);
             $c->detach();
         }
         $c->res->redirect('/submit/' . $c->stash->{'location'} . '/');
