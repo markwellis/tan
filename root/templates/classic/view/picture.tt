@@ -15,7 +15,7 @@ type = 'picture';
 <img alt="[% object.user.username | html %]" src="[% avatar_http %]?m=[% avatar_mtime.defined ? avatar_mtime : '' %]" class="TAN-news-avatar left" />
 <ul>
     <li>
-        Posted by <a href="/user/[% object.user.username | html %]/1/" class="TAN-news-user">[% object.user.username | html %]</a>
+        Posted by [% object.user.username | html %]
         [%- IF ( object.promoted ) -%]
             promoted [% c.date_ago(object.promoted) -%] ago
         [%- ELSE -%]

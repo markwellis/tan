@@ -12,7 +12,7 @@ END -%]
 <div class="TAN-comment_holder TAN-hr" id="comment[% comment.comment_id %]">
     <ul class="left">
         <li>
-            <a href="/user/[% comment.user.username | html %]" class="TAN-news-user">[% comment.user.username | html %]</a>
+            [% comment.user.username | html %]
         </li>
         [%- IF comment.created.defined() -%]
         <li>
