@@ -37,7 +37,7 @@ PROCESS 'lib/plus_minus_box.tt';
 <img alt="[% object.user.username | html %]" src="[% avatar_http %]?m=[% avatar_mtime.defined ? avatar_mtime : '' %]" class="TAN-news-avatar left" />
 <ul>
     <li>
-        Posted by [% object.user.username | html %]
+        Posted by <a href="#" class="TAN-news-user">[% object.user.username | html %]</a>
         [%- IF ( object.promoted ) -%]
             promoted [% c.date_ago(object.promoted) -%] ago
         [%- ELSE -%]
