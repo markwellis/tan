@@ -54,20 +54,14 @@ our $VERSION = '0.90';
 # local deployment.
 
 __PACKAGE__->config( name => 'TAN', 
-    'Plugin::ConfigLoader' => {
-        driver => {
-            'General' => { 
-                -InterPolateVars => 1,
-            }
-        }
-    },
     'Plugin::PageCache' => {
-        cache_hook => 'check_cache',
-        key_maker => sub {
+        'cache_hook' => 'check_cache',
+        'key_maker' => sub {
             my $c = shift;
             my $path = $c->req->path || 'index';
             return $path . $c->nsfw;
-        }
+        },
+        'no_expire' => 0,
     }
  );
 
@@ -101,13 +95,8 @@ sub check_cache{
         my $session_id = $c->sessionid;
         my $ip_address = $c->req->address;
 
-warn "object id: ${object_id}";
-warn "session id: ${session_id}";
-warn "ip address: ${ip_address}";
-
         if ( $object_id  && $session_id ){
             my $user_id = $c->user_exists ? $c->user->user_id : 0;
-warn "user id: ${user_id}";
 
             $c->model('MySQL::Views')->update_or_create({
                 'session_id' => $session_id,
