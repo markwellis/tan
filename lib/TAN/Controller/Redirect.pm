@@ -17,7 +17,7 @@ redirects to a objects url
 =head1 EXAMPLE
 
 I</redirect/internal/45990>
-I</redirect/internal/234234_sdfsdf.jpg>
+I</redirect/internal/23400/234234_sdfsdf.jpg>
 I</redirect/external/45990>
 I</redirect/old/$type/$id>
 
@@ -25,9 +25,9 @@ I</redirect/old/$type/$id>
 
 =cut
 
-=head2 internal: Local Args(1)
+=head2 internal: Local
 
-B<@args = source>
+B<@args = $source, $filename>
 
 =over
 
@@ -36,11 +36,11 @@ for images. accepts id or filename and redirects to object url
 =back
 
 =cut
-sub internal: Local Args(1){
-    my ( $self, $c, $source ) = @_;
+sub internal: Local{
+    my ( $self, $c, $source, $filename ) = @_;
 
     my $url;
-    if ( $source =~ m/^$is_int_reg$/ ){
+    if ( !defined($filename) && ($source =~ m/^$is_int_reg$/) ){
     #id
         my $object = $c->model('MySQL::Object')->find({
             'object_id' => $source,
@@ -51,8 +51,15 @@ sub internal: Local Args(1){
         }
     } else {
     #filename
+        if ( !defined($filename) ){
+        #old filename (no mod)
+            $source =~ /^(\d+)/;
+            my $pic_time = $1;
+            $filename = $source;
+            $source = ($pic_time - ($pic_time % 604800));
+        }
         my $picture = $c->model('MySQL::Picture')->find({
-            'filename' => $source,
+            'filename' => "${source}/${filename}",
         });
 
         if ( $picture ){

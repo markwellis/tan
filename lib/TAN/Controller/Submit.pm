@@ -5,6 +5,7 @@ use warnings;
 use parent 'Catalyst::Controller';
 
 use Data::Validate::URI;
+use File::Path qw/mkpath/;
 
 my $int_reg = qr/\D+/;
 my $tag_reg = qr/[^a-zA-Z0-9]/;
@@ -267,7 +268,14 @@ sub validate_picture: Private{
 
     my $title = $c->req->param('title');
     my $url_title = $c->url_title($title);
-    my @path = split('/', 'root/' . $c->config->{'pic_path'} . '/' . time . '_' . $url_title);
+    my $time = time;
+
+#put images in a folder per week
+    my $mod = ($time - ($time % 604800));
+
+    my $path = $c->path_to('root') . $c->config->{'pic_path'} . "/${mod}";
+    mkpath($path);
+    $path .= "/${time}_${url_title}";
 
     my ( $fileinfo, $fetcher ) = (0, undef);
 
@@ -281,7 +289,7 @@ sub validate_picture: Private{
         } else {
         #valid url, fetch and validate
             $fetcher = $c->model('FetchImage');
-            $fileinfo = $fetcher->fetch($c->req->param('pic_url'), $c->path_to(@path));
+            $fileinfo = $fetcher->fetch($c->req->param('pic_url'), $path);
             if ( !$fileinfo ){
                 $c->stash->{'error'} = $fetcher->{'error'};
             }
@@ -295,7 +303,7 @@ sub validate_picture: Private{
 
             if( $fileinfo ){
             #is an image
-                $fileinfo->{'filename'} = $c->path_to(@path) . '.' . $fileinfo->{'file_ext'};
+                $fileinfo->{'filename'} = $path . '.' . $fileinfo->{'file_ext'};
                 $upload->copy_to($fileinfo->{'filename'});
             } else {
                 $c->stash->{'error'} = 'Invalid filetype';
@@ -460,7 +468,7 @@ sub submit_picture: Private{
     my $fileinfo = $c->stash->{'fileinfo'};
 
     my @path = split('/', $fileinfo->{'filename'});
-    my $filename = $path[-1];
+    my $filename = $path[-2] . '/' . $path[-1];
 
     my $object = $c->model('MySQL::Object')->create({
         'type' => $c->stash->{'location'},

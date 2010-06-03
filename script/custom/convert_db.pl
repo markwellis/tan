@@ -8,6 +8,7 @@ use TAN::Model::OldDB;
 use HTML::Entities;
 use File::Basename;
 use File::Copy;
+use File::Path qw/mkpath/;
 
 use Data::Dumper;
 
@@ -85,11 +86,23 @@ while (my $old_picture = $old_pictures->next){
     
     $picture_lookup->{$old_picture->picture_id} = $new_object->id;
 
+#work out pic mod
+    my $pic_filename = basename($old_picture->filename);
+    $pic_filename =~ /^(\d+)/;
+    my $pic_time = $1;
+    my $pic_mod = ($pic_time - ($pic_time % 604800));
+    my $pic_path = "${pic_mod}/$pic_filename";
+#move old_pic to new_pic/mod
+
+#this shouldn't be hardcoded....
+    mkpath("/mnt/stuff/images/pics/${pic_mod}");
+    copy("/mnt/stuff/images/old_pics/${pic_filename}", "/mnt/stuff/images/pics/${pic_path}");
+
     my $new_blog = $newdb->resultset('Picture')->create({
         'picture_id' => $new_object->id,
         'title' => strip_slashes(decode_entities($old_picture->title)),
         'description' => strip_slashes(decode_entities($old_picture->description)),
-        'filename' => basename($old_picture->filename),
+        'filename' => $pic_path,
         'x' => $old_picture->x,
         'y' => $old_picture->y,
         'size' => $old_picture->size,
