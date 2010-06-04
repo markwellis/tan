@@ -6,6 +6,7 @@ use parent 'Catalyst::Controller';
 
 use Data::Validate::URI;
 use File::Path qw/mkpath/;
+use Digest::SHA;
 
 my $int_reg = qr/\D+/;
 my $tag_reg = qr/[^a-zA-Z0-9]/;
@@ -124,7 +125,7 @@ my $error_codes = {
     'short_blog' => "Blog must be over ${blog_min} characters",
     'long_title' => "Title cannot be over ${title_max} characters",
     'invalid_url' => 'Url is invalid',
-    'already_submitted' => 'This link has already been submitted',
+    'already_submitted' => 'This has already been submitted',
     'no_image' => "Please select an image",
     'too_large' => "Filesize exceeded",
 };
@@ -202,14 +203,14 @@ sub validate_link: Private{
 
     #edit mode
     if ( !defined($c->stash->{'object'}) ){
-        my $link = $c->model('MySQL::Link')->search({
+        my $link_rs = $c->model('MySQL::Link')->find({
             'url' => $url,
         });
 
-        if ($link->count){
+        if ( $link_rs ){
         #already submitted
             $c->stash->{'error'} = $error_codes->{'already_submitted'};
-            $c->stash->{'link'} = $link->first;
+            $c->stash->{'duplicate'} = $link_rs;
         }
     }
 }
@@ -317,6 +318,21 @@ sub validate_picture: Private{
     }
 
     if ( $fileinfo ) {
+        open(INFILE, $fileinfo->{'filename'});
+        my $sha = new Digest::SHA(512);
+        $sha->addfile(*INFILE);
+        $c->stash->{'pic_sha512'} = $sha->hexdigest();
+        close(INFILE);
+
+        my $pic_rs = $c->model('MySQL::Picture')->find({
+            'sha512sum' => $c->stash->{'pic_sha512'},
+        });
+        if ( $pic_rs ){
+        #already submitted
+            $c->stash->{'error'} = $error_codes->{'already_submitted'};
+            $c->stash->{'duplicate'} = $pic_rs;
+        }
+
         $c->stash->{'fileinfo'} = $fileinfo;
     }
 }
@@ -339,9 +355,9 @@ sub post: PathPart('post') Chained('validate') Args(0){
 
     if ( $c->stash->{'error'} ){
         $c->flash->{'message'} = $c->stash->{'error'};
-        if ( defined($c->stash->{'link'}) ){
+        if ( defined($c->stash->{'duplicate'}) ){
             #redirect to the object_url
-            $c->res->redirect($c->stash->{'link'}->object->url);
+            $c->res->redirect($c->stash->{'duplicate'}->object->url);
             $c->detach();
         }
         $c->res->redirect('/submit/' . $c->stash->{'location'} . '/');
@@ -483,6 +499,7 @@ sub submit_picture: Private{
             'x' => $fileinfo->{'x'},
             'y' => $fileinfo->{'y'},
             'size' => $fileinfo->{'size'},
+            'sha512sum' => $c->stash->{'pic_sha512'},
         },
         'plus_minus' => [{
             'type' => 'plus',
