@@ -9,6 +9,7 @@ use HTML::Entities;
 use File::Basename;
 use File::Copy;
 use File::Path qw/mkpath/;
+use Digest::SHA;
 
 use Data::Dumper;
 
@@ -24,7 +25,7 @@ my $picture_lookup = {};
 my $tag_lookup = {};
 my $user_comment_no = {};
 
-my $old_avatar_path = '/mnt/stuff/images/old';
+my $old_avatar_path = '/mnt/stuff/images/old_avatar';
 my $new_avatar_path = '/mnt/stuff/images/avatar';
 
 #USERS
@@ -46,8 +47,6 @@ while (my $old_user = $old_users->next){
     #convert avatar
     my $old_avatar = $old_avatar_path . '/' . $old_user->user_id . '.jpg';
     my $new_avatar = $new_avatar_path . '/' . $new_user->user_id;
-warn $old_avatar . "\n";
-warn $new_avatar . "\n";
     if ( -f $old_avatar ){
         copy($old_avatar, $new_avatar) or warn 'error';
     }
@@ -98,6 +97,13 @@ while (my $old_picture = $old_pictures->next){
     mkpath("/mnt/stuff/images/pics/${pic_mod}");
     copy("/mnt/stuff/images/old_pics/${pic_filename}", "/mnt/stuff/images/pics/${pic_path}");
 
+#work out pic 512sum
+    open(INFILE, "/mnt/stuff/images/pics/${pic_path}");
+    my $sha2obj = new Digest::SHA2 512;
+    $sha2obj->addfile(*INFILE);
+    my $pic_sha512 = $sha2obj->hexdigest();
+    close(INFILE);
+
     my $new_blog = $newdb->resultset('Picture')->create({
         'picture_id' => $new_object->id,
         'title' => strip_slashes(decode_entities($old_picture->title)),
@@ -106,6 +112,7 @@ while (my $old_picture = $old_pictures->next){
         'x' => $old_picture->x,
         'y' => $old_picture->y,
         'size' => $old_picture->size,
+        'sha512sum' => $pic_sha512,
     });
 }
 print "converted " . $old_pictures->count . " pictures\n";
@@ -137,9 +144,6 @@ while (my $old_blog = $old_blogs->next){
         $blog_lookup->{$old_blog->blog_id} = $new_object->id;
     
         my $new_pic_id = $picture_lookup->{$old_blog->category};
-        if ( !$new_pic_id ){
-            warn 'blog: missing pic old_id: ' . $old_blog->category . ' :blog_id: ' . $old_blog->id;
-        }
         my $new_blog = $newdb->resultset('Blog')->create({
             'blog_id' => $new_object->id,
             'title' => strip_slashes(decode_entities($old_blog->title)),
@@ -178,9 +182,6 @@ while (my $old_link = $old_links->next){
         $link_lookup->{$old_link->link_id} = $new_object->id;
     
         my $new_pic_id = $picture_lookup->{$old_link->category};
-        if ( !$new_pic_id ){
-            warn 'link: missing pic old_id: ' . $old_link->category . ' :link_id: ' . $old_link->id;
-        }
         my $new_link = $newdb->resultset('Link')->create({
             'link_id' => $new_object->id,
             'title' => strip_slashes(decode_entities($old_link->title)),
