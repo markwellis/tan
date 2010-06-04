@@ -99,9 +99,9 @@ while (my $old_picture = $old_pictures->next){
 
 #work out pic 512sum
     open(INFILE, "/mnt/stuff/images/pics/${pic_path}");
-    my $sha2obj = new Digest::SHA2 512;
-    $sha2obj->addfile(*INFILE);
-    my $pic_sha512 = $sha2obj->hexdigest();
+    my $sha = new Digest::SHA(512);
+    $sha->addfile(*INFILE);
+    my $pic_sha512 = $sha->hexdigest();
     close(INFILE);
 
     my $new_blog = $newdb->resultset('Picture')->create({
