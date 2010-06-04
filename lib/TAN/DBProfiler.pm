@@ -9,7 +9,7 @@ use Text::Wrap;
 my $start;
 
 sub query_start {
-    if (defined($ENV{'CATALYST_DEBUG'})){
+    if ( $ENV{'CATALYST_DEBUG'} ){
         my ( $self, $sql, @params ) = @_;
 
         $self->{'start_time'} = time();
@@ -26,7 +26,7 @@ sub query_end {
     my ( $self ) = @_;
 
     $self->{'_queries'}++;
-    if (defined($ENV{'CATALYST_DEBUG'})){
+    if ( $ENV{'CATALYST_DEBUG'}){
         my $sql = shift;
         my @params = @_;
 
