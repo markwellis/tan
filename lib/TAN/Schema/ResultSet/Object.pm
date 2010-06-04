@@ -60,7 +60,7 @@ sub index {
         '+select' => [
             { 'unix_timestamp' => 'me.created' },
             { 'unix_timestamp' => 'me.promoted' },
-            \'(SELECT COUNT(*) FROM views WHERE views.object_id = me.object_id) views',
+            \'(SELECT COUNT(*) FROM views WHERE views.object_id = me.object_id and type="internal") views',
             \'(SELECT COUNT(*) FROM comments WHERE comments.object_id = me.object_id) comments',
             \'(SELECT COUNT(*) FROM plus_minus WHERE plus_minus.object_id = me.object_id AND type="plus") plus',
             \'(SELECT COUNT(*) FROM plus_minus WHERE plus_minus.object_id = me.object_id AND type="minus") minus',
