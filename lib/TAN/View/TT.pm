@@ -31,6 +31,7 @@ __PACKAGE__->config({
         'url_title' => sub { return url_title(shift); },
         'embed_url' => sub { return embed_url(shift); },
     },
+    render_die => 1,
 });
 
 =head1 NAME
