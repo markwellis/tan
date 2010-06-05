@@ -32,7 +32,6 @@ use parent 'Catalyst';
 
 use Catalyst qw/
     ConfigLoader
-    Unicode::Encoding
     Authentication
     Session
     Email
@@ -40,6 +39,7 @@ use Catalyst qw/
     Session::State::Cookie
     Cache
     PageCache
+    Unicode::Encoding
 /;
 
 our $VERSION = '0.90';
