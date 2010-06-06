@@ -2,6 +2,7 @@ package TAN::Schema::Result::Comments;
 
 use strict;
 use warnings;
+use utf8;
 
 use base 'DBIx::Class';
 
@@ -59,10 +60,15 @@ sub get_comment{
 
     $no_bb ||= 0;
     
-    my $comment = $self->result_source->schema->cache->get("comment.${no_bb}:" . $self->id);
-    if ( !defined($comment) ){
+    my $key = "comment.${no_bb}:" . $self->id;
+
+    my $comment = $self->result_source->schema->cache->get($key);
+    if ( !$comment ){
         $comment = $parser->parse( $self->_comment, $no_bb );
-        $self->result_source->schema->cache->set("comment.${no_bb}:" . $self->id, $comment, 120);
+        $self->result_source->schema->cache->set($key, $comment, 120);
+    } else {
+#decode cached comment coz otherwise its double encoded!
+        utf8::decode($comment);
     }
 
     return $comment;
