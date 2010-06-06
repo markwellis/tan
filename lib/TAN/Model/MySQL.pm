@@ -11,7 +11,7 @@ __PACKAGE__->config(
         'user' => 'thisaintnews',
         'password' => 'caBi2ieL',
         'mysql_enable_utf8' => 1,
-    }
+    },
 );
 
 =head1 NAME
@@ -32,7 +32,7 @@ sub COMPONENT {
 
     my $new = $self->next::method($c, @_);
    
-    #hack so we can access the cache in the resultsets. 
+    #hack so we can access the catalyst cache in the resultsets. 
     $new->schema->cache( $c->cache ) if $c;
 
     return $new;
