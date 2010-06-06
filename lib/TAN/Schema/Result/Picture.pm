@@ -5,7 +5,7 @@ use warnings;
 
 use base 'DBIx::Class';
 
-__PACKAGE__->load_components('UTF8Columns', "Core");
+__PACKAGE__->load_components("Core");
 __PACKAGE__->table("picture");
 __PACKAGE__->add_columns(
   "picture_id",
@@ -46,7 +46,6 @@ __PACKAGE__->add_columns(
   },
 );
 __PACKAGE__->set_primary_key("picture_id");
-__PACKAGE__->utf8_columns(qw/title description filename sha512sum/);
 
 # Created by DBIx::Class::Schema::Loader v0.04006 @ 2009-11-04 22:01:20
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:BzhIeLeSc7u8CwLvg7Mx6g

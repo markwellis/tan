@@ -10,6 +10,7 @@ __PACKAGE__->config(
         dsn => 'dbi:mysql:thisaintnews',
         user => 'thisaintnews',
         password => 'caBi2ieL',
+        'mysql_enable_utf8' => 1,
     }
 );
 

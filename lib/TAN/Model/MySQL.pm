@@ -3,16 +3,16 @@ use strict;
 
 use TAN::DBProfiler;
 use base 'Catalyst::Model::DBIC::Schema';
-
-             
-__PACKAGE__->config(         
-    schema_class => 'TAN::Schema',           
-    connect_info => {        
-        dsn => 'dbi:mysql:tan',          
-        user => 'thisaintnews',          
-        password => 'caBi2ieL',          
-    }        
-); 
+ 
+__PACKAGE__->config(
+    schema_class => 'TAN::Schema',
+    connect_info => {
+        'dsn' => 'dbi:mysql:tan;',
+        'user' => 'thisaintnews',
+        'password' => 'caBi2ieL',
+        'mysql_enable_utf8' => 1,
+    }
+);
 
 =head1 NAME
 
