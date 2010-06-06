@@ -117,6 +117,8 @@ sub random{
 sub get{
     my ($self, $object_id, $location) = @_;
 
+local $DBIx::Class::ResultSourceHandle::thaw_schema = $self->result_source->schema;
+
     my $object_rs = $self->result_source->schema->cache->get('object:' . $object_id);
 
     if ( !$object_rs ){  
@@ -136,12 +138,7 @@ sub get{
             'order_by' => '',
         });
         $self->result_source->schema->cache->set('object:' . $object_id, $object_rs, 120);
-    } else {
-    #HACK
-        #omg this is naughty...
-        $object_rs->_source_handle->schema($self->result_source->schema);
     }
-
     return $object_rs;
 }
 
