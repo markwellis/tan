@@ -34,11 +34,11 @@ sub index {
 
     if ($upcoming){
         $search = \'= 0';
-        $order ||= 'me.created'
+        $order ||= 'created'
     } else {
         $search = \'!= 0';
-        $order ||= 'me.promoted';
-        $order = 'me.promoted' if ($order eq 'created');
+        $order ||= 'promoted';
+        $order = 'promoted' if ($order eq 'created');
     }
 
     if ($location eq 'all'){
@@ -52,6 +52,31 @@ sub index {
         $nsfw_opts{'nsfw'} = 'N';
     }
     
+    my %search_opts;
+    if ( ($order ne 'created') || ($order ne 'promoted') ){
+        if ( $order eq 'comments' ){
+            %search_opts = (
+                '+select' => [\'(SELECT COUNT(*) FROM comments WHERE comments.object_id = me.object_id AND deleted = "N") comments'],
+                '+as' => ['comments'],
+            );
+        } elsif ( $order eq 'views' ){
+            %search_opts = (
+                '+select' => [\'(SELECT COUNT(*) FROM views WHERE views.object_id = me.object_id AND type="internal") views'],
+                '+as' => ['views'],
+            );
+        } elsif ( $order eq 'plus' ){
+            %search_opts = (
+                '+select' => [\'(SELECT COUNT(*) FROM plus_minus WHERE plus_minus.object_id = me.object_id AND type="plus") plus'],
+                '+as' => ['plus'],
+            );
+        } elsif ( $order eq 'minus' ){
+            %search_opts = (
+                '+select' => [\'(SELECT COUNT(*) FROM plus_minus WHERE plus_minus.object_id = me.object_id AND type="minus") minus'],
+                '+as' => ['minus'],
+            );
+        }
+    }
+
     my $index_rs = $self->search({
         'promoted' => $search,
         'type' => $type,
@@ -63,6 +88,7 @@ sub index {
         },
         'page' => $page,
         'rows' => 27,
+        %search_opts
     });
 
     my @index;
@@ -117,7 +143,7 @@ sub random{
 sub get{
     my ($self, $object_id, $location) = @_;
 
-local $DBIx::Class::ResultSourceHandle::thaw_schema = $self->result_source->schema;
+    local $DBIx::Class::ResultSourceHandle::thaw_schema = $self->result_source->schema;
 
     my $object_rs = $self->result_source->schema->cache->get('object:' . $object_id);
 
@@ -128,7 +154,7 @@ local $DBIx::Class::ResultSourceHandle::thaw_schema = $self->result_source->sche
             '+select' => [
                 { 'unix_timestamp' => 'me.created' },
                 { 'unix_timestamp' => 'me.promoted' },
-                \'(SELECT COUNT(*) FROM views WHERE views.object_id = me.object_id) views',
+                \'(SELECT COUNT(*) FROM views WHERE views.object_id = me.object_id AND type="internal") views',
                 \'(SELECT COUNT(*) FROM comments WHERE comments.object_id = me.object_id AND deleted = "N") comments',
                 \'(SELECT COUNT(*) FROM plus_minus WHERE plus_minus.object_id = me.object_id AND type="plus") plus',
                 \'(SELECT COUNT(*) FROM plus_minus WHERE plus_minus.object_id = me.object_id AND type="minus") minus',
