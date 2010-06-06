@@ -32,6 +32,7 @@ __PACKAGE__->config({
         'embed_url' => sub { return embed_url(shift); },
     },
     render_die => 1,
+    ENCODING => 'utf8',
 });
 
 =head1 NAME
