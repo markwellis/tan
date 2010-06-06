@@ -236,9 +236,6 @@ sub recent_comments{
 
     my @recent_comments = $c->model('MySQL::Comments')->recent_comments( $c->config->{'recent_comments'} )->all;
 
-# Tie::Hash::Indexed
-# must be serialized using storable!
-
    tie my %grouped_comments, 'Tie::Hash::Indexed';
    foreach my $comment (@recent_comments){
         if ( !defined($grouped_comments{$comment->object_id}) ){
