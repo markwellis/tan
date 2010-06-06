@@ -98,7 +98,7 @@ sub add{
         }
     }
 
-    return $count;
+    return $plusminus_rs;
 }
 
 =head2 meplus_minus

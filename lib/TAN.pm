@@ -59,7 +59,8 @@ __PACKAGE__->config( name => 'TAN',
         'key_maker' => sub {
             my $c = shift;
             my $path = $c->req->path || 'index';
-            return $path . $c->nsfw;
+
+            return "/${path}" . $c->nsfw;
         },
         'no_expire' => 0,
     }

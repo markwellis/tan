@@ -86,6 +86,7 @@ loads the article
 sub index: PathPart('') Chained('location') Args(1) {
     my ( $self, $c, $title ) = @_;
 
+    $c->cache_page( 60 );
 #check
 # object_id is valid
 # url matches (seo n that)
@@ -174,6 +175,7 @@ sub comment: PathPart('_comment') Chained('location') Args(0) {
                 $comment
             );
             $comment_id = $comment_rs->comment_id;
+            $c->clear_cached_page( $comment_rs->object->url . '.*' );
         }
     } else {
     #save for later
@@ -205,7 +207,7 @@ sub comment: PathPart('_comment') Chained('location') Args(0) {
             $c->detach();
         } else {
         #no object, redirect to /
-            $c->res->redirect( '/' );
+            $c->forward('/default');
             $c->detach();
         }
     } else {
@@ -317,6 +319,7 @@ sub edit_comment: PathPart('_edit_comment') Chained('location') Args(1) {
 # RETURN COMMENT HERE
                 $c->forward('ajax_comment', [$comment_rs]);
             }
+            $c->clear_cached_page( $comment_rs->object->url . '.*' );
             $c->detach();
         }
     }
@@ -385,19 +388,20 @@ sub add_plus_minus: Private{
 
     if ( $c->user_exists ){
     # valid user, do work
-        my $count = $c->model('MySQL::PlusMinus')->add(
+        my $plus_minus_rs = $c->model('MySQL::PlusMinus')->add(
             $type, $c->stash->{'object_id'}, $c->user->user_id
         );
+        $c->clear_cached_page( $plus_minus_rs->first->object->url . '.*' );
 
         if ( defined($c->req->param('json')) ){
         #json
             $c->res->header('Content-Type' => 'application/json');
             $c->res->body( to_json({
-                'count' => $count,
+                'count' => $plus_minus_rs->count,
             }) );
         } else {
         #redirect
-            $c->res->redirect( $c->model('MySQL::Object')->find( $c->stash->{'object_id'} )->url_title );
+            $c->res->redirect( $plus_minus_rs->first->object->url );
         }
     } else {
     #prompt for login
@@ -437,6 +441,7 @@ sub post_saved_comments: Private{
                 $c->user->user_id, 
                 $saved_comment->{'comment'} 
             );
+            $c->clear_cached_page( $comment_rs->object->url . '.*' );           
         }
         $c->session->{'comments'} = undef;
     }

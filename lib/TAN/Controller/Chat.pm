@@ -34,7 +34,7 @@ loads chat template...
 sub index :Path {
     my ( $self, $c ) = @_;
 
-    $c->cache_page( 120 );
+    $c->cache_page( 60 );
 
     $c->stash->{'template'} = 'chat.tt';
 }
