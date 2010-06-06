@@ -90,18 +90,15 @@ sub external: Local Args(1){
     my ( $self, $c, $object_id ) = @_;
 
     if ( !$object_id ){
-        $c->res->redirect('/');
+        $c->forward('/default');
         $c->detach;
     }
 
     $object_id =~ s/$not_int_reg//g;
 
     my $object_rs = $c->model('MySQL::Object')->find($object_id);
-    my $url;
     if ( defined($object_rs) && ($object_rs->type eq 'link') ){
     #links have urls
-        $url = $object_rs->link->url;
-
         my $session_id = $c->sessionid;
         my $ip_address = $c->req->address;
 
@@ -119,11 +116,11 @@ sub external: Local Args(1){
                 'key' => 'session_objectid',
             });
         }
+        $c->res->redirect( $object_rs->link->url );
     } else {
     # not a link
-        $url = '/';
+        $c->forward('/default');
     }
-    $c->res->redirect( $url );
     $c->detach();
 }
 
