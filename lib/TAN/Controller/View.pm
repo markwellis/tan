@@ -86,27 +86,13 @@ loads the article
 sub index: PathPart('') Chained('location') Args(1) {
     my ( $self, $c, $title ) = @_;
 
-    $c->cache_page( 60 );
+#    $c->cache_page( 60 );
 #check
 # object_id is valid
 # url matches (seo n that)
 # display article
 # load comments etc
-    $c->stash->{'object'} = $c->model('MySQL::Object')->find({
-        'object_id' => $c->stash->{'object_id'},
-    },{
-        '+select' => [
-            { 'unix_timestamp' => 'me.created' },
-            { 'unix_timestamp' => 'me.promoted' },
-            \'(SELECT COUNT(*) FROM views WHERE views.object_id = me.object_id) views',
-            \'(SELECT COUNT(*) FROM comments WHERE comments.object_id = me.object_id AND deleted = "N") comments',
-            \'(SELECT COUNT(*) FROM plus_minus WHERE plus_minus.object_id = me.object_id AND type="plus") plus',
-            \'(SELECT COUNT(*) FROM plus_minus WHERE plus_minus.object_id = me.object_id AND type="minus") minus',
-        ],
-        '+as' => ['created', 'promoted', 'views', 'comments', 'plus', 'minus'],
-        'prefetch' => [$c->stash->{'location'}, 'user'],
-        'order_by' => '',
-    });
+    $c->stash->{'object'} = $c->model('MySQL::Object')->get($c->stash->{'object_id'}, $c->stash->{'location'});
 
     if ( !defined($c->stash->{'object'}) ){
         $c->foward('/default');
@@ -144,7 +130,7 @@ sub index: PathPart('') Chained('location') Args(1) {
     })->all;
 
 
-    $title = eval('$c->stash->{"object"}->' . $c->stash->{'object'}->type . "->title");
+    $title = eval('$c->stash->{"object"}->' . $c->stash->{'location'} . "->title");
     $c->stash->{'page_title'} = $title;
 
     $c->stash->{'template'} = 'view.tt';

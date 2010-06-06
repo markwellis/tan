@@ -83,10 +83,10 @@ sub index :Path :Args(3) {
     $c->stash->{'upcoming'} = $upcoming;
     
     my $index_objects = $c->model('MySQL::Object')->index( $location, $page, $upcoming, $order, $c->nsfw );
-    my @index = $index_objects->all;
+    my @index = @{ $index_objects->{'index'} };
 
     if ( $c->user_exists ){
-        my @ids = map($_->object_id, @index);
+        my @ids = map($_->id, @index);
         my $meplus_minus = $c->model('MySQL::PlusMinus')->meplus_minus($c->user->user_id, \@ids);
 
         foreach my $object ( @index ){
@@ -101,7 +101,7 @@ sub index :Path :Args(3) {
 
     $c->stash->{'index_objects'} = {
         'objects' => \@index,
-        'pager' => $index_objects->pager,
+        'pager' => $index_objects->{'pager'},
     };
 
     if ( !$c->stash->{'index_objects'}->{'objects'} ){

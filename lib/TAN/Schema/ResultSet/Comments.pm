@@ -37,22 +37,32 @@ gets the 20 most recent comments
 sub recent_comments {
     my ( $self, $count ) = @_;
 
-    return $self->search({
-        'me.deleted' => 'N'
-    },{
-        'order_by' =>  {
-            '-desc' => 'me.created',
-        },
-        'rows' => $count,
-        'prefetch' => {
-            'user' => [],
-            'object' => [
-                'link',
-                'picture',
-                'blog',
-            ],
-        },
-    });
+    my $recent_comments_rs = $self->result_source->schema->cache->get('recent_comments');
+    if ( !$recent_comments_rs ){
+        $recent_comments_rs = $self->search({
+            'me.deleted' => 'N'
+        },{
+            'order_by' =>  {
+                '-desc' => 'me.created',
+            },
+            'rows' => $count,
+            'prefetch' => {
+                'user' => [],
+                'object' => [
+                    'link',
+                    'picture',
+                    'blog',
+                ],
+            },
+        });
+        $self->result_source->schema->cache->set('recent_comments', $recent_comments_rs, 120 );
+    } else {
+    #HACK
+        #omg this is naughty...
+        $recent_comments_rs->_source_handle->schema($self->result_source->schema);
+    }
+
+    return $recent_comments_rs;
 }
 
 =head2 create_comment

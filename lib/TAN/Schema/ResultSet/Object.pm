@@ -30,7 +30,7 @@ gets the stuff for the index
 sub index {
     my ($self, $location, $page, $upcoming, $order, $nsfw) = @_;
     
-    my ($type, $search, $prefetch);
+    my ($type, $search);
 
     if ($upcoming){
         $search = \'= 0';
@@ -52,27 +52,28 @@ sub index {
         $nsfw_opts{'nsfw'} = 'N';
     }
     
-    return $self->search({
+    my $index_rs = $self->search({
         'promoted' => $search,
         'type' => $type,
         %nsfw_opts
-    },{
-        '+select' => [
-            { 'unix_timestamp' => 'me.created' },
-            { 'unix_timestamp' => 'me.promoted' },
-            \'(SELECT COUNT(*) FROM views WHERE views.object_id = me.object_id and type="internal") views',
-            \'(SELECT COUNT(*) FROM comments WHERE comments.object_id = me.object_id) comments',
-            \'(SELECT COUNT(*) FROM plus_minus WHERE plus_minus.object_id = me.object_id AND type="plus") plus',
-            \'(SELECT COUNT(*) FROM plus_minus WHERE plus_minus.object_id = me.object_id AND type="minus") minus',
-        ],
-        '+as' => ['created', 'promoted', 'views', 'comments', 'plus', 'minus'],
+    },
+    {
         'order_by' => {
             -desc => [$order],
         },
         'page' => $page,
         'rows' => 27,
-        'prefetch' => [$type, 'user'],
     });
+
+    my @index;
+    foreach my $object ( $index_rs->all ){
+        push(@index, $self->get( $object->id, $object->type ));
+    }
+
+    return {
+        'index' => \@index,
+        'pager' => $index_rs->pager,
+    };
 }
 
 =head2 random
@@ -111,6 +112,37 @@ sub random{
         }
     )->first;
 
+}
+
+sub get{
+    my ($self, $object_id, $location) = @_;
+
+    my $object_rs = $self->result_source->schema->cache->get('object:' . $object_id);
+
+    if ( !$object_rs ){  
+        $object_rs = $self->find({
+            'object_id' => $object_id,
+        },{
+            '+select' => [
+                { 'unix_timestamp' => 'me.created' },
+                { 'unix_timestamp' => 'me.promoted' },
+                \'(SELECT COUNT(*) FROM views WHERE views.object_id = me.object_id) views',
+                \'(SELECT COUNT(*) FROM comments WHERE comments.object_id = me.object_id AND deleted = "N") comments',
+                \'(SELECT COUNT(*) FROM plus_minus WHERE plus_minus.object_id = me.object_id AND type="plus") plus',
+                \'(SELECT COUNT(*) FROM plus_minus WHERE plus_minus.object_id = me.object_id AND type="minus") minus',
+            ],
+            '+as' => ['created', 'promoted', 'views', 'comments', 'plus', 'minus'],
+            'prefetch' => [$location, 'user'],
+            'order_by' => '',
+        });
+        $self->result_source->schema->cache->set('object:' . $object_id, $object_rs, 120);
+    } else {
+    #HACK
+        #omg this is naughty...
+        $object_rs->_source_handle->schema($self->result_source->schema);
+    }
+
+    return $object_rs;
 }
 
 =head1 AUTHOR
