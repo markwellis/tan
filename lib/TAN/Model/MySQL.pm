@@ -26,6 +26,18 @@ MySQL connection
 
 =cut
 
+sub COMPONENT {
+    my $self = shift;
+    my $c = shift;
+
+    my $new = $self->next::method($c, @_);
+   
+    #hack so we can access the cache in the resultsets. 
+    $new->schema->cache( $c->cache ) if $c;
+
+    return $new;
+}
+
 =head2 BUILD
 
 B<@args = undef>
@@ -38,9 +50,9 @@ sets debugobj to new TAN::DBProfiler
 
 =cut
 sub BUILD{
-    my ($self) = @_;
+    my ( $self ) = @_;
     $self->storage->debugobj( TAN::DBProfiler->new() );
-    
+
     $self->storage->debug(1);
     return $self;
 }

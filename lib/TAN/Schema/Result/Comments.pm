@@ -43,20 +43,28 @@ __PACKAGE__->set_primary_key("comment_id");
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:1eFIzFs/gXnMuzdofLP07Q
 
 sub comment{
-    my ( $row ) = @_;
+    my ( $self ) = @_;
 
-    my $comment = $parser->parse( $row->_comment );
-
-#do some caching shit here...
-    return $comment;
+    return $self->get_comment(0);
 }
 
 sub comment_nobb{
-    my ( $row ) = @_;
+    my ( $self ) = @_;
 
-    my $comment = $parser->parse( $row->_comment, 1 );
+    return $self->get_comment(1);
+}
 
-#do some caching shit here...
+sub get_comment{
+    my ( $self, $no_bb ) = @_;
+
+    $no_bb ||= 0;
+    
+    my $comment = $self->result_source->schema->cache->get("comment.${no_bb}:" . $self->id);
+    if ( !defined($comment) ){
+        $comment = $parser->parse( $self->_comment, $no_bb );
+        $self->result_source->schema->cache->set("comment.${no_bb}:" . $self->id, $comment, 120);
+    }
+
     return $comment;
 }
 
