@@ -312,6 +312,9 @@ sub edit_comment: PathPart('_edit_comment') Chained('location') Args(1) {
                 $comment_rs->update({
                     'comment' => $c->req->param("edit_comment_${comment_id}"),
                 });
+#clear comment cache
+                $c->cache->remove("comment.0:" . $comment_rs->id);
+                $c->cache->remove("comment.1:" . $comment_rs->id);
             }
             if ( !defined($c->req->param('ajax')) ){
                 $c->res->redirect( $comment_rs->object->url . '#comment' . $comment_rs->comment_id);
