@@ -240,9 +240,7 @@ print "converted " . $old_tagds->count . " tag details\n";
 #       objects
 #       user
 my $old_comments = $olddb->resultset('Comments')->search({},{
-    'order_by' => {
-        '-desc' => 'comment_id'
-    }
+    'order_by' => 'comment_id'
 });
 while (my $old_comment = $old_comments->next){
     if ($user_lookup->{$old_comment->user_id}){
