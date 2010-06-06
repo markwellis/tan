@@ -312,9 +312,6 @@ sub edit_comment: PathPart('_edit_comment') Chained('location') Args(1) {
                 $comment_rs->update({
                     'comment' => $c->req->param("edit_comment_${comment_id}"),
                 });
-#clear comment cache
-                $c->cache->remove("comment.0:" . $comment_rs->id);
-                $c->cache->remove("comment.1:" . $comment_rs->id);
             }
             if ( !defined($c->req->param('ajax')) ){
                 $c->res->redirect( $comment_rs->object->url . '#comment' . $comment_rs->comment_id);
@@ -322,7 +319,11 @@ sub edit_comment: PathPart('_edit_comment') Chained('location') Args(1) {
 # RETURN COMMENT HERE
                 $c->forward('ajax_comment', [$comment_rs]);
             }
+            #clear comment cache
+            $c->cache->remove("comment.0:" . $comment_rs->id);
+            $c->cache->remove("comment.1:" . $comment_rs->id);
             $c->clear_cached_page( $comment_rs->object->url . '.*' );
+
             $c->detach();
         }
     }
