@@ -116,6 +116,9 @@ sub post: PathPart('post') Chained('validate_user') Args(0) {
             'details' => $c->req->param('blogmain'),
         });
     } elsif ( $c->stash->{'location'} eq 'picture' ){
+        $c->stash->{"object"}->update({
+            'nsfw' => defined($c->req->param('nsfw')) ? 'Y' : 'N',
+        });
         $c->stash->{"object"}->picture->update({
             'title' => $c->req->param('title'),
             'description' => $c->req->param('pdescription'),
