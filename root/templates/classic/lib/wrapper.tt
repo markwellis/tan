@@ -90,7 +90,7 @@
         </div>
         [%-
             runtime =  time - start_time;
-            sql_queries = c.model('MySQL').get_query_count();
+            sql_queries = c.model('MySQL').get_query_count() || 0;
         -%]
         <div class="TAN-footer">
             [%- runtime.substr(0, 4) -%] seconds, [% sql_queries %] [% (sql_queries == 1) ? 'query' : 'queries' -%]

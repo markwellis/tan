@@ -53,7 +53,7 @@ my $order_reg = qr/^(promoted|plus|minus|views|comments)$/;
 sub index :Path :Args(3) {
     my ( $self, $c, $location, $upcoming, $page ) = @_;
 
-#    $c->cache_page( 60 );
+    $c->cache_page( 60 );
 
     if ($location !~ m/$location_reg/){
         $location = 'all';
@@ -83,7 +83,7 @@ sub index :Path :Args(3) {
     $c->stash->{'upcoming'} = $upcoming;
     
     my $index_objects = $c->model('MySQL::Object')->index( $location, $page, $upcoming, $order, $c->nsfw );
-    my @index = @{ $index_objects->{'index'} };
+    my @index = @{ $index_objects->{'objects'} };
 
     if ( $c->user_exists ){
         my @ids = map($_->id, @index);

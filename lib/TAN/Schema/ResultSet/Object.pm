@@ -30,75 +30,98 @@ gets the stuff for the index
 sub index {
     my ($self, $location, $page, $upcoming, $order, $nsfw) = @_;
     
-    my ($type, $search);
+    local $DBIx::Class::ResultSourceHandle::thaw_schema = $self->result_source->schema;
 
-    if ($upcoming){
-        $search = \'= 0';
-        $order ||= 'created'
-    } else {
-        $search = \'!= 0';
-        $order ||= 'promoted';
-        $order = 'promoted' if ($order eq 'created');
-    }
+    my $key = "${location}:${page}:${upcoming}:${order}:${nsfw}";
+    my $indexes = $self->result_source->schema->cache->get("index:${key}");
+    my $pager = $self->result_source->schema->cache->get("pager:${key}");
 
-    if ($location eq 'all'){
-        $type = ['link', 'blog'];
-    } else {
-        $type = $location;
-    }
-    
-    my %nsfw_opts;
-    if ( !defined($nsfw) || !$nsfw ){
-        $nsfw_opts{'nsfw'} = 'N';
-    }
-    
-    my %search_opts;
-    if ( ($order ne 'created') || ($order ne 'promoted') ){
-        if ( $order eq 'comments' ){
-            %search_opts = (
-                '+select' => [\'(SELECT COUNT(*) FROM comments WHERE comments.object_id = me.object_id AND deleted = "N") comments'],
-                '+as' => ['comments'],
-            );
-        } elsif ( $order eq 'views' ){
-            %search_opts = (
-                '+select' => [\'(SELECT COUNT(*) FROM views WHERE views.object_id = me.object_id AND type="internal") views'],
-                '+as' => ['views'],
-            );
-        } elsif ( $order eq 'plus' ){
-            %search_opts = (
-                '+select' => [\'(SELECT COUNT(*) FROM plus_minus WHERE plus_minus.object_id = me.object_id AND type="plus") plus'],
-                '+as' => ['plus'],
-            );
-        } elsif ( $order eq 'minus' ){
-            %search_opts = (
-                '+select' => [\'(SELECT COUNT(*) FROM plus_minus WHERE plus_minus.object_id = me.object_id AND type="minus") minus'],
-                '+as' => ['minus'],
-            );
+    if ( !$indexes || !$pager ){
+        my ($type, $search);
+
+        if ($upcoming){
+            $search = \'= 0';
+            $order ||= 'created'
+        } else {
+            $search = \'!= 0';
+            $order ||= 'promoted';
+            $order = 'promoted' if ($order eq 'created');
         }
-    }
 
-    my $index_rs = $self->search({
-        'promoted' => $search,
-        'type' => $type,
-        %nsfw_opts
-    },
-    {
-        'order_by' => {
-            -desc => [$order],
+        if ($location eq 'all'){
+            $type = ['link', 'blog'];
+        } else {
+            $type = $location;
+        }
+        
+        my %nsfw_opts;
+        if ( !defined($nsfw) || !$nsfw ){
+            $nsfw_opts{'nsfw'} = 'N';
+        }
+        
+        my %search_opts;
+        if ( ($order ne 'created') || ($order ne 'promoted') ){
+            if ( $order eq 'comments' ){
+                %search_opts = (
+                    '+select' => [\'(SELECT COUNT(*) FROM comments WHERE comments.object_id = me.object_id AND deleted = "N") comments'],
+                    '+as' => ['comments'],
+                );
+            } elsif ( $order eq 'views' ){
+                %search_opts = (
+                    '+select' => [\'(SELECT COUNT(*) FROM views WHERE views.object_id = me.object_id AND type="internal") views'],
+                    '+as' => ['views'],
+                );
+            } elsif ( $order eq 'plus' ){
+                %search_opts = (
+                    '+select' => [\'(SELECT COUNT(*) FROM plus_minus WHERE plus_minus.object_id = me.object_id AND type="plus") plus'],
+                    '+as' => ['plus'],
+                );
+            } elsif ( $order eq 'minus' ){
+                %search_opts = (
+                    '+select' => [\'(SELECT COUNT(*) FROM plus_minus WHERE plus_minus.object_id = me.object_id AND type="minus") minus'],
+                    '+as' => ['minus'],
+                );
+            }
+        }
+
+        my $index_rs = $self->search({
+            'promoted' => $search,
+            'type' => $type,
+            %nsfw_opts
         },
-        'page' => $page,
-        'rows' => 27,
-        %search_opts
-    });
+        {
+            'order_by' => {
+                -desc => [$order],
+            },
+            'page' => $page,
+            'rows' => 27,
+            %search_opts
+        });
+
+        @{$indexes} = $index_rs->all;
+        $pager = {
+            'current_page' => $index_rs->pager->current_page,
+            'total_entries' => $index_rs->pager->total_entries,
+            'entries_per_page' => $index_rs->pager->entries_per_page,
+        };
+
+        $self->result_source->schema->cache->set("index:${key}", $indexes, 600);
+        $self->result_source->schema->cache->set("pager:${key}", $pager, 600);
+
+#build an index cache..
+        my $indexes_in_cache = $self->result_source->schema->cache->get("indexes_in_cache");
+        $indexes_in_cache->{$key} = 1;
+        $self->result_source->schema->cache->set("indexes_in_cache", $indexes_in_cache, 0);
+    }
 
     my @index;
-    foreach my $object ( $index_rs->all ){
+    foreach my $object ( @{$indexes} ){
         push(@index, $self->get( $object->id, $object->type ));
     }
 
     return {
-        'index' => \@index,
-        'pager' => $index_rs->pager,
+        'objects' => \@index,
+        'pager' => $pager,
     };
 }
 
