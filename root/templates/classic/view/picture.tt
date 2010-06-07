@@ -27,6 +27,9 @@ type = 'picture';
         <a href="[% comment_url %]#comments" class="TAN-news-comment">
             <img alt="" class="TAN-news-comment-image" src="/static/images/comment.png" /> [%- object.get_column('comments') %]
         </a> | [%- object.get_column('views') -%] views | [% object.picture.x %]x[% object.picture.y %] | [% object_size %]
+            [%- IF c.user_exists && (c.user.admin || c.user.id == object.user_id) -%]
+                | <a href="/submit/[% object.type %]/edit/[% object.id %]/" class="TAN-news-comment">Edit</a>
+            [%- END -%]
     </li>
 </ul>
     <span class="TAN-tags" style="margin-left:0px">
