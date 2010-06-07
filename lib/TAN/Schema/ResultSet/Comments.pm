@@ -3,13 +3,6 @@ package TAN::Schema::ResultSet::Comments;
 use strict;
 use warnings;
 use base 'DBIx::Class::ResultSet';
-use Cache::FastMmap;
-
-my $cache = Cache::FastMmap->new(
-    'expire_time' => 0,
-    'cache_size' => '200m',
-    'share_file'=>'/tmp/comment_cache',
-);
 
 =head1 NAME
 
@@ -39,10 +32,11 @@ sub recent_comments {
 
     local $DBIx::Class::ResultSourceHandle::thaw_schema = $self->result_source->schema;
 
-    my $recent_comments_rs = $self->result_source->schema->cache->get('recent_comments');
+    my $recent_comments = $self->result_source->schema->cache->get('recent_comments');
 
-    if ( !$recent_comments_rs ){
-        $recent_comments_rs = $self->search({
+    if ( !$recent_comments ){
+
+        @{$recent_comments} = $self->search({
             'me.deleted' => 'N'
         },{
             'order_by' =>  {
@@ -57,11 +51,12 @@ sub recent_comments {
                     'blog',
                 ],
             },
-        });
-        $self->result_source->schema->cache->set('recent_comments', $recent_comments_rs, 120 );
+        })->all;
+
+        $self->result_source->schema->cache->set('recent_comments', $recent_comments, 600 );
     }
 
-    return $recent_comments_rs;
+    return $recent_comments;
 }
 
 =head2 create_comment

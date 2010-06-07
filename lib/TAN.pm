@@ -234,17 +234,17 @@ returns the 20 most recent comments
 sub recent_comments{
     my $c = shift;
 
-    my @recent_comments = $c->model('MySQL::Comments')->recent_comments( $c->config->{'recent_comments'} )->all;
+    my $recent_comments = $c->model('MySQL::Comments')->recent_comments( $c->config->{'recent_comments'} );
 
-   tie my %grouped_comments, 'Tie::Hash::Indexed';
-   foreach my $comment (@recent_comments){
+    tie my %grouped_comments, 'Tie::Hash::Indexed';
+    foreach my $comment ( @{$recent_comments} ){
         if ( !defined($grouped_comments{$comment->object_id}) ){
             $grouped_comments{$comment->object_id} = [];
         }
         push(@{$grouped_comments{$comment->object_id}}, $comment);
-   }
+    }
 
-   return \%grouped_comments;
+    return \%grouped_comments;
 }
 
 =head2 filesize_h

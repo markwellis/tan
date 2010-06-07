@@ -140,6 +140,17 @@ sub random{
 
 }
 
+=head2 get
+
+B<@args = ($object_id, $location)>
+
+=over
+
+gets an article
+
+=back
+
+=cut
 sub get{
     my ($self, $object_id, $location) = @_;
 
@@ -163,7 +174,7 @@ sub get{
             'prefetch' => [$location, 'user'],
             'order_by' => '',
         });
-        $self->result_source->schema->cache->set('object:' . $object_id, $object_rs, 120);
+        $self->result_source->schema->cache->set('object:' . $object_id, $object_rs, 600);
     }
     return $object_rs;
 }

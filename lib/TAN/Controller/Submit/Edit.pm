@@ -126,6 +126,8 @@ sub post: PathPart('post') Chained('validate_user') Args(0) {
     $c->stash->{'object'}->tag_objects->delete();
     $c->forward('/submit/add_tags', [$c->stash->{'object'}]);
 
+    $c->cache->remove("object:" . $c->stash->{'object'}->id);
+
     $c->flash->{'message'} = 'Edit complete';
     $c->res->redirect($c->stash->{'object'}->url);
     $c->detach();

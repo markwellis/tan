@@ -161,6 +161,8 @@ sub comment: PathPart('_comment') Chained('location') Args(0) {
                 $comment
             );
             $comment_id = $comment_rs->comment_id;
+            $c->cache->remove("recent_comments");
+            $c->cache->remove("object:" . $c->stash->{'object_id'});
             $c->clear_cached_page( $comment_rs->object->url . '.*' );
         }
     } else {
@@ -308,6 +310,10 @@ sub edit_comment: PathPart('_edit_comment') Chained('location') Args(1) {
             #clear comment cache
             $c->cache->remove("comment.0:" . $comment_rs->id);
             $c->cache->remove("comment.1:" . $comment_rs->id);
+            #clear cobject
+            $c->cache->remove("object:" . $c->stash->{'object_id'});
+            $c->cache->remove("recent_comments");
+
             $c->clear_cached_page( $comment_rs->object->url . '.*' );
 
             $c->detach();
@@ -381,6 +387,7 @@ sub add_plus_minus: Private{
         my $plus_minus_rs = $c->model('MySQL::PlusMinus')->add(
             $type, $c->stash->{'object_id'}, $c->user->user_id
         );
+        $c->cache->remove("object:" . $c->stash->{'object_id'});
         $c->clear_cached_page( $plus_minus_rs->first->object->url . '.*' );
 
         if ( defined($c->req->param('json')) ){
@@ -431,6 +438,8 @@ sub post_saved_comments: Private{
                 $c->user->user_id, 
                 $saved_comment->{'comment'} 
             );
+            $c->cache->remove("recent_comments");
+            $c->cache->remove("object:" . $saved_comment->{'object_id'});
             $c->clear_cached_page( $comment_rs->object->url . '.*' );           
         }
         $c->session->{'comments'} = undef;
