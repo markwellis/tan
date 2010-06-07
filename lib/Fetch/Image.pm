@@ -71,10 +71,12 @@ sub fetch{
     my ($self, $url, $save_here) = @_;
 
     if ( !defined($url) || !defined($save_here) ){
-return 0;
+        return 0;
     }
 
     my $ua = $self->setup_ua();
+    $ua->default_header('Referer' => $url);
+
     my $head = $self->head($ua, $url);
 
     if ( $self->validate_head($head) ){
