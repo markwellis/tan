@@ -95,7 +95,7 @@ sub index: PathPart('') Chained('location') Args(1) {
     $c->stash->{'object'} = $c->model('MySQL::Object')->get($c->stash->{'object_id'}, $c->stash->{'location'});
 
     if ( !defined($c->stash->{'object'}) ){
-        $c->foward('/default');
+        $c->forward('/default');
         $c->detach();
     }
 
@@ -161,9 +161,7 @@ sub comment: PathPart('_comment') Chained('location') Args(0) {
                 $comment
             );
             $comment_id = $comment_rs->comment_id;
-            $c->cache->remove("recent_comments");
-            $c->cache->remove("object:" . $c->stash->{'object_id'});
-            $c->clear_cached_page( $comment_rs->object->url . '.*' );
+            $c->forward('delete_comment_caches', [$comment_rs]);
         }
     } else {
     #save for later
@@ -287,6 +285,8 @@ sub edit_comment: PathPart('_edit_comment') Chained('location') Args(1) {
             $comment_rs->update({
                 'deleted' => 'Y',
             });
+            $c->forward('delete_comment_caches', [$comment_rs]);
+
             if ( !defined($c->req->param('ajax')) ){
                 $c->flash->{'message'} = 'Comment deleted';
                 $c->res->redirect( $comment_rs->object->url );
@@ -300,6 +300,7 @@ sub edit_comment: PathPart('_edit_comment') Chained('location') Args(1) {
                 $comment_rs->update({
                     'comment' => $c->req->param("edit_comment_${comment_id}"),
                 });
+                $c->forward('delete_comment_caches', [$comment_rs]);
             }
             if ( !defined($c->req->param('ajax')) ){
                 $c->res->redirect( $comment_rs->object->url . '#comment' . $comment_rs->comment_id);
@@ -307,14 +308,6 @@ sub edit_comment: PathPart('_edit_comment') Chained('location') Args(1) {
 # RETURN COMMENT HERE
                 $c->forward('ajax_comment', [$comment_rs]);
             }
-            #clear comment cache
-            $c->cache->remove("comment.0:" . $comment_rs->id);
-            $c->cache->remove("comment.1:" . $comment_rs->id);
-            #clear cobject
-            $c->cache->remove("object:" . $c->stash->{'object_id'});
-            $c->cache->remove("recent_comments");
-
-            $c->clear_cached_page( $comment_rs->object->url . '.*' );
 
             $c->detach();
         }
@@ -328,6 +321,20 @@ sub edit_comment: PathPart('_edit_comment') Chained('location') Args(1) {
         $c->forward( $c->view('NoWrapper') );
         $c->detach();
     }
+}
+
+sub delete_comment_caches: Private{
+    my ( $self, $c, $comment_rs ) = @_;
+
+    #clear recent_comments
+    $c->cache->remove("recent_comments");
+    #clear comment cache
+    $c->cache->remove("comment.0:" . $comment_rs->id);
+    $c->cache->remove("comment.1:" . $comment_rs->id);
+    #clear cobject
+    $c->cache->remove("object:" . $c->stash->{'object_id'});
+
+    $c->clear_cached_page( $comment_rs->object->url . '.*' );
 }
 
 =head2 plus: PathPart('_plus') Chained('location') Args(0)
@@ -442,9 +449,7 @@ sub post_saved_comments: Private{
                 $c->user->user_id, 
                 $saved_comment->{'comment'} 
             );
-            $c->cache->remove("recent_comments");
-            $c->cache->remove("object:" . $saved_comment->{'object_id'});
-            $c->clear_cached_page( $comment_rs->object->url . '.*' );           
+            $c->forward('delete_comment_caches', [$comment_rs]);
         }
         $c->session->{'comments'} = undef;
     }
