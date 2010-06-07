@@ -378,6 +378,12 @@ sub post: PathPart('post') Chained('validate') Args(0){
 
     }
 
+    my $indexes_in_cache = $c->cache->get("indexes_in_cache");
+    foreach my $key ( keys(%{$indexes_in_cache}) ){
+        $c->cache->remove("index:${key}");
+        $c->cache->remove("pager:${key}");
+    }
+
     $c->flash->{'message'} = 'Submission complete';
     $c->res->redirect('/index/' . $c->stash->{'location'} . '/1/1/');
     $c->detach();

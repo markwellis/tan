@@ -141,7 +141,6 @@ sub promote{
 
     my $indexes_in_cache = $self->result_source->schema->cache->get("indexes_in_cache");
     foreach my $key ( keys(%{$indexes_in_cache}) ){
-        warn $key;
         $self->result_source->schema->cache->remove("index:${key}");
         $self->result_source->schema->cache->remove("pager:${key}");
     }
