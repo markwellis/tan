@@ -291,7 +291,8 @@ fieldset{
 	width:300px;
 	padding:5px;
 	border:1px solid #999;
-
+    word-wrap:break-word;
+    overflow:hidden;
 }
 
 .TAN-recent-comment-tip .tip-text > p{
