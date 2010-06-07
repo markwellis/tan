@@ -85,7 +85,7 @@ sub add{
     my $count = $plusminus_rs->count;
     my $first = $plusminus_rs->first;
 
-    if ( !$deleted && defined($first) ){
+    if ( !$deleted && ($type eq 'plus') && defined($first) ){
         my $object_rs = $first->object;
 
         #HACK - this probably isnt that nice!!
