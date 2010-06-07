@@ -388,7 +388,11 @@ sub add_plus_minus: Private{
             $type, $c->stash->{'object_id'}, $c->user->user_id
         );
         $c->cache->remove("object:" . $c->stash->{'object_id'});
-        $c->clear_cached_page( $plus_minus_rs->first->object->url . '.*' );
+
+        my $object = $c->model('MySQL::Object')->find({
+            'object_id' => $c->stash->{'object_id'}
+        });
+        $c->clear_cached_page( $object->url . '.*' ) if ( defined($object) );
 
         if ( defined($c->req->param('json')) ){
         #json
