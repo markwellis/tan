@@ -139,6 +139,23 @@ sub promote{
         'promoted' => \'NOW()',
     });
 
+    $self->clear_index_cache();
+}
+
+=head2 clear_index_cache
+
+B<@args = (undef)>
+
+=over
+
+clears the index page cache
+
+=back
+
+=cut
+sub clear_index_cache{
+    my ( $self ) = @_;
+
     my $indexes_in_cache = $self->result_source->schema->cache->get("indexes_in_cache");
     foreach my $key ( keys(%{$indexes_in_cache}) ){
         $self->result_source->schema->cache->remove("index:${key}");

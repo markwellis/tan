@@ -65,7 +65,7 @@ sub get_comment{
     my $comment = $self->result_source->schema->cache->get($key);
     if ( !$comment ){
         $comment = $parser->parse( $self->_comment, $no_bb );
-        $self->result_source->schema->cache->set($key, $comment, 120);
+        $self->result_source->schema->cache->set($key, $comment, 600);
     } else {
 #decode cached comment coz otherwise its double encoded!
         utf8::decode($comment);

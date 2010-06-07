@@ -378,11 +378,7 @@ sub post: PathPart('post') Chained('validate') Args(0){
 
     }
 
-    my $indexes_in_cache = $c->cache->get("indexes_in_cache");
-    foreach my $key ( keys(%{$indexes_in_cache}) ){
-        $c->cache->remove("index:${key}");
-        $c->cache->remove("pager:${key}");
-    }
+    $c->stash->{'object'}->clear_index_cache();
 
     $c->flash->{'message'} = 'Submission complete';
     $c->res->redirect('/index/' . $c->stash->{'location'} . '/1/1/');
@@ -428,6 +424,7 @@ sub submit_link: Private{
     if ( !defined($object) || !$object->id ){
         $c->flash->{'message'} = 'Error submitting link';
     }
+    $c->stash->{'object'} = $object;
 }
 
 =head2 submit_blog: Private
@@ -469,6 +466,7 @@ sub submit_blog: Private{
     if ( !defined($object) || !$object->id ){
         $c->flash->{'message'} = 'Error submitting blog';
     }
+    $c->stash->{'object'} = $object;
 }
 
 =head2 submit_picture: Private
@@ -518,6 +516,7 @@ sub submit_picture: Private{
     if ( !defined($object) || !$object->id ){
         $c->flash->{'message'} = 'Error submitting picture';
     }
+    $c->stash->{'object'} = $object;
 }
 
 =head2 add_tags: Private
