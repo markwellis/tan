@@ -8,6 +8,8 @@ USE `tan`;
 -- -----------------------------------------------------
 -- Table `tan`.`user`
 -- -----------------------------------------------------
+DROP TABLE IF EXISTS `tan`.`user` ;
+
 CREATE  TABLE IF NOT EXISTS `tan`.`user` (
   `user_id` BIGINT NOT NULL AUTO_INCREMENT ,
   `username` VARCHAR(255) NOT NULL ,
@@ -23,6 +25,8 @@ ENGINE = MyISAM;
 -- -----------------------------------------------------
 -- Table `tan`.`object`
 -- -----------------------------------------------------
+DROP TABLE IF EXISTS `tan`.`object` ;
+
 CREATE  TABLE IF NOT EXISTS `tan`.`object` (
   `object_id` BIGINT(20) NOT NULL AUTO_INCREMENT ,
   `type` ENUM('link','blog','picture') NOT NULL ,
@@ -34,12 +38,7 @@ CREATE  TABLE IF NOT EXISTS `tan`.`object` (
   INDEX `o_user` (`user_id` ASC) ,
   INDEX `created` (`created` ASC) ,
   INDEX `super_index` (`NSFW` ASC, `type` ASC, `promoted` ASC, `created` ASC) ,
-  INDEX `promoted` (`promoted` ASC) ,
-  CONSTRAINT `o_user`
-    FOREIGN KEY (`user_id` )
-    REFERENCES `tan`.`user` (`user_id` )
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+  INDEX `promoted` (`promoted` ASC) )
 ENGINE = MyISAM
 AUTO_INCREMENT = 53016
 DEFAULT CHARACTER SET = utf8
@@ -49,6 +48,8 @@ COLLATE = utf8_general_ci;
 -- -----------------------------------------------------
 -- Table `tan`.`views`
 -- -----------------------------------------------------
+DROP TABLE IF EXISTS `tan`.`views` ;
+
 CREATE  TABLE IF NOT EXISTS `tan`.`views` (
   `view_id` BIGINT(20) NOT NULL AUTO_INCREMENT ,
   `ip` VARCHAR(15) NOT NULL ,
@@ -60,17 +61,7 @@ CREATE  TABLE IF NOT EXISTS `tan`.`views` (
   PRIMARY KEY (`view_id`) ,
   INDEX `v_user` (`user_id` ASC) ,
   INDEX `v_object` (`object_id` ASC) ,
-  INDEX `session_objectid` (`object_id` ASC, `session_id` ASC, `type` ASC) ,
-  CONSTRAINT `v_user`
-    FOREIGN KEY (`user_id` )
-    REFERENCES `tan`.`user` (`user_id` )
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `v_object`
-    FOREIGN KEY (`object_id` )
-    REFERENCES `tan`.`object` (`object_id` )
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+  INDEX `session_objectid` (`object_id` ASC, `session_id` ASC, `type` ASC) )
 ENGINE = MyISAM
 AUTO_INCREMENT = 3397802
 DEFAULT CHARACTER SET = utf8
@@ -80,6 +71,8 @@ COLLATE = utf8_general_ci;
 -- -----------------------------------------------------
 -- Table `tan`.`user_tokens`
 -- -----------------------------------------------------
+DROP TABLE IF EXISTS `tan`.`user_tokens` ;
+
 CREATE  TABLE IF NOT EXISTS `tan`.`user_tokens` (
   `token_id` INT NOT NULL AUTO_INCREMENT ,
   `user_id` BIGINT NOT NULL ,
@@ -87,18 +80,15 @@ CREATE  TABLE IF NOT EXISTS `tan`.`user_tokens` (
   `expires` TIMESTAMP NOT NULL ,
   `type` ENUM('reg','forgot') NOT NULL ,
   PRIMARY KEY (`token_id`) ,
-  INDEX `ut_user` (`user_id` ASC) ,
-  CONSTRAINT `ut_user`
-    FOREIGN KEY (`user_id` )
-    REFERENCES `tan`.`user` (`user_id` )
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+  INDEX `ut_user` (`user_id` ASC) )
 ENGINE = MyISAM;
 
 
 -- -----------------------------------------------------
 -- Table `tan`.`tags`
 -- -----------------------------------------------------
+DROP TABLE IF EXISTS `tan`.`tags` ;
+
 CREATE  TABLE IF NOT EXISTS `tan`.`tags` (
   `tag_id` BIGINT NOT NULL AUTO_INCREMENT ,
   `tag` VARCHAR(30) NOT NULL ,
@@ -109,6 +99,8 @@ ENGINE = MyISAM;
 -- -----------------------------------------------------
 -- Table `tan`.`tag_objects`
 -- -----------------------------------------------------
+DROP TABLE IF EXISTS `tan`.`tag_objects` ;
+
 CREATE  TABLE IF NOT EXISTS `tan`.`tag_objects` (
   `object_tag_id` BIGINT NOT NULL AUTO_INCREMENT ,
   `tag_id` BIGINT NOT NULL ,
@@ -117,23 +109,15 @@ CREATE  TABLE IF NOT EXISTS `tan`.`tag_objects` (
   `created` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ,
   PRIMARY KEY (`object_tag_id`) ,
   INDEX `tags` (`tag_id` ASC) ,
-  INDEX `t_object` (`object_id` ASC) ,
-  CONSTRAINT `tags`
-    FOREIGN KEY (`tag_id` )
-    REFERENCES `tan`.`tags` (`tag_id` )
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `t_object`
-    FOREIGN KEY (`object_id` )
-    REFERENCES `tan`.`object` (`object_id` )
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+  INDEX `t_object` (`object_id` ASC) )
 ENGINE = MyISAM;
 
 
 -- -----------------------------------------------------
 -- Table `tan`.`comments`
 -- -----------------------------------------------------
+DROP TABLE IF EXISTS `tan`.`comments` ;
+
 CREATE  TABLE IF NOT EXISTS `tan`.`comments` (
   `comment_id` BIGINT(20) NOT NULL AUTO_INCREMENT ,
   `user_id` BIGINT(20) NOT NULL ,
@@ -147,17 +131,7 @@ CREATE  TABLE IF NOT EXISTS `tan`.`comments` (
   INDEX `c_object` (`object_id` ASC) ,
   INDEX `deleted` (`deleted` ASC) ,
   INDEX `created` (`created` ASC) ,
-  INDEX `object` (`object_id` ASC, `deleted` ASC) ,
-  CONSTRAINT `c_user`
-    FOREIGN KEY (`user_id` )
-    REFERENCES `tan`.`user` (`user_id` )
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `c_object`
-    FOREIGN KEY (`object_id` )
-    REFERENCES `tan`.`object` (`object_id` )
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+  INDEX `object` (`object_id` ASC, `deleted` ASC) )
 ENGINE = MyISAM
 AUTO_INCREMENT = 58860
 DEFAULT CHARACTER SET = utf8
@@ -167,6 +141,8 @@ COLLATE = utf8_general_ci;
 -- -----------------------------------------------------
 -- Table `tan`.`picture`
 -- -----------------------------------------------------
+DROP TABLE IF EXISTS `tan`.`picture` ;
+
 CREATE  TABLE IF NOT EXISTS `tan`.`picture` (
   `picture_id` BIGINT NOT NULL ,
   `title` VARCHAR(255) NOT NULL ,
@@ -179,18 +155,15 @@ CREATE  TABLE IF NOT EXISTS `tan`.`picture` (
   PRIMARY KEY (`picture_id`) ,
   INDEX `p_object` (`picture_id` ASC) ,
   INDEX `filenam` (`filename` ASC) ,
-  INDEX `512sum` (`sha512sum` ASC) ,
-  CONSTRAINT `p_object`
-    FOREIGN KEY (`picture_id` )
-    REFERENCES `tan`.`object` (`object_id` )
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+  INDEX `512sum` (`sha512sum` ASC) )
 ENGINE = MyISAM;
 
 
 -- -----------------------------------------------------
 -- Table `tan`.`blog`
 -- -----------------------------------------------------
+DROP TABLE IF EXISTS `tan`.`blog` ;
+
 CREATE  TABLE IF NOT EXISTS `tan`.`blog` (
   `blog_id` BIGINT NOT NULL ,
   `picture_id` BIGINT NOT NULL ,
@@ -199,23 +172,15 @@ CREATE  TABLE IF NOT EXISTS `tan`.`blog` (
   `description` VARCHAR(1000) NOT NULL ,
   PRIMARY KEY (`blog_id`) ,
   INDEX `b_object` (`blog_id` ASC) ,
-  INDEX `b_image` (`picture_id` ASC) ,
-  CONSTRAINT `b_object`
-    FOREIGN KEY (`blog_id` )
-    REFERENCES `tan`.`object` (`object_id` )
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `b_image`
-    FOREIGN KEY (`picture_id` )
-    REFERENCES `tan`.`picture` (`picture_id` )
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+  INDEX `b_image` (`picture_id` ASC) )
 ENGINE = MyISAM;
 
 
 -- -----------------------------------------------------
 -- Table `tan`.`link`
 -- -----------------------------------------------------
+DROP TABLE IF EXISTS `tan`.`link` ;
+
 CREATE  TABLE IF NOT EXISTS `tan`.`link` (
   `link_id` BIGINT NOT NULL ,
   `title` VARCHAR(255) NOT NULL ,
@@ -224,34 +189,21 @@ CREATE  TABLE IF NOT EXISTS `tan`.`link` (
   `url` VARCHAR(400) NOT NULL ,
   INDEX `l_image` (`picture_id` ASC) ,
   INDEX `l_object` (`link_id` ASC) ,
-  PRIMARY KEY (`link_id`) ,
-  CONSTRAINT `l_image`
-    FOREIGN KEY (`picture_id` )
-    REFERENCES `tan`.`picture` (`picture_id` )
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `l_object`
-    FOREIGN KEY (`link_id` )
-    REFERENCES `tan`.`object` (`object_id` )
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+  PRIMARY KEY (`link_id`) )
 ENGINE = MyISAM;
 
 
 -- -----------------------------------------------------
 -- Table `tan`.`old_lookup`
 -- -----------------------------------------------------
+DROP TABLE IF EXISTS `tan`.`old_lookup` ;
+
 CREATE  TABLE IF NOT EXISTS `tan`.`old_lookup` (
   `new_id` BIGINT(20) NOT NULL ,
   `old_id` INT(11) NOT NULL ,
   `type` ENUM('link','blog','picture','user') NOT NULL ,
   INDEX `ol_object` (`new_id` ASC) ,
-  INDEX `lookup` (`old_id` ASC, `type` ASC) ,
-  CONSTRAINT `ol_object`
-    FOREIGN KEY (`new_id` )
-    REFERENCES `tan`.`object` (`object_id` )
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+  INDEX `lookup` (`old_id` ASC, `type` ASC) )
 ENGINE = MyISAM
 DEFAULT CHARACTER SET = utf8
 COLLATE = utf8_general_ci;
@@ -260,6 +212,8 @@ COLLATE = utf8_general_ci;
 -- -----------------------------------------------------
 -- Table `tan`.`plus_minus`
 -- -----------------------------------------------------
+DROP TABLE IF EXISTS `tan`.`plus_minus` ;
+
 CREATE  TABLE IF NOT EXISTS `tan`.`plus_minus` (
   `plus_minus_id` BIGINT(20) NOT NULL AUTO_INCREMENT ,
   `type` ENUM('plus','minus') NOT NULL ,
