@@ -25,8 +25,8 @@ my $picture_lookup = {};
 my $tag_lookup = {};
 my $user_comment_no = {};
 
-my $old_avatar_path = '/mnt/stuff/images/old_avatar';
-my $new_avatar_path = '/mnt/stuff/images/avatar';
+my $old_avatar_path = '/mnt/stuff/images/avatar';
+my $new_avatar_path = '/mnt/stuff/TAN/user/avatar';
 
 #USERS
 my $old_users = $olddb->resultset('UserDetails')->search({},{
@@ -94,11 +94,11 @@ while (my $old_picture = $old_pictures->next){
 #move old_pic to new_pic/mod
 
 #this shouldn't be hardcoded....
-    mkpath("/mnt/stuff/images/pics/${pic_mod}");
-    copy("/mnt/stuff/images/old_pics/${pic_filename}", "/mnt/stuff/images/pics/${pic_path}");
+    mkpath("/mnt/stuff/TAN/user/pics/${pic_mod}");
+    copy("/mnt/stuff/images/pics/${pic_filename}", "/mnt/stuff/TAN/user/pics/${pic_path}");
 
 #work out pic 512sum
-    open(INFILE, "/mnt/stuff/images/pics/${pic_path}");
+    open(INFILE, "/mnt/stuff/TAN/user/pics/${pic_path}");
     my $sha = new Digest::SHA(512);
     $sha->addfile(*INFILE);
     my $pic_sha512 = $sha->hexdigest();
