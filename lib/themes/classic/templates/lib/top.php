@@ -23,7 +23,7 @@ name="submit" alt="SEND ME MONIES!1!!">
                     //<![CDATA[
                         window.addEvent('domready', function() {
                             $$('.mibbit').addEvent('click', function(e) {
-                                popUpWindow("https://widget.mibbit.com/?server=irc.thisaintnews.com%3A%2B6697&chatOutputShowTimes=true&autoConnect=true"
+                                popUpWindow("https://widget.mibbit.com/?server=irc.mibbit.com%3A%2B6697&chatOutputShowTimes=true&autoConnect=true"
                               +"&channel=%23thisaintnews&settings=8a8a5ac18a22e7eecd04026233c3df93"
                               +"&nick=<?php echo $username ?>", 720, 400);
                             e.stop();
