@@ -75,6 +75,7 @@ while (my $old_user = $old_users->next){
 
     $progress->update( ++$loop );
 }
+$progress->update( $count );
 print "\n";
 
 #PICTURES
@@ -143,6 +144,7 @@ while (my $old_picture = $old_pictures->next){
 
     $progress->update( ++$loop );
 }
+$progress->update( $count );
 print "\n";
 
 #BLOGS
@@ -191,6 +193,7 @@ while (my $old_blog = $old_blogs->next){
 
     $progress->update( ++$loop );
 }
+$progress->update( $count );
 print "\n";
 
 #LINKS
@@ -241,7 +244,7 @@ while (my $old_link = $old_links->next){
 
     $progress->update( ++$loop );
 }
-
+$progress->update( $count );
 print "\n";
 
 #TAGS
@@ -268,6 +271,7 @@ while (my $old_tag = $old_tags->next){
 
     $progress->update( ++$loop );
 }
+$progress->update( $count );
 print "\n";
 
 #TAG_OBJECTS
@@ -308,6 +312,7 @@ while (my $old_tag = $old_tagds->next){
 
     $progress->update( ++$loop );
 }
+$progress->update( $count );
 print "\n";
 
 #COMMENTS
@@ -360,6 +365,7 @@ while (my $old_comment = $old_comments->next){
 
     $progress->update( ++$loop );
 }
+$progress->update( $count );
 print "\n";
 
 #PLUS
@@ -401,6 +407,7 @@ while (my $old_plus = $old_pluss->next){
 
     $progress->update( ++$loop );
 }
+$progress->update( $count );
 print "\n";
 
 #MINUS
@@ -442,6 +449,7 @@ while (my $old_plus = $old_minuss->next){
 
     $progress->update( ++$loop );
 }
+$progress->update( $count );
 print "\n";
 
 #VIEWS
@@ -486,6 +494,7 @@ while (my $old_pi = $old_pis->next){
     $progress->update( ++$loop );
 
 }
+$progress->update( $count );
 print "\n";
 
 sub strip_slashes{
