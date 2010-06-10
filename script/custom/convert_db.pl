@@ -46,7 +46,6 @@ $progress = Term::ProgressBar->new({
     'ETA' => 'linear',
     'bar_width' => 50,
 });
-$progress->minor(0);
 
 while (my $old_user = $old_users->next){
     my $new_user = $newdb->resultset('User')->create({
@@ -92,7 +91,6 @@ $progress = Term::ProgressBar->new({
     'ETA' => 'linear',
     'bar_width' => 50,
 });
-$progress->minor(0);
 
 while (my $old_picture = $old_pictures->next){
     my $new_object = $newdb->resultset('Object')->create({
@@ -161,7 +159,6 @@ $progress = Term::ProgressBar->new({
     'ETA' => 'linear',
     'bar_width' => 50,
 });
-$progress->minor(0);
 
 while (my $old_blog = $old_blogs->next){
     my $new_object = $newdb->resultset('Object')->create({
@@ -209,7 +206,6 @@ $progress = Term::ProgressBar->new({
     'ETA' => 'linear',
     'bar_width' => 50,
 });
-$progress->minor(0);
 
 while (my $old_link = $old_links->next){
     if ($user_lookup->{$old_link->user_id}){
@@ -257,7 +253,6 @@ $progress = Term::ProgressBar->new({
     'ETA' => 'linear',
     'bar_width' => 50,
 });
-$progress->minor(0);
 
 while (my $old_tag = $old_tags->next){
     my $new_tag = $newdb->resultset('Tags')->create({
@@ -285,7 +280,6 @@ $progress = Term::ProgressBar->new({
     'ETA' => 'linear',
     'bar_width' => 50,
 });
-$progress->minor(0);
 
 while (my $old_tag = $old_tagds->next){
     my $newid;
@@ -326,7 +320,6 @@ $progress = Term::ProgressBar->new({
     'ETA' => 'linear',
     'bar_width' => 50,
 });
-$progress->minor(0);
 
 while (my $old_comment = $old_comments->next){
     if ($user_lookup->{$old_comment->user_id}){
@@ -378,7 +371,6 @@ $progress = Term::ProgressBar->new({
     'ETA' => 'linear',
     'bar_width' => 50,
 });
-$progress->minor(0);
 
 while (my $old_plus = $old_pluss->next){
     if ($user_lookup->{$old_plus->user_id}){
@@ -419,7 +411,6 @@ $progress = Term::ProgressBar->new({
     'ETA' => 'linear',
     'bar_width' => 50,
 });
-$progress->minor(0);
 
 while (my $old_plus = $old_minuss->next){
     if ($user_lookup->{$old_plus->user_id}){
@@ -458,7 +449,6 @@ $progress = Term::ProgressBar->new({
     'ETA' => 'linear',
     'bar_width' => 50,
 });
-$progress->minor(0);
 
 while (my $old_pi = $old_pis->next){
     my $newid = '';
