@@ -11,8 +11,8 @@ use File::Copy;
 use File::Path qw/mkpath/;
 use Digest::SHA;
 
-use Data::Dumper;
 use Time::HiRes qw/time/;
+use Term::ProgressBar;
 
 my $start_time = time;
 
