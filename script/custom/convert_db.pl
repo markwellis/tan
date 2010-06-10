@@ -488,4 +488,4 @@ sub strip_slashes{
 
 my $time = (time - $start_time);
 
-print "took ${time} seconds";
+print "\n\ntook ${time} seconds";
