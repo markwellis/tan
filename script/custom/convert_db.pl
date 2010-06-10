@@ -12,6 +12,9 @@ use File::Path qw/mkpath/;
 use Digest::SHA;
 
 use Data::Dumper;
+use Time::HiRes qw/time/;
+
+my $start_time = time;
 
 #db connections
 my $newdb = new TAN::Model::MySQL;
@@ -25,8 +28,10 @@ my $picture_lookup = {};
 my $tag_lookup = {};
 my $user_comment_no = {};
 
-my $old_avatar_path = '/mnt/stuff/images/avatar';
+my $old_avatar_path = '/mnt/stuff/avatar';
 my $new_avatar_path = '/mnt/stuff/TAN/user/avatar';
+
+my ( $count, $loop );
 
 #USERS
 my $old_users = $olddb->resultset('UserDetails')->search({},{
@@ -64,10 +69,13 @@ print "converted " . $old_users->count . " users\n";
 #   needs
 #       user
 my $old_pictures = $olddb->resultset('PictureDetails')->search({},{
-    'order_by' => {
-        '-desc' => 'picture_id'
-    }
+    'order_by' => 'picture_id'
 });
+
+$count = $old_pictures->count;
+$loop = 0;
+print "${count} pictures to convert\n";
+
 while (my $old_picture = $old_pictures->next){
     my $new_object = $newdb->resultset('Object')->create({
         'type' => 'picture',
@@ -114,55 +122,69 @@ while (my $old_picture = $old_pictures->next){
         'size' => $old_picture->size,
         'sha512sum' => $pic_sha512,
     });
+
+    if (++$loop % 5000 == 0) {
+        print "\t${loop} converted";
+    }
 }
-print "converted " . $old_pictures->count . " pictures\n";
+print "converted ${count} pictures\n\n";
 
 #BLOGS
 #   needs
 #       user
 #       picture
 my $old_blogs = $olddb->resultset('BlogDetails')->search({},{
-    'order_by' => {
-        '-desc' => 'blog_id'
-    }
+    'order_by' => 'blog_id'
 });
-while (my $old_blog = $old_blogs->next){
-        my $new_object = $newdb->resultset('Object')->create({
-            'type' => 'blog',
-            'created' => $old_blog->date,
-            'promoted' => $old_blog->promoted || 0,
-            'user_id' => $user_lookup->{$old_blog->user_id} || 1, #assign things from none users to me!
-            'nsfw' => 'N',
-        });
 
-        my $old_lookup = $newdb->resultset('OldLookup')->create({
-            'new_id' => $new_object->id,
-            'old_id' => $old_blog->blog_id,
-            'type' => 'blog',
-        });
-        
-        $blog_lookup->{$old_blog->blog_id} = $new_object->id;
+$count = $old_blogs->count;
+$loop = 0;
+print "${count} blogs to convert\n";
+
+while (my $old_blog = $old_blogs->next){
+    my $new_object = $newdb->resultset('Object')->create({
+        'type' => 'blog',
+        'created' => $old_blog->date,
+        'promoted' => $old_blog->promoted || 0,
+        'user_id' => $user_lookup->{$old_blog->user_id} || 1, #assign things from none users to me!
+        'nsfw' => 'N',
+    });
+
+    my $old_lookup = $newdb->resultset('OldLookup')->create({
+        'new_id' => $new_object->id,
+        'old_id' => $old_blog->blog_id,
+        'type' => 'blog',
+    });
     
-        my $new_pic_id = $picture_lookup->{$old_blog->category};
-        my $new_blog = $newdb->resultset('Blog')->create({
-            'blog_id' => $new_object->id,
-            'title' => strip_slashes(decode_entities($old_blog->title)),
-            'description' => strip_slashes(decode_entities($old_blog->description)),
-            'picture_id' => $new_pic_id || 1,
-            'details' => strip_slashes($old_blog->details),
-        });
+    $blog_lookup->{$old_blog->blog_id} = $new_object->id;
+
+    my $new_pic_id = $picture_lookup->{$old_blog->category};
+    my $new_blog = $newdb->resultset('Blog')->create({
+        'blog_id' => $new_object->id,
+        'title' => strip_slashes(decode_entities($old_blog->title)),
+        'description' => strip_slashes(decode_entities($old_blog->description)),
+        'picture_id' => $new_pic_id || 1,
+        'details' => strip_slashes($old_blog->details),
+    });
+
+    if (++$loop % 5000 == 0) {
+        print "\t${loop} converted";
+    }
 }
-print "converted " . $old_blogs->count . " blogs\n";
+print "converted ${count} blogs\n\n";
 
 #LINKS
 #   needs
 #       user
 #       picture
 my $old_links = $olddb->resultset('LinkDetails')->search({},{
-    'order_by' => {
-        '-desc' => 'link_id'
-    }
+    'order_by' => 'link_id'
 });
+
+$count = $old_links->count;
+$loop = 0;
+print "${count} links to convert\n";
+
 while (my $old_link = $old_links->next){
     if ($user_lookup->{$old_link->user_id}){
         my $new_object = $newdb->resultset('Object')->create({
@@ -190,23 +212,34 @@ while (my $old_link = $old_links->next){
             'url' => strip_slashes(decode_entities($old_link->url)),
         });
     }
+    if (++$loop % 5000 == 0) {
+        print "\t${loop} converted";
+    }
 }
-print "converted " . $old_links->count . " links\n";
+
+print "converted ${count} links\n\n";
 
 #TAGS
 my $old_tags = $olddb->resultset('Tags')->search({},{
-    'order_by' => {
-        '-desc' => 'tag_id'
-    }
+    'order_by' => 'tag_id'
 });
+
+$count = $old_tags->count;
+$loop = 0;
+print "${count} tags to convert\n";
+
 while (my $old_tag = $old_tags->next){
     my $new_tag = $newdb->resultset('Tags')->create({
         'tag' => $old_tag->tag,
     });
 
     $tag_lookup->{$old_tag->tag_id} = $new_tag->tag_id;
+
+    if (++$loop % 5000 == 0) {
+        print "\t${loop} converted";
+    }
 }
-print "converted " . $old_tags->count . " tags\n";
+print "converted ${count} tags\n\n";
 
 #TAG_OBJECTS
 #   needs
@@ -214,6 +247,11 @@ print "converted " . $old_tags->count . " tags\n";
 #       user
 #       tags
 my $old_tagds = $olddb->resultset('TagDetails');
+
+$count = $old_tagds->count;
+$loop = 0;
+print "${count} tag details to convert\n";
+
 while (my $old_tag = $old_tagds->next){
     my $newid;
     if ($old_tag->link_id > 0){
@@ -232,8 +270,12 @@ while (my $old_tag = $old_tagds->next){
             'created' => $old_tag->date,
         });
     }
+
+    if (++$loop % 5000 == 0) {
+        print "\t${loop} converted";
+    }
 }
-print "converted " . $old_tagds->count . " tag details\n";
+print "converted ${count} tag details\n\n";
 
 #COMMENTS
 #   needs
@@ -242,6 +284,11 @@ print "converted " . $old_tagds->count . " tag details\n";
 my $old_comments = $olddb->resultset('Comments')->search({},{
     'order_by' => 'comment_id'
 });
+
+$count = $old_comments->count;
+$loop = 0;
+print "${count} comments to convert\n";
+
 while (my $old_comment = $old_comments->next){
     if ($user_lookup->{$old_comment->user_id}){
         my $newid;
@@ -271,18 +318,24 @@ while (my $old_comment = $old_comments->next){
             });
         }
     }
+    if (++$loop % 5000 == 0) {
+        print "\t${loop} converted";
+    }
 }
-print "converted " . $old_comments->count . " comments\n";
+print "converted ${count} comments\n\n";
 
 #PLUS
 #   needs
 #       objects
 #       user
 my $old_pluss = $olddb->resultset('Plus')->search({},{
-    'order_by' => {
-        '-desc' => 'plus_id'
-    }
+    'order_by' => 'plus_id',
 });
+
+$count = $old_pluss->count;
+$loop = 0;
+print "${count} plus to convert\n";
+
 while (my $old_plus = $old_pluss->next){
     if ($user_lookup->{$old_plus->user_id}){
         my $newid;
@@ -301,18 +354,25 @@ while (my $old_plus = $old_pluss->next){
             });
         }
     }
+
+    if (++$loop % 5000 == 0) {
+        print "\t${loop} converted";
+    }
 }
-print "converted " . $old_pluss->count . " plus\n";
+print "converted ${count} plus\n\n";
 
 #MINUS
 #   needs
 #       objects
 #       user
 my $old_minuss = $olddb->resultset('Minus')->search({},{
-    'order_by' => {
-        '-desc' => 'minus_id'
-    }
+    'order_by' => 'minus_id'
 });
+
+$count = $old_minuss->count;
+$loop = 0;
+print "${count} minus to convert\n";
+
 while (my $old_plus = $old_minuss->next){
     if ($user_lookup->{$old_plus->user_id}){
         my $newid;
@@ -331,14 +391,23 @@ while (my $old_plus = $old_minuss->next){
             });
         }
     }
+
+    if (++$loop % 5000 == 0) {
+        print "\t${loop} converted";
+    }
 }
-print "converted " . $old_minuss->count . " minus\n";
+print "converted ${count} minus\n\n";
 
 #VIEWS
 #   needs
 #       objects
 #       user
 my $old_pis = $olddb->resultset('Pi');
+
+$count = $old_pictures->count;
+$loop = 0;
+print "${count} views to convert\n";
+
 while (my $old_pi = $old_pis->next){
     my $newid = '';
     if ($old_pi->type eq 'link'){
@@ -350,19 +419,23 @@ while (my $old_pi = $old_pis->next){
     }
     my $uid = (defined($old_pi->user_id) && defined($user_lookup->{$old_pi->user_id})) ? $user_lookup->{$old_pi->user_id} : '';
 
-my $params = {
-    'ip' => $old_pi->ip,
-    'object_id' => $newid,
-    'session_id' => $old_pi->session_id,
-    'user_id' => $uid,
-    'created' => $old_pi->date,
-};
+    my $params = {
+        'ip' => $old_pi->ip,
+        'object_id' => $newid,
+        'session_id' => $old_pi->session_id,
+        'user_id' => $uid,
+        'created' => $old_pi->date,
+    };
 
     if ($newid ne ''){
         my $new_view = $newdb->resultset('Views')->create($params);
     }
+
+    if (++$loop % 5000 == 0) {
+        print "\t${loop} converted";
+    }
 }
-print "converted " . $old_pis->count . " views\n";
+print "converted ${count} views\n\n";
 
 sub strip_slashes{
     my $string = shift;
@@ -371,3 +444,7 @@ sub strip_slashes{
     }
     return $string;
 }
+
+my $time = (time - $start_time);
+
+print "took ${time} seconds";
