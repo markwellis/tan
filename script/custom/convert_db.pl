@@ -124,7 +124,7 @@ while (my $old_picture = $old_pictures->next){
     });
 
     if (++$loop % 5000 == 0) {
-        print "\t${loop} converted";
+        print "\t${loop} converted\n";
     }
 }
 print "converted ${count} pictures\n\n";
@@ -168,7 +168,7 @@ while (my $old_blog = $old_blogs->next){
     });
 
     if (++$loop % 5000 == 0) {
-        print "\t${loop} converted";
+        print "\t${loop} converted\n";
     }
 }
 print "converted ${count} blogs\n\n";
@@ -213,7 +213,7 @@ while (my $old_link = $old_links->next){
         });
     }
     if (++$loop % 5000 == 0) {
-        print "\t${loop} converted";
+        print "\t${loop} converted\n";
     }
 }
 
@@ -236,7 +236,7 @@ while (my $old_tag = $old_tags->next){
     $tag_lookup->{$old_tag->tag_id} = $new_tag->tag_id;
 
     if (++$loop % 5000 == 0) {
-        print "\t${loop} converted";
+        print "\t${loop} converted\n";
     }
 }
 print "converted ${count} tags\n\n";
@@ -272,7 +272,7 @@ while (my $old_tag = $old_tagds->next){
     }
 
     if (++$loop % 5000 == 0) {
-        print "\t${loop} converted";
+        print "\t${loop} converted\n";
     }
 }
 print "converted ${count} tag details\n\n";
@@ -319,7 +319,7 @@ while (my $old_comment = $old_comments->next){
         }
     }
     if (++$loop % 5000 == 0) {
-        print "\t${loop} converted";
+        print "\t${loop} converted\n";
     }
 }
 print "converted ${count} comments\n\n";
@@ -356,7 +356,7 @@ while (my $old_plus = $old_pluss->next){
     }
 
     if (++$loop % 5000 == 0) {
-        print "\t${loop} converted";
+        print "\t${loop} converted\n";
     }
 }
 print "converted ${count} plus\n\n";
@@ -393,7 +393,7 @@ while (my $old_plus = $old_minuss->next){
     }
 
     if (++$loop % 5000 == 0) {
-        print "\t${loop} converted";
+        print "\t${loop} converted\n";
     }
 }
 print "converted ${count} minus\n\n";
@@ -432,7 +432,7 @@ while (my $old_pi = $old_pis->next){
     }
 
     if (++$loop % 5000 == 0) {
-        print "\t${loop} converted";
+        print "\t${loop} converted\n";
     }
 }
 print "converted ${count} views\n\n";
