@@ -75,6 +75,7 @@ while (my $old_user = $old_users->next){
 
     $progress->update( ++$loop );
 }
+print "\n";
 
 #PICTURES
 #   needs
@@ -142,6 +143,7 @@ while (my $old_picture = $old_pictures->next){
 
     $progress->update( ++$loop );
 }
+print "\n";
 
 #BLOGS
 #   needs
@@ -189,6 +191,7 @@ while (my $old_blog = $old_blogs->next){
 
     $progress->update( ++$loop );
 }
+print "\n";
 
 #LINKS
 #   needs
@@ -239,6 +242,7 @@ while (my $old_link = $old_links->next){
     $progress->update( ++$loop );
 }
 
+print "\n";
 
 #TAGS
 my $old_tags = $olddb->resultset('Tags')->search({},{
@@ -264,6 +268,7 @@ while (my $old_tag = $old_tags->next){
 
     $progress->update( ++$loop );
 }
+print "\n";
 
 #TAG_OBJECTS
 #   needs
@@ -303,6 +308,7 @@ while (my $old_tag = $old_tagds->next){
 
     $progress->update( ++$loop );
 }
+print "\n";
 
 #COMMENTS
 #   needs
@@ -354,6 +360,7 @@ while (my $old_comment = $old_comments->next){
 
     $progress->update( ++$loop );
 }
+print "\n";
 
 #PLUS
 #   needs
@@ -394,6 +401,7 @@ while (my $old_plus = $old_pluss->next){
 
     $progress->update( ++$loop );
 }
+print "\n";
 
 #MINUS
 #   needs
@@ -434,6 +442,7 @@ while (my $old_plus = $old_minuss->next){
 
     $progress->update( ++$loop );
 }
+print "\n";
 
 #VIEWS
 #   needs
@@ -477,6 +486,7 @@ while (my $old_pi = $old_pis->next){
     $progress->update( ++$loop );
 
 }
+print "\n";
 
 sub strip_slashes{
     my $string = shift;
@@ -488,4 +498,4 @@ sub strip_slashes{
 
 my $time = (time - $start_time);
 
-print "\n\ntook ${time} seconds";
+print "\ntook ${time} seconds";
