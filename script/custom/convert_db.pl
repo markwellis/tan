@@ -31,12 +31,23 @@ my $user_comment_no = {};
 my $old_avatar_path = '/mnt/stuff/avatar';
 my $new_avatar_path = '/mnt/stuff/TAN/user/avatar';
 
-my ( $count, $loop );
+my ( $count, $loop, $progress );
 
 #USERS
 my $old_users = $olddb->resultset('UserDetails')->search({},{
     'order_by' => 'user_id',
 });
+
+$count = $old_users->count;
+$loop = 0;
+$progress = Term::ProgressBar->new({
+    'name' => 'Users',
+    'count' => $count,
+    'ETA' => 'linear',
+    'bar_width' => 50,
+});
+$progress->minor(0);
+
 while (my $old_user = $old_users->next){
     my $new_user = $newdb->resultset('User')->create({
         'username' => $old_user->username,
@@ -62,8 +73,9 @@ while (my $old_user = $old_users->next){
         'type' => 'user',
     });
 
+    $progress->update( ++$loop );
 }
-print "converted " . $old_users->count . " users\n";
+print "\n\n";
 
 #PICTURES
 #   needs
@@ -74,7 +86,13 @@ my $old_pictures = $olddb->resultset('PictureDetails')->search({},{
 
 $count = $old_pictures->count;
 $loop = 0;
-print "${count} pictures to convert\n";
+$progress = Term::ProgressBar->new({
+    'name' => 'Pictures',
+    'count' => $count,
+    'ETA' => 'linear',
+    'bar_width' => 50,
+});
+$progress->minor(0);
 
 while (my $old_picture = $old_pictures->next){
     my $new_object = $newdb->resultset('Object')->create({
@@ -123,11 +141,9 @@ while (my $old_picture = $old_pictures->next){
         'sha512sum' => $pic_sha512,
     });
 
-    if (++$loop % 5000 == 0) {
-        print "\t${loop} converted\n";
-    }
+    $progress->update( ++$loop );
 }
-print "converted ${count} pictures\n\n";
+print "\n\n";
 
 #BLOGS
 #   needs
@@ -139,7 +155,13 @@ my $old_blogs = $olddb->resultset('BlogDetails')->search({},{
 
 $count = $old_blogs->count;
 $loop = 0;
-print "${count} blogs to convert\n";
+$progress = Term::ProgressBar->new({
+    'name' => 'Blogs',
+    'count' => $count,
+    'ETA' => 'linear',
+    'bar_width' => 50,
+});
+$progress->minor(0);
 
 while (my $old_blog = $old_blogs->next){
     my $new_object = $newdb->resultset('Object')->create({
@@ -167,11 +189,9 @@ while (my $old_blog = $old_blogs->next){
         'details' => strip_slashes($old_blog->details),
     });
 
-    if (++$loop % 5000 == 0) {
-        print "\t${loop} converted\n";
-    }
+    $progress->update( ++$loop );
 }
-print "converted ${count} blogs\n\n";
+print "\n\n";
 
 #LINKS
 #   needs
@@ -183,7 +203,13 @@ my $old_links = $olddb->resultset('LinkDetails')->search({},{
 
 $count = $old_links->count;
 $loop = 0;
-print "${count} links to convert\n";
+$progress = Term::ProgressBar->new({
+    'name' => 'Links',
+    'count' => $count,
+    'ETA' => 'linear',
+    'bar_width' => 50,
+});
+$progress->minor(0);
 
 while (my $old_link = $old_links->next){
     if ($user_lookup->{$old_link->user_id}){
@@ -212,12 +238,11 @@ while (my $old_link = $old_links->next){
             'url' => strip_slashes(decode_entities($old_link->url)),
         });
     }
-    if (++$loop % 5000 == 0) {
-        print "\t${loop} converted\n";
-    }
+
+    $progress->update( ++$loop );
 }
 
-print "converted ${count} links\n\n";
+print "\n\n";
 
 #TAGS
 my $old_tags = $olddb->resultset('Tags')->search({},{
@@ -226,7 +251,13 @@ my $old_tags = $olddb->resultset('Tags')->search({},{
 
 $count = $old_tags->count;
 $loop = 0;
-print "${count} tags to convert\n";
+$progress = Term::ProgressBar->new({
+    'name' => 'Tags',
+    'count' => $count,
+    'ETA' => 'linear',
+    'bar_width' => 50,
+});
+$progress->minor(0);
 
 while (my $old_tag = $old_tags->next){
     my $new_tag = $newdb->resultset('Tags')->create({
@@ -235,11 +266,9 @@ while (my $old_tag = $old_tags->next){
 
     $tag_lookup->{$old_tag->tag_id} = $new_tag->tag_id;
 
-    if (++$loop % 5000 == 0) {
-        print "\t${loop} converted\n";
-    }
+    $progress->update( ++$loop );
 }
-print "converted ${count} tags\n\n";
+print "\n\n";
 
 #TAG_OBJECTS
 #   needs
@@ -250,7 +279,13 @@ my $old_tagds = $olddb->resultset('TagDetails');
 
 $count = $old_tagds->count;
 $loop = 0;
-print "${count} tag details to convert\n";
+$progress = Term::ProgressBar->new({
+    'name' => 'Tag Details',
+    'count' => $count,
+    'ETA' => 'linear',
+    'bar_width' => 50,
+});
+$progress->minor(0);
 
 while (my $old_tag = $old_tagds->next){
     my $newid;
@@ -271,11 +306,9 @@ while (my $old_tag = $old_tagds->next){
         });
     }
 
-    if (++$loop % 5000 == 0) {
-        print "\t${loop} converted\n";
-    }
+    $progress->update( ++$loop );
 }
-print "converted ${count} tag details\n\n";
+print "\n\n";
 
 #COMMENTS
 #   needs
@@ -287,7 +320,13 @@ my $old_comments = $olddb->resultset('Comments')->search({},{
 
 $count = $old_comments->count;
 $loop = 0;
-print "${count} comments to convert\n";
+$progress = Term::ProgressBar->new({
+    'name' => 'Users',
+    'count' => $count,
+    'ETA' => 'linear',
+    'bar_width' => 50,
+});
+$progress->minor(0);
 
 while (my $old_comment = $old_comments->next){
     if ($user_lookup->{$old_comment->user_id}){
@@ -318,11 +357,10 @@ while (my $old_comment = $old_comments->next){
             });
         }
     }
-    if (++$loop % 5000 == 0) {
-        print "\t${loop} converted\n";
-    }
+
+    $progress->update( ++$loop );
 }
-print "converted ${count} comments\n\n";
+print "\n\n";
 
 #PLUS
 #   needs
@@ -334,7 +372,13 @@ my $old_pluss = $olddb->resultset('Plus')->search({},{
 
 $count = $old_pluss->count;
 $loop = 0;
-print "${count} plus to convert\n";
+$progress = Term::ProgressBar->new({
+    'name' => 'Users',
+    'count' => $count,
+    'ETA' => 'linear',
+    'bar_width' => 50,
+});
+$progress->minor(0);
 
 while (my $old_plus = $old_pluss->next){
     if ($user_lookup->{$old_plus->user_id}){
@@ -355,11 +399,9 @@ while (my $old_plus = $old_pluss->next){
         }
     }
 
-    if (++$loop % 5000 == 0) {
-        print "\t${loop} converted\n";
-    }
+    $progress->update( ++$loop );
 }
-print "converted ${count} plus\n\n";
+print "\n\n";
 
 #MINUS
 #   needs
@@ -371,7 +413,13 @@ my $old_minuss = $olddb->resultset('Minus')->search({},{
 
 $count = $old_minuss->count;
 $loop = 0;
-print "${count} minus to convert\n";
+$progress = Term::ProgressBar->new({
+    'name' => 'Users',
+    'count' => $count,
+    'ETA' => 'linear',
+    'bar_width' => 50,
+});
+$progress->minor(0);
 
 while (my $old_plus = $old_minuss->next){
     if ($user_lookup->{$old_plus->user_id}){
@@ -392,11 +440,9 @@ while (my $old_plus = $old_minuss->next){
         }
     }
 
-    if (++$loop % 5000 == 0) {
-        print "\t${loop} converted\n";
-    }
+    $progress->update( ++$loop );
 }
-print "converted ${count} minus\n\n";
+print "\n\n";
 
 #VIEWS
 #   needs
@@ -406,7 +452,13 @@ my $old_pis = $olddb->resultset('Pi');
 
 $count = $old_pis->count;
 $loop = 0;
-print "${count} views to convert\n";
+$progress = Term::ProgressBar->new({
+    'name' => 'Users',
+    'count' => $count,
+    'ETA' => 'linear',
+    'bar_width' => 50,
+});
+$progress->minor(0);
 
 while (my $old_pi = $old_pis->next){
     my $newid = '';
@@ -431,11 +483,10 @@ while (my $old_pi = $old_pis->next){
         my $new_view = $newdb->resultset('Views')->create($params);
     }
 
-    if (++$loop % 5000 == 0) {
-        print "\t${loop} converted\n";
-    }
+    $progress->update( ++$loop );
+
 }
-print "converted ${count} views\n\n";
+print "\n\n";
 
 sub strip_slashes{
     my $string = shift;
