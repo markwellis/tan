@@ -43,8 +43,6 @@ $loop = 0;
 $progress = Term::ProgressBar->new({
     'name' => 'Users      ',
     'count' => $count,
-    'ETA' => 'linear',
-    'bar_width' => 50,
 });
 
 while (my $old_user = $old_users->next){
@@ -88,8 +86,6 @@ $loop = 0;
 $progress = Term::ProgressBar->new({
     'name' => 'Pictures   ',
     'count' => $count,
-    'ETA' => 'linear',
-    'bar_width' => 50,
 });
 
 while (my $old_picture = $old_pictures->next){
@@ -156,8 +152,6 @@ $loop = 0;
 $progress = Term::ProgressBar->new({
     'name' => 'Blogs      ',
     'count' => $count,
-    'ETA' => 'linear',
-    'bar_width' => 50,
 });
 
 while (my $old_blog = $old_blogs->next){
@@ -203,8 +197,6 @@ $loop = 0;
 $progress = Term::ProgressBar->new({
     'name' => 'Links      ',
     'count' => $count,
-    'ETA' => 'linear',
-    'bar_width' => 50,
 });
 
 while (my $old_link = $old_links->next){
@@ -250,8 +242,6 @@ $loop = 0;
 $progress = Term::ProgressBar->new({
     'name' => 'Tags       ',
     'count' => $count,
-    'ETA' => 'linear',
-    'bar_width' => 50,
 });
 
 while (my $old_tag = $old_tags->next){
@@ -277,8 +267,6 @@ $loop = 0;
 $progress = Term::ProgressBar->new({
     'name' => 'Tag Details',
     'count' => $count,
-    'ETA' => 'linear',
-    'bar_width' => 50,
 });
 
 while (my $old_tag = $old_tagds->next){
@@ -317,8 +305,6 @@ $loop = 0;
 $progress = Term::ProgressBar->new({
     'name' => 'Comments   ',
     'count' => $count,
-    'ETA' => 'linear',
-    'bar_width' => 50,
 });
 
 while (my $old_comment = $old_comments->next){
@@ -368,8 +354,6 @@ $loop = 0;
 $progress = Term::ProgressBar->new({
     'name' => 'Plus       ',
     'count' => $count,
-    'ETA' => 'linear',
-    'bar_width' => 50,
 });
 
 while (my $old_plus = $old_pluss->next){
@@ -408,8 +392,6 @@ $loop = 0;
 $progress = Term::ProgressBar->new({
     'name' => 'Minus      ',
     'count' => $count,
-    'ETA' => 'linear',
-    'bar_width' => 50,
 });
 
 while (my $old_plus = $old_minuss->next){
@@ -446,8 +428,6 @@ $loop = 0;
 $progress = Term::ProgressBar->new({
     'name' => 'Views      ',
     'count' => $count,
-    'ETA' => 'linear',
-    'bar_width' => 50,
 });
 
 while (my $old_pi = $old_pis->next){
