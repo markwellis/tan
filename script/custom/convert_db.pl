@@ -404,7 +404,7 @@ print "converted ${count} minus\n\n";
 #       user
 my $old_pis = $olddb->resultset('Pi');
 
-$count = $old_pictures->count;
+$count = $old_pis->count;
 $loop = 0;
 print "${count} views to convert\n";
 
