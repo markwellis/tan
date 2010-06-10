@@ -159,6 +159,51 @@ sub old:Local Args(2){
     $c->forward('/default');
 }
 
+=head2 old_image: Path
+
+B<@args = $source, $size>
+
+=over
+
+redirects to the correct url for an old image/thumb 
+
+=back
+
+=cut
+sub old_image: Local{
+    my ( $self, $c, $source, $size ) = @_;
+
+    my $url;
+    if ( defined($size) && ($source =~ m/^$is_int_reg$/) ){
+    #thumb
+        my $lookup = $c->model('OldLookup')->find({
+            'type' => 'picture',
+            'old_id' => $source,
+        });
+        if ( $lookup ){
+            my $new_id = $lookup->new_id;
+            my $mod = $new_id - ($new_id % 1000);
+            $url = $c->config->{'thumb_path'} . "/${mod}/${new_id}/${size}";
+        }
+    } else {
+    #filename
+        #old filename (no mod)
+        if ( $source =~ /^(\d+)/ ){
+            my $pic_time = $1;
+            my $mod = ($pic_time - ($pic_time % 604800));
+
+            $url = $c->config->{'pic_path'} . "/${mod}/${source}";
+        }
+    }
+
+    if ( $url ){
+        $c->res->redirect($url, 301);
+    } else {
+        $c->forward('/default');
+    }
+    $c->detach();
+}
+
 =head1 AUTHOR
 
 A clever guy
