@@ -1,0 +1,51 @@
+[% css_includes.push('faq') -%]
+<ul class="TAN-inside">
+    <li>
+        <h1>Embedding videos</h1>
+        <ul>
+            <li>Can be used in comments or blogs. Links automatically embed based on the url submitted.</li>
+            <li>Embedding videos in comments is easy, just do the following, it'll be converted to the video when you post the comment.</li>
+            <li>Note, the old [youtube] tag still works, but is now <a href="http://en.wikipedia.org/wiki/Deprecation">deprecated</a>. Please avoid it.</li>
+            <li><strong><em>[video]URL[/video]</em></strong></li>
+            <li>&nbsp;</li>
+            <li>The following sites are supported</li>
+            <li>
+                <ul>
+                    <li>youtube</li>
+                    <li>liveleak</li>
+                    <li>google video</li>
+                    <li>yahoo video</li>
+                    <li>spiked humor</li>
+                    <li>college humor</li>
+                    <li>funny or die</li>
+                    <li>metacafe</li>
+                    <li>daily motion</li>
+                </ul>
+            </li>
+            <li>&nbsp;</li>
+            <li><strong>Examples</strong></li>
+            <li>
+                <ul>
+                    <li>[video]http://www.youtube.com/watch?v=HMhks1TSFog[/video]</li>
+                    <li>[video]http://www.funnyordie.com/videos/faca37d4c7/drunk-girl-j-chris-newberg[/video]</li>
+                    <li>[video]http://www.liveleak.com/view?i=774_1228266264[/video]</li>
+                    <li>and so on...</li>
+                </ul>
+            </li>
+        </ul>
+        <br />
+        <h1>Image Uploads</h1>
+        <ul>
+            <li>The maximum image upload is 3mb.</li>
+            <li>Make sure you set the NSFW option if the image isn't suitable for work</li>
+            <li>Tags are used for image searching when submitting links/blogs so please make sure they're appropriate</li>
+        </ul>
+        <br />
+        <h1>Site Rules</h1>
+        <ul>
+            <li>There kinda arnt any other than no illegal images, or goatse/similar.</li>
+            <li>Freedom of speech is king here. Although in <em><strong>very</strong> rare</em> cases your content may be edited or removed with valid reason; such as reposts, illegal images, or in the case of blogs, poor quality (short, nonsense, could be posted as a link/picture) etc.</li>
+            <li>All spam is forbidden and removed. What is spam is not strongly defined, just what we consider to be spam. Spammers can burn in hell. In the past spammers have suffered our wrath upon their site, please be aware of this if you're a spammer; also please fuck off. kthnxbye.</li>
+        </ul>
+    </li>
+</ul>

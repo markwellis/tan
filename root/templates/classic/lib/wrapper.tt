@@ -45,7 +45,8 @@
                 [%- ELSE -%]
                     <a href="/login/">Login/Register</a> | 
                 [%- END -%]
-                    <a href="/filter/" class="nsfw_filter">[%- IF (c.nsfw) %]Enable[% ELSE %]Disable[% END %] filter</a>
+                    <a href="/filter/" class="nsfw_filter">[%- IF (c.nsfw) %]Enable[% ELSE %]Disable[% END %] filter</a> | 
+                    <a href="/faq/">FAQ</a>                    
                 </p>
                 <form class="TAN-menu-top-search" action="http://www.google.com/cse">
                     <fieldset>
