@@ -332,7 +332,9 @@ sub delete_comment_caches: Private{
     $c->cache->remove("comment.0:" . $comment_rs->id);
     $c->cache->remove("comment.1:" . $comment_rs->id);
     #clear cobject
-    $c->cache->remove("object:" . $c->stash->{'object_id'});
+    if ( $c->stash->{'object_id'} ){
+        $c->cache->remove("object:" . $c->stash->{'object_id'});
+    }
 
     $c->clear_cached_page( $comment_rs->object->url . '.*' );
 }
