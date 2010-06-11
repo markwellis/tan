@@ -170,8 +170,8 @@ sub end: Private {
             $c->log->warn("****** Are you sure you need ${sql_queries} queries? ******");
         }
 
-        $c->model('MySQL')->reset_count();
     }
+    $c->model('MySQL')->reset_count();
 }
 
 =head1 AUTHOR
