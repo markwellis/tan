@@ -176,7 +176,7 @@ sub old_image: Local{
     my $url;
     if ( defined($size) && ($source =~ m/^$is_int_reg$/) ){
     #thumb
-        my $lookup = $c->model('OldLookup')->find({
+        my $lookup = $c->model('MySQL::OldLookup')->find({
             'type' => 'picture',
             'old_id' => $source,
         });
