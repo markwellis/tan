@@ -1,4 +1,4 @@
-package TAN::Controller::SeoConfirm;
+package TAN::Controller::Seo;
 use strict;
 use warnings;
 
@@ -6,11 +6,11 @@ use parent 'Catalyst::Controller';
 
 =head1 NAME
 
-TAN::Controller::SeoConfirm
+TAN::Controller::Seo
 
 =head1 DESCRIPTION
 
-SeoConfirm Controller
+Seo Controller - Not technically SEO, but w/e yo
 
 =head1 EXAMPLE
 
