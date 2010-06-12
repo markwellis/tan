@@ -34,7 +34,7 @@ END -%]
                     | <a href="#" class="quote_link" title="[% comment.user.username %]::[% comment.comment_id %]">Quote</a>
                 </li>
                 
-                [%- IF (c.user_exists) && ( c.user.user_id == comment.user_id ) -%]
+                [%- IF (c.user_exists) && ( c.user.user_id == comment.user.user_id ) -%]
                     <li>
                         <a class="comment_edit" href="_edit_comment/[% comment.comment_id %]">Edit Comment</a>
                     </li>

@@ -227,6 +227,7 @@ sub ajax_comment: Private{
             'username' => $c->user->username,
         }
     };
+    $c->stash->{'object'} = $comment_rs->object;
 
     $c->stash->{'template'} = 'view/comment.tt';
     $c->forward( $c->view('NoWrapper') );
