@@ -48,7 +48,7 @@ PROCESS 'lib/plus_minus_box.tt';
         [%- ELSE -%]
             [% c.date_ago(object.created) -%] ago
         [%- END -%]
-        <span class="TAN-type-[% type %]"> [[% type %]]</span>
+        <span class="TAN-type-[% type %]"> [[% IF (is_video); "video"; ELSE; type; END %]]</span>
     </li>
     <li>
         <a href="[% comment_url %]" class="TAN-news-comment">
@@ -88,4 +88,6 @@ PROCESS 'lib/plus_minus_box.tt';
             [% object.blog.details %]
         </p>
     [%- END;
-END -%]
+END;
+is_video = undef
+%]

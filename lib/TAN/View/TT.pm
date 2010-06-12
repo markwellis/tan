@@ -172,7 +172,7 @@ sub embed_url{
 }
 
 sub is_video{
-    return $embedder->is_video( shift );
+    return $embedder->is_video( shift ) || 0;
 }
 
 =head1 SEE ALSO
