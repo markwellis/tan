@@ -54,6 +54,11 @@ sub resize{
     if ( -e $filename ){
         my $image_info = $self->{'image_validator'}->is_image( $filename );
 
+        if ( !$image_info ){
+        #thumb not an image
+            return 'error';
+        }
+
         my ($new_x, $new_y);
 
         $new_x = $x * ($image_info->{'x'} / $image_info->{'y'});
