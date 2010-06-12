@@ -4,6 +4,7 @@ use warnings;
 
 use Parse::BBCode::TAN;
 use HTML::StripScripts::Parser;
+use Data::Validate::URI qw/ is_uri /;
 
 #initilise these here for performance reasons
 my $bbcode = new Parse::BBCode::TAN;
@@ -35,7 +36,7 @@ sub init{
             },
             'Rules' => {
                 'a' => sub {
-                    my ( $filter,$element ) = @_;
+                    my ( $filter, $element ) = @_;
 
                     #inject rel=nofollow
                     $element->{'attr'}{'rel'} = 'external nofollow';
@@ -49,12 +50,25 @@ sub init{
     my $context_whitelist = $self->{'hss'}->init_context_whitelist();
     my $attrib_whitelist = $self->{'hss'}->init_attrib_whitelist();
     my $style_whitelist = $self->{'hss'}->init_style_whitelist();
+    my $attval_whitelist = $self->{'hss'}->init_attval_whitelist();
+
+#copy and paste from HTML::StripScripts, only with longer urls allowed...
+    $attval_whitelist->{'href'} = sub{
+        my ( $filter, $tag, $attr_name, $attr_val ) = @_;
+
+        if ( is_uri($attr_val) ){
+            return $attr_val;
+        }
+        return undef;
+    };
 
 #allow size to be number or word...
     $style_whitelist->{'font-size'} = 'word';
 
 # set additionally allowed html tag attributes
     $attrib_whitelist->{'a'}->{'title'} = 'text';
+    $attrib_whitelist->{'a'}->{'href'} = 'href';
+    $attrib_whitelist->{'a'}->{'target'} = 'text';
 
     $attrib_whitelist->{'img'}->{'title'} = 'text';
     $attrib_whitelist->{'img'}->{'src'} = 'text';
