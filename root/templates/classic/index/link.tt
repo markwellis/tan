@@ -3,16 +3,16 @@ type = object.type;
 
 title = object.url_title;
 object_url = object.url;
+is_video = 0;
+
+IF (type == 'link');
+    is_video = object.link.url | is_video;
+END;
 
 IF !article || ( type == 'blog' );
     url = object_url;
     IF (type == 'link');
-        is_video = object.link.url | is_video;
-        IF ( is_video );
-            title_url = url;            
-        ELSE;
-            title_url = '/redirect/external/' _ object.id;
-        END;
+        title_url = '/redirect/external/' _ object.id;
     ELSE;
         title_url = url;
     END;
@@ -37,7 +37,7 @@ PROCESS 'lib/plus_minus_box.tt';
     <img alt="[% object.$type.picture_id %]" src="[% c.config.thumb_path _ '/' _ md _ '/' _ object.$type.picture_id %]/100"/>
 </div>
 <h2>
-    <a href="[% title_url %]" class="TAN-type-[% type %]" title="[% title %]">[%- object.$type.title | html -%]</a>
+    <a href="[% (is_video && !article) ? object_url : title_url %]" class="TAN-type-[% type %]" title="[% title %]">[%- object.$type.title | html -%]</a>
 </h2>
 <img alt="[% object.user.username | html %]" src="[% avatar_http %]?m=[% avatar_mtime.defined ? avatar_mtime : '' %]" class="TAN-news-avatar left" />
 <ul>
@@ -48,7 +48,7 @@ PROCESS 'lib/plus_minus_box.tt';
         [%- ELSE -%]
             [% c.date_ago(object.created) -%] ago
         [%- END -%]
-        <span class="TAN-type-[% type %]"> [[% IF (is_video); "video"; ELSE; type; END %]]</span>
+        <span class="TAN-type-[% type %]"> [[% is_video ? "video" : type %]]</span>
     </li>
     <li>
         <a href="[% comment_url %]" class="TAN-news-comment">
@@ -75,9 +75,9 @@ PROCESS 'lib/plus_minus_box.tt';
     [%- IF type == 'blog' -%]</p>[% END -%]
     [%- IF type == 'link';
         embed_code = object.$type.url | embed_url; 
-        IF (embed_code) %]
+        IF (is_video) %]
             <div class="TAN-video">
-                [% embed_code %]
+                [% object.$type.url | embed_url %]
             </div>
         [%- ELSE -%]
                 <a class="TAN-view_link TAN-type-link" href="[% url %]">View Link</a>
@@ -88,6 +88,4 @@ PROCESS 'lib/plus_minus_box.tt';
             [% object.blog.details %]
         </p>
     [%- END;
-END;
-is_video = undef
-%]
+END %]
