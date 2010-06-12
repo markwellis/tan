@@ -57,6 +57,7 @@ sub init{
 
     $attrib_whitelist->{'div'}->{'class'} = 'wordlist';
     $attrib_whitelist->{'div'}->{'style'} = 'style';
+    $attrib_whitelist->{'span'}->{'style'} = 'style';
 
 # BBCode
     $self->{'bbcode'} = new Parse::BBCode::TAN;
