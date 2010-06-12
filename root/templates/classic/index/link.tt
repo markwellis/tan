@@ -7,6 +7,9 @@ is_video = 0;
 
 IF (type == 'link');
     is_video = object.link.url | is_video;
+    IF is_video;
+        is_video = object.link.url | embed_url;
+    END;
 END;
 
 IF !article || ( type == 'blog' );
@@ -74,10 +77,9 @@ PROCESS 'lib/plus_minus_box.tt';
         </span>
     [%- IF type == 'blog' -%]</p>[% END -%]
     [%- IF type == 'link';
-        embed_code = object.$type.url | embed_url; 
         IF (is_video) %]
             <div class="TAN-video">
-                [% object.$type.url | embed_url %]
+                [% is_video %]
             </div>
         [%- ELSE -%]
                 <a class="TAN-view_link TAN-type-link" href="[% url %]">View Link</a>
