@@ -82,6 +82,9 @@ sub new {
                     # for some reason, $attr isnt set right :/
                     # but it is now!
                     $attr = $tag_tree->get_attr->[1]->[1];
+                    $attr ||= '';
+                    $content ||= '';
+
 
                     return '<div class="quote_holder"><span class="quoted_username">' . $attr . ' wrote:</span>'
                         .'<div class="quote">' . ${$content} . '</div></div>';
