@@ -33,8 +33,8 @@ use parent 'Catalyst';
 use Catalyst qw/
     ConfigLoader
     Authentication
-    Session
     Email
+    Session
     Session::Store::File
     Session::State::Cookie
     Cache
@@ -144,6 +144,7 @@ sub nsfw{
     if (defined($value)){
         $c->res->cookies->{'nsfw'} = {
             'value' => $value,
+            'expires' => '+3Y',
         };
 
         return $value;
