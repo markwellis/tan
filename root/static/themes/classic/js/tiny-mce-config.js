@@ -22,5 +22,6 @@ tiny_mce_config = {
     force_p_newlines : false,
 
     mode: "specific_textareas",
-    gecko_spellcheck: "1"
+    gecko_spellcheck: "1",
+    valid_elements : "*[*]"
 };
