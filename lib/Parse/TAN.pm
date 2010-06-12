@@ -48,6 +48,10 @@ sub init{
     );
     my $context_whitelist = $self->{'hss'}->init_context_whitelist();
     my $attrib_whitelist = $self->{'hss'}->init_attrib_whitelist();
+    my $style_whitelist = $self->{'hss'}->init_style_whitelist();
+
+#allow size to be number or word...
+    $style_whitelist->{'font-size'} = 'word';
 
 # set additionally allowed html tag attributes
     $attrib_whitelist->{'a'}->{'title'} = 'text';
