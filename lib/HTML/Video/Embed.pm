@@ -20,7 +20,7 @@ sub new{
     $self->{'width'} = $config->{'width'} || 450;
     $self->{'height'} = $config->{'height'} || 370;
     
-    $self->{'supported'} = {
+    $self->{'videos'} = {
         'youtube' => {
             'domain_reg' => qr/youtube\.com/,
             'validate_reg' => qr/^[a-zA-Z0-9-_]{11}$/,
@@ -46,7 +46,7 @@ sub new{
                 my $leak_id;
 
                 if ( ($leak_id = $uri->query_param('i')) && ($leak_id =~ m/$validate_reg/) ){
-                    return '<object width="' . $self->{'width'} . '/" height="' . $self->{'height'} . '">'
+                    return '<object width="' . $self->{'width'} . '" height="' . $self->{'height'} . '">'
                         .'<param name="movie" value="http://www.liveleak.com/e/' . $leak_id . '" />'
                         .'<param name="wmode" value="transparent" />'
                         .'<embed src="http://www.liveleak.com/e/' . $leak_id . '" type="application/x-shockwave-flash"'
@@ -214,27 +214,63 @@ sub new{
                 return undef;
             }
         },
+        'vimeo' => {
+            'domain_reg' => qr/vimeo\.com/,
+            'validate_reg' => qr/^\/(\d+).*/,
+            'embed' => sub{
+                my ( $validate_reg, $uri ) = @_;
+
+                if ( my ($vid) = $uri->path =~ m/$validate_reg/ ){
+                    if ( (!$vid) ){
+                        return undef;
+                    }
+                    return '<object width="' . $self->{'width'} . '" height="' . $self->{'height'} . '">'
+                        .'<param name="allowfullscreen" value="true" />'
+                        .'<param name="movie" value="'
+                        .'http://vimeo.com/moogaloop.swf?clip_id=' . $vid . '&amp;'
+                        .'server=vimeo.com&amp;show_title=1&amp;show_byline=1&amp;show_portrait=0&amp;color=&amp;fullscreen=1" />'
+                        .'<embed src="http://vimeo.com/moogaloop.swf?clip_id=' . $vid . '&amp;'
+                        .'server=vimeo.com&amp;show_title=1&amp;show_byline=1&amp;show_portrait=0&amp;color=&amp;fullscreen=1" '
+                        .'type="application/x-shockwave-flash" allowfullscreen="true" '
+                        .'width="' . $self->{'width'} . '" height="' . $self->{'height'} . '"></embed></object>';
+                }
+                
+                return undef;
+            }
+        },
     };
+
     return $self;
 }
 
 sub url_to_embed{
     my ( $self, $url ) = @_;
 
+    my ($domain, $uri) = $self->is_video($url);
+    if ( defined($domain) ){
+        return $self->{'videos'}->{ $domain }->{'embed'}->( $self->{'videos'}->{ $domain }->{'validate_reg'}, $uri );
+    }
+
+    return undef;
+}
+
+sub is_video{
+    my ( $self, $url ) = @_;
+
     return undef if ( !is_uri($url) );
 
-#un uri encode url here!
     my $uri = URI->new( URI::Escape::XS::uri_unescape($url) );
 
-    foreach my $domain ( keys(%{ $self->{'supported'} }) ){
+    foreach my $domain ( keys(%{ $self->{'videos'} }) ){
 #figure out if url is supported
-        my $domain_reg = $self->{'supported'}->{ $domain }->{'domain_reg'};
+        my $domain_reg = $self->{'videos'}->{ $domain }->{'domain_reg'};
         if ( $uri->host =~ m/$domain_reg/ ){
-            return $self->{'supported'}->{ $domain }->{'embed'}->( $self->{'supported'}->{ $domain }->{'validate_reg'}, $uri );
+            return ( $domain, $uri );
         }
     }
 
     return undef;
+
 }
 
 1;

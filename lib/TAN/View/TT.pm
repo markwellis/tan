@@ -30,6 +30,7 @@ __PACKAGE__->config({
         'file_mtime' => sub { return file_mtime(shift); },
         'url_title' => sub { return url_title(shift); },
         'embed_url' => sub { return embed_url(shift); },
+        'is_video' => sub { return is_video(shift); },
     },
     render_die => 1,
     ENCODING => 'utf8',
@@ -168,6 +169,10 @@ my $embedder = new HTML::Video::Embed({
 });
 sub embed_url{
     return $embedder->url_to_embed( shift );
+}
+
+sub is_video{
+    return $embedder->is_video( shift );
 }
 
 =head1 SEE ALSO
