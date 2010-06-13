@@ -54,7 +54,7 @@ sub resize{
     if ( -e $filename ){
         my $image_info = $self->{'image_validator'}->is_image( $filename );
 
-        if ( !$image_info ){
+        if ( !$image_info || !$image_info->{'x'} || !$image_info->{'y'} ){
         #thumb not an image
             return 'error';
         }

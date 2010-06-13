@@ -40,30 +40,32 @@ sub internal: Local{
     my ( $self, $c, $source, $filename ) = @_;
 
     my $url;
-    if ( !defined($filename) && ($source =~ m/^$is_int_reg$/) ){
-    #id
-        my $object = $c->model('MySQL::Object')->find({
-            'object_id' => $source,
-        });
+    if ( defined($source) ){
+        if ( !defined($filename) && ($source =~ m/^$is_int_reg$/) ){
+        #id
+            my $object = $c->model('MySQL::Object')->find({
+                'object_id' => $source,
+            });
 
-        if ( $object ){
-            $url = $object->url;
-        }
-    } else {
-    #filename
-        if ( !defined($filename) ){
-        #old filename (no mod)
-            $source =~ /^(\d+)/;
-            my $pic_time = $1;
-            $filename = $source;
-            $source = ($pic_time - ($pic_time % 604800));
-        }
-        my $picture = $c->model('MySQL::Picture')->find({
-            'filename' => "${source}/${filename}",
-        });
+            if ( $object ){
+                $url = $object->url;
+            }
+        } else {
+        #filename
+            if ( !defined($filename) ){
+            #old filename (no mod)
+                $source =~ /^(\d+)/;
+                my $pic_time = $1;
+                $filename = $source;
+                $source = ($pic_time - ($pic_time % 604800));
+            }
+            my $picture = $c->model('MySQL::Picture')->find({
+                'filename' => "${source}/${filename}",
+            });
 
-        if ( $picture ){
-            $url = $picture->object->url;
+            if ( $picture ){
+                $url = $picture->object->url;
+            }
         }
     }
 
@@ -174,25 +176,27 @@ sub old_image: Local{
     my ( $self, $c, $source, $size ) = @_;
 
     my $url;
-    if ( defined($size) && ($source =~ m/^$is_int_reg$/) ){
-    #thumb
-        my $lookup = $c->model('MySQL::OldLookup')->find({
-            'type' => 'picture',
-            'old_id' => $source,
-        });
-        if ( $lookup ){
-            my $new_id = $lookup->new_id;
-            my $mod = $new_id - ($new_id % 1000);
-            $url = $c->config->{'thumb_path'} . "/${mod}/${new_id}/${size}";
-        }
-    } else {
-    #filename
-        #old filename (no mod)
-        if ( $source =~ /^(\d+)/ ){
-            my $pic_time = $1;
-            my $mod = ($pic_time - ($pic_time % 604800));
+    if ( defined($source) ){
+        if ( defined($size) && ($source =~ m/^$is_int_reg$/) ){
+        #thumb
+            my $lookup = $c->model('MySQL::OldLookup')->find({
+                'type' => 'picture',
+                'old_id' => $source,
+            });
+            if ( $lookup ){
+                my $new_id = $lookup->new_id;
+                my $mod = $new_id - ($new_id % 1000);
+                $url = $c->config->{'thumb_path'} . "/${mod}/${new_id}/${size}";
+            }
+        } else {
+        #filename
+            #old filename (no mod)
+            if ( $source =~ /^(\d+)/ ){
+                my $pic_time = $1;
+                my $mod = ($pic_time - ($pic_time % 604800));
 
-            $url = $c->config->{'pic_path'} . "/${mod}/${source}";
+                $url = $c->config->{'pic_path'} . "/${mod}/${source}";
+            }
         }
     }
 
