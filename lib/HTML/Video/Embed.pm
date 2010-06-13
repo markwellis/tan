@@ -238,6 +238,24 @@ sub new{
                 return undef;
             }
         },
+        'megavideo' => {
+            'domain_reg' => qr/megavideo\.com/,
+            'validate_reg' => qr/^\w+$/,
+            'embed' => sub{
+                my ( $validate_reg, $uri ) = @_;
+                my $megavideo_id;
+
+                if ( ($megavideo_id = $uri->query_param('v')) && ($megavideo_id =~ m/$validate_reg/) ){
+                    return '<object width="' . $self->{'width'} . '" height="' . $self->{'height'} . '">'
+                        .'<param name="movie" value="http://www.megavideo.com/v/' . $megavideo_id . '" />'
+                        .'<param name="allowFullScreen" value="true" />'
+                        .'<embed src="http://www.megavideo.com/v/' . $megavideo_id . '" type="application/x-shockwave-flash" '
+                        .'allowfullscreen="true" width="' . $self->{'width'} . '" height="' . $self->{'height'} . '"></embed></object>';
+                }
+
+                return undef;
+            }
+        },
     };
 
     return $self;
