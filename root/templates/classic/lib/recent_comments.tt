@@ -1,6 +1,6 @@
 <ul class="TAN-recent-comments left">
 [%- IF (index_objects.defined) -%]
-    <div class="TAN-order-by">
+    <li class="TAN-order-by">
         Order <select>
             <option value="date" [%- (order == 'date') ? 'selected="selected"' : '' -%]>Date</option>
             <option value="comments" [%- (order == 'comments') ? 'selected="selected"' : '' -%]>Comments</option>
@@ -8,7 +8,7 @@
             <option value="minus" [%- (order == 'minus') ? 'selected="selected"' : '' -%]>AintNews</option>
             <option value="views" [%- (order == 'views') ? 'selected="selected"' : '' -%]>Views</option>
         </select>
-    </div>
+    </li>
 [%- END -%]
 
 [% grouped_comments = c.recent_comments;
