@@ -84,6 +84,17 @@ sub index {
             }
         }
 
+#order by newest to lastest
+        if ( ($order eq 'created') || ($order eq 'promoted') ){
+            $order = [$order];
+        } else {
+            if ( $upcoming ){
+                $order = [$order, 'created'];
+            } else {
+                $order = [$order, 'promoted'];
+            }
+        }
+
         my $index_rs = $self->search({
             'promoted' => $search,
             'type' => $type,
@@ -91,7 +102,7 @@ sub index {
         },
         {
             'order_by' => {
-                -desc => [$order],
+                -desc => $order,
             },
             'page' => $page,
             'rows' => 27,
