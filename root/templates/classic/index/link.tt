@@ -40,7 +40,9 @@ PROCESS 'lib/plus_minus_box.tt';
     <img alt="[% object.$type.picture_id %]" src="[% c.config.thumb_path _ '/' _ md _ '/' _ object.$type.picture_id %]/100"/>
 </div>
 <h2>
-    <a href="[% (is_video && !article) ? object_url : title_url %]" class="TAN-type-[% type %]" title="[% title %]">[%- object.$type.title | html -%]</a>
+    <a href="[% (is_video && !article) ? object_url : title_url %]" class="TAN-type-[% type %]" title="[% title %]">
+    [%- object.$type.title | html -%][% IF object.nsfw == 'Y' %] - NSFW[% END %]
+    </a>
 </h2>
 <img alt="[% object.user.username | html %]" src="[% avatar_http %]?m=[% avatar_mtime.defined ? avatar_mtime : '' %]" class="TAN-news-avatar left" />
 <ul>

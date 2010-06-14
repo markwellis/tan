@@ -174,8 +174,14 @@ sub fetch: Private{
 
     my $page = $c->req->param('page') || 1;
 
+    my %search_opts;
+    if ( !$c->nsfw ){
+        $search_opts{'nsfw'} = 'N';
+    }
+
     my $index_rs = $c->stash->{'user'}->objects->search({
         'type' => $location,
+        %search_opts,
     },{
         'page' => $page,
         'rows' => 27,
