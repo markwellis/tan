@@ -49,7 +49,7 @@ sub index {
         }
 
         if ($location eq 'all'){
-            $type = ['link', 'blog'];
+            $type = ['link', 'blog', 'picture'];
         } else {
             $type = $location;
         }

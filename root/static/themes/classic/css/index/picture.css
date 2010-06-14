@@ -7,6 +7,7 @@
 
 .TAN-news{
     padding:10px 1px;
+    overflow:hidden;
 }
 
 .TAN-news > h2{

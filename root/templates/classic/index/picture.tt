@@ -13,7 +13,7 @@ url = object.url;
     <img alt="[% object.user.username | html %]" src="[% avatar_http %]?m=[% avatar_mtime.defined ? avatar_mtime : '' %]" class="TAN-news-avatar left" />
     <ul>
         <li>
-            <a href="#" class="TAN-news-user">[% object.user.username | html %]</a>
+            <a href="/profile/[% object.user.username | html %]/" class="TAN-news-user">[% object.user.username | html %]</a>
         </li>
         <li>
             <a href="[% url %]#comments">
