@@ -178,7 +178,7 @@ sub fetch: Private{
         'type' => $location,
     },{
         'page' => $page,
-        'rows' => 50,
+        'rows' => 27,
         'order_by' => {
             '-desc' => 'me.created',
         },

@@ -45,11 +45,11 @@ pic_count = pictures.count || 0;
                         [% END %]
                     </li>
                     <li>
-                        [% IF pic_count %]
+                        [% IF link_count %]
                             <a href="links">
                         [% END %]
                             Links: [% link_count %]
-                        [% IF pic_count %]
+                        [% IF link_count %]
                             </a>
                         [% END %]
                     </li>
@@ -58,7 +58,7 @@ pic_count = pictures.count || 0;
                             <a href="blogs">
                         [% END %]
                             Blogs: [% blog_count %]
-                        [% IF pic_count %]
+                        [% IF blog_count%]
                             </a>
                         [% END %]
                     </li>
