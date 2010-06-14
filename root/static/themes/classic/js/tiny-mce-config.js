@@ -23,5 +23,6 @@ tiny_mce_config = {
 
     mode: "specific_textareas",
     gecko_spellcheck: "1",
-    valid_elements : "*[*]"
+    valid_elements: "*[*]",
+    entity_encoding: "numeric"
 };

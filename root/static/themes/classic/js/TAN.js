@@ -63,7 +63,7 @@ var TAN_class = new Class({
             Cookie.dispose('nsfw');
             Cookie.write('nsfw', value, {
                 'path': '/',
-                'duration': 1095,
+                'duration': 1095
             });
             return value;
         }
