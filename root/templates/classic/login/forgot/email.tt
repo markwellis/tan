@@ -1,0 +1,7 @@
+<html>
+<br />
+Your username is: [% user.username | html %]<br />
+<br />
+Please click <a href="[% c.uri_for('/login/forgot/step2', user.id, token) %]">here</a> to reset your password if you need to.<br/>
+or copy and paste [% c.uri_for('/login/forgot/step2', user.id, token) %] into your browsers address bar<br />
+</html>

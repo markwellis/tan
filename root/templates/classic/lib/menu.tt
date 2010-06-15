@@ -1,0 +1,42 @@
+[%-
+menu_tabs = {
+    '0All' => 'all',
+    '1Links' => 'link',
+    '2Blogs' => 'blog',
+    '3Pictures' => 'picture'
+};
+-%]
+<div class="TAN-menu left">
+    <ul class="TAN-menu-tab-holder">
+    [%- FOREACH key = menu_tabs.keys.sort;
+            value = menu_tabs.$key;
+            key = key.replace('\d', '') -%]
+        <li[% IF loop.last; ' class="TAN-menu-last"'; END %]>
+            <a class="TAN-menu-tab TAN-type-[% value %] [% IF (location == value); "TAN-menu-tab-${location}-selected"; END %]" href="#">[% key %]</a>
+        </li>
+    [% END %]
+    </ul>
+    [%- FOREACH value = ['all', 'link', 'picture', 'blog'] -%]
+    <ul class="TAN-menu-[% value %]" [% IF (location == value); "style=\"display:block\""; END %]>
+        [% IF (value != 'all') -%]
+        <li>
+            <a href="/submit/[% value %]/">Submit</a>
+        </li>
+        [%- END -%]
+        <li>
+            <a href="/random/[% value %]/">Random</a>
+        </li>
+        <li>
+            <a href="/index/[% value %]/0/1/" [% IF ( (location == value) && (upcoming == 0) ); "class=\"TAN-menu-tab-${location}-selected\""; END %]>Promoted</a>
+        </li>
+        <li class="TAN-menu-last">
+            <a href="/index/[% value %]/1/1/" [% IF ( (location == value) && (upcoming == 1) ); "class=\"TAN-menu-tab-${location}-selected\""; END %]>Upcoming</a>
+        </li>
+    </ul>
+    [%- END -%]
+</div>
+<script type="text/javascript">
+//<![CDATA[
+    selected_menu_type = '[% location %]';
+//]]>
+</script>

@@ -1,0 +1,78 @@
+[%-
+css_includes.push('profile');
+
+avatar_http = c.config.avatar_path _ "/" _ user.user_id;
+avatar_image = c.path_to('root') _ avatar_http;
+
+avatar_exists = avatar_image | file_exists;
+
+IF (avatar_exists);
+    avatar_mtime = avatar_image | file_mtime;
+    avatar_http = avatar_http _ "?m=" _ avatar_mtime;
+ELSE;
+    avatar_http = c.config.static_path _ '/images/_user.png';
+END;
+
+comment_count = user.comments_rs.count || 0;
+link_count = links.count || 0;
+blog_count = blogs.count || 0;
+pic_count = pictures.count || 0;
+%]
+
+<ul class="TAN-inside">
+    <li>
+        <h1>[% user.username | html %]</h1>
+    </li>
+    <li>
+        <ul class="TAN-id-card">
+            <li>
+                <img class="TAN-news-avatar" src="[% avatar_http %]" alt="[% user.username | html %]" />
+                <br />
+                [% IF c.user_exists && c.user.username == user.username %]
+                    <a href="/profile/_avatar/">Change Avatar</a>
+                [% END %]
+            </li>
+            <li>
+                <ul>
+                    <li>Joined on: [% user.join_date | html %]</li>
+                    <li>
+                        [% IF comment_count %]
+                            <a href="comments">
+                        [% END %]
+                            Comments: [% comment_count %]
+                        [% IF comment_count %]
+                            </a>
+                        [% END %]
+                    </li>
+                    <li>
+                        [% IF link_count %]
+                            <a href="links">
+                        [% END %]
+                            Links: [% link_count %]
+                        [% IF link_count %]
+                            </a>
+                        [% END %]
+                    </li>
+                    <li>
+                        [% IF blog_count %]
+                            <a href="blogs">
+                        [% END %]
+                            Blogs: [% blog_count %]
+                        [% IF blog_count%]
+                            </a>
+                        [% END %]
+                    </li>
+                    <li>
+                        [% IF pic_count %]
+                            <a href="pictures">
+                        [% END %]
+                            Pictures: [% pic_count %]
+                        [% IF pic_count %]
+                            </a>
+                        [% END %]
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </li>
+</ul>

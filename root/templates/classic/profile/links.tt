@@ -1,0 +1,21 @@
+[%-
+avatar_http = c.config.avatar_path _ "/" _ user.user_id;
+avatar_image = c.path_to('root') _ avatar_http;
+avatar_exists = avatar_image | file_exists;
+
+IF (avatar_exists);
+    avatar_mtime = avatar_image | file_mtime;
+ELSE;
+    avatar_http = c.config.static_path _ '/images/_user.png';
+END;
+-%]
+<ul class="TAN-inside">
+    [% FOREACH object=index.objects %]
+        <li class="TAN-news [% IF (loop.count % 2)  %] TAN-news-alternate[% END %]">
+            [% PROCESS 'index/link.tt' %]
+        </li>
+    [% END %]
+    <li>
+        [% PROCESS 'profile/pagination.tt' pager=index.pager %]
+    </li>
+</ul>

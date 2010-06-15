@@ -1,0 +1,95 @@
+[%
+type = object.type;
+
+title = object.url_title;
+object_url = object.url;
+is_video = 0;
+
+IF (type == 'link');
+    is_video = object.link.url | is_video;
+    IF is_video;
+        is_video = object.link.url | embed_url;
+    END;
+END;
+
+IF !article || ( type == 'blog' );
+    url = object_url;
+    IF (type == 'link');
+        title_url = '/redirect/external/' _ object.id;
+    ELSE;
+        title_url = url;
+    END;
+ELSE;
+    url = '/redirect/external/' _ object.id;
+    title_url = url;
+END;
+
+comment_url = object_url _ '#comments';
+rel = 'rel="external nofollow"';
+
+IF ( !num );
+    num = 0;
+END;
+num = num + 1;
+md = object.$type.picture_id - (object.$type.picture_id % 1000);
+
+PROCESS 'lib/plus_minus_box.tt';
+-%]
+
+<div class="TAN-news-image left">
+    <img alt="[% object.$type.picture_id %]" src="[% c.config.thumb_path _ '/' _ md _ '/' _ object.$type.picture_id %]/100"/>
+</div>
+<h2>
+    <a href="[% (is_video && !article) ? object_url : title_url %]" class="TAN-type-[% type %]" title="[% title %]">
+    [%- object.$type.title | html -%][% IF object.nsfw == 'Y' %] - NSFW[% END %]
+    </a>
+</h2>
+<img alt="[% object.user.username | html %]" src="[% avatar_http %]?m=[% avatar_mtime.defined ? avatar_mtime : '' %]" class="TAN-news-avatar left" />
+<ul>
+    <li>
+        Posted by <a href="/profile/[% object.user.username | html %]/" class="TAN-news-user">[% object.user.username | html %]</a>
+        [%- IF ( object.promoted ) -%]
+            promoted [% c.date_ago(object.promoted) -%] ago
+        [%- ELSE -%]
+            [% c.date_ago(object.created) -%] ago
+        [%- END -%]
+        <span class="TAN-type-[% type %]"> [[% is_video ? "video" : type %]]</span>
+    </li>
+    <li>
+        <a href="[% comment_url %]" class="TAN-news-comment">
+            <img alt="" class="TAN-news-comment-image" src="/static/images/comment.png" /> [%- object.get_column('comments') %]
+        </a> | [%- object.get_column('views') -%] views 
+        [%- IF c.user_exists && (c.user.admin || c.user.id == object.user_id) -%]
+            | <a href="/submit/[% object.type %]/edit/[% object.id %]/" class="TAN-news-comment">
+                Edit
+            </a>
+        [%- END -%]
+    </li>
+</ul>
+<p>
+    [%- object.$type.description | html | nl2br -%]
+</p>
+[% IF article -%]
+    <p>
+        <span class="TAN-tags">
+        [%- FOREACH tag = object.tags -%]
+            [%- IF loop.count > 1 %], [% END -%]
+            [% tag.tag %]
+        [%- END -%]
+        </span>
+    [%- IF type == 'blog' -%]</p>[% END -%]
+    [%- IF type == 'link';
+        IF (is_video) %]
+            <div class="TAN-video">
+                [% is_video %]
+            </div>
+        [%- ELSE -%]
+                <a class="TAN-view_link TAN-type-link" href="[% url %]">View Link</a>
+        [%- END -%]
+    </p>
+    [%- ELSIF type == 'blog' -%]
+        <p class="TAN-blog_wrapper TAN-hr">
+            [% object.blog.details %]
+        </p>
+    [%- END;
+END %]

@@ -1,0 +1,52 @@
+[%-
+avatar_http = c.config.avatar_path _ "/" _ comment.user.user_id;
+avatar_image = c.path_to('root') _ avatar_http;
+
+avatar_exists = avatar_image | file_exists;
+
+IF (avatar_exists);
+    avatar_mtime = avatar_image | file_mtime;
+    avatar_http = avatar_http _ "?m=" _ avatar_mtime;
+ELSE;
+    avatar_http = c.config.static_path _ '/images/_user.png';
+END -%]
+<div class="TAN-comment_holder TAN-hr" id="comment[% comment.comment_id %]">
+    <ul class="left">
+        <li>
+            <a href="/profile/[% comment.user.username | html %]/" class="TAN-news-user">[% comment.user.username | html %]</a>
+        </li>
+        [%- IF comment.created.defined() -%]
+        <li>
+            [% c.date_ago(comment.created) %]&#160;ago
+        </li>
+        [%- END -%]
+        <li>
+            <img class="TAN-news-avatar TAN-comment_avatar" src="[% avatar_http %]" alt="[% comment.user.username | html %]" />
+        </li>
+        <li>
+            Comment #[% comment.number %]
+        </li>
+        <li>
+            <ul class="TAN-comment_tools">
+                [%- type = object.type -%]
+                <li>
+                    <a href="[% comment.object.url %]#comment[% comment.comment_id %]">Link</a>
+                    [%- IF object.defined -%]
+                        | <a href="#" class="quote_link" title="[% comment.user.username %]::[% comment.comment_id %]">Quote</a>
+                    [% END %]
+                </li>
+                [%- IF object.defined -%]
+                    [%- IF (c.user_exists) && ( c.user.user_id == comment.user.user_id ) -%]
+                        <li>
+                            <a class="comment_edit" href="_edit_comment/[% comment.comment_id %]">Edit Comment</a>
+                        </li>
+                    [%- END -%]
+                [%- END -%]
+            </ul>
+        </li>
+    </ul>
+    <div class="TAN-comment_inner">
+        [%- comment.comment -%]
+        <br />
+    </div>
+</div>
