@@ -25,5 +25,6 @@ tiny_mce_config = {
     gecko_spellcheck: "1",
     valid_elements: "*[*]",
     relative_urls : false,
+    convert_urls : false,
     entity_encoding: "numeric"
 };
