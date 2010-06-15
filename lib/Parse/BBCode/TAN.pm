@@ -116,7 +116,7 @@ sub new {
                 return $embedder->url_to_embed($text) || '';
             },
         },
-        'tag_validation' => qr/^([^\]]*)?]/,
+        'direct_attributes' => 0,
     });
 }
 
