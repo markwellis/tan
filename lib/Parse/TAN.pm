@@ -58,6 +58,11 @@ sub init{
 
         if ( is_uri($attr_val) ){
             return $attr_val;
+        } else {
+        #relative url hack. w/e
+            if ( is_uri("http://example.com/${attr_val}") ){
+                return $attr_val;
+            }
         }
         return undef;
     };
