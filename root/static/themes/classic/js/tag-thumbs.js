@@ -41,7 +41,7 @@ function get_thumbs(id){
 	    		if (id){
 	    			select_img($('pic' + id));
 	    		}
-	    	},
+	    	}
 	    }).get({
             'random': 20
         });
