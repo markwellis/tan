@@ -1,0 +1,43 @@
+[%-
+IF (order != 'created') && (order != 'promoted');
+    page_order = "?order=" _ order;
+END;
+
+total_pages = (index_objects.pager.total_entries / index_objects.pager.entries_per_page) + 1 | format("%d");
+show_this_many = 5;
+current_page = index_objects.pager.current_page;
+
+lower = current_page - show_this_many;
+max = current_page + show_this_many;
+
+IF (lower <= 1);
+    lower = 1;
+    max = max + show_this_many;
+END;
+
+IF (max >= total_pages);
+    lower = total_pages - (2 * show_this_many);
+    IF (lower <= 1);
+        lower = 1;
+    END;
+
+    max = total_pages;
+END -%]
+
+<div class="clear TAN-news-pagination">
+[%- IF (lower != 1) -%]
+    <a class="TAN-news-page-number" href="/index/[%- "$location/$upcoming" -%]/1/[% page_order %]">1</a>
+    <span class="TAN-news-page-number">...</span>
+[%- END -%]
+
+[%- FOREACH page = [ lower .. max ] -%]
+    <a class="TAN-news-page-number[%- IF (page == current_page) -%] TAN-news-page-number-selected[%- END -%]" href="/index/[%- "$location/$upcoming" -%]/[%- page -%]/[% page_order %]">
+        [%- page -%]
+    </a>
+[%- END -%]
+
+[%- IF (max != total_pages) -%]
+    <span class="TAN-news-page-number">...</span>
+    <a class="TAN-news-page-number" href="/index/[%- "$location/$upcoming" -%]/[%- total_pages -%]/[% page_order %]">[%- total_pages -%]</a>
+[%- END -%]
+</div>

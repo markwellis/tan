@@ -1,0 +1,101 @@
+<!DOCTYPE  html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        [%-
+            page_title = page_title | html;
+            IF page_title;
+                page_title = page_title _ ' - ';
+            END
+        %]
+        <title>[% page_title %]This Aint News</title>
+        <meta name="Description" content="[% page_meta_description %]"/>
+        <meta name="keywords" content="[% page_keywords %]"/>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        [%- PROCESS 'lib/css_includes.tt'-%]
+        <link rel="shortcut icon" href="/static/favicon.ico" /> 
+    </head>
+    <body>
+        [%- PROCESS 'lib/js_includes.tt' -%]
+        <div class="TAN-header">
+            <h1 class="TAN-logo">
+                <a title="This Aint News" href="/">This Aint News</a>
+            </h1>
+            <div class="TAN-menu-top right">
+                <form class="right" method="post" action="https://www.paypal.com/cgi-bin/webscr">
+                    <fieldset>
+                        <input type="hidden" value="_xclick" name="cmd" />
+                        <input type="hidden" value="donate@thisaintnews.com" name="business" />
+                        <input type="hidden" value="TAN Donation" name="item_name" />
+                        <input type="hidden" value="mrbig4545" name="item_number" />
+                        <input type="hidden" value="GBP" name="currency_code" />
+                        <input type="hidden" value="0" name="tax" />
+                        <input type="image" alt="Donate" name="submit" src="/static/images/paypal.gif" />
+                    </fieldset>
+                </form>
+                <p>
+                    <a href="http://stats.thisaintnews.com">Stats</a> |
+                    <a class="mibbit" href="/chat/">Chat</a>
+                    [%- IF c.user_exists -%]
+                        | <a href="/login/logout/">Logout</a>
+                    [%- END -%]
+                </p>
+                <p>
+                [%- IF c.user_exists -%]
+                    <a href="/profile/[% c.user.username | html %]/">Profile</a> | 
+                [%- ELSE -%]
+                    <a href="/login/">Login/Register</a> | 
+                [%- END -%]
+                    <a href="/filter/" class="nsfw_filter">[%- IF (c.nsfw) %]Enable[% ELSE %]Disable[% END %] filter</a> | 
+                    <a href="/faq/">FAQ</a>                    
+                </p>
+                <form class="TAN-menu-top-search" action="http://www.google.com/cse">
+                    <fieldset>
+                        <input type="hidden" value="017135894524023845720:-eqs9gh9cxm" name="cx" />
+                        <input type="hidden" value="UTF-8" name="ie" />
+                        <input type="text" size="31" name="q" />
+                        <input type="submit" value="Search" name="sa" />
+                    </fieldset>
+                </form>
+            </div>
+            <div class="TAN-menu-ad-holder">
+                [% PROCESS 'lib/menu.tt' %]
+                [% PROCESS 'lib/ad.tt' ad = 'top' %]
+            </div>
+        </div>
+        <div class="TAN-main">
+            [% PROCESS 'lib/recent_comments.tt' %]
+            <div class="TAN-right-ads right">
+                [% PROCESS 'lib/ad.tt' ad = 'right1' %]
+                [% PROCESS 'lib/ad.tt' ad = 'right2' %]
+            </div>
+            <script type="text/javascript">
+            //<![CDATA[
+                [%- IF message.defined %]
+                window.addEvent('domready', function(){
+                    TAN.alert("[%- message -%]");
+                });
+                [%- END -%]
+
+                var mibbit_nick = '[% IF c.user; c.user.username; ELSE %]n00b[% END %]';
+            //]]>
+            </script>
+            [%- IF message.defined %]
+                <noscript>
+                    <h1>[%- message -%]</h1>
+                </noscript>
+            [%- END -%]
+            [% content %]
+        </div>
+        <div id="TAN-bottom">
+            [% PROCESS 'lib/ad.tt' ad = 'bottom' %]
+        </div>
+        [%-
+            runtime =  time - start_time;
+            sql_queries = c.model('MySQL').get_query_count();
+        -%]
+        <div class="TAN-footer">
+            [%- runtime.substr(0, 4) -%] seconds[% IF sql_queries %], [% sql_queries %] [% (sql_queries == 1) ? 'query' : 'queries' -%][% END %]
+            <span class="right"><a href="#">Up</a>&#160;<a href="#TAN-bottom">Down</a></span>
+        </div>
+    </body>
+</html>

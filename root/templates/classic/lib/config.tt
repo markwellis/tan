@@ -1,0 +1,28 @@
+[%-
+    theme_settings = {
+        'name' => 'classic',
+        'display_name' => 'Classic',
+        'description' => 'The classic theme v2',
+        'css_path' => "$theme_settings.path/css",
+        'js_path' => "$theme_settings.path/js",
+        'image_path' => "$theme_settings.path/images",
+    };
+
+    js_includes = [
+        'mootools-1-2-4-core-nc', 
+        "mootools-1-2-4-4-more",
+        'TAN',
+        'menu',
+        'recent-comments'
+    ];
+    
+    css_includes = [
+       'shared',
+    ];
+    
+    IF !page_title.defined;
+        page_title ='Social News For Internet Pirates';
+    END;
+    page_meta_description = 'Social News For Internet Pirates';
+    page_keywords = 'strange pirate news community comments english social fun jokes videos pictures share sharing lol lolz funny humour humor'
+-%]

@@ -1,0 +1,13 @@
+<form method="post" action="/[% c.req.path %]">
+    <fieldset>
+[% editor = {
+    'name' => "edit_comment_$comment_id",
+    'value' => comment,
+    'height' => '600px',
+};
+    
+PROCESS 'lib/editor.tt' %]
+        <input type="submit" value="Edit" id="edit[% comment_id %]" name="edit[% comment_id %]" />
+        <input type="submit" value="Delete" id="delete[% comment_id %]" name="delete[% comment_id %]" />
+    </fieldset>
+</form>

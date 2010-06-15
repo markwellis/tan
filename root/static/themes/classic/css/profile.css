@@ -1,0 +1,35 @@
+.TAN-inside{
+    background-color:#fff;
+}
+
+.TAN-inside > li > h1{
+    padding:0px;
+    margin:0px;
+}
+
+.TAN-id-card{
+    height:120px;
+    padding:5px 0px 0px 0px;
+}
+
+.TAN-id-card > li{
+    float:left;
+}
+
+.TAN-id-card:first-child{
+    height:150px;
+}
+
+.TAN-id-card li{
+    list-style:none;
+}
+
+.TAN-id-card ul{
+    padding:0px;
+    margin:0px;
+}
+
+.TAN-news-avatar{
+    height:100px;
+    width:100px;
+}

@@ -1,0 +1,88 @@
+.TAN-tags{
+    font-style: italic;
+}
+
+.TAN-hr {
+    border-top: 1px solid #C5D0D9;
+}
+
+.TAN-view_link{
+    float:right;
+    font-size:1.5em;
+}
+
+.TAN-video{
+    text-align:center;
+}
+
+.TAN-news{
+    max-height:none;
+}
+
+/* comment */
+
+.TAN-comment_holder{
+    margin-left:5px;
+    padding-top:10px;
+    padding-bottom:10px;
+    min-height:200px;
+}
+
+.TAN-comment_holder > ul, .TAN-comment_holder > ul > li > ul{
+    padding:0px;
+    margin:0px;
+}
+
+.TAN-comment_holder > ul > li, .TAN-comment_holder > ul > li > ul > li{
+    list-style:none;
+}
+
+.TAN-comment_holder > ul{
+    font-size:.8em;
+    padding-right:3px;
+    width:120px;
+}
+
+.TAN-comment_tools{
+    font-size:1.3em;
+}
+
+.TAN-comment_avatar{
+    height:100px;
+    width:100px;
+    float:none;
+}
+
+.TAN-comment_inner{
+    margin-left:135px;
+    margin-top:15px;
+    font-size: 0.8em;
+    word-wrap:break-word;
+}
+
+.TAN-comment_inner p{
+    margin:0px;
+}
+
+.TAN-blog_wrapper{
+    font-size:1em !important;
+    margin:10px 0px 0px 0px !important;
+    padding-top:5px;
+}
+
+/* quote stuff */
+
+.quoted_username{
+    font-weight:bold;
+}
+
+.quote_holder{
+	padding:5px;
+    background-color:#e1ebf2;
+    border: #bebebe 1px solid;
+}
+
+.quote{
+	padding-left:15px;
+    font-style:italic;
+}

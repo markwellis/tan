@@ -1,0 +1,10 @@
+[%
+css_includes.push('errors');
+%]
+
+<ul class="TAN-inside">
+    <li class="TAN-news">
+        <h2 class="TAN-type-link">Massive Cockup (500)</h2> 
+        <img src="[% theme_settings.image_path %]/boris-johnson.jpg" width="360" height="300" alt="Boris" />
+    </li>
+</ul>

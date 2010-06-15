@@ -1,0 +1,7 @@
+[% 
+js_includes.push('submit');
+css_includes.push('submit');
+-%]
+<ul class="TAN-inside">
+    <li class="TAN-news">[%- PROCESS "submit/${location}.tt" -%]</li>
+</ul>
