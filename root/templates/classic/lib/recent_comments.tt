@@ -21,7 +21,7 @@ FOREACH object_id = grouped_comments.keys() %]
             title = "[NSFW] ${title}";
         END;
         -%]
-        <a href="[% grouped_comments.$object_id.0.object.url %]#comments" class="TAN-type-[% type %]" title="[% title %]::">[% title %]</a>
+        <a href="[% grouped_comments.$object_id.0.object.url %]" class="TAN-type-[% type %]" title="[% title %]::">[% title %]</a>
         <ul>
         [% FOREACH comment = grouped_comments.$object_id %]
             <li>

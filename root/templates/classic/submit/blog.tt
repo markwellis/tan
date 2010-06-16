@@ -22,7 +22,7 @@
             <li>
                 [% editor = {
                     'name' => "blogmain",
-                    'value' => object.$location.details,
+                    'value' => object.$location.details_nobb,
                     'height' => '600px',
                 };
                     

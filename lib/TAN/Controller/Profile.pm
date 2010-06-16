@@ -72,7 +72,48 @@ sub index: PathPart('') Chained('user') Args(0){
     });
 #END tardism
 
+#prevent race
+    eval{
+        $c->model('MySQL')->txn_do(sub{
+            $c->stash->{'object'} = $c->model('MySQL::Object')->find_or_create({
+                'user_id' => $c->stash->{'user'}->id,
+                'type' => 'profile',
+            });
+            $c->stash->{'object'}->find_or_create_related('profile',{});
+        });
+    };
+
     $c->stash->{'template'} = 'profile.tt';
+}
+
+sub edit: PathPart('edit') Chained('user') Args(0){
+    my ( $self, $c ) = @_;
+
+    if ( $c->user_exists && ($c->stash->{'user'}->id == $c->user->id) ){
+        $c->stash->{'object'} = $c->model('MySQL::Object')->find({
+            'user_id' => $c->stash->{'user'}->id,
+            'type' => 'profile',
+        });
+
+        if ( $c->req->method eq 'POST' && defined($c->req->param('profile')) ){
+            if ( defined($c->stash->{'object'}) ){
+                my $profile = $c->stash->{'object'}->profile;
+                
+                if ( defined($profile) ){
+                    $profile->update({
+                        'details' => $c->req->param('profile'),
+                    });
+                }
+            }
+            $c->res->redirect('/profile/' . $c->stash->{'user'}->username);
+            $c->detach;
+        }
+        $c->stash->{'template'} = 'profile/edit.tt';
+        $c->detach;
+    }
+
+    $c->res->redirect('/profile/' . $c->stash->{'user'}->username);
+    $c->detach;
 }
 
 =head2 comments: PathPart('comments') Chained('user') Args(0)

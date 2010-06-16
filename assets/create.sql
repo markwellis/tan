@@ -2,14 +2,13 @@ SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL';
 
+DROP SCHEMA IF EXISTS `tan` ;
 CREATE SCHEMA IF NOT EXISTS `tan` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci ;
 USE `tan`;
 
 -- -----------------------------------------------------
 -- Table `tan`.`user`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `tan`.`user` ;
-
 CREATE  TABLE IF NOT EXISTS `tan`.`user` (
   `user_id` BIGINT NOT NULL AUTO_INCREMENT ,
   `username` VARCHAR(255) NOT NULL ,
@@ -25,8 +24,6 @@ ENGINE = MyISAM;
 -- -----------------------------------------------------
 -- Table `tan`.`object`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `tan`.`object` ;
-
 CREATE  TABLE IF NOT EXISTS `tan`.`object` (
   `object_id` BIGINT(20) NOT NULL AUTO_INCREMENT ,
   `type` ENUM('link','blog','picture') NOT NULL ,
@@ -38,7 +35,8 @@ CREATE  TABLE IF NOT EXISTS `tan`.`object` (
   INDEX `o_user` (`user_id` ASC) ,
   INDEX `created` (`created` ASC) ,
   INDEX `super_index` (`NSFW` ASC, `type` ASC, `promoted` ASC, `created` ASC) ,
-  INDEX `promoted` (`promoted` ASC) )
+  INDEX `promoted` (`promoted` ASC) ,
+  INDEX `profile` (`type` ASC, `user_id` ASC, `NSFW` ASC, `created` ASC) )
 ENGINE = MyISAM
 AUTO_INCREMENT = 53016
 DEFAULT CHARACTER SET = utf8
@@ -48,8 +46,6 @@ COLLATE = utf8_general_ci;
 -- -----------------------------------------------------
 -- Table `tan`.`views`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `tan`.`views` ;
-
 CREATE  TABLE IF NOT EXISTS `tan`.`views` (
   `view_id` BIGINT(20) NOT NULL AUTO_INCREMENT ,
   `ip` VARCHAR(15) NOT NULL ,
@@ -71,8 +67,6 @@ COLLATE = utf8_general_ci;
 -- -----------------------------------------------------
 -- Table `tan`.`user_tokens`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `tan`.`user_tokens` ;
-
 CREATE  TABLE IF NOT EXISTS `tan`.`user_tokens` (
   `token_id` INT NOT NULL AUTO_INCREMENT ,
   `user_id` BIGINT NOT NULL ,
@@ -87,8 +81,6 @@ ENGINE = MyISAM;
 -- -----------------------------------------------------
 -- Table `tan`.`tags`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `tan`.`tags` ;
-
 CREATE  TABLE IF NOT EXISTS `tan`.`tags` (
   `tag_id` BIGINT NOT NULL AUTO_INCREMENT ,
   `tag` VARCHAR(30) NOT NULL ,
@@ -99,8 +91,6 @@ ENGINE = MyISAM;
 -- -----------------------------------------------------
 -- Table `tan`.`tag_objects`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `tan`.`tag_objects` ;
-
 CREATE  TABLE IF NOT EXISTS `tan`.`tag_objects` (
   `object_tag_id` BIGINT NOT NULL AUTO_INCREMENT ,
   `tag_id` BIGINT NOT NULL ,
@@ -116,8 +106,6 @@ ENGINE = MyISAM;
 -- -----------------------------------------------------
 -- Table `tan`.`comments`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `tan`.`comments` ;
-
 CREATE  TABLE IF NOT EXISTS `tan`.`comments` (
   `comment_id` BIGINT(20) NOT NULL AUTO_INCREMENT ,
   `user_id` BIGINT(20) NOT NULL ,
@@ -141,8 +129,6 @@ COLLATE = utf8_general_ci;
 -- -----------------------------------------------------
 -- Table `tan`.`picture`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `tan`.`picture` ;
-
 CREATE  TABLE IF NOT EXISTS `tan`.`picture` (
   `picture_id` BIGINT NOT NULL ,
   `title` VARCHAR(255) NOT NULL ,
@@ -162,8 +148,6 @@ ENGINE = MyISAM;
 -- -----------------------------------------------------
 -- Table `tan`.`blog`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `tan`.`blog` ;
-
 CREATE  TABLE IF NOT EXISTS `tan`.`blog` (
   `blog_id` BIGINT NOT NULL ,
   `picture_id` BIGINT NOT NULL ,
@@ -179,8 +163,6 @@ ENGINE = MyISAM;
 -- -----------------------------------------------------
 -- Table `tan`.`link`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `tan`.`link` ;
-
 CREATE  TABLE IF NOT EXISTS `tan`.`link` (
   `link_id` BIGINT NOT NULL ,
   `title` VARCHAR(255) NOT NULL ,
@@ -196,8 +178,6 @@ ENGINE = MyISAM;
 -- -----------------------------------------------------
 -- Table `tan`.`old_lookup`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `tan`.`old_lookup` ;
-
 CREATE  TABLE IF NOT EXISTS `tan`.`old_lookup` (
   `new_id` BIGINT(20) NOT NULL ,
   `old_id` INT(11) NOT NULL ,
@@ -212,8 +192,6 @@ COLLATE = utf8_general_ci;
 -- -----------------------------------------------------
 -- Table `tan`.`plus_minus`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `tan`.`plus_minus` ;
-
 CREATE  TABLE IF NOT EXISTS `tan`.`plus_minus` (
   `plus_minus_id` BIGINT(20) NOT NULL AUTO_INCREMENT ,
   `type` ENUM('plus','minus') NOT NULL ,

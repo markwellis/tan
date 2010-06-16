@@ -63,6 +63,12 @@ __PACKAGE__->might_have(
 );
 
 __PACKAGE__->might_have(
+  "profile",
+  "TAN::Schema::Result::Profile",
+  { "foreign.profile_id" => "self.object_id" },
+);
+
+__PACKAGE__->might_have(
   "old_lookup",
   "TAN::Schema::Result::OldLookup",
   { "foreign.new_id" => "self.object_id" },
