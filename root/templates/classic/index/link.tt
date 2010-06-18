@@ -88,8 +88,8 @@ PROCESS 'lib/plus_minus_box.tt';
         [%- END -%]
     </p>
     [%- ELSIF type == 'blog' -%]
-        <p class="TAN-blog_wrapper TAN-hr">
+        <div class="TAN-blog_wrapper TAN-hr">
             [% object.blog.details %]
-        </p>
+        </div>
     [%- END;
 END %]

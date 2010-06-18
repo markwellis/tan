@@ -117,16 +117,19 @@ sub index: PathPart('') Chained('location') Args(1) {
         }
     }
 
-    @{$c->stash->{'comments'}} = $c->model('MySQL::Comments')->search({
-        'object_id' => $c->stash->{'object_id'},
+    @{$c->stash->{'comments'}} = 
+    $c->model('MySQL::Comments')->search({
+        'me.object_id' => $c->stash->{'object_id'},
         'me.deleted' => 'N',
     },{
         '+select' => [
             { 'unix_timestamp' => 'me.created' },
         ],
         '+as' => ['created'],
-        'prefetch' => ['user'],
-        'order_by' => 'created',
+        'prefetch' => ['user', {
+            'object' => ['link', 'blog', 'picture'],
+        }],
+        'order_by' => 'me.created',
     })->all;
 
 
@@ -267,7 +270,7 @@ sub edit_comment: PathPart('_edit_comment') Chained('location') Args(1) {
         $c->detach();
     }
 
-    if ( $comment_rs->user_id != $c->user->user_id ){
+    if ( !$c->user_exists || ($comment_rs->user_id != $c->user->user_id) ){
 #FAIL (comment not users)
         if ( !defined($c->req->param('ajax')) ){
             $c->flash->{'message'} = 'Not your comment';

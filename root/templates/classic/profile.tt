@@ -17,6 +17,7 @@ comment_count = user.comments_rs.count || 0;
 link_count = links.count || 0;
 blog_count = blogs.count || 0;
 pic_count = pictures.count || 0;
+
 %]
 
 <ul class="TAN-inside">
@@ -74,5 +75,12 @@ pic_count = pictures.count || 0;
                 </ul>
             </li>
         </ul>
+    </li>
+    <li>
+        [% object.profile.details %]
+        <br />
+        [% IF c.user_exists && c.user.username == user.username %]
+            <a href="/profile/[% c.user.username %]/edit">Edit</a>
+        [% END %]
     </li>
 </ul>

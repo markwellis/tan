@@ -1,4 +1,4 @@
-package TAN::Schema::Result::Blog;
+package TAN::Schema::Result::Profile;
 
 use strict;
 use warnings;
@@ -6,11 +6,9 @@ use warnings;
 use base 'DBIx::Class';
 
 __PACKAGE__->load_components("Core");
-__PACKAGE__->table("blog");
+__PACKAGE__->table("profile");
 __PACKAGE__->add_columns(
-  "blog_id",
-  { data_type => "BIGINT", default_value => undef, is_nullable => 0, size => 20 },
-  "picture_id",
+  "profile_id",
   { data_type => "BIGINT", default_value => undef, is_nullable => 0, size => 20 },
   "details",
   {
@@ -20,22 +18,8 @@ __PACKAGE__->add_columns(
     size => 16777215,
     accessor => '_details',
   },
-  "title",
-  {
-    data_type => "VARCHAR",
-    default_value => undef,
-    is_nullable => 0,
-    size => 255,
-  },
-  "description",
-  {
-    data_type => "VARCHAR",
-    default_value => undef,
-    is_nullable => 0,
-    size => 1000,
-  },
 );
-__PACKAGE__->set_primary_key("blog_id");
+__PACKAGE__->set_primary_key("profile_id");
 
 # Created by DBIx::Class::Schema::Loader v0.04006 @ 2009-11-04 22:01:19
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:2yuJn4YdJ2YjHiMM992ceQ
@@ -60,7 +44,7 @@ sub get_details{
 
     $no_bb ||= 0;
     
-    my $key = "blog.${no_bb}:" . $self->id;
+    my $key = "profile.${no_bb}:" . $self->id;
 
     my $details = $self->result_source->schema->cache->get($key);
     if ( !$details ){
@@ -77,12 +61,7 @@ sub get_details{
 __PACKAGE__->belongs_to(
   "object",
   "TAN::Schema::Result::Object",
-  { object_id => "blog_id" },
-);
-__PACKAGE__->belongs_to(
-  "image",
-  "TAN::Schema::Result::Picture",
-  { picture_id => "picture_id" },
+  { object_id => "profile_id" },
 );
 
 1;

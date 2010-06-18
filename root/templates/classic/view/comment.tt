@@ -24,7 +24,7 @@ END -%]
             <img class="TAN-news-avatar TAN-comment_avatar" src="[% avatar_http %]" alt="[% comment.user.username | html %]" />
         </li>
         <li>
-            Comment #[% comment.number %]
+            Comment #[% comment.number + 1%]
         </li>
         <li>
             <ul class="TAN-comment_tools">
