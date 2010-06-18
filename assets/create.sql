@@ -2,7 +2,6 @@ SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL';
 
-DROP SCHEMA IF EXISTS `tan` ;
 CREATE SCHEMA IF NOT EXISTS `tan` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci ;
 USE `tan`;
 
@@ -26,7 +25,7 @@ ENGINE = MyISAM;
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `tan`.`object` (
   `object_id` BIGINT(20) NOT NULL AUTO_INCREMENT ,
-  `type` ENUM('link','blog','picture') NOT NULL ,
+  `type` ENUM('link','blog','picture','profile') NOT NULL ,
   `created` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ,
   `promoted` TIMESTAMP NULL DEFAULT NULL ,
   `user_id` BIGINT(20) NOT NULL ,
@@ -206,6 +205,17 @@ ENGINE = MyISAM
 AUTO_INCREMENT = 459434
 DEFAULT CHARACTER SET = utf8
 COLLATE = utf8_general_ci;
+
+
+-- -----------------------------------------------------
+-- Table `tan`.`profile`
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS `tan`.`profile` (
+  `profile_id` BIGINT NOT NULL ,
+  `details` MEDIUMTEXT NOT NULL ,
+  PRIMARY KEY (`profile_id`) ,
+  INDEX `b_object` (`profile_id` ASC) )
+ENGINE = MyISAM;
 
 
 
