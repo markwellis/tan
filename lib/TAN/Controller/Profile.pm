@@ -103,6 +103,9 @@ sub edit: PathPart('edit') Chained('user') Args(0){
                     $profile->update({
                         'details' => $c->req->param('profile'),
                     });
+
+                    $c->cache->remove("profile.0:" . $c->stash->{'object'}->id);
+                    $c->cache->remove("profile.1:" . $c->stash->{'object'}->id);
                 }
             }
             $c->res->redirect('/profile/' . $c->stash->{'user'}->username);
