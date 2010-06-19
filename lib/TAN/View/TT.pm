@@ -6,6 +6,7 @@ use HTML::TreeBuilder;
 use HTML::FormatText;
 
 use HTML::Video::Embed;
+use URI;
 
 use base 'Catalyst::View::TT';
 
@@ -31,6 +32,7 @@ __PACKAGE__->config({
         'url_title' => sub { return url_title(shift); },
         'embed_url' => sub { return embed_url(shift); },
         'is_video' => sub { return is_video(shift); },
+        'domain' => sub { return domain(shift); },
     },
     render_die => 1,
     ENCODING => 'utf8',
@@ -171,11 +173,38 @@ sub embed_url{
     return $embedder->url_to_embed( shift );
 }
 
+=head2 is_video
+
+B<@args = ($url)>
+
+=over
+
+returns true if url is a L<HTML::Video::Embed> video
+
+=back
+
+=cut
 sub is_video{
     if ($embedder->is_video( shift )){
         return 1;
     }
     return 0;
+}
+
+=head2 domain
+
+B<@args = ($url)>
+
+=over
+
+returns the domain part of a url
+
+=back
+
+=cut
+sub domain{
+    my $u = URI->new(shift);
+    return $u->host;
 }
 
 =head1 SEE ALSO
