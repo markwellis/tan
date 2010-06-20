@@ -59,7 +59,7 @@ sub new{
         },
         'google' => {
             'domain_reg' => qr/google\.com/,
-            'validate_reg' => qr/^-?\w{19}$/,
+            'validate_reg' => qr/^-?\w+$/,
             'embed' => sub{
                 my ( $validate_reg, $uri ) = @_;
                 my $google_id;
