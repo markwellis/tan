@@ -55,9 +55,18 @@ sub index: Path('') Args(1) {
         $c->detach;
     }
 
-    my $index_count = $tags_rs->objects->count;
+    my %search_opts;
+    if ( !$c->nsfw ){
+        $search_opts{'nsfw'} = 'N';
+    }
 
-    my $index_rs = $tags_rs->objects->search({},
+    my $index_count = $tags_rs->objects->search({
+        %search_opts
+    })->count;
+
+    my $index_rs = $tags_rs->objects->search({
+        %search_opts,
+    },
     {
         'page' => $page,
         'rows' => 27,
