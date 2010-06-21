@@ -25,7 +25,7 @@ I</tagthumbs/$tags/>
 
 =cut
 
-=head2 index: Path: Args(1)
+=head2 index: Path Args(1)
 
 B<@args = ($tags)>
 
@@ -36,7 +36,7 @@ returns related picture info in json format
 =back
 
 =cut
-sub index :Path: Args(1) {
+sub index: Path Args(1) {
     my ( $self, $c, $tags ) = @_;
 
     my @split_tags = split(/ /, $tags);

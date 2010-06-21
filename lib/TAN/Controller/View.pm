@@ -86,7 +86,7 @@ loads the article
 sub index: PathPart('') Chained('location') Args(1) {
     my ( $self, $c, $title ) = @_;
 
-#    $c->cache_page( 60 );
+    $c->cache_page( 60 );
 #check
 # object_id is valid
 # url matches (seo n that)
