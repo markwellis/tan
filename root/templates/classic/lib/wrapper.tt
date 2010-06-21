@@ -94,7 +94,7 @@
             sql_queries = c.model('MySQL').get_query_count();
         -%]
         <div class="TAN-footer">
-            [%- runtime.substr(0, 4) -%] seconds[% IF sql_queries %], [% sql_queries %] [% (sql_queries == 1) ? 'query' : 'queries' -%][% END %]
+            [%- runtime.substr(0, 4) -%] seconds[% IF sql_queries %], [% sql_queries %] [% (sql_queries == 1) ? 'query' : 'queries' -%][% END %], version [% c.VERSION %]
             <span class="right"><a href="#">Up</a>&#160;<a href="#TAN-bottom">Down</a></span>
         </div>
     </body>
