@@ -77,7 +77,12 @@ sub resize{
         my $retval;
         if ( $image_info->{'mime'} eq 'image/gif' ){
         #GIF
-            $retval = `convert -background transparent '${filename}'[0-10] -coalesce -thumbnail '${new_x}x${new_y}' -layers OptimizePlus '${cacheimg}' 2>&1`;
+            #HACK - use original image if gif (could be animated) for preview page
+            if ( $x == 600 ){
+                return `cp '${filename}' '${cacheimg}'`;
+            } else {
+                $retval = `convert -background transparent '${filename}'[0-10] -coalesce -thumbnail '${new_x}x${new_y}' -layers OptimizePlus '${cacheimg}' 2>&1`;
+            }
         } else {
             $retval = `convert '${filename}' -thumbnail '${new_x}x${new_y}' '${cacheimg}' 2>&1`;
         }
