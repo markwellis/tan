@@ -536,13 +536,19 @@ sub add_tags: Private {
     my ( $self, $c, $object ) = @_;
 
     my @tags = split(/ /, lc($c->req->param('tags')));
+
+    my $tags_done = {};
+
     foreach my $tag ( @tags ){
         $tag =~ s/$tag_reg//g;
+        if ( !defined($tags_done->{ $tag }) ){
+            $tags_done->{ $tag } = 1;
 
-        if ( defined($tag) ){
-            $object->add_to_tags({
-                'tag' => $tag,
-            });
+            if ( defined($tag) ){
+                $object->add_to_tags({
+                    'tag' => $tag,
+                });
+            }
         }
     }
 }

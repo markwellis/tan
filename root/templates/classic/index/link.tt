@@ -80,7 +80,7 @@ PROCESS 'lib/plus_minus_box.tt';
         <span class="TAN-tags">
         [%- FOREACH tag = object.tags -%]
             [%- IF loop.count > 1 %], [% END -%]
-            [% tag.tag %]
+            <a href="/tag/[% tag.tag %]">[% tag.tag %]</a>
         [%- END -%]
         </span>
     [%- IF type == 'blog' -%]</p>[% END -%]
