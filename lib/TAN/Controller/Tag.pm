@@ -44,7 +44,7 @@ sub index: Path('') Args(1) {
 #get list of things with $tag
 #assemble index
 
-    my $page = $c->req->param('page') || 0;
+    my $page = $c->req->param('page') || 1;
 
     my $tags_rs = $c->model('MySQL::Tags')->search({
         'tag' => $tag,
