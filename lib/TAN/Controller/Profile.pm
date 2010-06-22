@@ -208,6 +208,7 @@ loads pictures for the user
 sub pictures: PathPart('pictures') Chained('user') Args(0){
     my ( $self, $c ) = @_;
 
+    $c->stash->{'location'} = 'picture';
     $c->forward('fetch', ['picture']);
 
     $c->stash->{'template'} = 'profile/pictures.tt';
