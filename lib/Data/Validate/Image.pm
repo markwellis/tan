@@ -56,12 +56,14 @@ sub _validate{
     my $image_type = Image::Info::image_info($file);
 
     if ( defined($image_type->{'file_ext'}) ){
+        my @frames = `convert -identify "${file}" /dev/null`;
         return {
             'x' => $image_type->{'width'},
             'y' => $image_type->{'height'},
             'size' => (-s $file) / 1024,
             'mime' => $image_type->{'file_media_type'},
             'file_ext' => $image_type->{'file_ext'},
+            'animated' => (scalar(@frames) - 1),
         };
     }
 

@@ -75,9 +75,9 @@ sub resize{
         }
 
         my $retval;
-        if ( $image_info->{'mime'} eq 'image/gif' ){
+        if ( ($image_info->{'mime'} eq 'image/gif') && ($image_info->{'animated'}) ){
         #GIF
-            #HACK - use original image if gif (could be animated) for preview page
+            #HACK - use original image if preview page
             if ( $x == 600 ){
                 return `cp '${filename}' '${cacheimg}'`;
             } else {
