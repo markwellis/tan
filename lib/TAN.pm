@@ -385,6 +385,57 @@ sub finalize_error {
     }
 }
 
+my $hooks;
+=head2 register_hook
+
+B<@args = ($name, $action)>
+
+=over
+
+registers a hook, e.g.
+
+=over
+
+$c->register_hook('object_new', '/index/clear_cache')
+
+=back
+
+=back
+
+=cut
+sub register_hook{
+    my ( $self, $name, $action ) = @_;
+
+    push(@{$hooks->{ $name }}, $action);
+}
+
+=head2 run_hook
+
+B<@args = ($name, $args)>
+
+=over
+
+runs a hook, e.g.
+
+=over
+
+$c->run_hook('object_new', [$object_rs])
+
+=back
+
+=back
+
+=cut
+sub run_hook{
+    my ( $self, $name, $args ) = @_;
+
+    return if ( !defined($hooks->{ $name }) );
+
+    foreach my $action ( @{$hooks->{ $name }} ){
+        $self->forward($action, $args)
+    }
+}
+
 =head1 SYNOPSIS
 
     script/tan_server.pl
