@@ -69,6 +69,7 @@ sub init{
 
 #allow size to be number or word...
     $style_whitelist->{'font-size'} = 'word';
+    $style_whitelist->{'text-decoration'} = 'word';
 
 # set additionally allowed html tag attributes
     $attrib_whitelist->{'a'}->{'title'} = 'text';
