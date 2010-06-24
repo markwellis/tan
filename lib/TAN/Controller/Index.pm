@@ -30,6 +30,15 @@ $page => page number
 
 =cut
 
+TAN->register_hook(['object_new', 'object_promoted', 'object_deleted'], '/index/clear_cache');
+
+sub clear_cache: Private{
+    my ( $self, $c, $object_rs ) = @_;
+
+    $object_rs->clear_index_cache();
+    $c->clear_cached_page('/index.*');
+}
+
 =head2 index: Path: Args(3)
 
 B<@args = ($location, $upcoming, $page)>

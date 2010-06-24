@@ -84,6 +84,7 @@ sub add{
     #if count > promotion cut off, then promote
     my $count = $plusminus_rs->count;
     my $first = $plusminus_rs->first;
+    my $promoted = 0;
 
     if ( !$deleted && ($type eq 'plus') && defined($first) ){
         my $object_rs = $first->object;
@@ -95,10 +96,11 @@ sub add{
             && ($count >= TAN->config->{'promotion_cutoff'})
         ){
             $object_rs->promote;
+            $promoted = 1;
         }
     }
 
-    return $plusminus_rs;
+    return ($count, $promoted);
 }
 
 =head2 meplus_minus

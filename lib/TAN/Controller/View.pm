@@ -40,6 +40,62 @@ $title = url title
 
 =cut
 
+TAN->register_hook(
+    [
+        'object_new', 
+        'object_deleted', 
+        'object_updated',
+        'object_plusminus', 
+        'comment_new', 
+        'comment_deleted',
+        'comment_updated',
+    ],
+    '/view/clear_object_cache'
+);
+
+sub clear_object_cache: Private{
+    my ( $self, $c, $object_rs ) = @_;
+
+    if ( ref($object_rs) eq 'TAN::Model::MySQL::Comments' ){
+    #$object_rs is actually $comment_rs...
+        $object_rs = $object_rs->object;
+    }
+
+    $c->cache->remove("object:" . $object_rs->id);
+    $c->clear_cached_page( $object_rs->url . '.*' );
+}
+
+TAN->register_hook(
+    [
+        'comment_new', 
+        'comment_deleted', 
+        'comment_updated',
+    ], 
+    '/view/clear_comment_cache'
+);
+sub clear_comment_cache: Private{
+    my ( $self, $c, $comment_rs ) = @_;
+
+    #clear recent_comments
+    $c->cache->remove("recent_comments");
+    #clear comment cache
+    $c->cache->remove("comment.0:" . $comment_rs->id);
+    $c->cache->remove("comment.1:" . $comment_rs->id);
+}
+
+TAN->register_hook(
+    [
+        'blog_updated',
+    ], 
+    '/view/clear_blog_cache'
+);
+sub clear_blog_cache: Private{
+    my ( $self, $c, $object_rs ) = @_;
+
+    $c->cache->remove("blog.0:" . $object_rs->id);
+    $c->cache->remove("blog.1:" . $object_rs->id);
+}
+
 =head2 location: PathPart('view') Chained('/') CaptureArgs(1)
 
 B<@args = ($location)>
@@ -164,7 +220,7 @@ sub comment: PathPart('_comment') Chained('location') Args(0) {
                 $comment
             );
             $comment_id = $comment_rs->comment_id;
-            $c->forward('delete_comment_caches', [$comment_rs]);
+            $c->run_hook('comment_new', $comment_rs);
         }
     } else {
     #save for later
@@ -289,7 +345,7 @@ sub edit_comment: PathPart('_edit_comment') Chained('location') Args(1) {
             $comment_rs->update({
                 'deleted' => 'Y',
             });
-            $c->forward('delete_comment_caches', [$comment_rs]);
+            $c->run_hook('comment_deleted', $comment_rs);
 
             if ( !defined($c->req->param('ajax')) ){
                 $c->flash->{'message'} = 'Comment deleted';
@@ -304,7 +360,7 @@ sub edit_comment: PathPart('_edit_comment') Chained('location') Args(1) {
                 $comment_rs->update({
                     'comment' => $c->req->param("edit_comment_${comment_id}"),
                 });
-                $c->forward('delete_comment_caches', [$comment_rs]);
+                $c->run_hook('comment_updated', $comment_rs);
             }
             if ( !defined($c->req->param('ajax')) ){
                 $c->res->redirect( $comment_rs->object->url . '#comment' . $comment_rs->comment_id);
@@ -325,22 +381,6 @@ sub edit_comment: PathPart('_edit_comment') Chained('location') Args(1) {
         $c->forward( $c->view('NoWrapper') );
         $c->detach();
     }
-}
-
-sub delete_comment_caches: Private{
-    my ( $self, $c, $comment_rs ) = @_;
-
-    #clear recent_comments
-    $c->cache->remove("recent_comments");
-    #clear comment cache
-    $c->cache->remove("comment.0:" . $comment_rs->id);
-    $c->cache->remove("comment.1:" . $comment_rs->id);
-    #clear cobject
-    if ( $c->stash->{'object_id'} ){
-        $c->cache->remove("object:" . $c->stash->{'object_id'});
-    }
-
-    $c->clear_cached_page( $comment_rs->object->url . '.*' );
 }
 
 =head2 plus: PathPart('_plus') Chained('location') Args(0)
@@ -397,25 +437,28 @@ sub add_plus_minus: Private{
 
     if ( $c->user_exists ){
     # valid user, do work
-        my $plus_minus_rs = $c->model('MySQL::PlusMinus')->add(
+        my ( $count, $promoted ) = $c->model('MySQL::PlusMinus')->add(
             $type, $c->stash->{'object_id'}, $c->user->user_id
         );
-        $c->cache->remove("object:" . $c->stash->{'object_id'});
 
         my $object = $c->model('MySQL::Object')->find({
             'object_id' => $c->stash->{'object_id'}
         });
-        $c->clear_cached_page( $object->url . '.*' ) if ( defined($object) );
+
+        $c->run_hook('object_plusminus', $object);
+        if ( $promoted ){
+            $c->run_hook('object_promoted', $object);
+        }
 
         if ( defined($c->req->param('json')) ){
         #json
             $c->res->header('Content-Type' => 'application/json');
             $c->res->body( to_json({
-                'count' => $plus_minus_rs->count,
+                'count' => $count,
             }) );
         } else {
         #redirect
-            $c->res->redirect( $plus_minus_rs->first->object->url );
+            $c->res->redirect( $object->url );
         }
     } else {
     #prompt for login
@@ -432,6 +475,7 @@ sub add_plus_minus: Private{
     }
     $c->detach();
 }
+
 =head2 post_saved_comments: Private
 
 B<@args = undef>
@@ -455,7 +499,7 @@ sub post_saved_comments: Private{
                 $c->user->user_id, 
                 $saved_comment->{'comment'} 
             );
-            $c->forward('delete_comment_caches', [$comment_rs]);
+            $c->run_hook('comment_new', [$comment_rs]);
         }
         $c->session->{'comments'} = undef;
     }

@@ -385,7 +385,6 @@ sub finalize_error {
     }
 }
 
-my $hooks;
 =head2 register_hook
 
 B<@args = ($name, $action)>
@@ -403,10 +402,18 @@ $c->register_hook('object_new', '/index/clear_cache')
 =back
 
 =cut
+my $hooks;
 sub register_hook{
     my ( $self, $name, $action ) = @_;
+    
+    if ( ref($name) ne 'ARRAY'){
+        $name = [$name];
+    }
 
-    push(@{$hooks->{ $name }}, $action);
+    foreach my $hook ( @{ $name } ){
+        push(@{$hooks->{ $hook }}, $action);
+        $self->log->debug("Registered hook: ${hook} for ${action}") if ( $self->debug );
+    }
 }
 
 =head2 run_hook
@@ -427,12 +434,12 @@ $c->run_hook('object_new', [$object_rs])
 
 =cut
 sub run_hook{
-    my ( $self, $name, $args ) = @_;
+    my ( $self, $name, @args ) = @_;
 
     return if ( !defined($hooks->{ $name }) );
 
     foreach my $action ( @{$hooks->{ $name }} ){
-        $self->forward($action, $args)
+        $self->forward($action, \@args)
     }
 }
 
