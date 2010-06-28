@@ -494,12 +494,14 @@ sub post_saved_comments: Private{
     if ( $c->user_exists ){
     #logged in, post
         foreach my $saved_comment ( @{$c->session->{'comments'}} ){
-            my $comment_rs = $c->model('MySQL::Comments')->create_comment( 
-                $saved_comment->{'object_id'}, 
-                $c->user->user_id, 
-                $saved_comment->{'comment'} 
-            );
-            $c->run_hook('comment_new', [$comment_rs]);
+            if ( defined($saved_comment->{'object_id'}) && defined($saved_comment->{'comment'}) ){
+                my $comment_rs = $c->model('MySQL::Comments')->create_comment( 
+                    $saved_comment->{'object_id'}, 
+                    $c->user->user_id, 
+                    $saved_comment->{'comment'} 
+                );
+                $c->run_hook('comment_new', $comment_rs);
+            }
         }
         $c->session->{'comments'} = undef;
     }
