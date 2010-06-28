@@ -1,5 +1,5 @@
 [% 
-js_includes.push('/static/tiny_mce/tiny_mce.js');
+js_includes.push('/static/tiny_mce/tiny_mce.js?r=1');
 js_includes.push('tiny-mce-config');
 
 edheight = editor.height.defined ? editor.height : '300px';
