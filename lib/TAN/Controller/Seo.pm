@@ -89,6 +89,7 @@ Disallow: /random*
 Disallow: /submit*
 Disallow: /profile*
 Disallow: /redirect*
+Disallow: /chat*
 
 Sitemap: http://thisaintnews.com/sitemap"
     );
