@@ -90,6 +90,10 @@ Disallow: /submit*
 Disallow: /profile*
 Disallow: /redirect*
 Disallow: /chat*
+Disallow: /static/cache*
+Disallow: /static/user/avatar*
+Disallow: /redirect*
+Disallow: /tag*
 
 Sitemap: http://thisaintnews.com/sitemap"
     );

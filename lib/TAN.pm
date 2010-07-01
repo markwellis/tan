@@ -42,7 +42,7 @@ use Catalyst qw/
     Unicode::Encoding
 /;
 
-our $VERSION = '1.2.3';
+our $VERSION = '1.2.4';
 
 # Configure the application.
 #
