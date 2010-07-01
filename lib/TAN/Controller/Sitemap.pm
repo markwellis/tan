@@ -106,7 +106,7 @@ sub xml: Path('xml') Args(1){
     foreach my $object ( @objects ){
         my $loc = '<url>'
             .'<loc>http://thisaintnews.com' . $object->url . '</loc>'
-            .'<lastmod>' . $object->get_column('W3Cdate') . '</lastmod>'
+            .'<lastmod>' . $object->get_column('W3Cdate') . '+00:00</lastmod>'
             .'<changefreq>daily</changefreq>'
             .'</url>';
         push(@locs, $loc);
