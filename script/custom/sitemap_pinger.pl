@@ -14,6 +14,5 @@ my @search_engine_ping_urls = (
 );
 
 foreach my $search_engine_ping_url (@search_engine_ping_urls) {
-    #get( $search_engine_ping_url . CGI::escape( 'http://thisaintnews.com/sitemap/' ) );
-    warn $search_engine_ping_url;
+    get( $search_engine_ping_url . CGI::escape( 'http://thisaintnews.com/sitemap/' ) );
 }
