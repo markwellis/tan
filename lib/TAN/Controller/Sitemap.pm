@@ -62,7 +62,7 @@ sub index: Private{
 
     my @sitemaps;
     foreach my $count ( 0..$sitemap_count ){
-        push(@sitemaps, "<sitemap><loc>" . $c->uri_for('xml', ($count)) . "</loc></sitemap>");
+        push(@sitemaps, "<sitemap><loc>" . $c->uri_for('xml', (sprintf("%06d", $count))) . "</loc></sitemap>");
     }
 
     my $output = '<?xml version="1.0" encoding="UTF-8"?>'
