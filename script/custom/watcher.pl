@@ -4,9 +4,9 @@ use warnings;
 
 use Linux::Inotify2;
 use App::Daemon;
-use Cwd;
 use File::Path qw/mkpath/;
 use Time::HiRes qw/time/;
+use File::Basename;
 
 App::Daemon::daemonize();
 
@@ -16,6 +16,7 @@ my $cwd = Cwd::cwd();
 mkpath('/tmp/tan_control');
 
 my $lastrun;
+my $script_dir = dirname($0);
 
 $inotify->watch("/tmp/tan_control", IN_CREATE, sub{
     my ( $event ) = @_; 
@@ -24,7 +25,7 @@ $inotify->watch("/tmp/tan_control", IN_CREATE, sub{
     if ( ($name eq 'sitemap_ping') && ( !$lastrun || (time - $lastrun) > 600 ) ){
 #10 min limit
         #run sitemap pinger. this might be harassment, lolz
-        do "${cwd}/sitemap_pinger.pl";
+        do "${script_dir}/sitemap_pinger.pl";
         $lastrun = time;
     }
     unlink( $event->fullname );
