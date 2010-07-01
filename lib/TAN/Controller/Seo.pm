@@ -65,6 +65,29 @@ sub yahoo: Path('/y_key_242ef28969a04b9c.html'){
     $c->detach();
 }
 
+=head2 robots: Path('/robots.txt')
+
+B<@args = undef>
+
+=over
+
+robots.txt
+
+=back
+
+=cut
+sub robots: Path('/robots.txt'){
+    my ( $self, $c ) = @_;
+
+    $c->res->output(
+"User-agent: *
+Sitemap: http://thisaintnews.com/sitemap"
+    );
+    $c->res->header('Content-Type' => 'text/plain');
+    $c->detach();
+}
+
+
 =head1 AUTHOR
 
 A clever guy
