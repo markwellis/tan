@@ -116,8 +116,8 @@ sub post: PathPart('post') Chained('validate_user') Args(0) {
             'details' => $c->req->param('blogmain'),
         });
 
-        $c->cache->remove("blog.0:" . $c->stash->{'object'}->id);
-        $c->cache->remove("blog.1:" . $c->stash->{'object'}->id);
+        $c->run_hook('blog_updated', $c->stash->{'object'});
+
     } elsif ( $c->stash->{'location'} eq 'picture' ){
         $c->stash->{"object"}->update({
             'nsfw' => defined($c->req->param('nsfw')) ? 'Y' : 'N',
@@ -132,7 +132,7 @@ sub post: PathPart('post') Chained('validate_user') Args(0) {
     $c->stash->{'object'}->tag_objects->delete();
     $c->forward('/submit/add_tags', [$c->stash->{'object'}]);
 
-    $c->cache->remove("object:" . $c->stash->{'object'}->id);
+    $c->run_hook('object_updated', $c->stash->{'object'});
 
     $c->flash->{'message'} = 'Edit complete';
     $c->res->redirect($c->stash->{'object'}->url);
