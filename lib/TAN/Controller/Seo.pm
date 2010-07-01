@@ -81,6 +81,15 @@ sub robots: Path('/robots.txt'){
 
     $c->res->output(
 "User-agent: *
+Disallow: /view/*/*/_plus
+Disallow: /view/*/*/_minus
+Disallow: /login*
+Disallow: /filter*
+Disallow: /random*
+Disallow: /submit*
+Disallow: /profile*
+Disallow: /redirect*
+
 Sitemap: http://thisaintnews.com/sitemap"
     );
     $c->res->header('Content-Type' => 'text/plain');

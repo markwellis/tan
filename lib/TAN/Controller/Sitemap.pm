@@ -28,6 +28,17 @@ search engine sitemap
 
 =cut
 
+TAN->register_hook(['object_new', 'object_updated', 'object_deleted'], '/sitemap/clear_cache');
+
+sub clear_cache: Private{
+    my ( $self, $c ) = @_;
+
+    $c->clear_cached_page('/sitemap.*');
+
+#trigger monitor to ping google and em
+    `touch /tmp/tan_control/sitemap_ping`;
+}
+
 =head2 index: Private
 
 B<@args = undef>
@@ -41,6 +52,8 @@ sitemap index page
 =cut
 sub index: Private{
     my ( $self, $c ) = @_;
+
+    $c->cache_page(3600);
 
     my $sitemap_count = $c->model('MySQL::Object')->search({
         'type' => ['link', 'blog', 'picture'],
@@ -63,6 +76,8 @@ sub index: Private{
 
 sub xml: Path('xml') Args(1){
     my ( $self, $c, $page ) = @_;
+
+    $c->cache_page(3600);
 
     if ( !defined($page) ){
         $c->forward('/default');
