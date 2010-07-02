@@ -79,6 +79,8 @@ robots.txt
 sub robots: Path('/robots.txt'){
     my ( $self, $c ) = @_;
 
+    $c->cache_page(3600);
+
     $c->res->output(
 "User-agent: *
 Disallow: /view/*/*/_plus
