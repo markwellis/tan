@@ -53,6 +53,11 @@ sitemap index page
 sub index: Private{
     my ( $self, $c ) = @_;
 
+    if ( $c->req->path eq 'sitemap/' ){
+        $c->res->redirect( '/sitemap', 301 );
+        $c->detach;
+    }
+
     $c->cache_page(3600);
 
     my $sitemap_count = $c->model('MySQL::Object')->search({
