@@ -22,28 +22,41 @@ B<@args = ($location, $page, $upcoming, $order)>
 
 =over
 
-gets the stuff for the index
+returns ($index_rs, $pager)
 
 =back
 
 =cut
+my $int_reg = qr/\D+/;
+my $location_reg = qr/^all|link|blog|picture$/;
+my $order_reg = qr/^promoted|plus|minus|views|comments$/;
+
 sub index {
-    my ($self, $location, $page, $upcoming, $order, $nsfw) = @_;
+    my ($self, $location, $page, $upcoming, $search, $order, $nsfw, $index_type) = @_;
     
+    if ($location !~ m/$location_reg/){
+        $location = 'all';
+    }
+
+    if ($order !~ m/$order_reg/){
+        $order = 'created';
+    }
+    
+    $upcoming =~ s/$int_reg//g;
+    $page =~ s/$int_reg//g;
+
     local $DBIx::Class::ResultSourceHandle::thaw_schema = $self->result_source->schema;
 
-    my $key = "${location}:${page}:${upcoming}:${order}:${nsfw}";
-    my $indexes = $self->result_source->schema->cache->get("index:${key}");
+    my $key = "${index_type}:${location}:${page}:${upcoming}:${order}:${nsfw}";
+    my $objects = $self->result_source->schema->cache->get("index:${key}");
     my $pager = $self->result_source->schema->cache->get("pager:${key}");
 
-    if ( !$indexes || !$pager ){
-        my ($type, $search);
+    if ( !$objects || !$pager ){
+        my $type;
 
         if ($upcoming){
-            $search = \'= 0';
             $order ||= 'created'
         } else {
-            $search = \'!= 0';
             $order ||= 'promoted';
             $order = 'promoted' if ($order eq 'created');
         }
@@ -52,11 +65,6 @@ sub index {
             $type = ['link', 'blog', 'picture'];
         } else {
             $type = $location;
-        }
-        
-        my %nsfw_opts;
-        if ( !defined($nsfw) || !$nsfw ){
-            $nsfw_opts{'nsfw'} = 'N';
         }
         
         my %search_opts;
@@ -84,7 +92,7 @@ sub index {
             }
         }
 
-#order by newest to lastest
+        #order by newest to lastest
         if ( ($order eq 'created') || ($order eq 'promoted') ){
             $order = [$order];
         } else {
@@ -94,11 +102,14 @@ sub index {
                 $order = [$order, 'promoted'];
             }
         }
+        
+        if ( (!defined($nsfw) || !$nsfw) && !defined($search->{'nsfw'}) ){
+            $search->{'nsfw'} = 'N';
+        }
 
         my $index_rs = $self->search({
-            'promoted' => $search,
+            %{$search},
             'type' => $type,
-            %nsfw_opts
         },
         {
             'order_by' => {
@@ -109,31 +120,26 @@ sub index {
             %search_opts
         });
 
-        @{$indexes} = $index_rs->all;
+        return undef if !$index_rs;
+    
+        @{$objects} = $index_rs->all;
+
         $pager = {
             'current_page' => $index_rs->pager->current_page,
             'total_entries' => $index_rs->pager->total_entries,
             'entries_per_page' => $index_rs->pager->entries_per_page,
         };
 
-        $self->result_source->schema->cache->set("index:${key}", $indexes, 600);
+        $self->result_source->schema->cache->set("index:${key}", $objects, 600);
         $self->result_source->schema->cache->set("pager:${key}", $pager, 600);
 
 #build an index cache..
         my $indexes_in_cache = $self->result_source->schema->cache->get("indexes_in_cache");
-        $indexes_in_cache->{$key} = 1;
+        $indexes_in_cache->{$index_type}->{$key} = 1;
         $self->result_source->schema->cache->set("indexes_in_cache", $indexes_in_cache, 0);
     }
 
-    my @index;
-    foreach my $object ( @{$indexes} ){
-        push(@index, $self->get( $object->id, $object->type ));
-    }
-
-    return {
-        'objects' => \@index,
-        'pager' => $pager,
-    };
+    return ($objects, $pager);
 }
 
 =head2 random

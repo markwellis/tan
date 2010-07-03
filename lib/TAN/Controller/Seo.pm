@@ -85,6 +85,7 @@ sub robots: Path('/robots.txt'){
 "User-agent: *
 Disallow: /view/*/*/_plus
 Disallow: /view/*/*/_minus
+Disallow: /view/*/*/_comment
 Disallow: /login*
 Disallow: /filter*
 Disallow: /random*
@@ -96,6 +97,7 @@ Disallow: /static/cache*
 Disallow: /static/user/avatar*
 Disallow: /redirect*
 Disallow: /tag*
+Disallow: /search*
 
 Sitemap: http://thisaintnews.com/sitemap"
     );

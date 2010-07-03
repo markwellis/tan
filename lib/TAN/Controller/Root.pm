@@ -74,7 +74,7 @@ B<@args = undef>
 
 =over
 
-forwards to /index/all/0/1/
+forwards to /index/all/0/
 
 =back
 
@@ -82,7 +82,7 @@ forwards to /index/all/0/1/
 sub index: Path: Args(0) {
     my ( $self, $c ) = @_;
 
-    $c->forward('/index/index', ['all', 0, 1]);
+    $c->forward('/index/index', ['all', 0] );
 }
 
 =head2 default: Path 

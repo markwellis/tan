@@ -104,6 +104,11 @@ fieldset{
     padding-top:3px;
 }
 
+.TAN-menu-top-search > fieldset > label{
+    color:#aaa;
+    font-size:0.8em;
+}
+
 /* menu */
 
 .TAN-menu-ad-holder{

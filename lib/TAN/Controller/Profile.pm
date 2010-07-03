@@ -208,7 +208,6 @@ loads pictures for the user
 sub pictures: PathPart('pictures') Chained('user') Args(0){
     my ( $self, $c ) = @_;
 
-    $c->stash->{'location'} = 'picture';
     $c->forward('fetch', ['picture']);
 
     $c->stash->{'template'} = 'profile/pictures.tt';
@@ -217,64 +216,18 @@ sub pictures: PathPart('pictures') Chained('user') Args(0){
 sub fetch: Private{
     my ( $self, $c, $location ) = @_;
 
+    $c->stash->{'location'} = $location;
+
     my $page = $c->req->param('page') || 1;
 
-    my %search_opts;
-    if ( !$c->nsfw ){
-        $search_opts{'nsfw'} = 'N';
+    my $order = $c->req->param('order') || 'created';
+    $c->stash->{'order'} = $order;
+
+    my ( $objects, $pager ) = $c->stash->{'user'}->objects->index( $location, $page, 1, {}, $order, $c->nsfw, "profile:" . $c->stash->{'user'}->id );
+
+    if ( $objects ){
+        $c->stash->{'index'} = $c->model('Index')->indexinate($c, $objects, $pager);
     }
-
-    my $index_rs = $c->stash->{'user'}->objects->search({
-        'type' => $location,
-        %search_opts,
-    },{
-        'page' => $page,
-        'rows' => 27,
-        'order_by' => {
-            '-desc' => 'me.created',
-        },
-        'prefetch' => $location,
-    });
-
-    if ( !$index_rs ){
-        $c->forward('/default');
-        $c->detach;
-    }
-
-    my @index;
-    foreach my $object ( $index_rs->all ){
-        push(@index, $c->model('MySQL::Object')->get( $object->id, $object->type ));
-    }
-
-    if ( $c->user_exists ){
-        my @ids = map($_->id, @index);
-        my $meplus_minus = $c->model('MySQL::PlusMinus')->meplus_minus($c->user->user_id, \@ids);
-
-        foreach my $object ( @index ){
-            if ( defined($meplus_minus->{ $object->object_id }->{'plus'}) ){
-                $object->{'meplus'} = 1;
-            } 
-            if ( defined($meplus_minus->{ $object->object_id }->{'minus'}) ){
-                $object->{'meminus'} = 1;  
-            }
-        }
-    }
-
-    if ( !scalar(@index) ){
-        $c->forward('/default');
-        $c->detach;
-    }
-
-    my $pager = {
-        'current_page' => $index_rs->pager->current_page,
-        'total_entries' => $index_rs->pager->total_entries,
-        'entries_per_page' => $index_rs->pager->entries_per_page,
-    };
-
-    $c->stash->{'index'} = {
-        'objects' => \@index,
-        'pager' => $pager,
-    };
 }
 
 =head1 AUTHOR

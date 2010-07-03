@@ -44,8 +44,6 @@ sub index: Path('') Args(1) {
 #get list of things with $tag
 #assemble index
 
-    my $page = $c->req->param('page') || 1;
-
     my $tags_rs = $c->model('MySQL::Tags')->search({
         'tag' => $tag,
     })->first;
@@ -55,61 +53,21 @@ sub index: Path('') Args(1) {
         $c->detach;
     }
 
-    my %search_opts;
-    if ( !$c->nsfw ){
-        $search_opts{'nsfw'} = 'N';
-    }
+    my $page = $c->req->param('page') || 1;
 
-    my $index_count = $tags_rs->objects->search({
-        %search_opts
-    })->count;
+    my $order = $c->req->param('order') || 'created';
+    $c->stash->{'order'} = $order;
 
-    my $index_rs = $tags_rs->objects->search({
-        %search_opts,
-    },
-    {
-        'page' => $page,
-        'rows' => 27,
-        'order_by' => {
-            '-desc' => 'me.created',
-        },
-        'prefetch' => ['link', 'blog', 'picture'],
-    });
+    my $key = $tag;
+    $key =~ s/\W+/_/g;
+    my ( $objects, $pager ) = $tags_rs->objects->index( 'all', $page, 1, {}, $order, $c->nsfw, "tag:${key}" );
 
-    my @index;
-    foreach my $object ( $index_rs->all ){
-        push(@index, $c->model('MySQL::Object')->get( $object->id, $object->type ));
-    }
-
-    if ( $c->user_exists ){
-        my @ids = map($_->id, @index);
-        my $meplus_minus = $c->model('MySQL::PlusMinus')->meplus_minus($c->user->user_id, \@ids);
-
-        foreach my $object ( @index ){
-            if ( defined($meplus_minus->{ $object->object_id }->{'plus'}) ){
-                $object->{'meplus'} = 1;
-            } 
-            if ( defined($meplus_minus->{ $object->object_id }->{'minus'}) ){
-                $object->{'meminus'} = 1;  
-            }
-        }
-    }
-
-    if ( !scalar(@index) ){
+    if ( $objects ){
+        $c->stash->{'index'} = $c->model('Index')->indexinate($c, $objects, $pager);
+    } else {
         $c->forward('/default');
         $c->detach;
     }
-
-    my $pager = {
-        'current_page' => $page,
-        'total_entries' => $index_count,
-        'entries_per_page' => 27,
-    };
-
-    $c->stash->{'index'} = {
-        'objects' => \@index,
-        'pager' => $pager,
-    };
 
     $c->stash->{'template'} = 'tag.tt';
 }

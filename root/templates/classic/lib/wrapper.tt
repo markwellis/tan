@@ -12,7 +12,8 @@
         <meta name="keywords" content="[% page_keywords %]"/>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
         [%- PROCESS 'lib/css_includes.tt'-%]
-        <link rel="shortcut icon" href="/static/favicon.ico" /> 
+        <link rel="shortcut icon" href="/static/favicon.ico" />
+        <link rel="search" type="application/opensearchdescription+xml" title="TAN Search" href="/static/opensearchplugin.xml" />
     </head>
     <body>
         [%- PROCESS 'lib/js_includes.tt' -%]
@@ -48,12 +49,10 @@
                     <a href="/filter/" class="nsfw_filter">[%- IF (c.nsfw) %]Enable[% ELSE %]Disable[% END %] filter</a> | 
                     <a href="/faq/">FAQ</a>                    
                 </p>
-                <form class="TAN-menu-top-search" action="http://www.google.com/cse">
+                <form class="TAN-menu-top-search" action="/search/" method="get">
                     <fieldset>
-                        <input type="hidden" value="017135894524023845720:-eqs9gh9cxm" name="cx" />
-                        <input type="hidden" value="UTF-8" name="ie" />
-                        <input type="text" size="31" name="q" />
-                        <input type="submit" value="Search" name="sa" />
+                        <input type="text" size="31" name="q" value="[% c.req.param('q') | html %]"/>
+                        <input type="submit" value="Search" />
                     </fieldset>
                 </form>
             </div>
