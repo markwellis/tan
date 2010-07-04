@@ -343,6 +343,7 @@ fieldset{
     max-height:300px;
     padding:10px 5px;
     background-color:#fff;
+    overflow:hidden;
 }
 
 .TAN-news > ul > li{
