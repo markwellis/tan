@@ -437,7 +437,7 @@ sub add_plus_minus: Private{
 
     if ( $c->user_exists ){
     # valid user, do work
-        my ( $count, $promoted ) = $c->model('MySQL::PlusMinus')->add(
+        my ( $count, $promoted, $deleted ) = $c->model('MySQL::PlusMinus')->add(
             $type, $c->stash->{'object_id'}, $c->user->user_id
         );
 
@@ -455,6 +455,7 @@ sub add_plus_minus: Private{
             $c->res->header('Content-Type' => 'application/json');
             $c->res->body( to_json({
                 'count' => $count,
+                'deleted' => $deleted,
             }) );
         } else {
         #redirect
