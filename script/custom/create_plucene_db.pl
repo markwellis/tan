@@ -4,6 +4,7 @@ use warnings;
 
 use Plucene::Simple;
 use TAN::Model::MySQL;
+use Term::ProgressBar;
 
 my $index_path = '/mnt/stuff/TAN/plucene_index';
 my $plucy = Plucene::Simple->open($index_path);
@@ -22,16 +23,26 @@ my $objects = $db->resultset('Object')->search({
     'prefetch' => ['link', 'blog', 'picture'],
 });
 
+my $count = $objects->count;
+my $loop = 0;
+my $progress = Term::ProgressBar->new({
+    'name' => 'Indexing',
+    'count' => $count,
+});
+
 while (my $object = $objects->next){
     my $type = $object->type;
-    if ( !$plucy->indexed($object->id) ){
-        $plucy->add($object->id, {
-            '_type' => $type,
-            'date' => $object->get_column('iso_created'),
-            '_nsfw' => $object->nsfw,
-            'title' => $object->$type->title,
-            'description' => $object->$type->description,
-        });
+
+    $plucy->add($object->id, {
+        'date' => $object->get_column('iso_created'),
+        'title' => $object->$type->title,
+        'description' => $object->$type->description,
+    });
+
+    $progress->update( ++$loop );
+
+    if ( ($count % 100) == 0 ){
+        $plucy->optimize;
     }
 }
 
