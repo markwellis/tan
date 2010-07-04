@@ -5,7 +5,7 @@ use warnings;
 use parent 'Catalyst::Controller';
 
 use JSON;
-use DBIx::Class::ResultClass::HashRefInflator;
+use Tie::Hash::Indexed;
 
 my $int = qr/\D+/;
 
@@ -36,69 +36,75 @@ returns related picture info in json format
 =back
 
 =cut
+my $int_reg = qr/^\!\d+$/;
 sub index: Path Args(1) {
-    my ( $self, $c, $tags ) = @_;
+    my ( $self, $c, $all_tags ) = @_;
 
-    my @split_tags = split(/ /, $tags);
+    my @tags = split(/ /, $all_tags);
 
     #remove duplicate tags
-    my %split_tags_clean;
-    foreach my $split_tag ( @split_tags ){
-        $split_tags_clean{$split_tag} = 1;
-    }
-    @split_tags = keys( %split_tags_clean );
-
-# can't use search with many to many realtionship
-# probably a better way to do this
-    my @found;
-    foreach my $tag ( @split_tags ){
-        if ( $tag =~ m/^\!(\d+)$/ ){
-        #picture_id
-            push(@found, {
-                'nsfw' => 'N',
-                'object_id' => $1,
-            });
+    my %dupe_free_tags;
+    tie my %object_ids, 'Tie::Hash::Indexed';
+    foreach my $tag ( @tags ){
+        if ( $tag =~ m/$int_reg/ ){
+            $object_ids{$tag} = 1;
         } else {
-            my $found_tags = $c->model('MySQL::Tags')->find({
-               'tag' => $tag,
-            });
-    
-            next if ( !defined($found_tags) );
+            $dupe_free_tags{$tag} = 1;
+        }
+    }
 
-            my $res = $found_tags->tag_objects->search_related('object', {
-                'type' => 'picture',
-                'nsfw' => 'N',
-            }, {
-                'select' => ['object.object_id', 'object.nsfw'],
-            });
-            $res->result_class('DBIx::Class::ResultClass::HashRefInflator');
+    my @clean_tags = keys( %dupe_free_tags );
 
-            push(@found, $res->all);
+    if ( scalar(@clean_tags) ){
+        my $tags_rs = $c->model('MySQL::Tags')->search({
+            'tag' => \@clean_tags,
+        });
+
+        if ( $tags_rs ){
+            foreach my $tag_rs ( $tags_rs->all ){
+            #have to do this coz of the many_to_many :(
+                my $objects_rs = $tag_rs->objects->search({
+                    'type' => 'picture',
+                    'nsfw' => 'N',
+                });
+                if ( $objects_rs ){
+                    foreach my $object ( $objects_rs->all ){
+                        $object_ids{$object->id} = 1;
+                    }
+                }
+            }
         }
     }
 
     my $random = $c->req->param('random');
     $random =~ s/$int//g if ( defined($random) );
 
-    if ( defined($random) ){
+    if ( $random ){
         #little security
         $random = ($random > 50) ? 50 : $random;
 
-        my $res = $c->model('MySQL::Object')->search({
+        my $randoms_rs = $c->model('MySQL::Object')->search({
             'type' => 'picture',
             'nsfw' => 'N',
         }, {
             'order_by' => \'RAND()',
             'rows' => $random,
-            'select' => ['object_id', 'nsfw'],
         });
-        $res->result_class('DBIx::Class::ResultClass::HashRefInflator');
 
-        push(@found, $res->all);
+        if ( $randoms_rs ){
+            foreach my $random ( $randoms_rs->all ){
+                $object_ids{$random->id} = 1;
+            }
+        }
+    }
+
+    my @output;
+    foreach my $object_id ( keys( %object_ids ) ){
+        push(@output, {'object_id' => $object_id});
     }
 
     $c->res->header('Content-Type' => 'application/json');
-    $c->res->body( to_json(\@found) );
+    $c->res->body( to_json(\@output) );
     $c->detach();
 }
 
