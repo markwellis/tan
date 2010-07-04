@@ -74,7 +74,10 @@ sub location: PathPart('submit') Chained('/') CaptureArgs(1){
         $c->forward('/default');
         $c->detach();
     }
-    $c->stash->{'location'} = $location;
+    $c->stash(
+        'page_title' => 'Submit ' . ucfirst($location),
+        'location' => $location,
+    );
 }
 
 =head2 index: PathPart('') Chained('location') Args(0) 

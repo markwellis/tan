@@ -20,7 +20,7 @@ I</search/>
 
 =cut
 
-=head2 index: Path
+=head2 index: Path Args(0)
 
 B<@args = undef>
 
@@ -31,7 +31,7 @@ loads chat template...
 =back
 
 =cut
-sub index :Path {
+sub index: Path Args(0){
     my ( $self, $c ) = @_;
 
     my $q = $c->req->param('q');
@@ -39,6 +39,8 @@ sub index :Path {
     if ( $q  ){
         @ids = $c->model('Search')->search( $q );
     }
+
+#perhaps there should be some kind of splice here to prevent massive sql ids lookup
 
     if ( scalar(@ids) ){
         my $page = $c->req->param('page') || 1;
@@ -58,7 +60,10 @@ sub index :Path {
         }
     }
 
-    $c->stash->{'template'} = 'search.tt';
+    $c->stash(
+        'page_title' => "${q} - Search",
+        'template' => 'search.tt',
+    );
 }
 
 

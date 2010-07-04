@@ -35,7 +35,7 @@ sub index {
     my ($self, $location, $page, $upcoming, $search, $order, $nsfw, $index_type) = @_;
     
     if ($location !~ m/$location_reg/){
-        $location = 'all';
+        return undef;
     }
 
     if ($order !~ m/$order_reg/){

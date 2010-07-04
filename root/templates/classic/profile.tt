@@ -13,7 +13,7 @@ ELSE;
     avatar_http = c.config.static_path _ '/images/_user.png';
 END;
 
-comment_count = user.comments_rs.count || 0;
+comment_count = comments.count || 0;
 link_count = links.count || 0;
 blog_count = blogs.count || 0;
 pic_count = pictures.count || 0;

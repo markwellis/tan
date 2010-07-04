@@ -39,7 +39,7 @@ sub clear_cache: Private{
     $c->clear_cached_page('/index.*');
 }
 
-=head2 index: Path: Args(2)
+=head2 index: Path Args(2)
 
 B<@args = ($location, $upcoming)>
 B<@params = (order)>
@@ -55,28 +55,25 @@ loads index template
 =back
 
 =cut
-
-sub index :Path :Args(2) {
+my $int_reg = qr/\D+/;
+sub index :Path Args(2) {
     my ( $self, $c, $location, $upcoming ) = @_;
 
     $c->cache_page( 60 );
 
     my $page = $c->req->param('page') || 1;
 
+    $page =~ s/$int_reg//g;
+
     $upcoming ||= 0;
- 
-    my $order = $c->req->param('order') || 'created';
-    $c->stash->{'order'} = $order;
 
     #redirect to somewhere sensible if someone has made up some random url...
     if ('/' . $c->req->path() ne "/index/${location}/${upcoming}/" && '/' . $c->req->path() ne '/'){
         $c->res->redirect("/index/${location}/${upcoming}/", 301 );
         $c->detach();
-    }
+    } 
 
-    $c->stash->{'location'} = $location;
-    $c->stash->{'page'} = $page;
-    $c->stash->{'upcoming'} = $upcoming;
+    my $order = $c->req->param('order') || 'created';
 
     my $search = {};
     if ( $upcoming ){
@@ -87,7 +84,14 @@ sub index :Path :Args(2) {
     my ( $objects, $pager ) = $c->model('MySQL::Object')->index( $location, $page, $upcoming, $search, $order, $c->nsfw, "index" );
 
     if ( $objects ){
-        $c->stash->{'index'} = $c->model('Index')->indexinate($c, $objects, $pager);
+        $c->stash(
+            'index' => $c->model('Index')->indexinate($c, $objects, $pager),
+            'location' => $location,
+            'page' => $page,
+            'upcoming' => $upcoming,
+            'order' => $order,
+            'page_title' => ($upcoming ? 'Upcoming ' : 'Promoted ') . ucfirst($location) . ($location ne 'all' ? 's' : '' ),
+        );
     }
 
     if ( !$c->stash->{'index'} ){

@@ -26,7 +26,7 @@ lists things with this tag
 
 =cut
 
-=head2 index: Path('') Args(1) 
+=head2 index: Path Args(1) 
 
 B<@args = ($tag)>
 
@@ -37,7 +37,7 @@ loads things with $tag
 =back
 
 =cut
-sub index: Path('') Args(1) {
+sub index: Path Args(1){
     my ( $self, $c, $tag ) = @_;
 
     $c->cache_page( 60 );
@@ -54,22 +54,23 @@ sub index: Path('') Args(1) {
     }
 
     my $page = $c->req->param('page') || 1;
-
     my $order = $c->req->param('order') || 'created';
-    $c->stash->{'order'} = $order;
 
     my $key = $tag;
     $key =~ s/\W+/_/g;
     my ( $objects, $pager ) = $tags_rs->objects->index( 'all', $page, 1, {}, $order, $c->nsfw, "tag:${key}" );
 
     if ( $objects ){
-        $c->stash->{'index'} = $c->model('Index')->indexinate($c, $objects, $pager);
+        $c->stash(
+            'index' => $c->model('Index')->indexinate($c, $objects, $pager),
+            'order' => $order,
+            'template' => 'tag.tt',
+            'page_title' => "${tag} - Tag",
+        );
     } else {
         $c->forward('/default');
         $c->detach;
     }
-
-    $c->stash->{'template'} = 'tag.tt';
 }
 
 =head1 AUTHOR

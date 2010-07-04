@@ -10,6 +10,6 @@ js_includes.push('nsfw-comments');
         </li>
     [% END %]
     <li>
-        [% PROCESS 'profile/pagination.tt' pager=comments.pager %]
+        [% PROCESS 'lib/index/pagination.tt' pager=comments.pager %]
     </li>
 </ul>

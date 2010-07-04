@@ -76,10 +76,13 @@ sub index: Path Args(0){
 
     $c->flash->{'ref'} = defined($c->req->referer) ? $c->req->referer : '/';
     
-    $c->stash->{'template'} = 'login.tt';
+    $c->stash(
+        'page_title' => 'Login/Register',
+        'template' => 'login.tt',
+    );
 }
 
-=head2 login: Local
+=head2 login: Local Args(0)
 
 B<@params = (username, password)>
 
@@ -90,7 +93,7 @@ authenticates the user
 =back
 
 =cut
-sub login: Local{
+sub login: Local Args(0){
     my ( $self, $c ) = @_;
     
     my $ref = $c->flash->{'ref'};
@@ -128,7 +131,7 @@ sub login: Local{
     $c->detach();
 }
 
-=head2 logout: Local
+=head2 logout: Local Args(0)
 
 B<@args = undef>
 
@@ -139,7 +142,7 @@ logs the user out
 =back
 
 =cut
-sub logout: Local{
+sub logout: Local Args(0){
     my ( $self, $c ) = @_;
     
     if ( $c->user_exists ){

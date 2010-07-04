@@ -59,16 +59,32 @@ sub index: PathPart('') Chained('user') Args(0){
     my ( $self, $c ) = @_;
 
 #TT is tarded
-    $c->stash->{'links'} = $c->stash->{'user'}->objects->search({
+    my $user = $c->stash->{'user'};
+
+    my %search_opts;
+    if ( !$c->nsfw ){
+        %search_opts = (
+            'nsfw' => 'N',
+        );
+    }
+
+    $c->stash->{'comments'} = $user->comments->search({
+        'deleted' => 'N',
+    });
+
+    $c->stash->{'links'} = $user->objects->search({
         'type' => 'link',
+        %search_opts,
     });
 
-    $c->stash->{'blogs'} = $c->stash->{'user'}->objects->search({
+    $c->stash->{'blogs'} = $user->objects->search({
         'type' => 'blog',
+        %search_opts,
     });
 
-    $c->stash->{'pictures'} = $c->stash->{'user'}->objects->search({
+    $c->stash->{'pictures'} = $user->objects->search({
         'type' => 'picture',
+        %search_opts,
     });
 #END tardism
 
@@ -76,14 +92,17 @@ sub index: PathPart('') Chained('user') Args(0){
     eval{
         $c->model('MySQL')->txn_do(sub{
             $c->stash->{'object'} = $c->model('MySQL::Object')->find_or_create({
-                'user_id' => $c->stash->{'user'}->id,
+                'user_id' => $user->id,
                 'type' => 'profile',
             });
             $c->stash->{'object'}->find_or_create_related('profile',{});
         });
     };
 
-    $c->stash->{'template'} = 'profile.tt';
+    $c->stash(
+        'page_title' => $user->username . "'s Profile",
+        'template' => 'profile.tt',
+    );
 }
 
 sub edit: PathPart('edit') Chained('user') Args(0){
@@ -135,8 +154,9 @@ sub comments: PathPart('comments') Chained('user') Args(0){
 
     my $page = $c->req->param('page') || 1;
 
-    $c->stash->{'comments'} = $c->stash->{'user'}->comments->search(
-        {},
+    $c->stash->{'comments'} = $c->stash->{'user'}->comments->search({
+            'me.deleted' => 'N',
+        },
         {
             '+select' => [
                 { 'unix_timestamp' => 'me.created' },
@@ -152,8 +172,16 @@ sub comments: PathPart('comments') Chained('user') Args(0){
             },
         }
     );
-    
-    $c->stash->{'template'} = 'profile/comments.tt';
+
+    if ( !$c->stash->{'comments'} ) {
+        $c->forward('/default');
+        $c->detach;
+    }
+
+    $c->stash(
+        'page_title' => $c->stash->{'user'}->username . "'s Comments",
+        'template' => 'profile/comments.tt',
+    );
 }
 
 =head2 links: PathPart('links') Chained('user') Args(0)
@@ -172,7 +200,9 @@ sub links: PathPart('links') Chained('user') Args(0){
 
     $c->forward('fetch', ['link']);
 
-    $c->stash->{'template'} = 'profile/links.tt';
+    $c->stash(
+        'template' => 'profile/links.tt',
+    );
 }
 
 =head2 blogs: PathPart('blogs') Chained('user') Args(0)
@@ -191,7 +221,9 @@ sub blogs: PathPart('blogs') Chained('user') Args(0){
 
     $c->forward('fetch', ['blog']);
 
-    $c->stash->{'template'} = 'profile/links.tt';
+    $c->stash(
+        'template' => 'profile/links.tt',
+    );
 }
 
 =head2 pictures: PathPart('pictures') Chained('user') Args(0)
@@ -210,23 +242,29 @@ sub pictures: PathPart('pictures') Chained('user') Args(0){
 
     $c->forward('fetch', ['picture']);
 
-    $c->stash->{'template'} = 'profile/pictures.tt';
+    $c->stash(
+        'template' => 'profile/pictures.tt',
+    );
 }
 
 sub fetch: Private{
     my ( $self, $c, $location ) = @_;
 
-    $c->stash->{'location'} = $location;
-
     my $page = $c->req->param('page') || 1;
-
     my $order = $c->req->param('order') || 'created';
-    $c->stash->{'order'} = $order;
 
     my ( $objects, $pager ) = $c->stash->{'user'}->objects->index( $location, $page, 1, {}, $order, $c->nsfw, "profile:" . $c->stash->{'user'}->id );
 
-    if ( $objects ){
-        $c->stash->{'index'} = $c->model('Index')->indexinate($c, $objects, $pager);
+    if ( scalar(@{$objects}) ){
+        $c->stash(
+            'index' => $c->model('Index')->indexinate($c, $objects, $pager),
+            'order' => $order,
+            'page_title' => $c->stash->{'user'}->username . "'s " . ucfirst($location) . "s",
+            'location' => $location,
+        );
+    } else {
+        $c->forward('/default');
+        $c->detach;
     }
 }
 

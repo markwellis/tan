@@ -76,7 +76,11 @@ loads the object info and then the submit template
 sub index: PathPart('') Chained('validate_user') Args() {
     my ( $self, $c ) = @_;
 
-    $c->stash->{'template'} = 'submit.tt';
+    my $type = $c->stash->{'location'};
+    $c->stash(
+        'template' => 'submit.tt',
+        'page_title' => 'Edit ' . ($c->stash->{'object'}->$type->title || ''),
+    );
 }
 
 =head2 post: PathPart('post') Chained('validate_user') Args(0) 
