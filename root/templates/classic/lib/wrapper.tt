@@ -66,13 +66,12 @@
             [% PROCESS 'lib/recent_comments.tt' %]
             <div class="TAN-right-ads right">
                 [% PROCESS 'lib/ad.tt' ad = 'right1' %]
-                [% PROCESS 'lib/ad.tt' ad = 'right2' %]
             </div>
             <script type="text/javascript">
             //<![CDATA[
                 [%- IF message.defined %]
                 window.addEvent('domready', function(){
-                    TAN.alert("[%- message -%]");
+                    TAN.alert("[%- message | trim | html -%]");
                 });
                 [%- END -%]
 
@@ -86,9 +85,7 @@
             [%- END -%]
             [% content %]
         </div>
-        <div id="TAN-bottom">
-            [% PROCESS 'lib/ad.tt' ad = 'bottom' %]
-        </div>
+        <div id="TAN-bottom"></div>
         [%-
             runtime =  time - start_time;
             sql_queries = c.model('MySQL').get_query_count();
