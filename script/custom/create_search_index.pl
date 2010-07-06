@@ -44,4 +44,4 @@ while (my $object = $objects->next){
     $progress->update( ++$loop );
 }
 
-$searcher->optimise;
+$searcher->commit;

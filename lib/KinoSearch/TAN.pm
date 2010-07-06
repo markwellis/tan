@@ -9,6 +9,7 @@ use KinoSearch::Analysis::PolyAnalyzer;
 use KinoSearch::Search::Result::TAN;
 use KinoSearch::Index::Term;
 use KinoSearch::QueryParser::QueryParser;
+use KinoSearch::Search::TermQuery;
 
 use Data::Page;
 
@@ -24,32 +25,28 @@ has analyser => (
     'default' => sub { return KinoSearch::Analysis::PolyAnalyzer->new( language => 'en' ) },
 );
 
-has invindexer => (
+has indexer => (
     'is' => 'ro',
     'init_arg' => undef,
     'lazy_build' => 1,
 );
 
-sub _build_invindexer{
+sub _build_indexer{
     my $self = shift;
 
-    my $invindexer = KinoSearch::InvIndexer->new(
+    my $indexer = KinoSearch::InvIndexer->new(
         'invindex' => $self->index_path,
         'create'   => ( -f $self->index_path . '/segments' ) ? 0 : 1,
         'analyzer' => $self->analyser,
     );
 
-    $invindexer->spec_field( 'name'  => 'title', 'boost' => 3 );
+    $indexer->spec_field( 'name' => 'title', 'boost' => 3 );
+    $indexer->spec_field( 'name' => 'description' );
+    $indexer->spec_field( 'name' => 'id' );
+    $indexer->spec_field( 'name' => 'type' );
+    $indexer->spec_field( 'name' => 'nsfw' );
 
-    $invindexer->spec_field( 'name' => 'description' );
-
-    $invindexer->spec_field( 'name'  => 'id' );
-
-    $invindexer->spec_field( 'name'  => 'type' );
-
-    $invindexer->spec_field( 'name' => 'nsfw' );
-
-    return $invindexer;
+    return $indexer;
 }
 
 has searcher => (
@@ -86,6 +83,9 @@ sub _build_query_parser{
 sub search{
     my ( $self, $query_string, $page ) = @_;
 
+    return undef if ( !$query_string );
+    $page ||= 1;
+
     my $query = $self->query_parser->parse( $query_string );
 
     my $hits = $self->searcher->search( query => $query );
@@ -100,27 +100,70 @@ sub search{
     return ( \@return, $pager );
 }
 
-sub add{
+sub create{
     my ( $self, $document ) = @_;
 
-    my $doc = $self->invindexer->new_doc;
+    return undef if ( !$document );
+
+    my $doc = $self->indexer->new_doc;
 
     foreach my $key ( keys(%{$document}) ){
         $doc->set_value(
             $key => $document->{$key},
         );
     }
-    $self->invindexer->add_doc($doc);
+    $self->indexer->add_doc($doc);
 }
 
-sub optimise{
+sub update_or_create{
+    my ( $self, $document ) = @_;
+
+    return undef if ( !$document );
+    if ( $self->by_id( $document->{'id'} ) ){
+        $self->delete( $document->{'id'} );
+    }
+
+    $self->create( $document );
+}
+
+sub by_id{
+    my ( $self, $id ) = @_;
+
+    return undef if ( !$id );
+
+    my $term = KinoSearch::Index::Term->new( 'id' => $id );
+    my $term_query = KinoSearch::Search::TermQuery->new( 'term' => $term );
+
+    my $hits = $self->searcher->search( 'query' => $term_query );
+    if ( $hits->total_hits ){
+        #return the first hit
+        my $hit = $hits->fetch_hit;
+        return KinoSearch::Search::Result::TAN->new({
+            'score' =>$hit->get_score,
+            %{$hit->get_field_values},
+        });
+    }
+    return undef;
+}
+
+sub delete{
+    my ( $self, $id ) = @_;
+
+    return undef if ( !$id );
+
+    my $term = KinoSearch::Index::Term->new( 'id' => $id );
+
+    $self->indexer->delete_docs_by_term($term);
+}
+
+sub commit{
     my ( $self ) = @_;
 
-    $self->invindexer->finish( 'optimize' => 1 );
+    $self->indexer->finish( 'optimize' => 1 );
 
     #clear the searcher and indexer
     # they're lazy so they get rebuilt on next call...
-    $self->clear_invindexer;
+    $self->clear_indexer;
     $self->clear_searcher;
 }
 
