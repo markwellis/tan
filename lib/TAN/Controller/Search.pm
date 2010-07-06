@@ -7,26 +7,28 @@ use Time::HiRes qw/time/;
 use Data::Page;
 
 
-TAN->register_hook(['object_created', 'object_updated'], '/search/add');
-
-sub add: Private{
+TAN->register_hook(['object_created', 'object_updated'], '/search/add_to_index');
+sub add_to_index: Private{
     my ( $self, $c, $object ) = @_;
 
+    my $type = $object->type;
     $c->model('Search')->update_or_create({
         'id' => $object->id,
         'type' => $object->type,
         'nsfw' => $object->nsfw,
-        'title' => $object->title,
-        'description' => $object->description,
+        'title' => $object->$type->title,
+        'description' => $object->$type->description,
     });
+
+    $c->model('Search')->commit;
 }
 
-TAN->register_hook(['object_deleted'], '/search/delete');
-
-sub add: Private{
+TAN->register_hook(['object_deleted'], '/search/delete_from_index');
+sub delete_from_index: Private{
     my ( $self, $c, $object ) = @_;
 
     $c->model('Search')->delete( $object->id );
+    $c->model('Search')->commit;
 }
 
 =head1 NAME

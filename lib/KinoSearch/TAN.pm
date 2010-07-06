@@ -88,7 +88,7 @@ sub search{
 
     my $query = $self->query_parser->parse( $query_string );
 
-    my $hits = $self->searcher->search( query => $query );
+    my $hits = $self->searcher->search( 'query' => $query );
     my $pager = Data::Page->new($hits->total_hits, 27, $page);
     $hits->seek( $pager->skipped, $pager->entries_on_this_page );
 
