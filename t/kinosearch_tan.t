@@ -16,6 +16,48 @@ sub main{
         'index_path' => $tempdir,
     }]);
 
+    index_test_data($searcher);
+
+    my ( $objects, $pager );
+
+    {
+        ( $objects, $pager ) = $searcher->search('title:bacon', 1);
+
+        is(scalar(@{$objects}), 1, '"title:bacon" 1 result found');
+        isa_ok($objects->[0], 'KinoSearch::Search::Result::TAN');
+        is($objects->[0]->title, 'title filled with bacon', 'title matches');
+    }
+
+    {
+        ( $objects, $pager ) = $searcher->search('type:blog', 1);
+
+        is(scalar(@{$objects}), 1, '"type:blog" 1 result found');
+        isa_ok($objects->[0], 'KinoSearch::Search::Result::TAN');
+        is($objects->[0]->title, 'this is a title', 'title matches');
+    }
+
+    {
+        ( $objects, $pager ) = $searcher->search('type:link', 1);
+
+        is(scalar(@{$objects}), 2, '"type:link" 2 result found');
+        isa_ok($objects->[0], 'KinoSearch::Search::Result::TAN');
+        is($objects->[0]->title, 'title filled with bacon', 'title matches');
+        is($objects->[1]->title, 'title for link 2', 'title matches');
+    }
+
+    {
+        ( $objects, $pager ) = $searcher->search('type:picture', 1);
+
+        is(scalar(@{$objects}), 1, '"type:picture" 1 result found');
+        isa_ok($objects->[0], 'KinoSearch::Search::Result::TAN');
+        is($objects->[0]->title, 'pciture <-wrong not a link or a bg', 'title matches');
+    }
+}
+
+
+sub index_test_data{
+    my ( $searcher ) = @_;
+
     $searcher->add({
         'id' => 1,
         'type' => 'link',
@@ -43,18 +85,12 @@ sub main{
     $searcher->add({
         'id' => 4,
         'type' => 'picture',
-        'title' => 'pciture <-wrong not a link or a blog',
+        'title' => 'pciture <-wrong not a link or a bg',
         'description' => 'mighty baconation',
         'nsfw' => 'N',
     });
 
     $searcher->optimise;
-
-    my ( $objects, $pager ) = $searcher->search('title:bacon', 1);
-
-    is(scalar(@{$objects}), 1, '"title:bacon" 1 result found');
-    isa_ok($objects->[0], 'KinoSearch::Search::Result::TAN');
-    is($objects->[0]->title, 'title filled with bacon', 'title matches');
 }
 
 done_testing();

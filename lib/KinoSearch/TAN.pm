@@ -39,34 +39,15 @@ sub _build_invindexer{
         'analyzer' => $self->analyser,
     );
 
-    $invindexer->spec_field( 
-        'name'  => 'title',
-        'boost' => 3,
-        'vectorized' => 0,
-    );
+    $invindexer->spec_field( 'name'  => 'title', 'boost' => 3 );
 
-    $invindexer->spec_field(
-        'name' => 'description',
-        'vectorized' => 0,
-    );
+    $invindexer->spec_field( 'name' => 'description' );
 
-    $invindexer->spec_field( 
-        'name'  => 'id',
-        'vectorized' => 0,
-        'analyzed' => 0,
-    );
+    $invindexer->spec_field( 'name'  => 'id' );
 
-    $invindexer->spec_field( 
-        'name'  => 'type',
-        'vectorized' => 0,
-        'analyzed' => 0,
-    );
+    $invindexer->spec_field( 'name'  => 'type' );
 
-    $invindexer->spec_field(
-        'name' => 'nsfw',
-        'vectorized' => 0,
-        'analyzed' => 0,
-    );
+    $invindexer->spec_field( 'name' => 'nsfw' );
 
     return $invindexer;
 }
