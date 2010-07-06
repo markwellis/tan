@@ -11,7 +11,6 @@ use Time::HiRes qw(time);
 #
 __PACKAGE__->config(namespace => '');
 
-
 =head1 NAME
 
 TAN::Controller::Root

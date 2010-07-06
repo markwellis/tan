@@ -4,7 +4,7 @@ use strict;
 use warnings;
 use parent 'Catalyst::Model';
 
-use Plucene::Simple;
+use KinoSearch::TAN;
 
 =head1 NAME
 
@@ -12,7 +12,7 @@ TAN::Model::Search
 
 =head1 DESCRIPTION
 
-Interface to L<Plucene::Simple>
+Interface to L<KinoSearch::TAN>
 
 =head1 METHODS
 
@@ -32,7 +32,7 @@ sets up Plucene
 sub COMPONENT {
     my ( $class, $c, $config ) = @_;
 
-    return Plucene::Simple->open( $config->{'index_path'} );
+    return KinoSearch::TAN->new($config);
 }
 
 =head1 AUTHOR

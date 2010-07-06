@@ -3,6 +3,8 @@ use strict;
 use warnings;
 
 use parent 'Catalyst::Controller';
+use Time::HiRes qw/time/;
+use Data::Page;
 
 =head1 NAME
 
@@ -35,29 +37,10 @@ sub index: Path Args(0){
     my ( $self, $c ) = @_;
 
     my $q = $c->req->param('q');
-    my @ids;
-    if ( $q  ){
-        @ids = $c->model('Search')->search( $q );
-    }
+    my $page = $c->req->param('page') || 1;
 
-#perhaps there should be some kind of splice here to prevent massive sql ids lookup
-
-    if ( scalar(@ids) ){
-        my $page = $c->req->param('page') || 1;
-
-        my $order = $c->req->param('order') || 'created';
-        $c->stash->{'order'} = $order;
-
-        my $search = {
-            'object_id' => \@ids,
-        };
-        my $key = $q;
-        $key =~ s/\W+/_/g;
-        my ( $objects, $pager ) = $c->model('MySQL::Object')->index( 'all', $page, 1, $search, $order, $c->nsfw, "search:${key}" );
-
-        if ( $objects ){
-            $c->stash->{'index'} = $c->model('Index')->indexinate($c, $objects, $pager);
-        }
+    if ( my ( $objects, $pager ) = $c->model('Search')->search( $q, $page ) ){
+        $c->stash->{'index'} = $c->model('Index')->indexinate($c, $objects, $pager);
     }
 
     $c->stash(

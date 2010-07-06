@@ -46,7 +46,7 @@
     },
 
     "Model::Search": {
-        "index_path": "/mnt/stuff/TAN/plucene_index"
+        "index_path": "/mnt/stuff/TAN/search_index"
     },
 
     "Plugin::Cache": {
