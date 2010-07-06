@@ -42,11 +42,11 @@ $title = url title
 
 TAN->register_hook(
     [
-        'object_new', 
+        'object_created', 
         'object_deleted', 
         'object_updated',
         'object_plusminus', 
-        'comment_new', 
+        'comment_created', 
         'comment_deleted',
         'comment_updated',
     ],
@@ -67,7 +67,7 @@ sub clear_object_cache: Private{
 
 TAN->register_hook(
     [
-        'comment_new', 
+        'comment_created', 
         'comment_deleted', 
         'comment_updated',
     ], 
@@ -220,7 +220,7 @@ sub comment: PathPart('_comment') Chained('location') Args(0) {
                 $comment
             );
             $comment_id = $comment_rs->comment_id;
-            $c->run_hook('comment_new', $comment_rs);
+            $c->run_hook('comment_created', $comment_rs);
         }
     } else {
     #save for later
@@ -501,7 +501,7 @@ sub post_saved_comments: Private{
                     $c->user->user_id, 
                     $saved_comment->{'comment'} 
                 );
-                $c->run_hook('comment_new', $comment_rs);
+                $c->run_hook('comment_created', $comment_rs);
             }
         }
         $c->session->{'comments'} = undef;

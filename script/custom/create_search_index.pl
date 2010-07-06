@@ -29,11 +29,14 @@ my $progress = Term::ProgressBar->new({
 });
 $progress->minor(0);
 
+#create index
+$searcher->indexer;
+
 while (my $object = $objects->next){
     my $type = $object->type;
 
     if ( defined($object->$type) ){
-        $searcher->add({
+        $searcher->update_or_create({
             'id' => $object->id,
             'type' => $type,
             'nsfw' => $object->nsfw,

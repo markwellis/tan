@@ -6,6 +6,29 @@ use parent 'Catalyst::Controller';
 use Time::HiRes qw/time/;
 use Data::Page;
 
+
+TAN->register_hook(['object_created', 'object_updated'], '/search/add');
+
+sub add: Private{
+    my ( $self, $c, $object ) = @_;
+
+    $c->model('Search')->update_or_create({
+        'id' => $object->id,
+        'type' => $object->type,
+        'nsfw' => $object->nsfw,
+        'title' => $object->title,
+        'description' => $object->description,
+    });
+}
+
+TAN->register_hook(['object_deleted'], '/search/delete');
+
+sub add: Private{
+    my ( $self, $c, $object ) = @_;
+
+    $c->model('Search')->delete( $object->id );
+}
+
 =head1 NAME
 
 TAN::Controller::Search

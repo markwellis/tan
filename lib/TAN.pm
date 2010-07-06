@@ -395,7 +395,7 @@ registers a hook, e.g.
 
 =over
 
-$c->register_hook('object_new', '/index/clear_cache')
+$c->register_hook('object_created', '/index/clear_cache')
 
 =back
 
@@ -426,7 +426,7 @@ runs a hook, e.g.
 
 =over
 
-$c->run_hook('object_new', [$object_rs])
+$c->run_hook('object_created', [$object_rs])
 
 =back
 

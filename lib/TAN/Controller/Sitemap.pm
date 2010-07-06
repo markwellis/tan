@@ -28,7 +28,7 @@ search engine sitemap
 
 =cut
 
-TAN->register_hook(['object_new', 'object_updated', 'object_deleted'], '/sitemap/clear_cache');
+TAN->register_hook(['object_created', 'object_updated', 'object_deleted'], '/sitemap/clear_cache');
 
 sub clear_cache: Private{
     my ( $self, $c ) = @_;

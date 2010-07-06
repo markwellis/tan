@@ -30,7 +30,7 @@ $page => page number
 
 =cut
 
-TAN->register_hook(['object_new', 'object_promoted', 'object_deleted'], '/index/clear_cache');
+TAN->register_hook(['object_created', 'object_promoted', 'object_deleted'], '/index/clear_cache');
 
 sub clear_cache: Private{
     my ( $self, $c, $object_rs ) = @_;

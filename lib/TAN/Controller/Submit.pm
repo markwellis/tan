@@ -381,10 +381,10 @@ sub post: PathPart('post') Chained('validate') Args(0){
 
     }
 
-    $c->run_hook('object_new', $c->stash->{'object'});
+    $c->run_hook('object_created', $c->stash->{'object'});
 
     $c->flash->{'message'} = 'Submission complete';
-    $c->res->redirect('/index/' . $c->stash->{'location'} . '/1/1/');
+    $c->res->redirect('/index/' . $c->stash->{'location'} . '/1/');
     $c->detach();
 }
 
