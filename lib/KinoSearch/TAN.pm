@@ -119,9 +119,7 @@ sub update_or_create{
     my ( $self, $document ) = @_;
 
     return undef if ( !$document );
-    if ( $self->by_id( $document->{'id'} ) ){
-        $self->delete( $document->{'id'} );
-    }
+    $self->delete( $document->{'id'} );
 
     $self->create( $document );
 }
@@ -152,7 +150,6 @@ sub delete{
     return undef if ( !$id );
 
     my $term = KinoSearch::Index::Term->new( 'id' => $id );
-
     $self->indexer->delete_docs_by_term($term);
 }
 

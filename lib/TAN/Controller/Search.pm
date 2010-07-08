@@ -11,6 +11,7 @@ sub add_to_index: Event(object_created) Event(object_updated){
     my ( $self, $c, $object ) = @_;
 
     my $type = $object->type;
+
     $c->model('Search')->update_or_create({
         'id' => $object->id,
         'type' => $object->type,
