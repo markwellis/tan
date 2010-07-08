@@ -29,7 +29,7 @@ after 'setup_finalize' => sub {
 
     foreach my $action ( values %{$c->dispatcher->_action_hash} ){
         foreach my $event ( @{$action->attributes->{'Event'}} ){
-                push(@{$_registered_events->{$event}}, '/' . $action->reverse );
+            push(@{$_registered_events->{$event}}, '/' . $action->reverse );
         }
     }
 
