@@ -1,6 +1,6 @@
 package Data::Validate::Image;
-use strict;
-use warnings;
+use Moose;
+use namespace::autoclean;
 
 use Image::Info;
 
@@ -35,24 +35,14 @@ modify it under the same terms as Perl v5.10.1 itself.
 
 =cut
 
-sub new {
-    my $invocant = shift;
-
-    my $class = ref($invocant) || $invocant;
-    my $self = { };
-    bless($self,$class);
-
-    return $self;
-}
-
 sub is_image{
-    my ($self, $file) = @_;
+    my ( $self, $file ) = @_;
 
     return $self->_validate($file);
 }
 
 sub _validate{
-    my ($self, $file) = @_;
+    my ( $self, $file ) = @_;
     my $image_type = Image::Info::image_info($file);
 
     if ( defined($image_type->{'file_ext'}) ){
