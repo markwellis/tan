@@ -1,14 +1,13 @@
 package TAN::Controller::Search;
-use strict;
-use warnings;
+use Moose;
+use namespace::autoclean;
 
-use parent 'Catalyst::Controller';
+BEGIN { extends 'Catalyst::Controller'; }
+
 use Time::HiRes qw/time/;
 use Data::Page;
 
-
-TAN->register_hook(['object_created', 'object_updated'], '/search/add_to_index');
-sub add_to_index: Private{
+sub add_to_index: Event(object_created) Event(object_updated){
     my ( $self, $c, $object ) = @_;
 
     my $type = $object->type;
@@ -23,9 +22,8 @@ sub add_to_index: Private{
     $c->model('Search')->commit;
 }
 
-TAN->register_hook(['object_deleted'], '/search/delete_from_index');
-sub delete_from_index: Private{
-    my ( $self, $c, $object ) = @_;
+sub delete_from_index: Event(object_deleted){
+    my ( $c, $object ) = @_;
 
     $c->model('Search')->delete( $object->id );
     $c->model('Search')->commit;
@@ -85,5 +83,7 @@ This library is free software. You can redistribute it and/or modify
 it under the same terms as Perl itself.
 
 =cut
+
+__PACKAGE__->meta->make_immutable;
 
 1;

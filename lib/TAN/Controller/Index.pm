@@ -1,8 +1,8 @@
 package TAN::Controller::Index;
-use strict;
-use warnings;
+use Moose;
+use namespace::autoclean;
 
-use parent 'Catalyst::Controller';
+BEGIN { extends 'Catalyst::Controller'; }
 
 =head1 NAME
 
@@ -30,12 +30,10 @@ $page => page number
 
 =cut
 
-TAN->register_hook(['object_created', 'object_promoted', 'object_deleted'], '/index/clear_cache');
+sub clear_index_caches: Event(object_created) Event(object_promoted) Event(object_deleted){
+    my ( $self, $c, $object ) = @_;
 
-sub clear_cache: Private{
-    my ( $self, $c, $object_rs ) = @_;
-
-    $object_rs->clear_index_cache();
+    $object->clear_index_cache();
     $c->clear_cached_page('/index.*');
 }
 

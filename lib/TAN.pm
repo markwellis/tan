@@ -1,6 +1,5 @@
 package TAN;
-use strict;
-use warnings;
+use Moose;
 
 use Catalyst::Runtime 5.80;
 use Number::Format;
@@ -40,6 +39,7 @@ use Catalyst qw/
     Cache
     PageCache
     Unicode::Encoding
+    Event
 /;
 
 our $VERSION = '1.2.6';
@@ -382,64 +382,6 @@ sub finalize_error {
                 ),
             ],
         );
-    }
-}
-
-=head2 register_hook
-
-B<@args = ($name, $action)>
-
-=over
-
-registers a hook, e.g.
-
-=over
-
-$c->register_hook('object_created', '/index/clear_cache')
-
-=back
-
-=back
-
-=cut
-my $hooks;
-sub register_hook{
-    my ( $self, $name, $action ) = @_;
-    
-    if ( ref($name) ne 'ARRAY'){
-        $name = [$name];
-    }
-
-    foreach my $hook ( @{ $name } ){
-        push(@{$hooks->{ $hook }}, $action);
-        $self->log->debug("Registered hook: ${hook} for ${action}") if ( $self->debug );
-    }
-}
-
-=head2 run_hook
-
-B<@args = ($name, $args)>
-
-=over
-
-runs a hook, e.g.
-
-=over
-
-$c->run_hook('object_created', [$object_rs])
-
-=back
-
-=back
-
-=cut
-sub run_hook{
-    my ( $self, $name, @args ) = @_;
-
-    return if ( !defined($hooks->{ $name }) );
-
-    foreach my $action ( @{$hooks->{ $name }} ){
-        $self->forward($action, \@args)
     }
 }
 

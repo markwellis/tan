@@ -1,8 +1,9 @@
 package TAN::Controller::Sitemap;
-use strict;
-use warnings;
+use Moose;
+use namespace::autoclean;
 
-use parent 'Catalyst::Controller';
+BEGIN { extends 'Catalyst::Controller'; }
+
 use POSIX qw/ceil/;
 
 =head1 NAME
@@ -27,10 +28,7 @@ search engine sitemap
 =head1 METHODS
 
 =cut
-
-TAN->register_hook(['object_created', 'object_updated', 'object_deleted'], '/sitemap/clear_cache');
-
-sub clear_cache: Private{
+sub ping_sitemap: Event(object_created) Event(object_updated) Event(object_deleted){
     my ( $self, $c ) = @_;
 
     $c->clear_cached_page('/sitemap.*');
@@ -136,5 +134,7 @@ This library is free software. You can redistribute it and/or modify
 it under the same terms as Perl itself.
 
 =cut
+
+__PACKAGE__->meta->make_immutable;
 
 1;
