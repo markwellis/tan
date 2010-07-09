@@ -2,7 +2,7 @@
     js_includes.push('tag-thumbs');
 END -%]
 <label for="tags">Tags</label>
-<input type="text" name="tags" id="tags" class="text_input full_width" value="[% FOREACH tag=object.tags; IF loop.count > 1; " "; END; tag.tag; END %]"/>
+<input type="text" name="tags" id="tags" class="text_input full_width" value="[% FOREACH tag=object.tags; IF loop.count > 1; " "; END; tag.tag | html ; END %]"/>
 [% IF (location != 'picture') %]
     <a href="#" class="refresh_thumbs right">Refresh</a>
 [% END %]

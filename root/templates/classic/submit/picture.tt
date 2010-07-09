@@ -7,10 +7,10 @@
                 <label for="title">Title</label>
             </li>
             <li>
-                <input type="text" name="title" id="title" class="text_input full_width" value="[% object.$location.title | html %]"/>
+                <input type="text" name="title" id="title" value="[% object.$location.title | html %]"/>
             </li>
 
-            [% IF object.defined;
+            [% IF object.defined && object.$location.picture_id;
                 md = object.$location.picture_id - (object.$location.picture_id % 1000) %]
                 <li>
                     <img alt="[% object.$location.picture_id %]" src="[% c.config.thumb_path _ '/' _ md _ '/' _ object.$location.picture_id %]/600"/>
@@ -20,20 +20,20 @@
                     <label for="pic">Upload File</label>
                 </li>
                 <li>
-                    <input type="file" name="pic" id="pic" class="text_input full_width"/>
+                    <input type="file" name="pic" id="pic" />
                 </li>
                 <li>
                     <label for="pic_url">Remote Upload</label>
                 </li>
                 <li>
-                    <input type="text" name="pic_url" id="pic_url" class="text_input full_width"/>
+                    <input type="text" name="pic_url" id="pic_url" value="[% object.$location.pic_url %]"/>
                 </li>
             [% END %]
             <li>
                 <label for="pdescription">Description (optional)</label>
             </li>
             <li>
-                <textarea cols="1" rows="5" name="pdescription" id="pdescription" class="text_input full_width">[% object.$location.description | html %]</textarea>
+                <textarea cols="1" rows="5" name="pdescription" id="pdescription">[% object.$location.description | html %]</textarea>
             </li>
             <li>
                 <label for="nsfw">Not Safe for Work?</label>
