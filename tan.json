@@ -38,17 +38,6 @@
         }
     },
 
-    "Model::FetchImage": {
-        "args" : {
-            "max_filesize": 3145728,
-            "user_agent": "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.16) Gecko/2009120208 Firefox/3.0.16 (.NET CLR 3.5.30729)"
-        }
-    },
-
-    "Model::Search": {
-        "index_path": "/mnt/stuff/TAN/search_index"
-    },
-
     "Plugin::Cache": {
         "backend": {
             "class": "Cache::Memcached::libmemcached",
@@ -62,5 +51,35 @@
     "Plugin::Session": {
         "expires": 1209600,
         "storage": "/tmp/tan_session_cache"
+    },
+
+    "Model::FetchImage": {
+        "args" : {
+            "max_filesize": 3145728,
+            "user_agent": "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.16) Gecko/2009120208 Firefox/3.0.16 (.NET CLR 3.5.30729)"
+        }
+    },
+
+    "Model::Search": {
+        "args" : {
+            "index_path": "/mnt/stuff/TAN/search_index",
+            "schema": [
+                {
+                    "name": "title", 
+                    "boost": 3,
+                },{
+                    "name": "description",
+                },{
+                    "name": "id",
+                },{
+                    "name": "type",
+                },{
+                    "name": "nsfw",
+                }
+            ],
+            "search_fields": ["title", "description"],
+            "search_boolop": "AND",
+            "entries_per_page": 27
+        }
     }
 }

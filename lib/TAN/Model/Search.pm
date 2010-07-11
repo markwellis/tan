@@ -1,10 +1,9 @@
 package TAN::Model::Search;
+use Moose;
 
-use strict;
-use warnings;
-use parent 'Catalyst::Model';
+extends 'Catalyst::Model::Adaptor';
 
-use KinoSearch::TAN;
+__PACKAGE__->config( class => 'KinoSearch::Simple' );
 
 =head1 NAME
 
@@ -12,28 +11,7 @@ TAN::Model::Search
 
 =head1 DESCRIPTION
 
-Interface to L<KinoSearch::TAN>
-
-=head1 METHODS
-
-=cut
-
-=head2 COMPONENT
-
-B<@args = undef>
-
-=over
-
-sets up Plucene
-
-=back
-
-=cut
-sub COMPONENT {
-    my ( $class, $c, $config ) = @_;
-
-    return KinoSearch::TAN->new($config);
-}
+Interface to L<KinoSearch::Simple>
 
 =head1 AUTHOR
 
