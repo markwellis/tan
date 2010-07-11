@@ -17,4 +17,6 @@ sub BUILD{
     }
 }
 
+no Moose;
+
 1;

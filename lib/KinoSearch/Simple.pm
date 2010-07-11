@@ -118,6 +118,8 @@ has entries_per_page => (
     'default' => 100,
 );
 
+no Moose;
+
 sub search{
     my ( $self, $query_string, $page ) = @_;
 
