@@ -33,7 +33,7 @@ after 'setup_finalize' => sub {
         }
     }
 
-    if ( $c->log->debug ){
+    if ( $c->debug ){
         my $events_table = Text::SimpleTable->new( [ 35, 'Event' ], [ 36, 'Action' ] );
         foreach my $event ( keys(%{$_registered_events}) ){
             foreach my $action ( @{$_registered_events->{$event}} ){
