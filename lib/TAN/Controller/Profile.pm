@@ -20,6 +20,20 @@ I</profile/$username/>
 
 =cut
 
+sub clear_index_caches: Event(object_created) Event(object_deleted) Event(comment_created){
+    my ( $self, $c, $object ) = @_;
+
+    $c->clear_cached_page('/profile/.*/links');
+    $c->clear_cached_page('/profile/.*/blogs');
+    $c->clear_cached_page('/profile/.*/pictures');
+}
+
+sub clear_comment_caches: Event(comment_deleted){
+    my ( $self, $c, $object ) = @_;
+
+    $c->clear_cached_page('/profile/.*/comments');
+}
+
 =head2 user: PathPart('submit') Chained('/') CaptureArgs(1)
 
 B<@args = ($username)>
@@ -57,6 +71,8 @@ loads profile page for the user
 =cut
 sub index: PathPart('') Chained('user') Args(0){
     my ( $self, $c ) = @_;
+
+    $c->cache_page(600);
 
 #TT is tarded
     my $user = $c->stash->{'user'};
@@ -151,6 +167,8 @@ loads comments for the user
 =cut
 sub comments: PathPart('comments') Chained('user') Args(0){
     my ( $self, $c ) = @_;
+
+    $c->cache_page(600);
 
     my $page = $c->req->param('page') || 1;
 
@@ -249,6 +267,8 @@ sub pictures: PathPart('pictures') Chained('user') Args(0){
 
 sub fetch: Private{
     my ( $self, $c, $location ) = @_;
+
+    $c->cache_page(600);
 
     my $page = $c->req->param('page') || 1;
     my $order = $c->req->param('order') || 'created';

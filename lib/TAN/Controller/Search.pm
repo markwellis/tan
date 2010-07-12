@@ -63,12 +63,16 @@ sub index: Path Args(0){
     my $q = $c->req->param('q');
     my $page = $c->req->param('page') || 1;
 
+    #nsfw...
+    if ( !$c->nsfw && ($q !~ m/nsfw\:?/) ){
+        $q .= ' nsfw:n';
+    }
     if ( my ( $objects, $pager ) = $c->model('Search')->search( $q, $page ) ){
         $c->stash->{'index'} = $c->model('Index')->indexinate($c, $objects, $pager);
     }
 
     $c->stash(
-        'page_title' => "${q} - Search",
+        'page_title' => $c->req->param('q') . " - Search",
         'template' => 'search.tt',
     );
 }

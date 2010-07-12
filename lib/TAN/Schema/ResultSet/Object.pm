@@ -135,11 +135,42 @@ sub index {
 
 #build an index cache..
         my $indexes_in_cache = $self->result_source->schema->cache->get("indexes_in_cache");
-        $indexes_in_cache->{$index_type}->{$key} = 1;
+        $indexes_in_cache->{$index_type} = $key;
         $self->result_source->schema->cache->set("indexes_in_cache", $indexes_in_cache, 0);
     }
 
     return ($objects, $pager);
+}
+
+
+=head2 clear_index_cache
+
+B<@args = (undef)>
+
+=over
+
+clears the index page cache
+
+=back
+
+=cut
+sub clear_index_cache{
+    my ( $self, $index_to_clear ) = @_;
+
+    my $indexes_in_cache = $self->result_source->schema->cache->get("indexes_in_cache");
+    foreach my $index_type ( keys(%{$indexes_in_cache}) ){
+        if ( defined($index_to_clear) && ($index_to_clear ne $index_type) ){
+        #clear specific index, or all
+            next;
+        }
+
+        my $key = $indexes_in_cache->{$index_type};
+
+        $self->result_source->schema->cache->remove("index:${key}");
+        $self->result_source->schema->cache->remove("pager:${key}");
+        delete($indexes_in_cache->{$index_type});
+    }
+    $self->result_source->schema->cache->set("indexes_in_cache", $indexes_in_cache);
 }
 
 =head2 random

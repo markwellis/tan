@@ -33,7 +33,7 @@ $page => page number
 sub clear_index_caches: Event(object_created) Event(object_promoted) Event(object_deleted){
     my ( $self, $c, $object ) = @_;
 
-    $object->clear_index_cache();
+    $c->model('MySQL::Object')->clear_index_cache();
     $c->clear_cached_page('/index.*');
 }
 

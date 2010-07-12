@@ -26,6 +26,12 @@ lists things with this tag
 
 =cut
 
+sub clear_index_caches: Event(object_created) Event(object_deleted) Event(object_updated){
+    my ( $self, $c, $object ) = @_;
+
+    $c->clear_cached_page('/tag.*');
+}
+
 =head2 index: Path Args(1) 
 
 B<@args = ($tag)>
@@ -40,7 +46,7 @@ loads things with $tag
 sub index: Path Args(1){
     my ( $self, $c, $tag ) = @_;
 
-    $c->cache_page( 60 );
+    $c->cache_page( 600 );
 #get list of things with $tag
 #assemble index
 

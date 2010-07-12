@@ -293,7 +293,7 @@ sub _kontraband{
         if ( (!$vid) ){
             return undef;
         }
-        return '<embed height="' . $self->width . '" width="' . $self->height . '" '
+        return '<embed height="' . $self->height . '" width="' . $self->width . '" '
             .'flashvars="file=http://208.116.9.205/10/content/' . $vid . '/450.flv" '
             .'usefullscreen="true" allowfullscreen="true" quality="high" '
             .'name="kbvideo" id="kbvideo" src="http://www.kontraband.com/show/4.5.swf" '

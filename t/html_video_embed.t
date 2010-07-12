@@ -171,7 +171,7 @@ is( $embeder->url_to_embed('http://www.m3gavideo.com/?v=6JACS1RB'), undef, 'm3ga
 diag('kontraband');
 is( $embeder->url_to_embed('http://www.kontraband.com/videos/23299/I-Kissed-A-Nerd/'),
 
-    '<embed height="450" width="370" flashvars="file=http://208.116.9.205/10/content/23299/450.flv" usefullscreen="true" allowfullscreen="true" quality="high" name="kbvideo" id="kbvideo" src="http://www.kontraband.com/show/4.5.swf" type="application/x-shockwave-flash"/>',
+    '<embed height="370" width="450" flashvars="file=http://208.116.9.205/10/content/23299/450.flv" usefullscreen="true" allowfullscreen="true" quality="high" name="kbvideo" id="kbvideo" src="http://www.kontraband.com/show/4.5.swf" type="application/x-shockwave-flash"/>',
 
     'kontraband embed works'
 );
