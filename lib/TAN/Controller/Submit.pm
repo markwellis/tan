@@ -77,6 +77,7 @@ sub location: PathPart('submit') Chained('/') CaptureArgs(1){
     $c->stash(
         'page_title' => 'Submit ' . ucfirst($location),
         'location' => $location,
+        'no_ads' => 1,
     );
 }
 

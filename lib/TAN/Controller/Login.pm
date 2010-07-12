@@ -79,6 +79,7 @@ sub index: Path Args(0){
     $c->stash(
         'page_title' => 'Login/Register',
         'template' => 'login.tt',
+        'no_ads' => 1,
     );
 }
 

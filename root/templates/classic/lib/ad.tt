@@ -19,11 +19,13 @@ END;
 -%]
 
 <div class="TAN-[% ad %]-ad">
-    <script type="text/javascript">//<![CDATA[
-        google_ad_client = "[% ad_client %]";
-        google_ad_slot = "[% ad_slot %]";
-        google_ad_width = [% width %];
-        google_ad_height = [% height %];
-    //]]></script>
-    <script type="text/javascript" src="http://pagead2.googlesyndication.com/pagead/show_ads.js"></script>
+    [% IF !no_ads.defined %]
+        <script type="text/javascript">//<![CDATA[
+            google_ad_client = "[% ad_client %]";
+            google_ad_slot = "[% ad_slot %]";
+            google_ad_width = [% width %];
+            google_ad_height = [% height %];
+        //]]></script>
+        <script type="text/javascript" src="http://pagead2.googlesyndication.com/pagead/show_ads.js"></script>
+    [% END %]
 </div>
