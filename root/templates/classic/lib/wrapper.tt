@@ -19,7 +19,7 @@
         [%- PROCESS 'lib/js_includes.tt' -%]
         <div class="TAN-header">
             <h1 class="TAN-logo">
-                <a title="This Aint News" href="/">This Aint News</a>
+                <a title="This Aint News" href="/index/all/0/">This Aint News</a>
             </h1>
             <div class="TAN-menu-top right">
                 <form class="right" method="post" action="https://www.paypal.com/cgi-bin/webscr">
