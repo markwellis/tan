@@ -42,7 +42,7 @@ use Catalyst qw/
     Event
 /;
 
-our $VERSION = '1.2.6';
+our $VERSION = '1.3.0';
 
 # Configure the application.
 #
