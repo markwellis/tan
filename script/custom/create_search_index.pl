@@ -2,15 +2,31 @@
 use strict;
 use warnings;
 
-use KinoSearch::TAN;
+use KinoSearch::Simple;
 
 use TAN::Model::MySQL;
 use Term::ProgressBar;
 
 my $index_path = '/mnt/stuff/TAN/search_index';
 
-my $searcher = KinoSearch::TAN->new({
+my $searcher = KinoSearch::Simple->new({
     'index_path' => '/mnt/stuff/TAN/search_index',
+    'schema' => [
+        {
+            'name' => 'title', 
+            'boost' => 3,
+        },{
+            'name' => 'description',
+        },{
+            'name' => 'id',
+        },{
+            'name' => 'type',
+        },{
+            'name' => 'nsfw',
+        },
+    ],
+    'search_fields' => ['title', 'description'],
+    'search_boolop' => 'AND',
 });
 
 my $db = new TAN::Model::MySQL;
@@ -30,7 +46,7 @@ my $progress = Term::ProgressBar->new({
 $progress->minor(0);
 
 #create index
-$searcher->indexer;
+$searcher->_indexer;
 
 while (my $object = $objects->next){
     my $type = $object->type;
