@@ -48,6 +48,7 @@ sub index {
     local $DBIx::Class::ResultSourceHandle::thaw_schema = $self->result_source->schema;
 
     my $key = "${index_type}:${location}:${page}:${upcoming}:${order}:${nsfw}";
+
     my $objects = $self->result_source->schema->cache->get("index:${key}");
     my $pager = $self->result_source->schema->cache->get("pager:${key}");
 
@@ -134,8 +135,8 @@ sub index {
         $self->result_source->schema->cache->set("pager:${key}", $pager, 600);
 
 #build an index cache..
-        my $indexes_in_cache = $self->result_source->schema->cache->get("indexes_in_cache");
-        $indexes_in_cache->{$index_type} = $key;
+        my $indexes_in_cache = $self->result_source->schema->cache->get("indexes_in_cache") || {};
+        $indexes_in_cache->{$key} = 1;
         $self->result_source->schema->cache->set("indexes_in_cache", $indexes_in_cache, 0);
     }
 
@@ -155,20 +156,13 @@ clears the index page cache
 
 =cut
 sub clear_index_cache{
-    my ( $self, $index_to_clear ) = @_;
+    my ( $self ) = @_;
 
     my $indexes_in_cache = $self->result_source->schema->cache->get("indexes_in_cache");
-    foreach my $index_type ( keys(%{$indexes_in_cache}) ){
-        if ( defined($index_to_clear) && ($index_to_clear ne $index_type) ){
-        #clear specific index, or all
-            next;
-        }
-
-        my $key = $indexes_in_cache->{$index_type};
-
+    foreach my $key ( keys(%{$indexes_in_cache}) ){
         $self->result_source->schema->cache->remove("index:${key}");
         $self->result_source->schema->cache->remove("pager:${key}");
-        delete($indexes_in_cache->{$index_type});
+        delete($indexes_in_cache->{$key});
     }
     $self->result_source->schema->cache->set("indexes_in_cache", $indexes_in_cache);
 }
