@@ -22,6 +22,7 @@
                     <li>daily motion</li>
                     <li>vimeo</li>
                     <li>megavideo</li>
+                    <li>kontraband video</li>
                 </ul>
             </li>
             <li>&nbsp;</li>
@@ -57,6 +58,24 @@
             <li>To connect to IRC using <a href="http://www.mirc.com/">mirc</a> please install <a href="http://www.mirc.com/download/openssl-0.9.8o-setup.exe">this</a> and connect to server: <em>irc.mibbit.com</em>, port: <em>+6697</em></li>
             <li>To connect with <a href="https://addons.mozilla.org/en-US/firefox/addon/16/">chatzilla</a>, please issue the command <em>/sslserver irc.mibbit.com:6697</em>, or click <a href="ircs://irc.mibbit.com:6697/#thisaintnews">here</a></li>
             <li>The room we use is <em>#thisaintnews</em> join with the command <em>/join #thisaintnews</em></li>
+        </ul>
+        <br />
+        <h1>Search</h1>
+        <ul>
+            <li>you can do a more advanced search using the following fields</li>
+            <ul>
+                <li>id:number</li>
+                <li>title:text</li>
+                <li>description:text</li>
+                <li>nsfw:y|n</li>
+                <li>type:link|blog|picture</li>
+            </ul>
+            <li>you can also use the keywords <em>AND</em> <em>OR</em> and <em>quotes(&quot;)</em> to group details</li>
+            <li><strong>examples</strong></li>
+            <ul>
+                <li>type:link description:&quot;Michael Jackson has died&quot;</li>
+                <li>type:picture nsfw:y</li>
+            </ul>
         </ul>
     </li>
 </ul>

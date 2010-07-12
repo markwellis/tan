@@ -301,7 +301,7 @@ sub validate_picture: Private{
         }
     } elsif (my $upload = $c->request->upload('pic')) {
     #upload
-        if ( $upload->size > $c->config->{'Model::FetchImage'}->{'max_filesize'} ){
+        if ( $upload->size > $c->config->{'Model::FetchImage'}->{'args'}->{'max_filesize'} ){
             $c->stash->{'error'} = $error_codes->{'too_large'};
         } else {
             $fileinfo = $c->model('ValidateImage')->is_image($upload->tempname);
