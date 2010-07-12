@@ -12,7 +12,11 @@ window.addEvent('domready', function() {
             'onSuccess': function(value){
                 if ( !$defined(value.login) ){
                     update_me.set('html', value.count);
-                    add_class_to.toggleClass( selected_class );
+                    if ( value.deleted ){
+                        add_class_to.removeClass( selected_class );
+                    } else {
+                        add_class_to.addClass( selected_class );
+                    }
                 } else {
                     TAN.login();
                 }

@@ -1,8 +1,8 @@
 package TAN::Controller::Index;
-use strict;
-use warnings;
+use Moose;
+use namespace::autoclean;
 
-use parent 'Catalyst::Controller';
+BEGIN { extends 'Catalyst::Controller'; }
 
 =head1 NAME
 
@@ -30,18 +30,16 @@ $page => page number
 
 =cut
 
-TAN->register_hook(['object_new', 'object_promoted', 'object_deleted'], '/index/clear_cache');
+sub clear_index_caches: Event(object_created) Event(object_promoted) Event(object_deleted){
+    my ( $self, $c, $object ) = @_;
 
-sub clear_cache: Private{
-    my ( $self, $c, $object_rs ) = @_;
-
-    $object_rs->clear_index_cache();
+    $c->model('MySQL::Object')->clear_index_cache();
     $c->clear_cached_page('/index.*');
 }
 
-=head2 index: Path: Args(3)
+=head2 index: Path Args(2)
 
-B<@args = ($location, $upcoming, $page)>
+B<@args = ($location, $upcoming)>
 B<@params = (order)>
 
 =over
@@ -55,65 +53,46 @@ loads index template
 =back
 
 =cut
-my $location_reg = qr/^(all|link|blog|picture)$/;
 my $int_reg = qr/\D+/;
-my $order_reg = qr/^(promoted|plus|minus|views|comments)$/;
-
-sub index :Path :Args(3) {
-    my ( $self, $c, $location, $upcoming, $page ) = @_;
+sub index :Path Args(2) {
+    my ( $self, $c, $location, $upcoming ) = @_;
 
     $c->cache_page( 60 );
 
-    if ($location !~ m/$location_reg/){
-        $location = 'all';
-    }
+    my $page = $c->req->param('page') || 1;
 
-    $upcoming =~ s/$int_reg//g;
     $page =~ s/$int_reg//g;
 
     $upcoming ||= 0;
-    $page ||= 1;
-    
-    
-    my $order = $c->req->param('order') || 'created';
-    if ($order !~ m/$order_reg/){
-        $order = 'created';
-    }
-    $c->stash->{'order'} = $order;
 
     #redirect to somewhere sensible if someone has made up some random url...
-    if ('/' . $c->req->path() ne "/index/${location}/${upcoming}/${page}/" && '/' . $c->req->path() ne '/'){
-        $c->res->redirect("/index/${location}/${upcoming}/${page}/", 301 );
+    if ('/' . $c->req->path() ne "/index/${location}/${upcoming}/" && '/' . $c->req->path() ne '/'){
+        $c->res->redirect("/index/${location}/${upcoming}/", 301 );
         $c->detach();
+    } 
+
+    my $order = $c->req->param('order') || 'created';
+
+    my $search = {};
+    if ( $upcoming ){
+        $search->{'promoted'} = \'= 0';
+    } else {
+        $search->{'promoted'} = \'!= 0';
+    }
+    my ( $objects, $pager ) = $c->model('MySQL::Object')->index( $location, $page, $upcoming, $search, $order, $c->nsfw, "index" );
+
+    if ( $objects ){
+        $c->stash(
+            'index' => $c->model('Index')->indexinate($c, $objects, $pager),
+            'location' => $location,
+            'page' => $page,
+            'upcoming' => $upcoming,
+            'order' => $order,
+            'page_title' => ($upcoming ? 'Upcoming ' : 'Promoted ') . ucfirst($location) . ($location ne 'all' ? 's' : '' ),
+        );
     }
 
-    $c->stash->{'location'} = $location;
-    $c->stash->{'page'} = $page;
-    $c->stash->{'upcoming'} = $upcoming;
-    
-    my $index_objects = $c->model('MySQL::Object')->index( $location, $page, $upcoming, $order, $c->nsfw );
-    my @index = @{ $index_objects->{'objects'} };
-
-    if ( $c->user_exists ){
-        my @ids = map($_->id, @index);
-        my $meplus_minus = $c->model('MySQL::PlusMinus')->meplus_minus($c->user->user_id, \@ids);
-
-        foreach my $object ( @index ){
-            if ( defined($meplus_minus->{ $object->object_id }->{'plus'}) ){
-                $object->{'meplus'} = 1;
-            } 
-            if ( defined($meplus_minus->{ $object->object_id }->{'minus'}) ){
-                $object->{'meminus'} = 1;  
-            }
-        }
-    }
-
-    $c->stash->{'index_objects'} = {
-        'objects' => \@index,
-        'pager' => $index_objects->{'pager'},
-    };
-
-    if ( !$c->stash->{'index_objects'}->{'objects'} ){
+    if ( !$c->stash->{'index'} ){
         $c->forward('/default');
         $c->detach();
     }

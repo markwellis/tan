@@ -5,7 +5,7 @@ window.addEvent('domready', function() {
         var menu_type = this.getProperty('class').split(' ')[1].replace(/.*-/, '');
 
         if ( selected_menu_type ){
-            var selected_menu = $$('.TAN-menu-tab-' + selected_menu_type + '-selected');
+            var selected_menu = $$('.TAN-type-' + selected_menu_type);
             selected_menu.removeClass('TAN-menu-tab-' + selected_menu_type + '-selected');
             $$('.TAN-menu-' + selected_menu_type).setStyle('display', 'none');
         }

@@ -15,7 +15,7 @@ END;
 
 SWITCH (object.type);
     CASE ['link', 'blog'];
-        tmplt = 'index/link.tt';
+        tmplt = 'lib/index/link.tt';
     CASE 'picture';
         tmplt = 'view/picture.tt';
 END

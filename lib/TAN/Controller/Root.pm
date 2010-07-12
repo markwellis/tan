@@ -11,7 +11,6 @@ use Time::HiRes qw(time);
 #
 __PACKAGE__->config(namespace => '');
 
-
 =head1 NAME
 
 TAN::Controller::Root
@@ -52,37 +51,35 @@ sets default location to all
 sub auto: Private{
     my ( $self, $c ) = @_;
 
-    $c->stash->{'start_time'} = time();
-    
-## this shouldn't be here
-    my $theme = 'classic'; 
-    $c->stash->{'theme_settings'} = {
-        'name' => $theme,
-        'path' => $c->config->{'static_path'} . "/themes/${theme}",
-    };
-## end
-    
-    # set a default location
-    $c->stash->{'location'} = 'all';
+## theme shouldn't be set here!!
+    my $theme = 'classic';
+    $c->stash(
+        'start_time' => time(),    
+        'theme_settings' => {
+            'name' => $theme,
+            'path' => $c->config->{'static_path'} . "/themes/${theme}",
+        },
+        'location' => 'all',
+    );
     
     return 1;
 }
 
-=head2 index: Path: Args(0)
+=head2 index: Path Args(0)
 
 B<@args = undef>
 
 =over
 
-forwards to /index/all/0/1/
+forwards to /index/all/0/
 
 =back
 
 =cut
-sub index: Path: Args(0) {
+sub index: Private{
     my ( $self, $c ) = @_;
 
-    $c->forward('/index/index', ['all', 0, 1]);
+    $c->forward('/index/index', ['all', 0] );
 }
 
 =head2 default: Path 
@@ -96,15 +93,13 @@ loads error 404 template
 =back
 
 =cut
-sub default: Path {
+sub default: Path{
     my ( $self, $c ) = @_;
 
-    $c->stash->{'error_404'} = 1;
-    $c->stash->{'template'} = 'errors/404.tt';
-    $c->response->status(404);
+    $c->forward('/error404');
 }
 
-=head2 error404: Local 
+=head2 error404: Local Args(0)
 
 B<@args = undef>
 
@@ -115,10 +110,199 @@ loads error 404 template
 =back
 
 =cut
-sub error404: Local{
+sub error404: Local Args(0){
     my ( $self, $c ) = @_;
 
+    $c->stash(
+        'error_404' => 1,
+        'template' => 'errors/404.tt',
+    );
+
+    $c->response->status(404);
+}
+
+=head2 filter: Local Args(0)
+
+B<@args = undef>
+
+=over
+
+enables/disables NSFW filter
+
+redirects to referer or / 
+
+=back
+
+=cut
+sub filter: Local Args(0){
+    my ( $self, $c ) = @_;
+
+    #bitwise ftw
+    $c->nsfw($c->nsfw ^ 1);
+
+    my $ref = $c->req->referer;
+    if (!defined($ref)){
+        $ref = '/';
+    }
+
+    $c->res->redirect($ref);
+    $c->detach();
+}
+
+=head2 random: Local Args(1)
+
+B<@args = ($location)>
+
+=over
+
+validates params
+
+loads a random object (based on $location) and redirects to it
+
+404's
+
+=back
+
+=cut
+my $location_reg = qr/^(all|link|blog|picture)$/;
+sub random: Local Args(1){
+    my ( $self, $c, $location ) = @_;
+    
+    if ($location !~ m/$location_reg/){
+        $location = 'all';
+    }
+
+    my $object = $c->model('MySQL::Object')->random($location, $c->nsfw);
+
+    if ($object){
+        $c->res->redirect($object->url);
+        $c->detach();
+    }
+
     $c->forward('/default');
+    $c->detach();
+}
+
+=head2 chat: Local Args(0)
+
+B<@args = undef>
+
+=over
+
+loads chat template... 
+
+=back
+
+=cut
+sub chat: Local Args(0){
+    my ( $self, $c ) = @_;
+
+    $c->cache_page( 3600 );
+
+    $c->stash(
+        'page_title' => 'Chat',
+        'template' => 'chat.tt',
+    );
+}
+
+=head2 faq: Local Args(0)
+
+B<@args = undef>
+
+=over
+
+loads chat template... 
+
+=back
+
+=cut
+sub faq: Local Args(0){
+    my ( $self, $c ) = @_;
+
+    $c->cache_page( 3600 );
+
+    $c->stash(
+        'page_title' => 'FAQ',
+        'template' => 'faq.tt',
+    );
+}
+
+=head2 google: Path('/googledc796c4dad406173.html')
+
+B<@args = undef>
+
+=over
+
+google confirm key
+
+=back
+
+=cut
+sub google: Path('/googledc796c4dad406173.html'){
+    my ( $self, $c ) = @_;
+
+    #google just check if the path exists
+    $c->res->output(1);
+    $c->detach();
+}
+
+=head2 yahoo: Path('/googledc796c4dad406173.html')
+
+B<@args = undef>
+
+=over
+
+yahoo confirm key
+
+=back
+
+=cut
+sub yahoo: Path('/y_key_242ef28969a04b9c.html'){
+    my ( $self, $c ) = @_;
+
+    #yahoo needs this key
+    $c->res->output('adf14f5d24cef99f');
+    $c->detach();
+}
+
+=head2 robots: Path('/robots.txt')
+
+B<@args = undef>
+
+=over
+
+robots.txt
+
+=back
+
+=cut
+sub robots: Path('/robots.txt'){
+    my ( $self, $c ) = @_;
+
+    $c->cache_page(3600);
+
+    $c->res->output(
+"User-agent: *
+Disallow: /view/*/*/_plus
+Disallow: /view/*/*/_minus
+Disallow: /view/*/*/_comment
+Disallow: /login*
+Disallow: /filter*
+Disallow: /random*
+Disallow: /submit*
+Disallow: /profile*
+Disallow: /redirect*
+Disallow: /chat*
+Disallow: /static/cache*
+Disallow: /static/user/avatar*
+Disallow: /redirect*
+Disallow: /tag*
+Disallow: /search*
+
+Sitemap: http://thisaintnews.com/sitemap"
+    );
+    $c->res->header('Content-Type' => 'text/plain');
+    $c->detach();
 }
 
 =head2 render: ActionClass('RenderView') 
@@ -132,7 +316,7 @@ RenderView
 =back
 
 =cut
-sub render: ActionClass('RenderView') {
+sub render: ActionClass('RenderView'){
     my ( $self, $c ) = @_;
 
     $c->stash->{'time'} = sub { return time(); };
@@ -151,7 +335,7 @@ if debug warns sql output
 =back
 
 =cut
-sub end: Private {
+sub end: Private{
     my ( $self, $c ) = @_;
 
     if ( !$c->res->output || ($c->res->status < 300) ){

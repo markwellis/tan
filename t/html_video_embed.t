@@ -57,7 +57,7 @@ is( $embeder->url_to_embed('http://video.google.com/videoplay?docid=-29128784053
     'google embed works'
 );
 
-is( $embeder->url_to_embed('http://video.google.com/videoplay?docid=-2928784053jj99014351#'), undef, 'invalid docid=');
+is( $embeder->url_to_embed('http://video.google.com/videoplay?docid=*()#'), undef, 'invalid docid=');
 is( $embeder->url_to_embed('http://video.google.com/videoplay?d0cid=-2912878405399014351#'), undef, 'no docid=');
 is( $embeder->url_to_embed('http://video.g0ogle.com/videoplay?docid=-2912878405399014351#'), undef, 'g0ogle, not goolge');
 
@@ -166,5 +166,18 @@ is( $embeder->url_to_embed('http://www.megavideo.com/?v=0BILAIF2'),
 is( $embeder->url_to_embed('http://www.megavideo.com/?c=6JACS1RB'), undef, 'invalid url');
 is( $embeder->url_to_embed('http://www.megavideo.com'), undef, 'no video id');
 is( $embeder->url_to_embed('http://www.m3gavideo.com/?v=6JACS1RB'), undef, 'm3gavideo, not megavideo');
+
+#kontraband
+diag('kontraband');
+is( $embeder->url_to_embed('http://www.kontraband.com/videos/23299/I-Kissed-A-Nerd/'),
+
+    '<embed height="370" width="450" flashvars="file=http://208.116.9.205/10/content/23299/450.flv" usefullscreen="true" allowfullscreen="true" quality="high" name="kbvideo" id="kbvideo" src="http://www.kontraband.com/show/4.5.swf" type="application/x-shockwave-flash"/>',
+
+    'kontraband embed works'
+);
+
+is( $embeder->url_to_embed('http://www.kontraband.com/videos/fgh23299/I-Kissed-A-Nerd/'), undef, 'invalid url');
+is( $embeder->url_to_embed('http://www.kontraband.com/videos/'), undef, 'no video id');
+is( $embeder->url_to_embed('http://www.kuntraband.com/videos/23299/I-Kissed-A-Nerd/'), undef, 'kuntraband, not kontraband');
 
 done_testing();

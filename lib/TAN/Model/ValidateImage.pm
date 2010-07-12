@@ -2,9 +2,9 @@ package TAN::Model::ValidateImage;
 
 use strict;
 use warnings;
-use parent 'Catalyst::Model';
+use parent 'Catalyst::Model::Adaptor';
 
-use Data::Validate::Image;
+__PACKAGE__->config( class => 'Data::Validate::Image' );
 
 =head1 NAME
 
@@ -12,28 +12,7 @@ TAN::Model::ValidateImage
 
 =head1 DESCRIPTION
 
-Validates an image
-
-=head1 METHODS
-
-=cut
-
-=head2 COMPONENT
-
-B<@args = (@config)>
-
-=over
-
-returns a new Data::Validate::Image(@config)
-
-=back
-
-=cut
-sub COMPONENT{
-    my ($self, $c, @config) = @_;
-
-    return new Data::Validate::Image(@config);
-}
+Validates an image L<Data::Validate::Image>
 
 =head1 AUTHOR
 

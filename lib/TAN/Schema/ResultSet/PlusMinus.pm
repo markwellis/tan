@@ -49,7 +49,7 @@ sub add{
         return undef;
     }
 
-    my $deleted;
+    my $deleted = 0;
 #transaction
 # prevents race condition (apparently....)
     eval{
@@ -100,7 +100,7 @@ sub add{
         }
     }
 
-    return ($count, $promoted);
+    return ($count, $promoted, $deleted);
 }
 
 =head2 meplus_minus

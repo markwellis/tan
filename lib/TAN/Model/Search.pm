@@ -1,17 +1,17 @@
-package TAN::Model::FetchImage;
+package TAN::Model::Search;
 use Moose;
 
 extends 'Catalyst::Model::Adaptor';
 
-__PACKAGE__->config( class => 'Fetch::Image' );
+__PACKAGE__->config( class => 'KinoSearch::Simple' );
 
 =head1 NAME
 
-TAN::Model::FetchImage
+TAN::Model::Search
 
 =head1 DESCRIPTION
 
-Fetches a remote image L<Fetch::Image>
+Interface to L<KinoSearch::Simple>
 
 =head1 AUTHOR
 

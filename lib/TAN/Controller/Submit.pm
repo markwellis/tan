@@ -74,7 +74,11 @@ sub location: PathPart('submit') Chained('/') CaptureArgs(1){
         $c->forward('/default');
         $c->detach();
     }
-    $c->stash->{'location'} = $location;
+    $c->stash(
+        'page_title' => 'Submit ' . ucfirst($location),
+        'location' => $location,
+        'no_ads' => 1,
+    );
 }
 
 =head2 index: PathPart('') Chained('location') Args(0) 
@@ -360,6 +364,46 @@ sub post: PathPart('post') Chained('validate') Args(0){
             $c->res->redirect($c->stash->{'duplicate'}->object->url);
             $c->detach();
         }
+
+#flash the params here...
+        my $object;
+        if ( $c->stash->{'location'} eq 'link' ){
+            $c->flash('object' => {
+                'link' => {
+                    'title' => $c->req->param('title') || undef,
+                    'description' => $c->req->param('description') || undef,
+                    'url' => $c->req->param('url') || undef,
+                    'picture_id' => $c->req->param('cat') || undef,
+                },
+                'tags' => [
+                    { 'tag' => $c->req->param('tags') || undef }
+                ],
+            });
+        } elsif ( $c->stash->{'location'} eq 'blog' ){
+            $c->flash('object' => {
+                'blog' => {
+                    'title' => $c->req->param('title') || undef,
+                    'description' => $c->req->param('description') || undef,
+                    'details_nobb' => $c->req->param('blogmain') || undef,
+                    'picture_id' => $c->req->param('cat') || undef,
+                },
+                'tags' => [
+                    { 'tag' => $c->req->param('tags') || undef }
+                ],
+            });
+        } elsif ( $c->stash->{'location'} eq 'picture' ){
+            $c->flash('object' => {
+                'picture' => {
+                    'title' => $c->req->param('title') || undef,
+                    'description' => $c->req->param('description') || undef,
+                    'pic_url' => $c->req->param('pic_url') || undef,
+                },
+                'tags' => [
+                    { 'tag' => $c->req->param('tags') || undef }
+                ],
+            });
+        }
+
         $c->res->redirect('/submit/' . $c->stash->{'location'} . '/');
         $c->detach();
     }
@@ -378,10 +422,10 @@ sub post: PathPart('post') Chained('validate') Args(0){
 
     }
 
-    $c->run_hook('object_new', $c->stash->{'object'});
+    $c->trigger_event('object_created', $c->stash->{'object'});
 
     $c->flash->{'message'} = 'Submission complete';
-    $c->res->redirect('/index/' . $c->stash->{'location'} . '/1/1/');
+    $c->res->redirect('/index/' . $c->stash->{'location'} . '/1/');
     $c->detach();
 }
 

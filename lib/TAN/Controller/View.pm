@@ -1,8 +1,8 @@
 package TAN::Controller::View;
-use strict;
-use warnings;
+use Moose;
+use namespace::autoclean;
 
-use parent 'Catalyst::Controller';
+BEGIN { extends 'Catalyst::Controller'; }
 
 use JSON;
 
@@ -40,60 +40,41 @@ $title = url title
 
 =cut
 
-TAN->register_hook(
-    [
-        'object_new', 
-        'object_deleted', 
-        'object_updated',
-        'object_plusminus', 
-        'comment_new', 
-        'comment_deleted',
-        'comment_updated',
-    ],
-    '/view/clear_object_cache'
-);
+sub remove_blog_cache: Event(blog_updated){
+    my ( $self, $c, $object ) = @_;
 
-sub clear_object_cache: Private{
-    my ( $self, $c, $object_rs ) = @_;
-
-    if ( ref($object_rs) eq 'TAN::Model::MySQL::Comments' ){
-    #$object_rs is actually $comment_rs...
-        $object_rs = $object_rs->object;
-    }
-
-    $c->cache->remove("object:" . $object_rs->id);
-    $c->clear_cached_page( $object_rs->url . '.*' );
+    $c->cache->remove("blog.0:" . $object->id);
+    $c->cache->remove("blog.1:" . $object->id);
 }
 
-TAN->register_hook(
-    [
-        'comment_new', 
-        'comment_deleted', 
-        'comment_updated',
-    ], 
-    '/view/clear_comment_cache'
-);
-sub clear_comment_cache: Private{
-    my ( $self, $c, $comment_rs ) = @_;
+sub remove_comment_cache: Event(comment_created) Event(comment_deleted) Event(comment_updated){
+    my ( $self, $c, $comment ) = @_;
 
     #clear recent_comments
     $c->cache->remove("recent_comments");
     #clear comment cache
-    $c->cache->remove("comment.0:" . $comment_rs->id);
-    $c->cache->remove("comment.1:" . $comment_rs->id);
+    $c->cache->remove("comment.0:" . $comment->id);
+    $c->cache->remove("comment.1:" . $comment->id);
 }
 
-TAN->register_hook(
-    [
-        'blog_updated',
-    ], 
-    '/view/clear_blog_cache'
-);
-sub clear_blog_cache: Private{
-    my ( $self, $c, $object_rs ) = @_;
+sub remove_object_cache: 
+    Event(object_created)
+    Event(object_deleted)
+    Event(object_updated)
+    Event(object_plusminus)
+    Event(comment_created)
+    Event(comment_deleted)
+    Event(comment_updated)
+{
+    my ( $self, $c, $object ) = @_;
 
-    $c->cache->remove("blog.0:" . $object_rs->id);
-    $c->cache->remove("blog.1:" . $object_rs->id);
+    if ( ref($object) eq 'TAN::Model::MySQL::Comments' ){
+    #$object_rs is actually $comment_rs...
+        $object = $object->object;
+    }
+
+    $c->cache->remove("object:" . $object->id);
+    $c->clear_cached_page( $object->url . '.*' );
 }
 
 =head2 location: PathPart('view') Chained('/') CaptureArgs(1)
@@ -220,7 +201,7 @@ sub comment: PathPart('_comment') Chained('location') Args(0) {
                 $comment
             );
             $comment_id = $comment_rs->comment_id;
-            $c->run_hook('comment_new', $comment_rs);
+            $c->trigger_event('comment_created', $comment_rs);
         }
     } else {
     #save for later
@@ -345,7 +326,7 @@ sub edit_comment: PathPart('_edit_comment') Chained('location') Args(1) {
             $comment_rs->update({
                 'deleted' => 'Y',
             });
-            $c->run_hook('comment_deleted', $comment_rs);
+            $c->trigger_event('comment_deleted', $comment_rs);
 
             if ( !defined($c->req->param('ajax')) ){
                 $c->flash->{'message'} = 'Comment deleted';
@@ -360,7 +341,7 @@ sub edit_comment: PathPart('_edit_comment') Chained('location') Args(1) {
                 $comment_rs->update({
                     'comment' => $c->req->param("edit_comment_${comment_id}"),
                 });
-                $c->run_hook('comment_updated', $comment_rs);
+                $c->trigger_event('comment_updated', $comment_rs);
             }
             if ( !defined($c->req->param('ajax')) ){
                 $c->res->redirect( $comment_rs->object->url . '#comment' . $comment_rs->comment_id);
@@ -437,7 +418,7 @@ sub add_plus_minus: Private{
 
     if ( $c->user_exists ){
     # valid user, do work
-        my ( $count, $promoted ) = $c->model('MySQL::PlusMinus')->add(
+        my ( $count, $promoted, $deleted ) = $c->model('MySQL::PlusMinus')->add(
             $type, $c->stash->{'object_id'}, $c->user->user_id
         );
 
@@ -445,9 +426,9 @@ sub add_plus_minus: Private{
             'object_id' => $c->stash->{'object_id'}
         });
 
-        $c->run_hook('object_plusminus', $object);
+        $c->trigger_event('object_plusminus', $object);
         if ( $promoted ){
-            $c->run_hook('object_promoted', $object);
+            $c->trigger_event('object_promoted', $object);
         }
 
         if ( defined($c->req->param('json')) ){
@@ -455,6 +436,7 @@ sub add_plus_minus: Private{
             $c->res->header('Content-Type' => 'application/json');
             $c->res->body( to_json({
                 'count' => $count,
+                'deleted' => $deleted,
             }) );
         } else {
         #redirect
@@ -500,7 +482,7 @@ sub post_saved_comments: Private{
                     $c->user->user_id, 
                     $saved_comment->{'comment'} 
                 );
-                $c->run_hook('comment_new', $comment_rs);
+                $c->trigger_event('comment_created', $comment_rs);
             }
         }
         $c->session->{'comments'} = undef;
@@ -517,5 +499,7 @@ This library is free software. You can redistribute it and/or modify
 it under the same terms as Perl itself.
 
 =cut
+
+__PACKAGE__->meta->make_immutable;
 
 1;

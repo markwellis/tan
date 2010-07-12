@@ -20,6 +20,20 @@ I</profile/$username/>
 
 =cut
 
+sub clear_index_caches: Event(object_created) Event(object_deleted) Event(comment_created){
+    my ( $self, $c, $object ) = @_;
+
+    $c->clear_cached_page('/profile/.*/links');
+    $c->clear_cached_page('/profile/.*/blogs');
+    $c->clear_cached_page('/profile/.*/pictures');
+}
+
+sub clear_comment_caches: Event(comment_deleted){
+    my ( $self, $c, $object ) = @_;
+
+    $c->clear_cached_page('/profile/.*/comments');
+}
+
 =head2 user: PathPart('submit') Chained('/') CaptureArgs(1)
 
 B<@args = ($username)>
@@ -58,17 +72,35 @@ loads profile page for the user
 sub index: PathPart('') Chained('user') Args(0){
     my ( $self, $c ) = @_;
 
+    $c->cache_page(600);
+
 #TT is tarded
-    $c->stash->{'links'} = $c->stash->{'user'}->objects->search({
+    my $user = $c->stash->{'user'};
+
+    my %search_opts;
+    if ( !$c->nsfw ){
+        %search_opts = (
+            'nsfw' => 'N',
+        );
+    }
+
+    $c->stash->{'comments'} = $user->comments->search({
+        'deleted' => 'N',
+    });
+
+    $c->stash->{'links'} = $user->objects->search({
         'type' => 'link',
+        %search_opts,
     });
 
-    $c->stash->{'blogs'} = $c->stash->{'user'}->objects->search({
+    $c->stash->{'blogs'} = $user->objects->search({
         'type' => 'blog',
+        %search_opts,
     });
 
-    $c->stash->{'pictures'} = $c->stash->{'user'}->objects->search({
+    $c->stash->{'pictures'} = $user->objects->search({
         'type' => 'picture',
+        %search_opts,
     });
 #END tardism
 
@@ -76,14 +108,17 @@ sub index: PathPart('') Chained('user') Args(0){
     eval{
         $c->model('MySQL')->txn_do(sub{
             $c->stash->{'object'} = $c->model('MySQL::Object')->find_or_create({
-                'user_id' => $c->stash->{'user'}->id,
+                'user_id' => $user->id,
                 'type' => 'profile',
             });
             $c->stash->{'object'}->find_or_create_related('profile',{});
         });
     };
 
-    $c->stash->{'template'} = 'profile.tt';
+    $c->stash(
+        'page_title' => $user->username . "'s Profile",
+        'template' => 'profile.tt',
+    );
 }
 
 sub edit: PathPart('edit') Chained('user') Args(0){
@@ -133,10 +168,13 @@ loads comments for the user
 sub comments: PathPart('comments') Chained('user') Args(0){
     my ( $self, $c ) = @_;
 
+    $c->cache_page(600);
+
     my $page = $c->req->param('page') || 1;
 
-    $c->stash->{'comments'} = $c->stash->{'user'}->comments->search(
-        {},
+    $c->stash->{'comments'} = $c->stash->{'user'}->comments->search({
+            'me.deleted' => 'N',
+        },
         {
             '+select' => [
                 { 'unix_timestamp' => 'me.created' },
@@ -152,8 +190,16 @@ sub comments: PathPart('comments') Chained('user') Args(0){
             },
         }
     );
-    
-    $c->stash->{'template'} = 'profile/comments.tt';
+
+    if ( !$c->stash->{'comments'} ) {
+        $c->forward('/default');
+        $c->detach;
+    }
+
+    $c->stash(
+        'page_title' => $c->stash->{'user'}->username . "'s Comments",
+        'template' => 'profile/comments.tt',
+    );
 }
 
 =head2 links: PathPart('links') Chained('user') Args(0)
@@ -172,7 +218,9 @@ sub links: PathPart('links') Chained('user') Args(0){
 
     $c->forward('fetch', ['link']);
 
-    $c->stash->{'template'} = 'profile/links.tt';
+    $c->stash(
+        'template' => 'profile/links.tt',
+    );
 }
 
 =head2 blogs: PathPart('blogs') Chained('user') Args(0)
@@ -191,7 +239,9 @@ sub blogs: PathPart('blogs') Chained('user') Args(0){
 
     $c->forward('fetch', ['blog']);
 
-    $c->stash->{'template'} = 'profile/links.tt';
+    $c->stash(
+        'template' => 'profile/links.tt',
+    );
 }
 
 =head2 pictures: PathPart('pictures') Chained('user') Args(0)
@@ -208,73 +258,34 @@ loads pictures for the user
 sub pictures: PathPart('pictures') Chained('user') Args(0){
     my ( $self, $c ) = @_;
 
-    $c->stash->{'location'} = 'picture';
     $c->forward('fetch', ['picture']);
 
-    $c->stash->{'template'} = 'profile/pictures.tt';
+    $c->stash(
+        'template' => 'profile/pictures.tt',
+    );
 }
 
 sub fetch: Private{
     my ( $self, $c, $location ) = @_;
 
+    $c->cache_page(600);
+
     my $page = $c->req->param('page') || 1;
+    my $order = $c->req->param('order') || 'created';
 
-    my %search_opts;
-    if ( !$c->nsfw ){
-        $search_opts{'nsfw'} = 'N';
-    }
+    my ( $objects, $pager ) = $c->stash->{'user'}->objects->index( $location, $page, 1, {}, $order, $c->nsfw, "profile:" . $c->stash->{'user'}->id );
 
-    my $index_rs = $c->stash->{'user'}->objects->search({
-        'type' => $location,
-        %search_opts,
-    },{
-        'page' => $page,
-        'rows' => 27,
-        'order_by' => {
-            '-desc' => 'me.created',
-        },
-        'prefetch' => $location,
-    });
-
-    if ( !$index_rs ){
+    if ( scalar(@{$objects}) ){
+        $c->stash(
+            'index' => $c->model('Index')->indexinate($c, $objects, $pager),
+            'order' => $order,
+            'page_title' => $c->stash->{'user'}->username . "'s " . ucfirst($location) . "s",
+            'location' => $location,
+        );
+    } else {
         $c->forward('/default');
         $c->detach;
     }
-
-    my @index;
-    foreach my $object ( $index_rs->all ){
-        push(@index, $c->model('MySQL::Object')->get( $object->id, $object->type ));
-    }
-
-    if ( $c->user_exists ){
-        my @ids = map($_->id, @index);
-        my $meplus_minus = $c->model('MySQL::PlusMinus')->meplus_minus($c->user->user_id, \@ids);
-
-        foreach my $object ( @index ){
-            if ( defined($meplus_minus->{ $object->object_id }->{'plus'}) ){
-                $object->{'meplus'} = 1;
-            } 
-            if ( defined($meplus_minus->{ $object->object_id }->{'minus'}) ){
-                $object->{'meminus'} = 1;  
-            }
-        }
-    }
-
-    if ( !scalar(@index) ){
-        $c->forward('/default');
-        $c->detach;
-    }
-
-    my $pager = {
-        'current_page' => $index_rs->pager->current_page,
-        'total_entries' => $index_rs->pager->total_entries,
-        'entries_per_page' => $index_rs->pager->entries_per_page,
-    };
-
-    $c->stash->{'index'} = {
-        'objects' => \@index,
-        'pager' => $pager,
-    };
 }
 
 =head1 AUTHOR

@@ -24,7 +24,7 @@ B<@args = undef>
 
 =over
 
-sets debugobj to new TAN::DBProfiler
+loads Data::Validate::Image
 
 =back
 

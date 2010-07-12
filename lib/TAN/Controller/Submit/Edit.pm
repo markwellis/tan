@@ -76,7 +76,11 @@ loads the object info and then the submit template
 sub index: PathPart('') Chained('validate_user') Args() {
     my ( $self, $c ) = @_;
 
-    $c->stash->{'template'} = 'submit.tt';
+    my $type = $c->stash->{'location'};
+    $c->stash(
+        'template' => 'submit.tt',
+        'page_title' => 'Edit ' . ($c->stash->{'object'}->$type->title || ''),
+    );
 }
 
 =head2 post: PathPart('post') Chained('validate_user') Args(0) 
@@ -116,7 +120,7 @@ sub post: PathPart('post') Chained('validate_user') Args(0) {
             'details' => $c->req->param('blogmain'),
         });
 
-        $c->run_hook('blog_updated', $c->stash->{'object'});
+        $c->trigger_event('blog_updated', $c->stash->{'object'});
 
     } elsif ( $c->stash->{'location'} eq 'picture' ){
         $c->stash->{"object"}->update({
@@ -132,7 +136,7 @@ sub post: PathPart('post') Chained('validate_user') Args(0) {
     $c->stash->{'object'}->tag_objects->delete();
     $c->forward('/submit/add_tags', [$c->stash->{'object'}]);
 
-    $c->run_hook('object_updated', $c->stash->{'object'});
+    $c->trigger_event('object_updated', $c->stash->{'object'});
 
     $c->flash->{'message'} = 'Edit complete';
     $c->res->redirect($c->stash->{'object'}->url);
