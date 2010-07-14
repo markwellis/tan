@@ -238,7 +238,7 @@ google confirm key
 =back
 
 =cut
-sub google: Path('/googledc796c4dad406173.html'){
+sub google: Path('/google540d7580f0fb6a3b.html'){
     my ( $self, $c ) = @_;
 
     #google just check if the path exists
