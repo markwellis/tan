@@ -164,11 +164,12 @@ loads a random object (based on $location) and redirects to it
 =back
 
 =cut
-my $location_reg = qr/^(all|link|blog|picture)$/;
 sub random: Local Args(1){
     my ( $self, $c, $location ) = @_;
     
-    if ($location !~ m/$location_reg/){
+    my $location_reg = $c->model('CommonRegex')->location;
+
+    if ( ($location ne 'all') || ($location !~ m/$location_reg/) ){
         $location = 'all';
     }
 
