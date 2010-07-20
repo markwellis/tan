@@ -169,7 +169,7 @@ sub random: Local Args(1){
     
     my $location_reg = $c->model('CommonRegex')->location;
 
-    if ( ($location ne 'all') || ($location !~ m/$location_reg/) ){
+    if ( ($location ne 'all') && ($location !~ m/$location_reg/) ){
         $location = 'all';
     }
 

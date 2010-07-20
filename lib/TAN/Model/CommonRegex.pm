@@ -18,7 +18,7 @@ has 'isnt_number' => (
 has 'location' => (
     'is' => 'ro',
     'isa' => 'RegexpRef',
-    'default' => sub { return qr/^link|blog|picture$/ },
+    'default' => sub { return qr/^link|blog|picture|poll$/ },
 );
 
 no Moose;

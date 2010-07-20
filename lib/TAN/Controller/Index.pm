@@ -53,7 +53,6 @@ loads index template
 =back
 
 =cut
-my $int_reg = qr/\D+/;
 sub index :Path Args(2) {
     my ( $self, $c, $location, $upcoming ) = @_;
 
@@ -61,6 +60,7 @@ sub index :Path Args(2) {
 
     my $page = $c->req->param('page') || 1;
 
+    my $int_reg = $c->model('CommonRegex')->isnt_number;
     $page =~ s/$int_reg//g;
 
     $upcoming ||= 0;

@@ -88,10 +88,10 @@ checks the location is valid
 =back
 
 =cut
-my $location_reg = qr/^link|blog|picture$/;
 sub location: PathPart('view') Chained('/') CaptureArgs(2){
     my ( $self, $c, $location, $object_id ) = @_;
 
+    my $location_reg = $c->model('CommonRegex')->location;
     if ($location !~ m/$location_reg/){
         $c->forward('/default');
         $c->detach();

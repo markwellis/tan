@@ -28,13 +28,13 @@ returns ($index_rs, $pager)
 
 =cut
 my $int_reg = qr/\D+/;
-my $location_reg = qr/^all|link|blog|picture$/;
 my $order_reg = qr/^promoted|plus|minus|views|comments$/;
 
 sub index {
     my ($self, $location, $page, $upcoming, $search, $order, $nsfw, $index_type) = @_;
     
-    if ($location !~ m/$location_reg/){
+    my $location_reg = TAN->model('CommonRegex')->location;
+    if ( ($location ne 'all') && ($location !~ m/$location_reg/) ){
         return undef;
     }
 
