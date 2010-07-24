@@ -12,14 +12,6 @@ __PACKAGE__->add_columns(
   { data_type => "BIGINT", default_value => undef, is_nullable => 0, size => 20 },
   "picture_id",
   { data_type => "BIGINT", default_value => undef, is_nullable => 0, size => 20 },
-  "details",
-  {
-    data_type => "MEDIUMTEXT",
-    default_value => undef,
-    is_nullable => 0,
-    size => 16777215,
-    accessor => '_details',
-  },
   "title",
   {
     data_type => "VARCHAR",

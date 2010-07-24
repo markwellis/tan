@@ -1,0 +1,40 @@
+<form action="post" id="submit_form" method="post">
+    <fieldset>
+        <ul>
+            <li>
+                <input type="hidden" id="cat" name="cat" value="[% object.$location.picture_id | html %]" />
+                <label for="url">Title</label>
+            </li>
+            <li>
+                <input type="text" name="title" id="title" value="[% object.$location.title | html %]"/>
+            </li>
+            <li>
+                <label for="description">Description</label>
+            </li>
+            <li>
+                <textarea cols="1" rows="5" name="description" id="description">[% object.$location.description | html %]</textarea><br/>
+            </li>
+            <li>
+                <label for="days">End in this many days</label>
+            </li>
+            <li>
+                <input type="text" name="days" id="days" />
+            </li>
+            <li>
+                <label for="answers1">Answer 1</label>
+            </li>
+            <li>
+                <input type="text" name="answers" id="answer1" />
+            </li>
+            <li>
+                <label for="answers2">Answer 2</label>
+            </li>
+            <li>
+                <input type="text" name="answers" id="answer2" />
+            </li>
+        </ul>   
+        [%- PROCESS 'lib/tag_thumb_browser.tt' -%]
+
+        <input type="submit" value="Submit Link"/>
+    </fieldset>
+</form>

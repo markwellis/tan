@@ -3,13 +3,13 @@ use Moose;
 
 extends 'Catalyst::Model';
 
-has 'is_number' => (
+has 'int' => (
     'is' => 'ro',
     'isa' => 'RegexpRef',
     'default' => sub { return qr/\d+/ },
 );
 
-has 'isnt_number' => (
+has 'not_int' => (
     'is' => 'ro',
     'isa' => 'RegexpRef',
     'default' => sub { return qr/\D+/ },

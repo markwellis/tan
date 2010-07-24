@@ -152,18 +152,8 @@ sub validate: PathPart('') Chained('location') CaptureArgs(0){
         $c->stash->{'error'} = $error_codes->{'long_title'};
 
     } else {
-        if ($c->stash->{'location'} eq 'link'){
-        #validate link specific details
-            $c->forward('validate_link');
-
-        } elsif ($c->stash->{'location'} eq 'blog') {
-        #validate blog specific details
-            $c->forward('validate_blog');
-
-        } elsif ($c->stash->{'location'} eq 'picture') {
-        #validate picture specific details
-            $c->forward('validate_picture');
-        }
+    #validate location specific details
+        $c->forward('validate_' . $c->stash->{'location'});
     }
 }
 
@@ -257,7 +247,7 @@ sub validate_blog: Private{
 
 =head2 validate_picture: Private
 
-B<@args = undef/>
+B<@args = undef>
 
 B<@params = (pic_url, pic)>
 
@@ -341,6 +331,24 @@ sub validate_picture: Private{
     }
 }
 
+=head2 validate_poll: Private
+
+B<@args = undef>
+
+B<@params = (pic_url, pic)>
+
+=over
+
+validates picture specific details
+
+=back
+
+=cut
+sub validate_poll: Private{
+    my ( $self, $c ) = @_;
+
+}
+
 =head2 post: PathPart('post') Chained('validate') Args(0)
 
 B<@args = undef>
@@ -408,19 +416,7 @@ sub post: PathPart('post') Chained('validate') Args(0){
         $c->detach();
     }
 
-    if ($c->stash->{'location'} eq 'link'){
-    #submit link
-        $c->forward('submit_link');
-
-    } elsif ($c->stash->{'location'} eq 'blog'){
-    #submit blog
-        $c->forward('submit_blog');
-
-    } elsif ($c->stash->{'location'} eq 'picture') {
-    #submit picture
-        $c->forward('submit_picture');
-
-    }
+    $c->forward('submit_' . $c->stash->{'location'});
 
     $c->trigger_event('object_created', $c->stash->{'object'});
 
@@ -559,6 +555,62 @@ sub submit_picture: Private{
 
     if ( !defined($object) || !$object->id ){
         $c->flash->{'message'} = 'Error submitting picture';
+    }
+    $c->stash->{'object'} = $object;
+}
+
+=head2 submit_poll: Private
+
+B<@args = undef>
+
+B<@params = (title, description, cat, end_date, answers[])>
+
+=over
+
+submits a poll
+
+=back
+
+=cut
+sub submit_poll: Private{
+    my ( $self, $c ) = @_;
+
+
+    my $days = $c->req->param('days');
+    my $int_reg = $c->model('CommonRegex')->not_int;
+    $days =~ s/$int_reg//;
+    $days ||= 3;
+
+    my $answers;
+    foreach my $answer ( $c->req->param('answers') ){
+        push(@{$answers}, {
+            'answer' => $answer,
+        });
+    }
+
+    my $object = $c->model('MySQL::Object')->create({
+        'type' => $c->stash->{'location'},
+        'created' => \'NOW()',
+        'promoted' => 0,
+        'user_id' => $c->user->user_id,
+        'nsfw' => 'N',
+        'poll' => {
+            'title' => $c->req->param('title'),
+            'description' => $c->req->param('description'),
+            'picture_id' => $c->req->param('cat'),
+            'end_date' => \"DATE_ADD(NOW(), INTERVAL ${days} DAY)",
+            'answers' => $answers,
+        },
+        'plus_minus' => [{
+            'type' => 'plus',
+            'user_id' => $c->user->user_id,
+        }],
+    });
+
+    $c->forward('add_tags', [$object]) if ( defined($object) );
+
+    if ( !defined($object) || !$object->id ){
+        $c->flash->{'message'} = 'Error submitting poll';
     }
     $c->stash->{'object'} = $object;
 }

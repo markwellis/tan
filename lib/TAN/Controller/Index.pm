@@ -60,7 +60,7 @@ sub index :Path Args(2) {
 
     my $page = $c->req->param('page') || 1;
 
-    my $int_reg = $c->model('CommonRegex')->isnt_number;
+    my $int_reg = $c->model('CommonRegex')->not_int;
     $page =~ s/$int_reg//g;
 
     $upcoming ||= 0;
