@@ -38,7 +38,7 @@ sub main{
         my ( $objects, $pager ) = $searcher->search('title:bacon', 1);
 
         is(scalar(@{$objects}), 1, '"title:bacon" 1 result found');
-        isa_ok($objects->[0], 'KinoSearch::Search::Result::Simple');
+        isa_ok($objects->[0], 'KinoSearch::Simple::Result');
         is($objects->[0]->title, 'title filled with bacon', 'title matches');
     }
 
@@ -46,7 +46,7 @@ sub main{
         my ( $objects, $pager ) = $searcher->search('type:blog', 1);
 
         is(scalar(@{$objects}), 1, '"type:blog" 1 result found');
-        isa_ok($objects->[0], 'KinoSearch::Search::Result::Simple');
+        isa_ok($objects->[0], 'KinoSearch::Simple::Result');
         is($objects->[0]->title, 'this is a title', 'title matches');
     }
 
@@ -54,7 +54,7 @@ sub main{
         my ( $objects, $pager ) = $searcher->search('type:link', 1);
 
         is(scalar(@{$objects}), 2, '"type:link" 2 result found');
-        isa_ok($objects->[0], 'KinoSearch::Search::Result::Simple');
+        isa_ok($objects->[0], 'KinoSearch::Simple::Result');
         is($objects->[0]->title, 'title filled with bacon', 'link 1 title matches');
         is($objects->[1]->title, 'title for link 2', 'link 2 title matches');
     }
@@ -63,7 +63,7 @@ sub main{
         my ( $objects, $pager ) = $searcher->search('type:picture', 1);
 
         is(scalar(@{$objects}), 1, '"type:picture" 1 result found');
-        isa_ok($objects->[0], 'KinoSearch::Search::Result::Simple');
+        isa_ok($objects->[0], 'KinoSearch::Simple::Result');
         is($objects->[0]->title, 'pciture <-wrong not a link or a bg', 'title matches');
     }
 
@@ -71,7 +71,7 @@ sub main{
         my ( $object, $pager ) = $searcher->search( 'id:1' );
         ok($object, 'search reults');
         is( scalar(@{$object}), 1, '1 result');
-        isa_ok($object->[0], 'KinoSearch::Search::Result::Simple');
+        isa_ok($object->[0], 'KinoSearch::Simple::Result');
 
         my ( $not_indexed ) = $searcher->search( 'id:9999' );
         is( $not_indexed, undef, " object id:9999 doesn't exist");
@@ -80,7 +80,7 @@ sub main{
     {
         my ( $object, $pager ) = $searcher->search( 'id:1' );
         ok($object, '"id:1" 1 result found');
-        isa_ok($object->[0], 'KinoSearch::Search::Result::Simple');
+        isa_ok($object->[0], 'KinoSearch::Simple::Result');
 
         $searcher->delete( 'id' => 1);
         $searcher->commit;
@@ -91,7 +91,7 @@ sub main{
     {
         my ( $object, $page ) = $searcher->search( 'id:2' );
         ok($object, 'reults found');
-        isa_ok($object->[0], 'KinoSearch::Search::Result::Simple');
+        isa_ok($object->[0], 'KinoSearch::Simple::Result');
         is($object->[0]->title, 'title for link 2', 'title for link2 is as expected');
         my $old_title = $object->[0]->title;
 
@@ -106,7 +106,7 @@ sub main{
 
         ( $object, $page ) = $searcher->search( 'id:2' );
         ok($object, "object id:2 exists");
-        isa_ok($object->[0], 'KinoSearch::Search::Result::Simple');
+        isa_ok($object->[0], 'KinoSearch::Simple::Result');
         is($object->[0]->title, "updated ${old_title}", 'object updated');
     }
 
@@ -122,7 +122,7 @@ sub main{
 
         my ( $object, $pager ) = $searcher->search( 'id:99' );
         ok($object, 'object id:99 exists');
-        isa_ok($object->[0], 'KinoSearch::Search::Result::Simple');
+        isa_ok($object->[0], 'KinoSearch::Simple::Result');
         is($object->[0]->title, 'update or create test', 'update or create test');
     }
 
