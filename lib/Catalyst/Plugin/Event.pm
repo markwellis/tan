@@ -17,11 +17,6 @@ say for cache managment, index rebuilding etc.
 
 =cut
 
-has '_registered_events' => (
-    'is' => 'ro',
-    'isa' => 'HashRef[ArrayRef]',
-    'default' => sub { return {} },
-);
 my $_registered_events;
 
 after 'setup_finalize' => sub {
