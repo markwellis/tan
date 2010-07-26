@@ -44,6 +44,7 @@ after 'setup_finalize' => sub {
 sub trigger_event{
     my ( $c, $event, @args ) = @_;
 
+    return undef if ( !defined($_registered_events->{ $event }) );
     my @actions = @{$_registered_events->{ $event }};
     return undef if ( !scalar(@actions) );
     foreach my $action ( @actions ){
