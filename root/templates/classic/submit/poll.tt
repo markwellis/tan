@@ -21,16 +21,19 @@
                 <input type="text" name="days" id="days" />
             </li>
             <li>
-                <label for="answers1">Answer 1</label>
+                <label for="answer1">Answer 1</label>
             </li>
             <li>
-                <input type="text" name="answers" id="answer1" />
+                <input type="text" name="answers" id="answer1" class="TAN-poll-answer" />
             </li>
             <li>
-                <label for="answers2">Answer 2</label>
+                <label for="answer2">Answer 2</label>
             </li>
             <li>
-                <input type="text" name="answers" id="answer2" />
+                <input type="text" name="answers" id="answer2" class="TAN-poll-answer" />
+            </li>
+            <li>
+                <a href="#" class="TAN-poll-submit-add-more">Add another</a>
             </li>
         </ul>   
         [%- PROCESS 'lib/tag_thumb_browser.tt' -%]

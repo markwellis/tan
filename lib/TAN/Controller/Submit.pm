@@ -583,9 +583,11 @@ sub submit_poll: Private{
 
     my $answers;
     foreach my $answer ( $c->req->param('answers') ){
-        push(@{$answers}, {
-            'answer' => $answer,
-        });
+        if ( $answer ){
+            push(@{$answers}, {
+                'answer' => $answer,
+            });
+        }
     }
 
     my $object = $c->model('MySQL::Object')->create({

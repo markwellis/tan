@@ -53,4 +53,19 @@ window.addEvent('domready', function() {
 			
 		}
 	});
+
+    $$('.TAN-poll-submit-add-more').addEvent('click', function(e) {
+        e.stop();
+        var number = ($$('.TAN-poll-answer').length + 1);
+
+        var label = new Element('li', {
+            'html': '<label for="answer' + number + '">Answer ' + number + '</label>'
+        });
+
+        var input = new Element('li', {
+            'html': '<input type="text" name="answers" id="answer' + number + '" class="TAN-poll-answer" />'
+        });
+        label.inject(this.getParent(), 'before');
+        input.inject(this.getParent(), 'before');
+    });
 });
