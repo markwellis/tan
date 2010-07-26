@@ -75,26 +75,21 @@ sub vote{
 
 #transaction
 # prevents race condition
-    eval{
-        $self->result_source->schema->txn_do(sub{
-            my $vote = $self->votes->find({
-                'user_id' => $user_id,
-            });
-            
-            if ( $vote ){
-                warn 'here0';
-                return 0;
-            } else {
-                warn 'here1';
-                $self->votes->create({
-                    'user_id' => $user_id,
-                    'answer_id' => $answer_id,
-                });
-                return 1;
-            }
+    $self->result_source->schema->txn_do(sub{
+        my $vote = $self->votes->find({
+            'user_id' => $user_id,
         });
-    };
-    warn $@ if $@;
+        
+        if ( $vote ){
+            return 0;
+        } else {
+            $self->votes->create({
+                'user_id' => $user_id,
+                'answer_id' => $answer_id,
+            });
+            return 1;
+        }
+    });
 }
 
 1;
