@@ -164,16 +164,16 @@ sub index: PathPart('') Chained('location') Args(1) {
         ],
         '+as' => ['created'],
         'prefetch' => ['user', {
-            'object' => ['link', 'blog', 'picture'],
+            'object' => $c->stash->{'location'},
         }],
         'order_by' => 'me.created',
     })->all;
 
-
     $title = eval('$c->stash->{"object"}->' . $c->stash->{'location'} . "->title");
-    $c->stash->{'page_title'} = $title;
-
-    $c->stash->{'template'} = 'view.tt';
+    $c->stash(
+        'page_title' => $title,
+        'template' => 'view.tt',
+    );
 }
 
 =head2 comment: PathPart('_comment') Chained('location') Args(0)
@@ -489,6 +489,62 @@ sub post_saved_comments: Private{
     }
 }
 
+=head2 vote: PathPart('_vote') Chained('location') Args(0)
+
+B<@args = undef>
+
+=over
+
+for voting on a poll
+
+=back
+
+=cut
+sub vote: PathPart('_vote') Chained('location') Args(0) {
+    my ( $self, $c ) = @_;
+
+    if ( $c->user_exists ){
+    # valid user, do work
+        my $poll = $c->model('MySQL::Poll')->find({
+            'poll_id' => $c->stash->{'object_id'},
+        });
+
+        my $vote;
+        if ( $poll ){
+#check if user has already voted
+            $vote = $poll->vote($c->user->user_id, $c->req->param('answer_id'));
+        }
+
+        if ( $vote ){
+            $c->trigger_event('poll_vote', $poll);
+        }
+
+        if ( defined($c->req->param('json')) ){
+        #json
+            $c->res->header('Content-Type' => 'application/json');
+            $c->res->body( to_json({
+                'vote' => $vote || 0,
+            }) );
+        } else {
+        #redirect
+            $c->res->redirect( $poll->object->url );
+        }
+    } else {
+    #prompt for login
+        if ( defined($c->req->param('json')) ){
+        #json
+            $c->res->header('Content-Type' => 'application/json');
+            $c->res->body( to_json({
+                'login' => 1,
+            }) );
+        } else {
+        #redirect
+            $c->res->redirect( '/login/' );
+        }
+    }
+    $c->detach();
+
+}
 =head1 AUTHOR
 
 A clever guy

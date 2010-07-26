@@ -21,13 +21,13 @@ __PACKAGE__->set_primary_key("vote_id");
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:2yuJn4YdJ2YjHiMM992ceQ
 
 __PACKAGE__->belongs_to(
-  "poll",
+  "answer",
   "TAN::Schema::Result::PollAnswer",
   { answer_id => "answer_id" },
 );
 
 __PACKAGE__->belongs_to(
-  "poll",
+  "user",
   "TAN::Schema::Result::User",
   { user_id => "user_id" },
 );

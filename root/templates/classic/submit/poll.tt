@@ -35,6 +35,6 @@
         </ul>   
         [%- PROCESS 'lib/tag_thumb_browser.tt' -%]
 
-        <input type="submit" value="Submit Link"/>
+        <input type="submit" value="Submit Poll"/>
     </fieldset>
 </form>

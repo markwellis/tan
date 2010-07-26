@@ -1,6 +1,5 @@
 [%-
 css_includes.push('view');
-
 js_includes.push('comment');
 
 avatar_http = c.config.avatar_path _ "/" _ object.user_id;
@@ -14,10 +13,10 @@ ELSE;
 END;
 
 SWITCH (object.type);
-    CASE ['link', 'blog'];
-        tmplt = 'lib/index/link.tt';
     CASE 'picture';
         tmplt = 'view/picture.tt';
+    CASE;
+        tmplt = 'lib/index/object.tt';
 END
 %]
 <ul class="TAN-inside">

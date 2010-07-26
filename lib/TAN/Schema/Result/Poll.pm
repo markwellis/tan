@@ -57,4 +57,44 @@ __PACKAGE__->has_many(
   { "foreign.poll_id" => "self.poll_id" },
 );
 
+__PACKAGE__->many_to_many(
+  "votes" => "answers",
+  "votes" 
+);
+
+sub voted{
+    my ( $self, $user_id ) = @_;
+    
+    return $self->votes->find({
+        'user_id' => $user_id,
+    });
+}
+
+sub vote{
+    my ( $self, $user_id, $answer_id ) = @_;
+
+#transaction
+# prevents race condition
+    eval{
+        $self->result_source->schema->txn_do(sub{
+            my $vote = $self->votes->find({
+                'user_id' => $user_id,
+            });
+            
+            if ( $vote ){
+                warn 'here0';
+                return 0;
+            } else {
+                warn 'here1';
+                $self->votes->create({
+                    'user_id' => $user_id,
+                    'answer_id' => $answer_id,
+                });
+                return 1;
+            }
+        });
+    };
+    warn $@ if $@;
+}
+
 1;

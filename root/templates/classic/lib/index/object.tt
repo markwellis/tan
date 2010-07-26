@@ -96,5 +96,36 @@ PROCESS 'lib/plus_minus_box.tt';
         <div class="TAN-blog_wrapper TAN-hr">
             [% object.blog.details %]
         </div>
-    [%- END;
+    [%- ELSIF type == 'poll' -%]
+        <ul class="TAN-poll">
+            [% voted = object.poll.voted(c.user.id) %]
+            [% IF !voted %]
+                <form action="_vote" method="get">
+                <fieldset>
+            [% END %]
+            [% FOREACH poll_answer = object.poll.answers_rs.all %]
+                <li>
+                    [% IF !voted %]
+                        <label for="answer[% loop.count %]">
+                        <input type="radio" value="[% poll_answer.id %]" id="answer[% loop.count %]" name="answer_id" />
+                    [% END %]
+                    [% poll_answer.answer | html %]
+                    <span class="TAN-poll-percent-holder">
+                        <span class="TAN-poll-percent" style="width:[% poll_answer.percent.substr(0, 4) %]%"></span>
+                    </span>
+                    <span class="TAN-poll-percent-voted">
+                        [% poll_answer.percent.substr(0, 4) %]%
+                    </span>
+                    [% IF !voted %]
+                        </label>
+                    [% END %]
+                </li>
+            [% END %]
+            [% IF !voted %]
+                <input type="submit" value="Vote" />
+                </fieldset>
+                </form>
+            [% END %]
+        </ul>
+    [% END;
 END %]

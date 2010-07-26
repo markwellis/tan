@@ -37,4 +37,14 @@ __PACKAGE__->has_many(
   { "foreign.answer_id" => "self.answer_id" },
 );
 
+sub percent{
+    my ( $self ) = @_;
+
+    my $total_votes = $self->poll->votes->count;
+    my $votes = $self->votes->count;
+
+    return 0 if ( !$total_votes || !$votes );
+    return (100 / $total_votes) * $votes;
+}
+
 1;
