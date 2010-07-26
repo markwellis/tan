@@ -637,6 +637,10 @@ sub add_tags: Private {
 
     foreach my $tag ( @tags ){
         $tag =~ s/$tag_reg//g;
+        $tag =~ s/^\s+//;
+        $tag =~ s/\s+$//;
+        next if ( !$tag );
+
         if ( !defined($tags_done->{ $tag }) ){
             $tags_done->{ $tag } = 1;
 
