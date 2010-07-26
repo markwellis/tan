@@ -26,7 +26,7 @@ js_includes.push('profile@avatar');
         </li>
         <li class="TAN-news">
             <h2>
-                Upload new avatar
+                Upload avatar
             </h2>
             <p>
                 Keep your avatar safe for work
@@ -42,6 +42,12 @@ js_includes.push('profile@avatar');
     [% ELSE %]
     [%-# crop page -%]
         <li class="TAN-news">
+            <h2>
+                Crop avatar
+            </h2>
+            <p>
+                Please select the area you wish to have as your avatar
+            </p>
             <img src="[% avatar_http %].no_crop?m=[% avatar_image _ '.no_crop' | file_mtime %]" id="cropper"/>
 
             <form method="post" action="/profile/_avatar/crop" id="crop_form">
