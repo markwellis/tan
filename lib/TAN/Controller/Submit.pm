@@ -346,7 +346,28 @@ validates picture specific details
 =cut
 sub validate_poll: Private{
     my ( $self, $c ) = @_;
+   
+#must have at least 2 answers
 
+    my $description = $c->req->param('description');
+    my $cat = $c->req->param('cat');
+
+    $cat =~ s/$int_reg//g;
+    if (!defined($cat)){
+    #no image selected
+        $c->stash->{'error'} = $error_codes->{'no_image'};
+    }
+
+    if (length($description) < $desc_min){
+    #desc too short
+        $c->stash->{'error'} = $error_codes->{'short_desc'};
+    }
+
+    my @answers = $c->req->param('answers');
+
+    if ( ($answers[0] eq '') || ($answers[1]  eq '') ){
+        $c->stash->{'error'} = 'Must have at least 2 answers';
+    }
 }
 
 =head2 post: PathPart('post') Chained('validate') Args(0)
@@ -405,6 +426,18 @@ sub post: PathPart('post') Chained('validate') Args(0){
                     'title' => $c->req->param('title') || undef,
                     'description' => $c->req->param('description') || undef,
                     'pic_url' => $c->req->param('pic_url') || undef,
+                },
+                'tags' => [
+                    { 'tag' => $c->req->param('tags') || undef }
+                ],
+            });
+        } elsif ( $c->stash->{'location'} eq 'poll' ){
+            $c->flash('object' => {
+                'poll' => {
+                    'title' => $c->req->param('title') || undef,
+                    'description' => $c->req->param('description') || undef,
+                    'picture_id' => $c->req->param('cat') || undef,
+                    'answers' => [map({'answer' => $_}, $c->req->param('answers'))] || undef ,
                 },
                 'tags' => [
                     { 'tag' => $c->req->param('tags') || undef }
