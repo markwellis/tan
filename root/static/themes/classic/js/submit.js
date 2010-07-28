@@ -47,6 +47,13 @@ window.addEvent('domready', function() {
 					            e.stop();
 					        }
 					        break;
+						case 'answer1':
+						case 'answer2':
+                            if (el.value === ''){
+                                TAN.alert("Must have at least 2 answers");
+                                e.stop();
+                            }
+					        break;
 					};
 				}
 			);
