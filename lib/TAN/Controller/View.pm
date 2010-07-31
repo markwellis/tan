@@ -509,31 +509,32 @@ sub vote: PathPart('_vote') Chained('location') Args(0) {
             'poll_id' => $c->stash->{'object_id'},
         });
 
+#check that $poll exists
+#check that $c->req->param('answer_id') exists
         if ( !$poll || !$c->req->param('answer_id') ){
             $c->forward('/default');
             $c->detach;
         }
-#check that $poll exists
-#check that $c->req->param('answer_id') exists
 
-        my $vote;
         if ( $poll ){
+            my $vote;
 #check if user has already voted
-            $vote = $poll->vote($c->user->user_id, $c->req->param('answer_id'));
-        }
 
-        if ( $vote ){
-            $c->trigger_event('poll_vote', $poll);
+            $vote = $poll->vote($c->user->user_id, $c->req->param('answer_id'));
+            if ( $vote ){
+                $c->trigger_event('poll_vote', $poll);
+            }
         }
 
         if ( defined($c->req->param('json')) ){
         #json
             $c->res->header('Content-Type' => 'application/json');
             my @results;
+            my $total_votes = $poll->votes->count;
             foreach my $answer ( $poll->answers->all ){
                 push(@results, {
                     'name' => $answer->answer, 
-                    'percent' => $answer->percent,
+                    'percent' => $answer->percent($total_votes),
                 });
             }
             $c->res->body( to_json(\@results) );

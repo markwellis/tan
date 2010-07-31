@@ -223,6 +223,23 @@ sub get{
 
     my $object_rs = $self->result_source->schema->cache->get('object:' . $object_id);
 
+my $prefetch = [
+    'user',
+    {
+        'tag_objects' => ['tag']
+    },
+];
+
+if ( $location eq 'poll' ){
+    push(@{$prefetch}, {
+        'poll' => {
+            'answers' => ['votes'],
+        },
+    });
+} else {
+    push(@{$prefetch}, $location);
+}
+
     if ( !$object_rs ){  
         $object_rs = $self->find({
             'object_id' => $object_id,
@@ -237,7 +254,7 @@ sub get{
                 \'(SELECT COUNT(*) FROM plus_minus WHERE plus_minus.object_id = me.object_id AND type="minus") minus',
             ],
             '+as' => ['created', 'promoted', 'views', 'external', 'comments', 'plus', 'minus'],
-            'prefetch' => [$location, 'user'],
+            'prefetch' => $prefetch,
             'order_by' => '',
         });
         $self->result_source->schema->cache->set('object:' . $object_id, $object_rs, 600);

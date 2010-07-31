@@ -21,6 +21,10 @@ window.addEvent('domready', function() {
                 'onSuccess': function(results){
                     if ( !$defined(results.login) ){
                         results.each(function(item, index){
+                            var ul = new Element('ul', {
+                                'class': 'TAN-poll'
+                            });
+
                             var li = new Element('li', {
                                 'html': item.name
                             });
@@ -43,7 +47,8 @@ window.addEvent('domready', function() {
                             percent_holder.inject(li);
                             percent.inject(percent_holder);
                             percent_voted.inject(li);
-                            li.inject($('poll_vote_form').getParent());
+                            li.inject(ul);
+                            ul.inject($('poll_vote_form').getParent());
                         });
                         $('poll_vote_form').dispose();
                     } else {

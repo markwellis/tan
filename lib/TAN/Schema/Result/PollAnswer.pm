@@ -38,9 +38,8 @@ __PACKAGE__->has_many(
 );
 
 sub percent{
-    my ( $self ) = @_;
+    my ( $self, $total_votes ) = @_;
 
-    my $total_votes = $self->poll->votes->count;
     my $votes = $self->votes->count;
 
     return 0 if ( !$total_votes || !$votes );
