@@ -613,6 +613,7 @@ sub submit_poll: Private{
     my $int_reg = $c->model('CommonRegex')->not_int;
     $days =~ s/$int_reg//;
     $days ||= 3;
+    $days = ( $days > 31 ) ? 31 : $days;
 
     my $answers;
     foreach my $answer ( $c->req->param('answers') ){

@@ -97,14 +97,15 @@ PROCESS 'lib/plus_minus_box.tt';
             [% object.blog.details %]
         </div>
     [%- ELSIF type == 'poll' -%]
+        </p>
+        [% IF !voted && ends %]
+            <form action="_vote" method="get" id="poll_vote_form">
+            <fieldset>
+        [% END %]
         <ul class="TAN-poll">
-            [% IF !voted %]
-                <form action="_vote" method="get" id="poll_vote_form">
-                <fieldset>
-            [% END %]
             [% FOREACH poll_answer = object.poll.answers_rs.all %]
                 <li>
-                    [% IF !voted %]
+                    [% IF !voted && ends %]
                         <label for="answer[% loop.count %]">
                         <input type="radio" value="[% poll_answer.id %]" id="answer[% loop.count %]" name="answer_id" />
                     [% END %]
@@ -115,16 +116,19 @@ PROCESS 'lib/plus_minus_box.tt';
                     <span class="TAN-poll-percent-voted">
                         [% poll_answer.percent %]%
                     </span>
-                    [% IF !voted %]
+                    [% IF !voted && ends %]
                         </label>
                     [% END %]
                 </li>
             [% END %]
-            [% IF !voted %]
-                <input type="submit" value="Vote" />
-                </fieldset>
-                </form>
-            [% END %]
+            <li>
+                [% ends ? "Ends in $ends" : "Ended" %]
+            </li>
         </ul>
+        [% IF !voted && ends %]
+            <input type="submit" value="Vote" />
+            </fieldset>
+            </form>
+        [% END %]
     [% END;
 END %]

@@ -5,7 +5,7 @@ use warnings;
 
 use base 'DBIx::Class';
 
-__PACKAGE__->load_components("Core");
+__PACKAGE__->load_components(qw/Core InflateColumn::DateTime/);
 __PACKAGE__->table("poll");
 __PACKAGE__->add_columns(
   "poll_id",
@@ -28,10 +28,7 @@ __PACKAGE__->add_columns(
   },
   "end_date",
   {
-    data_type => "TIMESTAMP",
-    default_value => "CURRENT_TIMESTAMP",
-    is_nullable => 0,
-    size => 14,
+      data_type => 'datetime',
   },
 );
 __PACKAGE__->set_primary_key("poll_id");
@@ -61,6 +58,23 @@ __PACKAGE__->many_to_many(
   "votes" => "answers",
   "votes" 
 );
+
+use DateTime;
+use DateTime::Format::Human::Duration;
+
+sub ends{
+    my ( $self ) = @_;
+
+    my $now = DateTime->now;
+    my $formatter = DateTime::Format::Human::Duration->new();
+    my $duration = $now - $self->end_date;
+
+    if ( $duration->is_negative ){
+        return $formatter->format_duration( $duration );
+    }
+
+    return 0;
+}
 
 sub voted{
     my ( $self, $user_id ) = @_;

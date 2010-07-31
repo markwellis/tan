@@ -509,6 +509,10 @@ sub vote: PathPart('_vote') Chained('location') Args(0) {
             'poll_id' => $c->stash->{'object_id'},
         });
 
+        if ( !$poll || !$c->req->param('answer_id') ){
+            $c->forward('/default');
+            $c->detach;
+        }
 #check that $poll exists
 #check that $c->req->param('answer_id') exists
 
