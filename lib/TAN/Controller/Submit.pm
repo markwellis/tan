@@ -608,7 +608,6 @@ submits a poll
 sub submit_poll: Private{
     my ( $self, $c ) = @_;
 
-
     my $days = $c->req->param('days');
     my $int_reg = $c->model('CommonRegex')->not_int;
     $days =~ s/$int_reg//;
