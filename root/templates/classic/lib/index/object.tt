@@ -98,9 +98,8 @@ PROCESS 'lib/plus_minus_box.tt';
         </div>
     [%- ELSIF type == 'poll' -%]
         <ul class="TAN-poll">
-            [% voted = object.poll.voted(c.user.id) %]
             [% IF !voted %]
-                <form action="_vote" method="get">
+                <form action="_vote" method="get" id="poll_vote_form">
                 <fieldset>
             [% END %]
             [% FOREACH poll_answer = object.poll.answers_rs.all %]
@@ -111,10 +110,10 @@ PROCESS 'lib/plus_minus_box.tt';
                     [% END %]
                     [% poll_answer.answer | html %]
                     <span class="TAN-poll-percent-holder">
-                        <span class="TAN-poll-percent" style="width:[% poll_answer.percent.substr(0, 4) %]%"></span>
+                        <span class="TAN-poll-percent" style="width:[% poll_answer.percent%]%"></span>
                     </span>
                     <span class="TAN-poll-percent-voted">
-                        [% poll_answer.percent.substr(0, 4) %]%
+                        [% poll_answer.percent %]%
                     </span>
                     [% IF !voted %]
                         </label>

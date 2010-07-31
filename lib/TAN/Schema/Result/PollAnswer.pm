@@ -44,7 +44,9 @@ sub percent{
     my $votes = $self->votes->count;
 
     return 0 if ( !$total_votes || !$votes );
-    return (100 / $total_votes) * $votes;
+    my $percentage = sprintf("%0.2f", ((100 / $total_votes) * $votes) );
+    $percentage =~ s/\.00//;
+    return $percentage;
 }
 
 1;
