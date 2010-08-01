@@ -6,7 +6,7 @@ use namespace::autoclean;
 use KinoSearch::InvIndexer;
 use KinoSearch::Searcher;
 use KinoSearch::Analysis::PolyAnalyzer;
-use KinoSearch::Search::Result::Simple;
+use KinoSearch::Simple::Result;
 use KinoSearch::Index::Term;
 use KinoSearch::QueryParser::QueryParser;
 use KinoSearch::Search::TermQuery;
@@ -108,7 +108,7 @@ has resultclass => (
     'is' => 'rw',
     'isa' => 'ClassName',
     'lazy' => 1,
-    'default' => 'KinoSearch::Search::Result::Simple',
+    'default' => 'KinoSearch::Simple::Result',
 );
 
 has entries_per_page => (

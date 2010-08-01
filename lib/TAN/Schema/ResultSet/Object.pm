@@ -28,13 +28,13 @@ returns ($index_rs, $pager)
 
 =cut
 my $int_reg = qr/\D+/;
-my $location_reg = qr/^all|link|blog|picture$/;
 my $order_reg = qr/^promoted|plus|minus|views|comments$/;
 
 sub index {
     my ($self, $location, $page, $upcoming, $search, $order, $nsfw, $index_type) = @_;
     
-    if ($location !~ m/$location_reg/){
+    my $location_reg = TAN->model('CommonRegex')->location;
+    if ( ($location ne 'all') && ($location !~ m/$location_reg/) ){
         return undef;
     }
 
@@ -63,7 +63,7 @@ sub index {
         }
 
         if ($location eq 'all'){
-            $type = ['link', 'blog', 'picture'];
+            $type = ['link', 'blog', 'picture', 'poll'];
         } else {
             $type = $location;
         }
@@ -223,6 +223,23 @@ sub get{
 
     my $object_rs = $self->result_source->schema->cache->get('object:' . $object_id);
 
+my $prefetch = [
+    'user',
+    {
+        'tag_objects' => ['tag']
+    },
+];
+
+if ( $location eq 'poll' ){
+    push(@{$prefetch}, {
+        'poll' => {
+            'answers' => ['votes'],
+        },
+    });
+} else {
+    push(@{$prefetch}, $location);
+}
+
     if ( !$object_rs ){  
         $object_rs = $self->find({
             'object_id' => $object_id,
@@ -237,7 +254,7 @@ sub get{
                 \'(SELECT COUNT(*) FROM plus_minus WHERE plus_minus.object_id = me.object_id AND type="minus") minus',
             ],
             '+as' => ['created', 'promoted', 'views', 'external', 'comments', 'plus', 'minus'],
-            'prefetch' => [$location, 'user'],
+            'prefetch' => $prefetch,
             'order_by' => '',
         });
         $self->result_source->schema->cache->set('object:' . $object_id, $object_rs, 600);

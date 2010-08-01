@@ -213,6 +213,17 @@ fieldset{
     background-color:#d61d00 !important;
 }
 
+/* poll */
+
+.TAN-type-poll, .TAN-menu-poll > li > a{
+    color:#36393D;
+}
+
+.TAN-type-poll:hover, .TAN-menu-tab-poll-selected, .TAN-menu-poll > li > a:hover{
+    color:#fff !important;
+    background-color:#36393D !important;
+}
+
 /* ads */
 
 .TAN-top-ad, .TAN-right1-ad, .TAN-right2-ad, .TAN-left-ad, .TAN-bottom-ad{

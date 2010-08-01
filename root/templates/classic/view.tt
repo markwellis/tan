@@ -1,7 +1,13 @@
 [%-
 css_includes.push('view');
-
 js_includes.push('comment');
+IF location == 'poll';
+    voted = object.poll.voted(c.user.id);
+    ends = object.poll.ends;
+    IF ( !voted && ends ) ;
+        js_includes.push('poll');
+    END;
+END;
 
 avatar_http = c.config.avatar_path _ "/" _ object.user_id;
 avatar_image = c.path_to('root') _ avatar_http;
@@ -14,10 +20,10 @@ ELSE;
 END;
 
 SWITCH (object.type);
-    CASE ['link', 'blog'];
-        tmplt = 'lib/index/link.tt';
     CASE 'picture';
         tmplt = 'view/picture.tt';
+    CASE;
+        tmplt = 'lib/index/object.tt';
 END
 %]
 <ul class="TAN-inside">

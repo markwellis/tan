@@ -86,3 +86,46 @@
 	padding-left:15px;
     font-style:italic;
 }
+
+/* poll */
+.TAN-poll li{
+    list-style:none;
+    width:490px;
+    position:relative;
+    padding-bottom:10px;
+    border-bottom:1px solid #EAEAEA;
+}
+
+.TAN-poll label{
+    cursor:pointer;
+    display:block;
+}
+
+.TAN-poll input{
+    float:left;
+}
+
+
+.TAN-poll-percent, .TAN-poll-percent-holder{
+    display:block;
+    height:24px;
+}
+
+.TAN-poll-percent-holder{
+    margin-left:10px;
+    width:400px;
+    border:1px solid #a3a3a3;
+    background-color:#f6f6f6;
+}
+
+.TAN-poll-percent{
+    background-color:#c9c9c9;
+}
+
+.TAN-poll-percent-voted{
+    position:absolute;
+    right:55px;
+    bottom:12px;
+    text-align:left;
+    width:20px;
+}
