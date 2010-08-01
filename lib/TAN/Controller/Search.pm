@@ -10,28 +10,24 @@ use Data::Page;
 sub add_to_index: Event(object_created) Event(object_updated){
     my ( $self, $c, $object ) = @_;
 
-    eval{
-        my $type = $object->type;
+    my $type = $object->type;
 
-        $c->model('Search')->update_or_create({
-            'id' => $object->id,
-            'type' => $object->type,
-            'nsfw' => $object->nsfw,
-            'title' => $object->$type->title,
-            'description' => $object->$type->description,
-        });
+    $c->model('Search')->update_or_create({
+        'id' => $object->id,
+        'type' => $object->type,
+        'nsfw' => $object->nsfw,
+        'title' => $object->$type->title,
+        'description' => $object->$type->description,
+    });
 
-        $c->model('Search')->commit;
-    };
+    $c->model('Search')->commit;
 }
 
 sub delete_from_index: Event(object_deleted){
     my ( $c, $object ) = @_;
 
-    eval{
-        $c->model('Search')->delete( $object->id );
-        $c->model('Search')->commit;
-    };
+    $c->model('Search')->delete( $object->id );
+    $c->model('Search')->commit;
 }
 
 =head1 NAME

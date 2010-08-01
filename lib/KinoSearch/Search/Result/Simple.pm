@@ -1,4 +1,4 @@
-package KinoSearch::Simple::Result;
+package KinoSearch::Search::Result::Simple;
 use Moose;
 use namespace::autoclean;
 

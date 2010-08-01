@@ -1,6 +1,5 @@
 package TAN;
 use Moose;
-use namespace::autoclean;
 
 use Catalyst::Runtime 5.80;
 use Number::Format;
@@ -28,6 +27,7 @@ Main catalyst application
 =head1 METHODS
 
 =cut
+use parent 'Catalyst';
 
 use Catalyst qw/
     ConfigLoader
@@ -42,9 +42,7 @@ use Catalyst qw/
     Event
 /;
 
-extends 'Catalyst';
-
-our $VERSION = 1.4.0;
+our $VERSION = '1.3.2';
 
 # Configure the application.
 #

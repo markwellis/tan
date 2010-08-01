@@ -17,6 +17,11 @@ say for cache managment, index rebuilding etc.
 
 =cut
 
+has '_registered_events' => (
+    'is' => 'ro',
+    'isa' => 'HashRef[ArrayRef]',
+    'default' => sub { return {} },
+);
 my $_registered_events;
 
 after 'setup_finalize' => sub {
@@ -44,7 +49,6 @@ after 'setup_finalize' => sub {
 sub trigger_event{
     my ( $c, $event, @args ) = @_;
 
-    return undef if ( !defined($_registered_events->{ $event }) );
     my @actions = @{$_registered_events->{ $event }};
     return undef if ( !scalar(@actions) );
     foreach my $action ( @actions ){

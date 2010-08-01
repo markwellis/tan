@@ -20,7 +20,7 @@ IF index.defined;
             IF ( (location == 'picture') && fancy_picture_index );
                 PROCESS 'lib/index/picture.tt';
             ELSE;
-                PROCESS 'lib/index/object.tt';
+                PROCESS 'lib/index/link.tt';
             END;
         -%]
         </li>

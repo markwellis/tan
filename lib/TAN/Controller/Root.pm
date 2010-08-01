@@ -164,12 +164,11 @@ loads a random object (based on $location) and redirects to it
 =back
 
 =cut
+my $location_reg = qr/^(all|link|blog|picture)$/;
 sub random: Local Args(1){
     my ( $self, $c, $location ) = @_;
     
-    my $location_reg = $c->model('CommonRegex')->location;
-
-    if ( ($location ne 'all') && ($location !~ m/$location_reg/) ){
+    if ($location !~ m/$location_reg/){
         $location = 'all';
     }
 
@@ -239,7 +238,7 @@ google confirm key
 =back
 
 =cut
-sub google: Path('/google540d7580f0fb6a3b.html'){
+sub google: Path('/googledc796c4dad406173.html'){
     my ( $self, $c ) = @_;
 
     #google just check if the path exists

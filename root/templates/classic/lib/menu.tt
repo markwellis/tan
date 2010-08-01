@@ -4,7 +4,6 @@ menu_tabs = {
     '1Links' => 'link',
     '2Blogs' => 'blog',
     '3Pictures' => 'picture'
-    '3Polls' => 'poll'
 };
 -%]
 <div class="TAN-menu left">
@@ -17,7 +16,7 @@ menu_tabs = {
         </li>
     [% END %]
     </ul>
-    [%- FOREACH value = menu_tabs.values() -%]
+    [%- FOREACH value = ['all', 'link', 'picture', 'blog'] -%]
     <ul class="TAN-menu-[% value %]" [% IF (location == value); "style=\"display:block\""; END %]>
         [% IF (value != 'all') -%]
         <li>

@@ -51,7 +51,7 @@ sub add{
 
     my $deleted = 0;
 #transaction
-# prevents race condition
+# prevents race condition (apparently....)
     eval{
         $self->result_source->schema->txn_do(sub{
             my $plusminus_rs = $self->find({

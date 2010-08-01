@@ -49,7 +49,6 @@ sub recent_comments {
                     'link',
                     'picture',
                     'blog',
-                    'poll',
                 ],
             },
         })->all;

@@ -43,7 +43,7 @@ sub query_end {
             $error .= "\n" . '^='x40 . "\n\n\n";
         }
 
-        $self->print($error);
+        warn $error;
     }
 }
 

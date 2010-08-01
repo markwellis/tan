@@ -60,6 +60,7 @@ checks the location is valid
 =back
 
 =cut
+my $location_reg = qr/^link|blog|picture$/;
 sub location: PathPart('submit') Chained('/') CaptureArgs(1){
     my ( $self, $c, $location ) = @_;
 
@@ -69,7 +70,6 @@ sub location: PathPart('submit') Chained('/') CaptureArgs(1){
         $c->detach();
     }
 
-    my $location_reg = $c->model('CommonRegex')->location;
     if ($location !~ m/$location_reg/){
         $c->forward('/default');
         $c->detach();
@@ -152,8 +152,18 @@ sub validate: PathPart('') Chained('location') CaptureArgs(0){
         $c->stash->{'error'} = $error_codes->{'long_title'};
 
     } else {
-    #validate location specific details
-        $c->forward('validate_' . $c->stash->{'location'});
+        if ($c->stash->{'location'} eq 'link'){
+        #validate link specific details
+            $c->forward('validate_link');
+
+        } elsif ($c->stash->{'location'} eq 'blog') {
+        #validate blog specific details
+            $c->forward('validate_blog');
+
+        } elsif ($c->stash->{'location'} eq 'picture') {
+        #validate picture specific details
+            $c->forward('validate_picture');
+        }
     }
 }
 
@@ -247,7 +257,7 @@ sub validate_blog: Private{
 
 =head2 validate_picture: Private
 
-B<@args = undef>
+B<@args = undef/>
 
 B<@params = (pic_url, pic)>
 
@@ -331,45 +341,6 @@ sub validate_picture: Private{
     }
 }
 
-=head2 validate_poll: Private
-
-B<@args = undef>
-
-B<@params = (pic_url, pic)>
-
-=over
-
-validates picture specific details
-
-=back
-
-=cut
-sub validate_poll: Private{
-    my ( $self, $c ) = @_;
-   
-#must have at least 2 answers
-
-    my $description = $c->req->param('description');
-    my $cat = $c->req->param('cat');
-
-    $cat =~ s/$int_reg//g;
-    if (!defined($cat)){
-    #no image selected
-        $c->stash->{'error'} = $error_codes->{'no_image'};
-    }
-
-    if (length($description) < $desc_min){
-    #desc too short
-        $c->stash->{'error'} = $error_codes->{'short_desc'};
-    }
-
-    my @answers = $c->req->param('answers');
-
-    if ( ($answers[0] eq '') || ($answers[1]  eq '') ){
-        $c->stash->{'error'} = 'Must have at least 2 answers';
-    }
-}
-
 =head2 post: PathPart('post') Chained('validate') Args(0)
 
 B<@args = undef>
@@ -431,25 +402,25 @@ sub post: PathPart('post') Chained('validate') Args(0){
                     { 'tag' => $c->req->param('tags') || undef }
                 ],
             });
-        } elsif ( $c->stash->{'location'} eq 'poll' ){
-            $c->flash('object' => {
-                'poll' => {
-                    'title' => $c->req->param('title') || undef,
-                    'description' => $c->req->param('description') || undef,
-                    'picture_id' => $c->req->param('cat') || undef,
-                    'answers' => [map({'answer' => $_}, $c->req->param('answers'))] || undef ,
-                },
-                'tags' => [
-                    { 'tag' => $c->req->param('tags') || undef }
-                ],
-            });
         }
 
         $c->res->redirect('/submit/' . $c->stash->{'location'} . '/');
         $c->detach();
     }
 
-    $c->forward('submit_' . $c->stash->{'location'});
+    if ($c->stash->{'location'} eq 'link'){
+    #submit link
+        $c->forward('submit_link');
+
+    } elsif ($c->stash->{'location'} eq 'blog'){
+    #submit blog
+        $c->forward('submit_blog');
+
+    } elsif ($c->stash->{'location'} eq 'picture') {
+    #submit picture
+        $c->forward('submit_picture');
+
+    }
 
     $c->trigger_event('object_created', $c->stash->{'object'});
 
@@ -592,64 +563,6 @@ sub submit_picture: Private{
     $c->stash->{'object'} = $object;
 }
 
-=head2 submit_poll: Private
-
-B<@args = undef>
-
-B<@params = (title, description, cat, end_date, answers[])>
-
-=over
-
-submits a poll
-
-=back
-
-=cut
-sub submit_poll: Private{
-    my ( $self, $c ) = @_;
-
-    my $days = $c->req->param('days');
-    my $int_reg = $c->model('CommonRegex')->not_int;
-    $days =~ s/$int_reg//;
-    $days ||= 3;
-    $days = ( $days > 31 ) ? 31 : $days;
-
-    my $answers;
-    foreach my $answer ( $c->req->param('answers') ){
-        if ( $answer ){
-            push(@{$answers}, {
-                'answer' => $answer,
-            });
-        }
-    }
-
-    my $object = $c->model('MySQL::Object')->create({
-        'type' => $c->stash->{'location'},
-        'created' => \'NOW()',
-        'promoted' => 0,
-        'user_id' => $c->user->user_id,
-        'nsfw' => 'N',
-        'poll' => {
-            'title' => $c->req->param('title'),
-            'description' => $c->req->param('description'),
-            'picture_id' => $c->req->param('cat'),
-            'end_date' => \"DATE_ADD(NOW(), INTERVAL ${days} DAY)",
-            'answers' => $answers,
-        },
-        'plus_minus' => [{
-            'type' => 'plus',
-            'user_id' => $c->user->user_id,
-        }],
-    });
-
-    $c->forward('add_tags', [$object]) if ( defined($object) );
-
-    if ( !defined($object) || !$object->id ){
-        $c->flash->{'message'} = 'Error submitting poll';
-    }
-    $c->stash->{'object'} = $object;
-}
-
 =head2 add_tags: Private
 
 B<@args = ($object)>
@@ -672,10 +585,6 @@ sub add_tags: Private {
 
     foreach my $tag ( @tags ){
         $tag =~ s/$tag_reg//g;
-        $tag =~ s/^\s+//;
-        $tag =~ s/\s+$//;
-        next if ( !$tag );
-
         if ( !defined($tags_done->{ $tag }) ){
             $tags_done->{ $tag } = 1;
 
