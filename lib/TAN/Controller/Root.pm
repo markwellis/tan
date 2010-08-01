@@ -243,7 +243,7 @@ sub google: Path('/google540d7580f0fb6a3b.html'){
     my ( $self, $c ) = @_;
 
     #google just check if the path exists
-    $c->res->output(1);
+    $c->res->output('google-site-verification: google540d7580f0fb6a3b.html');
     $c->detach();
 }
 
