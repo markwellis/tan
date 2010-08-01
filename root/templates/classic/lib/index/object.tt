@@ -103,8 +103,11 @@ PROCESS 'lib/plus_minus_box.tt';
             <fieldset>
         [% END %]
         <ul class="TAN-poll">
-            [% total_votes = object.poll.votes_rs.count %]
-            [% FOREACH poll_answer = object.poll.answers_rs.all %]
+            [% 
+            total_votes = object.poll.votes_rs.count;
+            poll_answers = object.poll.answers_rs.search({}, {'order_by' => 'answer_id'});
+            FOREACH poll_answer = poll_answers %]
+                [% percent = poll_answer.percent(total_votes) %]
                 <li>
                     [% IF !voted && ends %]
                         <label for="answer[% loop.count %]">
@@ -112,10 +115,10 @@ PROCESS 'lib/plus_minus_box.tt';
                     [% END %]
                     [% poll_answer.answer | html %]
                     <span class="TAN-poll-percent-holder">
-                        <span class="TAN-poll-percent" style="width:[% poll_answer.percent(total_votes) %]%"></span>
+                        <span class="TAN-poll-percent" style="width:[% percent %]%"></span>
                     </span>
                     <span class="TAN-poll-percent-voted">
-                        [% poll_answer.percent(total_votes) %]%
+                        [% percent %]%
                     </span>
                     [% IF !voted && ends %]
                         </label>

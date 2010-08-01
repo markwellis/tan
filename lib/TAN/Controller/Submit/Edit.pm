@@ -80,6 +80,7 @@ sub index: PathPart('') Chained('validate_user') Args() {
     $c->stash(
         'template' => 'submit.tt',
         'page_title' => 'Edit ' . ($c->stash->{'object'}->$type->title || ''),
+        'edit' => 1,
     );
 }
 
@@ -121,7 +122,6 @@ sub post: PathPart('post') Chained('validate_user') Args(0) {
         });
 
         $c->trigger_event('blog_updated', $c->stash->{'object'});
-
     } elsif ( $c->stash->{'location'} eq 'picture' ){
         $c->stash->{"object"}->update({
             'nsfw' => defined($c->req->param('nsfw')) ? 'Y' : 'N',
@@ -130,6 +130,35 @@ sub post: PathPart('post') Chained('validate_user') Args(0) {
             'title' => $c->req->param('title'),
             'description' => $c->req->param('pdescription'),
         });
+    } elsif ( $c->stash->{'location'} eq 'poll' ){
+        $c->stash->{"object"}->poll->update({
+            'title' => $c->req->param('title'),
+            'description' => $c->req->param('description'),
+            'picture_id' => $c->req->param('cat'),
+        });
+        
+        my @new_answers = $c->req->param('answers');
+        my @existing_answers = $c->stash->{"object"}->poll->answers->search({}, {'order_by' => 'answer_id'})->all;
+
+        my $loop = 0;
+        foreach my $answer ( @new_answers ){
+            if ( $answer ){
+                if ( $existing_answers[$loop] ){
+                    $existing_answers[$loop]->update({
+                        'answer' => $answer,
+                    });
+                } else {
+                    $c->stash->{"object"}->poll->answers->create({
+                        'answer' => $answer,
+                    });
+                }
+            } else {
+                if ( $existing_answers[$loop] ){
+                    $existing_answers[$loop]->delete;
+                }
+            }
+            ++$loop;
+        }
     }
 
     #seems not very nice

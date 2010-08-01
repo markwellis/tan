@@ -65,11 +65,12 @@ sub remove_object_cache:
     Event(comment_created)
     Event(comment_deleted)
     Event(comment_updated)
+    Event(poll_vote)
 {
     my ( $self, $c, $object ) = @_;
 
-    if ( ref($object) eq 'TAN::Model::MySQL::Comments' ){
-    #$object_rs is actually $comment_rs...
+    if ( ref($object) ne 'TAN::Model::MySQL::Object' ){
+    #$object_rs is something else with a ->object relationshop
         $object = $object->object;
     }
 
