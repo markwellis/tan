@@ -225,9 +225,6 @@ sub get{
 
 my $prefetch = [
     'user',
-    {
-        'tag_objects' => ['tag']
-    },
 ];
 
 if ( $location eq 'poll' ){

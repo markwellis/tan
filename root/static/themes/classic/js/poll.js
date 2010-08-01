@@ -52,6 +52,7 @@ window.addEvent('domready', function() {
                         });
                         $('poll_vote_form').dispose();
                     } else {
+                        submit_button.disabled = 0;
                         TAN.login();
                     }
                 },
