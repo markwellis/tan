@@ -134,5 +134,8 @@ PROCESS 'lib/plus_minus_box.tt';
             </fieldset>
             </form>
         [% END %]
+        [% IF total_votes %]
+            Votes: [% total_votes %]
+        [% END %]
     [% END;
 END %]
