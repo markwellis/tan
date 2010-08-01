@@ -5,6 +5,9 @@ use warnings;
 
 use base 'DBIx::Class';
 
+use DateTime;
+use DateTime::Format::Human::Duration;
+
 __PACKAGE__->load_components(qw/Core InflateColumn::DateTime/);
 __PACKAGE__->table("poll");
 __PACKAGE__->add_columns(
@@ -58,9 +61,6 @@ __PACKAGE__->many_to_many(
   "votes" => "answers",
   "votes" 
 );
-
-use DateTime;
-use DateTime::Format::Human::Duration;
 
 sub ends{
     my ( $self ) = @_;
