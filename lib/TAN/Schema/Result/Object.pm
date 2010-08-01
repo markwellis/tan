@@ -69,6 +69,12 @@ __PACKAGE__->might_have(
 );
 
 __PACKAGE__->might_have(
+  "poll",
+  "TAN::Schema::Result::Poll",
+  { "foreign.poll_id" => "self.object_id" },
+);
+
+__PACKAGE__->might_have(
   "old_lookup",
   "TAN::Schema::Result::OldLookup",
   { "foreign.new_id" => "self.object_id" },
