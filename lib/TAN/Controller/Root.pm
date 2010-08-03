@@ -115,7 +115,7 @@ sub error404: Local Args(0){
 
     $c->stash(
         'error_404' => 1,
-        'template' => 'errors/404.tt',
+        'template' => 'Error::404',
     );
 
     $c->response->status(404);

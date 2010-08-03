@@ -97,7 +97,7 @@ sub index :Path Args(2) {
         $c->detach();
     }
     
-    $c->stash->{'template'} = 'index.tt';
+    $c->stash->{'template'} = 'Index';
 }
 
 =head1 AUTHOR

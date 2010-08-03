@@ -1,7 +1,9 @@
 {
     "name": "TAN",
-    "default_view": "TT",
+    "default_view": "Perl",
     "encoding": "UTF-8",
+
+    "google_adcode": "pub-2707046014408987",
 
     "using_frontend_proxy": 1,
 
