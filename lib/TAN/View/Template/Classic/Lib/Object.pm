@@ -13,9 +13,9 @@ sub process{
     my $is_video = 0;
 
     if ( $type eq 'link' ){
-        $is_video = $c->view('Perl')->is_video($object->link->url);
+        $is_video = $c->view->is_video($object->link->url);
         if ( $is_video ){
-            $is_video = $c->view('Perl')->is_video($object->link->url);
+            $is_video = $c->view->embed_url($object->link->url);
         }
     }
 
@@ -49,14 +49,14 @@ sub process{
         <h2>
             <a href="@{[ (($is_video && !$c->stash->{'article'}) ? $object_url : $title_url) ]}" 
                 @{[ ($is_video && !$c->stash->{'article'}) ? '' : 'rel="external nofollow"' ]} class="TAN-type-${type}" title="${title}">
-                @{[ $c->view('Perl')->html($object->$type->title) ]}@{[ $object->nsfw eq "Y" ? '- NSFW' : '' ]}
+                @{[ $c->view->html($object->$type->title) ]}@{[ $object->nsfw eq "Y" ? '- NSFW' : '' ]}
             </a>
         </h2>
-        <img alt="@{[ $c->view('Perl')->html($object->user->username) ]}" src="@{[ $c->stash->{'avatar_http'} ]}?m=@{[ defined($c->stash->{'avatar_mtime'}) ? $c->stash->{'avatar_mtime'} : '' ]}" class="TAN-news-avatar left" />
+        <img alt="@{[ $c->view->html($object->user->username) ]}" src="@{[ $c->stash->{'avatar_http'} ]}?m=@{[ $c->stash->{'avatar_mtime'} || '' ]}" class="TAN-news-avatar left" />
         <ul>
             <li>
-                Posted by <a href="/profile/@{[ $c->view('Perl')->html($object->user->username) ]}/" class="TAN-news-user">
-                    @{[ $c->view('Perl')->html($object->user->username) ]}
+                Posted by <a href="/profile/@{[ $c->view->html($object->user->username) ]}/" class="TAN-news-user">
+                    @{[ $c->view->html($object->user->username) ]}
                 </a>
                 @{[ ( $object->promoted ) ? "promoted @{[ $c->date_ago($object->promoted) ]} ago" : $c->date_ago($object->created) . ' ago' ]}
                 <span class="TAN-type-${type}"> [@{[ $is_video ? "video" : $type ]}]</span>
@@ -69,7 +69,7 @@ sub process{
                      qq#| @{[ $object->get_column('external') || 0 ]} external views#
                 : '' ]}
                 @{[ ( $type eq 'link' ) ?
-                     qq#| @{[ $c->view('Perl')->domain($object->link->url) ]}#
+                     qq#| @{[ $c->view->domain($object->link->url) ]}#
                 : '' ]}
                 @{[ ( $c->user_exists && ($c->user->admin || $c->user->id == $object->user_id) ) ?
                     qq#| <a href="/submit/@{[ $object->$type ]}/edit/@{[ $object->id ]}/" class="TAN-news-comment">
@@ -79,7 +79,7 @@ sub process{
             </li>
         </ul>
         <p>
-            @{[ $c->view('Perl')->nl2br($c->view('Perl')->html($object->$type->description)) ]}
+            @{[ $c->view->nl2br($c->view->html($object->$type->description)) ]}
         </p>\;
 
     if ( $c->stash->{'article'} ){
@@ -95,8 +95,8 @@ sub article{
 
     my $loop = 0;
     foreach my $tag ( $object->tags->all ){
-        if ( $loop > 1 ) {
-            print ',';
+        if ( $loop ) {
+            print ', ';
         }
         print qq\<a href="/tag/@{[ $tag->tag ]}">@{[ $tag->tag ]}</a>\;
         ++$loop;
@@ -128,17 +128,15 @@ sub article{
         }
         print '<ul class="TAN-poll">';
         my $total_votes = $object->poll->votes->count;
-        my $poll_answers = $object->poll->answers->search({}, {'order_by' => 'answer_id'});
         my $loop;
-        foreach my $poll_answer ( $poll_answers ){
+        foreach my $poll_answer ( $object->poll->answers->search({}, {'order_by' => 'answer_id'})->all ){
             my $percent = $poll_answer->percent($total_votes);
             print '<li>';
-            $loop = 0;
             if ( !$c->stash->{'voted'} && $c->stash->{'ends'} ){
                 print qq\<label for="answer${loop}">
-                    <input type="radio" value="@{[$poll_answer->id]}" id="answer${loop}" name="answer_id" />\;
+                    <input type="radio" value="@{[ $poll_answer->id ]}" id="answer${loop}" name="answer_id" />\;
             }
-            print $c->view('Poll')->html($poll_answer->answer);
+            print $c->view->html($poll_answer->answer);
             print qq\<span class="TAN-poll-percent-holder">
                 <span class="TAN-poll-percent" style="width:${percent}%"></span>
                 </span>
@@ -149,6 +147,7 @@ sub article{
                 print '</label>';
             }
             print '</li>';
+            ++$loop;
         }
         print qq\
             <li>
@@ -161,7 +160,7 @@ sub article{
                 </form>\;
         }
 
-        if ( $c->stash->{'total_votes'} ){
+        if ( $total_votes ){
             print "Votes: ${total_votes}";
         }
     }

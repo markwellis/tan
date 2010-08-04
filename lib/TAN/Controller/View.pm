@@ -173,7 +173,7 @@ sub index: PathPart('') Chained('location') Args(1) {
     $title = eval('$c->stash->{"object"}->' . $c->stash->{'location'} . "->title");
     $c->stash(
         'page_title' => $title,
-        'template' => 'view.tt',
+        'template' => 'View',
     );
 }
 
@@ -270,7 +270,7 @@ sub ajax_comment: Private{
     };
     $c->stash->{'object'} = $comment_rs->object;
 
-    $c->stash->{'template'} = 'view/comment.tt';
+    $c->stash->{'template'} = 'View::Comment';
     $c->forward( $c->view('NoWrapper') );
 }
 
@@ -357,7 +357,7 @@ sub edit_comment: PathPart('_edit_comment') Chained('location') Args(1) {
 
     $c->stash->{'comment_id'} = $comment_id;
     $c->stash->{'comment'} = $comment_rs->comment_nobb;
-    $c->stash->{'template'} = 'view/edit_comment.tt';
+    $c->stash->{'template'} = 'View::EditComment';
 
     if ( $c->req->param('ajax') ){
         $c->forward( $c->view('NoWrapper') );

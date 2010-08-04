@@ -10,7 +10,7 @@ sub process{
         'name' => 'classic',
         'display_name' => 'Classic',
         'description' => 'The classic theme v2',
-        'css_path' => "$theme_settings.path/css",
+        'css_path' => "@{[ $theme_settings->{'path'} ]}/css",
         'js_path' => "@{[ $theme_settings->{'path'} ]}/js",
         'image_path' => "@{[ $theme_settings->{'path'} ]}/images",
         %{$theme_settings},

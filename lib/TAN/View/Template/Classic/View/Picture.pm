@@ -1,0 +1,77 @@
+package TAN::View::Template::Classic::View::Picture;
+
+use base 'Catalyst::View::Perl::Template';
+
+sub process{
+    my ( $self, $c ) = @_;
+
+    my $object = $c->stash->{'object'};
+    my $object_size = $c->filesize_h($object->picture->size);
+    my $md = $object->id - ($object->id % 1000);
+
+    my $filename = "@{[$c->config->{'pic_path'} ]}/@{[ $object->picture->filename ]}";
+    my $type = 'picture';
+
+    print qq\
+        <h2 style="margin-left:0px;">
+            <a class="TAN-type-picture" href="${filename}">
+                @{[ $c->view->html($object->picture->title) ]}@{[ ($object->nsfw eq 'Y') ? ' - NSFW' : '' ]}
+            </a>
+        </h2>\;
+
+    $c->view->template('Lib::PlusMinus');
+    print qq\
+        <img alt="@{[ $c->view->html($object->user->username) ]}" src="@{[ $c->stash->{'avatar_http'} ]}?m=@{[ $c->stash->{'avatar_mtime'} || '' ]}" class="TAN-news-avatar left" />
+        <ul>
+            <li>
+                Posted by <a href="/profile/@{[ $c->view->html($object->user->username) ]}/" class="TAN-news-user">@{[ $c->view->html($object->user->username) ]}</a>
+                @{[
+                    ($object->promoted) ? 
+                        qq#promoted @{[ $c->date_ago( $object->promoted ) ]} ago#
+                    : 
+                        qq#@{[ $c->date_ago( $object->created ) ]} ago#
+                ]}
+                <span class="TAN-type-picture"> [picture]</span>
+            </li>
+            <li>
+                <a href="@{[ $c->stash->{'comment_url'} ]}#comments" class="TAN-news-comment">
+                    <img alt="" class="TAN-news-comment-image" src="/static/images/comment.png" />
+                    @{[ $object->get_column('comments') ]}
+                </a>
+                | @{[ $object->get_column('views') ]} views
+                | @{[ $object->picture->x ]}x@{[ $object->picture->y ]}
+                | @{[ $object_size ]}\;
+
+    if ( $c->user_exists && ($c->user->admin || $c->user->id == $object->user_id) ){
+        print qq\
+                | <a href="/submit/@{[ $object->type ]}/edit/@{[ $object->id ]}/" class="TAN-news-comment">Edit</a>\;
+    }
+    print qq\
+            </li>
+        </ul>
+        <span class="TAN-tags" style="margin-left:0px">\;
+
+    my $loop = 0;
+    foreach my $tag ( $object->tags->all ){
+        if ( $loop ){
+            print ', ';
+        }
+        print qq\<a href="/tag/@{[ $tag->tag ]}">@{[ $tag->tag ]}</a>\;
+        ++$loop;
+    }
+    print qq\
+        </span>
+
+    <div class="TAN-video">
+        <a class="big_center_cell" href="${filename}">
+            <img class='big_picture' src="@{[ $c->config->{'thumb_path'} ]}/${md}/@{[ $object->picture->id ]}/600" alt=" "/>
+        </a>
+    </div>\;
+
+    my $description = $object->picture->description;
+    if ( defined($description) ){
+        print $c->view->nl2br($c->view->strip_tags($description));
+    }
+}
+
+1;

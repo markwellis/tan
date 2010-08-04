@@ -8,6 +8,11 @@ with 'Catalyst::Component::InstancePerContext';
 with 'Catalyst::View::Perl::Core';
 
 has 'context' => (is => 'ro');
+has 'namespace' =>(
+    'is' => 'rw',
+    'isa' => 'Str',
+    'default' => 'Template',
+);
 
 sub build_per_context_instance {
     my ($self, $c, @args) = @_;
@@ -55,21 +60,16 @@ sub process{
 sub template{
     my ( $self, $template, @args ) = @_;
 
-    if ( !$self->config->{'namespace'} ){
-    #set default namespace - prob not the place for this...
-        $self->config->{'namespace'} = 'Template';
-    }
-
     my $c = $self->context;
-    my $view = $c->view("@{[ $self->config->{'namespace'} ]}::${template}");
+    my $view = $c->view("@{[ $self->namespace ]}::${template}");
 
     if ( !$view ){
         Catalyst::Exception->throw( "Template '${template}' not found" );
     }
 
-    $c->stats->profile('begin' => "-> ${template}");
+    $c->stats->profile('begin' => " -> ${template}");
     $view->process($c, @args);
-    $c->stats->profile('end' => "-> ${template}");
+    $c->stats->profile('end' => " -> ${template}");
 }
 
 1;

@@ -51,7 +51,7 @@ qq\<!DOCTYPE  html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/
                 <p>
                 @{[ 
                 $c->user_exists ? 
-                    qw#<a href="/profile/@{[ $c->view('Perl')->html($c->user->username) ]}/">Profile</a> | #
+                    qq#<a href="/profile/@{[ $c->view('Perl')->html($c->user->username) ]}/">Profile</a> | #
                 : 
                     '<a href="/login/">Login/Register</a> | ' 
                 ]}
@@ -81,7 +81,7 @@ qq\<!DOCTYPE  html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/
         //<![CDATA[
             @{[ 
             defined($c->stash->{'message'}) ? 
-                qw#window.addEvent('domready', function(){
+                qq#window.addEvent('domready', function(){
                     TAN.alert("@{[ $c->view->html($c->view->trim($c->stash->{'message'})) ]}");
                     });#
             : '' 
@@ -92,7 +92,7 @@ qq\<!DOCTYPE  html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/
         </script>
         @{[
         defined($c->stash->{'message'}) ?
-            qw#<noscript>
+            qq#<noscript>
             <h1>@{[ $c->stash->{'message'} ]}</h1>
             </noscript>#
         : ''
