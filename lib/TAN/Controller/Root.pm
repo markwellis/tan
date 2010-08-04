@@ -202,7 +202,7 @@ sub chat: Local Args(0){
 
     $c->stash(
         'page_title' => 'Chat',
-        'template' => 'chat.tt',
+        'template' => 'Chat',
     );
 }
 
@@ -224,7 +224,7 @@ sub faq: Local Args(0){
 
     $c->stash(
         'page_title' => 'FAQ',
-        'template' => 'faq.tt',
+        'template' => 'FAQ',
     );
 }
 
