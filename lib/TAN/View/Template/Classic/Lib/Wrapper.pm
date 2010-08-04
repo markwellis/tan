@@ -27,7 +27,7 @@ qq\<!DOCTYPE  html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/
         </head>
         <body>\;
     $c->view->template('Lib::JsIncludes');
-    print qq\<div class="TAN-header">
+    print qq+<div class="TAN-header">
             <h1 class="TAN-logo">
                 <a title="This Aint News" href="/index/all/0/">This Aint News</a>
             </h1>
@@ -35,7 +35,7 @@ qq\<!DOCTYPE  html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/
                 <form class="right" method="post" action="https://www.paypal.com/cgi-bin/webscr">
                     <fieldset>
                         <input type="hidden" value="_xclick" name="cmd" />
-                        <input type="hidden" value="donate@thisaintnews.com" name="business" />
+                        <input type="hidden" value="donate\@thisaintnews.com" name="business" />
                         <input type="hidden" value="TAN Donation" name="item_name" />
                         <input type="hidden" value="mrbig4545" name="item_number" />
                         <input type="hidden" value="GBP" name="currency_code" />
@@ -65,7 +65,7 @@ qq\<!DOCTYPE  html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/
                     </fieldset>
                 </form>
             </div>
-            <div class="TAN-menu-ad-holder">\;
+            <div class="TAN-menu-ad-holder">+;
     $c->view->template('Lib::Menu');
     $c->view->template('Lib::Ad', 'top');
     print qq\

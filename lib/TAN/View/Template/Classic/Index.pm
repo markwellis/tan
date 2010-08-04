@@ -9,9 +9,9 @@ sub process{
     $c->stash->{'fancy_picture_index'} = 1;
     $c->view->template('Lib::Index');
 
-    $c->stash->{'pager'} = $c->stash->{'index'}->{'pager'};
-
     print '</ul>';
+
+    $c->stash->{'pager'} = $c->stash->{'index'}->{'pager'};
     $c->view->template('Lib::Index::Pagination');
 }
 

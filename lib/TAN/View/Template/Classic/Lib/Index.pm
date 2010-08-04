@@ -45,6 +45,11 @@ sub process{
             print '</li>';
             ++$loop;
         }
+    } else {
+        print qq\
+            <li class="TAN-news">
+                <h1>Nothing found</h1>
+            </li>\;
     }
 }
 
