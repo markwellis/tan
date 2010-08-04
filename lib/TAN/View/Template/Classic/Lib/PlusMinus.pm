@@ -17,7 +17,7 @@ sub process{
             </div>
             <div class="TAN-minus">
                 <span>@{[ $object->get_column('minus') ]}</span>
-                <a href="/view/${type}/@{[ $object->$type->id ]}/_plus" @{[ ($object->{'meminus'}) ? 'class="TAN-minus-selected"' : '' ]}>AintNews</a>
+                <a href="/view/${type}/@{[ $object->$type->id ]}/_minus" @{[ ($object->{'meminus'}) ? 'class="TAN-minus-selected"' : '' ]}>AintNews</a>
             </div>
         </div>\;
 }

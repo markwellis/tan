@@ -8,7 +8,7 @@ sub process{
     print qq\<div class="TAN-comment_wrapper">\;
     
     if ( $c->stash->{'object'}->comments ){
-        foreach my $comment ( ($c->stash->{'comments'}) ){
+        foreach my $comment ( @{$c->stash->{'comments'}} ){
             $c->view->template('View::Comment', $comment);
         }
 

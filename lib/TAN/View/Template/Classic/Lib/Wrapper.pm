@@ -5,7 +5,7 @@ use Time::HiRes qw/time/;
 use base 'Catalyst::View::Perl::Template';
 
 sub process{
-    my ( $self, $c ) = @_;
+    my ( $self, $c, $content ) = @_;
 
     my $page_title = $c->view('Perl')->html($c->stash->{'page_title'});
     if ( $page_title ){
@@ -97,7 +97,7 @@ qq\<!DOCTYPE  html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/
             </noscript>#
         : ''
         ]}
-        @{[ $c->stash->{'content'} ]}
+        ${content}
     </div>
     <div id="TAN-bottom"></div>
     <div class="TAN-footer">

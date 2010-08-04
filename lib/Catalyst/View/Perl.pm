@@ -22,6 +22,15 @@ sub build_per_context_instance {
 sub process{
     my ( $self, $c ) = @_;
 
+    if ( !$c->stash->{'template'} ){
+        Catalyst::Exception->throw( "No Template specified" );
+    }
+
+    $c->response->body( $self->render($c, $c->stash->{'template'}) );
+}
+
+sub render{
+    my ( $self, $c, $template, @args ) = @_;
 #redirect stdout so we can print template output 
     my ( $content, $output );
 
@@ -33,14 +42,13 @@ sub process{
         $self->template( $self->config->{'config'} );
     }
 
-    $self->template($c->stash->{'template'});
+    $self->template($template, @args);
     close(STDOUT);
 
     if ( $self->config->{'wrapper'} ){
         open(STDOUT, '>', \$output);
 
-        $c->stash( 'content' => $content );
-        $self->template( $self->config->{'wrapper'} );
+        $self->template( $self->config->{'wrapper'}, $content );
 
         close(STDOUT);
     } else {
@@ -54,7 +62,7 @@ sub process{
         $c->response->content_type('text/html; charset=utf-8');
     }
 
-    $c->res->body( $output );
+    return $output;
 }
 
 sub template{

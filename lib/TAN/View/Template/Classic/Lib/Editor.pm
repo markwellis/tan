@@ -13,9 +13,9 @@ sub process{
     my $edname = defined($editor->{'name'}) ? $editor->{'name'} : 'editor';
 
     print qq\
-        <textarea class="${edname}" style="height:${edheight};width:${edwidth}" id="${edname}" name="${edname}" rows="80" cols="20">
-            @{[ $c->view->html($editor->{'value'}) || '' ]}
-        </textarea>
+        <textarea class="${edname}" style="height:${edheight};width:${edwidth}" id="${edname}" name="${edname}" rows="80" cols="20">@{[ 
+            $c->view->html($editor->{'value'}) || '' 
+        ]}</textarea>
 
         <script type="text/javascript">
         //<![CDATA[

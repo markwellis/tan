@@ -2,9 +2,11 @@ package TAN::View::NoWrapper;
 use strict;
 use warnings;
 
-use base 'TAN::View::TT';
+use base 'TAN::View::Perl';
 
-__PACKAGE__->config(WRAPPER => '');
+__PACKAGE__->config(
+    'wrapper' => '',
+);
 
 =head1 NAME
 
