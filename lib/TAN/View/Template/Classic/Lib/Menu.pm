@@ -36,20 +36,30 @@ sub process{
         <ul class="TAN-menu-${value}" @{[ ($location eq $value) ? 'style="display:block"' : '' ]}>\;
 
         if ( $value ne 'all' ){
-         print qq\
-            <li>
-                <a href="/submit/${value}/">Submit</a>
-            </li>\;
+             print qq\
+                <li>
+                    <a href="/submit/${value}/">Submit</a>
+                </li>\;
         }
         print qq\
             <li>
                 <a href="/random/${value}/">Random</a>
             </li>
             <li>
-                <a href="/index/${value}/0/" @{[ ( ($location eq $value) && (defined($c->stash->{'upcoming'}) && $c->stash->{'upcoming'} == 0) ) ? qq#class="TAN-menu-tab-${location}-selected"# : '' ]}>Promoted</a>
+                <a href="/index/${value}/0/" @{[ 
+                    ( ($location eq $value) && (defined($c->stash->{'upcoming'}) && $c->stash->{'upcoming'} == 0) ) ? 
+                        qq#class="TAN-menu-tab-${location}-selected"# 
+                    : 
+                        '' 
+                    ]}>Promoted</a>
             </li>
             <li class="TAN-menu-last">
-                <a href="/index/${value}/1/" @{[ ( ($location eq $value) && ($c->stash->{'upcoming'}) ) ? qq#class="TAN-menu-tab-${location}-selected"# : '' ]}>Upcoming</a>
+                <a href="/index/${value}/1/" @{[
+                    ( ($location eq $value) && ($c->stash->{'upcoming'}) ) ? 
+                        qq#class="TAN-menu-tab-${location}-selected"# 
+                    :
+                        '' 
+                    ]}>Upcoming</a>
             </li>
         </ul>\;
     }

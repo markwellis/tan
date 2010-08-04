@@ -21,17 +21,15 @@ sub process{
 
             my $avatar_http = $c->config->{'avatar_path'} . "/" . $object->user_id;
             my $avatar_image = $c->path_to('root') . $avatar_http;
-            my $avatar_exists = $c->view('Perl')->file_exists($avatar_image);
 
             $c->stash(
                 'object' => $object,
                 'avatar_http' => $avatar_http,
                 'avatar_image' => $avatar_image,
-                'avatar_exists' => $avatar_exists,
             );
 
-            if ( $avatar_exists ){
-                $c->stash->{'avatar_mtime'} = $c->view('Perl')->file_exists($avatar_image);
+            if ( -e $avatar_image ){
+                $c->stash->{'avatar_mtime'} = $c->view('Perl')->file_mtime($avatar_image);
             } else {
                 $c->stash->{'avatar_http'} = $c->config->static_path . '/images/_user.png';
             }

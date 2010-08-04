@@ -70,4 +70,26 @@ sub nl2br{
     return $text;
 }
 
+=head2 trim
+
+B<@args = ($text)>
+
+=over
+
+trims a string
+
+=back
+
+=cut
+my $ltrim = qr/^\s+/;
+my $rtrim = qr/\s+$/;
+sub trim{
+    my ( $self, $string ) = @_;
+
+    $string =~ s/$ltrim//;
+    $string =~ s/$rtrim//;
+
+    return $string
+}
+
 1;

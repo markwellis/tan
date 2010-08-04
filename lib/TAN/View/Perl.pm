@@ -15,23 +15,6 @@ __PACKAGE__->config({
     'wrapper' => 'Lib::Wrapper',
 });
 
-=head2 file_exists
-
-B<@args = ($file)>
-
-=over
-
-true if a file exists
-
-=back
-
-=cut
-sub file_exists{
-    my ( $self, $file ) = @_;
-    
-    return (-e $file) ? 1 : 0; 
-}
-
 =head2 file_mtime
 
 B<@args = ($file)>

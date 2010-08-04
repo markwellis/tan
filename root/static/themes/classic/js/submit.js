@@ -63,7 +63,7 @@ window.addEvent('domready', function() {
 
     $$('.TAN-poll-submit-add-more').addEvent('click', function(e) {
         e.stop();
-        var number = ($$('.TAN-poll-answer').length + 1);
+        var number = $$('.TAN-poll-answer').length;
 
         var label = new Element('li', {
             'html': '<label for="answer' + number + '">Answer ' + number + '</label>'

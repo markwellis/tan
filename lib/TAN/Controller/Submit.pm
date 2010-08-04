@@ -95,7 +95,7 @@ loads the submit template
 sub index: PathPart('') Chained('location') Args(0) {
     my ( $self, $c ) = @_;
 
-    $c->stash->{'template'} = 'submit.tt';
+    $c->stash->{'template'} = 'Submit';
 }
 
 
