@@ -11,7 +11,7 @@ sub process{
     my $object = $c->stash->{'object'};
 
     if ( $c->stash->{'location'} eq 'poll' ){
-        $c->stash->{'voted'} = $object->poll->voted($c->user->id);
+        $c->stash->{'voted'} = ($c->user_exists) ? $object->poll->voted($c->user->id) : undef;
         $c->stash->{'ends'} = $object->poll->ends;
 
         if ( !$c->stash->{'voted'} && $c->stash->{'ends'} ){

@@ -51,7 +51,7 @@ sub index: Path Args(0){
 
     $c->flash->{'ref'} = defined($c->req->referer) ? $c->req->referer : '/';
     
-    $c->stash->{'template'} = 'login/forgot/index.tt';
+    $c->stash->{'template'} = 'Login::Forgot::Index';
 }
 
 =head2 step1: Local
@@ -93,7 +93,7 @@ sub step1: Local{
             'Subject' => 'User Details',
             'Content-Type' => 'text/html',
         ],
-        'body' => $c->view('NoWrapper')->render( $c, 'login/forgot/email.tt' ),
+        'body' => $c->view('NoWrapper')->render( $c, 'Login::Forgot::Email' ),
     );
 
 #add a message and redirect user somewhere...
@@ -152,7 +152,7 @@ sub step2: Local Args(2){
 
     $c->stash->{'token'} = $token;
     $c->stash->{'user_id'} = $user_id;
-    $c->stash->{'template'} = 'login/forgot/step2.tt';
+    $c->stash->{'template'} = 'Login::Forgot::Step2';
 }
 
 =head1 AUTHOR
