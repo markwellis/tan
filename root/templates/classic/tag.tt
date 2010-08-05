@@ -1,6 +1,0 @@
-<ul class="TAN-inside">
-    [% PROCESS 'lib/index.tt' %]
-    <li>
-        [% PROCESS 'lib/index/pagination.tt' pager=index.pager %]
-    </li>
-</ul>
