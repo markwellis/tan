@@ -109,6 +109,7 @@ __PACKAGE__->many_to_many(
   "tag" 
 );
 
+my $url_title = qr/[^a-zA-Z0-9]/;
 sub url_title{
     my ( $self ) = @_;
 
@@ -121,7 +122,8 @@ sub url_title{
         $title .= '-NSFW';
     }
 
-    return TAN::View::Perl::url_title($title);
+    $title =~ s/$url_title/-/g;
+    return $title;
 }
 
 sub url{
