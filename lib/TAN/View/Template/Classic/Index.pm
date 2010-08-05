@@ -33,7 +33,7 @@ sub process{
                 if ( -e $avatar_image ){
                     $c->stash->{'avatar_mtime'} = $c->view('Perl')->file_mtime($avatar_image);
                 } else {
-                    $c->stash->{'avatar_http'} = $c->config->static_path . '/images/_user.png';
+                    $c->stash->{'avatar_http'} = $c->config-{'static_path'} . '/images/_user.png';
                 }
 
                 if ( $is_picture ){
