@@ -18,7 +18,7 @@ sub process{
     }
     print '<li>';
 
-    $c->view->template('Lib::Index::Pagination', $c->stash->{'comments'}->pager);
+    $c->view->template('Index::Pagination', $c->stash->{'comments'}->pager);
 
     print qq\</li>
         </ul>\;

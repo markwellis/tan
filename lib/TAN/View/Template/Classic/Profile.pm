@@ -13,29 +13,21 @@ sub process{
         );
     }
 
-    my $comments = $user->comments->search({
-        'deleted' => 'N',
-    });
+    my $comment_count = $user->comments->count || 0;
+    my $link_count = $user->objects->search({
+            'type' => 'link',
+            %search_opts,
+        })->count || 0;
 
-    my $links = $user->objects->search({
-        'type' => 'link',
-        %search_opts,
-    });
+    my $blog_count = $user->objects->search({
+            'type' => 'blog',
+            %search_opts,
+        })->count || 0;
 
-    my $blogs = $user->objects->search({
-        'type' => 'blog',
-        %search_opts,
-    });
-
-    my $pictures = $user->objects->search({
-        'type' => 'picture',
-        %search_opts,
-    });
-
-    my $comment_count = $comments->count || 0;
-    my $link_count = $links->count || 0;
-    my $blog_count = $blogs->count || 0;
-    my $pic_count = $pictures->count || 0;
+    my $pic_count = $user->objects->search({
+            'type' => 'picture',
+            %search_opts,
+        })->count || 0;
 
     push(@{$c->stash->{'css_includes'}}, 'profile');
 
