@@ -230,7 +230,7 @@ sub comment: PathPart('_comment') Chained('location') Args(0) {
 
         if ( defined($object_rs) ){
         #redirect to the object
-            $c->res->redirect( $object_rs->object->url . "#comment${comment_id}" );
+            $c->res->redirect( "@{[ $object_rs->object->url ]}#comment@{[ $comment_id || 's' ]}" );
             $c->detach();
         } else {
         #no object, redirect to /
