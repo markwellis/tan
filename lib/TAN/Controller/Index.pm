@@ -94,11 +94,6 @@ sub index :Path Args(2) {
             $c->stash->{'fancy_picture_index'} = 1;
         }
     }
-
-    if ( !$c->stash->{'index'} ){
-        $c->forward('/default');
-        $c->detach();
-    }
     
     $c->stash->{'template'} = 'Index';
 }
