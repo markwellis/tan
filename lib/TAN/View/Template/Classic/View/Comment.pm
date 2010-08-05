@@ -35,7 +35,7 @@ sub process{
 
     print qq\
                 <li>
-                    <img class="TAN-news-avatar TAN-comment_avatar" src="${avatar_http}" alt="@{[ $c->view->html($comment->user->username) ]}" />
+                    <img class="TAN-news-avatar TAN-comment_avatar" src="${avatar_http}?m=${avatar_mtime}" alt="@{[ $c->view->html($comment->user->username) ]}" />
                 </li>
                 <li>
                     Comment #@{[ $comment->number || 1 ]}

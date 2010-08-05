@@ -1,12 +1,11 @@
-package TAN::View::Template::Classic::Lib::Index::Pagination;
+package TAN::View::Template::Classic::Index::Pagination;
 
 use base 'Catalyst::View::Perl::Template';
 
 sub process{
-    my ( $self, $c ) = @_;
+    my ( $self, $c, $pager ) = @_;
 
     my $order = $c->stash->{'order'};
-    my $pager = $c->stash->{'pager'};
 
     if ( !$pager ){
     #no pager

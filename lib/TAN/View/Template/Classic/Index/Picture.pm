@@ -1,4 +1,4 @@
-package TAN::View::Template::Classic::Lib::Index::Picture;
+package TAN::View::Template::Classic::Index::Picture;
 
 use base 'Catalyst::View::Perl::Template';
 

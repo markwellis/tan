@@ -90,6 +90,9 @@ sub index :Path Args(2) {
             'order' => $order,
             'page_title' => ($upcoming ? 'Upcoming ' : 'Promoted ') . ucfirst($location) . ($location ne 'all' ? 's' : '' ),
         );
+        if ( $location eq 'picture' ){
+            $c->stash->{'fancy_picture_index'} = 1;
+        }
     }
 
     if ( !$c->stash->{'index'} ){
