@@ -121,7 +121,7 @@ sub url_title{
         $title .= '-NSFW';
     }
 
-    return TAN::View::TT::url_title($title);
+    return TAN::View::Perl::url_title($title);
 }
 
 sub url{
