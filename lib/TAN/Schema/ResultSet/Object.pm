@@ -184,7 +184,7 @@ sub random{
     my $search = {};
     if ($location eq 'all'){
         my $rand = int(rand(3));
-        my @types = ('link', 'blog', 'picture');
+        my @types = ('link', 'blog', 'picture', 'poll');
         $location = $types[$rand];
     }
     $search->{'type'} = $location;
