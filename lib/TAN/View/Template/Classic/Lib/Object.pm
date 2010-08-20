@@ -68,6 +68,9 @@ sub process{
                 @{[ ( ($type eq 'link') && (!$is_video) ) ?
                      qq#| @{[ $object->get_column('external') || 0 ]} external views#
                 : '' ]}
+                @{[ ( ($type eq 'poll') ) ?
+                     qq#| @{[ $object->poll->votes || 0 ]} votes#
+                : '' ]}
                 @{[ ( $type eq 'link' ) ?
                      qq#| @{[ $c->view->domain($object->link->url) ]}#
                 : '' ]}
@@ -158,10 +161,6 @@ sub article{
             print qq\<input type="submit" value="Vote" />
                 </fieldset>
                 </form>\;
-        }
-
-        if ( $total_votes ){
-            print "Votes: ${total_votes}";
         }
     }
 }
