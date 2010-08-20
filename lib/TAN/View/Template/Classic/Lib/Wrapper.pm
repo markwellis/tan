@@ -102,8 +102,6 @@ qq\<!DOCTYPE  html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/
     <div id="TAN-bottom"></div>
     <div class="TAN-footer">
         @{[ substr(time - $c->stash->{'start_time'}, 0, 4) ]} seconds,
-        @{[ $sql_queries ? "${sql_queries} " : '' ]}
-        @{[ ($sql_queries == 1) ? 'query,' : 'queries,' ]}
         version @{[ $c->VERSION ]}
         <span class="right"><a href="#">Up</a>&#160;<a href="#TAN-bottom">Down</a></span>
     </div>
