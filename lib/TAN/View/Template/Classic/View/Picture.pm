@@ -27,9 +27,9 @@ sub process{
                 Posted by <a href="/profile/@{[ $c->view->html($object->user->username) ]}/" class="TAN-news-user">@{[ $c->view->html($object->user->username) ]}</a>
                 @{[
                     ($object->promoted) ? 
-                        qq#promoted @{[ $c->date_ago( $object->promoted ) ]} ago#
+                        qq#promoted @{[ $object->promoted ]} ago#
                     : 
-                        qq#@{[ $c->date_ago( $object->created ) ]} ago#
+                        qq#@{[ $object->created ]} ago#
                 ]}
                 <span class="TAN-type-picture"> [picture]</span>
             </li>

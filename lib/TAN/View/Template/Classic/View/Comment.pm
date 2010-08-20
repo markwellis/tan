@@ -18,7 +18,7 @@ sub process{
     if ( $comment->created ){
         print qq\
                 <li>
-                    @{[ $c->date_ago($comment->created) ]}&#160;ago
+                    @{[ $comment->created ]}&#160;ago
                 </li>\;
     }
 

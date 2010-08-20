@@ -160,10 +160,6 @@ sub index: PathPart('') Chained('location') Args(1) {
         'me.object_id' => $c->stash->{'object_id'},
         'me.deleted' => 'N',
     },{
-        '+select' => [
-            { 'unix_timestamp' => 'me.created' },
-        ],
-        '+as' => ['created'],
         'prefetch' => ['user', {
             'object' => $c->stash->{'location'},
         }],

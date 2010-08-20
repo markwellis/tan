@@ -161,68 +161,6 @@ sub nsfw{
     return $nsfw_res_val || $nsfw_req_val || 0;
 }
 
-=head2 date_ago
-
-B<@args = ($date)>
-
-=over
-
-returns how long aog a unix date was in the format x days x hours etc
-
-=back
-
-=cut
-sub date_ago{
-    my ($c, $date) = @_;
-
-    my $blocks = [
-        {
-            'name' => 'year',
-            'amount' => 60*60*24*365,
-        },
-        {
-            'name' => 'month',
-            'amount' => 60*60*24*31
-        },
-        {
-            'name' => 'day',
-            'amount' => 60*60*24,
-        },
-        {
-            'name' => 'hour',
-            'amount' => 60*60,
-        },
-        {
-            'name' => 'minute',
-            'amount' => 60,
-        },
-        {
-            'name' => 'second',
-            'amount' => 1,
-        },
-    ];
-   
-    my $diff = abs( $date - time );
-   
-    my $i = 0;
-    my @result;
-
-    foreach my $block (@{$blocks}) {
-        if ($i > 1) {
-            last;
-        }
-        if ($diff/$block->{'amount'} >= 1) {
-            ++$i;
-            my $amount = floor($diff/$block->{'amount'});
-            
-            my $plural = ($amount>1) ? 's' : '';
-            push(@result, "${amount}&#160;" . $block->{'name'} . $plural);
-            $diff -= $amount*$block->{'amount'};
-        }
-    }
-    return join(' ',@result);
-}
-
 =head2 recent_comments
 
 B<@args = undef>

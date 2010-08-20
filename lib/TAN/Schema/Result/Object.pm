@@ -5,7 +5,10 @@ use warnings;
 
 use base 'DBIx::Class';
 
-__PACKAGE__->load_components("Core");
+use DateTime;
+use DateTime::Format::Human::Duration;
+
+__PACKAGE__->load_components(qw/Core InflateColumn::DateTime/);
 __PACKAGE__->table("object");
 __PACKAGE__->add_columns(
   "object_id",
@@ -14,18 +17,20 @@ __PACKAGE__->add_columns(
   { data_type => "ENUM", default_value => undef, is_nullable => 0, size => 7 },
   "created",
   {
-    data_type => "TIMESTAMP",
-    default_value => "CURRENT_TIMESTAMP",
-    is_nullable => 0,
-    size => 14,
+      data_type => 'datetime',
+      is_nullable => 0,
+      datetime_undef_if_invalid => 1,
+      size => 14,
+      accessor => '_created',
   },
   "promoted",
   {
-    data_type => "TIMESTAMP",
-    default_value => undef,
-    is_nullable => 1,
-    size => 14,
-    datetime_undef_if_invalid => 1,
+      data_type => 'datetime',
+      datetime_undef_if_invalid => 1,
+      default_value => undef,
+      is_nullable => 1,
+      size => 14,
+      accessor => '_promoted',
   },
   "user_id",
   { data_type => "BIGINT", default_value => undef, is_nullable => 0, size => 20 },
@@ -37,6 +42,31 @@ __PACKAGE__->set_primary_key("object_id");
 
 # Created by DBIx::Class::Schema::Loader v0.04006 @ 2009-11-04 22:01:20
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:zHtxjN50TOUzr4b7Jb877A
+
+sub created{
+    my ( $self ) = @_;
+
+    return $self->date_ago( $self->_created );
+}
+
+sub promoted{
+    my ( $self ) = @_;
+
+    return $self->date_ago( $self->_promoted );
+}
+
+sub date_ago{
+    my ( $self, $date ) = @_;
+
+    return undef if !$date;
+
+    my $now = DateTime->now;
+    my $formatter = DateTime::Format::Human::Duration->new();
+    my $duration = $now - $date;
+
+    my @formatted = split(', ', $formatter->format_duration( $duration ));
+    return join(' ', @formatted[0,1]);
+}
 
 __PACKAGE__->belongs_to(
   "user",

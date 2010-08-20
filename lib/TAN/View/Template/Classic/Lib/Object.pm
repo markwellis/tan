@@ -58,7 +58,7 @@ sub process{
                 Posted by <a href="/profile/@{[ $c->view->html($object->user->username) ]}/" class="TAN-news-user">
                     @{[ $c->view->html($object->user->username) ]}
                 </a>
-                @{[ ( $object->promoted ) ? "promoted @{[ $c->date_ago($object->promoted) ]} ago" : $c->date_ago($object->created) . ' ago' ]}
+                @{[ ( $object->promoted ) ? "promoted @{[ $object->promoted ]} ago" : $object->created . ' ago' ]}
                 <span class="TAN-type-${type}"> [@{[ $is_video ? "video" : $type ]}]</span>
             </li>
             <li>
