@@ -1,6 +1,7 @@
 package Catalyst::View::Perl;
 
 use Moose;
+use IO::Capture::Stdout;
 
 extends 'Catalyst::View';
 
@@ -13,6 +14,8 @@ has 'namespace' =>(
     'isa' => 'Str',
     'default' => 'Template',
 );
+
+no Moose;
 
 sub build_per_context_instance {
     my ($self, $c, @args) = @_;
@@ -27,42 +30,41 @@ sub process{
     }
 
     $c->response->body( $self->render($c, $c->stash->{'template'}) );
+
+    unless ( $c->response->content_type ) {
+        $c->response->content_type('text/html; charset=utf-8');
+    }
 }
 
 sub render{
     my ( $self, $c, $template, @args ) = @_;
 #redirect stdout so we can print template output 
-    my ( $content, $output );
 
-    open(SAVED_STDOUT, ">&STDOUT");
-    close(STDOUT);
+    my $capture =  IO::Capture::Stdout->new;
+    $capture->start;
 
-    open(STDOUT, '>', \$content);
     if ( $self->config->{'config'} ){
         $self->template( $self->config->{'config'} );
     }
 
     $self->template($template, @args);
-    close(STDOUT);
+    $capture->stop;
+
+    my @content = $capture->read;
+    my @output;
 
     if ( $self->config->{'wrapper'} ){
-        open(STDOUT, '>', \$output);
+        $capture->start;
 
-        $self->template( $self->config->{'wrapper'}, $content );
+        $self->template( $self->config->{'wrapper'}, join('', @content) );
 
-        close(STDOUT);
+        $capture->stop;
+        @output = $capture->read;
     } else {
-        $output = $content;
+        @output = @content;
     }
 
-    open(STDOUT, ">&SAVED_STDOUT");
-    close(SAVED_STDOUT);
-
-    unless ( $c->response->content_type ) {
-        $c->response->content_type('text/html; charset=utf-8');
-    }
-
-    return $output;
+    return join('', @output);
 }
 
 sub template{
@@ -79,5 +81,7 @@ sub template{
     $view->process($c, @args);
     $c->stats->profile('end' => " -> ${template}");
 }
+
+__PACKAGE__->meta->make_immutable;
 
 1;
