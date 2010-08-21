@@ -59,6 +59,7 @@ sub created{
     my $formatter = DateTime::Format::Human::Duration->new();
     my $duration = $now - $date;
 
+    return $formatted[0] if !$formatted[1];
     my @formatted = split(', ', $formatter->format_duration( $duration ));
     return join(' ', @formatted[0,1]);
 }
