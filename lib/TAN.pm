@@ -213,23 +213,6 @@ sub filesize_h{
     }
 }
 
-=head2 url_tile
-
-B<@args = ($title)>
-
-=over
-
-shortcut to TAN::View::TT::url_title
-
-=back
-
-=cut
-sub url_title{
-    my ($c, $title) = @_;
-
-    return TAN::View::TT::url_title($title);
-}
-
 =head2 finalize_error
 
 B<@args = undef>
