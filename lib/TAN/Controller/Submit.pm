@@ -262,7 +262,7 @@ sub validate_picture: Private{
     my ( $self, $c ) = @_;
 
     my $title = $c->req->param('title');
-    my $url_title = $c->url_title($title);
+    my $url_title = $c->view->url_title($title);
     my $time = time;
 
 #put images in a folder per week

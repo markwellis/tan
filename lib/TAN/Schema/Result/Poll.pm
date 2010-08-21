@@ -73,6 +73,7 @@ sub ends{
 
     if ( $duration->is_negative ){
         my @formatted = split(', ', $formatter->format_duration( $duration ));
+        return $formatted[0] if !$formatted[1];
         return join(', ', @formatted[0,1]);
     }
 
