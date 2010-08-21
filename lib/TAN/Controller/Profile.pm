@@ -74,35 +74,7 @@ sub index: PathPart('') Chained('user') Args(0){
 
     $c->cache_page(600);
 
-#TT is tarded
     my $user = $c->stash->{'user'};
-
-    my %search_opts;
-    if ( !$c->nsfw ){
-        %search_opts = (
-            'nsfw' => 'N',
-        );
-    }
-
-    $c->stash->{'comments'} = $user->comments->search({
-        'deleted' => 'N',
-    });
-
-    $c->stash->{'links'} = $user->objects->search({
-        'type' => 'link',
-        %search_opts,
-    });
-
-    $c->stash->{'blogs'} = $user->objects->search({
-        'type' => 'blog',
-        %search_opts,
-    });
-
-    $c->stash->{'pictures'} = $user->objects->search({
-        'type' => 'picture',
-        %search_opts,
-    });
-#END tardism
 
 #prevent race
     eval{
@@ -117,7 +89,7 @@ sub index: PathPart('') Chained('user') Args(0){
 
     $c->stash(
         'page_title' => $user->username . "'s Profile",
-        'template' => 'profile.tt',
+        'template' => 'Profile',
     );
 }
 
@@ -146,7 +118,7 @@ sub edit: PathPart('edit') Chained('user') Args(0){
             $c->res->redirect('/profile/' . $c->stash->{'user'}->username);
             $c->detach;
         }
-        $c->stash->{'template'} = 'profile/edit.tt';
+        $c->stash->{'template'} = 'Profile::Edit';
         $c->detach;
     }
 
@@ -198,7 +170,7 @@ sub comments: PathPart('comments') Chained('user') Args(0){
 
     $c->stash(
         'page_title' => $c->stash->{'user'}->username . "'s Comments",
-        'template' => 'profile/comments.tt',
+        'template' => 'Profile::Comments',
     );
 }
 
@@ -219,7 +191,7 @@ sub links: PathPart('links') Chained('user') Args(0){
     $c->forward('fetch', ['link']);
 
     $c->stash(
-        'template' => 'profile/links.tt',
+        'template' => 'Index',
     );
 }
 
@@ -240,7 +212,7 @@ sub blogs: PathPart('blogs') Chained('user') Args(0){
     $c->forward('fetch', ['blog']);
 
     $c->stash(
-        'template' => 'profile/links.tt',
+        'template' => 'Index',
     );
 }
 
@@ -261,7 +233,8 @@ sub pictures: PathPart('pictures') Chained('user') Args(0){
     $c->forward('fetch', ['picture']);
 
     $c->stash(
-        'template' => 'profile/pictures.tt',
+        'fancy_picture_index' => 1,
+        'template' => 'Index',
     );
 }
 

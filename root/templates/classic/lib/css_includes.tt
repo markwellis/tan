@@ -1,7 +1,0 @@
-[% FOREACH css_include = css_includes;
-#replace @ with / so we can get the file mod time
-    css_file = css_include | replace('@', '/');
-    m_time = c.path_to('root') _ theme_settings.css_path _ '/' _ css_file _ '.css' | file_mtime 
-%]
-    <link type="text/css" rel="stylesheet" media="screen" href="[%- "${c.config.csscache_path}/${theme_settings.name}_${css_include}_${m_time}.css" -%]" />
-[%- END %]

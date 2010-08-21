@@ -90,14 +90,12 @@ sub index :Path Args(2) {
             'order' => $order,
             'page_title' => ($upcoming ? 'Upcoming ' : 'Promoted ') . ucfirst($location) . ($location ne 'all' ? 's' : '' ),
         );
-    }
-
-    if ( !$c->stash->{'index'} ){
-        $c->forward('/default');
-        $c->detach();
+        if ( $location eq 'picture' ){
+            $c->stash->{'fancy_picture_index'} = 1;
+        }
     }
     
-    $c->stash->{'template'} = 'index.tt';
+    $c->stash->{'template'} = 'Index';
 }
 
 =head1 AUTHOR

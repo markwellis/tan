@@ -57,7 +57,7 @@ sub index: Path{
         $c->stash->{'crop'} = 1;
     }
 
-    $c->stash->{'template'} = 'profile/avatar.tt';
+    $c->stash->{'template'} = 'Profile::Avatar';
 }
 
 sub upload: Local{

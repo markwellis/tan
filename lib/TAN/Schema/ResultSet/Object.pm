@@ -4,6 +4,8 @@ use strict;
 use warnings;
 use base 'DBIx::Class::ResultSet';
 
+use Data::Page;
+
 =head1 NAME
 
 TAN::Schema::ResultSet::Comments
@@ -125,11 +127,9 @@ sub index {
     
         @{$objects} = $index_rs->all;
 
-        $pager = {
-            'current_page' => $index_rs->pager->current_page,
-            'total_entries' => $index_rs->pager->total_entries,
-            'entries_per_page' => $index_rs->pager->entries_per_page,
-        };
+        # we construct our own pager so the count(*) from sql 
+        # runs now instead of later (cacheable)
+        $pager = Data::Page->new($index_rs->pager->total_entries, $index_rs->pager->entries_per_page, $index_rs->pager->current_page);
 
         $self->result_source->schema->cache->set("index:${key}", $objects, 600);
         $self->result_source->schema->cache->set("pager:${key}", $pager, 600);
@@ -184,7 +184,7 @@ sub random{
     my $search = {};
     if ($location eq 'all'){
         my $rand = int(rand(3));
-        my @types = ('link', 'blog', 'picture');
+        my @types = ('link', 'blog', 'picture', 'poll');
         $location = $types[$rand];
     }
     $search->{'type'} = $location;
@@ -223,34 +223,32 @@ sub get{
 
     my $object_rs = $self->result_source->schema->cache->get('object:' . $object_id);
 
-my $prefetch = [
-    'user',
-];
+    my $prefetch = [
+        'user',
+    ];
 
-if ( $location eq 'poll' ){
-    push(@{$prefetch}, {
-        'poll' => {
-            'answers' => ['votes'],
-        },
-    });
-} else {
-    push(@{$prefetch}, $location);
-}
+    if ( $location eq 'poll' ){
+        push(@{$prefetch}, {
+            'poll' => {
+                'answers' => ['votes'],
+            },
+        });
+    } else {
+        push(@{$prefetch}, $location);
+    }
 
     if ( !$object_rs ){  
         $object_rs = $self->find({
             'object_id' => $object_id,
         },{
             '+select' => [
-                { 'unix_timestamp' => 'me.created' },
-                { 'unix_timestamp' => 'me.promoted' },
                 \'(SELECT COUNT(*) FROM views WHERE views.object_id = me.object_id AND type="internal") views',
                 \'(SELECT COUNT(*) FROM views WHERE views.object_id = me.object_id AND type="external") external',
                 \'(SELECT COUNT(*) FROM comments WHERE comments.object_id = me.object_id AND deleted = "N") comments',
                 \'(SELECT COUNT(*) FROM plus_minus WHERE plus_minus.object_id = me.object_id AND type="plus") plus',
                 \'(SELECT COUNT(*) FROM plus_minus WHERE plus_minus.object_id = me.object_id AND type="minus") minus',
             ],
-            '+as' => ['created', 'promoted', 'views', 'external', 'comments', 'plus', 'minus'],
+            '+as' => ['views', 'external', 'comments', 'plus', 'minus'],
             'prefetch' => $prefetch,
             'order_by' => '',
         });

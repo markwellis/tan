@@ -32,6 +32,8 @@ __PACKAGE__->add_columns(
   "end_date",
   {
       data_type => 'datetime',
+      is_nullable => 1,
+      datetime_undef_if_invalid => 1,
   },
 );
 __PACKAGE__->set_primary_key("poll_id");
@@ -70,7 +72,8 @@ sub ends{
     my $duration = $now - $self->end_date;
 
     if ( $duration->is_negative ){
-        return $formatter->format_duration( $duration );
+        my @formatted = split(', ', $formatter->format_duration( $duration ));
+        return join(', ', @formatted[0,1]);
     }
 
     return 0;

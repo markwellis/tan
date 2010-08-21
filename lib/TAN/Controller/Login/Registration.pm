@@ -118,7 +118,7 @@ sub index: Path Args(0){
             'Subject' => 'Confirm email address',
             'Content-Type' => 'text/html',
         ],
-        'body' => $c->view('NoWrapper')->render( $c, 'login/registration/email.tt' ),
+        'body' => $c->view('NoWrapper')->render( $c, 'Login::Registration::Email' ),
     );
 
     $c->flash->{'message'} = 'Thanks for registering, you will recieve a confirmation email shortly';

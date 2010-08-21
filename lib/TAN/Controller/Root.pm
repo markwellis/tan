@@ -115,7 +115,7 @@ sub error404: Local Args(0){
 
     $c->stash(
         'error_404' => 1,
-        'template' => 'errors/404.tt',
+        'template' => 'Error::404',
     );
 
     $c->response->status(404);
@@ -202,7 +202,7 @@ sub chat: Local Args(0){
 
     $c->stash(
         'page_title' => 'Chat',
-        'template' => 'chat.tt',
+        'template' => 'Chat',
     );
 }
 
@@ -224,7 +224,7 @@ sub faq: Local Args(0){
 
     $c->stash(
         'page_title' => 'FAQ',
-        'template' => 'faq.tt',
+        'template' => 'FAQ',
     );
 }
 

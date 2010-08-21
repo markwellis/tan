@@ -92,7 +92,7 @@ sub add{
         #HACK - this probably isnt that nice!!
         # not impotant coz will be gone when #53 is complete
         if ( 
-            ($object_rs->promoted eq '0000-00-00 00:00:00') 
+            ( !$object_rs->promoted ) 
             && ($count >= TAN->config->{'promotion_cutoff'})
         ){
             $object_rs->promote;

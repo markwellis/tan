@@ -160,10 +160,6 @@ sub index: PathPart('') Chained('location') Args(1) {
         'me.object_id' => $c->stash->{'object_id'},
         'me.deleted' => 'N',
     },{
-        '+select' => [
-            { 'unix_timestamp' => 'me.created' },
-        ],
-        '+as' => ['created'],
         'prefetch' => ['user', {
             'object' => $c->stash->{'location'},
         }],
@@ -173,7 +169,7 @@ sub index: PathPart('') Chained('location') Args(1) {
     $title = eval('$c->stash->{"object"}->' . $c->stash->{'location'} . "->title");
     $c->stash(
         'page_title' => $title,
-        'template' => 'view.tt',
+        'template' => 'View',
     );
 }
 
@@ -230,7 +226,7 @@ sub comment: PathPart('_comment') Chained('location') Args(0) {
 
         if ( defined($object_rs) ){
         #redirect to the object
-            $c->res->redirect( $object_rs->object->url . "#comment${comment_id}" );
+            $c->res->redirect( "@{[ $object_rs->object->url ]}#comment@{[ $comment_id || 's' ]}" );
             $c->detach();
         } else {
         #no object, redirect to /
@@ -259,18 +255,19 @@ sub comment: PathPart('_comment') Chained('location') Args(0) {
 sub ajax_comment: Private{
     my ( $self, $c, $comment_rs ) = @_;
 
-    $c->stash->{'comment'} = {
-        'comment' => $comment_rs->comment,
-        'comment_id' => $comment_rs->comment_id,
-        'number' => $comment_rs->number,
-        'user' => {
-            'user_id' => $c->user->user_id,
-            'username' => $c->user->username,
-        }
-    };
-    $c->stash->{'object'} = $comment_rs->object;
+    $c->stash->{'comment'} = $comment_rs;
+#    {
+#        'comment' => $comment_rs->comment,
+#        'comment_id' => $comment_rs->comment_id,
+#        'number' => $comment_rs->number,
+#        'user' => {
+#            'user_id' => $c->user->user_id,
+#            'username' => $c->user->username,
+#        }
+#    };
+#    $c->stash->{'object'} = $comment_rs->object;
 
-    $c->stash->{'template'} = 'view/comment.tt';
+    $c->stash->{'template'} = 'View::Comment';
     $c->forward( $c->view('NoWrapper') );
 }
 
@@ -357,7 +354,7 @@ sub edit_comment: PathPart('_edit_comment') Chained('location') Args(1) {
 
     $c->stash->{'comment_id'} = $comment_id;
     $c->stash->{'comment'} = $comment_rs->comment_nobb;
-    $c->stash->{'template'} = 'view/edit_comment.tt';
+    $c->stash->{'template'} = 'View::EditComment';
 
     if ( $c->req->param('ajax') ){
         $c->forward( $c->view('NoWrapper') );
