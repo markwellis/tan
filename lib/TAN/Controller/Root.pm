@@ -56,9 +56,9 @@ sub auto: Private{
         'start_time' => time(),    
         'theme_settings' => {
             'name' => 'classic',
-            'namespace' => 'Template::Classic',
         },
         'location' => 'all',
+        'template_namespace' => 'Template::Classic',
     );
     
     return 1;
@@ -327,9 +327,8 @@ sub end: Private{
     #dont render if redirect or ajax etc
         if ( $c->stash->{'can_rss'} && $c->req->param('rss') ){
             $c->stash->{'theme_settings'}->{'name'} = 'rss';
-            $c->stash->{'theme_settings'}->{'namespace'} = 'Template::RSS';
+            $c->stash->{'template_namespace'} = 'Template::RSS';
         }
-        $c->view->namespace( $c->stash->{'theme_settings'}->{'namespace'} );
         $c->forward('render');
     }
 
