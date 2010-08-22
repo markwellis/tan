@@ -8,7 +8,7 @@ sub process{
     #ajax comment
     $comment ||= $c->stash->{'comment'};
 
-    print qq\
+    my $out =  qq\
         <div class="TAN-comment_holder TAN-hr" id="comment@{[ $comment->id ]}">
             <ul class="left">
                 <li>
@@ -16,7 +16,7 @@ sub process{
                 </li>\;
 
     if ( $comment->created ){
-        print qq\
+        $out .= qq\
                 <li>
                     @{[ $comment->created ]}&#160;ago
                 </li>\;
@@ -33,7 +33,7 @@ sub process{
         $avatar_http = "@{[ $c->config->{'static_path'} ]}/images/_user.png";
     }
 
-    print qq\
+    $out .= qq\
                 <li>
                     <img class="TAN-news-avatar TAN-comment_avatar" src="${avatar_http}?m=${avatar_mtime}" alt="@{[ $c->view->html($comment->user->username) ]}" />
                 </li>
@@ -49,13 +49,13 @@ sub process{
                         </li>\;
     
     if ( ($c->user_exists) && ( $c->user->id == $comment->user->user_id ) ){
-        print qq\
+        $out .= qq\
                     <li>
                         <a class="comment_edit" href="_edit_comment/@{[ $comment->id ]}">Edit Comment</a>
                     </li>\;
     }
 
-    print qq\
+    $out .= qq\
                     </ul>
                 </li>
             </ul>
@@ -64,6 +64,8 @@ sub process{
                 <br />
             </div>
         </div>\;
+
+    return $out;
 }
 
 1;

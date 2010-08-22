@@ -12,15 +12,15 @@ sub process{
     my $filename = "@{[$c->config->{'pic_path'} ]}/@{[ $object->picture->filename ]}";
     my $type = 'picture';
 
-    print qq\
+    my $out = qq\
         <h2 style="margin-left:0px;">
             <a class="TAN-type-picture" href="${filename}">
                 @{[ $c->view->html($object->picture->title) ]}@{[ ($object->nsfw eq 'Y') ? ' - NSFW' : '' ]}
             </a>
         </h2>\;
 
-    $c->view->template('Lib::PlusMinus');
-    print qq\
+    $out .= $c->view->template('Lib::PlusMinus');
+    $out .= qq\
         <img alt="@{[ $c->view->html($object->user->username) ]}" src="@{[ $c->stash->{'avatar_http'} ]}?m=@{[ $c->stash->{'avatar_mtime'} || '' ]}" class="TAN-news-avatar left" />
         <ul>
             <li>
@@ -43,10 +43,10 @@ sub process{
                 | @{[ $object_size ]}\;
 
     if ( $c->user_exists && ($c->user->admin || $c->user->id == $object->user_id) ){
-        print qq\
+        $out .= qq\
                 | <a href="/submit/@{[ $object->type ]}/edit/@{[ $object->id ]}/" class="TAN-news-comment">Edit</a>\;
     }
-    print qq\
+    $out .= qq\
             </li>
         </ul>
         <span class="TAN-tags" style="margin-left:0px">\;
@@ -54,12 +54,12 @@ sub process{
     my $loop = 0;
     foreach my $tag ( $object->tags->all ){
         if ( $loop ){
-            print ', ';
+            $out .= ', ';
         }
-        print qq\<a href="/tag/@{[ $tag->tag ]}">@{[ $tag->tag ]}</a>\;
+        $out .= qq\<a href="/tag/@{[ $tag->tag ]}">@{[ $tag->tag ]}</a>\;
         ++$loop;
     }
-    print qq\
+    $out .= qq\
         </span>
 
     <div class="TAN-video">
@@ -70,8 +70,10 @@ sub process{
 
     my $description = $object->picture->description;
     if ( defined($description) ){
-        print $c->view->nl2br($c->view->strip_tags($description));
+        $out .= $c->view->nl2br($c->view->strip_tags($description));
     }
+
+    return $out;
 }
 
 1;

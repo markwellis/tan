@@ -89,6 +89,7 @@ sub index :Path Args(2) {
             'upcoming' => $upcoming,
             'order' => $order,
             'page_title' => ($upcoming ? 'Upcoming ' : 'Promoted ') . ucfirst($location) . ($location ne 'all' ? 's' : '' ),
+            'can_rss' => 1,
         );
         if ( $location eq 'picture' ){
             $c->stash->{'fancy_picture_index'} = 1;

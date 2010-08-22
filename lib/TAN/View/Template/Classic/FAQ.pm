@@ -6,7 +6,7 @@ sub process{
     my ( $self, $c ) = @_;
 
     push(@{$c->stash->{'css_includes'}}, 'faq');
-    print qq\
+    return qq\
         <ul class="TAN-inside">
             <li>
                 <h1>Embedding videos</h1>

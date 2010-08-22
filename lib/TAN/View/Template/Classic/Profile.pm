@@ -42,7 +42,7 @@ sub process{
         $avatar_http = "@{[ $c->config->{'static_path'} ]}/images/_user.png";
     }
 
-    print qq\
+    return qq\
         <ul class="TAN-inside">
             <li>
                 <h1>@{[ $c->view->html($user->username) ]}</h1>

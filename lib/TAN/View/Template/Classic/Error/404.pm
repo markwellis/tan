@@ -7,7 +7,7 @@ sub process{
 
     push(@{$c->stash->{'css_includes'}}, 'errors');
 
-    print qq\
+    return qq\
         <ul class="TAN-inside">
             <li class="TAN-news">
                 <h2 class="TAN-type-link">Page Not found (404)</h2> 

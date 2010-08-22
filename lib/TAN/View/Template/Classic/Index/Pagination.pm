@@ -45,26 +45,28 @@ sub process{
         $max = $total_pages;
     }
 
-    print qq\<div class="@{[ ($c->stash->{'location'} eq 'picture') ? 'clear ' : '' ]}TAN-news-pagination">\;
+    my $output = qq\<div class="@{[ ($c->stash->{'location'} eq 'picture') ? 'clear ' : '' ]}TAN-news-pagination">\;
     if ( $lower != 1 ){
-        print qq\
+        $output .= qq\
         <a class="TAN-news-page-number" href="@{[ $c->view->url("/@{[ $c->req->path ]}", %params, 'page' => 1) ]}">1</a>
         <span class="TAN-news-page-number">...</span>\;
     }
 
     foreach my $page ( $lower..$max ){
-        print qq\
+        $output .= qq\
         <a class="TAN-news-page-number@{[ ($page == $current_page) ? ' TAN-news-page-number-selected' : '' ]}" href="@{[ $c->view->url("/@{[ $c->req->path ]}", %params, 'page' => $page) ]}">
             ${page}
         </a>\;
     }
 
     if ( $max != $total_pages) {
-        print qq\
+        $output .= qq\
         <span class="TAN-news-page-number">...</span>
         <a class="TAN-news-page-number" href="@{[ $c->view->url("/@{[ $c->req->path ]}", %params, 'page' => $total_pages) ]}">${total_pages}</a>\;
     }
-    print '</div>';
+    $output .= '</div>';
+
+    return $output;
 }
 
 1;
