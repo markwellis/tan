@@ -7,7 +7,7 @@ use base 'Catalyst::View::Perl::Template';
 sub process{
     my ( $self, $c, $content ) = @_;
 
-    my $page_title = $c->view('Perl')->html($c->stash->{'page_title'});
+    my $page_title = $c->view->html($c->stash->{'page_title'});
     if ( $page_title ){
         $page_title = "${page_title} - ";
     }
@@ -18,12 +18,19 @@ qq\<!DOCTYPE  html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/
     <html xmlns="http://www.w3.org/1999/xhtml">
         <head>
             <title>${page_title}This Aint News</title>
-            <meta name="Description" content="[% page_meta_description %]"/>
-            <meta name="keywords" content="[% page_keywords %]"/>
+            <meta name="Description" content="@{[ $c->view->html($c->stash->{'page_meta_description'}) ]}"/>
+            <meta name="keywords" content="@{[ $c->stash->{'page_keywords'} ]}"/>
             <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>\;
     $c->view->template('Lib::CssIncludes');
     print qq\<link rel="shortcut icon" href="/static/favicon.ico" />
             <link rel="search" type="application/opensearchdescription+xml" title="TAN Search" href="/static/opensearchplugin.xml" />
+            @{[
+                $c->stash->{'can_rss'} ?
+                    qq#<link rel="alternate" type="application/rss+xml" title="RSS" href="@{[ $c->view->url($c->req->uri, %{$c->req->params}, 'rss' => 1) ]}" />#
+                :
+                    ''
+            ]}
+
             <script type="text/javascript">
             //<![CDATA[
                 var _gaq = _gaq || [];

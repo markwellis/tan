@@ -5,6 +5,7 @@ use namespace::autoclean;
 use HTML::TreeBuilder;
 use HTML::FormatText;
 use HTML::Entities;
+use XML::Entities;
 
 =head2 html
 
@@ -21,6 +22,23 @@ sub html{
     my ( $self, $text ) = @_;
 
     return encode_entities($text);
+}
+
+=head2 xml
+
+B<@args = ($text)>
+
+=over
+
+xml encodes $text
+
+=back
+
+=cut
+sub xml{
+    my ( $self, $text ) = @_;
+
+    return XML::Entities::numify('all', $self->html($text));
 }
 
 =head2 strip_tags
