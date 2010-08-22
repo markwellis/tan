@@ -23,11 +23,11 @@ sub process{
     push(@{$c->stash->{'js_includes'}}, 'Lasso-Crop');
     push(@{$c->stash->{'js_includes'}}, 'profile@avatar');
 
-    my $out = '<ul class="TAN-inside">';
+    print '<ul class="TAN-inside">';
 
     if ( !$c->stash->{'crop'} ){
     # upload page
-        $out .= qq\
+        print qq\
             <li class="TAN-news left" >
                 <img alt="@{[ $c->view->html($c->user->username) ]}" src="${avatar_http}?m=@{[ $avatar_mtime || '' ]}" class="avatar">
             </li>
@@ -48,7 +48,7 @@ sub process{
             </li>\;
     } else {
     # crop page
-        $out .= qq\
+        print qq\
             <li class="TAN-news">
                 <h2>
                     Crop avatar
@@ -66,9 +66,7 @@ sub process{
                 </form>        
             </li>\
     }
-    $out .= '</ul>';
-
-    return $out;
+    print '</ul>';
 }
 
 1;

@@ -7,7 +7,7 @@ sub process{
 
     push(@{$c->stash->{'css_includes'}}, 'login');
 
-    return qq\
+    print qq\
         <ul class="TAN-inside">
             <li class="TAN-news">
                 <h2>Sign In</h2>

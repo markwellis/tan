@@ -11,7 +11,7 @@ sub process{
 
     my $object = $c->stash->{'object'};
 
-    my $out = qq\
+    print qq\
         <label for="tags">Tags</label>
         <input type="text" name="tags" id="tags" class="text_input full_width" value="@{[
             $object ?
@@ -21,10 +21,10 @@ sub process{
         ]}"/>\;
 
     if ( $c->stash->{'location'} ne 'picture' ){
-        $out .= '<a href="" class="refresh_thumbs right">Refresh</a>';
+        print '<a href="" class="refresh_thumbs right">Refresh</a>';
     }
 
-    $out .= qq\
+    print qq\
         <br />
         <div id="thumb_tags">
             e.g.
@@ -35,7 +35,7 @@ sub process{
         </div>\;
 
     if ( $object ){
-        $out .= qq#
+        print qq#
             <script type="text/javascript">
                 get_thumbs( \$('cat').value );
             </script>#;

@@ -7,7 +7,7 @@ sub process{
 
     my $object = $c->stash->{'object'};
 
-    return qq\
+    print qq\
         <form action="post" id="submit_form" method="post">
             <fieldset>
                 <ul>
@@ -42,17 +42,21 @@ sub process{
                     <li>
                         <label for="blogmain">Blog</label>
                     </li>
-                    <li>
-                    @{[ 
-                        $c->view->template('Lib::Editor', {
-                            'name' => "blogmain",
-                            'value' => $object ? $object->blog->details_nobb : '',
-                            'height' => '600px',
-                        })
-                    ]}
+                    <li>\;
+
+    $c->view->template('Lib::Editor', {
+        'name' => "blogmain",
+        'value' => $object ? $object->blog->details_nobb : '',
+        'height' => '600px',
+    });
+
+    print qq\
                     </li>
-                </ul>
-                @{[ $c->view->template('Submit::TagThumbBrowser') ]}
+                </ul>\;
+
+    $c->view->template('Submit::TagThumbBrowser');
+
+    print qq\
                 <input type="submit" value="Submit Blog"/>
             </fieldset>
         </form>\;

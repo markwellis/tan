@@ -8,7 +8,7 @@ sub process{
     my $user_id = $c->stash->{'user_id'};
     my $token = $c->stash->{'token'};
 
-    return qq\
+    print qq\
         <html>
         <h1>Welcome to This Aint News</h1><br />
         <br />

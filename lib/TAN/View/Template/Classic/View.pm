@@ -30,21 +30,23 @@ sub process{
         $c->stash->{'avatar_http'} = "@{[ $c->config->{'static_path'} ]}/images/_user.png";
     }
 
-    my $out = qq\
+    print qq\
     <ul class="TAN-inside">
         <li class="TAN-news">\;
 
     $c->stash->{'article'} = 1;
     if ( $object->type eq 'picture' ){
-        $out .= $c->view->template('View::Picture');
+        $c->view->template('View::Picture');
     } else {
-        $out .= $c->view->template('Lib::Object');
+        $c->view->template('Lib::Object');
     }
 
-    $out .= qq\
+    print qq\
         </li>
-        <li class="TAN-news" id="comments">
-            @{[ $c->view->template('View::Comments') ]}
+        <li class="TAN-news" id="comments">\;
+    
+    $c->view->template('View::Comments');
+    print qq\
         </li>
     </ul>\;
 }

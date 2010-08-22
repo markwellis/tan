@@ -40,16 +40,16 @@ sub process{
     ++$num;
     my $md = $object->$type->picture_id - ($object->$type->picture_id % 1000);
 
-    my $out = $c->view->template('Lib::PlusMinus');
+    $c->view->template('Lib::PlusMinus');
 
-    $out .= qq\
+    print qq\
         <div class="TAN-news-image left">
             <img alt="@{[ $object->$type->picture_id ]}" src="@{[ $c->config->{'thumb_path'} ]}/${md}/@{[ $object->$type->picture_id ]}/100"/>
         </div>
         <h2>
             <a href="@{[ (($is_video && !$c->stash->{'article'}) ? $object_url : $title_url) ]}" 
                 @{[ ($is_video && !$c->stash->{'article'}) ? '' : 'rel="external nofollow"' ]} class="TAN-type-${type}" title="${title}">
-                @{[ $c->view->html($object->$type->title) ]}@{[ $object->nsfw eq "Y" ? ' - NSFW' : '' ]}
+                @{[ $c->view->html($object->$type->title) ]}@{[ $object->nsfw eq "Y" ? '- NSFW' : '' ]}
             </a>
         </h2>
         <img alt="@{[ $c->view->html($object->user->username) ]}" src="@{[ $c->stash->{'avatar_http'} ]}?m=@{[ $c->stash->{'avatar_mtime'} || '' ]}" class="TAN-news-avatar left" />
@@ -86,87 +86,83 @@ sub process{
         </p>\;
 
     if ( $c->stash->{'article'} ){
-        $out .= $self->article($c, $type, $object, $is_video, $url);
+        $self->article($c, $type, $object, $is_video, $url);
     }
-
-    return $out;
 }
 
 sub article{
     my ( $self, $c, $type, $object, $is_video, $url ) = @_;
 
-    my $out = qq\<p>
+    print qq\<p>
         <span class="TAN-tags">\;
 
     my $loop = 0;
     foreach my $tag ( $object->tags->all ){
         if ( $loop ) {
-            $out .= ', ';
+            print ', ';
         }
-        $out .= qq\<a href="/tag/@{[ $tag->tag ]}">@{[ $tag->tag ]}</a>\;
+        print qq\<a href="/tag/@{[ $tag->tag ]}">@{[ $tag->tag ]}</a>\;
         ++$loop;
     }
 
-    $out .= '</span>';
+    print '</span>';
 
     if ( $type eq 'blog' ){
-        $out .= '</p>';
+        print '</p>';
     }
     if ( $type eq 'link' ){
         if ( $is_video ){
-            $out .= qq\<div class="TAN-video">
+            print qq\<div class="TAN-video">
                 ${is_video}
             </div>\;
         } else {
-            $out .= qq\<a class="TAN-view_link TAN-type-link" href="${url}" rel="external nofollow">View Link</a>\;
+            print qq\<a class="TAN-view_link TAN-type-link" href="${url}" rel="external nofollow">View Link</a>\;
         }
-        $out .= '</p>';
+        print '</p>';
     } elsif ( $type eq 'blog' ){
-        $out .= qq\<div class="TAN-blog_wrapper TAN-hr">
+        print qq\<div class="TAN-blog_wrapper TAN-hr">
             @{[ $object->blog->details ]}
         </div>\;
     } elsif ( $type eq 'poll' ){
-        $out .= '</p>';
+        print '</p>';
         if ( !$c->stash->{'voted'} && $c->stash->{'ends'} ){
-            $out .= qq\<form action="_vote" method="get" id="poll_vote_form">
+            print qq\<form action="_vote" method="get" id="poll_vote_form">
                 <fieldset>\;
         }
-        $out .= '<ul class="TAN-poll">';
+        print '<ul class="TAN-poll">';
         my $total_votes = $object->poll->votes->count;
         my $loop;
         foreach my $poll_answer ( $object->poll->answers->search({}, {'order_by' => 'answer_id'})->all ){
             my $percent = $poll_answer->percent($total_votes);
-            $out .= '<li>';
+            print '<li>';
             if ( !$c->stash->{'voted'} && $c->stash->{'ends'} ){
-                $out .= qq\<label for="answer${loop}">
+                print qq\<label for="answer${loop}">
                     <input type="radio" value="@{[ $poll_answer->id ]}" id="answer${loop}" name="answer_id" />\;
             }
-            $out .= $c->view->html($poll_answer->answer);
-            $out .= qq\<span class="TAN-poll-percent-holder">
+            print $c->view->html($poll_answer->answer);
+            print qq\<span class="TAN-poll-percent-holder">
                 <span class="TAN-poll-percent" style="width:${percent}%"></span>
                 </span>
                 <span class="TAN-poll-percent-voted">
                     ${percent}%
                 </span>\;
             if ( !$c->stash->{'voted'} && $c->stash->{'ends'} ){
-                $out .= '</label>';
+                print '</label>';
             }
-            $out .= '</li>';
+            print '</li>';
             ++$loop;
         }
-        $out .= qq\
+        print qq\
             <li>
                 @{[ $c->stash->{'ends'} ? 'Ends in ' . $c->stash->{'ends'} : "Ended" ]}
             </li>
         </ul>\;
         if ( !$c->stash->{'voted'} && $c->stash->{'ends'} ){
-            $out .= qq\<input type="submit" value="Vote" />
+            print qq\<input type="submit" value="Vote" />
                 </fieldset>
                 </form>\;
         }
     }
-
-    return $out;
 }
 
 1;
