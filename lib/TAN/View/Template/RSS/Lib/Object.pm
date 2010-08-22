@@ -21,7 +21,7 @@ sub process{
 
     print qq\
         <item>
-            <title>@{[ $c->view->xml($object->$type->title) ]}@{[ $object->nsfw eq "Y" ? ' - NSFW' : '' ]} [@{[ $is_video || $type ]}]</title>
+            <title>@{[ $c->view->xml($object->$type->title) ]}@{[ $object->nsfw eq "Y" ? ' - NSFW' : '' ]} [@{[ $is_video || $type ]}][@{[ $object->get_column('comments') ]}]@{[ $object->_promoted ? '*' : '' ]}</title>
             <link>@{[ $c->view->xml($base . $object->url) ]}</link>
             <pubDate>@{[ DateTime::Format::Mail->format_datetime( $object->_promoted || $object->_created ) ]}</pubDate>
             <description>@{[ $c->view->xml($object->$type->description) ]}</description>
