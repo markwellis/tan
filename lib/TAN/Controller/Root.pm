@@ -52,12 +52,11 @@ sub auto: Private{
     my ( $self, $c ) = @_;
 
 ## theme shouldn't be set here!!
-    my $theme = 'classic';
     $c->stash(
         'start_time' => time(),    
         'theme_settings' => {
-            'name' => $theme,
-            'path' => $c->config->{'static_path'} . "/themes/${theme}",
+            'name' => 'classic',
+            'namespace' => 'Template::Classic',
         },
         'location' => 'all',
     );
@@ -306,22 +305,7 @@ Sitemap: http://thisaintnews.com/sitemap"
     $c->detach();
 }
 
-=head2 render: ActionClass('RenderView') 
-
-B<@args = undef>
-
-=over
-
-RenderView
-
-=back
-
-=cut
-sub render: ActionClass('RenderView'){
-    my ( $self, $c ) = @_;
-
-    $c->stash->{'time'} = sub { return time(); };
-}
+sub render: ActionClass('RenderView'){}
 
 =head2 end: Private 
 
@@ -339,9 +323,13 @@ if debug warns sql output
 sub end: Private{
     my ( $self, $c ) = @_;
 
-    if ( !$c->res->output || ($c->res->status < 300) ){
+    if ( !$c->res->output ){
     #dont render if redirect or ajax etc
-
+        if ( $c->stash->{'can_rss'} && $c->req->param('rss') ){
+            $c->stash->{'theme_settings'}->{'name'} = 'rss';
+            $c->stash->{'theme_settings'}->{'namespace'} = 'Template::RSS';
+        }
+        $c->view->namespace( $c->stash->{'theme_settings'}->{'namespace'} );
         $c->forward('render');
     }
 
