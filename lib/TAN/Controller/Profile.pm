@@ -192,6 +192,7 @@ sub links: PathPart('links') Chained('user') Args(0){
 
     $c->stash(
         'template' => 'Index',
+        'can_rss' => 1,
     );
 }
 
@@ -213,6 +214,7 @@ sub blogs: PathPart('blogs') Chained('user') Args(0){
 
     $c->stash(
         'template' => 'Index',
+        'can_rss' => 1,
     );
 }
 
@@ -235,6 +237,7 @@ sub pictures: PathPart('pictures') Chained('user') Args(0){
     $c->stash(
         'fancy_picture_index' => 1,
         'template' => 'Index',
+        'can_rss' => 1,
     );
 }
 

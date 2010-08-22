@@ -9,7 +9,7 @@ sub process{
     my $object = $c->stash->{'object'};
     my $type = $object->type;
     
-    print qq\
+    return qq\
         <div class="TAN-plusminus right">
             <div class="TAN-plus">
                 <span>@{[ $object->get_column('plus') ]}</span>

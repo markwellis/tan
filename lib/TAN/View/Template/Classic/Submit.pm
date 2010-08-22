@@ -12,13 +12,10 @@ sub process{
     if ( $flashed_object ){
         $c->stash->{'object'} = $flashed_object;
     }
-    print qq\
+    return qq\
         <ul class="TAN-inside">
-            <li class="TAN-news">\;
-
-    $c->view->template("Submit::@{[ ucfirst($c->stash->{'location'}) ]}");
-
-    print qq\
+            <li class="TAN-news">
+                @{[ $c->view->template("Submit::@{[ ucfirst($c->stash->{'location'}) ]}") ]}
             </li>
         </ul>\;
 }

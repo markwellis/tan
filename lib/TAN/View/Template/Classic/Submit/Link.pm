@@ -7,7 +7,7 @@ sub process{
 
     my $object = $c->stash->{'object'};
 
-    print qq\
+    return qq\
         <form action="post" id="submit_form" method="post">
             <fieldset>
                 <ul>
@@ -50,11 +50,8 @@ sub process{
                                 '' 
                         ]}</textarea><br/>
                     </li>
-                </ul>\;
-
-    $c->view->template('Submit::TagThumbBrowser');
-
-    print qq\
+                </ul>
+                @{[ $c->view->template('Submit::TagThumbBrowser') ]}
                 <input type="submit" value="Submit Link"/>
             </fieldset>
         </form>\;

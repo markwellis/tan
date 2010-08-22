@@ -44,7 +44,7 @@ use Catalyst qw/
 
 extends 'Catalyst';
 
-our $VERSION = 1.4.4;
+our $VERSION = 1.4.6;
 
 # Configure the application.
 #
@@ -234,7 +234,7 @@ sub finalize_error {
     } else {
         $c->response->content_type('text/html; charset=utf-8');
 
-        $c->response->body( $c->view('TT')->render( $c, 'errors/500.tt' ) );
+        $c->response->body(  $c->view('NoWrapper')->render( $c, 'errors/500.tt' ) );
         $c->response->status(500);
 
         my $error = join '', map {"$_\n"} @{ $c->error };

@@ -7,23 +7,29 @@ use base 'Catalyst::View::Perl::Template';
 sub process{
     my ( $self, $c, $content ) = @_;
 
-    my $page_title = $c->view('Perl')->html($c->stash->{'page_title'});
+    my $page_title = $c->view->html($c->stash->{'page_title'});
     if ( $page_title ){
         $page_title = "${page_title} - ";
     }
 
-    my $sql_queries = $c->model('MySQL')->get_query_count();
-    print 
-qq\<!DOCTYPE  html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+    return <<"END";
+<!DOCTYPE  html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
     <html xmlns="http://www.w3.org/1999/xhtml">
         <head>
             <title>${page_title}This Aint News</title>
-            <meta name="Description" content="[% page_meta_description %]"/>
-            <meta name="keywords" content="[% page_keywords %]"/>
-            <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>\;
-    $c->view->template('Lib::CssIncludes');
-    print qq\<link rel="shortcut icon" href="/static/favicon.ico" />
+            <meta name="Description" content="@{[ $c->view->html($c->stash->{'page_meta_description'}) ]}"/>
+            <meta name="keywords" content="@{[ $c->stash->{'page_keywords'} ]}"/>
+            <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+            @{[ $c->view->template('Lib::CssIncludes') ]}
+            <link rel="shortcut icon" href="/static/favicon.ico" />
             <link rel="search" type="application/opensearchdescription+xml" title="TAN Search" href="/static/opensearchplugin.xml" />
+            @{[
+                $c->stash->{'can_rss'} ?
+                    qq#<link rel="alternate" type="application/rss+xml" title="RSS" href="@{[ $c->view->url($c->req->uri, %{$c->req->params}, 'rss' => 1) ]}" />#
+                :
+                    ''
+            ]}
+
             <script type="text/javascript">
             //<![CDATA[
                 var _gaq = _gaq || [];
@@ -38,9 +44,9 @@ qq\<!DOCTYPE  html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/
             //]]>
             </script>
         </head>
-        <body>\;
-    $c->view->template('Lib::JsIncludes');
-    print qq+<div class="TAN-header">
+        <body>
+        @{[ $c->view->template('Lib::JsIncludes') ]}
+        <div class="TAN-header">
             <h1 class="TAN-logo">
                 <a title="This Aint News" href="/index/all/0/">This Aint News</a>
             </h1>
@@ -78,17 +84,15 @@ qq\<!DOCTYPE  html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/
                     </fieldset>
                 </form>
             </div>
-            <div class="TAN-menu-ad-holder">+;
-    $c->view->template('Lib::Menu');
-    $c->view->template('Lib::Ad', 'top');
-    print qq\
+            <div class="TAN-menu-ad-holder">
+                @{[ $c->view->template('Lib::Menu') ]}
+                @{[ $c->view->template('Lib::Ad', 'top') ]}
             </div>
         </div>
-        <div class="TAN-main">\;
-    $c->view->template('Lib::RecentComments');
-    print   '<div class="TAN-right-ads right">';
-    $c->view->template('Lib::Ad', 'right1');
-    print <<"END";
+        <div class="TAN-main">
+            @{[ $c->view->template('Lib::RecentComments') ]}
+            <div class="TAN-right-ads right">
+                @{[ $c->view->template('Lib::Ad', 'right1') ]}
             </div>
         <script type="text/javascript">
         //<![CDATA[
