@@ -11,7 +11,7 @@ has 'context' => (is => 'ro');
 has 'namespace' =>(
     'is' => 'rw',
     'isa' => 'Str',
-    'default' => 'Template',
+    'default' => undef,
 );
 
 no Moose;
@@ -57,6 +57,15 @@ sub template{
     my ( $self, $template_name, @args ) = @_;
 
     my $c = $self->context;
+
+    if ( !$self->namespace ){
+        if ( $c->stash->{'template_namespace'} ){
+            $self->namespace( $c->stash->{'template_namespace'} );
+        } else {
+            Catalyst::Exception->throw( "Template namespace not set" );
+        }
+    }
+
     my $template = $c->view("@{[ $self->namespace ]}::${template_name}");
 
     if ( !$template ){
