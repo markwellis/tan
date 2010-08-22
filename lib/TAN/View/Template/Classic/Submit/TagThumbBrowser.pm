@@ -40,6 +40,8 @@ sub process{
                 get_thumbs( \$('cat').value );
             </script>#;
     }
+
+    return $out;
 }
 
 1;
