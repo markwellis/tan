@@ -8,7 +8,7 @@ sub process{
     my $user_id = $c->stash->{'user'}->id;
     my $token = $c->stash->{'token'};
     
-    print qq\
+    return qq\
         <html>
         <br />
         Your username is: @{[ $c->view->html($c->stash->{'user'}->username) ]}<br />

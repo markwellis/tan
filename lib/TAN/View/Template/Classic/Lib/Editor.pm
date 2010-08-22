@@ -12,7 +12,7 @@ sub process{
     my $edwidth = defined($editor->{'width'}) ? $editor->{'width'} : '100%';
     my $edname = defined($editor->{'name'}) ? $editor->{'name'} : 'editor';
 
-    print qq\
+    return qq\
         <textarea class="${edname}" style="height:${edheight};width:${edwidth}" id="${edname}" name="${edname}" rows="80" cols="20">@{[ 
             $c->view->html($editor->{'value'}) || '' 
         ]}</textarea>

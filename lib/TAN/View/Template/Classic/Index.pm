@@ -5,7 +5,7 @@ use base 'Catalyst::View::Perl::Template';
 sub process{
     my ( $self, $c ) = @_;
 
-    print '<ul class="TAN-inside">';
+    my $out = '<ul class="TAN-inside">';
 
         if ( defined($c->stash->{'index'}) ){
             my $is_picture = 0;
@@ -19,7 +19,7 @@ sub process{
 
             my $loop = 0;
             foreach my $object ( @{$c->stash->{'index'}->{'objects'}} ){
-                print '<li class="TAN-news' . (($loop % 2) ? ' TAN-news-alternate' : '') . '">';
+                $out .= '<li class="TAN-news' . (($loop % 2) ? ' TAN-news-alternate' : '') . '">';
 
                 my $avatar_http = $c->config->{'avatar_path'} . "/" . $object->user_id;
                 my $avatar_image = $c->path_to('root') . $avatar_http;
@@ -37,24 +37,25 @@ sub process{
                 }
 
                 if ( $is_picture ){
-                    $c->view->template('Index::Picture');
+                    $out .= $c->view->template('Index::Picture');
                 } else {
-                    $c->view->template('Lib::Object');
+                    $out .= $c->view->template('Lib::Object');
                 }
 
-                print '</li>';
+                $out .= '</li>';
                 ++$loop;
             }
         } else {
-            print qq\
+            $out .= qq\
                 <li class="TAN-news">
                     <h1>Nothing found</h1>
                 </li>\;
         }
 
-    print '</ul>';
+    $out .= "</ul>
+        @{[ $c->view->template('Index::Pagination', $c->stash->{'index'}->{'pager'}) ]}";
 
-    $c->view->template('Index::Pagination', $c->stash->{'index'}->{'pager'});
+    return $out;
 }
 
 1;

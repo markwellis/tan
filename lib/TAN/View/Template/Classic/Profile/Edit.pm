@@ -7,19 +7,18 @@ sub process{
 
     push(@{$c->stash->{'css_includes'}}, 'profile');
 
-    print qq\
+    return qq\
         <ul class="TAN-inside">
             <li>
                 <form action="edit" id="submit_form" method="post">
-                    <fieldset>\;
-
-    $c->view->template('Lib::Editor', {
-        'name' => "profile",
-        'value' => $c->stash->{'object'}->profile->details_nobb,
-        'height' => '600px',
-    }); 
-
-    print qq\
+                    <fieldset>
+                        @{[
+                            $c->view->template('Lib::Editor', {
+                                'name' => "profile",
+                                'value' => $c->stash->{'object'}->profile->details_nobb,
+                                'height' => '600px',
+                            })
+                        ]}
                        <br />
                        <input type="submit" value="Submit" />
                    </fieldset>

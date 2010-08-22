@@ -11,8 +11,7 @@ sub process{
     my $md = $object->id - ($object->id % 1000);
     my $url = $object->url;
 
-
-    print qq\
+    my $output = qq\
         <h2>
             <a class="TAN-type-picture big_font" href="@{[ $c->config->{'pic_path'} ]}/@{[ $object->picture->filename ]}">
                 @{[ $c->view->html($object->picture->title) ]}@{[ ($object->nsfw eq 'Y') ? ' - NSFW' : '' ]}
@@ -38,25 +37,27 @@ sub process{
             </li>\;
 
     if ( $c->user_exists && ($c->user->admin || ($c->user->id == $object->user_id)) ){
-        print qq\
+        $output .= qq\
             <li>
                 <a href="/submit/@{[ $object->type ]}/edit/@{[ $object->id ]}/" class="TAN-news-comment">Edit</a>
             </li>\;
     }
 
-    print qq\
+    $output .= qq\
             <li class="TAN-menu-last">
                 @{[ $object->picture->x ]}x@{[ $object->picture->y ]}
             </li>
         </ul>
         <div>\;
 
-    $c->view->template('Lib::PlusMinus');
-    print qq\
+    $output .= qq\
+            @{[ $c->view->template('Lib::PlusMinus') ]}
             <a class="left" href="${url}">
                 <img src="@{[ $c->config->{'thumb_path'} ]}/${md}/@{[ $object->picture->id ]}/160" alt=" "/>
             </a>
         </div>\;
+
+    return $output;
 }
 
 1;

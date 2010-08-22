@@ -19,7 +19,7 @@ sub process{
     my $base = $c->req->base;
     $base =~ s|/$||;
 
-    print qq\
+    return qq\
         <item>
             <title>@{[ $c->view->xml($object->$type->title) ]}@{[ $object->nsfw eq "Y" ? ' - NSFW' : '' ]} [@{[ $is_video || $type ]}][@{[ $object->get_column('comments') ]}]@{[ $object->_promoted ? '*' : '' ]}</title>
             <link>@{[ $c->view->xml($base . $object->url) ]}</link>

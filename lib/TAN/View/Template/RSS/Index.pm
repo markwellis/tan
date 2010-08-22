@@ -9,9 +9,12 @@ sub process{
     my $object = $c->stash->{'index'}->{'objects'}->[0];
     $c->stash->{'build_date'} = DateTime::Format::Mail->format_datetime( $object->_promoted || $object->_created );
 
+    my $output = '';
     foreach my $object ( @{$c->stash->{'index'}->{'objects'}} ){
-        $c->view->template('Lib::Object', $object);
+        $output .= $c->view->template('Lib::Object', $object);
     }
+
+    return $output;
 }
 
 1;

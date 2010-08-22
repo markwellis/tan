@@ -40,9 +40,9 @@ sub process{
     ++$num;
     my $md = $object->$type->picture_id - ($object->$type->picture_id % 1000);
 
-    $c->view->template('Lib::PlusMinus');
+    my $out = $c->view->template('Lib::PlusMinus');
 
-    print qq\
+    $out .= qq\
         <div class="TAN-news-image left">
             <img alt="@{[ $object->$type->picture_id ]}" src="@{[ $c->config->{'thumb_path'} ]}/${md}/@{[ $object->$type->picture_id ]}/100"/>
         </div>
@@ -86,83 +86,87 @@ sub process{
         </p>\;
 
     if ( $c->stash->{'article'} ){
-        $self->article($c, $type, $object, $is_video, $url);
+        $out .= $self->article($c, $type, $object, $is_video, $url);
     }
+
+    return $out;
 }
 
 sub article{
     my ( $self, $c, $type, $object, $is_video, $url ) = @_;
 
-    print qq\<p>
+    my $out = qq\<p>
         <span class="TAN-tags">\;
 
     my $loop = 0;
     foreach my $tag ( $object->tags->all ){
         if ( $loop ) {
-            print ', ';
+            $out .= ', ';
         }
-        print qq\<a href="/tag/@{[ $tag->tag ]}">@{[ $tag->tag ]}</a>\;
+        $out .= qq\<a href="/tag/@{[ $tag->tag ]}">@{[ $tag->tag ]}</a>\;
         ++$loop;
     }
 
-    print '</span>';
+    $out .= '</span>';
 
     if ( $type eq 'blog' ){
-        print '</p>';
+        $out .= '</p>';
     }
     if ( $type eq 'link' ){
         if ( $is_video ){
-            print qq\<div class="TAN-video">
+            $out .= qq\<div class="TAN-video">
                 ${is_video}
             </div>\;
         } else {
-            print qq\<a class="TAN-view_link TAN-type-link" href="${url}" rel="external nofollow">View Link</a>\;
+            $out .= qq\<a class="TAN-view_link TAN-type-link" href="${url}" rel="external nofollow">View Link</a>\;
         }
-        print '</p>';
+        $out .= '</p>';
     } elsif ( $type eq 'blog' ){
-        print qq\<div class="TAN-blog_wrapper TAN-hr">
+        $out .= qq\<div class="TAN-blog_wrapper TAN-hr">
             @{[ $object->blog->details ]}
         </div>\;
     } elsif ( $type eq 'poll' ){
-        print '</p>';
+        $out .= '</p>';
         if ( !$c->stash->{'voted'} && $c->stash->{'ends'} ){
-            print qq\<form action="_vote" method="get" id="poll_vote_form">
+            $out .= qq\<form action="_vote" method="get" id="poll_vote_form">
                 <fieldset>\;
         }
-        print '<ul class="TAN-poll">';
+        $out .= '<ul class="TAN-poll">';
         my $total_votes = $object->poll->votes->count;
         my $loop;
         foreach my $poll_answer ( $object->poll->answers->search({}, {'order_by' => 'answer_id'})->all ){
             my $percent = $poll_answer->percent($total_votes);
-            print '<li>';
+            $out .= '<li>';
             if ( !$c->stash->{'voted'} && $c->stash->{'ends'} ){
-                print qq\<label for="answer${loop}">
+                $out .= qq\<label for="answer${loop}">
                     <input type="radio" value="@{[ $poll_answer->id ]}" id="answer${loop}" name="answer_id" />\;
             }
-            print $c->view->html($poll_answer->answer);
-            print qq\<span class="TAN-poll-percent-holder">
+            $out .= $c->view->html($poll_answer->answer);
+            $out .= qq\<span class="TAN-poll-percent-holder">
                 <span class="TAN-poll-percent" style="width:${percent}%"></span>
                 </span>
                 <span class="TAN-poll-percent-voted">
                     ${percent}%
                 </span>\;
             if ( !$c->stash->{'voted'} && $c->stash->{'ends'} ){
-                print '</label>';
+                $out .= '</label>';
             }
-            print '</li>';
+            $out .= '</li>';
             ++$loop;
         }
-        print qq\
+        $out .= qq\
             <li>
                 @{[ $c->stash->{'ends'} ? 'Ends in ' . $c->stash->{'ends'} : "Ended" ]}
             </li>
         </ul>\;
         if ( !$c->stash->{'voted'} && $c->stash->{'ends'} ){
-            print qq\<input type="submit" value="Vote" />
+            $out .= qq\<input type="submit" value="Vote" />
                 </fieldset>
                 </form>\;
         }
     }
+
+    return $out;
 }
 
 1;
