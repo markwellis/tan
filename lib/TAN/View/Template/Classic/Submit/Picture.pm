@@ -6,7 +6,7 @@ sub process{
     my ( $self, $c ) = @_;
 
     my $object = $c->stash->{'object'};
-    my $out = qq\
+    print qq\
         <form action="post" enctype="multipart/form-data" id="submit_form" method="post">
             <fieldset>
                 <input type="hidden" name="MAX_FILE_SIZE" value="@{[ $c->config->{"Model::FetchImage"}->{'max_filesize'} ]}" />
@@ -25,12 +25,12 @@ sub process{
 
     if ( $object && $object->picture->id ){
         my $md = $object->picture->id - ($object->picture->id % 1000);
-        $out .= qq\
+        print qq\
             <li>
                 <img alt="@{[ $object->picture->id ]}" src="@{[ $c->config->{'thumb_path'} ]}/${md}/@{[ $object->picture->id ]}/600"/>
             </li>\;
     } else {
-        $out .= qq\
+        print qq\
             <li>
                 <label for="pic">Upload File</label>
             </li>
@@ -49,7 +49,7 @@ sub process{
             </li>\;
     }
 
-    $out .= qq\
+    print qq\
             <li>
                 <label for="pdescription">Description (optional)</label>
             </li>
@@ -66,13 +66,14 @@ sub process{
             <li>
                 <input type="checkbox" name="nsfw" id="nsfw" @{[ ($object && ($object->nsfw eq 'Y')) ? 'checked="checked"' : '' ]}/>
             </li>
-        </ul>
-                @{[ $c->view->template('Submit::TagThumbBrowser') ]}
+        </ul>\;
+
+    $c->view->template('Submit::TagThumbBrowser');
+
+    print qq\
                 <input type="submit" value="Submit Picture"/>
             </fieldset>
         </form>\;
-
-    return $out;
 }
 
 1;

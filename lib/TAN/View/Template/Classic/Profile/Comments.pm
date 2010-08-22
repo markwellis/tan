@@ -10,17 +10,17 @@ sub process{
 
     push(@{$c->stash->{'js_includes'}}, 'nsfw-comments');
 
-    my $out = '<ul class="TAN-inside TAN-comment_wrapper">';
+    print '<ul class="TAN-inside TAN-comment_wrapper">';
     foreach my $comment ( $c->stash->{'comments'}->all ){
-        $out .= qq\
-            <li class="TAN-news">
-                 @{[ $c->view->template('View::Comment', $comment) ]}
-            </li>\;
+        print '<li class="TAN-news">';
+            $c->view->template('View::Comment', $comment);
+        print '</li>';
     }
-    $out .= qq\
-            <li>
-                @{[ $c->view->template('Index::Pagination', $c->stash->{'comments'}->pager) ]}
-            </li>
+    print '<li>';
+
+    $c->view->template('Index::Pagination', $c->stash->{'comments'}->pager);
+
+    print qq\</li>
         </ul>\;
 }
 

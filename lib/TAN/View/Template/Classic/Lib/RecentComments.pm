@@ -6,10 +6,9 @@ sub process{
     my ( $self, $c, $position ) = @_;
 
     my $order = $c->stash->{'order'};
-    
-    my $out = '<ul class="TAN-recent-comments left">';
+    print '<ul class="TAN-recent-comments left">';
     if ( defined($c->stash->{'index'}) ){
-        $out .= qq\
+        print qq\
             <li class="TAN-order-by">
                 Order <select>
                     <option value="date" @{[ ($order eq 'date') ? 'selected="selected"' : '' ]}>Date</option>
@@ -28,7 +27,7 @@ sub process{
         if ( $grouped_comments->{$object_id}->[0]->object->nsfw eq 'Y' ){
             $title = "[NSFW] ${title}";
         }
-        $out .= qq\
+        print qq\
         <li>
             <a href="@{[ $grouped_comments->{$object_id}->[0]->object->url ]}" class="TAN-type-${type}" title="${title}">${title}</a>
             <ul>\;
@@ -49,22 +48,20 @@ sub process{
             }
             
             my $tip_title = $c->view->html($comment->user->username . "::${long_comment}");
-            $out .= qq\
+            print qq\
                 <li>
                     <a href="@{[ $comment->object->url ]}#comment@{[ $comment->comment_id ]}" title="${tip_title}">${short_comment}</a>
                 </li>\;
         }
-        $out .= qq\
+        print qq\
             </ul>
         </li>\;
     }
-    $out .= qq\
-        <li>
-            @{[ $c->view->template('Lib::Ad', 'left') ]}
+    print '<li>';
+    $c->view->template('Lib::Ad', 'left');
+    print qq\
         </li>
     </ul>\;
-
-    return $out;
 }
 
 1;

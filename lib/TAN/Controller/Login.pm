@@ -154,7 +154,7 @@ sub logout: Local Args(0){
     }
 
     my $ref = $c->req->referer || '/';
-    $c->res->redirect( $ref );
+    $c->res->redirect( $ref);
     $c->detach();
 }
 

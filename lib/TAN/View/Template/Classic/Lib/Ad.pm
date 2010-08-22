@@ -26,10 +26,10 @@ sub process{
         $width = 120;
     }
 
-    my $out = qq\<div class="TAN-${position}-ad">\;
+    print qq\<div class="TAN-${position}-ad">\;
 
     if ( !$c->stash->{'no_ads'} ){
-        $out .= qq\
+        print qq\
             <script type="text/javascript">//<![CDATA[
                 google_ad_client = "${ad_client}";
                 google_ad_slot = "${ad_slot}";
@@ -39,9 +39,7 @@ sub process{
             <script type="text/javascript" src="http://pagead2.googlesyndication.com/pagead/show_ads.js"></script>\;
     }
 
-    $out .= '</div>';
-
-    return $out;
+    print '</div>';
 }
 
 1;

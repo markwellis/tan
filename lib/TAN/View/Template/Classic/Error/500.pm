@@ -7,7 +7,7 @@ sub process{
 
     push(@{$c->stash->{'css_includes'}}, 'errors');
 
-    return qq\
+    print qq\
         <ul class="TAN-inside">
             <li class="TAN-news">
                 <h2 class="TAN-type-link">Massive Cockup (500)</h2> 

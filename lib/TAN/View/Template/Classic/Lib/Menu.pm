@@ -13,7 +13,7 @@ sub process{
         '3Polls' => 'poll',
     };
 
-    my $out = qq\
+    print qq\
     <div class="TAN-menu left">
         <ul class="TAN-menu-tab-holder">\;
     
@@ -24,24 +24,24 @@ sub process{
     foreach my $key ( sort(keys(%{$menu_tabs})) ){
         $value = $menu_tabs->{$key};
         $key =~ s/\d//;
-        $out .= qq\
+        print qq\
             <li@{[ ($loop == $size) ? ' class="TAN-menu-last"' : '' ]}>
                 <a class="TAN-menu-tab TAN-type-${value} @{[ ($location eq $value) ? "TAN-menu-tab-@{[ $location ]}-selected" : '' ]}" href="">${key}</a>
             </li>\;
         ++$loop;
     }
-    $out .= '</ul>';
+    print '</ul>';
     foreach my $value ( values(%{$menu_tabs}) ){
-        $out .= qq\
+        print qq\
         <ul class="TAN-menu-${value}" @{[ ($location eq $value) ? 'style="display:block"' : '' ]}>\;
 
         if ( $value ne 'all' ){
-            $out .= qq\
+             print qq\
                 <li>
                     <a href="/submit/${value}/">Submit</a>
                 </li>\;
         }
-        $out .= qq\
+        print qq\
             <li>
                 <a href="/random/${value}/">Random</a>
             </li>
@@ -63,7 +63,7 @@ sub process{
             </li>
         </ul>\;
     }
-    $out .= <<"END";
+    print <<"END";
     </div>
     <script type="text/javascript">
     //<![CDATA[
@@ -71,8 +71,6 @@ sub process{
     //]]>
     </script>
 END
-
-    return $out;
 }
 
 1;
