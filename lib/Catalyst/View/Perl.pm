@@ -1,7 +1,6 @@
 package Catalyst::View::Perl;
 
 use Moose;
-use IO::Capture::Stdout;
 
 extends 'Catalyst::View';
 
@@ -40,46 +39,34 @@ sub render{
     my ( $self, $c, $template, @args ) = @_;
 #redirect stdout so we can print template output 
 
-    my $capture =  IO::Capture::Stdout->new;
-    $capture->start;
+    my ( $content, $output );
 
     if ( $self->config->{'config'} ){
-        $self->template( $self->config->{'config'} );
+        $content = $self->template( $self->config->{'config'} );
     }
 
-    $self->template($template, @args);
-    $capture->stop;
-
-    my @content = $capture->read;
-    my @output;
-
+    $content = $self->template($template, @args);
     if ( $self->config->{'wrapper'} ){
-        $capture->start;
-
-        $self->template( $self->config->{'wrapper'}, join('', @content) );
-
-        $capture->stop;
-        @output = $capture->read;
-    } else {
-        @output = @content;
+        $output = $self->template( $self->config->{'wrapper'}, $content );
     }
 
-    return join('', @output);
+    return $output || $content;
 }
 
 sub template{
-    my ( $self, $template, @args ) = @_;
+    my ( $self, $template_name, @args ) = @_;
 
     my $c = $self->context;
-    my $view = $c->view("@{[ $self->namespace ]}::${template}");
+    my $template = $c->view("@{[ $self->namespace ]}::${template_name}");
 
-    if ( !$view ){
-        Catalyst::Exception->throw( "Template '${template}' not found" );
+    if ( !$template ){
+        Catalyst::Exception->throw( "Template '${template_name}' not found" );
     }
 
-    $c->stats->profile('begin' => " -> ${template}");
-    $view->process($c, @args);
-    $c->stats->profile('end' => " -> ${template}");
+    $c->stats->profile('begin' => " -> ${template_name}");
+    my $output = $template->process($c, @args);
+    $c->stats->profile('end' => " -> ${template_name}");
+    return $output;
 }
 
 __PACKAGE__->meta->make_immutable;
