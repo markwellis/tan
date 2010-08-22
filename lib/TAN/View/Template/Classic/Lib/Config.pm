@@ -6,13 +6,12 @@ sub process{
     my ( $self, $c ) = @_;
 
     my $theme_settings = $c->stash->{'theme_settings'};
+    my $path =$c->config->{'static_path'} . "/themes/@{[ $theme_settings->{'name'} ]}";
     $c->stash->{'theme_settings'} = {
         'name' => 'classic',
-        'display_name' => 'Classic',
-        'description' => 'The classic theme v2',
-        'css_path' => "@{[ $theme_settings->{'path'} ]}/css",
-        'js_path' => "@{[ $theme_settings->{'path'} ]}/js",
-        'image_path' => "@{[ $theme_settings->{'path'} ]}/images",
+        'css_path' => "${path}/css",
+        'js_path' => "${path}/js",
+        'image_path' => "${path}/images",
         %{$theme_settings},
     };
 
