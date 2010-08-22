@@ -49,7 +49,7 @@ sub process{
         <h2>
             <a href="@{[ (($is_video && !$c->stash->{'article'}) ? $object_url : $title_url) ]}" 
                 @{[ ($is_video && !$c->stash->{'article'}) ? '' : 'rel="external nofollow"' ]} class="TAN-type-${type}" title="${title}">
-                @{[ $c->view->html($object->$type->title) ]}@{[ $object->nsfw eq "Y" ? ' - NSFW' : '' ]}
+                @{[ $c->view->html($object->$type->title) ]}@{[ $object->nsfw eq "Y" ? '- NSFW' : '' ]}
             </a>
         </h2>
         <img alt="@{[ $c->view->html($object->user->username) ]}" src="@{[ $c->stash->{'avatar_http'} ]}?m=@{[ $c->stash->{'avatar_mtime'} || '' ]}" class="TAN-news-avatar left" />

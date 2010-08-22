@@ -10,6 +10,7 @@ no Moose;
 use HTML::Video::Embed;
 
 __PACKAGE__->config({
+    'namespace' => 'Template::Classic',
     'config' => 'Lib::Config',
     'wrapper' => 'Lib::Wrapper',
 });
