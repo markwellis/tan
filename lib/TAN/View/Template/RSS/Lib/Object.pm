@@ -20,7 +20,7 @@ sub process{
     $base =~ s|/$||;
 
     my $md = $object->$type->picture_id - ($object->$type->picture_id % 1000);
-    my $image = qq|<img width="100" height="100" align="left" src="@{[ $base . $c->config->{'thumb_path'} ]}/${md}/@{[ $object->$type->picture_id ]}/100" />|;
+    my $image = qq|<img width="100" height="100" align="left" src="@{[ $base . $c->config->{'thumb_path'} ]}/${md}/@{[ $object->$type->picture_id ]}/100?rss=1" />|;
 
     return qq\
         <item>
