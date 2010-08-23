@@ -57,10 +57,16 @@ fieldset{
     clear:right;
 }
 
+.TAN-rss-icon{
+    width:14px;
+    height:14px;
+}
+
 .TAN-header, .TAN-main{
     padding:5px;
     overflow:hidden;
 }
+
 .TAN-header{
     background-image:url("/static/themes/classic/images/top.jpg?r=2");
     background-color:#444;

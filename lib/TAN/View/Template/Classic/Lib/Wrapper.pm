@@ -12,6 +12,13 @@ sub process{
         $page_title = "${page_title} - ";
     }
 
+    
+    my $rss_url;
+
+    if ( $c->stash->{'can_rss'} ){
+        $rss_url = $c->view->url($c->req->uri, %{$c->req->params}, 'rss' => 1) ;
+    }
+
     return <<"END";
 <!DOCTYPE  html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
     <html xmlns="http://www.w3.org/1999/xhtml">
@@ -63,6 +70,12 @@ sub process{
                     </fieldset>
                 </form>
                 <p>
+                    @{[ 
+                    $c->stash->{'can_rss'} ?
+                        qq#<a href="${rss_url}"><img src="/static/images/rss.png" alt="rss" class="TAN-rss-icon" /></a> | #
+                    : 
+                        ''
+                    ]}
                     <a href="http://stats.thisaintnews.com">Stats</a> |
                     <a class="mibbit" href="/chat/">Chat</a>
                     @{[ $c->user_exists ? '| <a href="/login/logout/">Logout</a>' : '' ]}
