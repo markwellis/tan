@@ -13,7 +13,7 @@ sub process{
                 <ul>
                     <li>
                         <input type="hidden" id="cat" name="cat" value="@{[
-                            $object ? 
+                            defined($object) ? 
                                 $object->link->picture_id
                             :
                                 ''
@@ -22,7 +22,7 @@ sub process{
                     </li>
                     <li>
                         <input type="text" name="title" id="title" value="@{[ 
-                            $object ? 
+                            defined($object) ? 
                                 $c->view->html($object->link->title) 
                             : 
                                 '' 
@@ -33,7 +33,7 @@ sub process{
                     </li>
                     <li>
                         <input type="text" name="url" id="url" value="@{[ 
-                            $object ? 
+                            defined($object) ?  
                                 $c->view->html($object->link->url) 
                             : 
                                 '' 
@@ -44,7 +44,7 @@ sub process{
                     </li>
                     <li>
                         <textarea cols="1" rows="5" name="description" id="description">@{[ 
-                            $object ? 
+                            defined($object) ? 
                                 $c->view->html($object->link->description) 
                             : 
                                 '' 

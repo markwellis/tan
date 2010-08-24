@@ -40,15 +40,17 @@ sub indexinate{
     }
 
     if ( $c->user_exists ){
-        my @ids = map($_->id, @index);
-        my $meplus_minus = $c->model('MySQL::PlusMinus')->meplus_minus($c->user->user_id, \@ids);
+        if ( scalar(@index) ){
+            my @ids = map($_->id, @index);
+            my $meplus_minus = $c->model('MySQL::PlusMinus')->meplus_minus($c->user->user_id, \@ids);
 
-        foreach my $object ( @index ){
-            if ( defined($meplus_minus->{ $object->object_id }->{'plus'}) ){
-                $object->{'meplus'} = 1;
-            } 
-            if ( defined($meplus_minus->{ $object->object_id }->{'minus'}) ){
-                $object->{'meminus'} = 1;  
+            foreach my $object ( @index ){
+                if ( defined($meplus_minus->{ $object->object_id }->{'plus'}) ){
+                    $object->{'meplus'} = 1;
+                } 
+                if ( defined($meplus_minus->{ $object->object_id }->{'minus'}) ){
+                    $object->{'meminus'} = 1;  
+                }
             }
         }
     }
