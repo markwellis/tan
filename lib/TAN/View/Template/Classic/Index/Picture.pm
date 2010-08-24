@@ -28,7 +28,7 @@ sub process{
             </li>
             <li>
                 <a href="${url}#comments">
-                    <img src="@{[ $c->config->{'static_path'} ]}/images/comment.png" alt="" class="TAN-news-comment left"/>
+                    <img src="@{[ $c->config->{'static_path'} ]}/images/comment.png" alt="" class="TAN-news-comment left"/>&nbsp;
                     @{[ $object->get_column('comments') ]}
                 </a>
             </li>
