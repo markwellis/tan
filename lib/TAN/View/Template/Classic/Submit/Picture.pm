@@ -16,14 +16,14 @@ sub process{
                     </li>
                     <li>
                         <input type="text" name="title" id="title" value="@{[ 
-                            $object ? 
+                            defined($object) ? 
                                 $c->view->html($object->picture->title) 
                             : 
                                 '' 
                         ]}"/>
                     </li>\;
 
-    if ( $object && $object->picture->id ){
+    if ( defined($object) && $object->picture->id ){
         my $md = $object->picture->id - ($object->picture->id % 1000);
         $out .= qq\
             <li>
@@ -42,7 +42,7 @@ sub process{
             </li>
             <li>
                 <input type="text" name="pic_url" id="pic_url" value="@{[ 
-                    $object ?
+                    defined($object) ?
                         $object->picture->pic_url 
                     : ''
                 ]}"/>
@@ -55,7 +55,7 @@ sub process{
             </li>
             <li>
                 <textarea cols="1" rows="5" name="pdescription" id="pdescription">@{[ 
-                    $object ? 
+                    defined($object) ? 
                         $c->view->html($object->picture->description)
                     : ''
                 ]}</textarea>
@@ -64,7 +64,7 @@ sub process{
                 <label for="nsfw">Not Safe for Work?</label>
             </li>
             <li>
-                <input type="checkbox" name="nsfw" id="nsfw" @{[ ($object && ($object->nsfw eq 'Y')) ? 'checked="checked"' : '' ]}/>
+                <input type="checkbox" name="nsfw" id="nsfw" @{[ (defined($object) && ($object->nsfw eq 'Y')) ? 'checked="checked"' : '' ]}/>
             </li>
         </ul>
                 @{[ $c->view->template('Submit::TagThumbBrowser') ]}
