@@ -148,10 +148,6 @@ sub comments: PathPart('comments') Chained('user') Args(0){
             'me.deleted' => 'N',
         },
         {
-            '+select' => [
-                { 'unix_timestamp' => 'me.created' },
-            ],
-            '+as' => ['created'],
             'prefetch' => ['user', {
                 'object' => ['link', 'blog', 'picture'],
             }],
