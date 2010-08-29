@@ -9,13 +9,22 @@ sub process{
         push(@{$c->stash->{'js_includes'}}, 'tag-thumbs');
     }
 
-    my $object = $c->stash->{'object'};
+    my $object = $c->stash->{'object'} || $c->flash->{'object'};
+
+    my @tags;
+    if ( defined(($object)) ){
+        if ( ref($object) eq 'HASH' ){
+            @tags = map($_->{'tag'}, @{$object->{'tags'}});
+        } else {
+            @tags = map($_->tag, $object->tags->all);
+        }
+    }
 
     my $out = qq\
         <label for="tags">Tags</label>
         <input type="text" name="tags" id="tags" class="text_input full_width" value="@{[
-            $object ?
-                map($_->tag, $object->tags->all)
+            scalar(@tags) ?
+                join(' ', @tags)
             : 
                 ''
         ]}"/>\;

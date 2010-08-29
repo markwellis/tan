@@ -5,7 +5,26 @@ use base 'Catalyst::View::Perl::Template';
 sub process{
     my ( $self, $c ) = @_;
 
-    my $object = $c->stash->{'object'};
+    my $object = $c->stash->{'object'} || $c->flash->{'object'};
+    my ( $title, $description, $picture_id );
+    my @answers = (undef, undef);
+
+    if ( defined($object) ){
+        if ( ref($object) eq 'HASH' ){
+            $picture_id = $object->{'poll'}->{'picture_id'};
+            $title = $object->{'poll'}->{'title'};
+            $description = $object->{'poll'}->{'description'};
+            @answers = map($_->{'answer'}, @{ $object->{'poll'}->{'answers'} });
+        } else {
+            $picture_id = $object->poll->picture_id;
+            $title = $object->poll->title;
+            $description = $object->poll->description;
+            @answers = map($_->answer, $object->poll->answers->all);
+            if ( scalar(@answers) == 1 ){
+                push(@answers, undef);
+            }
+        }
+    }
 
     my $out = qq\
         <form action="post" id="submit_form" method="post">
@@ -13,8 +32,8 @@ sub process{
                 <ul>
                     <li>
                         <input type="hidden" id="cat" name="cat" value="@{[ 
-                            $object ? 
-                                $object->poll->picture_id
+                            $picture_id ? 
+                                $c->view->html($picture_id)
                             : 
                                 '' 
                         ]}" />
@@ -22,8 +41,8 @@ sub process{
                     </li>
                     <li>
                         <input type="text" name="title" id="title" value="@{[ 
-                            $object ? 
-                                $c->view->html($object->poll->title) 
+                            $title ? 
+                                $c->view->html($title) 
                             : 
                                 '' 
                         ]}"/>
@@ -33,8 +52,8 @@ sub process{
                     </li>
                     <li>
                         <textarea cols="1" rows="5" name="description" id="description">@{[ 
-                            $object ? 
-                                $c->view->html($object->poll->description) 
+                            $description ? 
+                                $c->view->html($description) 
                             : 
                                 '' 
                         ]}</textarea><br/>
@@ -46,17 +65,6 @@ sub process{
                         <input type="text" name="days" id="days" value="3" @{[ $c->stash->{'edit'} ? 'disabled="disabled"' : '' ]}/>
                     </li>\;
 
-        my @answers;
-        if ( $object ){
-            @answers = $object->poll->answers->all;
-            
-            if ( scalar($answers) == 1 ){
-                push(@answers, undef);
-            }
-        } else {
-            @answers = (undef, undef);
-        }
-
         my $loop = 0;
         foreach my $answer ( @answers ){
             $out .= qq\
@@ -64,7 +72,7 @@ sub process{
                     <label for="answer${loop}">Answer ${loop}</label>
                 </li>
                 <li>
-                    <input type="text" name="answers" id="answer${loop}" class="TAN-poll-answer" value="@{[ $answer ? $answer->answer : '' ]}"/>
+                    <input type="text" name="answers" id="answer${loop}" class="TAN-poll-answer" value="@{[ $answer ? $answer : '' ]}"/>
                 </li>\;
             ++$loop;
         }

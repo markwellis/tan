@@ -41,10 +41,11 @@ sub indexinate{
 
     if ( $c->user_exists ){
         if ( scalar(@index) ){
-            my @ids = map($_->id, @index);
+            my @ids = map(defined($_) ? $_->id : undef, @index);
             my $meplus_minus = $c->model('MySQL::PlusMinus')->meplus_minus($c->user->user_id, \@ids);
 
             foreach my $object ( @index ){
+                next if !$object;
                 if ( defined($meplus_minus->{ $object->object_id }->{'plus'}) ){
                     $object->{'meplus'} = 1;
                 } 

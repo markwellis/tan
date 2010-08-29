@@ -5,16 +5,30 @@ use base 'Catalyst::View::Perl::Template';
 sub process{
     my ( $self, $c ) = @_;
 
-    my $object = $c->stash->{'object'};
+    my $object = $c->stash->{'object'} || $c->flash->{'object'};
+    my ( $title, $url, $description, $picture_id );
 
+    if ( defined($object) ){
+        if ( ref($object) eq 'HASH' ){
+            $picture_id = $object->{'link'}->{'picture_id'};
+            $title = $object->{'link'}->{'title'};
+            $url = $object->{'link'}->{'url'};
+            $description = $object->{'link'}->{'description'};
+        } else {
+            $picture_id = $object->link->picture_id;
+            $title = $object->link->title;
+            $description = $object->link->description;
+            $url = $object->link->url;
+        }
+    }
     return qq\
         <form action="post" id="submit_form" method="post">
             <fieldset>
                 <ul>
                     <li>
                         <input type="hidden" id="cat" name="cat" value="@{[
-                            defined($object) ? 
-                                $object->link->picture_id
+                            $picture_id ? 
+                                $c->view->html($picture_id)
                             :
                                 ''
                         ]}" />
@@ -22,8 +36,8 @@ sub process{
                     </li>
                     <li>
                         <input type="text" name="title" id="title" value="@{[ 
-                            defined($object) ? 
-                                $c->view->html($object->link->title) 
+                            $title ? 
+                                $c->view->html($title) 
                             : 
                                 '' 
                         ]}"/>
@@ -33,8 +47,8 @@ sub process{
                     </li>
                     <li>
                         <input type="text" name="url" id="url" value="@{[ 
-                            defined($object) ?  
-                                $c->view->html($object->link->url) 
+                            $url ?  
+                                $c->view->html($url) 
                             : 
                                 '' 
                         ]}" />
@@ -44,8 +58,8 @@ sub process{
                     </li>
                     <li>
                         <textarea cols="1" rows="5" name="description" id="description">@{[ 
-                            defined($object) ? 
-                                $c->view->html($object->link->description) 
+                            $description ? 
+                                $c->view->html($description) 
                             : 
                                 '' 
                         ]}</textarea><br/>

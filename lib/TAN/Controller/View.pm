@@ -47,14 +47,16 @@ sub remove_blog_cache: Event(blog_updated){
     $c->cache->remove("blog.1:" . $object->id);
 }
 
-sub remove_comment_cache: Event(comment_created) Event(comment_deleted) Event(comment_updated){
+sub remove_comment_cache: Event(comment_created) Event(comment_deleted) Event(comment_updated) Event(object_updated){
     my ( $self, $c, $comment ) = @_;
 
     #clear recent_comments
     $c->cache->remove("recent_comments");
     #clear comment cache
-    $c->cache->remove("comment.0:" . $comment->id);
-    $c->cache->remove("comment.1:" . $comment->id);
+    if ( $comment ){
+        $c->cache->remove("comment.0:" . $comment->id);
+        $c->cache->remove("comment.1:" . $comment->id);
+    }
 }
 
 sub remove_object_cache: 

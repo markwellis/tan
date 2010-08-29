@@ -5,7 +5,22 @@ use base 'Catalyst::View::Perl::Template';
 sub process{
     my ( $self, $c ) = @_;
 
-    my $object = $c->stash->{'object'};
+    my $object = $c->stash->{'object'} || $c->flash->{'object'};
+    my ( $title, $details, $description, $picture_id );
+
+    if ( defined($object) ){
+        if ( ref($object) eq 'HASH' ){
+            $picture_id = $object->{'blog'}->{'picture_id'};
+            $title = $object->{'blog'}->{'title'};
+            $details = $object->{'blog'}->{'details'};
+            $description = $object->{'blog'}->{'description'};
+        } else {
+            $picture_id = $object->blog->picture_id;
+            $title = $object->blog->title;
+            $description = $object->blog->description;
+            $details = $object->blog->details_nobb;
+        }
+    }
 
     return qq\
         <form action="post" id="submit_form" method="post">
@@ -13,8 +28,8 @@ sub process{
                 <ul>
                     <li>
                         <input type="hidden" id="cat" name="cat" value="@{[
-                            $object ? 
-                                $object->blog->picture_id
+                            $picture_id ? 
+                                $c->view->html($picture_id)
                             :
                                 ''
                         ]}" />
@@ -22,8 +37,8 @@ sub process{
                     </li>
                     <li>
                         <input type="text" name="title" id="title" value="@{[ 
-                            $object ? 
-                                $c->view->html($object->blog->title) 
+                            $title ? 
+                                $c->view->html($title) 
                             : 
                                 '' 
                         ]}" />
@@ -33,8 +48,8 @@ sub process{
                     </li>
                     <li>
                         <textarea cols="1" rows="5" name="description" id="description" >@{[
-                            $object ? 
-                                $c->view->html($object->blog->description)
+                            $description ? 
+                                $c->view->html($description)
                             :
                                 ''
                         ]}</textarea><br/>
@@ -46,7 +61,7 @@ sub process{
                     @{[ 
                         $c->view->template('Lib::Editor', {
                             'name' => "blogmain",
-                            'value' => $object ? $object->blog->details_nobb : '',
+                            'value' => $details ? $details : '',
                             'height' => '600px',
                         })
                     ]}

@@ -19,6 +19,7 @@ sub process{
 
             my $loop = 0;
             foreach my $object ( @{$c->stash->{'index'}->{'objects'}} ){
+                next if not $object;
                 $out .= '<li class="TAN-news' . (($loop % 2) ? ' TAN-news-alternate' : '') . '">';
 
                 my $avatar_http = $c->config->{'avatar_path'} . "/" . $object->user_id;
@@ -33,7 +34,7 @@ sub process{
                 if ( -e $avatar_image ){
                     $c->stash->{'avatar_mtime'} = $c->view('Perl')->file_mtime($avatar_image);
                 } else {
-                    $c->stash->{'avatar_http'} = $c->config-{'static_path'} . '/images/_user.png';
+                    $c->stash->{'avatar_http'} = $c->config->{'static_path'} . '/images/_user.png';
                 }
 
                 if ( $is_picture ){
