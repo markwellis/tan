@@ -36,7 +36,7 @@ returns related picture info in json format
 =back
 
 =cut
-my $int_reg = qr/^\!\d+$/;
+my $int_reg = qr/^\!(\d+)$/;
 sub index: Path Args(1) {
     my ( $self, $c, $all_tags ) = @_;
 
@@ -47,7 +47,7 @@ sub index: Path Args(1) {
     tie my %object_ids, 'Tie::Hash::Indexed';
     foreach my $tag ( @tags ){
         if ( $tag =~ m/$int_reg/ ){
-            $object_ids{$tag} = 1;
+            $object_ids{$1} = 1;
         } else {
             $dupe_free_tags{$tag} = 1;
         }

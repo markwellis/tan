@@ -51,7 +51,7 @@ function get_thumbs(id){
                 add_thumbs( start, end );
                 $('thumb_tags').fade(1);
                 if (id){
-                    select_img($('pic' + id));
+                    select_img($('pic' + (id.replace(/\D+/g, '')) ));
                 }
             }
         }).get({
