@@ -177,7 +177,7 @@ sub validate_link: Private{
     my $cat = $c->req->param('cat');
 
     $cat =~s/$int_reg//g;
-    if (!defined($cat)){
+    if (!$cat){
     #no image selected
         $c->stash->{'error'} = $error_codes->{'no_image'};
     }
@@ -229,7 +229,7 @@ sub validate_blog: Private{
     my $cat = $c->req->param('cat');
 
     $cat =~ s/$int_reg//g;
-    if (!defined($cat)){
+    if (!$cat){
     #no image selected
         $c->stash->{'error'} = $error_codes->{'no_image'};
     }
@@ -353,7 +353,7 @@ sub validate_poll: Private{
     my $cat = $c->req->param('cat');
 
     $cat =~ s/$int_reg//g;
-    if (!defined($cat)){
+    if (!$cat){
     #no image selected
         $c->stash->{'error'} = $error_codes->{'no_image'};
     }
@@ -413,7 +413,7 @@ sub post: PathPart('post') Chained('validate') Args(0){
                 'blog' => {
                     'title' => $c->req->param('title') || undef,
                     'description' => $c->req->param('description') || undef,
-                    'details_nobb' => $c->req->param('blogmain') || undef,
+                    'details' => $c->req->param('blogmain') || undef,
                     'picture_id' => $c->req->param('cat') || undef,
                 },
                 'tags' => [
@@ -430,6 +430,7 @@ sub post: PathPart('post') Chained('validate') Args(0){
                 'tags' => [
                     { 'tag' => $c->req->param('tags') || undef }
                 ],
+                'nsfw' => defined($c->req->param('nsfw')) ? 'Y' : 'N',
             });
         } elsif ( $c->stash->{'location'} eq 'poll' ){
             $c->flash('object' => {

@@ -5,7 +5,22 @@ use base 'Catalyst::View::Perl::Template';
 sub process{
     my ( $self, $c ) = @_;
 
-    my $object = $c->stash->{'object'};
+    my $object = $c->stash->{'object'} || $c->flash->{'object'};
+    my ( $title, $pic_url, $description, $nsfw );
+
+    if ( defined($object) ){
+        if ( ref($object) eq 'HASH' ){
+            $title = $object->{'picture'}->{'title'};
+            $pic_url = $object->{'picture'}->{'pic_url'};
+            $description = $object->{'picture'}->{'description'};
+            $nsfw = $object->{'nsfw'};
+        } else {
+            $title = $object->picture->title;
+            $description = $object->picture->description;
+            $nsfw = $object->nsfw;
+        }
+    }
+
     my $out = qq\
         <form action="post" enctype="multipart/form-data" id="submit_form" method="post">
             <fieldset>
@@ -16,14 +31,14 @@ sub process{
                     </li>
                     <li>
                         <input type="text" name="title" id="title" value="@{[ 
-                            defined($object) ? 
-                                $c->view->html($object->picture->title) 
+                            $title ? 
+                                $c->view->html($title) 
                             : 
                                 '' 
                         ]}"/>
                     </li>\;
 
-    if ( defined($object) && $object->picture->id ){
+    if ( defined($object) && $c->stash->{'edit'} && $object->picture->id ){
         my $md = $object->picture->id - ($object->picture->id % 1000);
         $out .= qq\
             <li>
@@ -42,8 +57,8 @@ sub process{
             </li>
             <li>
                 <input type="text" name="pic_url" id="pic_url" value="@{[ 
-                    defined($object) ?
-                        $object->picture->pic_url 
+                    $pic_url ?
+                        $c->view->html($pic_url)
                     : ''
                 ]}"/>
             </li>\;
@@ -55,8 +70,8 @@ sub process{
             </li>
             <li>
                 <textarea cols="1" rows="5" name="pdescription" id="pdescription">@{[ 
-                    defined($object) ? 
-                        $c->view->html($object->picture->description)
+                    $description ? 
+                        $c->view->html($description)
                     : ''
                 ]}</textarea>
             </li>
@@ -64,7 +79,7 @@ sub process{
                 <label for="nsfw">Not Safe for Work?</label>
             </li>
             <li>
-                <input type="checkbox" name="nsfw" id="nsfw" @{[ (defined($object) && ($object->nsfw eq 'Y')) ? 'checked="checked"' : '' ]}/>
+                <input type="checkbox" name="nsfw" id="nsfw" @{[ ( $nsfw && ($nsfw eq 'Y') ) ? 'checked="checked"' : '' ]}/>
             </li>
         </ul>
                 @{[ $c->view->template('Submit::TagThumbBrowser') ]}
