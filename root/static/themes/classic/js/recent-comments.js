@@ -6,6 +6,8 @@ window.addEvent('domready', function(){
             var title = content[0];
             if ( content[1] ){
                 title += ' wrote:';
+            } else {
+                content[1] = '';
             }
 
             element.store('tip:title', title);  
