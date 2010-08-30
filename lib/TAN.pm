@@ -5,7 +5,6 @@ use namespace::autoclean;
 use Catalyst::Runtime 5.80;
 use Number::Format;
 use Data::Dumper;
-use Tie::Hash::Indexed;
 use Time::HiRes qw/time/;
 use POSIX qw/floor/;
 
@@ -44,7 +43,7 @@ use Catalyst qw/
 
 extends 'Catalyst';
 
-our $VERSION = 1.4.12;
+our $VERSION = 1.4.13;
 
 # Configure the application.
 #
@@ -159,33 +158,6 @@ sub nsfw{
     my $nsfw_req_val = $nsfw_req->value if ( defined($nsfw_req) );
 
     return $nsfw_res_val || $nsfw_req_val || 0;
-}
-
-=head2 recent_comments
-
-B<@args = undef>
-
-=over
-
-returns the 20 most recent comments
-
-=back
-
-=cut
-sub recent_comments{
-    my $c = shift;
-
-    my $recent_comments = $c->model('MySQL::Comments')->recent_comments( $c->config->{'recent_comments'} );
-
-    tie my %grouped_comments, 'Tie::Hash::Indexed';
-    foreach my $comment ( @{$recent_comments} ){
-        if ( !defined($grouped_comments{$comment->object_id}) ){
-            $grouped_comments{$comment->object_id} = [];
-        }
-        push(@{$grouped_comments{$comment->object_id}}, $comment);
-    }
-
-    return \%grouped_comments;
 }
 
 =head2 filesize_h

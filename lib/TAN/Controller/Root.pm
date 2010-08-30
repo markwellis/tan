@@ -53,7 +53,6 @@ sub auto: Private{
 
 ## theme shouldn't be set here!!
     $c->stash(
-        'start_time' => time(),    
         'theme_settings' => {
             'name' => 'classic',
         },

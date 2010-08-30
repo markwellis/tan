@@ -339,6 +339,15 @@ fieldset{
     color:#396A9C;
 }
 
+.TAN-whos-online{
+    height:20px;
+}
+
+.TAN-whos-online > img{
+    width:20px;
+    height:20px;
+}
+
 /* news */
 
 .TAN-news{
