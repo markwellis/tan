@@ -28,7 +28,8 @@ sub process{
         } else {
             $avatar_http = "@{[ $c->config->{'static_path'} ]}/images/_user.png";
         }
-        push(@whos_online, qq\<img alt="@{[ $c->view->html($user->get_column('username')) ]}" src="${avatar_http}?m=${avatar_mtime}" />\);
+        my $username = $c->view->html($user->get_column('username'));
+        push(@whos_online, qq\<img title="${username}" alt="${username}" src="${avatar_http}?m=${avatar_mtime}" />\);
     }
 
     return <<"END";
