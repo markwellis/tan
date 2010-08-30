@@ -1,7 +1,5 @@
 package TAN::View::Template::Classic::Lib::Wrapper;
 
-use Time::HiRes qw/time/;
-
 use base 'Catalyst::View::Perl::Template';
 
 sub process{
@@ -17,6 +15,20 @@ sub process{
 
     if ( $c->stash->{'can_rss'} ){
         $rss_url = $c->view->url($c->req->uri, %{$c->req->params}, 'rss' => 1) ;
+    }
+
+    my @whos_online ;
+    foreach my $user ( @{$c->model('MySQL::Views')->whos_online} ){
+        my $avatar_http = "@{[ $c->config->{'avatar_path'} ]}/@{[ $user->get_column('user_id') ]}";
+        my $avatar_image = "@{[ $c->path_to('root') ]}${avatar_http}";
+        my $avatar_mtime;
+
+        if ( -e $avatar_image ){
+            $avatar_mtime = $c->view->file_mtime($avatar_image);
+        } else {
+            $avatar_http = "@{[ $c->config->{'static_path'} ]}/images/_user.png";
+        }
+        push(@whos_online, qq\<img alt="@{[ $c->view->html($user->get_column('username')) ]}" src="${avatar_http}?m=${avatar_mtime}" />\);
     }
 
     return <<"END";
@@ -131,8 +143,7 @@ sub process{
     </div>
     <div id="TAN-bottom"></div>
     <div class="TAN-footer">
-        @{[ substr(time - $c->stash->{'start_time'}, 0, 4) ]} seconds,
-        version @{[ $c->VERSION ]}
+        <span class="TAN-whos-online">@{whos_online}</span>
         <span class="right"><a href="#">Up</a>&#160;<a href="#TAN-bottom">Down</a></span>
     </div>
     </body>

@@ -21,7 +21,7 @@ sub process{
             </li>\;
     }
 
-    my $grouped_comments = $c->recent_comments;
+    my $grouped_comments = $c->model('MySQL::Comments')->recent_comments(20);
     foreach my $object_id ( keys(%{$grouped_comments}) ){
         my $type = $grouped_comments->{$object_id}->[0]->object->type;
         my $title = $c->view->html($grouped_comments->{$object_id}->[0]->object->$type->title);

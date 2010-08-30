@@ -16,7 +16,6 @@
     "jscache_path": "/static/cache/js",
     "thumb_path": "/static/cache/thumbs",
 
-    "recent_comments": 20,
     "promotion_cutoff": 10,
 
     "recaptcha_public_key": "6LfOtQIAAAAAAKjR5kiq9YLFjG80_bLST2fB696F",

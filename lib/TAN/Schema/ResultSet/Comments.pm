@@ -3,6 +3,7 @@ package TAN::Schema::ResultSet::Comments;
 use strict;
 use warnings;
 use base 'DBIx::Class::ResultSet';
+use Tie::Hash::Indexed;
 
 =head1 NAME
 
@@ -22,7 +23,7 @@ B<@args = undef>
 
 =over
 
-gets the 20 most recent comments
+gets the most recent comments
 
 =back
 
@@ -57,7 +58,15 @@ sub recent_comments {
         $self->result_source->schema->cache->set('recent_comments', $recent_comments, 600 );
     }
 
-    return $recent_comments;
+    tie my %grouped_comments, 'Tie::Hash::Indexed';
+    foreach my $comment ( @{$recent_comments} ){
+        if ( !defined($grouped_comments{$comment->object_id}) ){
+            $grouped_comments{$comment->object_id} = [];
+        }
+        push(@{$grouped_comments{$comment->object_id}}, $comment);
+    }
+
+    return \%grouped_comments;
 }
 
 =head2 create_comment
