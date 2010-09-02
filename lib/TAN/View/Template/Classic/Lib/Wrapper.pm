@@ -76,7 +76,7 @@ sub process{
                         <input type="hidden" value="_xclick" name="cmd" />
                         <input type="hidden" value="donate\@thisaintnews.com" name="business" />
                         <input type="hidden" value="TAN Donation" name="item_name" />
-                        <input type="hidden" value="mrbig4545" name="item_number" />
+                        <input type="hidden" value="@{[ $c->user_exists ? $c->view->html($c->user->username) : 'n00b' ]}" name="item_number" />
                         <input type="hidden" value="GBP" name="currency_code" />
                         <input type="hidden" value="0" name="tax" />
                         <input type="image" alt="Donate" name="submit" src="/static/images/paypal.gif" />
@@ -96,7 +96,7 @@ sub process{
                 <p>
                 @{[ 
                 $c->user_exists ? 
-                    qq#<a href="/profile/@{[ $c->view('Perl')->html($c->user->username) ]}/">Profile</a> | #
+                    qq#<a href="/profile/@{[ $c->view->html($c->user->username) ]}/">Profile</a> | #
                 : 
                     '<a href="/login/">Login/Register</a> | ' 
                 ]}
@@ -130,7 +130,7 @@ sub process{
             : '' 
             ]}
 
-            var mibbit_nick = '@{[ $c->user_exists ? $c->user->username : 'n00b' ]}';
+            var mibbit_nick = '@{[ $c->user_exists ? $c->view->html($c->user->username) : 'n00b' ]}';
         //]]>
         </script>
         @{[

@@ -41,7 +41,7 @@ sub whos_online {
             'select' => [\'DISTINCT(me.user_id)', 'user.username'],
             'as' => ['user_id', 'username'],
             'join' => 'user',
-            'rows' => 10,
+            'rows' => 30,
         })->all;
 
         $self->result_source->schema->cache->set("whos_online", $who, 60);

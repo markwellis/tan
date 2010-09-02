@@ -122,7 +122,7 @@ sub edit: PathPart('edit') Chained('user') Args(0){
         $c->detach;
     }
 
-    $c->res->redirect('/profile/' . $c->stash->{'user'}->username);
+    $c->res->redirect("/profile/@{[ $c->stash->{'user'}->username ]}/");
     $c->detach;
 }
 
