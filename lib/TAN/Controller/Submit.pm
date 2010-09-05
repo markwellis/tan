@@ -303,6 +303,10 @@ sub validate_picture: Private{
             #is an image
                 $fileinfo->{'filename'} = $path . '.' . $fileinfo->{'file_ext'};
                 $upload->copy_to($fileinfo->{'filename'});
+                #strip uploaded image if not animated
+                if ( !$fileinfo->{'animated'} ){
+                    `convert -strip '$fileinfo->{'filename'}' '$fileinfo->{'filename'}'`;
+                }
             } else {
                 $c->stash->{'error'} = 'Invalid filetype';
             }
