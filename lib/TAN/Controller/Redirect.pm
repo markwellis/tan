@@ -3,8 +3,6 @@ use strict;
 use warnings;
 
 use parent 'Catalyst::Controller';
-my $not_int_reg = qr/\D+/;
-my $is_int_reg = qr/\d+/;
 
 =head1 NAME
 
@@ -41,6 +39,7 @@ sub internal: Local{
 
     my $url;
     if ( defined($source) ){
+        my $is_int_reg = $c->model('CommonRegex')->int;
         if ( !defined($filename) && ($source =~ m/^$is_int_reg$/) ){
         #id
             my $object = $c->model('MySQL::Object')->find({
@@ -54,7 +53,7 @@ sub internal: Local{
         #filename
             if ( !defined($filename) ){
             #old filename (no mod)
-                $source =~ /^(\d+)/;
+                $source =~ /^($is_int_reg)/;
                 my $pic_time = $1;
                 $filename = $source;
                 $source = ($pic_time - ($pic_time % 604800));
@@ -96,6 +95,7 @@ sub external: Local Args(1){
         $c->detach;
     }
 
+    my $not_int_reg = $c->model('CommonRegex')->not_int;
     $object_id =~ s/$not_int_reg//g;
 
     my $object_rs = $c->model('MySQL::Object')->find($object_id);
@@ -177,6 +177,7 @@ sub old_image: Local{
 
     my $url;
     if ( defined($source) ){
+        my $is_int_reg = $c->model('CommonRegex')->int;
         if ( defined($size) && ($source =~ m/^$is_int_reg$/) ){
         #thumb
             my $lookup = $c->model('MySQL::OldLookup')->find({

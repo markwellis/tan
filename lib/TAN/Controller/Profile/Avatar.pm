@@ -8,8 +8,6 @@ __PACKAGE__->config(namespace => 'profile/_avatar');
 use parent 'Catalyst::Controller';
 use JSON;
 
-my $int_reg = qr/\D+/;
-
 =head1 NAME
 
 TAN::Controller::Profile::Avatar
@@ -135,10 +133,13 @@ sub crop: Local{
         $cords->{'w'},
         $cords->{'h'},
     );
-    $x =~ s/$int_reg//g;
-    $y =~ s/$int_reg//g;
-    $w =~ s/$int_reg//g;
-    $h =~ s/$int_reg//g;
+
+    my $not_int_reg = $c->model('CommonRegex')->not_int;
+
+    $x =~ s/$not_int_reg//g;
+    $y =~ s/$not_int_reg//g;
+    $w =~ s/$not_int_reg//g;
+    $h =~ s/$not_int_reg//g;
 
 #x, y can be 0,0!
     if ( !$w || !$h ){

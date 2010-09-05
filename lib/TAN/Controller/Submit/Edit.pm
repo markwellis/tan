@@ -3,7 +3,6 @@ use strict;
 use warnings;
 
 use parent 'Catalyst::Controller';
-my $tag_reg = qr/[^a-zA-Z0-9]/;
 
 =head1 NAME
 

@@ -6,8 +6,6 @@ BEGIN { extends 'Catalyst::Controller'; }
 
 use JSON;
 
-my $int_reg = qr/\D+/;
-
 =head1 NAME
 
 TAN::Controller::View
@@ -100,7 +98,8 @@ sub location: PathPart('view') Chained('/') CaptureArgs(2){
         $c->detach();
     }
 
-    $object_id =~ s/$int_reg//g;
+    my $not_int_reg = $c->model('CommonRegex')->not_int;
+    $object_id =~ s/$not_int_reg//g;
     if ( !$object_id ){
         $c->forward('/default');
         $c->detach();
@@ -276,7 +275,8 @@ sub ajax_comment: Private{
 sub edit_comment: PathPart('_edit_comment') Chained('location') Args(1) {
     my ( $self, $c, $comment_id ) = @_;
 
-    $comment_id =~ s/$int_reg//g;
+    my $not_int_reg = $c->model('CommonRegex')->not_int;
+    $comment_id =~ s/$not_int_reg//g;
     my $object_rs = $c->model('MySQL::Object')->find({
         'object_id' => $c->stash->{'object_id'},
     });

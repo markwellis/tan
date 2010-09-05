@@ -15,6 +15,18 @@ has 'not_int' => (
     'default' => sub { return qr/\D+/ },
 );
 
+has 'alpha_numeric' => (
+    'is' => 'ro',
+    'isa' => 'RegexpRef',
+    'default' => sub { return qr/[a-zA-Z0-9]/ },
+);
+
+has 'not_alpha_numeric' => (
+    'is' => 'ro',
+    'isa' => 'RegexpRef',
+    'default' => sub { return qr/[^a-zA-Z0-9]/ },
+);
+
 has 'location' => (
     'is' => 'ro',
     'isa' => 'RegexpRef',

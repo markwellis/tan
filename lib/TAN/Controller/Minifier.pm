@@ -64,7 +64,7 @@ outputs css/js or 404's
 
 =cut
 my $alpha_reg = qr/[^a-zA-Z0-9\-_@]/; 
-my $format_reg = qr/[a-zA-Z0-9\-@]+_(.*)_\w+/;
+my $format_reg = qr/[a-zA-Z0-9\-@]+_(.*?)_\w+/;
 my $ext_reg = qr/(css|js)$/;
 
 sub index: Path Args(1) {

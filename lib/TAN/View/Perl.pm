@@ -33,27 +33,6 @@ sub file_mtime{
     return $stats[9];
 }
 
-=head2 url_title
-
-B<@args = ($title)>
-
-=over
-
-makes a title url/seo safe
-
-=back
-
-=cut
-my $url_title = qr/[^a-zA-Z0-9]/;
-sub url_title{
-    my ( $self, $title ) = @_;
-
-    $title =~ s/$url_title/-/g;
-
-    return $title;
-}
-
-
 =head2 embed_url
 
 B<@args = ($url)>
