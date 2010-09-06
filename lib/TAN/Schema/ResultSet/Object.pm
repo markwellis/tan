@@ -29,7 +29,6 @@ returns ($index_rs, $pager)
 =back
 
 =cut
-my $int_reg = qr/\D+/;
 my $order_reg = qr/^promoted|plus|minus|views|comments$/;
 
 sub index {
@@ -43,9 +42,10 @@ sub index {
     if ($order !~ m/$order_reg/){
         $order = 'created';
     }
-    
-    $upcoming =~ s/$int_reg//g;
-    $page =~ s/$int_reg//g;
+   
+    my $not_int_reg = TAN->model('CommonRegex')->not_int;
+    $upcoming =~ s/$not_int_reg//g;
+    $page =~ s/$not_int_reg//g;
 
     local $DBIx::Class::ResultSourceHandle::thaw_schema = $self->result_source->schema;
 

@@ -2,6 +2,7 @@ package TAN::View::Template::Classic::Lib::JsIncludes;
 
 use base 'Catalyst::View::Perl::Template';
 
+my $http_regex = qr/^http|\//;
 sub process{
     my ( $self, $c ) = @_;
 
@@ -14,7 +15,6 @@ sub process{
     }
 
     my $js_inc_done = {};
-    my $http_regex = qr/^http|\//;
 
     my $out;
     foreach my $js_include ( @{$scripts} ){

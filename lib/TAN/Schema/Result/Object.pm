@@ -141,7 +141,6 @@ __PACKAGE__->many_to_many(
   "tag" 
 );
 
-my $url_title = qr/[^a-zA-Z0-9]/;
 sub url_title{
     my ( $self ) = @_;
 
@@ -154,7 +153,8 @@ sub url_title{
         $title .= '-NSFW';
     }
 
-    $title =~ s/$url_title/-/g;
+    my $not_alpha_numeric_reg = TAN->model('CommonRegex')->not_alpha_numeric;
+    $title =~ s/$not_alpha_numeric_reg/-/g;
     return $title;
 }
 

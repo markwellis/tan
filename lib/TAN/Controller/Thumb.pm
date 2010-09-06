@@ -65,13 +65,12 @@ forwards to resize
 =back
 
 =cut
-my $int = qr/\D+/;
-
 sub index: Path Args(3) {
     my ( $self, $c, $mod, $id, $x ) = @_;
 
-    $id =~ s/$int//g;
-    $x =~ s/$int//g;
+    my $not_int_reg = $c->model('CommonRegex')->not_int;
+    $id =~ s/$not_int_reg//g;
+    $x =~ s/$not_int_reg//g;
 
     #work out mod incase someone ddoses server by requesting random mods :\
     $mod = $id - ($id % 1000);

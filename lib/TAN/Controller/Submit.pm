@@ -8,9 +8,6 @@ use Data::Validate::URI;
 use File::Path qw/mkpath/;
 use Digest::SHA;
 
-my $int_reg = qr/\D+/;
-my $tag_reg = qr/[^a-zA-Z0-9]/;
-
 =head1 NAME
 
 TAN::Controller::Submit
@@ -176,7 +173,8 @@ sub validate_link: Private{
     my $description = $c->req->param('description');
     my $cat = $c->req->param('cat');
 
-    $cat =~s/$int_reg//g;
+    my $not_int_reg = $c->model('CommonRegex')->not_int;
+    $cat =~ s/$not_int_reg//g;
     if (!$cat){
     #no image selected
         $c->stash->{'error'} = $error_codes->{'no_image'};
@@ -228,7 +226,8 @@ sub validate_blog: Private{
     my $description = $c->req->param('description');
     my $cat = $c->req->param('cat');
 
-    $cat =~ s/$int_reg//g;
+    my $not_int_reg = $c->model('CommonRegex')->not_int;
+    $cat =~ s/$not_int_reg//g;
     if (!$cat){
     #no image selected
         $c->stash->{'error'} = $error_codes->{'no_image'};
@@ -261,8 +260,12 @@ validates picture specific details
 sub validate_picture: Private{
     my ( $self, $c ) = @_;
 
+    my $not_alpha_numeric_reg = TAN->model('CommonRegex')->not_alpha_numeric;
+
     my $title = $c->req->param('title');
-    my $url_title = $c->view->url_title($title);
+    my $url_title = $title;
+    $url_title =~ s/$not_alpha_numeric_reg/-/g;
+
     my $time = time;
 
 #put images in a folder per week
@@ -300,6 +303,10 @@ sub validate_picture: Private{
             #is an image
                 $fileinfo->{'filename'} = $path . '.' . $fileinfo->{'file_ext'};
                 $upload->copy_to($fileinfo->{'filename'});
+                #strip uploaded image if not animated
+                if ( !$fileinfo->{'animated'} ){
+                    `convert -strip '$fileinfo->{'filename'}' '$fileinfo->{'filename'}'`;
+                }
             } else {
                 $c->stash->{'error'} = 'Invalid filetype';
             }
@@ -352,7 +359,9 @@ sub validate_poll: Private{
     my $description = $c->req->param('description');
     my $cat = $c->req->param('cat');
 
-    $cat =~ s/$int_reg//g;
+    my $not_int_reg = $c->model('CommonRegex')->not_int;
+    $cat =~ s/$not_int_reg//g;
+
     if (!$cat){
     #no image selected
         $c->stash->{'error'} = $error_codes->{'no_image'};
@@ -610,8 +619,8 @@ sub submit_poll: Private{
     my ( $self, $c ) = @_;
 
     my $days = $c->req->param('days');
-    my $int_reg = $c->model('CommonRegex')->not_int;
-    $days =~ s/$int_reg//;
+    my $not_int_reg = $c->model('CommonRegex')->not_int;
+    $days =~ s/$not_int_reg//;
     $days ||= 3;
     $days = ( $days > 31 ) ? 31 : $days;
 
@@ -671,6 +680,7 @@ sub add_tags: Private {
 
     my $tags_done = {};
 
+    my $tag_reg = $c->model('CommonRegex')->not_alpha_numeric;
     foreach my $tag ( @tags ){
         $tag =~ s/$tag_reg//g;
         $tag =~ s/^\s+//;

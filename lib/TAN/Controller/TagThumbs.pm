@@ -7,8 +7,6 @@ use parent 'Catalyst::Controller';
 use JSON;
 use Tie::Hash::Indexed;
 
-my $int = qr/\D+/;
-
 =head1 NAME
 
 TAN::Controller::TagThumbs
@@ -36,7 +34,7 @@ returns related picture info in json format
 =back
 
 =cut
-my $int_reg = qr/^\!(\d+)$/;
+my $tag_is_id_reg = qr/^\!(\d+)$/;
 sub index: Path Args(1) {
     my ( $self, $c, $all_tags ) = @_;
 
@@ -46,7 +44,7 @@ sub index: Path Args(1) {
     my %dupe_free_tags;
     tie my %object_ids, 'Tie::Hash::Indexed';
     foreach my $tag ( @tags ){
-        if ( $tag =~ m/$int_reg/ ){
+        if ( $tag =~ m/$tag_is_id_reg/ ){
             $object_ids{$1} = 1;
         } else {
             $dupe_free_tags{$tag} = 1;
@@ -76,8 +74,10 @@ sub index: Path Args(1) {
         }
     }
 
+    my $not_int_reg = $c->model('CommonRegex')->not_int;
+
     my $random = $c->req->param('random');
-    $random =~ s/$int//g if ( defined($random) );
+    $random =~ s/$not_int_reg//g if ( defined($random) );
 
     if ( $random ){
         #little security
