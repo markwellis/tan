@@ -46,7 +46,14 @@ sub _validate{
     my $image_type = Image::Info::image_info($file);
 
     if ( defined($image_type->{'file_ext'}) ){
-        my @frames = `convert -identify "${file}" /dev/null`;
+        my @frames = `convert -identify "${file}" /dev/null > /dev/null 2>&1`;
+
+        if ( $? ){
+        # convert returns 0 on success
+        # fail coz its prolly a corrupt image
+            return 0;
+        }
+
         return {
             'x' => $image_type->{'width'},
             'y' => $image_type->{'height'},

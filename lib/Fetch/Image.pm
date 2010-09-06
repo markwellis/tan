@@ -148,7 +148,7 @@ sub validate_head{
         return 0;
     }
 
-    if ( $head->header('content-length') > $self->{'config'}->{'max_filesize'} ){
+    if ( $head->header('content-length') && ($head->header('content-length') > $self->{'config'}->{'max_filesize'}) ){
     #file too big
         $self->{'error'} = 'Filesize exceeded';
 
