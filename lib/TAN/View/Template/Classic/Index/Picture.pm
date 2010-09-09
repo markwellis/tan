@@ -7,7 +7,7 @@ sub process{
     
     my $type = 'picture';
     my $object = $c->stash->{'object'};
-    my $object_size = $c->filesize_h( $object->picture->size );
+    my $object_size = $c->view->filesize_h( $object->picture->size );
     my $md = $object->id - ($object->id % 1000);
     my $url = $object->url;
 

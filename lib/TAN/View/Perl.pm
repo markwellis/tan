@@ -8,6 +8,7 @@ with 'Catalyst::View::Perl::URL';
 no Moose;
 
 use HTML::Video::Embed;
+use Number::Format;
 
 __PACKAGE__->config({
     'config' => 'Lib::Config',
@@ -72,6 +73,31 @@ sub is_video{
         return 1;
     }
     return 0;
+}
+
+=head2 filesize_h
+
+B<@args = ($size)>
+
+=over
+
+takes a size (KB) and converts it to a human readable format
+
+=back
+
+=cut
+sub filesize_h{
+    my ($c, $size) = @_;
+
+    if ( !$size ){
+        return 0;
+    }
+
+    if ( $size > 1024 ){
+        return Number::Format::format_number(($size / 1024)) . 'MB';
+    } else {
+        return Number::Format::format_number($size) . 'KB';
+    }
 }
 
 __PACKAGE__->meta->make_immutable;
