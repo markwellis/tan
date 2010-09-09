@@ -3,7 +3,6 @@ use strict;
 use warnings;
 
 use parent 'Catalyst::Controller';
-use Data::Validate::Email;
 
 =head1 NAME
 
