@@ -2,8 +2,6 @@ package KinoSearch::Simple::Result;
 use Moose;
 use namespace::autoclean;
 
-use Moose::Util::TypeConstraints;
-
 sub BUILD{
     my ( $self, $config ) = @_;
 
