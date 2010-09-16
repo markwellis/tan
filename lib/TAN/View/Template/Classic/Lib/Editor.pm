@@ -5,7 +5,7 @@ use base 'Catalyst::View::Perl::Template';
 sub process{
     my ( $self, $c, $editor ) = @_;
 
-    push(@{$c->stash->{'js_includes'}}, '/static/tiny_mce/tiny_mce.js?r=1');
+    push(@{$c->stash->{'js_includes'}}, '/static/tiny_mce/tiny_mce.js?r=2');
     push(@{$c->stash->{'js_includes'}}, 'tiny-mce-config');
 
     my $edheight = defined($editor->{'height'}) ? $editor->{'height'} : '300px';
