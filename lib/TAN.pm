@@ -3,10 +3,7 @@ use Moose;
 use namespace::autoclean;
 
 use Catalyst::Runtime 5.80;
-use Number::Format;
 use Data::Dumper;
-use Time::HiRes qw/time/;
-use POSIX qw/floor/;
 
 # Set flags and add plugins for the application
 #
@@ -43,7 +40,7 @@ use Catalyst qw/
 
 extends 'Catalyst';
 
-our $VERSION = 1.5.0;
+our $VERSION = 1.5.1;
 
 # Configure the application.
 #
@@ -158,31 +155,6 @@ sub nsfw{
     my $nsfw_req_val = $nsfw_req->value if ( defined($nsfw_req) );
 
     return $nsfw_res_val || $nsfw_req_val || 0;
-}
-
-=head2 filesize_h
-
-B<@args = ($size)>
-
-=over
-
-takes a size (KB) and converts it to a human readable format
-
-=back
-
-=cut
-sub filesize_h{
-    my ($c, $size) = @_;
-
-    if ( !$size ){
-        return 0;
-    }
-
-    if ( $size > 1024 ){
-        return Number::Format::format_number(($size / 1024)) . 'MB';
-    } else {
-        return Number::Format::format_number($size) . 'KB';
-    }
 }
 
 =head2 finalize_error

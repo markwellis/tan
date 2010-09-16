@@ -51,7 +51,7 @@ sub process{
     if ( ($c->user_exists) && ( $c->user->id == $comment->user->user_id ) ){
         $out .= qq\
                     <li>
-                        <a class="comment_edit" href="_edit_comment/@{[ $comment->id ]}">Edit Comment</a>
+                        <a class="comment_edit" href="@{[ $comment->object->url ]}/../_edit_comment/@{[ $comment->id ]}">Edit Comment</a>
                     </li>\;
     }
 
