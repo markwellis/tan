@@ -62,7 +62,7 @@ sub internal: Local{
                 'filename' => "${source}/${filename}",
             });
 
-            if ( $picture ){
+            if ( $picture && $picture->object ){
                 $url = $picture->object->url;
             }
         }
