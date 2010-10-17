@@ -1,4 +1,4 @@
-package TAN::View::Template::Classic::Profile;
+package TAN::View::Template::Classic::Profile::User;
 
 use base 'Catalyst::View::Perl::Template';
 
@@ -29,6 +29,11 @@ sub process{
             %search_opts,
         })->count || 0;
 
+    my $poll_count = $user->objects->search({
+            'type' => 'poll',
+            %search_opts,
+        })->count || 0;
+
     push(@{$c->stash->{'css_includes'}}, 'profile');
 
     my $avatar_http = "@{[ $c->config->{'avatar_path'} ]}/@{[ $user->user_id ]}";
@@ -51,6 +56,7 @@ sub process{
                 <ul class="TAN-id-card">
                     <li>
                         <img class="TAN-news-avatar" src="${avatar_http}?m=${avatar_mtime}" alt="@{[ $c->view->html($user->username) ]}" />
+                        <br />
                         <br />
                         @{[
                             ( $c->user_exists && ($c->user->username eq $user->username) ) ?
@@ -81,6 +87,11 @@ sub process{
                                 @{[ $pic_count ? '<a href="pictures">' : '' ]}
                                     Pictures: ${pic_count}
                                 @{[ $pic_count ? '</a>' : '' ]}
+                            </li>
+                            <li>
+                                @{[ $poll_count ? '<a href="polls">' : '' ]}
+                                    Polls: ${poll_count}
+                                @{[ $poll_count ? '</a>' : '' ]}
                             </li>
                         </ul>
                     </li>

@@ -33,3 +33,9 @@
     height:100px;
     width:100px;
 }
+
+.TAN-profile-avatar{
+    float:left;
+    background-color:#fff;
+    margin:0 0 2px 2px;
+}
