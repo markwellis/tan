@@ -5,17 +5,6 @@ use base 'Catalyst::View::Perl::Template';
 sub process{
     my ( $self, $c ) = @_;
 
-    my $avatar_http = "@{[ $c->config->{'avatar_path'} ]}/@{[ $c->user->id ]}";
-    my $avatar_image = "@{[ $c->path_to('root') ]}${avatar_http}";
-    my $avatar_mtime;
-
-    if ( -e $avatar_image ){
-    #avatar exists
-        $avatar_mtime = $c->view->file_mtime($avatar_image);
-    } else {
-        $avatar_http = "@{[ $c->config->{'static_path'} ]}/images/_user.png";
-    }
-
     push(@{$c->stash->{'css_includes'}}, 'view');
     push(@{$c->stash->{'css_includes'}}, 'profile@avatar');
 
@@ -24,12 +13,13 @@ sub process{
     push(@{$c->stash->{'js_includes'}}, 'profile@avatar');
 
     my $out = '<ul class="TAN-inside">';
+    my $avatar_http = $c->user->avatar($c);
 
     if ( !$c->stash->{'crop'} ){
     # upload page
         $out .= qq\
             <li class="TAN-news left" >
-                <img alt="@{[ $c->view->html($c->user->username) ]}" src="${avatar_http}?m=@{[ $avatar_mtime || '' ]}" class="avatar">
+                <img alt="@{[ $c->view->html($c->user->username) ]}" src="${avatar_http}" class="avatar">
             </li>
             <li class="TAN-news">
                 <h2>
@@ -48,6 +38,7 @@ sub process{
             </li>\;
     } else {
     # crop page
+        $avatar_http =~ s/\?/\.no_crop\?/;
         $out .= qq\
             <li class="TAN-news">
                 <h2>
@@ -56,7 +47,7 @@ sub process{
                 <p>
                     Please select the area you wish to have as your avatar
                 </p>
-                <img src="${avatar_http}.no_crop?m=@{[ $c->view->file_mtime("${avatar_image}.no_crop") ]}" id="cropper"/>
+                <img src="${avatar_http}" id="cropper"/>
 
                 <form method="post" action="/profile/_avatar/crop" id="crop_form">
                     <fieldset>

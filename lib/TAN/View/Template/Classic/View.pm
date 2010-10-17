@@ -19,17 +19,6 @@ sub process{
         }
     }
 
-    my $avatar_http = "@{[ $c->config->{'avatar_path'} ]}/@{[ $object->user_id ]}";
-    my $avatar_image = "@{[ $c->path_to('root') ]}${avatar_http}";
-
-    if ( -e $avatar_image ){
-    #avatar exists
-        $c->stash->{'avatar_mtime'} = $c->view->file_mtime($avatar_image);
-        $c->stash->{'avatar_http'} = $avatar_http;
-    } else {
-        $c->stash->{'avatar_http'} = "@{[ $c->config->{'static_path'} ]}/images/_user.png";
-    }
-
     my $out = qq\
     <ul class="TAN-inside">
         <li class="TAN-news">\;

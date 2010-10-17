@@ -42,6 +42,7 @@ sub whos_online {
             'as' => ['user_id', 'username'],
             'join' => 'user',
             'rows' => 30,
+            'prefetch' => 'user',
         })->all;
 
         $self->result_source->schema->cache->set("whos_online", $who, 60);

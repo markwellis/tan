@@ -52,7 +52,7 @@ sub process{
                 @{[ $c->view->html($object->$type->title) ]}@{[ $object->nsfw eq "Y" ? ' - NSFW' : '' ]}
             </a>
         </h2>
-        <img alt="@{[ $c->view->html($object->user->username) ]}" src="@{[ $c->stash->{'avatar_http'} ]}?m=@{[ $c->stash->{'avatar_mtime'} || '' ]}" class="TAN-news-avatar left" />
+        <img alt="@{[ $c->view->html($object->user->username) ]}" src="@{[ $object->user->avatar($c) ]}" class="TAN-news-avatar left" />
         <ul>
             <li>
                 Posted by <a href="/profile/@{[ $c->view->html($object->user->username) ]}/" class="TAN-news-user">

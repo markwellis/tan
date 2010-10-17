@@ -26,16 +26,20 @@ sub process{
         my $type = $grouped_comments->{$object_id}->[0]->object->type;
         my $title = $c->view->html($grouped_comments->{$object_id}->[0]->object->$type->title);
         if ( $grouped_comments->{$object_id}->[0]->object->nsfw eq 'Y' ){
-            $title = "[NSFW] ${title}";
+            if ( !$c->nsfw ){
+                next;
+            } else {
+                $title = "[NSFW] ${title}";
+            }
         }
         $out .= qq\
-        <li>
-            <a href="@{[ $grouped_comments->{$object_id}->[0]->object->url ]}" class="TAN-type-${type}" title="${title}">${title}</a>
-            <ul>\;
+            <li>
+                <a href="@{[ $grouped_comments->{$object_id}->[0]->object->url ]}" class="TAN-type-${type}" title="${title}">${title}</a>
+                <ul>\;
         foreach my $comment ( @{$grouped_comments->{$object_id}} ){
             my $orig_comment = $c->view->strip_tags($comment->comment);
             if ( $comment->object->nsfw eq 'Y' ){
-                $orig_comment = "[NSFW] ${orig_comment}";
+                $orig_comment = "${orig_comment}";
             }
 
             my $short_comment = $c->view->html(substr($orig_comment, 0, 50));

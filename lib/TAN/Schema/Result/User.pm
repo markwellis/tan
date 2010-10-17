@@ -117,4 +117,32 @@ sub admin{
     return undef;
 }
 
+=head2 avatar
+
+B<@args = (undef)
+
+=over
+
+returns the path to the users avatar or the no avatar image
+
+=back
+
+=cut
+sub avatar{
+    my ( $self, $c ) = @_;
+
+    my $avatar_http = "@{[ $c->config->{'avatar_path'} ]}/@{[ $self->id ]}";
+    my $avatar_image = "@{[ $c->path_to('root') ]}${avatar_http}";
+    my $avatar_mtime;
+
+    if ( -e $avatar_image ){
+    #avatar exists
+        $avatar_http = "$avatar_http?m=@{[ $c->view->file_mtime($avatar_image) ]}";
+    } else {
+        $avatar_http = "@{[ $c->config->{'static_path'} ]}/images/_user.png";
+    }
+    
+    return $avatar_http;
+}
+
 1;

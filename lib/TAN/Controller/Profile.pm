@@ -34,6 +34,28 @@ sub clear_comment_caches: Event(comment_deleted){
     $c->clear_cached_page('/profile/.*/comments');
 }
 
+
+sub index: Private{
+    my ( $self, $c ) = @_;
+
+    $c->cache_page(600);
+
+    my $users = $c->model('MySQL::User')->search({
+        'deleted' => 'N',
+    },{
+        'columns' => [
+            'user_id', 
+            'username',
+        ],
+    });
+
+    $c->stash(
+        'users' => $users,
+        'template' => 'Profile', 
+        'page_title' => "User List",
+    );
+}
+
 =head2 user: PathPart('submit') Chained('/') CaptureArgs(1)
 
 B<@args = ($username)>
@@ -58,7 +80,7 @@ sub user: PathPart('profile') Chained('/') CaptureArgs(1){
     }
 }
 
-=head2 index: PathPart('') Chained('user') Args(0)
+=head2 user_index: PathPart('') Chained('user') Args(0)
 
 B<@args = undef>
 
@@ -69,7 +91,7 @@ loads profile page for the user
 =back
 
 =cut
-sub index: PathPart('') Chained('user') Args(0){
+sub user_index: PathPart('') Chained('user') Args(0){
     my ( $self, $c ) = @_;
 
     $c->cache_page(600);
@@ -89,7 +111,7 @@ sub index: PathPart('') Chained('user') Args(0){
 
     $c->stash(
         'page_title' => $user->username . "'s Profile",
-        'template' => 'Profile',
+        'template' => 'Profile::User',
     );
 }
 
@@ -232,6 +254,28 @@ sub pictures: PathPart('pictures') Chained('user') Args(0){
 
     $c->stash(
         'fancy_picture_index' => 1,
+        'template' => 'Index',
+        'can_rss' => 1,
+    );
+}
+
+=head2 polls: PathPart('polls') Chained('user') Args(0)
+
+B<@args = undef>
+
+=over
+
+loads polls for the user
+
+=back
+
+=cut
+sub polls: PathPart('polls') Chained('user') Args(0){
+    my ( $self, $c ) = @_;
+
+    $c->forward('fetch', ['poll']);
+
+    $c->stash(
         'template' => 'Index',
         'can_rss' => 1,
     );
