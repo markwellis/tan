@@ -19,17 +19,8 @@ sub process{
 
     my @whos_online ;
     foreach my $user ( @{$c->model('MySQL::Views')->whos_online} ){
-        my $avatar_http = "@{[ $c->config->{'avatar_path'} ]}/@{[ $user->get_column('user_id') ]}";
-        my $avatar_image = "@{[ $c->path_to('root') ]}${avatar_http}";
-        my $avatar_mtime;
-
-        if ( -e $avatar_image ){
-            $avatar_mtime = $c->view->file_mtime($avatar_image);
-        } else {
-            $avatar_http = "@{[ $c->config->{'static_path'} ]}/images/_user.png";
-        }
         my $username = $c->view->html($user->get_column('username'));
-        push(@whos_online, qq\<a href="/profile/${username}/"><img title="${username}" alt="${username}" src="${avatar_http}?m=${avatar_mtime}" /></a>\);
+        push(@whos_online, qq\<a href="/profile/${username}/"><img title="${username}" alt="${username}" src="@{[ $user->user->avatar($c) ]}" /></a>\);
     }
 
     return <<"END";

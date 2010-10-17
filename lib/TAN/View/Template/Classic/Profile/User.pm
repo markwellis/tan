@@ -36,17 +36,6 @@ sub process{
 
     push(@{$c->stash->{'css_includes'}}, 'profile');
 
-    my $avatar_http = "@{[ $c->config->{'avatar_path'} ]}/@{[ $user->user_id ]}";
-    my $avatar_image = "@{[ $c->path_to('root') ]}${avatar_http}";
-    my $avatar_mtime;
-
-    if ( -e $avatar_image ){
-    #avatar exists
-        $avatar_mtime = $c->view->file_mtime($avatar_image);
-    } else {
-        $avatar_http = "@{[ $c->config->{'static_path'} ]}/images/_user.png";
-    }
-
     return qq\
         <ul class="TAN-inside">
             <li>
@@ -55,7 +44,7 @@ sub process{
             <li>
                 <ul class="TAN-id-card">
                     <li>
-                        <img class="TAN-news-avatar" src="${avatar_http}?m=${avatar_mtime}" alt="@{[ $c->view->html($user->username) ]}" />
+                        <img class="TAN-news-avatar" src="@{[ $user->avatar($c) ]}" alt="@{[ $c->view->html($user->username) ]}" />
                         <br />
                         <br />
                         @{[

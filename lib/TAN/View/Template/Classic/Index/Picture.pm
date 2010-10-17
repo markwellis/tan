@@ -10,6 +10,7 @@ sub process{
     my $object_size = $c->view->filesize_h( $object->picture->size );
     my $md = $object->id - ($object->id % 1000);
     my $url = $object->url;
+    my $username = $c->view->html($object->user->username);
 
     my $output = qq\
         <h2>
@@ -18,13 +19,10 @@ sub process{
             </a>
         </h2>
 
-        <img alt="@{[ $c->view->html($object->user->username) ]}" 
-            src="@{[ $c->stash->{'avatar_http'} ]}?m=@{[ $c->stash->{'avatar_mtime'} ? $c->stash->{'avatar_mtime'} : '' ]}" 
-            class="TAN-news-avatar left"
-        />
+        <img alt="${username}" src="@{[ $object->user->avatar($c) ]}" class="TAN-news-avatar left" />
         <ul>
             <li>
-                <a href="/profile/@{[ $c->view->html($object->user->username) ]}/" class="TAN-news-user">@{[ $c->view->html($object->user->username) ]}</a>
+                <a href="/profile/${username}/" class="TAN-news-user">${username}</a>
             </li>
             <li>
                 <a href="${url}#comments">

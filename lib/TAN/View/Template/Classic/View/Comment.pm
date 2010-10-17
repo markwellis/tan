@@ -22,20 +22,9 @@ sub process{
                 </li>\;
     }
 
-    my $avatar_http = "@{[ $c->config->{'avatar_path'} ]}/@{[ $comment->user_id ]}";
-    my $avatar_image = "@{[ $c->path_to('root') ]}${avatar_http}";
-    my $avatar_mtime;
-
-    if ( -e $avatar_image ){
-    #avatar exists
-        $avatar_mtime = $c->view->file_mtime($avatar_image);
-    } else {
-        $avatar_http = "@{[ $c->config->{'static_path'} ]}/images/_user.png";
-    }
-
     $out .= qq\
                 <li>
-                    <img class="TAN-news-avatar TAN-comment_avatar" src="${avatar_http}?m=${avatar_mtime}" alt="@{[ $c->view->html($comment->user->username) ]}" />
+                    <img class="TAN-news-avatar TAN-comment_avatar" src="@{[ $comment->user->avatar($c) ]}" alt="@{[ $c->view->html($comment->user->username) ]}" />
                 </li>
                 <li>
                     Comment #@{[ $comment->number || 1 ]}

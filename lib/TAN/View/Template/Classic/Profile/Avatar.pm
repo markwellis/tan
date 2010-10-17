@@ -38,6 +38,7 @@ sub process{
             </li>\;
     } else {
     # crop page
+        $avatar_http =~ s/\?/\.no_crop\?/;
         $out .= qq\
             <li class="TAN-news">
                 <h2>
@@ -46,7 +47,7 @@ sub process{
                 <p>
                     Please select the area you wish to have as your avatar
                 </p>
-                <img src="${avatar_http}.no_crop?m=@{[ $c->view->file_mtime("${avatar_image}.no_crop") ]}" id="cropper"/>
+                <img src="${avatar_http}" id="cropper"/>
 
                 <form method="post" action="/profile/_avatar/crop" id="crop_form">
                     <fieldset>
