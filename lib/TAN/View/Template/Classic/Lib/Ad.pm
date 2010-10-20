@@ -5,11 +5,7 @@ use base 'Catalyst::View::Perl::Template';
 sub process{
     my ( $self, $c, $position ) = @_;
 
-
-
-    my $ad_client = $c->config->{'google_adcode'};
     my ( $ad_slot, $height, $width );
-
     if ( $position eq 'top' ){
         $ad_slot = "5056038012";
         $height = 90;
@@ -31,7 +27,7 @@ sub process{
     if ( !$c->stash->{'no_ads'} ){
         $out .= qq\
             <script type="text/javascript">//<![CDATA[
-                google_ad_client = "${ad_client}";
+                google_ad_client = "@{[ $c->config->{'google_adcode'} ]}";
                 google_ad_slot = "${ad_slot}";
                 google_ad_width = ${width};
                 google_ad_height = ${height};
