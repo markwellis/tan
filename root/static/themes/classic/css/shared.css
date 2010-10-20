@@ -232,10 +232,6 @@ fieldset{
 
 /* ads */
 
-.TAN-top-ad, .TAN-right1-ad, .TAN-right2-ad, .TAN-left-ad, .TAN-bottom-ad{
-    background-color:#fff;
-}
-
 .TAN-top-ad{
     height:90px;
     width:728px;
