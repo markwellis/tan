@@ -9,18 +9,23 @@ sub process{
     if ( $position eq 'top' ){
     #leaderboard
         $ad_slot = "52129";
+        $ad_type = 5;
     } elsif ( $position eq 'left' ){
     #skyscraper
         $ad_slot = "52130";
+        $ad_type = 3;
     } elsif ( $position eq 'right1' ){
     #skyscraper
         $ad_slot = "52131";
+        $ad_type = 3;
     } elsif ( $position eq 'right2' ){
     #skyscraper
         $ad_slot = "52132";
+        $ad_type = 3;
     } elsif ( $position eq 'bottom' ){
 # bottom
         $ad_slot = "52133";
+        $ad_type = 5;
     }
 
     my $out = qq\<div class="TAN-${position}-ad">\;
@@ -30,7 +35,7 @@ sub process{
         <script type="text/javascript">//<![CDATA[
             var pw_d=document;
             pw_d.projectwonderful_adbox_id = "${ad_slot}";
-            pw_d.projectwonderful_adbox_type = "5";
+            pw_d.projectwonderful_adbox_type = "${ad_type}";
             pw_d.projectwonderful_foreground_color = "";
             pw_d.projectwonderful_background_color = "";
             //]]>
