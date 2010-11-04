@@ -19,11 +19,11 @@ sub process{
         }
     }
 
-    if ( $object->nsfw eq 'Y' ){
-        $c->stash(
-            'no_ads' => 1,
-        );
-    }
+#    if ( $object->nsfw eq 'Y' ){
+#        $c->stash(
+#            'no_ads' => 1,
+#        );
+#    }
 
     my $out = qq\
     <ul class="TAN-inside">
