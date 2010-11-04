@@ -46,7 +46,7 @@ sub process{
     if ( $object ){
         $out .= qq#
             <script type="text/javascript">
-                get_thumbs( \$('picture_id').value );
+                get_thumbs( \$('cat').value );
             </script>#;
     }
 

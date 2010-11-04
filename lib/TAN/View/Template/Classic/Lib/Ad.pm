@@ -7,35 +7,32 @@ sub process{
 
     my ( $ad_slot, $height, $width );
     if ( $position eq 'top' ){
-    #leaderboard
-        $ad_slot = "52129";
+        $ad_slot = "5056038012";
+        $height = 90;
+        $width = 728;
     } elsif ( $position eq 'left' ){
-    #skyscraper
-        $ad_slot = "52130";
+# left
+        $ad_slot = "0470978238";
+        $height = 600;
+        $width = 160;
     } elsif ( $position eq 'right1' ){
-    #skyscraper
-        $ad_slot = "52131";
-    } elsif ( $position eq 'right2' ){
-    #skyscraper
-        $ad_slot = "52132";
-    } elsif ( $position eq 'bottom' ){
-# bottom
-        $ad_slot = "52133";
+# right1
+        $ad_slot = "9701017441";
+        $height = 600;
+        $width = 120;
     }
 
     my $out = qq\<div class="TAN-${position}-ad">\;
 
     if ( !$c->stash->{'no_ads'} ){
         $out .= qq\
-        <script type="text/javascript">//<![CDATA[
-            var pw_d=document;
-            pw_d.projectwonderful_adbox_id = "${ad_slot}";
-            pw_d.projectwonderful_adbox_type = "5";
-            pw_d.projectwonderful_foreground_color = "";
-            pw_d.projectwonderful_background_color = "";
-            //]]>
-        </script>
-        <script type="text/javascript" src="http://www.projectwonderful.com/ad_display.js"></script>\;
+            <script type="text/javascript">//<![CDATA[
+                google_ad_client = "@{[ $c->config->{'google_adcode'} ]}";
+                google_ad_slot = "${ad_slot}";
+                google_ad_width = ${width};
+                google_ad_height = ${height};
+            //]]></script>
+            <script type="text/javascript" src="http://pagead2.googlesyndication.com/pagead/show_ads.js"></script>\;
     }
 
     $out .= '</div>';

@@ -90,7 +90,7 @@ sub index :Path Args(2) {
             'order' => $order,
             'page_title' => ($upcoming ? 'Upcoming ' : 'Promoted ') . ucfirst($location) . ($location ne 'all' ? 's' : '' ),
             'can_rss' => 1,
-#            'no_ads' => $c->nsfw, #no ads if nsfw filter is off
+            'no_ads' => $c->nsfw, #no ads if nsfw filter is off
         );
         if ( $location eq 'picture' ){
             $c->stash->{'fancy_picture_index'} = 1;

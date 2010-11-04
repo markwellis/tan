@@ -72,7 +72,7 @@ function select_img(img){
     	'width': '100px',
     	'height' : '100px'
     });
-    $('picture_id').value = parseInt(img.id.substring(3), 10);
+    $('cat').value = parseInt(img.id.substring(3), 10);
 }
 
 function add_thumbs(start, end) {
