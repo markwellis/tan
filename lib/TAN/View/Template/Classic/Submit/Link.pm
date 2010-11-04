@@ -2,31 +2,44 @@ package TAN::View::Template::Classic::Submit::Link;
 
 use base 'Catalyst::View::Perl::Template';
 
+use feature qw/switch/;
+
 sub process{
     my ( $self, $c ) = @_;
 
-    my $object = $c->stash->{'object'} || $c->flash->{'object'};
-    my ( $title, $url, $description, $picture_id );
+    my $module = $c->model('Submit')->modules->{'link'};
 
-    if ( defined($object) ){
-        if ( ref($object) eq 'HASH' ){
-            $picture_id = $object->{'link'}->{'picture_id'};
-            $title = $object->{'link'}->{'title'};
-            $url = $object->{'link'}->{'url'};
-            $description = $object->{'link'}->{'description'};
-        } else {
-            $picture_id = $object->link->picture_id;
-            $title = $object->link->title;
-            $description = $object->link->description;
-            $url = $object->link->url;
+    return undef if !$module;
+
+    my $config = $module->config;
+
+    # this doesn't really cut it, coz we need to produce javascript
+    # as well so that we can validate input stuff client side, or maybe thats 
+    # another function?
+    my $output;
+    foreach my $key ( sort(keys(%{$config})) ){
+# HTMLENTITTIES!!!!!!! // heh heh titties, but cereal y'all
+        if ( $config->{ $key }->{'type'} ne 'hidden' ){
+            $output .= qq\<label for="${key}">@{[ ucfirst($key) ]}</label>\;
+        }
+        given ($config->{ $key }->{'type'}){
+            when ('textarea'){
+                $output .= qq\<textarea name="${key}" id="${key}"></textarea>\;
+            };
+            default {
+                $output .= qq\<input type="${_}" name="${key}" id="${key}" />\;
+            };
         }
     }
+
     return qq\
         <form action="post" id="submit_form" method="post">
             <fieldset>
+            ${output}<br /><br />
                 <ul>
                     <li>
-                        <input type="hidden" id="cat" name="cat" value="@{[
+                        <input type="hidden" id="type" name="type" value="link" />
+                        <input type="hidden" id="picture_id" name="picture_id" value="@{[
                             $picture_id ? 
                                 $c->view->html($picture_id)
                             :
