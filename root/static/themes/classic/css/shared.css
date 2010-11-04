@@ -241,13 +241,26 @@ fieldset{
 
 .TAN-right1-ad{
     height:600px;
-    width:120px;
+    width:160px;
+    margin-bottom:45px;
+}
+
+.TAN-right2-ad{
+    height:600px;
+    width:160px;
 }
 
 .TAN-left-ad{
     height:600px;
     width:160px;
     margin-top:20px;
+}
+
+.TAN-bottom-ad{
+    margin:15px auto 30px auto;
+    clear:both;
+    height:90px;
+    width:728px;
 }
 
 /* main */
@@ -312,7 +325,7 @@ fieldset{
 
 .TAN-inside{
     margin-left:170px !important;
-    margin-right:125px !important;
+    margin-right:165px !important;
 }
 
 /* bottom */
