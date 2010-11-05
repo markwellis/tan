@@ -326,9 +326,12 @@ sub is_video{
     foreach my $domain ( keys(%{ $self->_videos }) ){
 #figure out if url is supported
         my $domain_reg = $self->_videos->{ $domain }->{'domain_reg'};
-        if ( $uri->host =~ m/$domain_reg/ ){
-            return ( $domain, $uri );
+        eval{
+            if ( $uri->host =~ m/$domain_reg/ ){
+                return ( $domain, $uri );
+            }
         }
+        return undef if $@;
     }
 
     return undef;
