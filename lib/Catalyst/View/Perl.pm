@@ -1,6 +1,7 @@
 package Catalyst::View::Perl;
 
 use Moose;
+use Try::Tiny;
 
 extends 'Catalyst::View';
 
@@ -73,7 +74,14 @@ sub template{
     }
 
     $c->stats->profile('begin' => " -> ${template_name}");
-    my $output = $template->process($c, @args);
+
+    my $output = try{
+        $template->process($c, @args);
+    } catch {
+        $c->error($_);
+        return undef;
+    };
+
     $c->stats->profile('end' => " -> ${template_name}");
     return $output;
 }
