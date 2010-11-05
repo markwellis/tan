@@ -5,7 +5,7 @@ use URI;
 use URI::QueryParam;
 use URI::Escape::XS;
 
-use Data::Validate::URI qw/is_uri/;
+use Data::Validate::URI qw/is_web_uri/;
 use LWPx::ParanoidAgent;
 
 has 'width' => (
@@ -319,19 +319,16 @@ sub url_to_embed{
 sub is_video{
     my ( $self, $url ) = @_;
 
-    return undef if ( !is_uri($url) );
+    return undef if ( !is_web_uri($url) );
 
     my $uri = URI->new( URI::Escape::XS::uri_unescape($url) );
 
     foreach my $domain ( keys(%{ $self->_videos }) ){
 #figure out if url is supported
         my $domain_reg = $self->_videos->{ $domain }->{'domain_reg'};
-        eval{
-            if ( $uri->host =~ m/$domain_reg/ ){
-                return ( $domain, $uri );
-            }
+        if ( $uri->host =~ m/$domain_reg/ ){
+            return ( $domain, $uri );
         }
-        return undef if $@;
     }
 
     return undef;
