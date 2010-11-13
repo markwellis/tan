@@ -11,7 +11,7 @@ my $header = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "ht
 <head>
     <title>{#emotions_dlg.title}</title>
         <script type="text/javascript" src="../../tiny_mce_popup.js"></script>
-            <script type="text/javascript" src="js/emotions.js?r=2"></script>
+            <script type="text/javascript" src="js/emotions.js?r=4"></script>
             </head>
             <body style="display: none">
                 <div align="center">
@@ -35,15 +35,15 @@ my $patch_command = "sed -i -e \"s/tinyMCEPopup\\.getWindowArg('plugin_url') + '
 
 my $patch_popup_size = '../../root/static/tiny_mce/plugins/emotions/editor_plugin.js';
 #width and height are hacked, lookup proper values in js
-my $patch_poppup_command0 = "sed -i -e \"s/width:654/width:750/\" ${patch_popup_size}";
-my $patch_poppup_command1 = "sed -i -e \"s/height:428/height:470/\" ${patch_popup_size}";
+my $patch_poppup_command0 = "sed -i -e \"s/width:750/width:750/\" ${patch_popup_size}";
+my $patch_poppup_command1 = "sed -i -e \"s/height:470/height:600/\" ${patch_popup_size}";
 `$patch_poppup_command0`;
 `$patch_poppup_command1`;
 
 
 my $i = 0;
 my $middle;
-my $columns = 20;
+my $columns = 14;
 
 foreach my $smiley (@smilies){
     if ( !($i % $columns) ){
