@@ -12,11 +12,21 @@ sub process{
     my $edwidth = defined($editor->{'width'}) ? $editor->{'width'} : '100%';
     my $edname = defined($editor->{'name'}) ? $editor->{'name'} : 'editor';
 
-    return qq\
+    my $out = qq\
         <textarea class="${edname}" style="height:${edheight};width:${edwidth}" id="${edname}" name="${edname}" rows="80" cols="20">@{[ 
             $c->view->html($editor->{'value'}) || '' 
-        ]}</textarea>
+        ]}</textarea>\;
 
+    if ( 
+        ( $c->req->user_agent =~ /iPhone/ ) 
+        || ( $c->req->user_agent =~ /Android/ )
+    ){
+    #tinymce isn't compatable with iPhone or Android
+        return $out;
+    }
+
+    return qq\
+        ${out}
         <script type="text/javascript">
         //<![CDATA[
             var tiny_mce_config;
