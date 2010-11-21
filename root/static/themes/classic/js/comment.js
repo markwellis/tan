@@ -129,6 +129,11 @@ function edit_link(link){
                 }).post(data);
             });
 
+            var post_params = {
+                'ajax': 1
+            };
+            post_params[ 'delete' + comment_id ] = 'Delete'; 
+
             //delete comment
             comment_holder.getElement('#delete' + comment_id).addEvent('click', function(e){
                 e.stop();
@@ -145,10 +150,7 @@ function edit_link(link){
                     'onFailure': function(xhr){
                         TAN.alert( xhr.responseText );
                     }
-                }).post({
-                    'ajax': 1,
-                    'delete': 1
-                });
+                }).post( post_params );
             });
         },
         'onFailure': function(xhr){
