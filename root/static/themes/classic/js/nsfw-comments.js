@@ -19,15 +19,13 @@ window.addEvent('domready', function(){
                 'onload': function(image){
                     var el = image.retrieve('el');
 
-                    resize_image(image, el);
+                    resize_image(el, el);
                     el.setProperty('src', image_src);
                     el.setStyle('visibility', 'visible');
                     el.addEvents({
                         'mouseover': function(e){
                             e.stop();
                             this.setProperty('src', this.retrieve('original_image').src);
-                            this.height = this.height;
-                            this.width = this.width;
                         },
                         'mouseout': function(e){
                             e.stop();
@@ -61,7 +59,7 @@ window.addEvent('domready', function(){
     }
 });
 
-function resize_image(image, el){
+function resize_image(image, el, min_size){
     if (image.width > 550){
         var width = image.width;
         var height = image.height;
