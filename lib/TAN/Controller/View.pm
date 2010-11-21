@@ -309,9 +309,10 @@ sub edit_comment: PathPart('_edit_comment') Chained('location') Args(1) {
 
         $c->detach();
     }
-
     if ( $c->req->method eq 'POST' ){
-        if ( defined($c->req->param('delete')) ){
+        if ( defined($c->req->param("delete${comment_id}"))
+            && ( $c->req->param("delete${comment_id}") eq 'Delete' )
+        ){
 #DELETE comment
             $comment_rs->update({
                 'deleted' => 'Y',
