@@ -1,7 +1,7 @@
 tiny_mce_config = {
     theme: "advanced",
 
-    plugins: "safari,table,emotions,fullscreen,inlinepopups",
+    plugins: "safari,table,emotions,fullscreen,inlinepopups,autoresize",
 
     theme_advanced_buttons1: "code,|,undo,redo,|,fontsizeselect,|,"
         + "bold,italic,underline,strikethrough,|,"
