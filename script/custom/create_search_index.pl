@@ -2,14 +2,14 @@
 use strict;
 use warnings;
 
-use KinoSearch::Simple;
+use KinoSearchX::Simple;
 
 use TAN::Model::MySQL;
 use Term::ProgressBar;
 
 my $index_path = '/mnt/stuff/TAN/search_index';
 
-my $searcher = KinoSearch::Simple->new({
+my $searcher = KinoSearchX::Simple->new({
     'index_path' => '/mnt/stuff/TAN/search_index',
     'schema' => [
         {
