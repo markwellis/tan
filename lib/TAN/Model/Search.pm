@@ -3,7 +3,7 @@ use Moose;
 
 extends 'Catalyst::Model::Adaptor';
 
-__PACKAGE__->config( class => 'KinoSearch::Simple' );
+__PACKAGE__->config( class => 'KinoSearchX::Simple' );
 
 =head1 NAME
 
@@ -11,7 +11,7 @@ TAN::Model::Search
 
 =head1 DESCRIPTION
 
-Interface to L<KinoSearch::Simple>
+Interface to L<KinoSearchX::Simple>
 
 =head1 AUTHOR
 
