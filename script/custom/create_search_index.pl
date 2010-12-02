@@ -32,9 +32,9 @@ my $searcher = KinoSearchX::Simple->new({
 my $db = new TAN::Model::MySQL;
 
 my $objects = $db->resultset('Object')->search({
-        'type' => ['link', 'blog', 'picture'],
+        'type' => ['link', 'blog', 'picture', 'poll'],
     },{
-    'prefetch' => ['link', 'blog', 'picture'],
+    'prefetch' => ['link', 'blog', 'picture', 'poll'],
 });
 
 my $count = $objects->count;
