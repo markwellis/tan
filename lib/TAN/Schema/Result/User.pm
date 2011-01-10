@@ -94,22 +94,11 @@ sub confirm{
     });
 }
 
-=head2 admin
-
-B<@args = (undef)
-
-=over
-
-returns true if the user is an admin (aka me)
-
-=back
-
-=cut
 sub admin{
     my ( $self ) = @_;
 
     if ( 
-        ($self->username eq 'mrbig4545') 
+        ($self->username eq 'n0body') 
         && ($self->id == 1)
     ){
         return 1;
@@ -117,17 +106,6 @@ sub admin{
     return undef;
 }
 
-=head2 avatar
-
-B<@args = (undef)
-
-=over
-
-returns the path to the users avatar or the no avatar image
-
-=back
-
-=cut
 sub avatar{
     my ( $self, $c ) = @_;
 

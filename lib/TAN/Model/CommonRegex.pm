@@ -30,7 +30,7 @@ has 'not_alpha_numeric' => (
 has 'location' => (
     'is' => 'ro',
     'isa' => 'RegexpRef',
-    'default' => sub { return qr/^link|blog|picture|poll$/ },
+    'default' => sub { return qr/^(?:link|blog|picture|poll)$/ },
 );
 
 no Moose;
