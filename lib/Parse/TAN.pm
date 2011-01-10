@@ -75,6 +75,7 @@ sub init{
     $attrib_whitelist->{'a'}->{'title'} = 'text';
     $attrib_whitelist->{'a'}->{'href'} = 'href';
     $attrib_whitelist->{'a'}->{'target'} = 'text';
+    $attrib_whitelist->{'a'}->{'class'} = 'text';
 
     $attrib_whitelist->{'img'}->{'title'} = 'text';
     $attrib_whitelist->{'img'}->{'src'} = 'text';
