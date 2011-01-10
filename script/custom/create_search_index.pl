@@ -52,7 +52,7 @@ while (my $object = $objects->next){
     my $type = $object->type;
 
     if ( defined($object->$type) ){
-        $searcher->update_or_create({
+        $searcher->create({
             'id' => $object->id,
             'type' => $type,
             'nsfw' => $object->nsfw,
