@@ -5,9 +5,6 @@ use base 'Catalyst::View::Perl::Template';
 sub process{
     my ( $self, $c, $editor ) = @_;
 
-    push(@{$c->stash->{'js_includes'}}, '/static/tiny_mce/tiny_mce.js?r=9');
-    push(@{$c->stash->{'js_includes'}}, 'tiny-mce-config');
-
     my $edheight = defined($editor->{'height'}) ? $editor->{'height'} : '300px';
     my $edwidth = defined($editor->{'width'}) ? $editor->{'width'} : '100%';
     my $edname = defined($editor->{'name'}) ? $editor->{'name'} : 'editor';
@@ -22,8 +19,19 @@ sub process{
         || ( $c->req->user_agent =~ /Android/ )
     ){
     #tinymce isn't compatable with iPhone or Android
+        #remove comment from js since comment.js references tinymce
+        my @js_includes;
+        foreach my $js_include ( @{ $c->stash->{'js_includes'} } ){
+            if ( $js_include ne 'comment' ){
+                push( @js_includes, $js_include );
+            }
+        }
+        $c->stash->{'js_includes'} = \@js_includes;
         return $out;
     }
+
+    push(@{$c->stash->{'js_includes'}}, '/static/tiny_mce/tiny_mce.js?r=10');
+    push(@{$c->stash->{'js_includes'}}, 'tiny-mce-config');
 
     return qq\
         ${out}
