@@ -10,7 +10,6 @@ sub process{
         $page_title = "${page_title} - ";
     }
 
-    
     my $rss_url;
 
     if ( $c->stash->{'can_rss'} ){
@@ -89,15 +88,10 @@ sub process{
             </div>
             <div class="TAN-menu-ad-holder">
                 @{[ $c->view->template('Lib::Menu') ]}
-                @{[ $c->view->template('Lib::Ad', 'top') ]}
             </div>
         </div>
         <div class="TAN-main">
             @{[ $c->view->template('Lib::RecentComments') ]}
-            <div class="TAN-right-ads right">
-                @{[ $c->view->template('Lib::Ad', 'right1') ]}
-                @{[ $c->view->template('Lib::Ad', 'right2') ]}
-            </div>
         <script type="text/javascript">
         //<![CDATA[
             @{[ 

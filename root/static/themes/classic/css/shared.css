@@ -5,7 +5,7 @@ body{
     font-weight:normal;
     height:100%;
     margin:0px;
-    min-width:1040px;
+    min-width:885px;
 }
 
 a{
@@ -126,7 +126,6 @@ fieldset{
 
 .TAN-menu{
     clear:both;
-    position:absolute;
     bottom:0px;
 }
 
@@ -232,13 +231,6 @@ fieldset{
 
 /* ads */
 
-.TAN-top-ad{
-    height:90px;
-    width:728px;
-    margin:0px auto 25px;
-    float:right;
-}
-
 .TAN-right1-ad{
     height:600px;
     width:160px;
@@ -326,7 +318,6 @@ fieldset{
 
 .TAN-inside{
     margin-left:170px !important;
-    margin-right:165px !important;
 }
 
 /* bottom */
@@ -488,7 +479,7 @@ fieldset{
 
 .TAN-news-pagination{
     width:700px;
-    margin:25px auto 0px auto;
+    margin:5px 0px 5px 170px;
 }
 
 .TAN-news-page-number{
