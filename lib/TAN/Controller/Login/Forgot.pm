@@ -1,45 +1,11 @@
 package TAN::Controller::Login::Forgot;
-use strict;
-use warnings;
+use Moose;
+use namespace::autoclean;
 
-use parent 'Catalyst::Controller';
+BEGIN { extends 'Catalyst::Controller'; }
+
 use Data::Validate::Email;
 
-=head1 NAME
-
-TAN::Controller::Login::Forgot
-
-=head1 DESCRIPTION
-
-User forgot username/password
-
-=head1 EXAMPLE
-
-I</login/forgot>
-
-=over
-
-show email form
-
-=back
-
-=head1 METHODS
-
-=cut
-
-=head2 index: Path: Args(0)
-
-B<@args = undef>
-
-=over
-
-redirects to / if user logged in
-
-loads the forgot template
-
-=back
-
-=cut
 sub index: Path Args(0){
     my ( $self, $c ) = @_;
    
@@ -54,17 +20,6 @@ sub index: Path Args(0){
     $c->stash->{'template'} = 'Login::Forgot::Index';
 }
 
-=head2 step1: Local
-
-B<@args = undef>
-
-=over
-
-finds user by email, then emails them a reset token
-
-=back
-
-=cut
 sub step1: Local{
     my ( $self, $c ) = @_;
    
@@ -102,17 +57,6 @@ sub step1: Local{
     $c->detach();
 }
 
-=head2 step2: Local Args(2)
-
-B<@args = $user_id, $token>
-
-=over
-
-lets a user change their password
-
-=back
-
-=cut
 sub step2: Local Args(2){
     my ( $self, $c, $user_id, $token ) = @_;
 
@@ -155,15 +99,4 @@ sub step2: Local Args(2){
     $c->stash->{'template'} = 'Login::Forgot::Step2';
 }
 
-=head1 AUTHOR
-
-A clever guy
-
-=head1 LICENSE
-
-This library is free software. You can redistribute it and/or modify
-it under the same terms as Perl itself.
-
-=cut
-
-1;
+__PACKAGE__->meta->make_immutable;

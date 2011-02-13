@@ -38,7 +38,6 @@ sub process{
 
 sub render{
     my ( $self, $c, $template, @args ) = @_;
-#redirect stdout so we can print template output 
 
     my ( $content, $output );
 
@@ -87,5 +86,3 @@ sub template{
 }
 
 __PACKAGE__->meta->make_immutable;
-
-1;

@@ -6,31 +6,7 @@ use base 'DBIx::Class::ResultSet';
 
 use Data::Page;
 
-=head1 NAME
-
-TAN::Schema::ResultSet::Comments
-
-=head1 DESCRIPTION
-
-Comments ResultSet
-
-=head1 METHODS
-
-=cut
-
-=head2 index
-
-B<@args = ($location, $page, $upcoming, $order)>
-
-=over
-
-returns ($index_rs, $pager)
-
-=back
-
-=cut
 my $order_reg = qr/^promoted|plus|minus|views|comments$/;
-
 sub index {
     my ($self, $location, $page, $upcoming, $search, $order, $nsfw, $index_type) = @_;
     
@@ -143,18 +119,6 @@ sub index {
     return ($objects, $pager);
 }
 
-
-=head2 clear_index_cache
-
-B<@args = (undef)>
-
-=over
-
-clears the index page cache
-
-=back
-
-=cut
 sub clear_index_cache{
     my ( $self ) = @_;
 
@@ -167,17 +131,6 @@ sub clear_index_cache{
     $self->result_source->schema->cache->set("indexes_in_cache", $indexes_in_cache);
 }
 
-=head2 random
-
-B<@args = ($location, $nsfw)>
-
-=over
-
-gets a random article
-
-=back
-
-=cut
 sub random{
     my ($self, $location, $nsfw) = @_;
 
@@ -205,24 +158,15 @@ sub random{
 
 }
 
-=head2 get
-
-B<@args = ($object_id, $location)>
-
-=over
-
-gets an article
-
-=back
-
-=cut
 sub get{
-    my ($self, $object_id, $location) = @_;
+    my ($self, $object_id, $location, $no_extra) = @_;
 
     local $DBIx::Class::ResultSourceHandle::thaw_schema = $self->result_source->schema;
 
     my $object_rs = $self->result_source->schema->cache->get('object:' . $object_id);
+    return $object_rs if ( $object_rs );
 
+    my $order_by = ''; #don't know why, but it orders wrong if this is unset, set to '' for speedy correct ordering
     my $prefetch = [
         'user',
     ];
@@ -233,39 +177,33 @@ sub get{
                 'answers' => ['votes'],
             },
         });
+        $order_by = 'answers.answer_id';
     } else {
         push(@{$prefetch}, $location);
     }
 
-    if ( !$object_rs ){  
-        $object_rs = $self->find({
-            'object_id' => $object_id,
-        },{
-            '+select' => [
-                \'(SELECT COUNT(*) FROM views WHERE views.object_id = me.object_id AND type="internal") views',
-                \'(SELECT COUNT(*) FROM views WHERE views.object_id = me.object_id AND type="external") external',
-                \'(SELECT COUNT(*) FROM comments WHERE comments.object_id = me.object_id AND deleted = "N") comments',
-                \'(SELECT COUNT(*) FROM plus_minus WHERE plus_minus.object_id = me.object_id AND type="plus") plus',
-                \'(SELECT COUNT(*) FROM plus_minus WHERE plus_minus.object_id = me.object_id AND type="minus") minus',
-            ],
-            '+as' => ['views', 'external', 'comments', 'plus', 'minus'],
-            'prefetch' => $prefetch,
-            'order_by' => '',
-        });
-        $self->result_source->schema->cache->set('object:' . $object_id, $object_rs, 600);
+    my %extra;
+    if ( !$no_extra ){
+        $extra{'+select'} = [
+            \'(SELECT COUNT(*) FROM views WHERE views.object_id = me.object_id AND type="internal") views',
+            \'(SELECT COUNT(*) FROM views WHERE views.object_id = me.object_id AND type="external") external',
+            \'(SELECT COUNT(*) FROM comments WHERE comments.object_id = me.object_id AND deleted = "N") comments',
+            \'(SELECT COUNT(*) FROM plus_minus WHERE plus_minus.object_id = me.object_id AND type="plus") plus',
+            \'(SELECT COUNT(*) FROM plus_minus WHERE plus_minus.object_id = me.object_id AND type="minus") minus',
+        ];
+        $extra{'+as'} = ['views', 'external', 'comments', 'plus', 'minus'];
     }
+
+    $object_rs = $self->find({
+        'object_id' => $object_id,
+    },{
+        %extra,
+        'prefetch' => $prefetch,
+        'order_by' => $order_by,
+    });
+
+    $self->result_source->schema->cache->set('object:' . $object_id, $object_rs, 600);
     return $object_rs;
 }
-
-=head1 AUTHOR
-
-A clever guy
-
-=head1 LICENSE
-
-This library is free software. You can redistribute it and/or modify
-it under the same terms as Perl itself.
-
-=cut
 
 1;

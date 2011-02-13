@@ -1,39 +1,12 @@
 package TAN::Controller::TagThumbs;
-use strict;
-use warnings;
+use Moose;
+use namespace::autoclean;
 
-use parent 'Catalyst::Controller';
+BEGIN { extends 'Catalyst::Controller'; }
 
 use JSON;
 use Tie::Hash::Indexed;
 
-=head1 NAME
-
-TAN::Controller::TagThumbs
-
-=head1 DESCRIPTION
-
-JSON for the pictures with these tags
-
-=head1 EXAMPLE
-
-I</tagthumbs/$tags/>
-
-=head1 METHODS
-
-=cut
-
-=head2 index: Path Args(1)
-
-B<@args = ($tags)>
-
-=over
-
-returns related picture info in json format
-
-=back
-
-=cut
 my $tag_is_id_reg = qr/^\!(\d+)$/;
 sub index: Path Args(1) {
     my ( $self, $c, $all_tags ) = @_;
@@ -108,16 +81,4 @@ sub index: Path Args(1) {
     $c->detach();
 }
 
-
-=head1 AUTHOR
-
-A clever guy
-
-=head1 LICENSE
-
-This library is free software. You can redistribute it and/or modify
-it under the same terms as Perl itself.
-
-=cut
-
-1;
+__PACKAGE__->meta->make_immutable;

@@ -25,8 +25,7 @@ sub process{
                 $js_file =~ s|@|/|;
 
                 my $m_time = $c->view->file_mtime("@{[ $c->path_to('root') ]}@{[ $c->stash->{'theme_settings'}->{'js_path'} ]}/${js_file}.js");
-                $out .= qq\
-                <script type="text/javascript" src="@{[ $c->config->{'jscache_path'} ]}/@{[ $c->stash->{'theme_settings'}->{'name'} ]}_${js_include}_${m_time}.js"></script>\;
+                $out .= qq\<script type="text/javascript" src="@{[ $c->config->{'jscache_path'} ]}/@{[ $c->stash->{'theme_settings'}->{'name'} ]}_${js_include}_${m_time}.js"></script>\;
 
             } else {
                 $out .= qq\

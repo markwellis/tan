@@ -1,32 +1,9 @@
 package TAN::Model::Index;
+use Moose;
+use namespace::autoclean;
 
-use strict;
-use warnings;
-use parent 'Catalyst::Model';
+extends 'Catalyst::Model';
 
-=head1 NAME
-
-TAN::Model::Index
-
-=head1 DESCRIPTION
-
-Makes an index
-
-=head1 METHODS
-
-=cut
-
-=head2 indexinate
-
-B<@args = ($c, $index_rs)>
-
-=over
-
-converts $index_rs into an index, or returns undef
-
-=back
-
-=cut
 sub indexinate{
     my ( $self, $c, $objects, $pager ) = @_;
 
@@ -62,15 +39,4 @@ sub indexinate{
     };
 }
 
-=head1 AUTHOR
-
-A clever guy
-
-=head1 LICENSE
-
-This library is free software. You can redistribute it and/or modify
-it under the same terms as Perl itself.
-
-=cut
-
-1;
+__PACKAGE__->meta->make_immutable;

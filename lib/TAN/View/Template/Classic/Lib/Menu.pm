@@ -1,29 +1,29 @@
 package TAN::View::Template::Classic::Lib::Menu;
 
 use base 'Catalyst::View::Perl::Template';
+use Tie::Hash::Indexed;
 
 sub process{
     my ( $self, $c ) = @_;
 
-    my $menu_tabs = {
-        '0All' => 'all',
-        '1Links' => 'link',
-        '2Blogs' => 'blog',
-        '3Pictures' => 'picture',
-        '3Polls' => 'poll',
-    };
+    tie my %menu_tabs, 'Tie::Hash::Indexed';
+
+    $menu_tabs{'All'} = 'all';
+
+    foreach my $module ( @{ $c->model('Submit')->menu_items } ){
+        $menu_tabs{ ucfirst("${module}s") } = $module;
+    }
 
     my $out = qq\
     <div class="TAN-menu left">
         <ul class="TAN-menu-tab-holder">\;
     
     my $loop = 0;
-    my $size = scalar(keys(%{$menu_tabs})) - 1;
+    my $size = scalar(keys(%menu_tabs)) - 1;
     my $location = $c->stash->{'location'};
 
-    foreach my $key ( sort(keys(%{$menu_tabs})) ){
-        $value = $menu_tabs->{$key};
-        $key =~ s/\d//;
+    foreach my $key ( keys(%menu_tabs) ){
+        $value = $menu_tabs{$key};
         $out .= qq\
             <li@{[ ($loop == $size) ? ' class="TAN-menu-last"' : '' ]}>
                 <a class="TAN-menu-tab TAN-type-${value} @{[ ($location eq $value) ? "TAN-menu-tab-@{[ $location ]}-selected" : '' ]}" href="">${key}</a>
@@ -31,7 +31,7 @@ sub process{
         ++$loop;
     }
     $out .= '</ul>';
-    foreach my $value ( values(%{$menu_tabs}) ){
+    foreach my $value ( values(%menu_tabs) ){
         $out .= qq\
         <ul class="TAN-menu-${value}" @{[ ($location eq $value) ? 'style="display:block"' : '' ]}>\;
 

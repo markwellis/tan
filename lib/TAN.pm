@@ -3,27 +3,7 @@ use Moose;
 use namespace::autoclean;
 
 use Catalyst::Runtime 5.80;
-use Data::Dumper;
-
-# Set flags and add plugins for the application
-#
-#         -Debug: activates the debug mode for very useful log messages
-#   ConfigLoader: will load the configuration from a Config::General file in the
-#                 application's home directory
-# Static::Simple: will serve static files from the application's root
-#                 directory
-
-=head1 NAME
-
-TAN
-
-=head1 DESCRIPTION
-
-Main catalyst application
-
-=head1 METHODS
-
-=cut
+use Data::Dumper; #used in 500 error email
 
 use Catalyst qw/
     ConfigLoader
@@ -42,15 +22,6 @@ extends 'Catalyst';
 
 our $VERSION = 1.5.16;
 
-# Configure the application.
-#
-# Note that settings in tan.conf (or other external
-# configuration file that you set up manually) take precedence
-# over this when using ConfigLoader. Thus configuration
-# details given here can function as a default configuration,
-# with an external configuration file acting as an override for
-# local deployment.
-
 __PACKAGE__->config( name => 'TAN', 
     'Plugin::PageCache' => {
         'cache_hook' => 'check_cache',
@@ -67,19 +38,6 @@ __PACKAGE__->config( name => 'TAN',
 # Start the application
 __PACKAGE__->setup();
 
-=head2 check_cache
-
-B<@args = undef>
-
-=over
-
-doesn't cache if user is logged in
-
-doesn't cache if user has a flash message
-
-=back
-
-=cut
 sub check_cache{
     my $c = shift;
 
@@ -123,19 +81,7 @@ sub check_cache{
     return 1;
 }
 
-=head2 nsfw
-
-B<@args = ($value)>
-
-=over
-
-returns the current nsfw value (filter is B<OFF> if 1)
-
-sets the nsfw to value
-
-=back
-
-=cut
+#filter is off if 1
 sub nsfw{
     my ($c, $value) = @_;
     
@@ -157,19 +103,6 @@ sub nsfw{
     return $nsfw_res_val || $nsfw_req_val || 0;
 }
 
-=head2 finalize_error
-
-B<@args = undef>
-
-=over
-
-handles catalyst 500 errors
-
-sends email to tan.webmaster@thisaintnews.com if not in debug mode
-
-=back
-
-=cut
 sub finalize_error {
     my ($c) = @_;
 
@@ -251,24 +184,5 @@ sub finalize_error {
         );
     }
 }
-
-=head1 SYNOPSIS
-
-    script/tan_server.pl
-
-=head1 SEE ALSO
-
-L<TAN::Controller::Root>, L<Catalyst>
-
-=head1 AUTHOR
-
-A clever guy
-
-=head1 LICENSE
-
-This library is free software. You can redistribute it and/or modify
-it under the same terms as Perl itself.
-
-=cut
 
 1;

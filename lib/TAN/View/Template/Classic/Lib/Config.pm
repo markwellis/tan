@@ -16,8 +16,8 @@ sub process{
     };
 
     $c->stash->{'js_includes'} = [
-        'mootools-1-2-4-core-nc', 
-        "mootools-1-2-4-4-more",
+        'mootools-1-2-5-core-nc', 
+        "mootools-more",
         'TAN',
         'menu',
         'recent-comments'

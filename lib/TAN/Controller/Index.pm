@@ -4,32 +4,6 @@ use namespace::autoclean;
 
 BEGIN { extends 'Catalyst::Controller'; }
 
-=head1 NAME
-
-TAN::Controller::Index
-
-=head1 DESCRIPTION
-
-Main index page
-
-=head1 EXAMPLE
-
-I</index/$location/$upcoming/$page/>
-
-=over
-
-$location => all|link|blog|picture 
-
-$upcoming  => boolean
-
-$page => page number
-
-=back
-
-=head1 METHODS
-
-=cut
-
 sub clear_index_caches: Event(object_created) Event(object_promoted) Event(object_deleted){
     my ( $self, $c, $object ) = @_;
 
@@ -37,22 +11,6 @@ sub clear_index_caches: Event(object_created) Event(object_promoted) Event(objec
     $c->clear_cached_page('/index.*');
 }
 
-=head2 index: Path Args(2)
-
-B<@args = ($location, $upcoming)>
-B<@params = (order)>
-
-=over
-
-validates the params
-
-gets the index items
-
-loads index template
-
-=back
-
-=cut
 sub index :Path Args(2) {
     my ( $self, $c, $location, $upcoming ) = @_;
 
@@ -100,15 +58,4 @@ sub index :Path Args(2) {
     $c->stash->{'template'} = 'Index';
 }
 
-=head1 AUTHOR
-
-A clever guy
-
-=head1 LICENSE
-
-This library is free software. You can redistribute it and/or modify
-it under the same terms as Perl itself.
-
-=cut
-
-1;
+__PACKAGE__->meta->make_immutable;

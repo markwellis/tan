@@ -6,28 +6,6 @@ BEGIN { extends 'Catalyst::Controller'; }
 
 use POSIX qw/ceil/;
 
-=head1 NAME
-
-TAN::Controller::Sitemap
-
-=head1 DESCRIPTION
-
-Sitemap stuff
-
-=head1 EXAMPLE
-
-I</googledc796c4dad406173.html>
-I</y_key_242ef28969a04b9c.html>
-
-=over
-
-search engine sitemap
-
-=back
-
-=head1 METHODS
-
-=cut
 sub ping_sitemap: Event(object_created) Event(object_updated) Event(object_deleted){
     my ( $self, $c ) = @_;
 
@@ -37,17 +15,6 @@ sub ping_sitemap: Event(object_created) Event(object_updated) Event(object_delet
     `touch /tmp/tan_control/sitemap_ping`;
 }
 
-=head2 index: Private
-
-B<@args = undef>
-
-=over
-
-sitemap index page
-
-=back
-
-=cut
 sub index: Private{
     my ( $self, $c ) = @_;
 
@@ -124,17 +91,4 @@ sub xml: Path('xml') Args(1){
     $c->detach();
 }
 
-=head1 AUTHOR
-
-A clever guy
-
-=head1 LICENSE
-
-This library is free software. You can redistribute it and/or modify
-it under the same terms as Perl itself.
-
-=cut
-
 __PACKAGE__->meta->make_immutable;
-
-1;

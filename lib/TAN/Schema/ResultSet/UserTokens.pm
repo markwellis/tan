@@ -7,30 +7,6 @@ use base 'DBIx::Class::ResultSet';
 use Digest::SHA;
 use Time::HiRes qw/time/;
 
-=head1 NAME
-
-TAN::Schema::ResultSet::UserTokens
-
-=head1 DESCRIPTION
-
-UserTokens ResultSet
-
-=head1 METHODS
-
-=cut
-
-=head2 new_tokene
-
-B<@args = ($user_id, $type)
-
-=over
-
-creates a new token for $user_id of $type and returns $token
-
-=back
-
-=cut
-
 sub new_token{
     my ( $self, $user_id, $type ) = @_;
 
@@ -45,18 +21,6 @@ sub new_token{
 
     return $token;
 }
-
-=head2 compare
-
-B<@args = ($user_id, $token, $token_type)
-
-=over
-
-returns true if $token for $user_id of $type matches
-
-=back
-
-=cut
 
 sub compare{
     my ( $self, $user_id, $token, $type, $no_delete ) = @_;
@@ -87,18 +51,6 @@ sub compare{
     }
 }
 
-=head2 clean
-
-B<@args = (undef)
-
-=over
-
-deletes expired tokens
-
-=back
-
-=cut
-
 sub clean{
     my ( $self ) = @_;
     
@@ -108,16 +60,5 @@ sub clean{
         },
     })->delete;
 }
-
-=head1 AUTHOR
-
-A clever guy
-
-=head1 LICENSE
-
-This library is free software. You can redistribute it and/or modify
-it under the same terms as Perl itself.
-
-=cut
 
 1;

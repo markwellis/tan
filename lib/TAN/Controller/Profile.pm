@@ -1,24 +1,8 @@
 package TAN::Controller::Profile;
-use strict;
-use warnings;
+use Moose;
+use namespace::autoclean;
 
-use parent 'Catalyst::Controller';
-
-=head1 NAME
-
-TAN::Controller::Profile
-
-=head1 DESCRIPTION
-
-FAQ page
-
-=head1 EXAMPLE
-
-I</profile/$username/>
-
-=head1 METHODS
-
-=cut
+BEGIN { extends 'Catalyst::Controller'; }
 
 sub clear_index_caches: Event(object_created) Event(object_deleted) Event(comment_created){
     my ( $self, $c, $object ) = @_;
@@ -56,17 +40,6 @@ sub index: Private{
     );
 }
 
-=head2 user: PathPart('submit') Chained('/') CaptureArgs(1)
-
-B<@args = ($username)>
-
-=over
-
-loads the user
-
-=back
-
-=cut
 sub user: PathPart('profile') Chained('/') CaptureArgs(1){
     my ( $self, $c, $username ) = @_;
 
@@ -80,17 +53,6 @@ sub user: PathPart('profile') Chained('/') CaptureArgs(1){
     }
 }
 
-=head2 user_index: PathPart('') Chained('user') Args(0)
-
-B<@args = undef>
-
-=over
-
-loads profile page for the user 
-
-=back
-
-=cut
 sub user_index: PathPart('') Chained('user') Args(0){
     my ( $self, $c ) = @_;
 
@@ -148,17 +110,6 @@ sub edit: PathPart('edit') Chained('user') Args(0){
     $c->detach;
 }
 
-=head2 comments: PathPart('comments') Chained('user') Args(0)
-
-B<@args = undef>
-
-=over
-
-loads comments for the user
-
-=back
-
-=cut
 sub comments: PathPart('comments') Chained('user') Args(0){
     my ( $self, $c ) = @_;
 
@@ -192,17 +143,6 @@ sub comments: PathPart('comments') Chained('user') Args(0){
     );
 }
 
-=head2 links: PathPart('links') Chained('user') Args(0)
-
-B<@args = undef>
-
-=over
-
-loads links for the user
-
-=back
-
-=cut
 sub links: PathPart('links') Chained('user') Args(0){
     my ( $self, $c ) = @_;
 
@@ -214,17 +154,6 @@ sub links: PathPart('links') Chained('user') Args(0){
     );
 }
 
-=head2 blogs: PathPart('blogs') Chained('user') Args(0)
-
-B<@args = undef>
-
-=over
-
-loads blogs for the user
-
-=back
-
-=cut
 sub blogs: PathPart('blogs') Chained('user') Args(0){
     my ( $self, $c ) = @_;
 
@@ -236,17 +165,6 @@ sub blogs: PathPart('blogs') Chained('user') Args(0){
     );
 }
 
-=head2 pictures: PathPart('pictures') Chained('user') Args(0)
-
-B<@args = undef>
-
-=over
-
-loads pictures for the user
-
-=back
-
-=cut
 sub pictures: PathPart('pictures') Chained('user') Args(0){
     my ( $self, $c ) = @_;
 
@@ -259,17 +177,6 @@ sub pictures: PathPart('pictures') Chained('user') Args(0){
     );
 }
 
-=head2 polls: PathPart('polls') Chained('user') Args(0)
-
-B<@args = undef>
-
-=over
-
-loads polls for the user
-
-=back
-
-=cut
 sub polls: PathPart('polls') Chained('user') Args(0){
     my ( $self, $c ) = @_;
 
@@ -304,15 +211,4 @@ sub fetch: Private{
     }
 }
 
-=head1 AUTHOR
-
-A clever guy
-
-=head1 LICENSE
-
-This library is free software. You can redistribute it and/or modify
-it under the same terms as Perl itself.
-
-=cut
-
-1;
+__PACKAGE__->meta->make_immutable;

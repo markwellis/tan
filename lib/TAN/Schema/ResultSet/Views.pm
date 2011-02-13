@@ -4,29 +4,6 @@ use strict;
 use warnings;
 use base 'DBIx::Class::ResultSet';
 
-=head1 NAME
-
-TAN::Schema::ResultSet::Views
-
-=head1 DESCRIPTION
-
-Views ResultSet
-
-=head1 METHODS
-
-=cut
-
-=head2 whos_online
-
-B<@args = undef>
-
-=over
-
-whos online
-
-=back
-
-=cut
 sub whos_online {
     my ( $self ) = @_;
 
@@ -51,17 +28,6 @@ sub whos_online {
     return $who;
 }
 
-=head2 create_comment
-
-B<@args = ($object_id, $user_id, $comment)>
-
-=over
-
-creates a comment 
-
-=back
-
-=cut
 sub create_comment {
     my ( $self, $object_id, $user_id, $comment ) = @_;
 
@@ -79,16 +45,5 @@ sub create_comment {
 
     return $comment_rs;
 }
-
-=head1 AUTHOR
-
-A clever guy
-
-=head1 LICENSE
-
-This library is free software. You can redistribute it and/or modify
-it under the same terms as Perl itself.
-
-=cut
 
 1;

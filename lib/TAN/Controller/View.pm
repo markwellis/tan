@@ -6,38 +6,6 @@ BEGIN { extends 'Catalyst::Controller'; }
 
 use JSON;
 
-=head1 NAME
-
-TAN::Controller::View
-
-=head1 DESCRIPTION
-
-View Controller
-
-=head1 EXAMPLE
-
-I</view/$location/$id/$title>
-
-=over
-
-view article
-
-=over
-
-$location => link|blog|picture
-
-$id = int
-
-$title = url title
-
-=back
-
-=back
-
-=head1 METHODS
-
-=cut
-
 sub remove_blog_cache: Event(blog_updated){
     my ( $self, $c, $object ) = @_;
 
@@ -68,6 +36,7 @@ sub remove_object_cache:
     Event(poll_vote)
 {
     my ( $self, $c, $object ) = @_;
+    return if ( !defined($object) );
 
     if ( ref($object) ne 'TAN::Model::MySQL::Object' ){
     #$object_rs is something else with a ->object relationshop
@@ -78,17 +47,6 @@ sub remove_object_cache:
     $c->clear_cached_page( $object->url . '.*' );
 }
 
-=head2 location: PathPart('view') Chained('/') CaptureArgs(1)
-
-B<@args = ($location)>
-
-=over
-
-checks the location is valid
-
-=back
-
-=cut
 sub location: PathPart('view') Chained('/') CaptureArgs(2){
     my ( $self, $c, $location, $object_id ) = @_;
 
@@ -109,19 +67,6 @@ sub location: PathPart('view') Chained('/') CaptureArgs(2){
     $c->stash->{'location'} = $location;
 }
 
-=head2 index: PathPart('') Chained('location') Args(2) 
-
-B<@args = ($title)>
-
-=over
-
-$title is never used, lol
-
-loads the article
-
-=back
-
-=cut
 sub index: PathPart('') Chained('location') Args(1) {
     my ( $self, $c, $title ) = @_;
 
@@ -174,17 +119,6 @@ sub index: PathPart('') Chained('location') Args(1) {
     );
 }
 
-=head2 comment: PathPart('_comment') Chained('location') Args(0)
-
-B<@args = undef>
-
-=over
-
-comments on an article
-
-=back
-
-=cut
 sub comment: PathPart('_comment') Chained('location') Args(0) {
     my ( $self, $c ) = @_;
 
@@ -355,55 +289,18 @@ sub edit_comment: PathPart('_edit_comment') Chained('location') Args(1) {
     }
 }
 
-=head2 plus: PathPart('_plus') Chained('location') Args(0)
-
-B<@args = undef>
-
-=over
-
-forwards to add_plus_minus('plus')
-
-=back
-
-=cut
 sub plus: PathPart('_plus') Chained('location') Args(0) {
     my ( $self, $c ) = @_;
 
     $c->forward('add_plus_minus', ['plus']);
 }
 
-=head2 minus: PathPart('_minus') Chained('location') Args(0)
-
-B<@args = undef>
-
-=over
-
-forwards to add_plus_minus('minus')
-
-=back
-
-=cut
 sub minus: PathPart('_minus') Chained('location') Args(0) {
     my ( $self, $c ) = @_;
 
     $c->forward('add_plus_minus', ['minus']);
 }
 
-=head2 add_plus_minus: Private
-
-B<@args = ($type)>
-
-=over
-
-adds/removes a plus/minus
-
-set ?json=1 for json
-
-else redirects to article
-
-=back
-
-=cut
 sub add_plus_minus: Private{
     my ( $self, $c, $type ) = @_;
 
@@ -449,18 +346,6 @@ sub add_plus_minus: Private{
     $c->detach();
 }
 
-=head2 post_saved_comments: Private
-
-B<@args = undef>
-
-=over
-
-used by on login to post any saved comments, in this controller because its 
-where the comment stuff is
-
-=back
-
-=cut
 sub post_saved_comments: Private{
     my ( $self, $c ) = @_;
 
@@ -480,17 +365,6 @@ sub post_saved_comments: Private{
     }
 }
 
-=head2 vote: PathPart('_vote') Chained('location') Args(0)
-
-B<@args = undef>
-
-=over
-
-for voting on a poll
-
-=back
-
-=cut
 sub vote: PathPart('_vote') Chained('location') Args(0) {
     my ( $self, $c ) = @_;
 
@@ -549,17 +423,5 @@ sub vote: PathPart('_vote') Chained('location') Args(0) {
     $c->detach();
 
 }
-=head1 AUTHOR
-
-A clever guy
-
-=head1 LICENSE
-
-This library is free software. You can redistribute it and/or modify
-it under the same terms as Perl itself.
-
-=cut
 
 __PACKAGE__->meta->make_immutable;
-
-1;

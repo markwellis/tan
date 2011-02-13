@@ -1,44 +1,11 @@
 package TAN::Controller::Login::Registration;
-use strict;
-use warnings;
+use Moose;
+use namespace::autoclean;
 
-use parent 'Catalyst::Controller';
+BEGIN { extends 'Catalyst::Controller'; }
+
 use Data::Validate::Email;
 
-=head1 NAME
-
-TAN::Controller::Login::Registration
-
-=head1 DESCRIPTION
-
-User registration stuff
-
-=head1 EXAMPLE
-
-I</login/register> *POST
-I</login/register/confirm>
-
-=over
-
-show email form
-
-=back
-
-=head1 METHODS
-
-=cut
-
-=head2 index: Path Args(0)
-
-B<@args = undef>
-
-=over
-
-registers a user
-
-=back
-
-=cut
 sub index: Path Args(0){
     my ( $self, $c ) = @_;
 
@@ -130,17 +97,6 @@ sub index: Path Args(0){
     $c->res->redirect($ref);
 }
 
-=head2 confirm: Local
-
-B<@args = (user_id, token)>
-
-=over
-
-registers a user
-
-=back
-
-=cut
 sub confirm: Local{
     my ( $self, $c, $user_id, $token ) = @_;
 
@@ -160,15 +116,4 @@ sub confirm: Local{
     $c->res->redirect('/login');
 }
 
-=head1 AUTHOR
-
-A clever guy
-
-=head1 LICENSE
-
-This library is free software. You can redistribute it and/or modify
-it under the same terms as Perl itself.
-
-=cut
-
-1;
+__PACKAGE__->meta->make_immutable;

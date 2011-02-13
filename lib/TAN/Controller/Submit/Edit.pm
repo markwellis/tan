@@ -1,52 +1,13 @@
 package TAN::Controller::Submit::Edit;
-use strict;
-use warnings;
+use Moose;
+use namespace::autoclean;
 
-use parent 'Catalyst::Controller';
+BEGIN { extends 'Catalyst::Controller'; }
 
-=head1 NAME
-
-TAN::Controller::Submit::Edit
-
-=head1 DESCRIPTION
-
-Edit controller
-
-=head1 EXAMPLE
-
-I</submit/edit/$id>
-
-=over
-
-loads an object and then displays the submit templates
-
-=back
-
-=head1 METHODS
-
-=cut
-
-=head2 validate_user: PathPart('') Chained('/submit/location') CaptureArgs(0)
-
-B<@args = undef>
-
-=over
-
-validates that the object is owned by the current user
-
-or current user is an admin
-
-=back
-
-=cut
-sub validate_user: PathPart('edit') Chained('/submit/location') CaptureArgs(1){
+sub validate_user: PathPart('edit') Chained('../location') CaptureArgs(1){
     my ( $self, $c, $object_id ) = @_;
 
-    $c->stash->{'object'} = $c->model('MySQL::Object')->find({
-        'object_id' => $object_id,
-    },{
-        'prefetch' => $c->stash->{'location'},
-    });
+    $c->stash->{'object'} = $c->model('MySQL::Object')->get( $object_id, $c->stash->{'location'}, 1 );
 
     if ( 
         !defined($c->stash->{'object'})
@@ -59,127 +20,115 @@ sub validate_user: PathPart('edit') Chained('/submit/location') CaptureArgs(1){
         $c->forward('/default');
         $c->detach();
     }
+
+    $c->stash(
+        'edit' => 1,
+    );
 }
 
-=head2 index: PathPart('') Chained('location') Args() 
-
-B<@args = undef>
-
-=over
-
-loads the object info and then the submit template
-
-=back
-
-=cut
-sub index: PathPart('') Chained('validate_user') Args() {
+sub index: PathPart('') Chained('validate_user') Args(){
     my ( $self, $c ) = @_;
 
     my $type = $c->stash->{'location'};
     $c->stash(
         'template' => 'Submit',
         'page_title' => 'Edit ' . ($c->stash->{'object'}->$type->title || ''),
-        'edit' => 1,
     );
 }
 
-=head2 post: PathPart('post') Chained('validate_user') Args(0) 
-
-B<@args = undef>
-
-=over
-
-edits something
-
-=back
-
-=cut
-sub post: PathPart('post') Chained('validate_user') Args(0) {
+sub post: PathPart('post') Chained('validate_user') Args(){
     my ( $self, $c ) = @_;
 
-    #can't chain coz of some bullshit
-    $c->forward('/submit/validate');
-    if ( $c->stash->{'error'} ){
-        $c->flash->{'message'} = $c->stash->{'error'};
-        $c->res->redirect('/submit/' . $c->stash->{'location'} . '/edit/' . $c->stash->{'object'}->id . '/');
-        $c->detach();
-    }
+    my $prepared = $c->forward('/submit/validate_and_prepare');
+    my $tags = delete( $prepared->{'tags'} );
 
-    if ( $c->stash->{'location'} eq 'link' ){
-        $c->stash->{"object"}->link->update({
-            'title' => $c->req->param('title'),
-            'description' => $c->req->param('description'),
-            'picture_id' => $c->req->param('cat'),
-            'url' => $c->req->param('url'),
-        });
-    } elsif ( $c->stash->{'location'} eq 'blog' ){
-        $c->stash->{"object"}->blog->update({
-            'title' => $c->req->param('title'),
-            'description' => $c->req->param('description'),
-            'picture_id' => $c->req->param('cat'),
-            'details' => $c->req->param('blogmain'),
-        });
+    $c->model('MySQL')->txn_do( sub {
+        $c->forward( 'update_object', [ $prepared ] );
 
-        $c->trigger_event('blog_updated', $c->stash->{'object'});
-    } elsif ( $c->stash->{'location'} eq 'picture' ){
-        $c->stash->{"object"}->update({
-            'nsfw' => defined($c->req->param('nsfw')) ? 'Y' : 'N',
-        });
-        $c->stash->{"object"}->picture->update({
-            'title' => $c->req->param('title'),
-            'description' => $c->req->param('pdescription'),
-        });
-    } elsif ( $c->stash->{'location'} eq 'poll' ){
-        $c->stash->{"object"}->poll->update({
-            'title' => $c->req->param('title'),
-            'description' => $c->req->param('description'),
-            'picture_id' => $c->req->param('cat'),
-        });
-        
-        my @new_answers = $c->req->param('answers');
-        my @existing_answers = $c->stash->{"object"}->poll->answers->search({}, {'order_by' => 'answer_id'})->all;
+        $c->forward( 'update_tags', [ $tags ] );
 
-        my $loop = 0;
-        foreach my $answer ( @new_answers ){
-            if ( $answer ){
-                if ( $existing_answers[$loop] ){
-                    $existing_answers[$loop]->update({
-                        'answer' => $answer,
-                    });
-                } else {
-                    $c->stash->{"object"}->poll->answers->create({
-                        'answer' => $answer,
-                    });
-                }
-            } else {
-                if ( $existing_answers[$loop] ){
-                    $existing_answers[$loop]->delete;
-                }
-            }
-            ++$loop;
-        }
-    }
-
-    #seems not very nice
-    $c->stash->{'object'}->tag_objects->delete();
-    $c->forward('/submit/add_tags', [$c->stash->{'object'}]);
-
-    $c->trigger_event('object_updated', $c->stash->{'object'});
+        $c->trigger_event( 'object_updated', $c->stash->{'object'} );
+    } );
 
     $c->flash->{'message'} = 'Edit complete';
-    $c->res->redirect($c->stash->{'object'}->url);
+
+    $c->res->redirect( $c->stash->{'object'}->url, 303 );
     $c->detach();
 }
 
-=head1 AUTHOR
+sub update_object: Private{
+    my ( $self, $c, $prepared ) = @_;
+    
+    $c->stash->{'object'}->update( {
+        'nsfw' => defined( $c->req->param('nsfw') ) ? 'Y' : 'N',
+    } );
 
-A clever guy
+    my $location = $c->stash->{'location'};
 
-=head1 LICENSE
+    my $to_update = {};
+    foreach my $key ( keys( %{$prepared} ) ){
+        if ( ref( $prepared->{ $key } ) eq 'ARRAY' ){
+            my @existing = $c->stash->{"object"}->$location->$key->search->all;
 
-This library is free software. You can redistribute it and/or modify
-it under the same terms as Perl itself.
+            foreach my $new ( @{$prepared->{ $key }} ){
+                my $found = shift( @existing );
 
-=cut
+                if ( $found ){
+                    $found->update( $new );
+                } else {
+                    $c->stash->{"object"}->$location->$key->create( $new );
+                }
+            }
+            foreach my $spare ( @existing ){
+                $spare->delete;
+            }
+        } else {
+            if ( $c->stash->{'object'}->$location->$key ne $prepared->{ $key } ){
+                $to_update->{ $key } = $prepared->{ $key };
+            }
+        }
+    }
 
-1;
+    $c->stash->{'object'}->$location->update( $to_update );
+}
+
+sub update_tags: Private{
+    my ( $self, $c, $tags ) = @_;
+
+    my @tags = split(/ /, lc($tags));
+
+    my $object = $c->stash->{'object'};
+
+    my %existing_tags = map { $_->tag => $_ } $object->tags->all;
+    my %new_tags = map { $_ => 1 } @tags;
+
+    foreach my $tag ( keys( %new_tags ) ){
+        if ( $existing_tags{ $tag } ){
+            delete( $existing_tags{ $tag } );
+            delete( $new_tags{ $tag } );
+        }
+    }
+    my @tags_to_remove = values( %existing_tags );
+    my @tags_to_add = keys( %new_tags );
+
+    my $tag_reg = $c->model('CommonRegex')->not_alpha_numeric;
+    my $trim_reg = $c->model('CommonRegex')->trim;
+
+    foreach my $tag ( @tags_to_add ){
+        $tag =~ s/$tag_reg//g;
+        $tag =~ s/$trim_reg//g;
+        next if ( !$tag );
+
+        if ( defined($tag) ){
+            $object->add_to_tags({
+                'tag' => $tag,
+            });
+        }
+    }
+
+    foreach my $spare ( @tags_to_remove ){
+        $object->remove_from_tags( $spare );
+    }
+}
+
+__PACKAGE__->meta->make_immutable;
