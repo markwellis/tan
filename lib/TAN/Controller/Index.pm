@@ -20,6 +20,7 @@ sub index :Path Args(2) {
 
     my $int_reg = $c->model('CommonRegex')->not_int;
     $page =~ s/$int_reg//g;
+    $page ||= 1;
 
     $upcoming ||= 0;
 
