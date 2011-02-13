@@ -1,5 +1,6 @@
 package TAN::Model::MySQL;
 use strict;
+use warnings;
 
 use TAN::DBProfiler;
 use base 'Catalyst::Model::DBIC::Schema';
@@ -14,18 +15,6 @@ __PACKAGE__->config(
     },
 );
 
-=head1 NAME
-
-TAN::Model::MySQL
-
-=head1 DESCRIPTION
-
-MySQL connection
-
-=head1 METHODS
-
-=cut
-
 sub COMPONENT {
     my $self = shift;
     my $c = shift;
@@ -38,17 +27,6 @@ sub COMPONENT {
     return $new;
 }
 
-=head2 BUILD
-
-B<@args = undef>
-
-=over
-
-sets debugobj to new TAN::DBProfiler
-
-=back
-
-=cut
 sub BUILD{
     my ( $self ) = @_;
     $self->storage->debugobj( TAN::DBProfiler->new() );
@@ -58,17 +36,6 @@ sub BUILD{
     return $self;
 }
 
-=head2 reset_count
-
-B<@args = undef>
-
-=over
-
-resets sql query count to 0
-
-=back
-
-=cut
 sub reset_count {
     my ($self) = @_;
     my $debugobj = $self->storage()->debugobj();
@@ -81,17 +48,6 @@ sub reset_count {
     return 1;
 }
 
-=head2 get_query_count
-
-B<@args = undef>
-
-=over
-
-returns sql query count
-
-=back
-
-=cut
 sub get_query_count {
     my $self = shift;
     my $debugobj = $self->storage()->debugobj();
@@ -102,16 +58,5 @@ sub get_query_count {
 
     return;
 }
-
-=head1 AUTHOR
-
-A clever guy
-
-=head1 LICENSE
-
-This library is free software. You can redistribute it and/or modify
-it under the same terms as Perl itself.
-
-=cut
 
 1;

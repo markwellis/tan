@@ -4,8 +4,8 @@ use warnings;
 
 use LWPx::ParanoidAgent;
 use Data::Validate::Image;
+use Data::Validate::URI qw/is_web_uri/;
 use File::Temp;
-use File::Copy;
 
 =head1 NAME
 
@@ -68,39 +68,24 @@ sub new{
 }
 
 sub fetch{
-    my ($self, $url, $save_here) = @_;
+    my ( $self, $url ) = @_;
 
-    if ( !defined($url) || !defined($save_here) ){
-        return 0;
+    if ( !defined($url) ){
+        die "no url\n";
+    } elsif  ( !defined(is_web_uri($url)) ){
+        die "invalid url\n";
     }
 
-    my $ua = $self->setup_ua();
-    $ua->default_header('Referer' => $url);
+    my $ua = $self->setup_ua($url);
 
     my $head = $self->head($ua, $url);
-
-    if ( $self->validate_head($head) ){
-    #http response says image
-        if ( my $tmp_file = $self->save_tmp($ua, $url) ){
-        #tempory file saved
-            if ( my $image_info = $self->is_image($tmp_file) ){
-            #is image
-                my $save_filename = "${save_here}." . $image_info->{'file_ext'};
-                if ( $self->save_file($tmp_file, $save_filename) ){
-                #image save complete
-                    $image_info->{'filename'} = $save_filename;
-                    return $image_info;
-                }
-            }
-        }
-    }
-
-    return 0;
+    return $self->save($ua, $url)
+        || die "generic error\n";
 }
 
 #sets up the LWPx::ParanoidAgent
 sub setup_ua{
-    my ($self) = @_;
+    my ( $self, $url ) = @_;
 
     my $ua = new LWPx::ParanoidAgent;
 
@@ -108,101 +93,49 @@ sub setup_ua{
     $ua->timeout($self->{'config'}->{'timeout'}) if defined($self->{'config'}->{'timeout'});
     $ua->cookie_jar({});
 
+    $ua->default_header('Referer' => $url);
+
     return $ua;
 }
 
 # returns a HTTP::Response for a HTTP HEAD request
 sub head{
-    my ($self, $ua, $url) = @_;
+    my ( $self, $ua, $url ) = @_;
 
-    $self->{'error'} = '';
-    return $ua->head($url);
-}
+    my $head = $ua->head($url);
 
-# checks whether content type is allowed
-sub content_type{
-    my ($self, $content_type) = @_;
+    $head->is_error && die "transfer error\n";
 
-    if ( defined($self->{'config'}->{'allowed_types'}->{$content_type}) ){
-        return 1;
-    }
-
-    return 0;
-}
-
-# checks HTTP:Response for image validity (error, format, size)
-sub validate_head{
-    my ($self, $head) = @_;
-
-    if ( $head->is_error ){
-    #some kind of http error
-        $self->{'error'} = 'Transfer error';
-        return 0;
-    }
-
-    my $content_type = $self->content_type($head->header('content-type'));
-    if ( !$content_type ){
-    # not an image
-        $self->{'error'} = 'Invalid content-type';
-
-        return 0;
-    }
+    exists($self->{'config'}->{'allowed_types'}->{ $head->header('content-type') }) 
+        || die "invalid content-type\n";
 
     if ( $head->header('content-length') && ($head->header('content-length') > $self->{'config'}->{'max_filesize'}) ){
     #file too big
-        $self->{'error'} = 'Filesize exceeded';
-
-        return 0;
+        die "filesize exceeded\n";
     }
 
-    return 1;
+    return $head;
 }
 
 # returns a File::Temp copy of the requested url
-sub save_tmp{
+sub save{
     my ($self, $ua, $url) = @_;
 
-    if ( my $temp_file = new File::Temp ){
-    # opened Temp::File
-        if ( my $response = $ua->get($url) ){
-        #file downloaded
-            $temp_file->print($response->content);
-            $temp_file->close;
+    my $response = $ua->get($url) || die "download Failed\n";
 
-            return $temp_file;
-        } else {
-            $self->{'error'} = 'Download Failed';
-        }
-    } else {
-        $self->{'error'} = 'Temp file save failed';
-    }
+    my $temp_file = File::Temp->new() || die "temp file save failed\n";
+    $temp_file->print($response->content);
+    $temp_file->close;
 
-    return 0;
-}
+    my $image_info = $self->{'image_validator'}->validate($temp_file->filename);
 
-# returns filetype if File::Temp points to an image
-sub is_image{
-    my ($self, $tmp_file) = @_;
+    if ( !$image_info ){
+        $temp_file->DESTROY; 
+        die "not an image\n";
+    };
 
-    my $image_info = $self->{'image_validator'}->is_image($tmp_file->filename);
-    if ( my $image_info = $self->{'image_validator'}->is_image($tmp_file->filename) ){
-        return $image_info;
-    }
-
-    $self->{'error'} = 'Not an image';
-
-    $tmp_file->DESTROY;
-    return 0;
-}
-
-# moves the File::Temp and makes it permanent
-sub save_file{
-    my ($self, $tmp_file, $save_here) = @_;
-
-    my $filecopy = File::Copy::copy($tmp_file->filename, $save_here);
-    $tmp_file->DESTROY;
-
-    return $filecopy;
+    $image_info->{'temp_file'} = $temp_file;
+    return $image_info;
 }
 
 1;

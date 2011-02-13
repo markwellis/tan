@@ -5,29 +5,6 @@ use warnings;
 use base 'DBIx::Class::ResultSet';
 use Tie::Hash::Indexed;
 
-=head1 NAME
-
-TAN::Schema::ResultSet::Comments
-
-=head1 DESCRIPTION
-
-Comments ResultSet
-
-=head1 METHODS
-
-=cut
-
-=head2 recent_comments
-
-B<@args = undef>
-
-=over
-
-gets the most recent comments
-
-=back
-
-=cut
 sub recent_comments {
     my ( $self, $count ) = @_;
 
@@ -69,17 +46,6 @@ sub recent_comments {
     return \%grouped_comments;
 }
 
-=head2 create_comment
-
-B<@args = ($object_id, $user_id, $comment)>
-
-=over
-
-creates a comment 
-
-=back
-
-=cut
 sub create_comment {
     my ( $self, $object_id, $user_id, $comment ) = @_;
 
@@ -97,16 +63,5 @@ sub create_comment {
 
     return $comment_rs;
 }
-
-=head1 AUTHOR
-
-A clever guy
-
-=head1 LICENSE
-
-This library is free software. You can redistribute it and/or modify
-it under the same terms as Perl itself.
-
-=cut
 
 1;

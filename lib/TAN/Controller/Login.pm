@@ -1,60 +1,9 @@
 package TAN::Controller::Login;
-use strict;
-use warnings;
+use Moose;
+use namespace::autoclean;
 
-use parent 'Catalyst::Controller';
+BEGIN { extends 'Catalyst::Controller'; }
 
-=head1 NAME
-
-TAN::Controller::Login
-
-=head1 DESCRIPTION
-
-User Login
-
-=head1 EXAMPLE
-
-I</login>
-
-=over
-
-show login form
-
-=back
-
-I</login/login>
-
-=over
-
-post here
-
-=back
-
-I</login/logout>
-
-=over
-
-logout url
-
-=back
-
-=head1 METHODS
-
-=cut
-
-=head2 index: Path: Args(0)
-
-B<@args = undef>
-
-=over
-
-redirects to / if user logged in
-
-loads the login template
-
-=back
-
-=cut
 sub index: Path Args(0){
     my ( $self, $c ) = @_;
     
@@ -82,17 +31,6 @@ sub index: Path Args(0){
     );
 }
 
-=head2 login: Local Args(0)
-
-B<@params = (username, password)>
-
-=over
-
-authenticates the user
-
-=back
-
-=cut
 sub login: Local Args(0){
     my ( $self, $c ) = @_;
     
@@ -131,17 +69,6 @@ sub login: Local Args(0){
     $c->detach();
 }
 
-=head2 logout: Local Args(0)
-
-B<@args = undef>
-
-=over
-
-logs the user out
-
-=back
-
-=cut
 sub logout: Local Args(0){
     my ( $self, $c ) = @_;
     
@@ -157,16 +84,4 @@ sub logout: Local Args(0){
     $c->detach();
 }
 
-
-=head1 AUTHOR
-
-A clever guy
-
-=head1 LICENSE
-
-This library is free software. You can redistribute it and/or modify
-it under the same terms as Perl itself.
-
-=cut
-
-1;
+__PACKAGE__->meta->make_immutable;

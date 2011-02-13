@@ -3,7 +3,7 @@ package TAN::Schema;
 use strict;
 use warnings;
 
-use base qw/DBIx::Class::Schema  Class::Accessor/;
+use base qw/DBIx::Class::Schema Class::Accessor/;
 
 __PACKAGE__->load_namespaces;
 

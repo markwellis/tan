@@ -1,4 +1,4 @@
-tiny_mce_config = {
+var tiny_mce_config = {
     theme: "advanced",
 
     plugins: "safari,table,emotions,fullscreen,inlinepopups",

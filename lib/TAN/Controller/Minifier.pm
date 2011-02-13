@@ -1,68 +1,9 @@
 package TAN::Controller::Minifier;
-use strict;
-use warnings;
+use Moose;
+use namespace::autoclean;
 
-use parent 'Catalyst::Controller';
+BEGIN { extends 'Catalyst::Controller'; }
 
-=head1 NAME
-
-TAN::Controller::Minifier
-
-=head1 DESCRIPTION
-
-Minifies css or js and caches it
-
-Webserver rule means should only be called if cache doesn't exist in the filesystem already
-
-=head1 EXAMPLE
-
-I</static/cache/js/$theme_$file_$mtime.js>
-I</static/cache/css/$theme_$file_$mtime.css>
-
-=over
-
-outside world access url (configurable)
-
-=over
-
-$theme => theme name
-
-$file  => filename
-
-$mtime => filemtime
-
-=back
-
-=back
-
-I</minifier/$theme_$file_$mtime.js>
-I</minifier/$theme_$file_$mtime.css>
-
-=over
-
-Webserver internal redirect url
-
-=back
-
-=head1 METHODS
-
-=cut
-
-=head2 index: Path: Args(1)
-
-B<@args = ($source_file)>
-
-=over
-
-splits $source_file into $theme, $file, $mtime
-
-uses Minifer model to minify css/js
-
-outputs css/js or 404's
-
-=back
-
-=cut
 my $alpha_reg = qr/[^a-zA-Z0-9\-_@]/; 
 my $format_reg = qr/[a-zA-Z0-9\-@]+_(.*?)_\w+/;
 my $ext_reg = qr/(css|js)$/;
@@ -113,16 +54,4 @@ sub index: Path Args(1) {
     $c->detach();
 }
 
-
-=head1 AUTHOR
-
-A clever guy
-
-=head1 LICENSE
-
-This library is free software. You can redistribute it and/or modify
-it under the same terms as Perl itself.
-
-=cut
-
-1;
+__PACKAGE__->meta->make_immutable;

@@ -1,5 +1,6 @@
 package TAN::Model::CommonRegex;
 use Moose;
+use namespace::autoclean;
 
 extends 'Catalyst::Model';
 
@@ -33,31 +34,12 @@ has 'location' => (
     'default' => sub { return qr/^(?:link|blog|picture|poll)$/ },
 );
 
+has 'trim' => (
+    'is' => 'ro',
+    'isa' => 'RegexpRef',
+    'default' => sub { return qr/^\s+|\s+$/ },
+);
+
 no Moose;
 
-=head1 NAME
-
-TAN::Model::CommonRegex
-
-=head1 DESCRIPTION
-
-Commonly used regex
-
-=head1 METHODS
-
-=cut
-
-=head1 AUTHOR
-
-A clever guy
-
-=head1 LICENSE
-
-This library is free software. You can redistribute it and/or modify
-it under the same terms as Perl itself.
-
-=cut
-
 __PACKAGE__->meta->make_immutable;
-
-1;

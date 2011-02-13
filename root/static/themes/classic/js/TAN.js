@@ -58,7 +58,7 @@ var TAN_class = new Class({
         this.alert('<a href="/login/">' + message + '</a>');
     },
     nsfw: function(value){
-        if ( $chk(value) ){
+        if ( !!(value || value === 0) ){
             //delete old cookie
             Cookie.dispose('nsfw');
             Cookie.write('nsfw', value, {

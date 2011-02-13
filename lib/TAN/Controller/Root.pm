@@ -1,53 +1,13 @@
 package TAN::Controller::Root;
-use strict;
-use warnings;
+use Moose;
+use namespace::autoclean;
 
-use parent 'Catalyst::Controller';
+BEGIN { extends 'Catalyst::Controller'; }
 
 use Time::HiRes qw(time);
-#
-# Sets the actions in this controller to be registered with no prefix
-# so they function identically to actions created in MyApp.pm
-#
+
 __PACKAGE__->config(namespace => '');
 
-=head1 NAME
-
-TAN::Controller::Root
-
-=head1 DESCRIPTION
-
-Root controller
-
-=head1 EXAMPLE
-
-I</>
-
-=over
-
-forwards to /index/all/0/1/
-
-=back
-
-=head1 METHODS
-
-=cut
-
-=head2 auto: Private
-
-B<@args = undef>
-
-=over
-
-stashes the start time in start_time
-
-sets up the theme settings B<*SHOULDNT BE HERE*>
-
-sets default location to all
-
-=back
-
-=cut
 sub auto: Private{
     my ( $self, $c ) = @_;
 
@@ -63,51 +23,18 @@ sub auto: Private{
     return 1;
 }
 
-=head2 index: Path Args(0)
-
-B<@args = undef>
-
-=over
-
-forwards to /index/all/0/
-
-=back
-
-=cut
 sub index: Private{
     my ( $self, $c ) = @_;
 
     $c->forward('/index/index', ['all', 0] );
 }
 
-=head2 default: Path 
-
-B<@args = undef>
-
-=over
-
-loads error 404 template
-
-=back
-
-=cut
 sub default: Path{
     my ( $self, $c ) = @_;
 
     $c->forward('/error404');
 }
 
-=head2 error404: Local Args(0)
-
-B<@args = undef>
-
-=over
-
-loads error 404 template
-
-=back
-
-=cut
 sub error404: Local Args(0){
     my ( $self, $c ) = @_;
 
@@ -119,19 +46,6 @@ sub error404: Local Args(0){
     $c->response->status(404);
 }
 
-=head2 filter: Local Args(0)
-
-B<@args = undef>
-
-=over
-
-enables/disables NSFW filter
-
-redirects to referer or / 
-
-=back
-
-=cut
 sub filter: Local Args(0){
     my ( $self, $c ) = @_;
 
@@ -147,21 +61,6 @@ sub filter: Local Args(0){
     $c->detach();
 }
 
-=head2 random: Local Args(1)
-
-B<@args = ($location)>
-
-=over
-
-validates params
-
-loads a random object (based on $location) and redirects to it
-
-404's
-
-=back
-
-=cut
 sub random: Local Args(1){
     my ( $self, $c, $location ) = @_;
     
@@ -182,17 +81,6 @@ sub random: Local Args(1){
     $c->detach();
 }
 
-=head2 chat: Local Args(0)
-
-B<@args = undef>
-
-=over
-
-loads chat template... 
-
-=back
-
-=cut
 sub chat: Local Args(0){
     my ( $self, $c ) = @_;
 
@@ -204,17 +92,6 @@ sub chat: Local Args(0){
     );
 }
 
-=head2 faq: Local Args(0)
-
-B<@args = undef>
-
-=over
-
-loads chat template... 
-
-=back
-
-=cut
 sub faq: Local Args(0){
     my ( $self, $c ) = @_;
 
@@ -226,17 +103,6 @@ sub faq: Local Args(0){
     );
 }
 
-=head2 google: Path('/googledc796c4dad406173.html')
-
-B<@args = undef>
-
-=over
-
-google confirm key
-
-=back
-
-=cut
 sub google: Path('/google540d7580f0fb6a3b.html'){
     my ( $self, $c ) = @_;
 
@@ -245,17 +111,6 @@ sub google: Path('/google540d7580f0fb6a3b.html'){
     $c->detach();
 }
 
-=head2 yahoo: Path('/googledc796c4dad406173.html')
-
-B<@args = undef>
-
-=over
-
-yahoo confirm key
-
-=back
-
-=cut
 sub yahoo: Path('/y_key_242ef28969a04b9c.html'){
     my ( $self, $c ) = @_;
 
@@ -264,17 +119,6 @@ sub yahoo: Path('/y_key_242ef28969a04b9c.html'){
     $c->detach();
 }
 
-=head2 robots: Path('/robots.txt')
-
-B<@args = undef>
-
-=over
-
-robots.txt
-
-=back
-
-=cut
 sub robots: Path('/robots.txt'){
     my ( $self, $c ) = @_;
 
@@ -306,19 +150,6 @@ Sitemap: http://thisaintnews.com/sitemap"
 
 sub render: ActionClass('RenderView'){}
 
-=head2 end: Private 
-
-B<@args = undef>
-
-=over
-
-forwards to render
-
-if debug warns sql output
-
-=back
-
-=cut
 sub end: Private{
     my ( $self, $c ) = @_;
 
@@ -344,15 +175,4 @@ sub end: Private{
     }
 }
 
-=head1 AUTHOR
-
-Catalyst developer
-
-=head1 LICENSE
-
-This library is free software. You can redistribute it and/or modify
-it under the same terms as Perl itself.
-
-=cut
-
-1;
+__PACKAGE__->meta->make_immutable;

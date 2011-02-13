@@ -1,30 +1,8 @@
 package TAN::Controller::Tag;
-use strict;
-use warnings;
+use Moose;
+use namespace::autoclean;
 
-use parent 'Catalyst::Controller';
-
-=head1 NAME
-
-TAN::Controller::Tag
-
-=head1 DESCRIPTION
-
-Tag Controller
-
-=head1 EXAMPLE
-
-I</tag/$tag>
-
-=over
-
-lists things with this tag
-
-=back
-
-=head1 METHODS
-
-=cut
+BEGIN { extends 'Catalyst::Controller'; }
 
 sub clear_index_caches: Event(object_created) Event(object_deleted) Event(object_updated){
     my ( $self, $c, $object ) = @_;
@@ -32,17 +10,6 @@ sub clear_index_caches: Event(object_created) Event(object_deleted) Event(object
     $c->clear_cached_page('/tag.*');
 }
 
-=head2 index: Path Args(1) 
-
-B<@args = ($tag)>
-
-=over
-
-loads things with $tag
-
-=back
-
-=cut
 sub index: Path Args(1){
     my ( $self, $c, $tag ) = @_;
 
@@ -79,15 +46,4 @@ sub index: Path Args(1){
     }
 }
 
-=head1 AUTHOR
-
-A clever guy
-
-=head1 LICENSE
-
-This library is free software. You can redistribute it and/or modify
-it under the same terms as Perl itself.
-
-=cut
-
-1;
+__PACKAGE__->meta->make_immutable;

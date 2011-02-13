@@ -1,70 +1,12 @@
 package TAN::Controller::Thumb;
-use strict;
-use warnings;
+use Moose;
+use namespace::autoclean;
 
-use parent 'Catalyst::Controller';
+BEGIN { extends 'Catalyst::Controller'; }
 
 use File::Path qw/mkpath/;
+use Try::Tiny;
 
-=head1 NAME
-
-TAN::Controller::Thumb
-
-=head1 DESCRIPTION
-
-Gets an image and resizes it
-
-Webserver rule means should only be called if thumb doesn't exist in the filesystem already
-
-=head1 EXAMPLE
-
-I</static/cache/thumbs/$mod/$id/$newx>
-
-=over
-
-outside world url
-
-=over
-
-$mod => $id - ($id % 1000)
-
-$id  => picture_id
-
-$newx => the new x of the thumb
-
-=back
-
-=back
-
-I</thumb/$mod/$id/$newx>
-
-=over
-
-internal webserver redirect url
-
-=back
-
-=head1 METHODS
-
-=cut
-
-=head2 index: Path: Args(3)
-
-B<@args = ($mod, $id, $new)>
-
-=over
-
-validates the params as integers
-
-re-calculates mod
-
-forwards to resize
-
-404's (should only get here if thumb creation failed)
-
-=back
-
-=cut
 sub index: Path Args(3) {
     my ( $self, $c, $mod, $id, $x ) = @_;
 
@@ -87,22 +29,6 @@ sub index: Path Args(3) {
     $c->detach();
 }
 
-
-=head2 resize: Private
-
-B<@args = ($mod, $id, $new)>
-
-=over
-
-finds the picture
-
-creates the thumb using convert
-
-redirects to the thumb (webserver should now handle file) if file exists
-
-=back
-
-=cut
 sub resize: Private {
     my ( $self, $c, $mod, $id, $x ) = @_;
 
@@ -118,7 +44,7 @@ sub resize: Private {
     if ( defined($row) && (my $filename = $row->filename) ){
         my $orig_image = $c->path_to('root') . $c->config->{'pic_path'} . "/${filename}";
 
-        my $image = $c->model('Thumb')->resize($orig_image, $cache_image, $x);
+        my $image = $c->model('Image')->resize($orig_image, $cache_image, $x);
         if (!$image && -e $cache_image){
             $c->res->redirect("/static/cache/thumbs/${mod}/${id}/${x}?" . int(rand(100)));
             $c->detach();
@@ -131,15 +57,4 @@ sub resize: Private {
     $c->detach();
 }
 
-=head1 AUTHOR
-
-A clever guy
-
-=head1 LICENSE
-
-This library is free software. You can redistribute it and/or modify
-it under the same terms as Perl itself.
-
-=cut
-
-1;
+__PACKAGE__->meta->make_immutable;

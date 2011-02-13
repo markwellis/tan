@@ -38,7 +38,7 @@ window.addEvent('domready', function() {
         e.stop();
     });
 
-    if ( $defined($$('.TAN-order-by select')) ){
+    if ( $$('.TAN-order-by select') != undefined ){
         $$('.TAN-order-by select').addEvent('change', function(e) {
             var oper = (window.location.toString().indexOf('?') !== -1) ? '&' : '?';
             var order = 'order=' + this.value;
