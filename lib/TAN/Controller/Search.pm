@@ -34,33 +34,6 @@ sub delete_from_index: Event(object_deleted){
     };
 }
 
-=head1 NAME
-
-TAN::Controller::Search
-
-=head1 DESCRIPTION
-
-FAQ page
-
-=head1 EXAMPLE
-
-I</search/>
-
-=head1 METHODS
-
-=cut
-
-=head2 index: Path Args(0)
-
-B<@args = undef>
-
-=over
-
-loads chat template... 
-
-=back
-
-=cut
 sub index: Path Args(0){
     my ( $self, $c ) = @_;
 
@@ -75,24 +48,12 @@ sub index: Path Args(0){
         $c->stash->{'index'} = $c->model('Index')->indexinate($c, $objects, $pager);
     }
 
+    $c->model('Search')->commit;
+
     $c->stash(
         'page_title' => $c->req->param('q') . " - Search",
         'template' => 'Index',
     );
 }
 
-
-=head1 AUTHOR
-
-A clever guy
-
-=head1 LICENSE
-
-This library is free software. You can redistribute it and/or modify
-it under the same terms as Perl itself.
-
-=cut
-
 __PACKAGE__->meta->make_immutable;
-
-1;
