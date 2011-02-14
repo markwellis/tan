@@ -39,7 +39,7 @@ sub internal: Local{
     }
 
     if ( $url ){
-        $c->res->redirect($url);
+        $c->res->redirect( $url, 303 );
     } else {
         $c->forward('/default');
     }
@@ -77,7 +77,7 @@ sub external: Local Args(1){
                 'key' => 'session_objectid',
             });
         }
-        $c->res->redirect( $object_rs->link->url );
+        $c->res->redirect( $object_rs->link->url, 303 );
     } else {
     # not a link
         $c->forward('/default');
