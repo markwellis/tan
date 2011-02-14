@@ -15,8 +15,6 @@ has 'namespace' =>(
     'default' => undef,
 );
 
-no Moose;
-
 sub build_per_context_instance {
     my ($self, $c, @args) = @_;
     return $self->new({ context => $c, %$self, @args });
