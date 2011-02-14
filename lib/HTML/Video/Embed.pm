@@ -80,8 +80,6 @@ sub _build__videos{
     };
 }
 
-no Moose;
-
 #=== videos ===#
 
 sub _youtube{
@@ -335,5 +333,3 @@ sub is_video{
 }
 
 __PACKAGE__->meta->make_immutable;
-
-1;
