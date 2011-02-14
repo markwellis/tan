@@ -1,9 +1,8 @@
 package TAN::Submit::Module::Link;
 use Moose;
+use namespace::autoclean;
 
 with 'TAN::Submit::Module';
-
-no Moose;
 
 use Try::Tiny;
 use Data::Validate::URI;
