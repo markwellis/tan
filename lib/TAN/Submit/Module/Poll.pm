@@ -1,6 +1,7 @@
 package TAN::Submit::Module::Poll;
-
 use Moose;
+use namespace::autoclean;
+
 with 'TAN::Submit::Module';
 
 sub _build_config{

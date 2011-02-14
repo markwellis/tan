@@ -64,9 +64,7 @@ sub validate_and_prepare: Private{
         if ( blessed( $_ ) ){
             if ( $_->isa('Exception::Simple') ){
                 $c->flash->{'message'} = $_->error;
-#                if ( !$c->stash->{'edit'} ){
-                    $c->flash->{'params'} = $c->req->params;
- #               }
+                $c->flash->{'params'} = $c->req->params;
 
                 if ( $_->can('url') ){
                     $c->res->redirect( $_->url, 303 );

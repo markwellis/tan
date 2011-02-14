@@ -1,9 +1,8 @@
 package TAN::Submit::Module::Blog;
-
 use Moose;
-with 'TAN::Submit::Module';
+use namespace::autoclean;
 
-no Moose;
+with 'TAN::Submit::Module';
 
 use Data::Validate::URI;
 use Tie::Hash::Indexed;
@@ -51,8 +50,6 @@ sub _build_config{
             'position' => 20,
         },
     };
-
-    return \%config;
 }
 
 __PACKAGE__->meta->make_immutable;
