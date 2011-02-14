@@ -1,23 +1,23 @@
 window.addEvent('load', function() {
-    if ( $('cropper') ){
+    if ( document.id('cropper') ){
         new Lasso.Crop('cropper',{
             preset : [0,0,100,100],
             handleSize : 4,
             opacity : .6,
             color : '#7389AE',
             onResize: function(cords){
-                $('cords').value = JSON.encode(cords);
+                document.id('cords').value = JSON.encode(cords);
             }
         });
 
     } else {
-        $('avatar').addEvent('click',function(e){
+        document.id('avatar').addEvent('click',function(e){
             this.getParent().getElement('input:[type="submit"]').disabled = 0;
         });
     }
 
-    $('crop_form').addEvent('submit',function(e){
-        if ( $('avatar') && !$('avatar').value ){
+    document.id('crop_form').addEvent('submit',function(e){
+        if ( document.id('avatar') && !document.id('avatar').value ){
             TAN.alert('Please select an image to upload');
             return false;
         }

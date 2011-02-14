@@ -51,7 +51,7 @@ window.addEvent('domready', function() {
                 }
             } );
 
-            $( msg_pos ).empty();
+            document.id( msg_pos ).empty();
             if ( error_messages.length ){
                 if ( msg_pos ){
                     error_messages.each( function( error_message, i ){
@@ -59,7 +59,7 @@ window.addEvent('domready', function() {
                             "text": error_message,
                             "class": 'validation-advice'
                         } );
-                        $( msg_pos ).adopt( error_element );
+                        document.id( msg_pos ).adopt( error_element );
                     } );
                 }
                 return false;

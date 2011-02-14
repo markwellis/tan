@@ -1,3 +1,3 @@
 window.addEvent( 'domready', function(){
-    var validator = new Form.Validator.Inline( $('submit_form') );
+    var validator = new Form.Validator.Inline( document.id('submit_form') );
 } );

@@ -43,7 +43,7 @@ var Lasso = new Class({
 			this.mask.inject(this.overlay);
 		}
 		
-		this.trigger = $(this.options.trigger);
+		this.trigger = document.id(this.options.trigger);
 		
 		// Marching Ants
 		var antStyles = { 'position' : 'absolute', 'width' : 1, 'height' : 1, 'overflow' : 'hidden', 'z-index' : this.options.zindex+1 };
