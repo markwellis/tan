@@ -40,6 +40,4 @@ has 'trim' => (
     'default' => sub { return qr/^\s+|\s+$/ },
 );
 
-no Moose;
-
 __PACKAGE__->meta->make_immutable;
