@@ -50,8 +50,6 @@ sub _build_config{
             'position' => 20,
         },
     };
-
-    return \%config;
 }
 
 __PACKAGE__->meta->make_immutable;

@@ -47,7 +47,7 @@ sub resize: Private {
         my $image = try{
             $c->model('Image')->resize($orig_image, $cache_image, $x);
         } catch {
-            $c->forward('copy_blank');
+            $c->forward( 'copy_blank', [ $cache_image, $mod, $id, $x ] );
         };
         if ( !$image && -e $cache_image ){
             $c->res->redirect("/static/cache/thumbs/${mod}/${id}/${x}?" . int(rand(100)));
@@ -55,11 +55,11 @@ sub resize: Private {
         }
     }
     #if we get here somethings gone wrong
-    $c->forward('copy_blank');
+    $c->forward( 'copy_blank', [ $cache_image, $mod, $id, $x ] );
 }
 
 sub copy_blank: Private{
-    my ( $self, $c ) = @_;
+    my ( $self, $c, $cache_image, $mod, $id, $x ) = @_;
 
     my $cp_command = 'cp ' . $c->path_to(qw/root static images blank.png/) . " ${cache_image}";
     `${cp_command}`;
