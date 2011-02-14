@@ -48,7 +48,7 @@ sub resize: Private {
             $c->model('Image')->resize($orig_image, $cache_image, $x);
         } catch {
             $c->forward('copy_blank');
-        }
+        };
         if ( !$image && -e $cache_image ){
             $c->res->redirect("/static/cache/thumbs/${mod}/${id}/${x}?" . int(rand(100)));
             $c->detach();
