@@ -46,12 +46,7 @@ sub upload: Local{
                 unlink( $outfile );
             }
 
-            try{
-                $c->model('Image')->resize( $upload->tempname, $outfile, 640 );
-            } catch {
-                $c->flash->{'message'} = $_->error;
-                $c->res->redirect('/profile/_avatar');
-            };
+            $c->model('Image')->resize( $upload->tempname, $outfile, 640 );
             undef $upload;
 
             # upload success

@@ -44,23 +44,13 @@ sub resize: Private {
     if ( defined($row) && (my $filename = $row->filename) ){
         my $orig_image = $c->path_to('root') . $c->config->{'pic_path'} . "/${filename}";
 
-        my $image = try{
-            $c->model('Image')->resize($orig_image, $cache_image, $x);
-        } catch {
-            $c->forward('copy_blank');
-        };
-        if ( !$image && -e $cache_image ){
+        my $image = $c->model('Image')->resize($orig_image, $cache_image, $x);
+        if (!$image && -e $cache_image){
             $c->res->redirect("/static/cache/thumbs/${mod}/${id}/${x}?" . int(rand(100)));
             $c->detach();
         }
     }
-    #if we get here somethings gone wrong
-    $c->forward('copy_blank');
-}
-
-sub copy_blank: Private{
-    my ( $self, $c ) = @_;
-
+#if we get here somethings gone wrong
     my $cp_command = 'cp ' . $c->path_to(qw/root static images blank.png/) . " ${cache_image}";
     `${cp_command}`;
     $c->res->redirect("/static/cache/thumbs/${mod}/${id}/${x}?" . int(rand(100)));

@@ -1,8 +1,9 @@
 package TAN::Submit::Module::Blog;
-use Moose;
-use namespace::autoclean;
 
+use Moose;
 with 'TAN::Submit::Module';
+
+no Moose;
 
 use Data::Validate::URI;
 use Tie::Hash::Indexed;
