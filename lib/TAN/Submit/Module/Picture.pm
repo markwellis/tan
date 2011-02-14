@@ -1,5 +1,4 @@
 package TAN::Submit::Module::Picture;
-
 use Moose;
 use namespace::autoclean;
 use Try::Tiny;
@@ -11,8 +10,6 @@ use Data::Validate::Image;
 use Digest::SHA;
 use File::Path qw/mkpath/;
 use File::Temp;
-use Time::HiRes qw/time/;
-
 
 has '_fetcher' => (
     'is' => 'ro',
@@ -36,8 +33,6 @@ has '_validator' => (
 sub _build__validator {
     return new Data::Validate::Image;
 }
-
-no Moose;
 
 sub _build_config{
     my ( $self ) = @_;
@@ -159,15 +154,20 @@ sub prepare{
         my $time = time;
 
         #put images in a folder per week
-        my $mod = ($time - ($time % 604800));
+        my $mod = ( $time - ($time % 604800) );
 
         my $path = $c->path_to('root') . $c->config->{'pic_path'} . "/${mod}";
         mkpath($path);
-        $filename .= "${path}/${time}_${url_title}.@{[ $image_info->{'file_ext'} ]}";
+        my $filename = "${path}/${time}_${url_title}.@{[ $image_info->{'file_ext'} ]}";
 
         my $filecopy = File::Copy::copy( $image_info->{'temp_file'}->filename, $filename );
         $image_info->{'temp_file'}->DESTROY;
         delete( $image_info->{'temp_file'} );
+
+        if ( !( -e $filename ) ){
+        #shits all fucked up
+            Exception::Simple->throw('upload failed');
+        }
 
         my @path = split('/', $filename);
        
