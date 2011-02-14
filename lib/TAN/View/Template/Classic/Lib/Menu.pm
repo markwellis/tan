@@ -26,7 +26,7 @@ sub process{
         $value = $menu_tabs{$key};
         $out .= qq\
             <li@{[ ($loop == $size) ? ' class="TAN-menu-last"' : '' ]}>
-                <a class="TAN-menu-tab TAN-type-${value} @{[ ($location eq $value) ? "TAN-menu-tab-@{[ $location ]}-selected" : '' ]}" href="">${key}</a>
+                <a class="TAN-menu-tab TAN-type-${value} @{[ ($location eq $value) ? "TAN-menu-tab-@{[ $location ]}-selected" : '' ]}" href="/index/${value}/0/">${key}</a>
             </li>\;
         ++$loop;
     }
