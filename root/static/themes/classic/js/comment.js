@@ -1,5 +1,5 @@
 window.addEvent('domready', function() {
-	$('comment_form').addEvents({
+	document.id('comment_form').addEvents({
 		submit: function(e) {
             e.stop();
 
@@ -10,7 +10,7 @@ window.addEvent('domready', function() {
                     'url' : this.action,
                     'noCache': true,
                     'onSuccess': function(responseTree, responseElements, responseHTML, responseJavaScript) {
-                        $('submit_comment').disabled = 0;
+                        document.id('submit_comment').disabled = 0;
                         if ( responseHTML == 'error' ){
                             TAN.alert('fail');
                         } else if ( responseHTML == 'login' ){
@@ -33,18 +33,18 @@ window.addEvent('domready', function() {
                             $$('.TAN-comment_wrapper').adopt(responseTree);
                             tinyMCE.get('comment').setContent('');
                         }
-                        $('submit_comment').disabled = 0;
+                        document.id('submit_comment').disabled = 0;
                     },
                     'onFailure': function(){
                         TAN.alert('fail');
-                        $('submit_comment').disabled = 0;
+                        document.id('submit_comment').disabled = 0;
                     }
                 }).post({
                     'comment': input_comment,
                     'ajax': 1
                 });
 
-                $('submit_comment').disabled = 1;
+                document.id('submit_comment').disabled = 1;
             }
 		}
 	});

@@ -56,7 +56,7 @@ sub index: Path Args(0){
         $c->flash->{'email'} = $email;
 
         $c->flash->{'message'} = $error;
-        $c->res->redirect( '/login' );
+        $c->res->redirect( '/login', 303 );
         $c->detach();
     }
 
@@ -67,7 +67,7 @@ sub index: Path Args(0){
         $c->flash->{'email'} = $c->req->param('remail');
 
         $c->flash->{'message'} = 'Something done fucked up';
-        $c->res->redirect( '/login' );
+        $c->res->redirect( '/login', 303 );
         $c->detach();
     }
 
@@ -94,7 +94,7 @@ sub index: Path Args(0){
     if ( !$ref || $ref =~ m|/login/| ){
         $ref = '/';
     }
-    $c->res->redirect($ref);
+    $c->res->redirect($ref, 303);
 }
 
 sub confirm: Local{
@@ -113,7 +113,7 @@ sub confirm: Local{
     } else {
         $c->flash->{'message'} = 'There has been a problem';
     }
-    $c->res->redirect('/login');
+    $c->res->redirect('/login', 303);
 }
 
 __PACKAGE__->meta->make_immutable;

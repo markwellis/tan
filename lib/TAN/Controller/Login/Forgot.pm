@@ -11,7 +11,7 @@ sub index: Path Args(0){
    
     if ( $c->user_exists ){
         $c->flash->{'message'} = "You're already logged in";
-        $c->res->redirect('/');
+        $c->res->redirect('/', 303);
         $c->detach();
     }
 
@@ -25,14 +25,14 @@ sub step1: Local{
    
     my $email = $c->req->param('email');
     if ( $c->req->method ne 'POST' || !defined($email) ){
-        $c->res->redirect('/login/forgot');
+        $c->res->redirect('/login/forgot', 303);
         $c->detach();
     }
 
     my $user = $c->model('MySQL::User')->by_email($email);
     if ( !defined($user) ){
         $c->flash->{'message'} = 'Not a valid email';
-        $c->res->redirect('/login/forgot');
+        $c->res->redirect('/login/forgot', 303);
         $c->detach();
     }
 
@@ -53,7 +53,7 @@ sub step1: Local{
 
 #add a message and redirect user somewhere...
     $c->flash->{'message'} = 'Email sent';
-    $c->res->redirect('/');
+    $c->res->redirect('/', 303);
     $c->detach();
 }
 
@@ -65,7 +65,7 @@ sub step2: Local Args(2){
     if ( !defined($token_rs) ){
     #token doesn't match
         $c->flash->{'message'} = 'There has been a problem';
-        $c->res->redirect('/');
+        $c->res->redirect('/', 303);
         $c->detach();
     }
 
@@ -80,7 +80,7 @@ sub step2: Local Args(2){
                 $token_rs->delete;
 
                 $c->flash->{'message'} = 'Your password has been changed';
-                $c->res->redirect('/login/');
+                $c->res->redirect('/login/', 303);
                 $c->detach();
             } else {
                 #why stash not flash?

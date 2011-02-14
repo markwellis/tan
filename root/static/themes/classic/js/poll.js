@@ -1,5 +1,5 @@
 window.addEvent('domready', function() {
-	$('poll_vote_form').addEvents({
+	document.id('poll_vote_form').addEvents({
 		submit: function(e) {
             e.stop();
 
@@ -48,9 +48,9 @@ window.addEvent('domready', function() {
                             percent.inject(percent_holder);
                             percent_voted.inject(li);
                             li.inject(ul);
-                            ul.inject($('poll_vote_form').getParent());
+                            ul.inject(document.id('poll_vote_form').getParent());
                         });
-                        $('poll_vote_form').dispose();
+                        document.id('poll_vote_form').dispose();
                     } else {
                         submit_button.disabled = 0;
                         TAN.login();

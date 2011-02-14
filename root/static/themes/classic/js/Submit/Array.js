@@ -3,7 +3,7 @@ window.addEvent('domready', function() {
         e.stop();
         var number = $$('.TAN-array').length;
 
-        var input_name = $('array-0').get('name');
+        var input_name = document.id('array-0').get('name');
         var label_name = $$('.TAN-array')[0].getParent().getElement('label').get('text').replace(/ \d+$/, '');
 
         var label = new Element('li', {

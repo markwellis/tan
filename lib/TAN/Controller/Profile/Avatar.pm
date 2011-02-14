@@ -15,7 +15,7 @@ sub auto: Private{
 
     if ( !$c->user_exists ){
         $c->flash->{'message'} = 'Please login';
-        $c->res->redirect('/login/');
+        $c->res->redirect('/login/', 303);
         $c->detach();
     }
 
@@ -50,20 +50,20 @@ sub upload: Local{
                 $c->model('Image')->resize( $upload->tempname, $outfile, 640 );
             } catch {
                 $c->flash->{'message'} = $_->error;
-                $c->res->redirect('/profile/_avatar');
+                $c->res->redirect('/profile/_avatar', 303);
             };
             undef $upload;
 
             # upload success
             #redirect back to avatar upload page
-            $c->res->redirect('/profile/_avatar/?crop=true');
+            $c->res->redirect('/profile/_avatar/?crop=true', 303);
         }catch{
             $c->flash->{'message'} = $_->error;
-            $c->res->redirect('/profile/_avatar');
+            $c->res->redirect('/profile/_avatar', 303);
         };
     } else {
         $c->flash->{'message'} = 'no image uploaded';
-        $c->res->redirect('/profile/_avatar/');
+        $c->res->redirect('/profile/_avatar/', 303);
     }
     $c->detach();
 }
@@ -76,7 +76,7 @@ sub crop: Local{
     if ( !$json ){
 #ERROR HERE
         $c->flash->{'message'} = 'Crop error';
-        $c->res->redirect('/profile/_avatar/?crop=true');
+        $c->res->redirect('/profile/_avatar/?crop=true', 303);
         $c->detach();
     }
     my $cords;
@@ -86,7 +86,7 @@ sub crop: Local{
         return from_json( $json );
     } catch {
         $c->flash->{'message'} = 'Crop error';
-        $c->res->redirect('/profile/_avatar/?crop=true');
+        $c->res->redirect('/profile/_avatar/?crop=true', 303);
         $c->detach();
     };
 
@@ -108,7 +108,7 @@ sub crop: Local{
     if ( !$w || !$h ){
 #ERROR HERE
         $c->flash->{'message'} = 'Crop error';
-        $c->res->redirect('/profile/_avatar?crop=true');
+        $c->res->redirect('/profile/_avatar?crop=true', 303);
         $c->detach();
     }
 
@@ -126,11 +126,11 @@ sub crop: Local{
             unlink( $filename . '.no_crop' );
         }
 
-        $c->res->redirect('/profile/_avatar/');
+        $c->res->redirect('/profile/_avatar/', 303);
     } else {
 #ERROR HERE
         $c->flash->{'message'} = 'Crop error';
-        $c->res->redirect('/profile/_avatar/?crop=true');
+        $c->res->redirect('/profile/_avatar/?crop=true', 303);
     }
     
     $c->detach();

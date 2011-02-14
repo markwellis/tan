@@ -57,7 +57,7 @@ sub filter: Local Args(0){
         $ref = '/';
     }
 
-    $c->res->redirect($ref);
+    $c->res->redirect( $ref, 303 );
     $c->detach();
 }
 
@@ -73,7 +73,7 @@ sub random: Local Args(1){
     my $object = $c->model('MySQL::Object')->random($location, $c->nsfw);
 
     if ($object){
-        $c->res->redirect($object->url);
+        $c->res->redirect( $object->url, 303 );
         $c->detach();
     }
 
@@ -141,6 +141,7 @@ Disallow: /static/user/avatar*
 Disallow: /redirect*
 Disallow: /tag*
 Disallow: /search*
+Disallow: /index*
 
 Sitemap: http://thisaintnews.com/sitemap"
     );

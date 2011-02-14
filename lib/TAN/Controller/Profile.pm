@@ -99,14 +99,14 @@ sub edit: PathPart('edit') Chained('user') Args(0){
                     $c->cache->remove("profile.1:" . $c->stash->{'object'}->id);
                 }
             }
-            $c->res->redirect('/profile/' . $c->stash->{'user'}->username);
+            $c->res->redirect('/profile/' . $c->stash->{'user'}->username, 303);
             $c->detach;
         }
         $c->stash->{'template'} = 'Profile::Edit';
         $c->detach;
     }
 
-    $c->res->redirect("/profile/@{[ $c->stash->{'user'}->username ]}/");
+    $c->res->redirect("/profile/@{[ $c->stash->{'user'}->username ]}/", 303);
     $c->detach;
 }
 

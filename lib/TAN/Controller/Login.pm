@@ -9,7 +9,7 @@ sub index: Path Args(0){
     
     if ( $c->user_exists ){
         $c->flash->{'message'} = 'You are already logged in';
-        $c->res->redirect('/');
+        $c->res->redirect( '/', 303 );
         $c->detach();
     }
     
@@ -65,7 +65,7 @@ sub login: Local Args(0){
         }
     }
 
-    $c->res->redirect($ref);
+    $c->res->redirect( $ref, 303 );
     $c->detach();
 }
 
@@ -80,7 +80,7 @@ sub logout: Local Args(0){
     }
 
     my $ref = $c->req->referer || '/';
-    $c->res->redirect( $ref );
+    $c->res->redirect( $ref, 303 );
     $c->detach();
 }
 

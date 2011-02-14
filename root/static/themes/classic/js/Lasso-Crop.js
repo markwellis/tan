@@ -14,7 +14,7 @@ Lasso.Crop = new Class({
 	
 	initialize : function(img,options){
 
-		this.img = $(img);
+		this.img = document.id(img);
 		if(this.img.get('tag') != 'img') return false;
 		
 		var coords = this.img.getCoordinates();

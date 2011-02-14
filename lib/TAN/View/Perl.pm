@@ -5,8 +5,6 @@ use namespace::autoclean;
 extends 'Catalyst::View::Perl';
 with 'Catalyst::View::Perl::URL';
 
-no Moose;
-
 use HTML::Video::Embed;
 use Number::Format;
 

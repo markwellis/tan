@@ -146,7 +146,7 @@ sub comment: PathPart('_comment') Chained('location') Args(0) {
 
             if ( !defined($c->req->param('ajax')) ){
                 $c->flash->{'message'} = 'Your comment has been saved, please login/register';
-                $c->res->redirect( '/login/' );
+                $c->res->redirect( '/login/', 303 );
             } else {
                 $c->res->output("login");
             }
@@ -161,7 +161,7 @@ sub comment: PathPart('_comment') Chained('location') Args(0) {
 
         if ( defined($object_rs) ){
         #redirect to the object
-            $c->res->redirect( "@{[ $object_rs->object->url ]}#comment@{[ $comment_id || 's' ]}" );
+            $c->res->redirect( "@{[ $object_rs->object->url ]}#comment@{[ $comment_id || 's' ]}", 303 );
             $c->detach();
         } else {
         #no object, redirect to /
@@ -209,7 +209,7 @@ sub edit_comment: PathPart('_edit_comment') Chained('location') Args(1) {
 #FAIL (no comment id)
         if ( !defined($c->req->param('ajax')) ){
             $c->flash->{'message'} = 'No comment Id';
-            $c->res->redirect( $object_rs->url );
+            $c->res->redirect( $object_rs->url, 303 );
         } else {
             $c->res->output("No comment Id");
             $c->res->status(400);
@@ -223,7 +223,7 @@ sub edit_comment: PathPart('_edit_comment') Chained('location') Args(1) {
 #FAIL (comment not found)
         if ( !defined($c->req->param('ajax')) ){
             $c->flash->{'message'} = 'Comment not found';
-            $c->res->redirect( $object_rs->url );
+            $c->res->redirect( $object_rs->url, 303 );
         } else {
             $c->res->output("Comment not found");
             $c->res->status(404);
@@ -235,7 +235,7 @@ sub edit_comment: PathPart('_edit_comment') Chained('location') Args(1) {
 #FAIL (comment not users)
         if ( !defined($c->req->param('ajax')) ){
             $c->flash->{'message'} = 'Not your comment';
-            $c->res->redirect( $comment_rs->object->url );
+            $c->res->redirect( $comment_rs->object->url, 303 );
         } else {
             $c->res->output("Not your comment");
             $c->res->status(403);
@@ -255,7 +255,7 @@ sub edit_comment: PathPart('_edit_comment') Chained('location') Args(1) {
 
             if ( !defined($c->req->param('ajax')) ){
                 $c->flash->{'message'} = 'Comment deleted';
-                $c->res->redirect( $comment_rs->object->url );
+                $c->res->redirect( $comment_rs->object->url, 303 );
             } else {
                 $c->res->output("Comment deleted");
             }
@@ -269,7 +269,7 @@ sub edit_comment: PathPart('_edit_comment') Chained('location') Args(1) {
                 $c->trigger_event('comment_updated', $comment_rs);
             }
             if ( !defined($c->req->param('ajax')) ){
-                $c->res->redirect( $comment_rs->object->url . '#comment' . $comment_rs->comment_id);
+                $c->res->redirect( $comment_rs->object->url . '#comment' . $comment_rs->comment_id, 303 );
             } else {
 # RETURN COMMENT HERE
                 $c->forward('ajax_comment', [$comment_rs]);
@@ -328,7 +328,7 @@ sub add_plus_minus: Private{
             }) );
         } else {
         #redirect
-            $c->res->redirect( $object->url );
+            $c->res->redirect( $object->url, 303 );
         }
     } else {
     #prompt for login
@@ -340,7 +340,7 @@ sub add_plus_minus: Private{
             }) );
         } else {
         #redirect
-            $c->res->redirect( '/login/' );
+            $c->res->redirect( '/login/', 303 );
         }
     }
     $c->detach();
@@ -405,7 +405,7 @@ sub vote: PathPart('_vote') Chained('location') Args(0) {
             $c->res->body( to_json(\@results) );
         } else {
         #redirect
-            $c->res->redirect( $poll->object->url );
+            $c->res->redirect( $poll->object->url, 303 );
         }
     } else {
     #prompt for login
@@ -417,7 +417,7 @@ sub vote: PathPart('_vote') Chained('location') Args(0) {
             }) );
         } else {
         #redirect
-            $c->res->redirect( '/login/' );
+            $c->res->redirect( '/login/', 303 );
         }
     }
     $c->detach();
