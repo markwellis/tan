@@ -88,6 +88,7 @@ sub process{
             </div>
             <div class="TAN-menu-ad-holder">
                 @{[ $c->view->template('Lib::Menu') ]}
+                @{[ $c->view->template('Lib::Ad', 'top') ]}
             </div>
         </div>
         <div class="TAN-main">
@@ -113,7 +114,6 @@ sub process{
         : ''
         ]}
         ${content}
-        @{[ $c->view->template('Lib::Ad', 'bottom') ]}
     </div>
     <div id="TAN-bottom"></div>
     <div class="TAN-footer">

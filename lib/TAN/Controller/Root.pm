@@ -157,10 +157,10 @@ sub end: Private{
     if ( !$c->res->output ){
     #dont render if redirect or ajax etc
         if ( $c->stash->{'can_rss'} && $c->req->param('rss') ){
-            $c->stash->{'theme_settings'}->{'name'} = 'rss';
-            $c->stash->{'template_namespace'} = 'Template::RSS';
+            $c->forward( $c->view('RSS') );
+        } else {
+            $c->forward('render');
         }
-        $c->forward('render');
     }
 
     if($c->debug) {

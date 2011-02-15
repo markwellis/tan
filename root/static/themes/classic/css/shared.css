@@ -5,7 +5,7 @@ body{
     font-weight:normal;
     height:100%;
     margin:0px;
-    min-width:885px;
+    min-width:1035px;
 }
 
 a{
@@ -126,6 +126,7 @@ fieldset{
 
 .TAN-menu{
     clear:both;
+    position:absolute;
     bottom:0px;
 }
 
@@ -230,6 +231,13 @@ fieldset{
 }
 
 /* ads */
+
+.TAN-top-ad{   	 	 
+    height:95px;  	 	 
+    width:728px;  	 	 
+    margin:0px auto 25px;  	 	 
+    float:right;  	 	 
+}
 
 .TAN-right1-ad{
     height:600px;
