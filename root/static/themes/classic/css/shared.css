@@ -233,9 +233,8 @@ fieldset{
 /* ads */
 
 .TAN-top-ad{   	 	 
-    height:95px;  	 	 
+    height:90px;  	 	 
     width:728px;  	 	 
-    margin:0px auto 25px;  	 	 
     float:right;  	 	 
 }
 
@@ -253,8 +252,6 @@ fieldset{
 .TAN-left-ad{
     height:600px;
     width:160px;
-    margin-top:20px;
-    margin-bottom:25px;
 }
 
 .TAN-bottom-ad{
