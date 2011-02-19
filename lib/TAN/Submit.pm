@@ -42,7 +42,10 @@ sub _validate{
     my %schema = %{ $module->config->{'schema'} }; #duplicate config so we can delete things from it without it affecting the module
     my @validator_return_values; #we'll use this later, perhaps...
 
+    my $trim_reg = $c->model('CommonRegex')->trim;
+
     foreach my $post_key ( keys(%{$post_data}) ){
+        $post_data->{ $post_key } =~ s/$trim_reg//g;
         next if ( $post_data->{ $post_key } eq '' ); #ignore empty fields
 
     #what does this do?
@@ -63,6 +66,7 @@ sub _validate{
                 #remove undef values...
                 my @clean_array;
                 foreach my $post_array_item ( @{$post_data->{ $post_key }} ){
+                    $post_array_item =~ s/$trim_reg//g;
                     push( @clean_array, $post_array_item ) if ( $post_array_item ne '' );
                 }
                 $post_data->{ $post_key } = \@clean_array;
