@@ -50,6 +50,7 @@ sub _build_config{
             'label' => 'Answer',
             'type' => 'array',
             'minimum' => 2,
+            'required' => 1,
             'length' => {
                 'min' => 1,
                 'max' =>255,
