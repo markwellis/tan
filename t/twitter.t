@@ -35,8 +35,19 @@ my $nt = Net::Twitter->new(
 
 my $availble_length = 140;
 my $tweet;
+$availble_length -= length( $short_url );
+
+my $rt_msg = 'RT @thisaintnews ';
+$availble_length -= length( $rt_msg );
+
+warn $availble_length;
+
 #TODO
 #make avil length from title length (shorten) and short url
 #assemble string
+#leave room for "RT @thisaintnews "
+#make twitter table store rt message so front end can just look it up if
+#save data in table
+#pull data out in promoted templates for tweet button
 
 #my $result = $nt->update( $tweet );
