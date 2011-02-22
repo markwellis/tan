@@ -1,11 +1,12 @@
 package TAN::View::Template::Classic::Lib::Ad;
+use Moose;
 
-use base 'Catalyst::View::Perl::Template';
+extends 'Catalyst::View::Perl::Template';
 
 sub process{
     my ( $self, $c, $position ) = @_;
 
-    my ( $ad_slot, $height, $width );
+    my ( $ad_slot, $ad_type );
     if ( $position eq 'top' ){
     #leaderboard
         $ad_slot = "52129";
@@ -14,31 +15,25 @@ sub process{
     #skyscraper
         $ad_slot = "52130";
         $ad_type = 3;
-    } elsif ( $position eq 'right1' ){
-    #skyscraper
-        $ad_slot = "52131";
-        $ad_type = 3;
-    } elsif ( $position eq 'right2' ){
-    #skyscraper
-        $ad_slot = "52132";
-        $ad_type = 3;
-    } elsif ( $position eq 'bottom' ){
-# bottom
-        $ad_slot = "52133";
-        $ad_type = 5;
     }
 
     my $out = qq\<div class="TAN-${position}-ad">\;
 
     if ( !$c->stash->{'no_ads'} ){
         $out .= qq#
-        <script type="text/javascript">//<![CDATA[
-            var pw_d=document;
-            pw_d.projectwonderful_adbox_id = "${ad_slot}";
-            pw_d.projectwonderful_adbox_type = "${ad_type}";
-            pw_d.projectwonderful_foreground_color = "";
-            pw_d.projectwonderful_background_color = "";
+        <!--
+            <div>
+                <script type="text/javascript">//<![CDATA[
+                    var pw_d=document;
+                    pw_d.projectwonderful_adbox_id = "${ad_slot}";
+                    pw_d.projectwonderful_adbox_type = "${ad_type}";
+                    //]]>
+                </script>
+                <script type="text/javascript" src="http://www.projectwonderful.com/ad_display.js"></script>
+            </div>
+        -->
 
+        <script type="text/javascript">//<![CDATA[
             var timestamp = new Date().getTime();
             var url = "http://www.projectwonderful.com/nojs.php?id=${ad_slot}&type=${ad_type}&t=" + timestamp;
             var img = Asset.image( url, {
@@ -62,4 +57,4 @@ sub process{
     return $out;
 }
 
-1;
+__PACKAGE__->meta->make_immutable;
