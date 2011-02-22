@@ -1,9 +1,11 @@
 package TAN::Model::MySQL;
-use strict;
-use warnings;
+use Moose;
+
+extends 'Catalyst::Model::DBIC::Schema';
+
+with 'Catalyst::Component::InstancePerContext';
 
 use TAN::DBProfiler;
-use base 'Catalyst::Model::DBIC::Schema';
  
 __PACKAGE__->config(
     schema_class => 'TAN::Schema',
@@ -14,6 +16,17 @@ __PACKAGE__->config(
         'mysql_enable_utf8' => 1,
     },
 );
+
+sub build_per_context_instance{
+        my ( $self, $c ) = @_;
+
+        my $new = $self->new( @_ );
+
+        #hack so we can access the catalyst cache in the resultsets. 
+        $new->schema->cache( $c->cache ) if $c;
+
+        return $new;
+    }
 
 sub COMPONENT {
     my $self = shift;
@@ -59,4 +72,4 @@ sub get_query_count {
     return;
 }
 
-1;
+__PACKAGE__->meta->make_immutable;

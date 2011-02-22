@@ -202,7 +202,9 @@ sub get{
         'order_by' => $order_by,
     });
 
-    $self->result_source->schema->cache->set('object:' . $object_id, $object_rs, 600);
+    if ( defined( $object_rs ) ){
+        $self->result_source->schema->cache->set('object:' . $object_id, $object_rs, 600);
+    }
     return $object_rs;
 }
 
