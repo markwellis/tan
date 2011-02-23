@@ -4,7 +4,7 @@ use namespace::autoclean;
 
 BEGIN { extends 'Catalyst::Controller'; }
 
-sub clear_index_caches: Event(object_created) Event(object_promoted) Event(object_deleted){
+sub clear_index_caches: Event(object_created) Event(object_promoted) Event(object_deleted) Event(object_updated){
     my ( $self, $c, $object ) = @_;
 
     $c->model('MySQL::Object')->clear_index_cache();
