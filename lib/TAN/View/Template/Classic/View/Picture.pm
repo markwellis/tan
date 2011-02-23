@@ -1,7 +1,6 @@
 package TAN::View::Template::Classic::View::Picture;
-use Moose;
 
-extends 'Catalyst::View::Perl::Template';
+use base 'Catalyst::View::Perl::Template';
 
 sub process{
     my ( $self, $c ) = @_;
@@ -78,4 +77,4 @@ sub process{
     return $out;
 }
 
-__PACKAGE__->meta->make_immutable;
+1;
