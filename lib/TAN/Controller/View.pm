@@ -6,6 +6,14 @@ BEGIN { extends 'Catalyst::Controller'; }
 
 use JSON;
 
+sub spam_twitter: Event('object_promoted'){
+    my ( $self, $c, $object ) = @_;
+
+    my $url = $c->model('Bitly')->shorten( $c->req->base . $object->url );
+
+    $c->model('Twitter')->spam( $object->link->title, $url );
+}
+
 sub remove_blog_cache: Event(blog_updated){
     my ( $self, $c, $object ) = @_;
 
