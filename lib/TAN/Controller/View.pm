@@ -12,7 +12,9 @@ sub spam_twitter: Event('object_promoted'){
     my $url = $c->model('Bitly')->shorten( $c->req->base . $object->url );
 
     my $location = $object->type;
-    $c->model('Twitter')->spam( $object->$location->title, $url );
+    my $title = $object->$location->title;
+
+    $c->model('Twitter')->spam( $title, $url, $object->nsfw );
 }
 
 sub remove_blog_cache: Event(blog_updated){
