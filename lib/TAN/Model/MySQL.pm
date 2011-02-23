@@ -3,8 +3,6 @@ use Moose;
 
 extends 'Catalyst::Model::DBIC::Schema';
 
-with 'Catalyst::Component::InstancePerContext';
-
 use TAN::DBProfiler;
  
 __PACKAGE__->config(
@@ -16,17 +14,6 @@ __PACKAGE__->config(
         'mysql_enable_utf8' => 1,
     },
 );
-
-sub build_per_context_instance{
-        my ( $self, $c ) = @_;
-
-        my $new = $self->new( @_ );
-
-        #hack so we can access the catalyst cache in the resultsets. 
-        $new->schema->cache( $c->cache ) if $c;
-
-        return $new;
-    }
 
 sub COMPONENT {
     my $self = shift;
