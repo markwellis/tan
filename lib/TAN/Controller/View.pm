@@ -17,11 +17,13 @@ sub spam_twitter: Event('object_promoted'){
     $c->model('Twitter')->spam( $title, $url, $object->nsfw );
 }
 
-sub remove_blog_cache: Event(blog_updated){
+sub remove_blog_cache: Event(object_updated){
     my ( $self, $c, $object ) = @_;
 
-    $c->cache->remove("blog.0:" . $object->id);
-    $c->cache->remove("blog.1:" . $object->id);
+    if ( $object->type eq 'blog' ){
+        $c->cache->remove("blog.0:" . $object->id);
+        $c->cache->remove("blog.1:" . $object->id);
+    }
 }
 
 sub remove_comment_cache: Event(comment_created) Event(comment_deleted) Event(comment_updated) Event(object_updated){
