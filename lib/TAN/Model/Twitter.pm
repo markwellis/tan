@@ -39,7 +39,7 @@ has 'username' => (
 );
 
 sub spam{
-    my ( $self, $title, $url ) = @_;
+    my ( $self, $title, $url, $is_nsfw ) = @_;
 
     my $nt = Net::Twitter->new(
         traits   => [qw/OAuth API::REST/],
@@ -56,12 +56,17 @@ sub spam{
     my $availble_length = 140;
     $availble_length -= length( $url ) + 1; #+1 is space
     $availble_length -= length( 'RT @' . $self->username . ' ' );
+    my $nsfw = '';
+    if ( $is_nsfw eq 'Y' ){
+        $nsfw = ' #NSFW';
+        $availble_length -= length( $nsfw );
+    }
 
     if ( length( $title ) > $availble_length ){
         $title = substr( $title, 0, ( $availble_length ) );
     }
 
-    return $nt->update( "${title} ${url}" );
+    return $nt->update( "${title}${nsfw} ${url}" );
 }
 
 __PACKAGE__->meta->make_immutable;
