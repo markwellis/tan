@@ -1,6 +1,7 @@
 package TAN::View::Template::Classic::View::Picture;
+use Moose;
 
-use base 'Catalyst::View::Perl::Template';
+extends 'Catalyst::View::Perl::Template';
 
 sub process{
     my ( $self, $c ) = @_;
@@ -69,11 +70,12 @@ sub process{
     </div>\;
 
     my $description = $object->picture->description;
+
     if ( defined($description) ){
-        $out .= $c->view->nl2br($c->view->strip_tags($description));
+        $out .= $c->view->nl2br($c->view->html($description));
     }
 
     return $out;
 }
 
-1;
+__PACKAGE__->meta->make_immutable;

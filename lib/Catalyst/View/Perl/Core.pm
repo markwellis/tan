@@ -78,12 +78,12 @@ converts \n's to <br />'s
 =back
 
 =cut
-my $nl2br_reg = qr/\n/;
+my $nl2br_reg = qr/\n|\r\n/;
 sub nl2br{
     my ( $self, $text ) = @_;
     chomp($text);
 
-    $text =~ s/$nl2br_reg/\<br\ \/\>/msg;
+    $text =~ s#$nl2br_reg#<br />#gm;
 
     return $text;
 }
