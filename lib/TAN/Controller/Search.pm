@@ -10,28 +10,23 @@ use Data::Page;
 sub add_to_index: Event(object_created) Event(object_updated){
     my ( $self, $c, $object ) = @_;
 
-    eval{
-        my $type = $object->type;
+    my $type = $object->type;
 
-        $c->model('Search')->update_or_create({
-            'id' => $object->id,
-            'type' => $object->type,
-            'nsfw' => $object->nsfw,
-            'title' => $object->$type->title,
-            'description' => $object->$type->description,
-        });
-
-        $c->model('Search')->commit;
+    my $document = {
+        'id' => $object->id,
+        'type' => $object->type,
+        'nsfw' => $object->nsfw,
+        'title' => $object->$type->title,
+        'description' => $object->$type->description,
     };
+
+    $c->model('Gearman')->run( 'search_add_to_index', $document );
 }
 
 sub delete_from_index: Event(object_deleted){
     my ( $c, $object ) = @_;
 
-    eval{
-        $c->model('Search')->delete( $object->id );
-        $c->model('Search')->commit;
-    };
+    $c->model('Gearman')->run( 'search_delete_from_index', $object->id );
 }
 
 sub index: Path Args(0){

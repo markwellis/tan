@@ -5,6 +5,7 @@ use namespace::autoclean;
 BEGIN { extends 'Catalyst::Controller'; }
 
 use POSIX qw/ceil/;
+use Gearman::Client;
 
 sub ping_sitemap: Event(object_created) Event(object_updated) Event(object_deleted){
     my ( $self, $c ) = @_;
@@ -12,7 +13,7 @@ sub ping_sitemap: Event(object_created) Event(object_updated) Event(object_delet
     $c->clear_cached_page('/sitemap.*');
 
 #trigger monitor to ping google and em
-    `touch /tmp/tan_control/sitemap_ping`;
+    $c->model('Gearman')->run( 'sitemap_ping', 0 );
 }
 
 sub index: Private{

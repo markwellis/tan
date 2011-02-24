@@ -9,12 +9,14 @@ use JSON;
 sub spam_twitter: Event('object_promoted'){
     my ( $self, $c, $object ) = @_;
 
-    my $url = $c->model('Bitly')->shorten( $c->req->base . $object->url );
-
     my $location = $object->type;
     my $title = $object->$location->title;
 
-    $c->model('Twitter')->spam( $title, $url, $object->nsfw );
+    $c->model('Gearman')->run( 'twitter_spam', {
+        'title' => $title,
+        'nsfw' => $object->nsfw,
+        'url' => $c->req->base . $object->url,
+    } );
 }
 
 sub remove_blog_cache: Event(object_updated){

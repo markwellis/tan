@@ -87,5 +87,9 @@
         "access_token": "25301655-kjlUcy2kLuq1ghyIDda9uCU0RjBhEXao1L0ojuaps",
         "access_token_secret": "jA0iMyIWljRR1Yr4Ow3KiMETqqFKmXkyiBWIvWsz0A",
         "username": "thisaintnews"
+    },
+
+    "Model::Gearman": {
+        "job_servers": ["127.0.0.1:4730"],
     }
 }
