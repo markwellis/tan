@@ -160,10 +160,13 @@ sub random{
 
 sub get{
     my ($self, $object_id, $location, $no_extra) = @_;
+    $no_extra ||= 0;
 
     local $DBIx::Class::ResultSourceHandle::thaw_schema = $self->result_source->schema;
 
-    my $object_rs = $self->result_source->schema->cache->get('object:' . $object_id);
+    my $cache_key = "object:${object_id}:${no_extra}";
+
+    my $object_rs = $self->result_source->schema->cache->get( $cache_key );
     return $object_rs if ( $object_rs );
 
     my $order_by = ''; #don't know why, but it orders wrong if this is unset, set to '' for speedy correct ordering
@@ -203,7 +206,7 @@ sub get{
     });
 
     if ( defined( $object_rs ) ){
-        $self->result_source->schema->cache->set('object:' . $object_id, $object_rs, 600);
+        $self->result_source->schema->cache->set( $cache_key, $object_rs, 600);
     }
     return $object_rs;
 }
