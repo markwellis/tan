@@ -1,0 +1,23 @@
+{
+    "job_servers": ["127.0.0.1:4730"],
+    "search_args": {
+        "index_path": "/mnt/stuff/TAN/search_index",
+        "schema": [
+            {
+                "name": "title", 
+                "boost": 3,
+            },{
+                "name": "description",
+            },{
+                "name": "id",
+            },{
+                "name": "type",
+            },{
+                "name": "nsfw",
+            }
+        ],
+        "search_fields": ["title", "description"],
+        "search_boolop": "AND",
+        "entries_per_page": 27
+    }
+}

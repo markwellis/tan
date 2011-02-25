@@ -4,9 +4,6 @@ use namespace::autoclean;
 
 BEGIN { extends 'Catalyst::Controller'; }
 
-use Time::HiRes qw/time/;
-use Data::Page;
-
 sub add_to_index: Event(object_created) Event(object_updated){
     my ( $self, $c, $object ) = @_;
 
@@ -39,11 +36,11 @@ sub index: Path Args(0){
     if ( !$c->nsfw && ($q !~ m/nsfw\:?/) ){
         $q .= ' nsfw:n';
     }
-    if ( my ( $objects, $pager ) = $c->model('Search')->search( $q, $page ) ){
+
+    my $searcher = $c->model('Search');
+    if ( my ( $objects, $pager ) = $searcher->search( $q, $page ) ){
         $c->stash->{'index'} = $c->model('Index')->indexinate($c, $objects, $pager);
     }
-
-    $c->model('Search')->commit;
 
     $c->stash(
         'page_title' => $c->req->param('q') . " - Search",

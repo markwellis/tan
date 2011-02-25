@@ -1,23 +1,27 @@
 use strict;
 use warnings;
 
-use App::Daemon;
-use Gearman::Worker;
-
-use Storable;
+use GearmanX::Simple::Worker;
 
 use WebService::Bitly;
 use Net::Twitter;
+use Storable;
 
 use LWPx::ParanoidAgent;
 use Exception::Simple;
 
-App::Daemon::daemonize();
+use Config::Any;
+use File::Basename;
+my $config_file = dirname(__FILE__) . '/config.json';
 
-my $worker = Gearman::Worker->new;
-$worker->job_servers('127.0.0.1:4730');
+my $config = Config::Any->load_files( {
+    'files' => [ $config_file ],
+    'flatten_to_hash' => 1,
+    'use_ext' => 1,
+} );
 
-$worker->register_function( 'spam_twitter' => \&spam_twitter );
+$config = $config->{ $config_file };
+
 sub spam_twitter{
     my ( $job ) = @_;
 
@@ -70,4 +74,8 @@ sub spam_twitter{
     $nt->update( "${title}${nsfw} ${url}" );
 }
 
-$worker->work while 1;
+my $worker = GearmanX::Simple::Worker->new( $config->{'job_servers'}, {
+    'spam_twitter' => \&spam_twitter,
+} );
+
+$worker->work;
