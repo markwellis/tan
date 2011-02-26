@@ -30,6 +30,8 @@ sub sitemap_ping{
         }
         $lastrun = time;
     }
+
+    return 1;
 }
 
 my $worker = GearmanX::Simple::Worker->new( $config->{'job_servers'}, {

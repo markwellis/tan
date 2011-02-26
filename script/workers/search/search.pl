@@ -24,6 +24,8 @@ sub add_to_index{
 
     $searcher->update_or_create( Storable::thaw( $job->arg ) );
     $searcher->commit;
+
+    return 1;
 }
 
 sub delete_from_index{
@@ -31,6 +33,8 @@ sub delete_from_index{
 
     $searcher->delete( $job->arg );
     $searcher->commit;
+
+    return 1;
 }
 
 my $worker = GearmanX::Simple::Worker->new( $config->{'job_servers'}, {
