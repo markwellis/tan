@@ -2,7 +2,7 @@ var image_src = '/static/images/mouseover.png?r=13';
 new Asset.image( image_src );
 
 // long regex :\
-var safe_reg = /\/static\/fckeditor\/editor\/images\/smiley\/|\/static\/smilies\/|\/sys\/js\/fckeditor\/editor\/images\/smiley\/smileys\//;
+var safe_reg = /^(?:\/static\/fckeditor\/editor\/images\/smiley\/)|(?:\/static\/smilies\/|\/sys\/js\/fckeditor\/editor\/images\/smiley\/smileys\/)/;
 
 window.addEvent('domready', function(){
     if (TAN.nsfw() === 0){
@@ -17,9 +17,10 @@ window.addEvent('domready', function(){
             
             var image = Asset.image(el.getProperty('src'), {
                 'onload': function(image){
-                    var el = image.retrieve('el');
+                    resize_image( el, el );
 
-                    resize_image(el, el);
+                    el.store('original_image', image);
+
                     el.setProperty('src', image_src);
                     el.setStyle('visibility', 'visible');
                     el.addEvents({
@@ -34,16 +35,12 @@ window.addEvent('domready', function(){
                     });
                 },
                 'onerror': function(image){
-                    var el = image.retrieve('el');
                     image.height = '0px';
                     image.width = '0px';
                     resize_image(image, el);
                 }
             });
 
-            image.store('el', el);
-            el.store('original_image', image);
-            el.setProperty('src', image_src);
         });
     } else {
         window.addEvent('load', function() {
