@@ -21,7 +21,7 @@ sub process{
 
     my $url;
     my $title_url;
-    if ( !$c->stash->{'article'} || ( $type eq 'blog' ) ){
+    if ( !$c->stash->{'article'} || ( $type eq 'blog' ) || ( $type eq 'poll' ) ){
         $url = $object_url;
         if ( $type eq 'link' ){
             $title_url = '/redirect/external/' . $object->id;
