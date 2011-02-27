@@ -66,7 +66,7 @@ sub process{
                         ''
                     ]}
                     <a href="http://www.twitter.com/thisaintnews">
-                        <img src="/static/images/twitter.png" alt="Follow thisaintnews on Twitter"/>
+                        <img src="/static/images/twitter.png" height="15" width="15" alt="Follow thisaintnews on Twitter"/>
                     </a> |
                     <a href="http://stats.thisaintnews.com">Stats</a> |
                     <a class="mibbit" href="/chat/">Chat</a>
