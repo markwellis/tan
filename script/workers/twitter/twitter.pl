@@ -47,7 +47,7 @@ sub spam_twitter{
         'user_api_key' => $config->{'bitly'}->{'user_api_key'},
         'domain' => $config->{'bitly'}->{'domain'},
         'ua' => LWPx::ParanoidAgent->new(
-            timeout   => 3,
+            timeout   => 5,
         ),
     );
 
@@ -58,7 +58,11 @@ sub spam_twitter{
         return;
     }
 
-    my $url = $shorten->short_url;
+    my $url = eval{
+        return $shorten->short_url;
+    };
+
+    return 1 if $@;
 
     my $nt = Net::Twitter->new(
         traits   => [qw/OAuth API::REST/],
@@ -68,7 +72,7 @@ sub spam_twitter{
         access_token_secret => $config->{'twitter'}->{'access_token_secret'},
         useragent_class => 'LWPx::ParanoidAgent',
         useragent_args => {
-            timeout   => 3,
+            timeout   => 5,
         },
     );
 
@@ -88,7 +92,9 @@ sub spam_twitter{
         $title = substr( $title, 0, ( $availble_length ) );
     }
 
-    $nt->update( "${title}${nsfw} ${url}" );
+    eval{
+        $nt->update( "${title}${nsfw} ${url}" );
+    };
 
     return 1;
 }
