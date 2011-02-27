@@ -11,6 +11,7 @@ use LWPx::ParanoidAgent;
 
 use Config::Any;
 use File::Basename;
+use Log::Log4perl qw/:easy/;
 
 my $config_file = dirname(__FILE__) . '/config.json';
 my $devel_config_file = dirname(__FILE__) . '/config_devel.json';
@@ -55,15 +56,12 @@ sub spam_twitter{
 
     my $shorten = $bitly->shorten( $args->{'url'} );
     if ( $shorten->is_error ){
-        return;
+        ERROR $shorten->status_code . ': ' . $shorten->status_txt . "\n";
+
+        return 1;
     }
 
-    my $url = eval{
-        return $shorten->short_url;
-    };
-
-    warn "${@}\n" if $@;
-    return 1 if $@;
+    my $url = $shorten->short_url;
 
     my $nt = Net::Twitter->new(
         traits   => [qw/OAuth API::REST/],
@@ -93,12 +91,12 @@ sub spam_twitter{
         $title = substr( $title, 0, ( $availble_length ) );
     }
 
-    warn "status: ${title}${nsfw} ${url}\n";
+    ERROR "status: ${title}${nsfw} ${url}\n";
     eval{
         $nt->update( "${title}${nsfw} ${url}" );
     };
 
-    warn "${@}\n" if $@;
+    ERROR "${@}\n" if $@;
 
     return 1;
 }

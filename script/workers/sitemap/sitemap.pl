@@ -8,6 +8,8 @@ use CGI;
 
 use Config::Any;
 use File::Basename;
+use Log::Log4perl qw/:easy/;
+
 my $config_file = dirname(__FILE__) . '/config.json';
 
 my $config = Config::Any->load_files( {
@@ -26,6 +28,7 @@ sub sitemap_ping{
     if ( !$lastrun || (time - $lastrun) > 600 ){
     #10 min limit
         foreach my $search_engine_ping_url ( @{$config->{'search_engine_ping_urls'}} ) {
+            ERROR "pinging $search_engine_ping_url";
             get( $search_engine_ping_url . CGI::escape( $config->{'sitemap_url'} ) );
         }
         $lastrun = time;
