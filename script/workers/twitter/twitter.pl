@@ -62,6 +62,7 @@ sub spam_twitter{
         return $shorten->short_url;
     };
 
+    warn "${@}\n" if $@;
     return 1 if $@;
 
     my $nt = Net::Twitter->new(
@@ -92,9 +93,12 @@ sub spam_twitter{
         $title = substr( $title, 0, ( $availble_length ) );
     }
 
+    warn "status: ${title}${nsfw} ${url}\n";
     eval{
         $nt->update( "${title}${nsfw} ${url}" );
     };
+
+    warn "${@}\n" if $@;
 
     return 1;
 }
