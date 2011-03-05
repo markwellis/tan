@@ -7,7 +7,7 @@ BEGIN { extends 'Catalyst::Controller'; }
 sub validate_user: PathPart('edit') Chained('../location') CaptureArgs(1){
     my ( $self, $c, $object_id ) = @_;
 
-    $c->stash->{'object'} = $c->model('MySQL::Object')->get( $object_id, $c->stash->{'location'}, 1 );
+    $c->stash->{'object'} = $c->model('MySQL::Object')->get( $object_id, $c->stash->{'location'} );
 
     if ( 
         !defined($c->stash->{'object'})

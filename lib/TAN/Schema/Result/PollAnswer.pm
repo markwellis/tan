@@ -19,6 +19,8 @@ __PACKAGE__->add_columns(
     is_nullable => 0,
     size => 255,
   },
+  "votes",
+  { data_type => "BIGINT", default_value => undef, is_nullable => 0, size => 20 },
 );
 __PACKAGE__->set_primary_key("answer_id");
 

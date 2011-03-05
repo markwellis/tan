@@ -40,7 +40,7 @@ sub main {
     }
 
     my $hot_copy_results = do_backup();
-    my $tar_res = create_tar();
+    my $tar_res = create_gz();
     my $diff_res = create_diff();
     cleanup();
     return 1;
@@ -49,7 +49,7 @@ sub main {
 sub cleanup {
     `rm -rf $db_db`;
     if (!$first_run_of_month) {
-        unlink("${backup_file}.tar");
+        unlink("${backup_file}.sql");
     }
 }
 
@@ -61,7 +61,7 @@ sub make_read_only {
 
 sub create_diff {
     if (!$first_run_of_month){
-        my $exec = `diff -Naur ${master_file}.tar ${backup_file}.tar > ${backup_file}.diff`;
+        my $exec = `diff -Naur ${master_file}.sql ${backup_file}.sql > ${backup_file}.diff`;
         my $gzip = `gzip -f ${backup_file}.diff`;
         make_read_only("${backup_file}.diff.gz");
         return $exec;
@@ -69,26 +69,24 @@ sub create_diff {
     return undef;
 }
 
-#creates the tar ball
-#copies it to day/hour.tar.gz if its the master
-sub create_tar {
-    my $tar = `tar -cpf ${backup_file}.tar ${db_db}/`;
-    make_read_only("${backup_file}.tar");
+#copies it to day/hour.sql.gz if its not the master
+sub create_gz {
+    make_read_only("${backup_file}.sql");
     if ($first_run_of_month){
         my $new_file = get_hour() . '-master';
-        copy("${backup_file}.tar", "${new_file}.tar");
-        my $gzip = `gzip -f ${new_file}.tar`;
-        make_read_only("${new_file}.tar.gz");
+        copy("${backup_file}.sql", "${new_file}.sql");
+        my $gzip = `gzip -f ${new_file}.sql`;
+        make_read_only("${new_file}.sql.gz");
     }
-    return $tar;
+    return 1;
 }
 
 sub do_backup {
-    return `mysqlhotcopy -u ${db_user} -p ${db_passwd} ${db_db} .`;
+    return `mysqldump -u ${db_user} -p ${db_passwd} --single-transaction ${db_db} > ${backup_file}.sql`
 }
 
 sub first_run_of_month {
-    if (-e "${master_file}.tar") {
+    if (-e "${master_file}.sql") {
         return 0;
     } else {
         return 1;

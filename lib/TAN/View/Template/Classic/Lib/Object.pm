@@ -65,9 +65,6 @@ sub process{
                 <a href="${comment_url}" class="TAN-news-comment">
                     <img alt="" class="TAN-news-comment-image" src="/static/images/comment.png" /> @{[ $object->get_column('comments') ]}
                 </a> | @{[ $object->get_column('views') ]} views
-                @{[ ( ($type eq 'link') && (!$is_video) ) ?
-                     qq#| @{[ $object->get_column('external') || 0 ]} external views#
-                : '' ]}
                 @{[ ( ($type eq 'poll') ) ?
                      qq#| @{[ $object->poll->votes || 0 ]} votes#
                 : '' ]}

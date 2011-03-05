@@ -46,31 +46,6 @@ sub index {
             $type = $location;
         }
         
-        my %search_opts;
-        if ( ($order ne 'created') || ($order ne 'promoted') ){
-            if ( $order eq 'comments' ){
-                %search_opts = (
-                    '+select' => [\'(SELECT COUNT(*) FROM comments WHERE comments.object_id = me.object_id AND deleted = "N") comments'],
-                    '+as' => ['comments'],
-                );
-            } elsif ( $order eq 'views' ){
-                %search_opts = (
-                    '+select' => [\'(SELECT COUNT(*) FROM views WHERE views.object_id = me.object_id AND type="internal") views'],
-                    '+as' => ['views'],
-                );
-            } elsif ( $order eq 'plus' ){
-                %search_opts = (
-                    '+select' => [\'(SELECT COUNT(*) FROM plus_minus WHERE plus_minus.object_id = me.object_id AND type="plus") plus'],
-                    '+as' => ['plus'],
-                );
-            } elsif ( $order eq 'minus' ){
-                %search_opts = (
-                    '+select' => [\'(SELECT COUNT(*) FROM plus_minus WHERE plus_minus.object_id = me.object_id AND type="minus") minus'],
-                    '+as' => ['minus'],
-                );
-            }
-        }
-
         #order by newest to lastest
         if ( ($order eq 'created') || ($order eq 'promoted') ){
             $order = [$order];
@@ -96,7 +71,6 @@ sub index {
             },
             'page' => $page,
             'rows' => 27,
-            %search_opts
         });
 
         return undef if !$index_rs;
@@ -159,12 +133,11 @@ sub random{
 }
 
 sub get{
-    my ($self, $object_id, $location, $no_extra) = @_;
-    $no_extra ||= 0;
+    my ( $self, $object_id, $location ) = @_;
 
     local $DBIx::Class::ResultSourceHandle::thaw_schema = $self->result_source->schema;
 
-    my $cache_key = "object:${object_id}:${no_extra}";
+    my $cache_key = "object:${object_id}";
 
     my $object_rs = $self->result_source->schema->cache->get( $cache_key );
     return $object_rs if ( $object_rs );
@@ -176,31 +149,18 @@ sub get{
 
     if ( $location eq 'poll' ){
         push(@{$prefetch}, {
-            'poll' => {
-                'answers' => ['votes'],
-            },
+            'poll' => [
+                'answers',
+            ],
         });
         $order_by = 'answers.answer_id';
     } else {
         push(@{$prefetch}, $location);
     }
 
-    my %extra;
-    if ( !$no_extra ){
-        $extra{'+select'} = [
-            \'(SELECT COUNT(*) FROM views WHERE views.object_id = me.object_id AND type="internal") views',
-            \'(SELECT COUNT(*) FROM views WHERE views.object_id = me.object_id AND type="external") external',
-            \'(SELECT COUNT(*) FROM comments WHERE comments.object_id = me.object_id AND deleted = "N") comments',
-            \'(SELECT COUNT(*) FROM plus_minus WHERE plus_minus.object_id = me.object_id AND type="plus") plus',
-            \'(SELECT COUNT(*) FROM plus_minus WHERE plus_minus.object_id = me.object_id AND type="minus") minus',
-        ];
-        $extra{'+as'} = ['views', 'external', 'comments', 'plus', 'minus'];
-    }
-
     $object_rs = $self->find({
         'object_id' => $object_id,
     },{
-        %extra,
         'prefetch' => $prefetch,
         'order_by' => $order_by,
     });

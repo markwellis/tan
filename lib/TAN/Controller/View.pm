@@ -58,8 +58,7 @@ sub remove_object_cache:
         $object = $object->object;
     }
 
-    $c->cache->remove("object:" . $object->id . ':0'); #extra 
-    $c->cache->remove("object:" . $object->id . ':1'); #no_extra
+    $c->cache->remove("object:" . $object->id); #no_extra
     $c->clear_cached_page( $object->url . '.*' );
 }
 
