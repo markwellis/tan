@@ -1,6 +1,6 @@
-UPDATE link SET picture_id = 53016 WHERE picture_id = 0;
+UPDATE link SET picture_id = 53016 WHERE picture_id = 0 OR picture_id = 1;
 
-UPDATE blog SET picture_id = 53016 WHERE picture_id = 0;
+UPDATE blog SET picture_id = 53016 WHERE picture_id = 0 OR picture_id = 1;
 
 DELETE comments.* FROM comments LEFT JOIN object ON ( comments.object_id = object.object_id ) WHERE comments.object_id IS NOT NULL AND object.object_id IS NULL;
 

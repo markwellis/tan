@@ -82,7 +82,7 @@ sub create_gz {
 }
 
 sub do_backup {
-    return `mysqldump -u ${db_user} -p ${db_passwd} --single-transaction ${db_db} > ${backup_file}.sql`
+    return `mysqldump -u${db_user} -p${db_passwd} --single-transaction ${db_db} > ${backup_file}.sql`;
 }
 
 sub first_run_of_month {
