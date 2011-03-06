@@ -64,7 +64,7 @@ sub external: Local Args(1){
         my $ip_address = $c->req->address;
 
         if ( $object_id  && $session_id ){
-            my $user_id = $c->user_exists ? $c->user->user_id : 0;
+            my $user_id = $c->user_exists ? $c->user->user_id : undef;
 
             $c->model('MySQL::Views')->update_or_create({
                 'session_id' => $session_id,
