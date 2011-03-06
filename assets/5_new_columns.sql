@@ -11,3 +11,9 @@ UPDATE object SET minus = ( SELECT COUNT(*) FROM plus_minus WHERE plus_minus.obj
 UPDATE object SET comments = ( SELECT COUNT(*) FROM comments WHERE comments.object_id = object.object_id AND deleted='N' );
 
 UPDATE poll_answer SET votes = ( SELECT COUNT(*) FROM poll_vote WHERE poll_answer.answer_id = poll_vote.answer_id );
+
+ALTER TABLE `tan`.`comments` 
+ADD INDEX `recent` (`deleted` ASC, `created` ASC, `object_id` ASC) 
+, DROP INDEX `object` 
+, DROP INDEX `created` 
+, DROP INDEX `deleted` ;
