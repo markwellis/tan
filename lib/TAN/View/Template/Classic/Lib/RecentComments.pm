@@ -21,11 +21,13 @@ sub process{
             </li>\;
     }
 
-    my $grouped_comments = $c->model('MySQL::Comments')->recent_comments(20);
+    my $grouped_comments = $c->model('MySQL::RecentComments')->grouped;
     foreach my $object_id ( keys(%{$grouped_comments}) ){
-        my $type = $grouped_comments->{$object_id}->[0]->object->type;
-        my $title = $c->view->html($grouped_comments->{$object_id}->[0]->object->$type->title);
-        if ( $grouped_comments->{$object_id}->[0]->object->nsfw eq 'Y' ){
+        my $type = $grouped_comments->{$object_id}->[0]->type;
+        my $title_key = $type . '_title';
+
+        my $title = $c->view->html( $grouped_comments->{ $object_id }->[0]->$title_key );
+        if ( $grouped_comments->{$object_id}->[0]->nsfw eq 'Y' ){
             if ( !$c->nsfw ){
                 next;
             } else {
@@ -34,11 +36,11 @@ sub process{
         }
         $out .= qq\
             <li>
-                <a href="@{[ $grouped_comments->{$object_id}->[0]->object->url ]}" class="TAN-type-${type}" title="${title}">${title}</a>
+                <a href="@{[ $grouped_comments->{ $object_id }->[0]->url ]}" class="TAN-type-${type}" title="${title}">${title}</a>
                 <ul>\;
         foreach my $comment ( @{$grouped_comments->{$object_id}} ){
             my $orig_comment = $c->view->strip_tags($comment->comment);
-            if ( $comment->object->nsfw eq 'Y' ){
+            if ( $comment->nsfw eq 'Y' ){
                 $orig_comment = "${orig_comment}";
             }
 
@@ -52,10 +54,10 @@ sub process{
                 $long_comment = "${long_comment}...";
             }
             
-            my $tip_title = $c->view->html($comment->user->username . "::${long_comment}");
+            my $tip_title = $c->view->html($comment->username . "::${long_comment}");
             $out .= qq\
                 <li>
-                    <a href="@{[ $comment->object->url ]}#comment@{[ $comment->comment_id ]}" title="${tip_title}">${short_comment}</a>
+                    <a href="@{[ $comment->url ]}#comment@{[ $comment->comment_id ]}" title="${tip_title}">${short_comment}</a>
                 </li>\;
         }
         $out .= qq\
