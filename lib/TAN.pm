@@ -55,16 +55,19 @@ sub check_cache{
         if ( $object_id  && $session_id ){
             my $user_id = $c->user_exists ? $c->user->user_id : undef;
 
-            $c->model('MySQL::Views')->update_or_create({
-                'session_id' => $session_id,
-                'object_id' => $object_id,
-                'user_id' => $user_id,
-                'ip' => $ip_address,
-                'created' => \'NOW()',
-                'type' => 'internal',
-            },{
-                'key' => 'session_objectid',
-            });
+            eval{
+            #might get a deadlock [284] - ignore in that case
+                $c->model('MySQL::Views')->update_or_create({
+                    'session_id' => $session_id,
+                    'object_id' => $object_id,
+                    'user_id' => $user_id,
+                    'ip' => $ip_address,
+                    'created' => \'NOW()',
+                    'type' => 'internal',
+                },{
+                    'key' => 'session_objectid',
+                });
+            };
         }
         #stop duplicate recordings
         $c->stash->{'pi_recorded'} = 1;
