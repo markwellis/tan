@@ -18,4 +18,4 @@ fi
             rsync $ARGS $SOURCE/$DIR $USER@$SERVER:$DESTINATION/$DIR
         done;
     fi
-) 88 > $LOCK_FILE
+) 88>$LOCK_FILE
