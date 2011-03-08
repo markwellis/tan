@@ -20,7 +20,7 @@ use Catalyst qw/
 
 extends 'Catalyst';
 
-our $VERSION = 1.7.4;
+our $VERSION = 1.7.5;
 
 __PACKAGE__->config( name => 'TAN', 
     'Plugin::PageCache' => {
@@ -46,13 +46,14 @@ sub check_cache{
     $c->stash->{'message'} = $c->flash->{'message'};
 
 #recored p.i.
-    if ( ($c->action eq 'view/index') && (!$c->stash->{'pi_recorded'}) ){
+    if ( !$c->stash->{'pi_recorded'} ){
         my @params = split('/', $c->req->path);
-        my $object_id = $params[2];
+
+        my $object_id = ( $c->action eq 'view/index' ) ? $params[2] : undef;
         my $session_id = $c->sessionid;
         my $ip_address = $c->req->address;
 
-        if ( $object_id  && $session_id ){
+        if ( $session_id ){
             my $user_id = $c->user_exists ? $c->user->user_id : undef;
 
             eval{
