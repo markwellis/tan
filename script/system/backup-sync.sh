@@ -7,7 +7,7 @@ BACKUP_DIRS="TAN/user trac svn backups"
 
 LOCK_FILE=/tmp/backup-sync
 
-ARGS="-aze ssh --delete"
+ARGS="-aze ssh"
 if [ $VERBOSE ]; then
     ARGS="${ARGS} -v"
 fi
