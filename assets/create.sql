@@ -32,6 +32,10 @@ CREATE  TABLE IF NOT EXISTS `tan`.`object` (
   `promoted` TIMESTAMP NULL DEFAULT NULL ,
   `user_id` BIGINT(20) NOT NULL ,
   `NSFW` ENUM('Y','N') NOT NULL DEFAULT 'N' ,
+  `views` BIGINT(20) NOT NULL DEFAULT 0 ,
+  `plus` BIGINT(20) NOT NULL DEFAULT 0 ,
+  `minus` BIGINT(20) NOT NULL DEFAULT 0 ,
+  `comments` BIGINT(20) NOT NULL DEFAULT 0 ,
   PRIMARY KEY (`object_id`) ,
   INDEX `created` (`created` ASC) ,
   INDEX `super_index` (`NSFW` ASC, `type` ASC, `promoted` ASC, `created` ASC) ,
@@ -111,9 +115,7 @@ CREATE  TABLE IF NOT EXISTS `tan`.`comments` (
   `deleted` ENUM('Y','N') NOT NULL DEFAULT 'N' ,
   `number` BIGINT(20) NOT NULL ,
   PRIMARY KEY (`comment_id`) ,
-  INDEX `deleted` (`deleted` ASC) ,
-  INDEX `created` (`created` ASC) ,
-  INDEX `object` (`object_id` ASC, `deleted` ASC) ,
+  INDEX `recent` (`created` ASC, `object_id` ASC, `deleted` ASC) ,
   INDEX `fk_comments_1` (`object_id` ASC) ,
   INDEX `fk_comments_2` (`user_id` ASC) ,
   CONSTRAINT `fk_comments_1`
@@ -236,6 +238,7 @@ CREATE  TABLE IF NOT EXISTS `tan`.`poll_answer` (
   `answer_id` BIGINT(20) NOT NULL AUTO_INCREMENT ,
   `poll_id` BIGINT(20) NOT NULL ,
   `answer` VARCHAR(255) NOT NULL ,
+  `votes` BIGINT(20) NOT NULL DEFAULT 0 ,
   PRIMARY KEY (`answer_id`) ,
   INDEX `fk_poll_answer_1` (`poll_id` ASC) ,
   CONSTRAINT `fk_poll_answer_1`
@@ -356,7 +359,7 @@ DEFAULT CHARACTER SET = utf8;
 CREATE  TABLE IF NOT EXISTS `tan`.`views` (
   `view_id` BIGINT(20) NOT NULL AUTO_INCREMENT ,
   `ip` VARCHAR(15) NOT NULL ,
-  `object_id` BIGINT(20) NOT NULL ,
+  `object_id` BIGINT(20) NULL ,
   `session_id` VARCHAR(128) NOT NULL ,
   `user_id` BIGINT(20) NULL DEFAULT NULL ,
   `created` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ,
@@ -380,6 +383,121 @@ ENGINE = InnoDB
 AUTO_INCREMENT = 10133956
 DEFAULT CHARACTER SET = utf8;
 
+
+-- -----------------------------------------------------
+-- Placeholder table for view `tan`.`recent_comments`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `tan`.`recent_comments` (`comment_id` INT, `comment` INT, `created` INT, `object_id` INT, `type` INT, `nsfw` INT, `link_title` INT, `picture_title` INT, `blog_title` INT, `poll_title` INT, `username` INT);
+
+-- -----------------------------------------------------
+-- View `tan`.`recent_comments`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tan`.`recent_comments`;
+USE `tan`;
+CREATE  OR REPLACE VIEW `tan`.`recent_comments` AS
+
+SELECT me.comment_id, me.comment, me.created, me.object_id, object.type, object.nsfw, link.title link_title, picture.title picture_title, blog.title blog_title, poll.title poll_title, user.username FROM comments me USE INDEX (recent) JOIN object object ON object.object_id = me.object_id LEFT JOIN link link ON link.link_id = me.object_id LEFT JOIN picture picture ON picture.picture_id = me.object_id LEFT JOIN blog blog ON blog.blog_id = me.object_id LEFT JOIN poll poll ON poll.poll_id = me.object_id JOIN user user ON user.user_id = me.user_id WHERE ( me.deleted = 'N' ) ORDER BY me.created DESC LIMIT 20;
+USE `tan`;
+
+DELIMITER $$
+USE `tan`$$
+
+
+Create Trigger increment_object_comments
+	AFTER INSERT ON comments
+	FOR EACH ROW
+BEGIN
+
+UPDATE object SET comments=comments+1 WHERE object_id=NEW.object_id;
+
+END$$
+
+USE `tan`$$
+
+
+Create Trigger decrement_object_comments
+	AFTER UPDATE ON comments
+	FOR EACH ROW
+BEGIN
+
+IF NEW.deleted = 'Y' THEN
+	UPDATE object SET comments=comments-1 WHERE object_id=NEW.object_id;
+END IF;
+
+END$$
+
+
+DELIMITER ;
+
+DELIMITER $$
+USE `tan`$$
+
+
+Create Trigger increment_object_plus_minus
+	AFTER INSERT ON plus_minus
+	FOR EACH ROW
+BEGIN
+
+IF NEW.type = 'plus' THEN
+	UPDATE object SET plus=plus+1 WHERE object_id=NEW.object_id;
+ELSEIF NEW.type = 'minus' THEN
+	UPDATE object SET minus=minus+1 WHERE object_id=NEW.object_id;
+END IF;
+
+END$$
+
+USE `tan`$$
+
+
+Create Trigger decrement_object_plus_minus
+	AFTER DELETE ON plus_minus
+	FOR EACH ROW
+BEGIN
+
+IF OLD.type = 'plus' THEN
+	UPDATE object SET plus=plus-1 WHERE object_id=OLD.object_id;
+ELSEIF OLD.type = 'minus' THEN
+	UPDATE object SET minus=minus-1 WHERE object_id=OLD.object_id;
+END IF;
+
+END$$
+
+
+DELIMITER ;
+
+DELIMITER $$
+USE `tan`$$
+
+
+Create Trigger increment_poll_answer_vote
+	AFTER INSERT ON poll_vote
+	FOR EACH ROW
+BEGIN
+
+UPDATE poll_answer SET votes=votes+1 WHERE answer_id=NEW.answer_id;
+
+END$$
+
+
+DELIMITER ;
+
+DELIMITER $$
+USE `tan`$$
+
+
+Create Trigger increment_object_views
+	AFTER INSERT ON views
+	FOR EACH ROW
+BEGIN
+
+IF NEW.object_id IS NOT NULL THEN
+	UPDATE object SET views=views+1 WHERE object_id=NEW.object_id;
+END IF;
+
+END$$
+
+
+DELIMITER ;
 
 
 SET SQL_MODE=@OLD_SQL_MODE;
