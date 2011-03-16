@@ -1,6 +1,6 @@
 CREATE  TABLE IF NOT EXISTS `tan`.`admin` (
   `admin_id` BIGINT(20) NOT NULL AUTO_INCREMENT ,
-  `level` VARCHAR(255) NOT NULL ,
+  `role` VARCHAR(255) NOT NULL ,
   PRIMARY KEY (`admin_id`) )
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8
@@ -8,10 +8,11 @@ COLLATE = utf8_general_ci;
 show warnings;
 
 CREATE  TABLE IF NOT EXISTS `tan`.`user_admin` (
-  `admin_id` BIGINT(20) NOT NULL ,
   `user_id` BIGINT(20) NOT NULL ,
+  `admin_id` BIGINT(20) NOT NULL ,
   INDEX `fk_user_admin_1` (`user_id` ASC) ,
   INDEX `fk_user_admin_2` (`admin_id` ASC) ,
+  PRIMARY KEY (`user_id`, `admin_id`) ,
   CONSTRAINT `fk_user_admin_1`
     FOREIGN KEY (`user_id` )
     REFERENCES `tan`.`user` (`user_id` )
@@ -27,7 +28,7 @@ DEFAULT CHARACTER SET = utf8
 COLLATE = utf8_general_ci;
 show warnings;
 
-INSERT INTO admin (level) VALUES('edit_object'),
+INSERT INTO admin (role) VALUES('edit_object'),
     ('delete_object'),
     ('edit_user'),
     ('delete_user'),

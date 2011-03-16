@@ -74,6 +74,11 @@ __PACKAGE__->has_many(
   "TAN::Schema::Result::Views",
   { "foreign.user_id" => "self.user_id" },
 );
+__PACKAGE__->has_many(
+  "map_user_role",
+  "TAN::Schema::Result::UserAdmin",
+  { "foreign.user_id" => "self.user_id" },
+);
 
 =head2 confirm
 

@@ -8,6 +8,7 @@ use Data::Dumper; #used in 500 error email
 use Catalyst qw/
     ConfigLoader
     Authentication
+    Authorization::Roles
     Email
     Session
     Session::Store::File
