@@ -42,7 +42,7 @@ sub process{
                 | @{[ $object->picture->x ]}x@{[ $object->picture->y ]}
                 | @{[ $object_size ]}\;
 
-    if ( $c->user_exists && ($c->user->admin || $c->user->id == $object->user_id) ){
+    if ( $c->user_exists && ($c->check_user_roles(qw/edit_object/) || $c->user->id == $object->user_id) ){
         $out .= qq\
                 | <a href="/submit/@{[ $object->type ]}/edit/@{[ $object->id ]}/" class="TAN-news-comment">Edit</a>\;
     }

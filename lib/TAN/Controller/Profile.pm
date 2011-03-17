@@ -80,7 +80,12 @@ sub user_index: PathPart('') Chained('user') Args(0){
 sub edit: PathPart('edit') Chained('user') Args(0){
     my ( $self, $c ) = @_;
 
-    if ( $c->user_exists && ($c->stash->{'user'}->id == $c->user->id) ){
+    if ( $c->user_exists 
+        && (
+            ( $c->stash->{'user'}->id == $c->user->id )
+            || $c->check_user_roles(qw/edit_user/)
+        )
+    ){
         $c->stash->{'object'} = $c->model('MySQL::Object')->find({
             'user_id' => $c->stash->{'user'}->id,
             'type' => 'profile',

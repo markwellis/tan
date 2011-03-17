@@ -13,7 +13,7 @@ sub validate_user: PathPart('edit') Chained('../location') CaptureArgs(1){
         !defined($c->stash->{'object'})
         || !$c->user_exists 
         || (
-            !$c->user->admin 
+            !$c->check_user_roles(qw/edit_object/) 
             && ($c->user->id != $c->stash->{'object'}->user_id)
         )
     ){

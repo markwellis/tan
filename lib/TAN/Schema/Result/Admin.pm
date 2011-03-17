@@ -20,9 +20,14 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("admin_id");
 
 __PACKAGE__->has_many(
-  "map_user_role",
+  "user_admin",
   "TAN::Schema::Result::UserAdmin",
   { "foreign.admin_id" => "self.admin_id" },
+);
+
+__PACKAGE__->many_to_many(
+  "map_user_role" => "user_admin",
+  "user" 
 );
 
 1;

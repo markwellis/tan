@@ -75,9 +75,14 @@ __PACKAGE__->has_many(
   { "foreign.user_id" => "self.user_id" },
 );
 __PACKAGE__->has_many(
-  "map_user_role",
+  "user_admin",
   "TAN::Schema::Result::UserAdmin",
   { "foreign.user_id" => "self.user_id" },
+);
+
+__PACKAGE__->many_to_many(
+  "map_user_role" => "user_admin",
+  "admin" 
 );
 
 =head2 confirm
@@ -97,18 +102,6 @@ sub confirm{
     $self->update({
         'confirmed' => 'Y',
     });
-}
-
-sub admin{
-    my ( $self ) = @_;
-
-    if ( 
-        ($self->username eq 'n0body') 
-        && ($self->id == 1)
-    ){
-        return 1;
-    }
-    return undef;
 }
 
 sub avatar{

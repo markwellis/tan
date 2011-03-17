@@ -32,7 +32,10 @@
             "store": {
                 "class": "DBIx::Class",
                 "user_model": "MySQL::User",
-                "use_userdata_from_session": 1
+                "use_userdata_from_session": 1,
+                "user_role_user_field": "user_id",
+                "role_relation": "map_user_role",
+                "role_field": "role"
             }
         }
     },

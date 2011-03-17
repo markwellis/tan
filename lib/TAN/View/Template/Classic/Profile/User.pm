@@ -90,8 +90,13 @@ sub process{
                 @{[ $c->stash->{'object'}->profile->details ]}
                 <br />
                 @{[
-                    ( $c->user_exists && ($c->user->username eq $user->username) ) ?
-                        qq'<a href="/profile/@{[ $c->view->html($c->user->username) ]}/edit">Edit</a>'
+                    ( $c->user_exists 
+                        && (
+                            $c->check_user_roles(qw/edit_user/)
+                            || ( $c->user->username eq $user->username) 
+                        )
+                    ) ?
+                        qq'<a href="/profile/@{[ $c->view->html($user->username) ]}/edit">Edit</a>'
                     :
                         ''
                 ]}

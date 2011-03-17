@@ -38,3 +38,13 @@ INSERT INTO admin (role) VALUES('edit_object'),
     ('admin_remove_user'),
     ('god');
 show warnings;
+
+INSERT INTO user_admin (user_id, admin_id) VALUES(1,1),
+    (1,2),
+    (1,3),
+    (1,4),
+    (1,5),
+    (1,6),
+    (1,7),
+    (1,8),
+    (1,9);

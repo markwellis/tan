@@ -71,7 +71,12 @@ sub process{
                 @{[ ( $type eq 'link' ) ?
                      qq#| @{[ $c->view->domain($object->link->url) ]}#
                 : '' ]}
-                @{[ ( $c->user_exists && ($c->user->admin || $c->user->id == $object->user_id) ) ?
+                @{[ ( $c->user_exists 
+                    && (
+                        $c->check_user_roles(qw/edit_object/) 
+                        || ( $c->user->id == $object->user_id ) 
+                        )
+                    ) ?
                     qq#| <a href="/submit/${type}/edit/@{[ $object->id ]}/" class="TAN-news-comment">
                         Edit
                     </a>#
