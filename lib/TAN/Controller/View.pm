@@ -246,7 +246,12 @@ sub edit_comment: PathPart('_edit_comment') Chained('location') Args(1) {
         $c->detach();
     }
 
-    if ( !$c->user_exists || ($comment_rs->user_id != $c->user->user_id) ){
+    if ( !$c->user_exists
+        || (
+            !$c->check_user_roles(qw/edit_comment/)
+            && ( $comment_rs->user_id != $c->user->user_id ) 
+        )
+    ){
 #FAIL (comment not users)
         if ( !defined($c->req->param('ajax')) ){
             $c->flash->{'message'} = 'Not your comment';

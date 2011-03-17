@@ -37,7 +37,12 @@ sub process{
                             <a href="" class="quote_link" title="@{[ $c->view->html($comment->user->username) ]}::@{[ $comment->id ]}">Quote</a>
                         </li>\;
     
-    if ( ($c->user_exists) && ( $c->user->id == $comment->user->user_id ) ){
+    if ( ($c->user_exists) 
+        && ( 
+            $c->check_user_roles(qw/edit_comment/)
+            || ( $c->user->id == $comment->user->user_id )
+        ) 
+    ){
         $out .= qq\
                     <li>
                         <a class="comment_edit" href="@{[ $comment->object->url ]}/../_edit_comment/@{[ $comment->id ]}">Edit Comment</a>
