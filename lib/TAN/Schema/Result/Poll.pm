@@ -48,7 +48,7 @@ __PACKAGE__->belongs_to(
 );
 
 __PACKAGE__->belongs_to(
-  "image",
+  "picture",
   "TAN::Schema::Result::Picture",
   { picture_id => "picture_id" },
 );

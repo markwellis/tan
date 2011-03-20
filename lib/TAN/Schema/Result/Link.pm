@@ -40,7 +40,7 @@ __PACKAGE__->set_primary_key("link_id");
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:QWdcXEX/OOzl7+gUlaLybA
 
 __PACKAGE__->belongs_to(
-  "image",
+  "picture",
   "TAN::Schema::Result::Picture",
   { picture_id => "picture_id" },
 );
