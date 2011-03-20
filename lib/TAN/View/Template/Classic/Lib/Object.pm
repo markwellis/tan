@@ -44,7 +44,12 @@ sub process{
 
     $out .= qq\
         <div class="TAN-news-image left">
-            <img alt="@{[ $object->$type->picture_id ]}" src="@{[ $c->config->{'thumb_path'} ]}/${md}/@{[ $object->$type->picture_id ]}/100"/>
+            <a href="@{[ $object->type eq 'picture' ? $object->url : $object->$type->picture->object->url ]}/">
+                <img 
+                    alt="@{[ $object->$type->picture_id ]}" 
+                    src="@{[ $c->config->{'thumb_path'} ]}/${md}/@{[ $object->$type->picture_id ]}/100"
+                />
+            </a>
         </div>
         <h2>
             <a href="@{[ (($is_video && !$c->stash->{'article'}) ? $object_url : $title_url) ]}" 
