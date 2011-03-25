@@ -152,11 +152,8 @@ __PACKAGE__->many_to_many(
 sub url_title{
     my ( $self ) = @_;
 
-    my $object_meta = eval ( '$self->' . $self->type );
-
-    return '' if ( !defined($object_meta) );
-
-    my $title = $object_meta->title;
+    my $type = $self->type;
+    my $title = $self->$type->title;
     if ( $self->nsfw eq 'Y' ){
         $title .= '-NSFW';
     }

@@ -80,7 +80,7 @@ __PACKAGE__->belongs_to(
   { object_id => "blog_id" },
 );
 __PACKAGE__->belongs_to(
-  "image",
+  "picture",
   "TAN::Schema::Result::Picture",
   { picture_id => "picture_id" },
 );

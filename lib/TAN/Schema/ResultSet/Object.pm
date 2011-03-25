@@ -147,13 +147,21 @@ sub get{
         'user',
     ];
 
-    if ( $location eq 'poll' ){
-        push(@{$prefetch}, {
-            'poll' => [
-                'answers',
-            ],
-        });
-        $order_by = 'answers.answer_id';
+    if ( $location ne 'picture' ){
+        my %fetcher; 
+        if ( $location eq 'poll' ){
+            $fetcher{'answers'} = [];
+            $order_by = 'answers.answer_id';
+        }
+
+        push( @{$prefetch}, {
+            $location => {
+                %fetcher,
+                'picture' => {
+                    'object' => 'picture',
+                },
+            },
+        } );
     } else {
         push(@{$prefetch}, $location);
     }
