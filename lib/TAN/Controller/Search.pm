@@ -21,7 +21,7 @@ sub add_to_index: Event(object_created) Event(object_updated){
 }
 
 sub delete_from_index: Event(object_deleted){
-    my ( $c, $object ) = @_;
+    my ( $self, $c, $object ) = @_;
 
     $c->model('Gearman')->run( 'search_delete_from_index', $object->id );
 }

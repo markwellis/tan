@@ -39,20 +39,36 @@ sub index: PathPart('') Chained('validate_user') Args(){
 sub post: PathPart('post') Chained('validate_user') Args(){
     my ( $self, $c ) = @_;
 
-    my $prepared = $c->forward('/submit/validate_and_prepare');
-    my $tags = delete( $prepared->{'tags'} );
+    my $redirect_url;
+    if ( 
+        defined( $c->req->param('delete') )
+        && ( $c->req->param('delete') eq 'Delete' ) 
+        && $c->check_user_roles(qw/delete_object/)
+    ){
+        $c->stash->{'object'}->update( {
+            'deleted' => 'Y',
+        } );
+        $c->trigger_event( 'object_deleted', $c->stash->{'object'} );
 
-    $c->model('MySQL')->txn_do( sub {
-        $c->forward( 'update_object', [ $prepared ] );
+        $redirect_url = "/index/all/0/";
+    } else {
+        my $prepared = $c->forward('/submit/validate_and_prepare');
+        my $tags = delete( $prepared->{'tags'} );
 
-        $c->forward( 'update_tags', [ $tags ] );
+        $c->model('MySQL')->txn_do( sub {
+            $c->forward( 'update_object', [ $prepared ] );
 
-        $c->trigger_event( 'object_updated', $c->stash->{'object'} );
-    } );
+            $c->forward( 'update_tags', [ $tags ] );
+
+            $c->trigger_event( 'object_updated', $c->stash->{'object'} );
+        } );
+
+        $redirect_url = $c->stash->{'object'}->url;
+    }
 
     $c->flash->{'message'} = 'Edit complete';
+    $c->res->redirect( $redirect_url, 303 );
 
-    $c->res->redirect( $c->stash->{'object'}->url, 303 );
     $c->detach();
 }
 

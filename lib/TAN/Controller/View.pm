@@ -28,13 +28,19 @@ sub remove_blog_cache: Event(object_updated){
     }
 }
 
-sub remove_comment_cache: Event(comment_created) Event(comment_deleted) Event(comment_updated) Event(object_updated){
+sub remove_comment_cache: 
+    Event(comment_created) 
+    Event(comment_deleted) 
+    Event(comment_updated) 
+    Event(object_updated) 
+    Event(object_deleted)
+{
     my ( $self, $c, $comment ) = @_;
 
     #clear recent_comments
     $c->cache->remove("recent_comments");
     #clear comment cache
-    if ( $comment ){
+    if ( $comment && ( ref($comment) eq 'TAN::Model::MySQL::Comment' ) ){
         $c->cache->remove("comment.0:" . $comment->id);
         $c->cache->remove("comment.1:" . $comment->id);
     }

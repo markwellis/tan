@@ -106,7 +106,14 @@ sub process{
                     </li>
                 </ul>
                 <input type="submit" value="Submit @{[ ucfirst( $c->stash->{'location'} ) ]}"/>
-                <input type="hidden" name="type" value="@{[ $c->stash->{'location'} ]}" />
+                <input type="hidden" name="type" value="@{[ $c->stash->{'location'} ]}" />\;
+
+
+    if ( $c->stash->{'edit'} && $c->check_user_roles(qw/delete_object/) ){
+        $output .= qq#<input type="submit" value="Delete" name="delete" onclick="return confirm('you sure?')" />#;
+    }
+
+    $output .= qq\
             </fieldset>
         </form>\;
 

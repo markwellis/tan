@@ -37,7 +37,7 @@ sub delete_from_index{
 
     ERROR "deleting " . $job->arg . " from index" ;
 
-    $searcher->delete( $job->arg );
+    $searcher->delete( 'id', $job->arg );
     $searcher->commit;
 
     return 1;
