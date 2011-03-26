@@ -124,6 +124,7 @@ sub comments: PathPart('comments') Chained('user') Args(0){
 
     $c->stash->{'comments'} = $c->stash->{'user'}->comments->search({
             'me.deleted' => 'N',
+            'object.deleted' => 'N',
         },
         {
             'prefetch' => ['user', {

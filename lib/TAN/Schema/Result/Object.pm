@@ -44,6 +44,8 @@ __PACKAGE__->add_columns(
   { data_type => "BIGINT", default_value => undef, is_nullable => 0, size => 20 },
   "comments",
   { data_type => "BIGINT", default_value => undef, is_nullable => 0, size => 20 },
+  "deleted",
+  { data_type => "ENUM", default_value => "N", is_nullable => 0, size => 1 },
 );
 __PACKAGE__->set_primary_key("object_id");
 

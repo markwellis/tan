@@ -93,7 +93,7 @@ sub index: PathPart('') Chained('location') Args(1) {
 # load comments etc
     $c->stash->{'object'} = $c->model('MySQL::Object')->get($c->stash->{'object_id'}, $c->stash->{'location'});
 
-    if ( !defined($c->stash->{'object'}) ){
+    if ( !defined($c->stash->{'object'}) || ( $c->stash->{'object'}->deleted eq 'Y' ) ){
         $c->forward('/default');
         $c->detach();
     }
