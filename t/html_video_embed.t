@@ -12,11 +12,7 @@ my $embeder = new HTML::Video::Embed({
 #youtube
 diag('youtube');
 is( $embeder->url_to_embed('http://www.youtube.com/watch?v=xExSdzkZZB0'),  
-
-    '<object data="http://www.youtube.com/v/xExSdzkZZB0" '
-        .'style="width: 450px; height: 370px;" type="application/x-shockwave-flash">'
-        .'<param value="transparent" name="wmode" />'
-        .'<param value="http://www.youtube.com/v/xExSdzkZZB0" name="movie" /></object>',
+    '<iframe title="YouTube video player" width="450" height="370" src="http://www.youtube.com/embed/xExSdzkZZB0" frameborder="0" allowfullscreen></iframe>',
 
     'youtube embed works'
 );

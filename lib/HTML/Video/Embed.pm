@@ -87,10 +87,13 @@ sub _youtube{
     my $youtube_id;
 
     if ( ($youtube_id = $uri->query_param('v')) && ($youtube_id =~ m/$validate_reg/) ){
-        return '<object data="http://www.youtube.com/v/' . $youtube_id . '" '
-            .'style="width: ' . $self->width . 'px; height: ' . $self->height . 'px;" type="application/x-shockwave-flash">'
-            .'<param value="transparent" name="wmode" />'
-            .'<param value="http://www.youtube.com/v/' . $youtube_id . '" name="movie" /></object>';
+        return '<iframe '
+            .'title="YouTube video player" '
+            .'width="' . $self->width . '" '
+            .'height="' . $self->height . '" '
+            .'src="http://www.youtube.com/embed/' . $youtube_id . '" '
+            .'frameborder="0" '
+            .'allowfullscreen></iframe>';
     }
 
     return undef;
