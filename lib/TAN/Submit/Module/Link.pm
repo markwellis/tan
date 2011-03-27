@@ -38,10 +38,17 @@ sub _build_config{
                             'url' => $url,
                         });
                         if ( $link_rs ){
-                            Exception::Simple->throw(
-                                'error' => 'repost',
-                                'url' => $link_rs->object->url
-                            );
+                            if ( $link_rs->object->deleted eq 'Y' ){
+                                Exception::Simple->throw(
+                                    'error' => 'deleted repost',
+                                    'url' => '/index/all/0/',
+                                );
+                            } else {
+                                Exception::Simple->throw(
+                                    'error' => 'repost',
+                                    'url' => $link_rs->object->url,
+                                );
+                            }
                         }
                 },
             ],

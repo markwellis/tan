@@ -5,15 +5,20 @@ use base 'Catalyst::View::Perl::Template';
 sub process{
     my ( $self, $c ) = @_;
 
-    my %search_opts;
+    my %search_opts = (
+        'deleted' => 'N',
+    );
     my $user = $c->stash->{'user'};
     if ( !$c->nsfw ){
-        %search_opts = (
-            'nsfw' => 'N',
-        );
+        $search_opts{'nsfw'} = 'N';
     }
 
-    my $comment_count = $user->comments->count || 0;
+
+    my $comment_count = $user->comments->search( {
+        'object.deleted' => 'N',
+    }, {
+        'prefetch' => 'object',
+    } )->count || 0;
     my $link_count = $user->objects->search({
             'type' => 'link',
             %search_opts,

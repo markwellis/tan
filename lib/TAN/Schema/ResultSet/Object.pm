@@ -64,6 +64,7 @@ sub index {
         my $index_rs = $self->search({
             %{$search},
             'type' => $type,
+            'deleted' => 'N',
         },
         {
             'order_by' => {

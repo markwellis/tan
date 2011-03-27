@@ -385,6 +385,38 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
+-- Table `tan`.`admin`
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS `tan`.`admin` (
+  `admin_id` BIGINT NOT NULL AUTO_INCREMENT ,
+  `role` VARCHAR(255) NOT NULL ,
+  PRIMARY KEY (`admin_id`) )
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `tan`.`user_admin`
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS `tan`.`user_admin` (
+  `user_id` BIGINT NOT NULL ,
+  `admin_id` BIGINT NOT NULL ,
+  INDEX `fk_user_admin_1` (`user_id` ASC) ,
+  INDEX `fk_user_admin_2` (`admin_id` ASC) ,
+  PRIMARY KEY (`user_id`, `admin_id`) ,
+  CONSTRAINT `fk_user_admin_1`
+    FOREIGN KEY (`user_id` )
+    REFERENCES `tan`.`user` (`user_id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_user_admin_2`
+    FOREIGN KEY (`admin_id` )
+    REFERENCES `tan`.`admin` (`admin_id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
 -- Placeholder table for view `tan`.`recent_comments`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `tan`.`recent_comments` (`comment_id` INT, `comment` INT, `created` INT, `object_id` INT, `type` INT, `nsfw` INT, `link_title` INT, `picture_title` INT, `blog_title` INT, `poll_title` INT, `username` INT);
