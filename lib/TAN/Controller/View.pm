@@ -40,7 +40,8 @@ sub remove_comment_cache:
     #clear recent_comments
     $c->cache->remove("recent_comments");
     #clear comment cache
-    if ( $comment && ( ref($comment) eq 'TAN::Model::MySQL::Comment' ) ){
+
+    if ( $comment && ( ref($comment) eq 'TAN::Model::MySQL::Comments' ) ){
         $c->cache->remove("comment.0:" . $comment->id);
         $c->cache->remove("comment.1:" . $comment->id);
     }
