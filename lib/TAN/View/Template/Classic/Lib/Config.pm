@@ -30,7 +30,7 @@ sub process{
     if ( !defined($c->stash->{'page_title'}) ){
         $c->stash->{'page_title'} = 'Social News For Internet Pirates';
     }
-    $c->stash->{'page_meta_description'} = 'Social News For Internet Pirates';
+    $c->stash->{'page_meta_description'} ||= 'Social News For Internet Pirates';
     $c->stash->{'page_keywords'} = 'strange pirate news community comments english social fun jokes videos pictures share sharing lol lolz funny humour humor';
 }
 

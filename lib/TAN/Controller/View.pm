@@ -98,14 +98,15 @@ sub index: PathPart('') Chained('location') Args(1) {
 # url matches (seo n that)
 # display article
 # load comments etc
-    $c->stash->{'object'} = $c->model('MySQL::Object')->get($c->stash->{'object_id'}, $c->stash->{'location'});
+    my $location = $c->stash->{'location'};
+    my $object = $c->model('MySQL::Object')->get($c->stash->{'object_id'}, $location);
 
-    if ( !defined($c->stash->{'object'}) || ( $c->stash->{'object'}->deleted eq 'Y' ) ){
+    if ( !defined($object) || ( $object->deleted eq 'Y' ) ){
         $c->forward('/default');
         $c->detach();
     }
 
-    my $url = $c->stash->{'object'}->url;
+    my $url = $object->url;
     if ( $c->req->uri->path ne $url ){
         $c->res->redirect( $url, 301 );
         $c->detach();
@@ -113,13 +114,13 @@ sub index: PathPart('') Chained('location') Args(1) {
 
     if ( $c->user_exists ){
         #get me plus info
-        my $meplus_minus = $c->stash->{'object'}->plus_minus->meplus_minus( $c->user->user_id );
+        my $meplus_minus = $object->plus_minus->meplus_minus( $c->user->user_id );
 
-        if ( defined($meplus_minus->{ $c->stash->{'object'}->object_id }->{'plus'}) ){
-            $c->stash->{'object'}->{'meplus'} = 1;
+        if ( defined($meplus_minus->{ $object->object_id }->{'plus'}) ){
+            $object->{'meplus'} = 1;
         }
-        if ( defined($meplus_minus->{ $c->stash->{'object'}->object_id }->{'minus'}) ){
-            $c->stash->{'object'}->{'meminus'} = 1;  
+        if ( defined($meplus_minus->{ $object->object_id }->{'minus'}) ){
+            $object->{'meminus'} = 1;  
         }
     }
 
@@ -129,15 +130,16 @@ sub index: PathPart('') Chained('location') Args(1) {
         'me.deleted' => 'N',
     },{
         'prefetch' => ['user', {
-            'object' => $c->stash->{'location'},
+            'object' => $location,
         }],
         'order_by' => 'me.created',
     })->all;
 
-    $title = eval('$c->stash->{"object"}->' . $c->stash->{'location'} . "->title");
     $c->stash(
-        'page_title' => $title,
+        'object' => $object,
+        'page_title' => $object->$location->title || undef,
         'template' => 'View',
+        'page_meta_description' => $object->$location->description || undef,
     );
 }
 
