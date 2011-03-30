@@ -10,7 +10,7 @@ sub process{
         if ( defined($c->stash->{'index'}) ){
             my $is_picture = 0;
             if ( 
-                ($c->stash->{'location'} eq 'picture') 
+                ($c->stash->{'type'} eq 'picture') 
                 && $c->stash->{'fancy_picture_index'} 
             ){
                 push(@{$c->stash->{'css_includes'}}, 'index@picture');

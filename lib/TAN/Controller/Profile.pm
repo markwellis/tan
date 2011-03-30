@@ -195,21 +195,21 @@ sub polls: PathPart('polls') Chained('user') Args(0){
 }
 
 sub fetch: Private{
-    my ( $self, $c, $location ) = @_;
+    my ( $self, $c, $type ) = @_;
 
     $c->cache_page(600);
 
     my $page = $c->req->param('page') || 1;
     my $order = $c->req->param('order') || 'created';
 
-    my ( $objects, $pager ) = $c->stash->{'user'}->objects->index( $location, $page, 1, {}, $order, $c->nsfw, "profile:" . $c->stash->{'user'}->id );
+    my ( $objects, $pager ) = $c->stash->{'user'}->objects->index( $type, $page, 1, {}, $order, $c->nsfw, "profile:" . $c->stash->{'user'}->id );
 
     if ( scalar(@{$objects}) ){
         $c->stash(
             'index' => $c->model('Index')->indexinate($c, $objects, $pager),
             'order' => $order,
-            'page_title' => $c->stash->{'user'}->username . "'s " . ucfirst($location) . "s",
-            'location' => $location,
+            'page_title' => $c->stash->{'user'}->username . "'s " . ucfirst($type) . "s",
+            'type' => $type,
         );
     } else {
         $c->forward('/default');

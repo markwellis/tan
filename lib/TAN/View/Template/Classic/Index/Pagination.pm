@@ -45,7 +45,7 @@ sub process{
         $max = $total_pages;
     }
 
-    my $output = qq\<div class="@{[ ($c->stash->{'location'} eq 'picture') ? 'clear ' : '' ]}TAN-news-pagination">\;
+    my $output = qq\<div class="@{[ ($c->stash->{'type'} eq 'picture') ? 'clear ' : '' ]}TAN-news-pagination">\;
     if ( $lower != 1 ){
         $output .= qq\
         <a class="TAN-news-page-number" href="@{[ $c->view->url("/@{[ $c->req->path ]}", %params, 'page' => 1) ]}">1</a>

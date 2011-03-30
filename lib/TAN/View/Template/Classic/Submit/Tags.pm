@@ -5,7 +5,7 @@ use base 'Catalyst::View::Perl::Template';
 sub process{
     my ( $self, $c, $field ) = @_;
 
-    if ( $c->stash->{'location'} ne 'picture' ){
+    if ( $c->stash->{'type'} ne 'picture' ){
         push(@{$c->stash->{'js_includes'}}, 'Submit@Tags'); #half done, waiting on js upgrades
     }
 
@@ -27,7 +27,7 @@ sub process{
             class="${required} ${min_length} ${max_length}"
         />\;
 
-    if ( $c->stash->{'location'} ne 'picture' ){
+    if ( $c->stash->{'type'} ne 'picture' ){
         $out .= '<a href="#" class="refresh_thumbs right">MORE!</a>';
     }
 

@@ -7,8 +7,8 @@ BEGIN { extends 'Catalyst::Controller'; }
 use Try::Tiny;
 use Scalar::Util 'blessed';
 
-sub location: PathPart('submit') Chained('/') CaptureArgs(1){
-    my ( $self, $c, $location ) = @_;
+sub type: PathPart('submit') Chained('/') CaptureArgs(1){
+    my ( $self, $c, $type ) = @_;
 
     if (!$c->user_exists){
         $c->flash->{'message'} = 'Please login';
@@ -16,24 +16,24 @@ sub location: PathPart('submit') Chained('/') CaptureArgs(1){
         $c->detach();
     }
 
-    my $location_reg = $c->model('CommonRegex')->location;
-    if ($location !~ m/$location_reg/){
+    my $type_reg = $c->model('CommonRegex')->type;
+    if ($type !~ m/$type_reg/){
         $c->forward('/default');
         $c->detach();
     }
     $c->stash(
-        'page_title' => 'Submit ' . ucfirst($location),
-        'location' => $location,
+        'page_title' => 'Submit ' . ucfirst($type),
+        'type' => $type,
     );
 }
 
-sub index: PathPart('') Chained('location') Args(0) {
+sub index: PathPart('') Chained('type') Args(0) {
     my ( $self, $c ) = @_;
 
     $c->stash->{'template'} = 'Submit';
 }
 
-sub post: PathPart('post') Chained('location') Args(0){
+sub post: PathPart('post') Chained('type') Args(0){
     my ( $self, $c ) = @_;
 
     my $prepared = $c->forward('validate_and_prepare');
@@ -51,7 +51,7 @@ sub post: PathPart('post') Chained('location') Args(0){
 
     $c->flash->{'message'} = 'Submission complete';
 
-    $c->res->redirect("/index/@{[ $c->stash->{'location'} ]}/1/", 303);
+    $c->res->redirect("/index/@{[ $c->stash->{'type'} ]}/1/", 303);
     $c->detach();
 }
 
@@ -82,9 +82,9 @@ sub validate_and_prepare: Private{
             die $_;
         }
         if ( $c->stash->{'edit'} ){
-            $c->res->redirect("/submit/@{[ $c->stash->{'location'} ]}/edit/@{[ $c->stash->{'object'}->id ]}/", 303);
+            $c->res->redirect("/submit/@{[ $c->stash->{'type'} ]}/edit/@{[ $c->stash->{'object'}->id ]}/", 303);
         } else {
-            $c->res->redirect("/submit/@{[ $c->stash->{'location'} ]}/", 303);
+            $c->res->redirect("/submit/@{[ $c->stash->{'type'} ]}/", 303);
         }
         $c->detach;
     };

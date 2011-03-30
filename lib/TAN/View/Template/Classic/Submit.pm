@@ -11,7 +11,7 @@ sub process{
     push(@{$c->stash->{'css_includes'}}, 'Submit');
     push(@{$c->stash->{'js_includes'}}, 'Submit');
 
-    my $module = $c->model('Submit')->modules->{ $c->stash->{'location'} };
+    my $module = $c->model('Submit')->modules->{ $c->stash->{'type'} };
 
     return undef if !$module;
 
@@ -24,7 +24,7 @@ sub process{
     my $template_prename_reg = qr/Template::\w+::/;
 
     my $params = $c->flash->{'params'};
-    my $location = $c->stash->{'location'};
+    my $type = $c->stash->{'type'};
     my $object = $c->stash->{'object'};
 
     foreach my $key ( keys( %{$schema} ) ){
@@ -40,10 +40,10 @@ sub process{
         if ( 
             $c->stash->{'edit'} 
             && defined( $object ) 
-            && $object->$location 
+            && $object->$type 
         ){
             if (
-                ( $location eq 'picture' )
+                ( $type eq 'picture' )
                 && ( $key eq 'remote' ) 
             ){
                 my $md = $object->picture->id - ( $object->picture->id % 1000 );
@@ -56,13 +56,13 @@ sub process{
                 my @tags = map( $_->tag, $object->tags->all );
                 $value = join( ' ', @tags );
             } elsif( 
-                ( $location eq 'poll' )
+                ( $type eq 'poll' )
                 && ( $key eq 'end_date' ) 
             ){
-                $value = $object->$location->ends || 'Ended';
+                $value = $object->$type->ends || 'Ended';
                 $field->{'disabled'} = 1;
             } else {
-                $value = $object->$location->$key;
+                $value = $object->$type->$key;
             }
         }
         $field->{'value'} = $params->{ $key } || $value || $schema->{ $key }->{'default'} || '',
@@ -105,8 +105,8 @@ sub process{
                         <input type="checkbox" name="nsfw" id="nsfw" @{[ ( $nsfw ) ? 'checked="checked"' : '' ]}/>
                     </li>
                 </ul>
-                <input type="submit" value="Submit @{[ ucfirst( $c->stash->{'location'} ) ]}"/>
-                <input type="hidden" name="type" value="@{[ $c->stash->{'location'} ]}" />\;
+                <input type="submit" value="Submit @{[ ucfirst( $c->stash->{'type'} ) ]}"/>
+                <input type="hidden" name="type" value="@{[ $c->stash->{'type'} ]}" />\;
 
 
     if ( $c->stash->{'edit'} && $c->check_user_roles(qw/delete_object/) ){

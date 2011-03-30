@@ -9,8 +9,8 @@ use JSON;
 sub spam_twitter: Event('object_promoted'){
     my ( $self, $c, $object ) = @_;
 
-    my $location = $object->type;
-    my $title = $object->$location->title;
+    my $type = $object->type;
+    my $title = $object->$type->title;
 
     $c->model('Gearman')->run( 'twitter_spam', {
         'title' => $title,
@@ -69,11 +69,11 @@ sub remove_object_cache:
     $c->clear_cached_page( $object->url . '.*' );
 }
 
-sub location: PathPart('view') Chained('/') CaptureArgs(2){
-    my ( $self, $c, $location, $object_id ) = @_;
+sub type: PathPart('view') Chained('/') CaptureArgs(2){
+    my ( $self, $c, $type, $object_id ) = @_;
 
-    my $location_reg = $c->model('CommonRegex')->location;
-    if ($location !~ m/$location_reg/){
+    my $type_reg = $c->model('CommonRegex')->type;
+    if ($type !~ m/$type_reg/){
         $c->forward('/default');
         $c->detach();
     }
@@ -86,10 +86,10 @@ sub location: PathPart('view') Chained('/') CaptureArgs(2){
     }
 
     $c->stash->{'object_id'} = $object_id;
-    $c->stash->{'location'} = $location;
+    $c->stash->{'type'} = $type;
 }
 
-sub index: PathPart('') Chained('location') Args(1) {
+sub index: PathPart('') Chained('type') Args(1) {
     my ( $self, $c, $title ) = @_;
 
     $c->cache_page( 60 );
@@ -98,8 +98,8 @@ sub index: PathPart('') Chained('location') Args(1) {
 # url matches (seo n that)
 # display article
 # load comments etc
-    my $location = $c->stash->{'location'};
-    my $object = $c->model('MySQL::Object')->get($c->stash->{'object_id'}, $location);
+    my $type = $c->stash->{'type'};
+    my $object = $c->model('MySQL::Object')->get($c->stash->{'object_id'}, $type);
 
     if ( !defined($object) || ( $object->deleted eq 'Y' ) ){
         $c->forward('/default');
@@ -130,20 +130,20 @@ sub index: PathPart('') Chained('location') Args(1) {
         'me.deleted' => 'N',
     },{
         'prefetch' => ['user', {
-            'object' => $location,
+            'object' => $type,
         }],
         'order_by' => 'me.created',
     })->all;
 
     $c->stash(
         'object' => $object,
-        'page_title' => $object->$location->title || undef,
+        'page_title' => $object->$type->title || undef,
         'template' => 'View',
-        'page_meta_description' => $object->$location->description || undef,
+        'page_meta_description' => $object->$type->description || undef,
     );
 }
 
-sub comment: PathPart('_comment') Chained('location') Args(0) {
+sub comment: PathPart('_comment') Chained('type') Args(0) {
     my ( $self, $c ) = @_;
 
     my $comment_id;
@@ -180,7 +180,7 @@ sub comment: PathPart('_comment') Chained('location') Args(0) {
 
     if ( !defined($c->req->param('ajax')) ){
     #not an ajax request
-        my $type = $c->stash->{'location'};
+        my $type = $c->stash->{'type'};
         my $object_rs = $c->model('MySQL::' . ucfirst($type) )->find( $c->stash->{'object_id'} );
 
         if ( defined($object_rs) ){
@@ -220,7 +220,7 @@ sub ajax_comment: Private{
     $c->forward( $c->view('NoWrapper') );
 }
 
-sub edit_comment: PathPart('_edit_comment') Chained('location') Args(1) {
+sub edit_comment: PathPart('_edit_comment') Chained('type') Args(1) {
     my ( $self, $c, $comment_id ) = @_;
 
     my $not_int_reg = $c->model('CommonRegex')->not_int;
@@ -318,13 +318,13 @@ sub edit_comment: PathPart('_edit_comment') Chained('location') Args(1) {
     }
 }
 
-sub plus: PathPart('_plus') Chained('location') Args(0) {
+sub plus: PathPart('_plus') Chained('type') Args(0) {
     my ( $self, $c ) = @_;
 
     $c->forward('add_plus_minus', ['plus']);
 }
 
-sub minus: PathPart('_minus') Chained('location') Args(0) {
+sub minus: PathPart('_minus') Chained('type') Args(0) {
     my ( $self, $c ) = @_;
 
     $c->forward('add_plus_minus', ['minus']);
@@ -394,7 +394,7 @@ sub post_saved_comments: Private{
     }
 }
 
-sub vote: PathPart('_vote') Chained('location') Args(0) {
+sub vote: PathPart('_vote') Chained('type') Args(0) {
     my ( $self, $c ) = @_;
 
     if ( $c->user_exists ){

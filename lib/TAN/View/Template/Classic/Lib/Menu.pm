@@ -20,20 +20,20 @@ sub process{
     
     my $loop = 0;
     my $size = scalar(keys(%menu_tabs)) - 1;
-    my $location = $c->stash->{'location'};
+    my $type = $c->stash->{'type'};
 
     foreach my $key ( keys(%menu_tabs) ){
         $value = $menu_tabs{$key};
         $out .= qq\
             <li@{[ ($loop == $size) ? ' class="TAN-menu-last"' : '' ]}>
-                <a class="TAN-menu-tab TAN-type-${value} @{[ ($location eq $value) ? "TAN-menu-tab-@{[ $location ]}-selected" : '' ]}" href="/index/${value}/0/">${key}</a>
+                <a class="TAN-menu-tab TAN-type-${value} @{[ ($type eq $value) ? "TAN-menu-tab-@{[ $type ]}-selected" : '' ]}" href="/index/${value}/0/">${key}</a>
             </li>\;
         ++$loop;
     }
     $out .= '</ul>';
     foreach my $value ( values(%menu_tabs) ){
         $out .= qq\
-        <ul class="TAN-menu-${value}" @{[ ($location eq $value) ? 'style="display:block"' : '' ]}>\;
+        <ul class="TAN-menu-${value}" @{[ ($type eq $value) ? 'style="display:block"' : '' ]}>\;
 
         if ( $value ne 'all' ){
             $out .= qq\
@@ -47,16 +47,16 @@ sub process{
             </li>
             <li>
                 <a href="/index/${value}/0/" @{[ 
-                    ( ($location eq $value) && (defined($c->stash->{'upcoming'}) && $c->stash->{'upcoming'} == 0) ) ? 
-                        qq#class="TAN-menu-tab-${location}-selected"# 
+                    ( ($type eq $value) && (defined($c->stash->{'upcoming'}) && $c->stash->{'upcoming'} == 0) ) ? 
+                        qq#class="TAN-menu-tab-${type}-selected"# 
                     : 
                         '' 
                     ]}>Promoted</a>
             </li>
             <li class="TAN-menu-last">
                 <a href="/index/${value}/1/" @{[
-                    ( ($location eq $value) && ($c->stash->{'upcoming'}) ) ? 
-                        qq#class="TAN-menu-tab-${location}-selected"# 
+                    ( ($type eq $value) && ($c->stash->{'upcoming'}) ) ? 
+                        qq#class="TAN-menu-tab-${type}-selected"# 
                     :
                         '' 
                     ]}>Upcoming</a>
@@ -67,7 +67,7 @@ sub process{
     </div>
     <script type="text/javascript">
     //<![CDATA[
-        selected_menu_type = '${location}';
+        selected_menu_type = '${type}';
     //]]>
     </script>
 END

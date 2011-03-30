@@ -16,7 +16,7 @@ sub auto: Private{
         'theme_settings' => {
             'name' => 'classic',
         },
-        'location' => 'all',
+        'type' => 'all',
         'template_namespace' => 'Template::Classic',
     );
     
@@ -62,15 +62,15 @@ sub filter: Local Args(0){
 }
 
 sub random: Local Args(1){
-    my ( $self, $c, $location ) = @_;
+    my ( $self, $c, $type ) = @_;
     
-    my $location_reg = $c->model('CommonRegex')->location;
+    my $type_reg = $c->model('CommonRegex')->type;
 
-    if ( ($location ne 'all') && ($location !~ m/$location_reg/) ){
-        $location = 'all';
+    if ( ($type ne 'all') && ($type !~ m/$type_reg/) ){
+        $type = 'all';
     }
 
-    my $object = $c->model('MySQL::Object')->random($location, $c->nsfw);
+    my $object = $c->model('MySQL::Object')->random($type, $c->nsfw);
 
     if ($object){
         $c->res->redirect( $object->url, 303 );

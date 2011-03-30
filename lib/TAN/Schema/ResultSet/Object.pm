@@ -8,10 +8,10 @@ use Data::Page;
 
 my $order_reg = qr/^promoted|plus|minus|views|comments$/;
 sub index {
-    my ($self, $location, $page, $upcoming, $search, $order, $nsfw, $index_type) = @_;
+    my ($self, $type, $page, $upcoming, $search, $order, $nsfw, $index_type) = @_;
     
-    my $location_reg = TAN->model('CommonRegex')->location;
-    if ( ($location ne 'all') && ($location !~ m/$location_reg/) ){
+    my $type_reg = TAN->model('CommonRegex')->type;
+    if ( ($type ne 'all') && ($type !~ m/$type_reg/) ){
         return undef;
     }
 
@@ -25,14 +25,12 @@ sub index {
 
     local $DBIx::Class::ResultSourceHandle::thaw_schema = $self->result_source->schema;
 
-    my $key = "${index_type}:${location}:${page}:${upcoming}:${order}:${nsfw}";
+    my $key = "${index_type}:${type}:${page}:${upcoming}:${order}:${nsfw}";
 
     my $objects = $self->result_source->schema->cache->get("index:${key}");
     my $pager = $self->result_source->schema->cache->get("pager:${key}");
 
     if ( !$objects || !$pager ){
-        my $type;
-
         if ($upcoming){
             $order ||= 'created'
         } else {
@@ -40,10 +38,8 @@ sub index {
             $order = 'promoted' if ($order eq 'created');
         }
 
-        if ($location eq 'all'){
+        if ($type eq 'all'){
             $type = ['link', 'blog', 'picture', 'poll'];
-        } else {
-            $type = $location;
         }
         
         #order by newest to lastest
@@ -107,15 +103,15 @@ sub clear_index_cache{
 }
 
 sub random{
-    my ($self, $location, $nsfw) = @_;
+    my ($self, $type, $nsfw) = @_;
 
     my $search = {};
-    if ($location eq 'all'){
+    if ($type eq 'all'){
         my $rand = int(rand(3));
         my @types = ('link', 'blog', 'picture', 'poll');
-        $location = $types[$rand];
+        $type = $types[$rand];
     }
-    $search->{'type'} = $location;
+    $search->{'type'} = $type;
     my %nsfw_opts;
     if ( !defined($nsfw) || !$nsfw ){
         $search->{'nsfw'} = 'N';
@@ -125,7 +121,7 @@ sub random{
         $search,
         {
             'rows' => 1,
-            '+select' => \"(SELECT title FROM ${location} WHERE ${location}.${location}_id = me.object_id) title",
+            '+select' => \"(SELECT title FROM ${type} WHERE ${type}.${type}_id = me.object_id) title",
             '+as' => 'title',
             'order_by' => \'RAND()',
         }
@@ -134,7 +130,7 @@ sub random{
 }
 
 sub get{
-    my ( $self, $object_id, $location ) = @_;
+    my ( $self, $object_id, $type ) = @_;
 
     local $DBIx::Class::ResultSourceHandle::thaw_schema = $self->result_source->schema;
 
@@ -148,15 +144,15 @@ sub get{
         'user',
     ];
 
-    if ( $location ne 'picture' ){
+    if ( $type ne 'picture' ){
         my %fetcher; 
-        if ( $location eq 'poll' ){
+        if ( $type eq 'poll' ){
             $fetcher{'answers'} = [];
             $order_by = 'answers.answer_id';
         }
 
         push( @{$prefetch}, {
-            $location => {
+            $type => {
                 %fetcher,
                 'picture' => {
                     'object' => 'picture',
@@ -164,7 +160,7 @@ sub get{
             },
         } );
     } else {
-        push(@{$prefetch}, $location);
+        push(@{$prefetch}, $type);
     }
 
     $object_rs = $self->find({

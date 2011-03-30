@@ -4,10 +4,10 @@ use namespace::autoclean;
 
 BEGIN { extends 'Catalyst::Controller'; }
 
-sub validate_user: PathPart('edit') Chained('../location') CaptureArgs(1){
+sub validate_user: PathPart('edit') Chained('../type') CaptureArgs(1){
     my ( $self, $c, $object_id ) = @_;
 
-    $c->stash->{'object'} = $c->model('MySQL::Object')->get( $object_id, $c->stash->{'location'} );
+    $c->stash->{'object'} = $c->model('MySQL::Object')->get( $object_id, $c->stash->{'type'} );
 
     if ( 
         !defined($c->stash->{'object'})
@@ -29,7 +29,7 @@ sub validate_user: PathPart('edit') Chained('../location') CaptureArgs(1){
 sub index: PathPart('') Chained('validate_user') Args(){
     my ( $self, $c ) = @_;
 
-    my $type = $c->stash->{'location'};
+    my $type = $c->stash->{'type'};
     $c->stash(
         'template' => 'Submit',
         'page_title' => 'Edit ' . ($c->stash->{'object'}->$type->title || ''),
@@ -79,12 +79,12 @@ sub update_object: Private{
         'nsfw' => defined( $c->req->param('nsfw') ) ? 'Y' : 'N',
     } );
 
-    my $location = $c->stash->{'location'};
+    my $type = $c->stash->{'type'};
 
     my $to_update = {};
     foreach my $key ( keys( %{$prepared} ) ){
         if ( ref( $prepared->{ $key } ) eq 'ARRAY' ){
-            my @existing = $c->stash->{"object"}->$location->$key->search->all;
+            my @existing = $c->stash->{"object"}->$type->$key->search->all;
 
             foreach my $new ( @{$prepared->{ $key }} ){
                 my $found = shift( @existing );
@@ -92,20 +92,20 @@ sub update_object: Private{
                 if ( $found ){
                     $found->update( $new );
                 } else {
-                    $c->stash->{"object"}->$location->$key->create( $new );
+                    $c->stash->{"object"}->$type->$key->create( $new );
                 }
             }
             foreach my $spare ( @existing ){
                 $spare->delete;
             }
         } else {
-            if ( $c->stash->{'object'}->$location->$key ne $prepared->{ $key } ){
+            if ( $c->stash->{'object'}->$type->$key ne $prepared->{ $key } ){
                 $to_update->{ $key } = $prepared->{ $key };
             }
         }
     }
 
-    $c->stash->{'object'}->$location->update( $to_update );
+    $c->stash->{'object'}->$type->update( $to_update );
 }
 
 sub update_tags: Private{

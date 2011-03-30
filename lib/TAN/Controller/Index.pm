@@ -12,7 +12,7 @@ sub clear_index_caches: Event(object_created) Event(object_promoted) Event(objec
 }
 
 sub index :Path Args(2) {
-    my ( $self, $c, $location, $upcoming ) = @_;
+    my ( $self, $c, $type, $upcoming ) = @_;
 
     $c->cache_page( 60 );
 
@@ -25,8 +25,8 @@ sub index :Path Args(2) {
     $upcoming ||= 0;
 
     #redirect to somewhere sensible if someone has made up some random url...
-    if ('/' . $c->req->path() ne "/index/${location}/${upcoming}/" && '/' . $c->req->path() ne '/'){
-        $c->res->redirect("/index/${location}/${upcoming}/", 301 );
+    if ('/' . $c->req->path() ne "/index/${type}/${upcoming}/" && '/' . $c->req->path() ne '/'){
+        $c->res->redirect("/index/${type}/${upcoming}/", 301 );
         $c->detach();
     } 
 
@@ -38,20 +38,20 @@ sub index :Path Args(2) {
     } else {
         $search->{'promoted'} = \'!= 0';
     }
-    my ( $objects, $pager ) = $c->model('MySQL::Object')->index( $location, $page, $upcoming, $search, $order, $c->nsfw, "index" );
+    my ( $objects, $pager ) = $c->model('MySQL::Object')->index( $type, $page, $upcoming, $search, $order, $c->nsfw, "index" );
 
     if ( $objects ){
         $c->stash(
             'index' => $c->model('Index')->indexinate($c, $objects, $pager),
-            'location' => $location,
+            'type' => $type,
             'page' => $page,
             'upcoming' => $upcoming,
             'order' => $order,
-            'page_title' => ($upcoming ? 'Upcoming ' : 'Promoted ') . ucfirst($location) . ($location ne 'all' ? 's' : '' ),
+            'page_title' => ($upcoming ? 'Upcoming ' : 'Promoted ') . ucfirst($type) . ($type ne 'all' ? 's' : '' ),
             'can_rss' => 1,
 #            'no_ads' => $c->nsfw, #no ads if nsfw filter is off
         );
-        if ( $location eq 'picture' ){
+        if ( $type eq 'picture' ){
             $c->stash->{'fancy_picture_index'} = 1;
         }
     }

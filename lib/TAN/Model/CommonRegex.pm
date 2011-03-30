@@ -28,7 +28,7 @@ has 'not_alpha_numeric' => (
     'default' => sub { return qr/[^a-zA-Z0-9]/ },
 );
 
-has 'location' => (
+has 'type' => (
     'is' => 'ro',
     'isa' => 'RegexpRef',
     'default' => sub { return qr/^(?:link|blog|picture|poll)$/ },

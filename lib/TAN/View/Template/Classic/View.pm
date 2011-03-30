@@ -10,7 +10,7 @@ sub process{
 
     my $object = $c->stash->{'object'};
 
-    if ( $c->stash->{'location'} eq 'poll' ){
+    if ( $c->stash->{'type'} eq 'poll' ){
         $c->stash->{'voted'} = ($c->user_exists) ? $object->poll->voted($c->user->id) : undef;
         $c->stash->{'ends'} = $object->poll->ends;
 
