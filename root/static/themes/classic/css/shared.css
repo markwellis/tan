@@ -391,7 +391,7 @@ fieldset{
     overflow:hidden;
 }
 
-.TAN-news-image > img{
+.TAN-news-image > a > img{
     display:block;
     margin:auto;
 }
