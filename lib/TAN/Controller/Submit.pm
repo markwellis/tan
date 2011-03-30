@@ -63,7 +63,10 @@ sub validate_and_prepare: Private{
     } catch {
         if ( blessed( $_ ) ){
             if ( $_->isa('Exception::Simple') ){
-                $c->flash->{'message'} = $_->error;
+                my $error = $_->error;
+                if ( $_->can('url') || !$c->req->param('no_error') ){
+                    $c->flash->{'message'} = $_->error;
+                }
                 $c->flash->{'params'} = $c->req->params;
 
                 if ( $_->can('url') ){
