@@ -1,6 +1,7 @@
 package TAN::View::Template::Classic::Profile::User;
+use Moose;
 
-use base 'Catalyst::View::Perl::Template';
+extends 'Catalyst::View::Perl::Template';
 
 sub process{
     my ( $self, $c ) = @_;
@@ -12,7 +13,6 @@ sub process{
     if ( !$c->nsfw ){
         $search_opts{'nsfw'} = 'N';
     }
-
 
     my $comment_count = $user->comments->search( {
         'object.deleted' => 'N',
@@ -89,6 +89,14 @@ sub process{
                             </li>
                         </ul>
                     </li>
+                    <li class="TAN-profile-user-admin">
+                        @{[
+                            ( $c->user_exists && $c->check_user_roles(qw/edit_user/) ) ?
+                                $c->view->template('Profile::User::Admin')
+                            :
+                                ''
+                        ]}
+                    </li>
                 </ul>
             </li>
             <li>
@@ -109,4 +117,4 @@ sub process{
         </ul>\;
 }
 
-1;
+__PACKAGE__->meta->make_immutable;

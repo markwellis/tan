@@ -39,3 +39,9 @@
     background-color:#fff;
     margin:0 0 2px 2px;
 }
+
+.TAN-profile-user-admin{
+    background-color:#ff0000;
+    float:right !important;
+    margin-right:25px;
+}
