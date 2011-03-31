@@ -13,7 +13,8 @@ sub process{
         $out .= qq\
             <li class="TAN-profile-avatar">
                 <a href="${username}/" title="${username}">
-                    <img class="TAN-news-avatar" src="@{[ $user->avatar($c) ]}" alt="${username}"/>
+                    <img class="TAN-news-avatar" src="@{[ $user->avatar($c) ]}" alt="${username}"/><br/>
+                    ${username}
                 </a>
             </li>\;
     }
