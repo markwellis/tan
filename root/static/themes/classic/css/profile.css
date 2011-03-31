@@ -45,3 +45,16 @@
     float:right !important;
     margin-right:25px;
 }
+
+.TAN-profile-user-admin-form > fieldset > h2{
+    margin:0px;
+}
+
+.TAN-profile-user-admin-form > fieldset > ul > li:first-child{
+    border-right: #000 1px solid;
+}
+
+.TAN-profile-user-admin-form > fieldset > ul > li{
+    float:left;
+    padding:5px;
+}
