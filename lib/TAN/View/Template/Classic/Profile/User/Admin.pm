@@ -12,70 +12,27 @@ sub process{
 
     return qq\
         <div class="TAN-profile-user-admin-form">
-            <h2>Super serious admin stuff</h2>
+            <h2>Admin</h2>
             <ul>
                 <li>
-                    <form action="_admin/delete" method="post">
-                        <fieldset>
-                            <ul>
-                                <li>
-                                    <input type="checkbox" name="delete" value="comments" id="delete_comments" />
-                                    <label for="delete_comments">Comments</label>
-                                </li>
-                                <li>
-                                    <input type="checkbox" name="delete" value="links" id="delete_links" />
-                                    <label for="delete_links">Links</label>
-                                </li>
-                                <li>
-                                    <input type="checkbox" name="delete" value="blogs" id="delete_blogs" />
-                                    <label for="delete_blogs">Blogs</label>
-                                </li>
-                                <li>
-                                    <input type="checkbox" name="delete" value="pictures" id="delete_pictures" />
-                                    <label for="delete_pictures">Pictures</label>
-                                </li>
-                                <li>
-                                    <input type="checkbox" name="delete" value="polls" id="delete_polls" />
-                                    <label for="delete_polls">Polls</label>
-                                </li>
-                                <li>
-                                    <input type="submit" value="Delete All" />
-                                </li>
-                            </ul>
-                        </fieldset>
-                    </form>
+                    <a href="admin/change_username">Change Username</a>
                 </li>
                 <li>
-                    <ul>
-                        <li>
-                            <form action="_admin/change_username" method="post">
-                                <fieldset>
-                                    <input type="submit" value="Change username" />
-                                </fieldset>
-                            </form>
-                        </li>
-                        <li>
-                            <form action="_admin/change_username" method="post">
-                                <fieldset>
-                                    <input type="submit" value="Remove avatar" />
-                                </fieldset>
-                            </form>
-                        </li>
-                        <li>
-                            <form action="_admin/change_username" method="post">
-                                <fieldset>
-                                    <input type="submit" value="Contact" />
-                                </fieldset>
-                            </form>
-                        </li>
-                        <li>
-                            <form action="_admin/change_username" method="post">
-                                <fieldset>
-                                    <input type="submit" value="Ban" />
-                                </fieldset>
-                            </form>
-                        </li>
-                    </ul>
+                    <a href="admin/remove_content">Remove Content</a>
+                </li>
+                <li>
+                    <a href="admin/remove_avatar">Remove Avatar</a>
+                </li>
+                <li>
+                    <a href="admin/contact">Contact</a>
+                </li>
+                <li>
+                    @{[ ( $c->stash->{'user'}->deleted eq 'N' ) 
+                        ? 
+                            qq#<a href="admin/ban">Ban</a>#
+                        : 
+                            qq#<a href="admin/unban">Unban</a>#
+                   ]}                        
                 </li>
             </ul>
         </div>\;

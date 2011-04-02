@@ -6,11 +6,10 @@ BEGIN { extends 'Catalyst::Controller'; }
 
 use Try::Tiny;
 
-sub check_permissions: Chained('/profile/user') CaptureArgs(0){
+sub check_permissions: Chained('/profile/user') PathPart('admin') CaptureArgs(0){
     my ( $self, $c ) = @_;
 
-    die 'fibble';
-    if ( 1 || !$c->user_exists || !$c->check_user_roles(qw/edit_user/) ){
+    if ( !$c->user_exists || !$c->check_user_roles(qw/edit_user/) ){
         $c->detach('/access_denied');
     }
 }
@@ -21,6 +20,14 @@ sub _force_logout: Private{
 
 sub ban: Chained('check_permissions') Args(0){
     my ( $self, $c ) = @_;
+
+    $c->stash->{'template'} = 'Profile::Admin::Ban';
+}
+
+sub unban: Chained('check_permissions') Args(0){
+    my ( $self, $c ) = @_;
+
+    $c->stash->{'template'} = 'Profile::Admin::Ban';
 }
 
 sub contact: Chained('check_permissions') Args(0){
@@ -35,7 +42,7 @@ sub change_username: Chained('check_permissions') Args(0){
     my ( $self, $c ) = @_;
 }
 
-sub delete: Chained('check_permissions') Args(0){
+sub remove_content: Chained('check_permissions') Args(0){
     my ( $self, $c ) = @_;
 }
 

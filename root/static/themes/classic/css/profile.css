@@ -44,17 +44,18 @@
     background-color:#ff0000;
     float:right !important;
     margin-right:25px;
+    padding:5px;
 }
 
 .TAN-profile-user-admin-form > h2{
     margin:0px;
 }
 
-.TAN-profile-user-admin-form > ul > li:first-child{
-    border-right: #000 1px solid;
+.TAN-profile-user-admin-form > ul > li > a, .TAN-profile-user-admin-form > ul > li > a:visited{
+    color:#535353;
 }
 
-.TAN-profile-user-admin-form > ul > li{
-    float:left;
-    padding:5px;
+.TAN-profile-user-admin-form > ul > li > a:hover{
+    color:#000;
+    text-decoration:underline;
 }
