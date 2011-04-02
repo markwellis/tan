@@ -1,4 +1,4 @@
-package TAN::View::Template::Classic::Error::500;
+package TAN::View::Template::Classic::Error::401;
 
 use base 'Catalyst::View::Perl::Template';
 
@@ -10,8 +10,8 @@ sub process{
     return qq\
         <ul class="TAN-inside">
             <li class="TAN-news">
-                <h2 class="TAN-type-link">Massive Cockup (500)</h2> 
-                <img src="@{[ $c->stash->{'theme_settings'}->{'image_path'} ]}/error/500.jpg" width="360" height="300" alt="500" />
+                <h2 class="TAN-type-link">Access Denied (401)</h2> 
+                <img src="@{[ $c->stash->{'theme_settings'}->{'image_path'} ]}/error/401.jpg" width="320" height="319" alt="401" />
             </li>
         </ul>\;
 }
