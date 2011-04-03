@@ -109,7 +109,7 @@ sub process{
                             || ( $c->user->username eq $user->username) 
                         )
                     ) ?
-                        qq'<a href="/profile/@{[ $c->view->html($user->username) ]}/edit">Edit</a>'
+                        qq'<a href="@{[ $user->profile_url ]}edit">Edit</a>'
                     :
                         ''
                 ]}

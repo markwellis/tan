@@ -121,4 +121,11 @@ sub avatar{
     return $avatar_http;
 }
 
+sub profile_url{
+    my ( $self ) = @_;
+
+#username can only contain word chars, so it should be safe
+    return "/profile/@{[ $self->username ]}/";
+}
+
 1;

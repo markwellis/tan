@@ -24,7 +24,7 @@ sub process{
         <img alt="@{[ $c->view->html($object->user->username) ]}" src="@{[ $object->user->avatar($c) ]}" class="TAN-news-avatar left" />
         <ul>
             <li>
-                Posted by <a href="/profile/@{[ $c->view->html($object->user->username) ]}/" class="TAN-news-user">@{[ $c->view->html($object->user->username) ]}</a>
+                Posted by <a href="@{[ $object->user->profile_url ]}" class="TAN-news-user">@{[ $c->view->html($object->user->username) ]}</a>
                 @{[
                     ($object->promoted) ? 
                         qq#promoted @{[ $object->promoted ]} ago#

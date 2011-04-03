@@ -18,8 +18,8 @@ sub process{
 
     my @whos_online ;
     foreach my $user ( @{$c->model('MySQL::Views')->whos_online} ){
-        my $username = $c->view->html($user->get_column('username'));
-        push(@whos_online, qq\<a href="/profile/${username}/"><img title="${username}" alt="${username}" src="@{[ $user->user->avatar($c) ]}" /></a>\);
+        my $username = $c->view->html( $user->username );
+        push(@whos_online, qq\<a href="/@{[ $user->profile_url ]}"><img title="${username}" alt="${username}" src="@{[ $user->avatar($c) ]}" /></a>\);
     }
 
     return <<"END";
@@ -75,7 +75,7 @@ sub process{
                 <p>
                 @{[ 
                 $c->user_exists ? 
-                    qq#<a href="/profile/@{[ $c->view->html($c->user->username) ]}/">Profile</a> | #
+                    qq#<a href="@{[ $c->user->profile_url ]}">Profile</a> | #
                 : 
                     '<a href="/login/">Login/Register</a> | ' 
                 ]}

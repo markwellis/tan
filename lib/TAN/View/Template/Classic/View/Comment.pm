@@ -12,7 +12,7 @@ sub process{
         <div class="TAN-comment_holder TAN-hr" id="comment@{[ $comment->id ]}">
             <ul class="left">
                 <li>
-                    <a href="/profile/@{[ $c->view->html($comment->user->username) ]}/" class="TAN-news-user">@{[ $c->view->html($comment->user->username) ]}</a>
+                    <a href="@{[ $comment->user->profile_url ]}" class="TAN-news-user">@{[ $c->view->html($comment->user->username) ]}</a>
                 </li>\;
 
     if ( $comment->created ){
