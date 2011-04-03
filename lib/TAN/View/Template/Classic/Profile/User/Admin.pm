@@ -8,8 +8,6 @@ sub process{
     my ( $self, $c ) = @_;
 
 #role checkings
-    push(@{$c->stash->{'js_includes'}}, 'profile@Admin');
-
     return qq\
         <div class="TAN-profile-user-admin-form">
             <h2>Admin</h2>

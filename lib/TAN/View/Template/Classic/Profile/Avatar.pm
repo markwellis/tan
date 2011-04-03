@@ -6,11 +6,11 @@ sub process{
     my ( $self, $c ) = @_;
 
     push(@{$c->stash->{'css_includes'}}, 'view');
-    push(@{$c->stash->{'css_includes'}}, 'profile@avatar');
+    push(@{$c->stash->{'css_includes'}}, 'Profile@Avatar');
 
     push(@{$c->stash->{'js_includes'}}, 'Lasso');
     push(@{$c->stash->{'js_includes'}}, 'Lasso-Crop');
-    push(@{$c->stash->{'js_includes'}}, 'profile@avatar');
+    push(@{$c->stash->{'js_includes'}}, 'Profile@Avatar');
 
     my $out = '<ul class="TAN-inside">';
     my $avatar_http = $c->user->avatar($c);

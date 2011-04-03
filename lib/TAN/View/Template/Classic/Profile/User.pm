@@ -39,7 +39,7 @@ sub process{
             %search_opts,
         })->count || 0;
 
-    push(@{$c->stash->{'css_includes'}}, 'profile');
+    push(@{$c->stash->{'css_includes'}}, 'Profile');
 
     return qq\
         <ul class="TAN-inside">

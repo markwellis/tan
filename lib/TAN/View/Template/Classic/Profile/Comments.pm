@@ -6,7 +6,7 @@ sub process{
     my ( $self, $c ) = @_;
 
     push(@{$c->stash->{'css_includes'}}, 'view');
-    push(@{$c->stash->{'css_includes'}}, 'profile@comments');
+    push(@{$c->stash->{'css_includes'}}, 'Profile@Comments');
 
     push(@{$c->stash->{'js_includes'}}, 'nsfw-comments');
 
