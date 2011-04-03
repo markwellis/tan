@@ -11,18 +11,17 @@ sub process{
 
     return 
         qq\<ul class="TAN-inside">
-            <li>
+            <li class="TAN-profile-user-admin-form">
                 <h2>Ban User</h2>
-                <form action="." method="post">
+                <form action="ban" method="post">
                     <fieldset>
-                        <textarea 
-                            class="required minLength:3 maxLength:1000" 
-                            rows="5" 
-                            cols="1" 
+                        <label for="reason">Reason for ban?</label>
+                        <input
+                            type="text"
+                            id="reason"
                             name="reason" 
-                            style="width: 100%;"
-                        >
-                        </textarea>
+                            style="width:100%;"
+                        />
                         <input type="submit" value="Ban" />
                     </fieldset>
                 </form>
