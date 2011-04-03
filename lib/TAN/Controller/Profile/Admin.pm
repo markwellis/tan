@@ -36,6 +36,7 @@ sub ban: Chained('check_permissions') Args(0){
         
         my $deleted = ( $c->stash->{'user'}->deleted eq 'Y' ) ? 1 : 0;
 
+#log action - reason
         if ( $deleted ){
             #ban
         } else {
@@ -49,18 +50,33 @@ sub ban: Chained('check_permissions') Args(0){
 
 sub contact: Chained('check_permissions') Args(0){
     my ( $self, $c ) = @_;
+
+#send email to user 
 }
 
 sub remove_avatar: Chained('check_permissions') Args(0){
     my ( $self, $c ) = @_;
+
+#log reason
+#remove avatar
 }
 
 sub change_username: Chained('check_permissions') Args(0){
     my ( $self, $c ) = @_;
+
+#log reason
+#change username
+#remove all sessions for user_id
+#email user
 }
 
 sub remove_content: Chained('check_permissions') Args(0){
     my ( $self, $c ) = @_;
+
+#log reason
+#remove content
+#trigger mass purge event *NEW*
+
 }
 
 __PACKAGE__->meta->make_immutable;
