@@ -22,12 +22,29 @@ sub ban: Chained('check_permissions') Args(0){
     my ( $self, $c ) = @_;
 
     $c->stash->{'template'} = 'Profile::Admin::Ban';
-}
 
-sub unban: Chained('check_permissions') Args(0){
-    my ( $self, $c ) = @_;
+    if ( $c->req->method eq 'POST' ){
+#check we have a reason
+        my $reason = $c->req->param('reason');
+        my $trim_req = $c->model('CommonRegex')->trim;
+        $reason =~ s/$trim_req//;
 
-    $c->stash->{'template'} = 'Profile::Admin::Ban';
+        if ( !$reason ){
+            #error message
+            #redirect somewhere
+        }
+        
+        my $deleted = ( $c->stash->{'user'}->deleted eq 'Y' ) ? 1 : 0;
+
+        if ( $deleted ){
+            #ban
+        } else {
+            #unban
+        }
+
+#redirect back to user profile
+#add banned status to user profile
+    }
 }
 
 sub contact: Chained('check_permissions') Args(0){

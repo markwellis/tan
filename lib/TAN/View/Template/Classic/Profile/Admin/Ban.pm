@@ -15,7 +15,7 @@ sub process{
                 <h2>Ban User</h2>
                 <form action="ban" method="post">
                     <fieldset>
-                        <label for="reason">Reason for ban?</label>
+                        <label for="reason">Reason</label>
                         <input
                             type="text"
                             id="reason"

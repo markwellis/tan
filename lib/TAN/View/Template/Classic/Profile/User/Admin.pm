@@ -25,12 +25,9 @@ sub process{
                     <a href="admin/contact">Contact</a>
                 </li>
                 <li>
-                    @{[ ( $c->stash->{'user'}->deleted eq 'N' ) 
-                        ? 
-                            qq#<a href="admin/ban">Ban</a>#
-                        : 
-                            qq#<a href="admin/unban">Unban</a>#
-                   ]}                        
+                    <a href="admin/ban">
+                        @{[ ( $c->stash->{'user'}->deleted eq 'N' ) ? 'Ban' : 'Unban' ]}
+                    </a>
                 </li>
             </ul>
         </div>\;
