@@ -16,10 +16,10 @@ sub process{
                     <a href="admin/change_username">Change Username</a>
                 </li>
                 <li>
-                    <a href="admin/remove_content">Remove Content</a>
+                    <a href="admin/delete_content">Delete Content</a>
                 </li>
                 <li>
-                    <a href="admin/remove_avatar">Remove Avatar</a>
+                    <a href="admin/delete_avatar">Delete Avatar</a>
                 </li>
                 <li>
                     <a href="admin/contact">Contact</a>

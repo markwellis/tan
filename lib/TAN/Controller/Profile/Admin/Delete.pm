@@ -8,17 +8,6 @@ sub delete: Chained('../admin') Args(0){
     my ( $self, $c ) = @_;
 
     if ( $c->req->method eq 'POST' ){
-        #check we have a reason
-        my $reason = $c->req->param('reason');
-        my $trim_req = $c->model('CommonRegex')->trim;
-        $reason =~ s/$trim_req//;
-
-        if ( !$reason ){
-            $c->flash->{'message'} = 'No reason given';
-            $c->res->redirect( $c->stash->{'user'}->profile_url . 'admin/delete', 303 );
-            $c->detach;
-        }
-        
         #toggle delete
         $c->stash->{'user'}->update( {
             'deleted' => ( $c->stash->{'user'}->deleted eq 'Y' ) ? 'N' : 'Y',
