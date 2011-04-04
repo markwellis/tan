@@ -12,13 +12,17 @@ sub check_role: Private{
     my ( $self, $c, $roles, $super_roles ) = @_;
 
     if ( 
-        !$c->check_user_roles( @$roles ) 
-        || $c->check_any_user_role( $c->find_user( { 'user_id' => $c->stash->{'user'}->id } ), @$super_roles ) 
+        $c->check_user_roles( @$roles )
+        && (
+            !$c->check_any_user_role( $c->stash->{'user'}, @$super_roles ) 
+            || $c->check_user_roles( qw/god/ ) 
+        )
     ){
-        $c->detach('/access_denied');
+        return;
     }
-}
 
+    $c->detach('/access_denied');
+}
 
 sub _force_logout: Private{
     my ( $self, $c ) = @_;

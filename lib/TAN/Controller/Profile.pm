@@ -43,14 +43,17 @@ sub index: Private{
 sub user: PathPart('profile') Chained('/') CaptureArgs(1){
     my ( $self, $c, $username ) = @_;
 
-    $c->stash->{'user'} = $c->model('MySQL::User')->find({
+    my $user_rs = $c->model('MySQL::User')->find({
         'username' => $username,
     });
 
-    if ( !$c->stash->{'user'} ){
-        $c->forward('/default');
-        $c->detach();
+    if ( !$user_rs ){
+        $c->detach('/default');
     }
+
+    $c->stash(
+        'user' => $c->find_user( { 'user_id' => $user_rs->id } ),
+    );
 }
 
 sub user_index: PathPart('') Chained('user') Args(0){
@@ -59,19 +62,20 @@ sub user_index: PathPart('') Chained('user') Args(0){
     $c->cache_page(600);
 
     my $user = $c->stash->{'user'};
-
+    my $object;
 #prevent race
     eval{
         $c->model('MySQL')->txn_do(sub{
-            $c->stash->{'object'} = $c->model('MySQL::Object')->find_or_create({
+            $object = $c->model('MySQL::Object')->find_or_create({
                 'user_id' => $user->id,
                 'type' => 'profile',
             });
-            $c->stash->{'object'}->find_or_create_related('profile',{});
+            $object->find_or_create_related('profile',{});
         });
     };
 
     $c->stash(
+        'object' => $object,
         'page_title' => $user->username . "'s Profile",
         'template' => 'Profile::User',
     );
