@@ -9,7 +9,7 @@ sub process{
     my $out = '<ul class="TAN-inside">';
 
     foreach my $user ( $c->stash->{'users'}->all ){
-        my $username = $c->view->html($user->username);
+        my $username = $user->username;
         $out .= qq\
             <li class="TAN-profile-avatar">
                 <a href="${username}/" title="${username}">

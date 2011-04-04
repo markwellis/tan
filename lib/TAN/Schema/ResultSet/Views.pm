@@ -21,6 +21,8 @@ sub whos_online {
             'prefetch' => 'user',
         });
 
+        #make this into an array ref
+        $who = [];
         foreach my $user ( $whos_online_rs->all ){
             push( @{$who}, $user->user );
         }

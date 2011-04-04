@@ -4,64 +4,85 @@ use namespace::autoclean;
 
 BEGIN { extends 'Catalyst::Controller'; }
 
-use Try::Tiny;
+sub admin: Chained('/profile/user') PathPart('admin') CaptureArgs(0){
+#prolly a better way of doing this, but we want the /admin part of the part and /admin does nothing
+}
 
-sub check_permissions: Chained('/profile/user') PathPart('admin') CaptureArgs(0){
-    my ( $self, $c ) = @_;
+sub check_role: Private{
+    my ( $self, $c, $roles, $super_roles ) = @_;
 
-    if ( !$c->user_exists || !$c->check_user_roles(qw/edit_user/) ){
+    if ( 
+        !$c->check_user_roles( @$roles ) 
+        || $c->check_any_user_role( $c->find_user( { 'user_id' => $c->stash->{'user'}->id } ), @$super_roles ) 
+    ){
         $c->detach('/access_denied');
     }
 }
 
+
 sub _force_logout: Private{
     my ( $self, $c ) = @_;
+
+    my $views_rs = $c->model('MySql::Views')->search( {
+        'user_id' => $c->stash->{'user'}->id,
+    },{
+        'group_by' => 'session_id',
+    } );
+
+    foreach my $view ( $views_rs->all ){
+        foreach my $key ( ('session','expires') ){
+            $c->delete_session_data( "${key}:" . $view->session_id );
+        }
+    }
 }
 
-sub ban: Chained('check_permissions') Args(0){
+sub delete: Chained('admin') Args(0){
     my ( $self, $c ) = @_;
 
-    $c->stash->{'template'} = 'Profile::Admin::Ban';
+    $c->forward( 'check_role', [ [ 'delete_user' ], [ qw/god delete_user admin_add_user admin_remove_user/ ] ] );
 
     if ( $c->req->method eq 'POST' ){
-#check we have a reason
+        #check we have a reason
         my $reason = $c->req->param('reason');
         my $trim_req = $c->model('CommonRegex')->trim;
         $reason =~ s/$trim_req//;
 
         if ( !$reason ){
-            #error message
-            #redirect somewhere
+            $c->flash->{'message'} = 'No reason given';
+            $c->res->redirect( $c->stash->{'user'}->profile_url . 'admin/delete', 303 );
+            $c->detach;
         }
         
-        my $deleted = ( $c->stash->{'user'}->deleted eq 'Y' ) ? 1 : 0;
+        #toggle delete
+        $c->stash->{'user'}->update( {
+            'deleted' => ( $c->stash->{'user'}->deleted eq 'Y' ) ? 'N' : 'Y',
+        } );
 
+        $c->forward('_force_logout');
 #log action - reason
-        if ( $deleted ){
-            #ban
-        } else {
-            #unban
-        }
+# ^ link to delete reason on profile page?
+#send email
 
-#redirect back to user profile
-#add banned status to user profile
+        $c->res->redirect( $c->stash->{'user'}->profile_url, 303 );
     }
+
+    $c->stash->{'template'} = 'Profile::Admin::Delete';
 }
 
-sub contact: Chained('check_permissions') Args(0){
+sub contact: Chained('admin') Args(0){
     my ( $self, $c ) = @_;
 
 #send email to user 
 }
 
-sub remove_avatar: Chained('check_permissions') Args(0){
+sub remove_avatar: Chained('admin') Args(0){
     my ( $self, $c ) = @_;
 
 #log reason
 #remove avatar
 }
 
-sub change_username: Chained('check_permissions') Args(0){
+sub change_username: Chained('admin') Args(0){
     my ( $self, $c ) = @_;
 
 #log reason
@@ -70,7 +91,7 @@ sub change_username: Chained('check_permissions') Args(0){
 #email user
 }
 
-sub remove_content: Chained('check_permissions') Args(0){
+sub remove_content: Chained('admin') Args(0){
     my ( $self, $c ) = @_;
 
 #log reason

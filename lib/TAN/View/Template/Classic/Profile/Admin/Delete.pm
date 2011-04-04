@@ -1,4 +1,4 @@
-package TAN::View::Template::Classic::Profile::Admin::Ban;
+package TAN::View::Template::Classic::Profile::Admin::Delete;
 use Moose;
 use namespace::autoclean;
 
@@ -9,11 +9,12 @@ sub process{
 
     push(@{$c->stash->{'css_includes'}}, 'Profile');
 
+    my $deleted = ( $c->stash->{'user'}->deleted eq 'Y' ) ? 1 : 0;
     return 
         qq\<ul class="TAN-inside">
             <li class="TAN-profile-user-admin-form">
-                <h2>Ban User</h2>
-                <form action="ban" method="post">
+                <h2>@{[ $deleted ? 'Undelete' : 'Delete' ]} User</h2>
+                <form action="delete" method="post">
                     <fieldset>
                         <label for="reason">Reason</label>
                         <input
@@ -22,7 +23,7 @@ sub process{
                             name="reason" 
                             style="width:100%;"
                         />
-                        <input type="submit" value="Ban" />
+                        <input type="submit" value="@{[ $deleted ? 'Undelete' : 'Delete' ]}" />
                     </fieldset>
                 </form>
             </li>

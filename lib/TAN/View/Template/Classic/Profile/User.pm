@@ -44,7 +44,15 @@ sub process{
     return qq\
         <ul class="TAN-inside">
             <li>
-                <h1>@{[ $c->view->html($user->username) ]}</h1>
+                <h1>
+                    @{[ $c->view->html($user->username) ]}
+                    @{[
+                        ( $user->deleted eq 'Y' ) ?
+                           ' <span style="color:#f00">DELETED</span>'
+                    :
+                        ''
+                    ]}
+                </h1>
             </li>
             <li>
                 <ul class="TAN-id-card">
@@ -61,7 +69,7 @@ sub process{
                     </li>
                     <li>
                         <ul>
-                            <li>Joined on: @{[ $c->view->html($user->join_date) ]}</li>
+                            <li>Joined @{[ $c->view->html($user->join_date) ]} ago</li>
                             <li>
                                 @{[ $comment_count ? '<a href="comments">' : '' ]}
                                     Comments: ${comment_count}
