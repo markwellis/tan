@@ -5,16 +5,23 @@ use namespace::autoclean;
 BEGIN { extends 'Catalyst::Controller'; }
 
 sub admin: Chained('../user') CaptureArgs(0){
-#prolly a better way of doing this, but we want the /admin part of the part and /admin does nothing
-}
+    my ( $self, $c ) = @_;
 
-sub check_role: Private{
-    my ( $self, $c, $roles, $super_roles ) = @_;
+    my $actions = {
+        'delete' => {
+            'required' => [ qw/delete_user/ ],
+            'super' => [ qw/god delete_user admin_add_user admin_remove_user/ ],
+        },
+    };
+
+    my $roles = $actions->{ $c->action->name };
+
+    return if ( !$roles ); #no roles required
 
     if ( 
-        $c->check_user_roles( @$roles )
+        $c->check_user_roles( @{$roles->{'required'}} )
         && (
-            !$c->check_any_user_role( $c->stash->{'user'}, @$super_roles ) 
+            !$c->check_any_user_role( $c->stash->{'user'}, @{$roles->{'super'}} ) 
             || $c->check_user_roles( qw/god/ ) 
         )
     ){

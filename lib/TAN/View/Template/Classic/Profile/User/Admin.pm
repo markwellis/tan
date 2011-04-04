@@ -24,11 +24,16 @@ sub process{
                 <li>
                     <a href="admin/contact">Contact</a>
                 </li>
-                <li>
-                    <a href="admin/delete">
-                        @{[ ( $c->stash->{'user'}->deleted eq 'N' ) ? 'Delete' : 'Undelete' ]}
-                    </a>
-                </li>
+                @{[
+                    $c->check_user_roles(qw/delete_user/) ?
+                        qq#<li>
+                            <a href="admin/delete">
+                                @{[ ( $c->stash->{'user'}->deleted eq 'N' ) ? 'Delete' : 'Undelete' ]}
+                            </a>
+                        </li>#
+                    :
+                        ''
+                ]}
             </ul>
         </div>\;
 }
