@@ -51,6 +51,15 @@
     margin:0px;
 }
 
+.TAN-profile-user-admin-form ul{
+    margin: 0;
+    padding: 0;
+}
+
+.TAN-profile-user-admin-form ul li{
+    list-style: none outside none;
+}
+
 .TAN-profile-user-admin-form > ul > li > a, .TAN-profile-user-admin-form > ul > li > a:visited{
     color:#535353;
 }

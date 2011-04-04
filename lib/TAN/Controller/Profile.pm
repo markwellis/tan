@@ -59,6 +59,11 @@ sub user: PathPart('profile') Chained('/') CaptureArgs(1){
 sub user_index: PathPart('') Chained('user') Args(0){
     my ( $self, $c ) = @_;
 
+    if ( $c->req->path !~ m#/$# ){
+        $c->res->redirect( $c->stash->{'user'}->profile_url, 303 );
+        $c->detach;
+    }
+
     $c->cache_page(600);
 
     my $user = $c->stash->{'user'};

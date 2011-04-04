@@ -18,6 +18,7 @@ sub delete_avatar: Chained('../admin') Args(0){
         }
 
         $c->res->redirect( $c->stash->{'user'}->profile_url, 303 );
+        $c->detach;
     }
 
     $c->stash->{'template'} = 'Profile::Admin::DeleteAvatar';
