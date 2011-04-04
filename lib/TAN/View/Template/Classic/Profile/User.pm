@@ -97,14 +97,14 @@ sub process{
                             </li>
                         </ul>
                     </li>
-                    <li class="TAN-profile-user-admin">
-                        @{[
-                            ( $c->user_exists && $c->check_user_roles(qw/edit_user/) ) ?
-                                $c->view->template('Profile::User::Admin')
-                            :
-                                ''
-                        ]}
-                    </li>
+                    @{[
+                        ( $c->user_exists && $c->check_user_roles(qw/edit_user/) ) ?
+                            qq#<li class="TAN-profile-user-admin">
+                                @{[ $c->view->template('Profile::User::Admin') ]}
+                            </li>#
+                        :
+                            ''
+                    ]}
                 </ul>
             </li>
             <li>
