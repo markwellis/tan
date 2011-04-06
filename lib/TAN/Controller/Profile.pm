@@ -43,16 +43,16 @@ sub index: Private{
 sub user: PathPart('profile') Chained('/') CaptureArgs(1){
     my ( $self, $c, $username ) = @_;
 
-    my $user_rs = $c->model('MySQL::User')->find({
+    my $user = $c->find_user( {
         'username' => $username,
-    });
+    } );
 
-    if ( !$user_rs ){
+    if ( !$user ){
         $c->detach('/default');
     }
 
     $c->stash(
-        'user' => $c->find_user( { 'user_id' => $user_rs->id } ),
+        'user' => $user,
     );
 }
 

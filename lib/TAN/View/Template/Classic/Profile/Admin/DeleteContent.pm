@@ -17,23 +17,23 @@ sub process{
                     <fieldset>
                        <ul>
                             <li>
-                                <input type="checkbox" name="delete" value="comments" id="delete_comments" />
+                                <input type="checkbox" name="comments" value="comments" id="delete_comments" />
                                 <label for="delete_comments">Comments</label>
                             </li>
                             <li>
-                                <input type="checkbox" name="delete" value="links" id="delete_links" />
+                                <input type="checkbox" name="objects" value="links" id="delete_links" />
                                 <label for="delete_links">Links</label>
                             </li>
                             <li>
-                                <input type="checkbox" name="delete" value="blogs" id="delete_blogs" />
+                                <input type="checkbox" name="objects" value="blogs" id="delete_blogs" />
                                 <label for="delete_blogs">Blogs</label>
                             </li>
                             <li>
-                                <input type="checkbox" name="delete" value="pictures" id="delete_pictures" />
+                                <input type="checkbox" name="objects" value="pictures" id="delete_pictures" />
                                 <label for="delete_pictures">Pictures</label>
                             </li>
                             <li>
-                                <input type="checkbox" name="delete" value="polls" id="delete_polls" />
+                                <input type="checkbox" name="objects" value="polls" id="delete_polls" />
                                 <label for="delete_polls">Polls</label>
                             </li>
                         </ul>

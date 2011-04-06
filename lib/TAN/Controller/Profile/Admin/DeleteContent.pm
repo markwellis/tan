@@ -8,11 +8,26 @@ sub delete_content: Chained('../admin') Args(0){
     my ( $self, $c ) = @_;
 
     if ( $c->req->method eq 'POST' ){
-#delete content
-#trigger mass delete event for object/comments
+        my @objects = $c->req->param('objects');
+        if ( scalar( @objects ) ){
+            my $objects_rs = $c->model('MySql')->search( {
+                'type' => \@objects,
+                'deleted' => 'N',
+            } );
+            
+            if ( $objects_rs ){
+                $objects_rs->update( {
+                    'deleted' => 'Y',
+                } );
+
+                #make this work!
+                $c->trigger_event( 'mass_objects_deleted', $objects_rs );
+            }
+        }
+#delete comments (check user has right to delete comments!)
 #log reason
 #send email
-        $c->res->redirect( $c->stash->{'user'}->profile_url, 303 );
+#        $c->res->redirect( $c->stash->{'user'}->profile_url, 303 );
         $c->detach;
     }
 
