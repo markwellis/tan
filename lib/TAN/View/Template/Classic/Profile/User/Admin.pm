@@ -12,17 +12,16 @@ sub process{
         <div class="TAN-profile-user-admin-form">
             <h2>Admin</h2>
             <ul>
-                <li>
-                    <a href="admin/change_username">Change Username</a>
-                </li>
-                <li>
-                    <a href="admin/delete_content">Delete Content</a>
-                </li>
+                @{[
+                    $c->check_any_user_role(qw/delete_object edit_comment/) ?
+                        qq#<li>
+                            <a href="admin/delete_content">Delete Content</a>
+                        </li>#
+                    :
+                        ''
+                ]}
                 <li>
                     <a href="admin/delete_avatar">Delete Avatar</a>
-                </li>
-                <li>
-                    <a href="admin/contact">Contact</a>
                 </li>
                 @{[
                     $c->check_user_roles(qw/delete_user/) ?

@@ -25,7 +25,6 @@ sub process{
                                 : ''
                             ]}
                             @{[
-                                #check this works
                                 $c->check_user_roles('delete_object') ?
                                     qq#<li>
                                         <input type="checkbox" name="objects" value="link" id="delete_links" />
