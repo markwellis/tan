@@ -7,7 +7,7 @@ sub process{
     my ( $self, $c ) = @_;
 
     my %search_opts = (
-        'deleted' => 'N',
+        'me.deleted' => 'N',
     );
     my $user = $c->stash->{'user'};
     if ( !$c->nsfw ){
@@ -15,6 +15,7 @@ sub process{
     }
 
     my $comment_count = $user->comments->search( {
+        %search_opts,
         'object.deleted' => 'N',
     }, {
         'prefetch' => 'object',

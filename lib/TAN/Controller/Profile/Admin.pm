@@ -24,11 +24,15 @@ sub admin: Chained('../user') CaptureArgs(0){
 
     my $actions = {
         'delete' => {
-            'required' => [ qw/delete_user/ ],
+            'one_of' => [ qw/delete_user/ ],
             'super' => [ qw/god delete_user admin_add_user admin_remove_user/ ],
         },
         'delete_avatar' => {
-            'required' => [ qw/edit_user/ ],
+            'one_of' => [ qw/edit_user/ ],
+            'super' => [ qw/god/ ],
+        },
+        'delete_content' => {
+            'one_of' => [ qw/delete_object edit_comment/ ],
             'super' => [ qw/god/ ],
         },
     };
@@ -38,7 +42,7 @@ sub admin: Chained('../user') CaptureArgs(0){
     return if ( !$roles ); #no roles required
 
     if ( 
-        $c->check_user_roles( @{$roles->{'required'}} )
+        $c->check_any_user_role( @{$roles->{'one_of'}} )
         && (
             !$c->check_any_user_role( $c->stash->{'user'}, @{$roles->{'super'}} ) 
             || $c->check_user_roles( qw/god/ ) 
