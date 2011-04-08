@@ -5,7 +5,7 @@ use warnings;
 
 use base 'DBIx::Class';
 
-__PACKAGE__->load_components("Core");
+__PACKAGE__->load_components(qw/Core InflateColumn::DateTime/);
 __PACKAGE__->table("user");
 __PACKAGE__->add_columns(
   "user_id",
@@ -19,10 +19,11 @@ __PACKAGE__->add_columns(
   },
   "join_date",
   {
-    data_type => "TIMESTAMP",
-    default_value => "CURRENT_TIMESTAMP",
+    data_type => 'datetime',
     is_nullable => 0,
+    datetime_undef_if_invalid => 1,
     size => 14,
+    accessor => '_join_date',
   },
   "email",
   {
@@ -85,6 +86,12 @@ __PACKAGE__->many_to_many(
   "admin" 
 );
 
+sub join_date{
+    my ( $self ) = @_;
+    
+    return TAN::Schema::Result::Object->date_ago( $self->_join_date );
+}
+
 =head2 confirm
 
 B<@args = (undef)
@@ -119,6 +126,13 @@ sub avatar{
     }
     
     return $avatar_http;
+}
+
+sub profile_url{
+    my ( $self ) = @_;
+
+#username can only contain word chars, so it should be safe
+    return "/profile/@{[ $self->username ]}/";
 }
 
 1;

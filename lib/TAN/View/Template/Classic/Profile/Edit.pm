@@ -5,7 +5,7 @@ use base 'Catalyst::View::Perl::Template';
 sub process{
     my ( $self, $c ) = @_;
 
-    push(@{$c->stash->{'css_includes'}}, 'profile');
+    push(@{$c->stash->{'css_includes'}}, 'Profile');
 
     return qq\
         <ul class="TAN-inside">

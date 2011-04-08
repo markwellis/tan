@@ -34,21 +34,29 @@ sub remove_comment_cache:
     Event(comment_updated) 
     Event(object_updated) 
     Event(object_deleted)
+    Event(mass_objects_deleted)
+    Event(mass_comments_deleted)
 {
-    my ( $self, $c, $comment ) = @_;
+    my ( $self, $c, $comments ) = @_;
 
     #clear recent_comments
     $c->cache->remove("recent_comments");
-    #clear comment cache
 
-    if ( $comment && ( ref($comment) eq 'TAN::Model::MySQL::Comments' ) ){
-        $c->cache->remove("comment.0:" . $comment->id);
-        $c->cache->remove("comment.1:" . $comment->id);
+    #clear comment cache
+    return if !defined( $comments );
+    if ( ref( $comments ) ne 'ARRAY' ){
+        $comments = [ $comments ];
+    }
+
+    foreach my $comment ( @{$comments} ){
+        if ( ref($comment) eq 'TAN::Model::MySQL::Comments' ){
+            $c->cache->remove("comment.0:" . $comment->id);
+            $c->cache->remove("comment.1:" . $comment->id);
+        }
     }
 }
 
 sub remove_object_cache: 
-    Event(object_created)
     Event(object_deleted)
     Event(object_updated)
     Event(object_plusminus)
@@ -56,17 +64,25 @@ sub remove_object_cache:
     Event(comment_deleted)
     Event(comment_updated)
     Event(poll_vote)
+    Event(mass_objects_deleted)
+    Event(mass_comments_deleted)
 {
-    my ( $self, $c, $object ) = @_;
-    return if ( !defined($object) );
+    my ( $self, $c, $objects ) = @_;
+    return if ( !defined($objects) );
 
-    if ( ref($object) ne 'TAN::Model::MySQL::Object' ){
-    #$object_rs is something else with a ->object relationshop
-        $object = $object->object;
+    if ( ref( $objects ) ne 'ARRAY' ){
+        $objects = [ $objects ];
     }
 
-    $c->cache->remove("object:" . $object->id); #no_extra
-    $c->clear_cached_page( $object->url . '.*' );
+    foreach my $object ( @{$objects} ){
+        if ( ref($object) ne 'TAN::Model::MySQL::Object' ){
+        #$object_rs probably something else with a ->object relationshop
+            $object = $object->object;
+        }
+
+        $c->cache->remove("object:" . $object->id);
+        $c->clear_cached_page( $object->url . '.*' );
+    }
 }
 
 sub type: PathPart('view') Chained('/') CaptureArgs(2){

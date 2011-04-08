@@ -4,8 +4,14 @@ use namespace::autoclean;
 
 BEGIN { extends 'Catalyst::Controller'; }
 
-sub clear_index_caches: Event(object_created) Event(object_promoted) Event(object_deleted) Event(object_updated){
-    my ( $self, $c, $object ) = @_;
+sub clear_index_caches:
+    Event(object_created)
+    Event(object_promoted)
+    Event(object_deleted)
+    Event(object_updated)
+    Event(mass_objects_deleted)
+{
+    my ( $self, $c ) = @_;
 
     $c->model('MySQL::Object')->clear_index_cache();
     $c->clear_cached_page('/index.*');

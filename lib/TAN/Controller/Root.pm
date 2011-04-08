@@ -29,21 +29,26 @@ sub index: Private{
     $c->forward('/index/index', ['all', 0] );
 }
 
-sub default: Path{
+sub default: Local{
     my ( $self, $c ) = @_;
 
-    $c->forward('/error404');
+    $c->forward('/error', [404]);
 }
 
-sub error404: Local Args(0){
+sub access_denied: Local{
     my ( $self, $c ) = @_;
 
+    $c->forward('/error', [401]);
+}
+
+sub error: Private{
+    my ( $self, $c, $code ) = @_;
+
     $c->stash(
-        'error_404' => 1,
-        'template' => 'Error::404',
+        'template' => "Error::${code}",
     );
 
-    $c->response->status(404);
+    $c->response->status( $code );
 }
 
 sub filter: Local Args(0){

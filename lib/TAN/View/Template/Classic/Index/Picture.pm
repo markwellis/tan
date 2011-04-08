@@ -22,7 +22,7 @@ sub process{
         <img alt="${username}" src="@{[ $object->user->avatar($c) ]}" class="TAN-news-avatar left" />
         <ul>
             <li>
-                <a href="/profile/${username}/" class="TAN-news-user">${username}</a>
+                <a href="@{[ $object->user->profile_url ]}" class="TAN-news-user">${username}</a>
             </li>
             <li>
                 <a href="${url}#comments">

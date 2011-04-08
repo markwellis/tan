@@ -1,20 +1,21 @@
 package TAN::View::Template::Classic::Profile::User;
+use Moose;
 
-use base 'Catalyst::View::Perl::Template';
+extends 'Catalyst::View::Perl::Template';
 
 sub process{
     my ( $self, $c ) = @_;
 
     my %search_opts = (
-        'deleted' => 'N',
+        'me.deleted' => 'N',
     );
     my $user = $c->stash->{'user'};
     if ( !$c->nsfw ){
         $search_opts{'nsfw'} = 'N';
     }
 
-
     my $comment_count = $user->comments->search( {
+        %search_opts,
         'object.deleted' => 'N',
     }, {
         'prefetch' => 'object',
@@ -39,12 +40,20 @@ sub process{
             %search_opts,
         })->count || 0;
 
-    push(@{$c->stash->{'css_includes'}}, 'profile');
+    push(@{$c->stash->{'css_includes'}}, 'Profile');
 
     return qq\
         <ul class="TAN-inside">
             <li>
-                <h1>@{[ $c->view->html($user->username) ]}</h1>
+                <h1>
+                    @{[ $c->view->html($user->username) ]}
+                    @{[
+                        ( $user->deleted eq 'Y' ) ?
+                           ' <span style="color:#f00">DELETED</span>'
+                    :
+                        ''
+                    ]}
+                </h1>
             </li>
             <li>
                 <ul class="TAN-id-card">
@@ -61,7 +70,7 @@ sub process{
                     </li>
                     <li>
                         <ul>
-                            <li>Joined on: @{[ $c->view->html($user->join_date) ]}</li>
+                            <li>Joined @{[ $c->view->html($user->join_date) ]} ago</li>
                             <li>
                                 @{[ $comment_count ? '<a href="comments">' : '' ]}
                                     Comments: ${comment_count}
@@ -89,6 +98,14 @@ sub process{
                             </li>
                         </ul>
                     </li>
+                    @{[
+                        ( $c->user_exists && $c->check_user_roles(qw/edit_user/) ) ?
+                            qq#<li class="TAN-profile-user-admin">
+                                @{[ $c->view->template('Profile::User::Admin') ]}
+                            </li>#
+                        :
+                            ''
+                    ]}
                 </ul>
             </li>
             <li>
@@ -101,7 +118,7 @@ sub process{
                             || ( $c->user->username eq $user->username) 
                         )
                     ) ?
-                        qq'<a href="/profile/@{[ $c->view->html($user->username) ]}/edit">Edit</a>'
+                        qq'<a href="@{[ $user->profile_url ]}edit">Edit</a>'
                     :
                         ''
                 ]}
@@ -109,4 +126,4 @@ sub process{
         </ul>\;
 }
 
-1;
+__PACKAGE__->meta->make_immutable;
