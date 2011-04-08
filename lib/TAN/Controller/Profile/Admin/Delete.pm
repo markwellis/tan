@@ -13,7 +13,7 @@ sub delete: Chained('../admin') Args(0){
             'deleted' => ( $c->stash->{'user'}->deleted eq 'Y' ) ? 'N' : 'Y',
         } );
 
-        $c->forward('/profile/admin/_force_logout');
+        $c->forward('_force_logout');
 #log action - reason
 # ^ link to delete reason on profile page?
 #send email
@@ -23,6 +23,22 @@ sub delete: Chained('../admin') Args(0){
     }
 
     $c->stash->{'template'} = 'Profile::Admin::Delete';
+}
+
+sub _force_logout: Private{
+    my ( $self, $c ) = @_;
+
+    my $views_rs = $c->model('MySql::Views')->search( {
+        'user_id' => $c->stash->{'user'}->id,
+    },{
+        'group_by' => 'session_id',
+    } );
+
+    foreach my $view ( $views_rs->all ){
+        foreach my $key ( ('session','expires') ){
+            $c->delete_session_data( "${key}:" . $view->session_id );
+        }
+    }
 }
 
 __PACKAGE__->meta->make_immutable;

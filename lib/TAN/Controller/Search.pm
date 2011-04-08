@@ -20,10 +20,16 @@ sub add_to_index: Event(object_created) Event(object_updated){
     $c->model('Gearman')->run( 'search_add_to_index', $document );
 }
 
-sub delete_from_index: Event(object_deleted){
-    my ( $self, $c, $object ) = @_;
+sub delete_from_index: Event(object_deleted) Event(mass_objects_deleted){
+    my ( $self, $c, $objects ) = @_;
 
-    $c->model('Gearman')->run( 'search_delete_from_index', $object->id );
+    if ( ref( $objects ) ne 'ARRAY' ){
+        $objects = [$objects];
+    }
+
+    foreach my $object ( @{$objects} ){
+        $c->model('Gearman')->run( 'search_delete_from_index', $object->id );
+    }
 }
 
 sub index: Path Args(0){

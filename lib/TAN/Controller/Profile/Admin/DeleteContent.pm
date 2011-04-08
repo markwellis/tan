@@ -30,19 +30,26 @@ sub delete_objects: Private{
 
     my @object_types = $c->req->param('objects');
     if ( scalar( @object_types ) ){
-        my $objects_rs = $c->model('MySql::Object')->search( {
+        my $search_terms = {
             'type' => \@object_types,
             'deleted' => 'N',
             'user_id' => $c->stash->{'user'}->id,
+        };
+
+        my $objects_rs = $c->model('MySql::Object')->search( $search_terms, {
+            'prefetch' => \@object_types,
         } );
         
         if ( $objects_rs ){
-            $objects_rs->update( {
+            my @objects = $objects_rs->all;
+
+            # do this again beacuse it'll do an indvidual query 
+            # for each update otherwise (coz of the prefetch)
+            $c->model('MySql::Object')->search( $search_terms )->update( {
                 'deleted' => 'Y',
             } );
 
-#make this work!
-            $c->trigger_event( 'mass_objects_deleted', $objects_rs );
+            $c->trigger_event( 'mass_objects_deleted', \@objects );
         }
     }
 }
@@ -57,12 +64,13 @@ sub delete_comments: Private{
         } );
 
         if ( $comments_rs ){
+            my @comments = $comments_rs->all;
+
             $comments_rs->update( {
                 'deleted' => 'Y',
             } );
 
-#make this work!
-            $c->trigger_event( 'mass_comments_deleted', $comments_rs );
+            $c->trigger_event( 'mass_comments_deleted', \@comments );
         }
     }
 }
