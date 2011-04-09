@@ -4,12 +4,12 @@ use strict;
 use warnings;
 use base 'DBIx::Class::ResultSet';
 
-use Storable;
+use JSON;
 
 sub log_event {
     my ( $self, $params ) = @_;
 
-    $params->{'bulk'} = freeze( $params->{'bulk'} ) 
+    $params->{'bulk'} = to_json( $params->{'bulk'} ) 
         if ref($params->{'bulk'});
 
     my $admin_log_rs = $self->create( $params );

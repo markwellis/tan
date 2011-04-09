@@ -36,3 +36,11 @@ CREATE  TABLE IF NOT EXISTS `tan`.`admin_log` (
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8
 COLLATE = utf8_general_ci;
+
+ALTER TABLE `tan`.`poll_vote` DROP FOREIGN KEY `fk_poll_vote_1` ;
+ALTER TABLE `tan`.`poll_vote` 
+  ADD CONSTRAINT `fk_poll_vote_1`
+  FOREIGN KEY (`answer_id` )
+  REFERENCES `tan`.`poll_answer` (`answer_id` )
+  ON DELETE CASCADE
+  ON UPDATE NO ACTION;

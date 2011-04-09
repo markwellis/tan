@@ -36,9 +36,10 @@ CREATE  TABLE IF NOT EXISTS `tan`.`object` (
   `plus` BIGINT(20) NOT NULL DEFAULT 0 ,
   `minus` BIGINT(20) NOT NULL DEFAULT 0 ,
   `comments` BIGINT(20) NOT NULL DEFAULT 0 ,
+  `deleted` ENUM('Y','N') NOT NULL DEFAULT 'N' ,
   PRIMARY KEY (`object_id`) ,
   INDEX `created` (`created` ASC) ,
-  INDEX `super_index` (`NSFW` ASC, `type` ASC, `promoted` ASC, `created` ASC) ,
+  INDEX `super_index` (`NSFW` ASC, `type` ASC, `promoted` ASC, `created` ASC, `deleted` ASC) ,
   INDEX `promoted` (`promoted` ASC) ,
   INDEX `profile` (`type` ASC, `user_id` ASC, `NSFW` ASC, `created` ASC) ,
   INDEX `fk_object_1` (`user_id` ASC) ,
@@ -264,7 +265,7 @@ CREATE  TABLE IF NOT EXISTS `tan`.`poll_vote` (
   CONSTRAINT `fk_poll_vote_1`
     FOREIGN KEY (`answer_id` )
     REFERENCES `tan`.`poll_answer` (`answer_id` )
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_poll_vote_2`
     FOREIGN KEY (`user_id` )
@@ -417,6 +418,47 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
+-- Table `tan`.`admin_log`
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS `tan`.`admin_log` (
+  `log_id` BIGINT NOT NULL AUTO_INCREMENT ,
+  `admin_id` BIGINT NOT NULL ,
+  `action` ENUM('edit_comment', 'edit_object', 'delete_object', 'delete_comment', 'delete_user', 'mass_delete_objects', 'mass_delete_comments') NOT NULL ,
+  `reason` VARCHAR(255) NOT NULL ,
+  `bulk` TEXT NULL ,
+  `user_id` BIGINT NOT NULL ,
+  `comment_id` BIGINT NULL ,
+  `object_id` BIGINT NULL ,
+  `created` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ,
+  PRIMARY KEY (`log_id`) ,
+  INDEX `fk_admin_id` (`admin_id` ASC) ,
+  INDEX `fk_user_id` (`user_id` ASC) ,
+  INDEX `fk_object_id` (`object_id` ASC) ,
+  INDEX `fk_comment_id` (`comment_id` ASC) ,
+  CONSTRAINT `fk_admin_id`
+    FOREIGN KEY (`admin_id` )
+    REFERENCES `tan`.`user` (`user_id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_user_id`
+    FOREIGN KEY (`user_id` )
+    REFERENCES `tan`.`user` (`user_id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_object_id`
+    FOREIGN KEY (`object_id` )
+    REFERENCES `tan`.`object` (`object_id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_comment_id`
+    FOREIGN KEY (`comment_id` )
+    REFERENCES `tan`.`comments` (`comment_id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
 -- Placeholder table for view `tan`.`recent_comments`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `tan`.`recent_comments` (`comment_id` INT, `comment` INT, `created` INT, `object_id` INT, `type` INT, `nsfw` INT, `link_title` INT, `picture_title` INT, `blog_title` INT, `poll_title` INT, `username` INT);
@@ -428,7 +470,7 @@ DROP TABLE IF EXISTS `tan`.`recent_comments`;
 USE `tan`;
 CREATE  OR REPLACE VIEW `tan`.`recent_comments` AS
 
-SELECT me.comment_id, me.comment, me.created, me.object_id, object.type, object.nsfw, link.title link_title, picture.title picture_title, blog.title blog_title, poll.title poll_title, user.username FROM comments me USE INDEX (recent) JOIN object object ON object.object_id = me.object_id LEFT JOIN link link ON link.link_id = me.object_id LEFT JOIN picture picture ON picture.picture_id = me.object_id LEFT JOIN blog blog ON blog.blog_id = me.object_id LEFT JOIN poll poll ON poll.poll_id = me.object_id JOIN user user ON user.user_id = me.user_id WHERE ( me.deleted = 'N' ) ORDER BY me.created DESC LIMIT 20;
+SELECT me.comment_id, me.comment, me.created, me.object_id, object.type, object.nsfw, link.title link_title, picture.title picture_title, blog.title blog_title, poll.title poll_title, user.username FROM comments me USE INDEX (recent) JOIN object object ON object.object_id = me.object_id LEFT JOIN link link ON link.link_id = me.object_id LEFT JOIN picture picture ON picture.picture_id = me.object_id LEFT JOIN blog blog ON blog.blog_id = me.object_id LEFT JOIN poll poll ON poll.poll_id = me.object_id JOIN user user ON user.user_id = me.user_id WHERE ( me.deleted = 'N' ) AND ( object.deleted = 'N' ) ORDER BY me.created DESC LIMIT 20;
 USE `tan`;
 
 DELIMITER $$
