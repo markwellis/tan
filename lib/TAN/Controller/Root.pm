@@ -23,29 +23,52 @@ sub auto: Private{
     return 1;
 }
 
-sub index: Private{
+sub access_denied: Private{
     my ( $self, $c ) = @_;
 
-    $c->forward('/index/index', ['all', 0] );
+    $c->stash(
+        'error' => 'Access denied',
+    );
+
+    $c->forward('/error', [401]);
 }
 
 sub default: Local{
     my ( $self, $c ) = @_;
 
+    $c->stash(
+        'error' => 'Not found',
+    );
+
     $c->forward('/error', [404]);
 }
 
-sub access_denied: Local{
+sub gone: Private{
     my ( $self, $c ) = @_;
 
-    $c->forward('/error', [401]);
+    $c->stash(
+        'error' => 'Gone!',
+    );
+
+    $c->forward('/error', [410]);
+}
+
+sub server_error: Private{
+    my ( $self, $c ) = @_;
+
+    $c->stash(
+        'error' => 'Massive cockup',
+    );
+
+    $c->forward('/error', [500]);
 }
 
 sub error: Private{
     my ( $self, $c, $code ) = @_;
 
     $c->stash(
-        'template' => "Error::${code}",
+        'template' => "Error",
+        'error_code' => $code,
     );
 
     $c->response->status( $code );
