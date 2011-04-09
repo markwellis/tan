@@ -18,7 +18,6 @@ sub clear_comment_caches: Event(comment_deleted){
     $c->clear_cached_page('/profile/.*/comments');
 }
 
-
 sub index: Private{
     my ( $self, $c ) = @_;
 

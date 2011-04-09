@@ -1,6 +1,8 @@
 package TAN::View::Template::Classic::Error;
+use Moose;
+use namespace::autoclean;
 
-use base 'Catalyst::View::Perl::Template';
+extends 'Catalyst::View::Perl::Template';
 
 sub process{
     my ( $self, $c ) = @_;
@@ -18,4 +20,4 @@ sub process{
         </ul>\;
 }
 
-1;
+__PACKAGE__->meta->make_immutable;

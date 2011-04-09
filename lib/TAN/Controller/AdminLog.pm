@@ -1,0 +1,64 @@
+package TAN::Controller::AdminLog;
+use Moose;
+use namespace::autoclean;
+
+BEGIN { extends 'Catalyst::Controller'; }
+
+use Try::Tiny;
+
+has 'prefetch' => (
+    'is' => 'ro',
+    'isa' => 'ArrayRef',
+    'lazy_build' => 1,
+);
+sub _build_prefetch{
+    return [
+        {
+            'object' => [qw/link blog picture poll/]
+        },
+        qw/admin user comment/
+    ];
+}
+
+sub index: Private{
+    my ( $self, $c ) = @_;
+
+    my $page = $c->req->param('page') || 1;
+
+    my $int_reg = $c->model('CommonRegex')->not_int;
+    $page =~ s/$int_reg//g;
+    $page ||= 1;
+
+    my $admin_logs = try {
+        $c->model('MySql::AdminLog')->index( $page );
+    } catch {
+        $c->detach('/default');
+    };
+
+    $c->stash(
+        'admin_logs' => $admin_logs,
+        'template' => 'AdminLog',
+    );
+}
+
+sub view: Local Args(1){
+    my ( $self, $c, $id ) = @_;
+
+    my $int_reg = $c->model('CommonRegex')->not_int;
+    $id =~ s/$int_reg//g;
+
+    my $admin_log = try {
+        $c->model('MySql::AdminLog')->view( $id );
+    } catch {
+        $c->detach('/default');
+    };
+
+    $c->stash(
+        'admin_log' => $admin_log,
+        'template' => 'AdminLog::View',
+    );
+}
+
+#need a sub that lists actions per object/user
+
+__PACKAGE__->meta->make_immutable;
