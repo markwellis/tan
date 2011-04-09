@@ -10,8 +10,9 @@ sub delete: Chained('../admin') Args(0){
     if ( $c->req->method eq 'POST' ){
         my $user = $c->stash->{'user'};
         #toggle delete
+        my $deleted = ( $user->deleted eq 'Y' ) ? 'N' : 'Y';
         $user->update( {
-            'deleted' => ( $user->deleted eq 'Y' ) ? 'N' : 'Y',
+            'deleted' => $deleted,
         } );
 
         $c->forward('_force_logout');
@@ -20,6 +21,7 @@ sub delete: Chained('../admin') Args(0){
             'admin_id' => $c->user->id,
             'user_id' => $user->id,
             'action' => 'delete_user',
+            'other' => $deleted,
             'reason' => $c->stash->{'reason'},
         } );
 
