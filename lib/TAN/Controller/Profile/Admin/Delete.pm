@@ -8,13 +8,23 @@ sub delete: Chained('../admin') Args(0){
     my ( $self, $c ) = @_;
 
     if ( $c->req->method eq 'POST' ){
+        my $user = $c->stash->{'user'};
         #toggle delete
-        $c->stash->{'user'}->update( {
-            'deleted' => ( $c->stash->{'user'}->deleted eq 'Y' ) ? 'N' : 'Y',
+        my $deleted = ( $user->deleted eq 'Y' ) ? 'N' : 'Y';
+        $user->update( {
+            'deleted' => $deleted,
         } );
 
         $c->forward('_force_logout');
-#log action - reason
+        
+        $c->model('MySql::AdminLog')->log_event( {
+            'admin_id' => $c->user->id,
+            'user_id' => $user->id,
+            'action' => 'delete_user',
+            'other' => $deleted,
+            'reason' => $c->stash->{'reason'},
+        } );
+
 # ^ link to delete reason on profile page?
 #send email
 

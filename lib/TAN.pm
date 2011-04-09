@@ -47,7 +47,7 @@ sub check_cache{
     $c->stash->{'message'} = $c->flash->{'message'};
 
 #recored p.i.
-    if ( !$c->stash->{'pi_recorded'} ){
+    if ( !$c->stash->{'pi_recorded'} && $c->action ne 'thumb/index' ){
         my @params = split('/', $c->req->path);
 
         my $object_id = ( $c->action eq 'view/index' ) ? $params[2] : undef;

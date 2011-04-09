@@ -117,15 +117,15 @@ sub random{
         $search->{'nsfw'} = 'N';
     }
 
-    return $self->search(
-        $search,
-        {
-            'rows' => 1,
-            '+select' => \"(SELECT title FROM ${type} WHERE ${type}.${type}_id = me.object_id) title",
-            '+as' => 'title',
-            'order_by' => \'RAND()',
-        }
-    )->first;
+    return $self->search( {
+        'deleted' => 'N',
+        %{$search},
+    }, {
+        'rows' => 1,
+        '+select' => \"(SELECT title FROM ${type} WHERE ${type}.${type}_id = me.object_id) title",
+        '+as' => 'title',
+        'order_by' => \'RAND()',
+    } )->first;
 
 }
 

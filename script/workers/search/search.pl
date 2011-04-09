@@ -35,9 +35,12 @@ sub add_to_index{
 sub delete_from_index{
     my ( $job ) = @_;
 
-    ERROR "deleting " . $job->arg . " from index" ;
+    my $ids = Storable::thaw( $job->arg );
 
-    $searcher->delete( 'id', $job->arg );
+    foreach my $id ( @{$ids} ){
+        ERROR "deleting " . $id . " from index" ;
+        $searcher->delete( 'id', $id );
+    }
     $searcher->commit;
 
     return 1;

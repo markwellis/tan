@@ -7,17 +7,25 @@ BEGIN { extends 'Catalyst::Controller'; }
 sub delete_avatar: Chained('../admin') Args(0){
     my ( $self, $c ) = @_;
 
+    my $user = $c->stash->{'user'};
+
     if ( $c->req->method eq 'POST' ){
-#log reason
-#send email
-        my @outfile_path = split('/', "root/@{[ $c->config->{'avatar_path'} ]}/@{[ $c->stash->{'user'}->id ]}");
+        my @outfile_path = split('/', "root/@{[ $c->config->{'avatar_path'} ]}/@{[ $user->id ]}");
         my $outfile = $c->path_to( @outfile_path );
 
         if ( -e $outfile ){
             unlink( $outfile );
         }
 
-        $c->res->redirect( $c->stash->{'user'}->profile_url, 303 );
+        $c->model('MySql::AdminLog')->log_event( {
+            'admin_id' => $c->user->id,
+            'user_id' => $user->id,
+            'action' => 'delete_avatar',
+            'reason' => $c->stash->{'reason'},
+        } );
+#send email
+
+        $c->res->redirect( $user->profile_url, 303 );
         $c->detach;
     }
 

@@ -262,8 +262,7 @@ sub edit_comment: PathPart('_edit_comment') Chained('type') Args(1) {
     if ( !defined($comment_rs) ){
 #FAIL (comment not found)
         if ( !defined($c->req->param('ajax')) ){
-            $c->flash->{'message'} = 'Comment not found';
-            $c->res->redirect( $object_rs->url, 303 );
+            $c->detach('/default');
         } else {
             $c->res->output("Comment not found");
             $c->res->status(404);
@@ -279,8 +278,7 @@ sub edit_comment: PathPart('_edit_comment') Chained('type') Args(1) {
     ){
 #FAIL (comment not users)
         if ( !defined($c->req->param('ajax')) ){
-            $c->flash->{'message'} = 'Not your comment';
-            $c->res->redirect( $comment_rs->object->url, 303 );
+            $c->detach('/access_denied');
         } else {
             $c->res->output("Not your comment");
             $c->res->status(403);
@@ -298,6 +296,19 @@ sub edit_comment: PathPart('_edit_comment') Chained('type') Args(1) {
             });
             $c->trigger_event('comment_deleted', $comment_rs);
 
+            if ( $c->check_user_roles(qw/edit_comment/)
+                && ( $comment_rs->user_id != $c->user->user_id ) 
+            ){
+                $c->model('MySql::AdminLog')->log_event( {
+                    'admin_id' => $c->user->id,
+                    'user_id' => $comment_rs->user_id,
+                    'action' => 'delete_comment',
+                    'reason' => ' ', #provide this somehow
+                    'comment_id' => $comment_rs->id,
+                    'object_id' => $comment_rs->object_id,
+                } );
+            }
+
             if ( !defined($c->req->param('ajax')) ){
                 $c->flash->{'message'} = 'Comment deleted';
                 $c->res->redirect( $comment_rs->object->url, 303 );
@@ -308,6 +319,22 @@ sub edit_comment: PathPart('_edit_comment') Chained('type') Args(1) {
         } else {
 #UPDATE comment
             if ( defined($c->req->param("edit_comment_${comment_id}")) ){
+                if ( $c->check_user_roles(qw/edit_comment/)
+                    && ( $comment_rs->user_id != $c->user->user_id ) 
+                ){
+                    $c->model('MySql::AdminLog')->log_event( {
+                        'admin_id' => $c->user->id,
+                        'user_id' => $comment_rs->user_id,
+                        'action' => 'edit_comment',
+                        'reason' => ' ', #provide this somehow
+                        'bulk' => {
+                            'original' => $comment_rs->comment,
+                            'new' => $c->req->param("edit_comment_${comment_id}"),
+                        },
+                        'comment_id' => $comment_rs->id,
+                        'object_id' => $comment_rs->object_id,
+                    } );
+                }
                 $comment_rs->update({
                     'comment' => $c->req->param("edit_comment_${comment_id}"),
                 });

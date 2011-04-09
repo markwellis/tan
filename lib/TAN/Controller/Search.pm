@@ -27,9 +27,11 @@ sub delete_from_index: Event(object_deleted) Event(mass_objects_deleted){
         $objects = [$objects];
     }
 
+    my @ids_to_delete;
     foreach my $object ( @{$objects} ){
-        $c->model('Gearman')->run( 'search_delete_from_index', $object->id );
+        push( @ids_to_delete, $object->id );
     }
+    $c->model('Gearman')->run( 'search_delete_from_index', \@ids_to_delete );
 }
 
 sub index: Path Args(0){

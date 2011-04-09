@@ -7,21 +7,20 @@ BEGIN { extends 'Catalyst::Controller'; }
 sub validate_user: PathPart('edit') Chained('../type') CaptureArgs(1){
     my ( $self, $c, $object_id ) = @_;
 
-    $c->stash->{'object'} = $c->model('MySQL::Object')->get( $object_id, $c->stash->{'type'} );
+    my $object = $c->model('MySQL::Object')->get( $object_id, $c->stash->{'type'} );
 
     if ( 
-        !defined($c->stash->{'object'})
-        || !$c->user_exists 
+        !defined($object)
         || (
             !$c->check_user_roles(qw/edit_object/) 
-            && ($c->user->id != $c->stash->{'object'}->user_id)
+            && ( $c->user->id != $object->user_id )
         )
     ){
-        $c->forward('/default');
-        $c->detach();
+        $c->detach('/access_denied');
     }
 
     $c->stash(
+        'object' => $object,
         'edit' => 1,
     );
 }
@@ -39,31 +38,37 @@ sub index: PathPart('') Chained('validate_user') Args(){
 sub post: PathPart('post') Chained('validate_user') Args(){
     my ( $self, $c ) = @_;
 
+    my $object = $c->stash->{'object'};
     my $redirect_url;
     if ( 
         defined( $c->req->param('delete') )
         && ( $c->req->param('delete') eq 'Delete' ) 
         && $c->check_user_roles(qw/delete_object/)
     ){
-        $c->stash->{'object'}->update( {
+        $c->model('MySql::AdminLog')->log_event( {
+            'admin_id' => $c->user->id,
+            'user_id' => $object->user_id,
+            'action' => 'delete_object',
+            'reason' => ' ', #provide this somehow
+            'object_id' => $object->id,
+        } );
+
+        $object->update( {
             'deleted' => 'Y',
         } );
-        $c->trigger_event( 'object_deleted', $c->stash->{'object'} );
+        $c->trigger_event( 'object_deleted', $object );
 
         $redirect_url = "/index/all/0/";
     } else {
         my $prepared = $c->forward('/submit/validate_and_prepare');
-        my $tags = delete( $prepared->{'tags'} );
 
         $c->model('MySQL')->txn_do( sub {
             $c->forward( 'update_object', [ $prepared ] );
 
-            $c->forward( 'update_tags', [ $tags ] );
-
-            $c->trigger_event( 'object_updated', $c->stash->{'object'} );
+            $c->trigger_event( 'object_updated', $object );
         } );
 
-        $redirect_url = $c->stash->{'object'}->url;
+        $redirect_url = $object->url;
     }
 
     $c->flash->{'message'} = 'Edit complete';
@@ -74,17 +79,28 @@ sub post: PathPart('post') Chained('validate_user') Args(){
 
 sub update_object: Private{
     my ( $self, $c, $prepared ) = @_;
-    
-    $c->stash->{'object'}->update( {
-        'nsfw' => defined( $c->req->param('nsfw') ) ? 'Y' : 'N',
-    } );
 
     my $type = $c->stash->{'type'};
+    my $tags = delete( $prepared->{'tags'} );
 
     my $to_update = {};
+    my $original = {};
+
+    my $object = $c->stash->{'object'};
+    my $old_nsfw = $object->nsfw;
+    my $new_nsfw = defined( $c->req->param('nsfw') ) ? 'Y' : 'N';
+
+    if ( $old_nsfw ne $new_nsfw ){
+        $original->{'nsfw'} = $object->nsfw;
+
+        $object->update( {
+            'nsfw' => $new_nsfw,
+        } );
+    }
+
     foreach my $key ( keys( %{$prepared} ) ){
         if ( ref( $prepared->{ $key } ) eq 'ARRAY' ){
-            my @existing = $c->stash->{"object"}->$type->$key->search->all;
+            my @existing = $object->$type->$key->search->all;
 
             foreach my $new ( @{$prepared->{ $key }} ){
                 my $found = shift( @existing );
@@ -92,45 +108,75 @@ sub update_object: Private{
                 if ( $found ){
                     $found->update( $new );
                 } else {
-                    $c->stash->{"object"}->$type->$key->create( $new );
+                    $object->$type->$key->create( $new );
                 }
             }
             foreach my $spare ( @existing ){
                 $spare->delete;
             }
         } else {
-            if ( $c->stash->{'object'}->$type->$key ne $prepared->{ $key } ){
+            my $original_value = $object->$type->$key;
+            if ( $original_value ne $prepared->{ $key } ){
+                $original->{ $key } = $original_value;
                 $to_update->{ $key } = $prepared->{ $key };
             }
         }
     }
 
-    $c->stash->{'object'}->$type->update( $to_update );
+    $object->$type->update( $to_update );
+    if ( $original->{'nsfw'} ){
+        $to_update->{'nsfw'} = $new_nsfw;
+    }
+
+    my $old_new_tags = $c->forward( 'update_tags', [ $tags ] );
+    if ( $old_new_tags->{'old'} ne $old_new_tags->{'new'} ){
+        $original->{'tags'} = $old_new_tags->{'old'};
+        $to_update->{'tags'} = $old_new_tags->{'new'};
+    }
+
+    if ( 
+        $c->check_user_roles(qw/edit_object/)
+        && ( $object->user_id != $c->user->user_id ) 
+    ){
+        $c->model('MySql::AdminLog')->log_event( {
+            'admin_id' => $c->user->id,
+            'user_id' => $object->user_id,
+            'action' => 'edit_object',
+            'reason' => ' ', #provide this somehow
+            'bulk' => {
+                'new' => $to_update,
+                'old' => $original,
+            },
+            'object_id' => $object->id,
+        } );
+    }
 }
 
 sub update_tags: Private{
     my ( $self, $c, $tags ) = @_;
+
 
     my @tags = split(/ /, lc($tags));
 
     my $object = $c->stash->{'object'};
 
     my %existing_tags = map { $_->tag => $_ } $object->tags->all;
-    my %new_tags = map { $_ => 1 } @tags;
 
-    foreach my $tag ( keys( %new_tags ) ){
-        if ( $existing_tags{ $tag } ){
-            delete( $existing_tags{ $tag } );
-            delete( $new_tags{ $tag } );
+    my @old_tags = keys( %existing_tags );
+    my @new_tags = @tags; #clone this for admin_log
+
+    for( my $i=0,my $max=scalar(@tags); $i < $max; ++$i ){
+        if ( $existing_tags{ $tags[ $i ] } ){
+            delete( $existing_tags{ $tags[ $i ] } );
+            delete( $tags[ $i ] );
         }
     }
     my @tags_to_remove = values( %existing_tags );
-    my @tags_to_add = keys( %new_tags );
 
     my $tag_reg = $c->model('CommonRegex')->not_alpha_numeric;
     my $trim_reg = $c->model('CommonRegex')->trim;
 
-    foreach my $tag ( @tags_to_add ){
+    foreach my $tag ( @tags ){
         $tag =~ s/$tag_reg//g;
         $tag =~ s/$trim_reg//g;
         next if ( !$tag );
@@ -145,6 +191,11 @@ sub update_tags: Private{
     foreach my $spare ( @tags_to_remove ){
         $object->remove_from_tags( $spare );
     }
+
+    return {
+        'old' => \@old_tags,
+        'new' => \@new_tags,
+    };
 }
 
 __PACKAGE__->meta->make_immutable;
