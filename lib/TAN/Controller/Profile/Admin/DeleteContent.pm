@@ -42,6 +42,19 @@ sub delete_objects: Private{
         
         if ( $objects_rs ){
             my @objects = $objects_rs->all;
+            my @object_ids;
+            foreach my $object ( @objects ){
+                push( @object_ids, $object->id );
+            }
+
+            $c->model('MySql::AdminLog')->log_event( {
+                'admin_id' => $c->user->id,
+                'user_id' => $c->stash->{'user'}->id,
+                'action' => 'mass_delete_objects',
+                'bulk' => \@object_ids,
+                'other' => \@object_types,
+                'reason' => $c->stash->{'reason'},
+            } );
 
             # do this again beacuse it'll do an indvidual query 
             # for each update otherwise (coz of the prefetch)
@@ -58,15 +71,33 @@ sub delete_comments: Private{
     my ( $self, $c ) = @_;
 
     if ( $c->req->param('comments') ){
-        my $comments_rs = $c->model('MySql::Comments')->search( {
-            'deleted' => 'N',
-            'user_id' => $c->stash->{'user'}->id,
+        my $search_terms = {
+            'me.deleted' => 'N',
+            'me.user_id' => $c->stash->{'user'}->id,
+        };
+
+        my $comments_rs = $c->model('MySql::Comments')->search( $search_terms, {
+            'prefetch' => {
+                'object' => [qw/link blog picture poll/]
+            },
         } );
 
         if ( $comments_rs ){
             my @comments = $comments_rs->all;
+            my @comment_ids;
+            foreach my $comment ( @comments ){
+                push( @comment_ids, $comment->id );
+            }
 
-            $comments_rs->update( {
+            $c->model('MySql::AdminLog')->log_event( {
+                'admin_id' => $c->user->id,
+                'user_id' => $c->stash->{'user'}->id,
+                'action' => 'mass_delete_comments',
+                'bulk' => \@comment_ids,
+                'reason' => $c->stash->{'reason'},
+            } );
+
+            $c->model('MySql::Comments')->search( $search_terms )->update( {
                 'deleted' => 'Y',
             } );
 

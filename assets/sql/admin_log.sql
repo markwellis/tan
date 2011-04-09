@@ -44,3 +44,5 @@ ALTER TABLE `tan`.`poll_vote`
   REFERENCES `tan`.`poll_answer` (`answer_id` )
   ON DELETE CASCADE
   ON UPDATE NO ACTION;
+
+ALTER TABLE `tan`.`admin_log` ADD COLUMN `other` TEXT NULL DEFAULT NULL  AFTER `created` , CHANGE COLUMN `action` `action` ENUM('edit_comment', 'edit_object', 'delete_object', 'delete_comment', 'delete_user', 'delete_avatar', 'mass_delete_objects', 'mass_delete_comments') NOT NULL  , CHANGE COLUMN `reason` `reason` VARCHAR(512) NOT NULL  , CHANGE COLUMN `bulk` `bulk` LONGTEXT NULL DEFAULT NULL  ;

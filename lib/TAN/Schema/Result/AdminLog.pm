@@ -6,7 +6,7 @@ use base 'DBIx::Class';
 
 __PACKAGE__->load_components("Core");
 __PACKAGE__->table("admin_log");
-__PACKAGE__->add_columns( qw/log_id admin_id action reason bulk user_id comment_id object_id created/ );
+__PACKAGE__->add_columns( qw/log_id admin_id action reason bulk user_id comment_id object_id created other/ );
 __PACKAGE__->set_primary_key("log_id");
 
 __PACKAGE__->belongs_to(
