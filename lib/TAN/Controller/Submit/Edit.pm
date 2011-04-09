@@ -134,17 +134,22 @@ sub update_object: Private{
         $to_update->{'tags'} = $old_new_tags->{'new'};
     }
 
-    $c->model('MySql::AdminLog')->log_event( {
-        'admin_id' => $c->user->id,
-        'user_id' => $object->user_id,
-        'action' => 'edit_object',
-        'reason' => ' ', #provide this somehow
-        'bulk' => {
-            'new' => $to_update,
-            'old' => $original,
-        },
-        'object_id' => $object->id,
-    } );
+    if ( 
+        $c->check_user_roles(qw/edit_object/)
+        && ( $object->user_id != $c->user->user_id ) 
+    ){
+        $c->model('MySql::AdminLog')->log_event( {
+            'admin_id' => $c->user->id,
+            'user_id' => $object->user_id,
+            'action' => 'edit_object',
+            'reason' => ' ', #provide this somehow
+            'bulk' => {
+                'new' => $to_update,
+                'old' => $original,
+            },
+            'object_id' => $object->id,
+        } );
+    }
 }
 
 sub update_tags: Private{
