@@ -24,7 +24,7 @@ sub process{
             $out .= 
                 qq\<tr>
                     <td class="TAN-adminlog-action">
-                        <a href="view/@{[ $admin_log->log_id ]}/">@{[ $admin_log->action ]}</a>
+                        @{[ $admin_log->action ]}
                     </td>
                     <td class="TAN-adminlog-admin">
                         <a href="@{[ $admin_log->admin->profile_url ]}">@{[ $admin_log->admin->username ]}</a>

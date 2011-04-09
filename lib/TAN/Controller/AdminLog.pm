@@ -41,24 +41,4 @@ sub index: Private{
     );
 }
 
-sub view: Local Args(1){
-    my ( $self, $c, $id ) = @_;
-
-    my $int_reg = $c->model('CommonRegex')->not_int;
-    $id =~ s/$int_reg//g;
-
-    my $admin_log = try {
-        $c->model('MySql::AdminLog')->view( $id );
-    } catch {
-        $c->detach('/default');
-    };
-
-    $c->stash(
-        'admin_log' => $admin_log,
-        'template' => 'AdminLog::View',
-    );
-}
-
-#need a sub that lists actions per object/user
-
 __PACKAGE__->meta->make_immutable;

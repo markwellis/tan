@@ -47,20 +47,4 @@ sub index{
     return $admin_logs;
 }
 
-sub view{
-    my ( $self, $id ) = @_;
-
-    my $admin_log = $self->find( {
-        'log_id' => $id
-    }, {
-        'prefetch' => $prefetch,
-    } );
-
-    if ( !$admin_log ){
-        Exception::Simple->throw;
-    }
-
-    return $admin_log;
-}
-
 1;
