@@ -19,7 +19,7 @@ sub process{
     my @whos_online ;
     foreach my $user ( @{$c->model('MySQL::Views')->whos_online} ){
         my $username = $c->view->html( $user->username );
-        push(@whos_online, qq\<a href="/@{[ $user->profile_url ]}"><img title="${username}" alt="${username}" src="@{[ $user->avatar($c) ]}" /></a>\);
+        push(@whos_online, qq\<a href="@{[ $user->profile_url ]}"><img title="${username}" alt="${username}" src="@{[ $user->avatar($c) ]}" /></a>\);
     }
 
     return <<"END";
