@@ -23,7 +23,7 @@ sub process{
         $c->check_user_roles(qw/edit_comment/) 
         && ( $c->stash->{'comment'}->user->id != $c->user->id )
     ){
-        $out .= qq#<input type="hidden" name="reason" id="reason" />#;
+        $out .= qq#<input type="hidden" name="_edit-reason" id="_edit-reason" />#;
     }
 
     $out .= qq\

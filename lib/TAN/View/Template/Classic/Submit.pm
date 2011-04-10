@@ -94,6 +94,20 @@ sub process{
         }
     }
 
+    if ( $c->stash->{'edit'} && $c->check_user_roles(qw/delete_object/) ){
+        push(@{$c->stash->{'js_includes'}}, 'AdminReason');
+
+        $output .= qq#<li>
+            <label for="_edit-reason">Reason for edit</label>
+            <input 
+                type="text" 
+                name="_edit-reason"
+                id="_edit-reason" 
+                class="required"
+            />
+        </li>#;
+    }
+
     my $nsfw;
     if ( defined( $object ) ){
         $nsfw = ( $object->nsfw eq 'Y' ) ? 1 : undef; 
@@ -110,10 +124,7 @@ sub process{
 
 
     if ( $c->stash->{'edit'} && $c->check_user_roles(qw/delete_object/) ){
-        push(@{$c->stash->{'js_includes'}}, 'AdminReason');
-
-        $output .= qq#<input type="hidden" name="reason" id="reason" />
-        <input type="submit" value="Delete" name="delete" />#;
+        $output .= qq#<input type="submit" value="Delete" name="delete" />#;
     }
 
     $output .= qq\

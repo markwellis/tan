@@ -101,7 +101,7 @@ function edit_link(link){
                 e.stop();
 
                 var data = {};
-                if ( comment_holder.getElement('#reason') != undefined ){
+                if ( comment_holder.getElement('#_edit-reason') != undefined ){
                     data['reason'] = prompt('reason for edit?').trim();
                     if ( !data['reason'] ){
                         return false;
@@ -149,7 +149,7 @@ function edit_link(link){
                     return false;
                 }
 
-                if ( comment_holder.getElement('#reason') != undefined ){
+                if ( comment_holder.getElement('#_edit-reason') != undefined ){
                     post_params['reason'] = prompt('reason for edit?').trim();
                     if ( !post_params['reason'] ){
                         return false;

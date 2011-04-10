@@ -303,7 +303,7 @@ sub edit_comment: PathPart('_edit_comment') Chained('type') Args(1) {
                     'admin_id' => $c->user->id,
                     'user_id' => $comment_rs->user_id,
                     'action' => 'delete_comment',
-                    'reason' => $c->req->param('reason') || ' ',
+                    'reason' => $c->req->param('_edit-reason') || ' ',
                     'comment_id' => $comment_rs->id,
                     'object_id' => $comment_rs->object_id,
                 } );
@@ -326,7 +326,7 @@ sub edit_comment: PathPart('_edit_comment') Chained('type') Args(1) {
                         'admin_id' => $c->user->id,
                         'user_id' => $comment_rs->user_id,
                         'action' => 'edit_comment',
-                        'reason' => $c->req->param('reason') || ' ',
+                        'reason' => $c->req->param('_edit-reason') || ' ',
                         'bulk' => {
                             'original' => $comment_rs->comment,
                             'new' => $c->req->param("edit_comment_${comment_id}"),
