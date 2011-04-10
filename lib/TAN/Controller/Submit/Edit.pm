@@ -102,9 +102,9 @@ sub update_object: Private{
         $c->check_any_user_role(qw/edit_object_nsfw/)
         && ( $object->user_id != $c->user->user_id )
     ){
-        $prepared = {
-            'picture_id' => $prepared->{'picture_id'},
-        };
+        my $picture_id = $prepared->{'picture_id'};
+        $prepared = {}; #reset this
+        $prepared->{'picture_id'} = $picture_id if $picture_id;
     }
 
     foreach my $key ( keys( %{$prepared} ) ){
