@@ -33,6 +33,16 @@ sub process{
                     :
                         ''
                 ]}
+                @{[
+                    $c->check_user_roles(qw/admin_user/) ?
+                        qq#<li>
+                            <a href="admin/roles">
+                                Roles
+                            </a>
+                        </li>#
+                    :
+                        ''
+                ]}
             </ul>
         </div>\;
 }

@@ -35,6 +35,10 @@ sub admin: Chained('../user') CaptureArgs(0){
             'one_of' => [ qw/delete_object edit_comment/ ],
             'super' => [ qw/god/ ],
         },
+        'roles' => {
+            'one_of' => [ qw/admin_user/ ],
+            'super' => [ qw/god/ ],
+        },
     };
 
     my $roles = $actions->{ $c->action->name };
