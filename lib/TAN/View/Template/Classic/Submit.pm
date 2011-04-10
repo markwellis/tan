@@ -110,7 +110,10 @@ sub process{
 
 
     if ( $c->stash->{'edit'} && $c->check_user_roles(qw/delete_object/) ){
-        $output .= qq#<input type="submit" value="Delete" name="delete" onclick="return confirm('you sure?')" />#;
+        push(@{$c->stash->{'js_includes'}}, 'AdminReason');
+
+        $output .= qq#<input type="hidden" name="reason" id="reason" />
+        <input type="submit" value="Delete" name="delete" />#;
     }
 
     $output .= qq\

@@ -303,7 +303,7 @@ sub edit_comment: PathPart('_edit_comment') Chained('type') Args(1) {
                     'admin_id' => $c->user->id,
                     'user_id' => $comment_rs->user_id,
                     'action' => 'delete_comment',
-                    'reason' => ' ', #provide this somehow
+                    'reason' => $c->req->param('reason') || ' ',
                     'comment_id' => $comment_rs->id,
                     'object_id' => $comment_rs->object_id,
                 } );
@@ -326,7 +326,7 @@ sub edit_comment: PathPart('_edit_comment') Chained('type') Args(1) {
                         'admin_id' => $c->user->id,
                         'user_id' => $comment_rs->user_id,
                         'action' => 'edit_comment',
-                        'reason' => ' ', #provide this somehow
+                        'reason' => $c->req->param('reason') || ' ',
                         'bulk' => {
                             'original' => $comment_rs->comment,
                             'new' => $c->req->param("edit_comment_${comment_id}"),
@@ -351,13 +351,13 @@ sub edit_comment: PathPart('_edit_comment') Chained('type') Args(1) {
         }
     }
 
-    $c->stash->{'comment_id'} = $comment_id;
-    $c->stash->{'comment'} = $comment_rs->comment_nobb;
-    $c->stash->{'template'} = 'View::EditComment';
+    $c->stash(
+        'comment' => $comment_rs,
+        'template' => 'View::EditComment',
+    );
 
     if ( $c->req->param('ajax') ){
-        $c->forward( $c->view('NoWrapper') );
-        $c->detach();
+        $c->detach( $c->view('NoWrapper') );
     }
 }
 

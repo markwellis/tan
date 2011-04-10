@@ -80,6 +80,7 @@ sub process{
                     '<a href="/login/">Login/Register</a> | ' 
                 ]}
                     <a href="/filter/" class="nsfw_filter">@{[ $c->nsfw ? 'Enable' : 'Disable' ]} filter</a> | 
+                    <a href="/adminlog/">Admin Log</a> |
                     <a href="/faq/">FAQ</a>                    
                 </p>
                 <form class="TAN-menu-top-search" action="/search/" method="get">

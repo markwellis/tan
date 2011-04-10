@@ -20,19 +20,16 @@ sub log_event {
     return $admin_log_rs;
 }
 
-#no moose here :(
-my $prefetch = [
-    {
-        'object' => [qw/link blog picture poll/]
-    },
-    qw/admin user comment/
-];
-
 sub index{
     my ( $self, $page ) = @_;
 
     my $admin_logs = $self->search( {}, {
-        'prefetch' => $prefetch,
+        'prefetch' => [
+            {
+                'object' => [qw/link blog picture poll/]
+            },
+            qw/admin user comment/,
+        ],
         'page' => $page,
         'rows' => 50,
         'order_by' => {

@@ -8,6 +8,7 @@ window.addEvent('domready', function() {
             if ( input_comment ){
                 var req = new Request.HTML({
                     'url' : this.action,
+                    "evalScripts": true,
                     'noCache': true,
                     'onSuccess': function(responseTree, responseElements, responseHTML, responseJavaScript) {
                         document.id('submit_comment').disabled = 0;
@@ -89,7 +90,6 @@ function edit_link(link){
     var comment_id = comment_holder.id.replace(/\D+/g, '');
     var req = new Request.HTML({
         'url' : link.href,
-        'evalScripts': false,
         'noCache': true,
         'onSuccess': function(responseTree) {
             comment_holder.empty();
@@ -99,9 +99,17 @@ function edit_link(link){
             //submit edit comment
             comment_holder.getElement('#edit' + comment_id).addEvent('click', function(e){
                 e.stop();
+
+                var data = {};
+                if ( comment_holder.getElement('#reason') != undefined ){
+                    data['reason'] = prompt('reason for edit?').trim();
+                    if ( !data['reason'] ){
+                        return false;
+                    }
+                }
+
                 var editor_id = 'edit_comment_' + comment_id;
                 //js is tarded and cant use varible as a object key coz it accepts barewords keys :/
-                var data = {};
                 data['ajax'] = 1;
                 data[editor_id] = tinyMCE.get(editor_id).getContent();
                 tinyMCE.execCommand('mceRemoveControl', false, editor_id);
@@ -137,9 +145,17 @@ function edit_link(link){
             //delete comment
             comment_holder.getElement('#delete' + comment_id).addEvent('click', function(e){
                 e.stop();
-                if ( !confirm('Are you sure you want to delete link comment?') ){
+                if ( !confirm('Are you sure you want to delete comment?') ){
                     return false;
                 }
+
+                if ( comment_holder.getElement('#reason') != undefined ){
+                    post_params['reason'] = prompt('reason for edit?').trim();
+                    if ( !post_params['reason'] ){
+                        return false;
+                    }
+                }
+
                 var edit_comment_submit = new Request.HTML({
                     'url': this.getParent().getParent().action,
                     'noCache': true,
