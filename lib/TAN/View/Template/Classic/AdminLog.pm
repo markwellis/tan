@@ -18,7 +18,6 @@ sub process{
                     <th>Username</th>
                     <th>When</th>
                     <th>Reason</th>
-                    <th>Object</th>
                 </tr>\;
 
         foreach my $admin_log ( $c->stash->{'admin_logs'}->all ){
@@ -38,9 +37,6 @@ sub process{
                     </td>
                     <td class="TAN-adminlog-reason">
                         @{[ $c->view->html( $admin_log->reason ) ]}
-                    </td>
-                    <td class="TAN-adminlog-reason">
-                        <a href="@{[ $admin_log->object ? $admin_log->object->url : '' ]}" >@{[ $admin_log->object_id ]}
                     </td>
                 </tr>\;
         }
