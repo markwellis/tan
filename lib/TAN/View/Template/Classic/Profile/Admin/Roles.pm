@@ -9,6 +9,8 @@ sub process{
 
     push(@{$c->stash->{'css_includes'}}, 'Profile');
 
+    my $user = $c->stash->{'user'};
+
     my $out = 
         qq\<ul class="TAN-inside">
             <li class="TAN-profile-user-admin-form">
@@ -17,12 +19,21 @@ sub process{
                     <fieldset>
                         <ul>\;
 
-#compare against users roles
-#make submit work
     foreach my $role ( $c->stash->{'roles'}->all ){
         $out .= qq\
             <li>
-                <input type="checkbox" name="roles" value="@{[ $role->role ]}" id="role_@{[ $role->id ]}" />
+                <input 
+                    type="checkbox" 
+                    name="roles" 
+                    value="@{[ $role->role ]}" 
+                    id="role_@{[ $role->id ]}"
+                    @{[
+                        $c->check_user_roles( $user, $role->role) ?
+                            'checked="checked"'
+                        :
+                            ''
+                    ]}
+                />
                 <label for="role_@{[ $role->id ]}">@{[ $role->role ]}</label>
             </li>
             \;

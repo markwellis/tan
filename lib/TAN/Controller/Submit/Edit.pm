@@ -166,7 +166,6 @@ sub update_object: Private{
 sub update_tags: Private{
     my ( $self, $c, $tags ) = @_;
 
-
     my @tags = split(/ /, lc($tags));
 
     my $object = $c->stash->{'object'};
