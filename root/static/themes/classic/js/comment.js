@@ -102,8 +102,8 @@ function edit_link(link){
 
                 var data = {};
                 if ( comment_holder.getElement('#_edit-reason') != undefined ){
-                    data['reason'] = prompt('reason for edit?').trim();
-                    if ( !data['reason'] ){
+                    data['_edit-reason'] = prompt('reason for edit?').trim();
+                    if ( !data['_edit-reason'] ){
                         return false;
                     }
                 }
@@ -150,8 +150,8 @@ function edit_link(link){
                 }
 
                 if ( comment_holder.getElement('#_edit-reason') != undefined ){
-                    post_params['reason'] = prompt('reason for edit?').trim();
-                    if ( !post_params['reason'] ){
+                    post_params['_edit-reason'] = prompt('reason for edit?').trim();
+                    if ( !post_params['_edit-reason'] ){
                         return false;
                     }
                 }

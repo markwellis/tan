@@ -49,7 +49,7 @@ sub post: PathPart('post') Chained('validate_user') Args(){
             'admin_id' => $c->user->id,
             'user_id' => $object->user_id,
             'action' => 'delete_object',
-            'reason' => $c->req->param('reason') || ' ',
+            'reason' => $c->req->param('_edit-reason') || ' ',
             'object_id' => $object->id,
         } );
 
@@ -142,7 +142,7 @@ sub update_object: Private{
             'admin_id' => $c->user->id,
             'user_id' => $object->user_id,
             'action' => 'edit_object',
-            'reason' => $c->req->param('reason') || ' ',
+            'reason' => $c->req->param('_edit-reason') || ' ',
             'bulk' => {
                 'new' => $to_update,
                 'old' => $original,

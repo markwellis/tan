@@ -15,7 +15,7 @@ sub process{
                     $c->view->template('Lib::Editor', {
                         'name' => "edit_comment_${comment_id}",
                         'value' => $c->stash->{'comment'}->comment_nobb,
-                        'height' => '600px',
+                        'height' => '300px',
                     })
                 ]}\;
 
