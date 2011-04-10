@@ -94,7 +94,11 @@ sub process{
         }
     }
 
-    if ( $c->stash->{'edit'} && $c->check_any_user_role(qw/delete_object edit_object edit_object_nsfw/) ){
+    if (
+        $c->stash->{'edit'} 
+        && $c->check_any_user_role(qw/delete_object edit_object edit_object_nsfw/)
+        && ( $object->user_id != $c->user->id )
+    ){
         push(@{$c->stash->{'js_includes'}}, 'AdminReason');
 
         $output .= qq#<li>
