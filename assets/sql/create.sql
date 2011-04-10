@@ -423,7 +423,7 @@ ENGINE = InnoDB;
 CREATE  TABLE IF NOT EXISTS `tan`.`admin_log` (
   `log_id` BIGINT NOT NULL AUTO_INCREMENT ,
   `admin_id` BIGINT NOT NULL ,
-  `action` ENUM('edit_comment', 'edit_object', 'delete_object', 'delete_comment', 'delete_user', 'delete_avatar', 'mass_delete_objects', 'mass_delete_comments') NOT NULL ,
+  `action` ENUM('edit_comment', 'edit_object', 'delete_object', 'delete_comment', 'delete_user', 'delete_avatar', 'mass_delete_objects', 'mass_delete_comments', 'edit_object_nsfw') NOT NULL ,
   `reason` VARCHAR(512) NOT NULL ,
   `bulk` LONGTEXT NULL ,
   `user_id` BIGINT NOT NULL ,

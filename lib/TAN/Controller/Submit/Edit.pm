@@ -12,7 +12,7 @@ sub validate_user: PathPart('edit') Chained('../type') CaptureArgs(1){
     if ( 
         !defined($object)
         || (
-            !$c->check_user_roles(qw/edit_object/) 
+            !$c->check_any_user_role(qw/edit_object edit_object_nsfw/) 
             && ( $c->user->id != $object->user_id )
         )
     ){
@@ -98,6 +98,15 @@ sub update_object: Private{
         } );
     }
 
+    if (
+        $c->check_any_user_role(qw/edit_object_nsfw/)
+        && ( $object->user_id != $c->user->user_id )
+    ){
+        $prepared = {
+            'picture_id' => $prepared->{'picture_id'},
+        };
+    }
+
     foreach my $key ( keys( %{$prepared} ) ){
         if ( ref( $prepared->{ $key } ) eq 'ARRAY' ){
             my @existing = $object->$type->$key->search->all;
@@ -128,16 +137,18 @@ sub update_object: Private{
         $to_update->{'nsfw'} = $new_nsfw;
     }
 
-    my $old_new_tags = $c->forward( 'update_tags', [ $tags ] );
-    if ( $old_new_tags->{'old'} ne $old_new_tags->{'new'} ){
-        $original->{'tags'} = $old_new_tags->{'old'};
-        $to_update->{'tags'} = $old_new_tags->{'new'};
-    }
-
     if ( 
-        $c->check_user_roles(qw/edit_object/)
+        $c->check_any_user_role(qw/edit_object edit_object_nsfw/)
         && ( $object->user_id != $c->user->user_id ) 
     ){
+        if ( !$c->check_any_user_role(qw/edit_object_nsfw/) ){
+            my $old_new_tags = $c->forward( 'update_tags', [ $tags ] );
+            if ( $old_new_tags->{'old'} ne $old_new_tags->{'new'} ){
+                $original->{'tags'} = $old_new_tags->{'old'};
+                $to_update->{'tags'} = $old_new_tags->{'new'};
+            }
+        }
+
         $c->model('MySql::AdminLog')->log_event( {
             'admin_id' => $c->user->id,
             'user_id' => $object->user_id,

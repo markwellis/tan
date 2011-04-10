@@ -78,7 +78,7 @@ sub process{
                 : '' ]}
                 @{[ ( $c->user_exists 
                     && (
-                        $c->check_user_roles(qw/edit_object/) 
+                        $c->check_any_user_role(qw/edit_object edit_object_nsfw/)
                         || ( $c->user->id == $object->user_id ) 
                         )
                     ) ?
