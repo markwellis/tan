@@ -1,0 +1,27 @@
+#!/bin/bash
+
+BACKUP_DIR=/homez.365/thisaint/www/backups/tan/backups
+
+function delete_old_sys_backups(){
+    DIR=$BACKUP_DIR
+    LATEST_FILE=$(find $BACKUP_DIR \! \( -name 'db*' -prune \) -type f | xargs stat -c %Y | sort -rn | head -1)
+    DELETE_OLDER_THAN=$(_date_diff $LATEST_FILE)
+
+    find $DIR \! \( -name 'db*' -prune \) -mtime +$DELETE_OLDER_THAN -exec rm -rf "{}" \;
+}
+
+function delete_old_db_backups(){
+    DIR=$BACKUP_DIR/db
+    LATEST_FILE=$(find $DIR -type f | xargs -I '{}' stat -c %Y '{}' | sort -r | head -1)
+    DELETE_OLDER_THAN=$(_date_diff $LATEST_FILE)
+
+    find $DIR -mtime +$DELETE_OLDER_THAN -exec rm -rf "{}" \;
+}
+
+CURRENT_DAY=$(date +%s)
+function _date_diff(){
+    echo $((((($CURRENT_DAY-$1)/3600)/24)+70))
+}
+
+delete_old_sys_backups
+delete_old_db_backups
