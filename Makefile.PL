@@ -20,6 +20,7 @@ requires 'Catalyst::Plugin::Unicode::Encoding';
 requires 'Catalyst::Action::RenderView';
 requires 'Data::Dumper';
 requires 'parent';
+requires 'Catalyst::Model::DBIC::Schema';
 requires 'Config::JSON'; # This should reflect the config file format you've chosen, See Catalyst::Plugin::ConfigLoader for supported formats
 
 requires 'Module::Find';
@@ -28,7 +29,6 @@ requires 'Try::Tiny';
 requires 'Tie::Hash::Indexed';
 requires 'Number::Format';
 requires 'XML::Feed';
-requires 'XML::Feed::Entry';
 requires 'Time::HiRes';
 requires 'Text::Wrap';
 requires 'Scalar::Util';
