@@ -5,7 +5,6 @@ use namespace::autoclean;
 BEGIN { extends 'Catalyst::Controller'; }
 
 use POSIX qw/ceil/;
-use Gearman::Client;
 
 sub ping_sitemap: Event(object_created) Event(object_updated) Event(object_deleted){
     my ( $self, $c ) = @_;
