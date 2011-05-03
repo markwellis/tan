@@ -29,6 +29,7 @@ requires 'Try::Tiny';
 requires 'Tie::Hash::Indexed';
 requires 'Number::Format';
 requires 'XML::Feed';
+requires 'XML::Feed::Entry';
 requires 'Time::HiRes';
 requires 'Text::Wrap';
 requires 'Scalar::Util';
