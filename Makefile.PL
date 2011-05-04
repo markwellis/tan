@@ -14,7 +14,7 @@ requires 'Catalyst::Plugin::Email';
 requires 'Catalyst::Plugin::Session';
 requires 'Catalyst::Plugin::Session::Store::File';
 requires 'Catalyst::Plugin::Session::State::Cookie';
-requires 'Catalyst::Plugin::Authentication::Store::DBIx::Class';
+requires 'Catalyst::Plugin::Authentication::Store::DBIC';
 requires 'Catalyst::Plugin::Cache';
 requires 'Catalyst::Plugin::PageCache';
 requires 'Catalyst::Plugin::Unicode::Encoding';
