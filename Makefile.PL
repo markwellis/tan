@@ -23,6 +23,8 @@ requires 'Catalyst::Engine::Apache';
 requires 'Data::Dumper';
 requires 'parent';
 requires 'Catalyst::Model::DBIC::Schema';
+requires 'Test::WWW::Mechanize::Catalyst';
+requires 'Test::More';
 requires 'Config::JSON'; # This should reflect the config file format you've chosen, See Catalyst::Plugin::ConfigLoader for supported formats
 
 requires 'Module::Find';
@@ -103,6 +105,8 @@ requires 'HTML::StripScripts::Parser';
 
 #Parse::BBCode::TAN
 requires 'Parse::BBCode';
+
+#tests!
 
 install_script glob('script/*.pl');
 auto_install;
