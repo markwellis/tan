@@ -6,16 +6,20 @@ use inc::Module::Install;
 name 'TAN';
 all_from 'lib/TAN.pm';
 
+#authenitcation 
+#template toolkit 
+
 requires 'Catalyst::Runtime' => '5.80013';
 requires 'Catalyst::Plugin::ConfigLoader';
 requires 'Catalyst::Plugin::Authentication';
 requires 'Catalyst::Plugin::Authorization::Roles';
+requires 'Catalyst::Authentication::Store::DBIx::Class';
 requires 'Catalyst::Plugin::Email';
 requires 'Catalyst::Plugin::Session';
 requires 'Catalyst::Plugin::Session::Store::File';
 requires 'Catalyst::Plugin::Session::State::Cookie';
-requires 'Catalyst::Plugin::Authentication::Store::DBIC';
 requires 'Catalyst::Plugin::Cache';
+requires 'Cache::Memcached::libmemcached';
 requires 'Catalyst::Plugin::PageCache';
 requires 'Catalyst::Plugin::Unicode::Encoding';
 requires 'Catalyst::Action::RenderView';
@@ -23,7 +27,6 @@ requires 'Catalyst::Engine::Apache';
 requires 'Data::Dumper';
 requires 'parent';
 requires 'Catalyst::Model::DBIC::Schema';
-requires 'Test::WWW::Mechanize::Catalyst';
 requires 'Test::More';
 requires 'Config::JSON'; # This should reflect the config file format you've chosen, See Catalyst::Plugin::ConfigLoader for supported formats
 
@@ -53,6 +56,7 @@ requires 'Data::Page';
 requires 'utf8';
 requires 'DateTime';
 requires 'DateTime::Format::Human::Duration';
+requires 'Captcha::reCAPTCHA';
 
 #workers
 requires 'Storable';
@@ -106,7 +110,9 @@ requires 'HTML::StripScripts::Parser';
 #Parse::BBCode::TAN
 requires 'Parse::BBCode';
 
-#tests!
+test_requires 'Test::More';
+test_requires 'Test::Exception';
+test_requires 'Catalyst::Test';
 
 install_script glob('script/*.pl');
 auto_install;
