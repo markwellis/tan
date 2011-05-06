@@ -16,6 +16,7 @@ sub whos_online {
             },
         },{
             'select' => [\'DISTINCT(me.user_id)'],
+            'as' => 'user_id',
             'join' => 'user',
             'rows' => 30,
             'prefetch' => 'user',

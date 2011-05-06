@@ -11,6 +11,7 @@ use Number::Format;
 __PACKAGE__->config({
     'config' => 'Lib::Config',
     'wrapper' => 'Lib::Wrapper',
+    'namespace' => '',
 });
 
 sub file_mtime{

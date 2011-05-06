@@ -26,6 +26,7 @@ our $VERSION = 1.8.16;
 __PACKAGE__->config( name => 'TAN', 
     'Plugin::PageCache' => {
         'cache_hook' => 'check_cache',
+        'disable_index' => 0, 
         'key_maker' => sub {
             my $c = shift;
             my $path = $c->req->path || 'index';
@@ -47,7 +48,11 @@ sub check_cache{
     $c->stash->{'message'} = $c->flash->{'message'};
 
 #recored p.i.
-    if ( !$c->stash->{'pi_recorded'} && $c->action ne 'thumb/index' ){
+    if ( 
+        !$c->stash->{'pi_recorded'} 
+        && ( $c->action ne 'thumb/index' )
+        && ( $c->action ne 'minifier/index' )
+    ){
         my @params = split('/', $c->req->path);
 
         my $object_id = ( $c->action eq 'view/index' ) ? $params[2] : undef;
@@ -59,6 +64,7 @@ sub check_cache{
 
             eval{
             #might get a deadlock [284] - ignore in that case
+                $ENV{DBIC_NULLABLE_KEY_NOWARN} = 1; #we *do* want to lookup with a null value, so stop the warning about this is probably not what we want
                 $c->model('MySQL::Views')->update_or_create({
                     'session_id' => $session_id,
                     'object_id' => $object_id,
@@ -69,6 +75,7 @@ sub check_cache{
                 },{
                     'key' => 'session_objectid',
                 });
+                delete $ENV{DBIC_NULLABLE_KEY_NOWARN};
             };
         }
         #stop duplicate recordings

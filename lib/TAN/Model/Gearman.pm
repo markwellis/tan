@@ -18,6 +18,7 @@ has 'client' => (
     'isa' => 'Gearman::Client',
     'init_arg' => undef,
     'builder' => '_build_client',
+    'lazy' => 1,
 );
 
 sub _build_client{

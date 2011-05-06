@@ -23,6 +23,13 @@ sub auto: Private{
     return 1;
 }
 
+sub index: Private{
+    my ( $self, $c ) = @_;
+
+    $c->res->redirect('/index/all/0/');
+    $c->detach;
+}
+
 sub access_denied: Private{
     my ( $self, $c ) = @_;
 
