@@ -32,10 +32,10 @@ sub embed_url{
     return $embedder->url_to_embed( $url );
 }
 
-sub is_video{
+sub _is_video{
     my ( $self, $url ) = @_;
 
-    my ( $domain_reg, $uri ) = $embedder->is_video( $url );
+    my ( $domain_reg, $uri ) = $embedder->_is_video( $url );
 
     if ( $domain_reg ){
         return 1;
