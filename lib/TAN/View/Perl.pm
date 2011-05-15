@@ -22,7 +22,7 @@ sub file_mtime{
     return $stats[9];
 }
 
-my $embedder = new HTML::Video::Embed({
+my $embedder = HTML::Video::Embed->new({
     'width' => 500,
     'height' => 410,
 });
@@ -35,7 +35,9 @@ sub embed_url{
 sub is_video{
     my ( $self, $url ) = @_;
 
-    if ($embedder->is_video( $url )){
+    my ( $domain_reg, $uri ) = $embedder->is_video( $url );
+
+    if ( $domain_reg ){
         return 1;
     }
     return 0;

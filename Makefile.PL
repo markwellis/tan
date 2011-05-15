@@ -59,8 +59,10 @@ requires 'utf8';
 requires 'DateTime';
 requires 'DateTime::Format::Human::Duration';
 requires 'Captcha::reCAPTCHA';
+requires 'HTML::Video::Embed';
 
 #workers
+requires 'GearmanX::Simple::Worker';
 requires 'Storable';
 requires 'Config::Any';
 requires 'File::Basename';
@@ -80,10 +82,6 @@ requires 'LWPx::ParanoidAgent';
 
 ##doesnt belong in here!
 
-#GearmanX::Simple::Worker
-requires 'App::Daemon';
-requires 'Gearman::Worker';
-
 #Catalyst::Plugin::Event
 requires 'Text::SimpleTable';
 
@@ -101,10 +99,6 @@ requires 'URI';
 #Fetch::Image
 requires 'Data::Validate::Image';
 requires 'Data::Validate::URI';
-
-#HTML::Video::Embed
-requires 'URI::QueryParam';
-requires 'URI::Escape::XS';
 
 #Parse::TAN
 requires 'HTML::StripScripts::Parser';
