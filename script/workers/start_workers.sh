@@ -1,5 +1,5 @@
 USER=www-data
-LIB="-I /mnt/stuff/perl_lib/lib/perl5
+LIB="-I /mnt/stuff/perl_lib/lib/perl5"
 
 perl $LIB /var/www/thisaintnews.com/htdocs2/script/workers/search/search.pl start -u $USER > /dev/null 2>&1
 
