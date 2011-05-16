@@ -117,14 +117,14 @@ sub index: PathPart('') Chained('type') Args(1) {
     my $type = $c->stash->{'type'};
     my $object = $c->model('MySQL::Object')->get($c->stash->{'object_id'}, $type);
 
-    my $url = $object->url;
-    if ( $c->req->uri->path ne $url ){
-        $c->res->redirect( $url, 301 );
+    if ( !defined($object) || ( $object->deleted eq 'Y' ) ){
+        $c->forward('/gone');
         $c->detach();
     }
 
-    if ( !defined($object) || ( $object->deleted eq 'Y' ) ){
-        $c->forward('/gone');
+    my $url = $object->url;
+    if ( $c->req->uri->path ne $url ){
+        $c->res->redirect( $url, 301 );
         $c->detach();
     }
 
