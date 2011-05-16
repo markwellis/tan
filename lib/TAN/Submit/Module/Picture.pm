@@ -1,7 +1,6 @@
 package TAN::Submit::Module::Picture;
 use Moose;
 use namespace::autoclean;
-use Try::Tiny;
 
 with 'TAN::Submit::Module';
 
@@ -77,12 +76,7 @@ sub _build_config{
 
                     return if ( $c->stash->{'edit'} );
 
-                    return try{
-                        return $self->_fetcher->fetch( $url )
-                    } catch {
-                        chomp;
-                        Exception::Simple->throw( $_ );
-                    };
+                    return $self->_fetcher->fetch( $url ); #throws an Exception::Simple if fails
                 },
 
             ],
