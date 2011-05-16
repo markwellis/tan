@@ -60,6 +60,7 @@ requires 'DateTime';
 requires 'DateTime::Format::Human::Duration';
 requires 'Captcha::reCAPTCHA';
 requires 'HTML::Video::Embed';
+requires 'Fetch::Image';
 
 #workers
 requires 'GearmanX::Simple::Worker';
@@ -95,10 +96,6 @@ requires 'XML::Entities';
 
 #Catalyst::View::Perl::URL
 requires 'URI';
-
-#Fetch::Image
-requires 'Data::Validate::Image';
-requires 'Data::Validate::URI';
 
 #Parse::TAN
 requires 'HTML::StripScripts::Parser';
