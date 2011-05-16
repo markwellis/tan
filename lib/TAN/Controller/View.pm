@@ -117,7 +117,12 @@ sub index: PathPart('') Chained('type') Args(1) {
     my $type = $c->stash->{'type'};
     my $object = $c->model('MySQL::Object')->get($c->stash->{'object_id'}, $type);
 
-    if ( !defined($object) || ( $object->deleted eq 'Y' ) ){
+    if ( !defined($object) ){
+        $c->forward('/default');
+        $c->detach();
+    }
+
+    if ( $object->deleted eq 'Y' ){
         $c->forward('/gone');
         $c->detach();
     }
