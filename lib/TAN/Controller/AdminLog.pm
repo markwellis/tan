@@ -14,7 +14,7 @@ has 'prefetch' => (
 sub _build_prefetch{
     return [
         {
-            'object' => [qw/link blog picture poll/]
+            'object' => [qw/link blog picture poll video/]
         },
         qw/admin user comment/
     ];

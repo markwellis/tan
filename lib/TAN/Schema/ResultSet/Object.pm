@@ -6,7 +6,7 @@ use base 'DBIx::Class::ResultSet';
 
 use Data::Page;
 
-my $order_reg = qr/^promoted|plus|minus|views|comments$/;
+my $order_reg = qr/^(?:promoted|plus|minus|views|comments)$/;
 sub index {
     my ($self, $type, $page, $upcoming, $search, $order, $nsfw, $index_type) = @_;
     
@@ -39,7 +39,7 @@ sub index {
         }
 
         if ($type eq 'all'){
-            $type = ['link', 'blog', 'picture', 'poll'];
+            $type = ['link', 'blog', 'picture', 'poll', 'video'];
         }
         
         #order by newest to lastest
@@ -108,7 +108,7 @@ sub random{
     my $search = {};
     if ($type eq 'all'){
         my $rand = int(rand(3));
-        my @types = ('link', 'blog', 'picture', 'poll');
+        my @types = ('link', 'blog', 'picture', 'poll', 'video');
         $type = $types[$rand];
     }
     $search->{'type'} = $type;

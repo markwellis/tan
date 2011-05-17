@@ -37,6 +37,7 @@ sub _validate{
     Exception::Simple->throw("no type") if !$post_data->{'type'};
 
     my $module = $self->modules->{ $post_data->{'type'} };
+
     Exception::Simple->throw("invalid type") if !$module;
 
     my %schema = %{ $module->config->{'schema'} }; #duplicate config so we can delete things from it without it affecting the module
@@ -141,6 +142,9 @@ sub menu_items{
     my $menu = {};
     foreach my $key ( keys(%{$self->modules}) ){
         $menu->{ $self->modules->{ $key }->config->{'menu'}->{'position'} } = $key;
+        if ( my $alias = $self->modules->{ $key }->config->{'alias'} ){
+            $menu->{ $alias->{'menu'}->{'position'} } = $alias->{'name'};
+        }
     }
 
     my @items = map $menu->{$_}, sort(keys(%{$menu}));

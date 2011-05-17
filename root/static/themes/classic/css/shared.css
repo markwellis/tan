@@ -230,6 +230,17 @@ fieldset{
     background-color:#002366 !important;
 }
 
+/* video */
+
+.TAN-type-video, .TAN-menu-video > li > a{
+    color:#800000;
+}
+
+.TAN-type-video:hover, .TAN-menu-tab-video-selected, .TAN-menu-video > li > a:hover{
+    color:#fff !important;
+    background-color:#800000 !important;
+}
+
 /* ads */
 
 .TAN-top-ad{   	 	 
