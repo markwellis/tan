@@ -7,14 +7,14 @@ CREATE  TABLE IF NOT EXISTS `tan`.`video` (
   `picture_id` BIGINT(20) NOT NULL ,
   `url` VARCHAR(400) NOT NULL ,
   PRIMARY KEY (`video_id`) ,
-  INDEX `fk_link_1` (`video_id` ASC) ,
-  INDEX `fk_link_2` (`picture_id` ASC) ,
-  CONSTRAINT `fk_link_10`
+  INDEX `fk_video_1` (`video_id` ASC) ,
+  INDEX `fk_video_2` (`picture_id` ASC) ,
+  CONSTRAINT `fk_video_10`
     FOREIGN KEY (`video_id` )
     REFERENCES `tan`.`object` (`object_id` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_link_20`
+  CONSTRAINT `fk_video_20`
     FOREIGN KEY (`picture_id` )
     REFERENCES `tan`.`picture` (`picture_id` )
     ON DELETE NO ACTION
