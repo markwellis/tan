@@ -110,14 +110,11 @@ around 'prepare' => sub {
 
     my $prepared = $self->$orig( $c, $params, $validator_return_values );
 
-    #3rd validator returns true if video
-warn Data::Dumper::Dumper( $validator_return_values );
     if ( $validator_return_values->[0] eq 'video' ) {
         $prepared->{'type'} = 'video'; 
     } else {
         $prepared->{'type'} = 'link';
     }
-warn Data::Dumper::Dumper( $prepared );
 
     return $prepared;
 };

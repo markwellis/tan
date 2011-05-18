@@ -32,7 +32,7 @@ sub index: Private{
     $sitemap_count = ceil($sitemap_count / 1000);
 
     my @sitemaps;
-    foreach my $count ( 0..$sitemap_count ){
+    foreach my $count ( 1..$sitemap_count ){
         push(@sitemaps, "<sitemap><loc>" . $c->uri_for('xml', (sprintf("%06d", $count))) . "</loc></sitemap>");
     }
 
@@ -49,7 +49,7 @@ sub xml: Path('xml') Args(1){
     my ( $self, $c, $page ) = @_;
 
     $c->cache_page(3600);
-
+    $page = int($page); #convert into a real number
     if ( !defined($page) ){
         $c->forward('/default');
         $c->detach();
