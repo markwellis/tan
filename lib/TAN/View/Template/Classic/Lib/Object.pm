@@ -12,11 +12,8 @@ sub process{
     my $object_url = $object->url;
     my $is_video = 0;
 
-    if ( $type eq 'link' ){
-        $is_video = $c->view->is_video($object->link->url);
-        if ( $is_video ){
-            $is_video = $c->view->embed_url($object->link->url);
-        }
+    if ( $type eq 'video' ){
+        $is_video = $c->view->embed_url($object->video->url);
     }
 
     my $url;
@@ -64,7 +61,7 @@ sub process{
                     @{[ $c->view->html($object->user->username) ]}
                 </a>
                 @{[ ( $object->promoted ) ? "promoted @{[ $object->promoted ]} ago" : $object->created . ' ago' ]}
-                <span class="TAN-type-${type}"> [@{[ $is_video ? "video" : $type ]}]</span>
+                <span class="TAN-type-${type}"> [${type}]</span>
             </li>
             <li>
                 <a href="${comment_url}" class="TAN-news-comment">
@@ -73,8 +70,11 @@ sub process{
                 @{[ ( ($type eq 'poll') ) ?
                      qq#| @{[ $object->poll->votes || 0 ]} votes#
                 : '' ]}
-                @{[ ( $type eq 'link' ) ?
-                     qq#| @{[ $c->view->domain($object->link->url) ]}#
+                @{[ (
+                        ( $type eq 'link' ) 
+                        || ( $type eq 'video' ) 
+                    ) ?
+                     qq#| @{[ $c->view->domain($object->$type->url) ]}#
                 : '' ]}
                 @{[ ( $c->user_exists 
                     && (
@@ -119,7 +119,10 @@ sub article{
     if ( $type eq 'blog' ){
         $out .= '</p>';
     }
-    if ( $type eq 'link' ){
+    if ( 
+        ( $type eq 'link' )
+        || ( $type eq 'video' )
+    ){
         if ( $is_video ){
             $out .= qq\<div class="TAN-video">
                 ${is_video}

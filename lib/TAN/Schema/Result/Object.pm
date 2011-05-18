@@ -99,6 +99,12 @@ __PACKAGE__->might_have(
 );
 
 __PACKAGE__->might_have(
+  "video",
+  "TAN::Schema::Result::Video",
+  { "foreign.video_id" => "self.object_id" },
+);
+
+__PACKAGE__->might_have(
   "picture",
   "TAN::Schema::Result::Picture",
   { "foreign.picture_id" => "self.object_id" },

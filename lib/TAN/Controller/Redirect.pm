@@ -58,8 +58,14 @@ sub external: Local Args(1){
     $object_id =~ s/$not_int_reg//g;
 
     my $object_rs = $c->model('MySQL::Object')->find($object_id);
-    if ( defined($object_rs) && ($object_rs->type eq 'link') ){
-    #links have urls
+    if ( 
+        defined($object_rs) 
+        && (
+            ($object_rs->type eq 'link')
+            || ($object_rs->type eq 'video')
+        )
+    ){
+    #links or videos have urls
         my $session_id = $c->sessionid;
         my $ip_address = $c->req->address;
 
@@ -77,7 +83,8 @@ sub external: Local Args(1){
                 'key' => 'session_objectid',
             });
         }
-        $c->res->redirect( $object_rs->link->url, 303 );
+        my $type = $object_rs->type;
+        $c->res->redirect( $object_rs->$type->url, 303 );
     } else {
     # not a link
         $c->forward('/default');

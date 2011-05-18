@@ -14,6 +14,8 @@ requires 'Catalyst::Plugin::ConfigLoader';
 requires 'Catalyst::Plugin::Authentication';
 requires 'Catalyst::Plugin::Authorization::Roles';
 requires 'Catalyst::Authentication::Store::DBIx::Class';
+requires 'DBIx::Class::InflateColumn::DateTime';
+requires 'DateTime::Format::MySQL';
 requires 'Catalyst::Plugin::Email';
 requires 'Catalyst::Model::Adaptor';
 requires 'Catalyst::Model::Factory::PerRequest';

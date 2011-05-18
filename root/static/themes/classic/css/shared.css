@@ -122,6 +122,7 @@ fieldset{
     position:relative;
     width:100%;
     clear:both;
+    height:130px;
 }
 
 .TAN-menu{
@@ -228,6 +229,17 @@ fieldset{
 .TAN-type-poll:hover, .TAN-menu-tab-poll-selected, .TAN-menu-poll > li > a:hover{
     color:#fff !important;
     background-color:#002366 !important;
+}
+
+/* video */
+
+.TAN-type-video, .TAN-menu-video > li > a{
+    color:#800000;
+}
+
+.TAN-type-video:hover, .TAN-menu-tab-video-selected, .TAN-menu-video > li > a:hover{
+    color:#fff !important;
+    background-color:#800000 !important;
 }
 
 /* ads */

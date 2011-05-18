@@ -13,7 +13,18 @@ sub process{
 
     my $module = $c->model('Submit')->modules->{ $c->stash->{'type'} };
 
-    return undef if !$module;
+    #try alias
+    if ( !$module ){
+        my $modules = $c->model('Submit')->modules;
+        foreach my $mod ( values %{$modules} ){
+            next if ( !defined ( $mod->config->{'alias'} ) );
+            if ( $c->stash->{'type'} eq $mod->config->{'alias'}->{'name'} ){
+                $module = $mod;
+                last;
+            }
+        }
+        return undef if !$module;
+    }
 
     my $output = qq\
         <form action="post" id="submit_form" method="post" enctype="multipart/form-data">
@@ -117,6 +128,8 @@ sub process{
         $nsfw = ( $object->nsfw eq 'Y' ) ? 1 : undef; 
     }
     $nsfw = $params->{'nsfw'} || $nsfw || undef;
+    my @submit_type = split( '::', ref( $module ) );
+
     $output .= qq\
                     <li>
                         <label for="nsfw">Not Safe for Work?</label>
@@ -124,7 +137,7 @@ sub process{
                     </li>
                 </ul>
                 <input type="submit" value="Submit @{[ ucfirst( $c->stash->{'type'} ) ]}"/>
-                <input type="hidden" name="type" value="@{[ $c->stash->{'type'} ]}" />\;
+                <input type="hidden" name="type" value="@{[ lc( $submit_type[-1] ) ]}" />\;
 
 
     if ( $c->stash->{'edit'} && $c->check_user_roles(qw/delete_object/) ){

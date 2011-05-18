@@ -80,6 +80,7 @@ sub post: PathPart('post') Chained('validate_user') Args(){
 sub update_object: Private{
     my ( $self, $c, $prepared ) = @_;
 
+    delete( $prepared->{'type'} ); #don't need this on edit, can't turn a link into a video or vice versa, so disregard it
     my $type = $c->stash->{'type'};
     my $tags = delete( $prepared->{'tags'} );
 

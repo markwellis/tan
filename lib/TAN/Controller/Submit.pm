@@ -37,6 +37,7 @@ sub post: PathPart('post') Chained('type') Args(0){
     my ( $self, $c ) = @_;
 
     my $prepared = $c->forward('validate_and_prepare');
+    my $type = $prepared->{'type'} || $c->stash->{'type'};
 
     my $tags = delete( $prepared->{'tags'} );
 
@@ -51,7 +52,7 @@ sub post: PathPart('post') Chained('type') Args(0){
 
     $c->flash->{'message'} = 'Submission complete';
 
-    $c->res->redirect("/index/@{[ $c->stash->{'type'} ]}/1/", 303);
+    $c->res->redirect("/index/@{[ $type ]}/1/", 303);
     $c->detach();
 }
 
@@ -93,7 +94,7 @@ sub validate_and_prepare: Private{
 sub create_new: Private{
     my ( $self, $c, $prepared ) = @_;
     
-    my $type = $c->req->param('type');
+    my $type = delete( $prepared->{'type'} ) || $c->req->param('type');
     return $c->model('MySQL::Object')->create({
         'type' => $type,
         'created' => \'NOW()',

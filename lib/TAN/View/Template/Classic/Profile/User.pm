@@ -40,6 +40,11 @@ sub process{
             %search_opts,
         })->count || 0;
 
+    my $video_count = $user->objects->search({
+            'type' => 'video',
+            %search_opts,
+        })->count || 0;
+
     push(@{$c->stash->{'css_includes'}}, 'Profile');
 
     return qq\
@@ -59,6 +64,7 @@ sub process{
                 <ul class="TAN-id-card">
                     <li>
                         <img class="TAN-news-avatar" src="@{[ $user->avatar($c) ]}" alt="@{[ $c->view->html($user->username) ]}" />
+                        <br />
                         <br />
                         <br />
                         @{[
@@ -95,6 +101,11 @@ sub process{
                                 @{[ $poll_count ? '<a href="polls">' : '' ]}
                                     Polls: ${poll_count}
                                 @{[ $poll_count ? '</a>' : '' ]}
+                            </li>
+                            <li>
+                                @{[ $video_count ? '<a href="videos">' : '' ]}
+                                    Videos: ${video_count}
+                                @{[ $video_count ? '</a>' : '' ]}
                             </li>
                         </ul>
                     </li>

@@ -10,6 +10,8 @@ sub clear_index_caches: Event(object_created) Event(object_deleted) Event(commen
     $c->clear_cached_page('/profile/.*/links');
     $c->clear_cached_page('/profile/.*/blogs');
     $c->clear_cached_page('/profile/.*/pictures');
+    $c->clear_cached_page('/profile/.*/polls');
+    $c->clear_cached_page('/profile/.*/videos');
 }
 
 sub clear_comment_caches: Event(comment_deleted){
@@ -136,7 +138,7 @@ sub comments: PathPart('comments') Chained('user') Args(0){
         },
         {
             'prefetch' => ['user', {
-                'object' => ['link', 'blog', 'picture'],
+                'object' => ['link', 'blog', 'picture', 'poll', 'video'],
             }],
             'page' => $page,
             'rows' => 50,
@@ -195,6 +197,17 @@ sub polls: PathPart('polls') Chained('user') Args(0){
     my ( $self, $c ) = @_;
 
     $c->forward('fetch', ['poll']);
+
+    $c->stash(
+        'template' => 'Index',
+        'can_rss' => 1,
+    );
+}
+
+sub videos: PathPart('videos') Chained('user') Args(0){
+    my ( $self, $c ) = @_;
+
+    $c->forward('fetch', ['video']);
 
     $c->stash(
         'template' => 'Index',

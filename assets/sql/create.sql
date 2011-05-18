@@ -27,7 +27,7 @@ DEFAULT CHARACTER SET = utf8;
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `tan`.`object` (
   `object_id` BIGINT(20) NOT NULL AUTO_INCREMENT ,
-  `type` ENUM('link','blog','picture','profile','poll') NOT NULL ,
+  `type` ENUM('link','blog','picture','profile','poll', 'video') NOT NULL ,
   `created` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ,
   `promoted` TIMESTAMP NULL DEFAULT NULL ,
   `user_id` BIGINT(20) NOT NULL ,
@@ -460,9 +460,35 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
+-- Table `tan`.`video`
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS `tan`.`video` (
+  `video_id` BIGINT(20) NOT NULL ,
+  `title` VARCHAR(255) NOT NULL ,
+  `description` VARCHAR(1000) NOT NULL ,
+  `picture_id` BIGINT(20) NOT NULL ,
+  `url` VARCHAR(400) NOT NULL ,
+  PRIMARY KEY (`video_id`) ,
+  INDEX `fk_link_1` (`video_id` ASC) ,
+  INDEX `fk_link_2` (`picture_id` ASC) ,
+  CONSTRAINT `fk_video_10`
+    FOREIGN KEY (`video_id` )
+    REFERENCES `tan`.`object` (`object_id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_video_20`
+    FOREIGN KEY (`picture_id` )
+    REFERENCES `tan`.`picture` (`picture_id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
 -- Placeholder table for view `tan`.`recent_comments`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `tan`.`recent_comments` (`comment_id` INT, `comment` INT, `created` INT, `object_id` INT, `type` INT, `nsfw` INT, `link_title` INT, `picture_title` INT, `blog_title` INT, `poll_title` INT, `username` INT);
+CREATE TABLE IF NOT EXISTS `tan`.`recent_comments` (`comment_id` INT, `comment` INT, `created` INT, `object_id` INT, `type` INT, `nsfw` INT, `link_title` INT, `picture_title` INT, `blog_title` INT, `poll_title` INT, `video_title` INT, `username` INT);
 
 -- -----------------------------------------------------
 -- View `tan`.`recent_comments`
@@ -471,7 +497,7 @@ DROP TABLE IF EXISTS `tan`.`recent_comments`;
 USE `tan`;
 CREATE  OR REPLACE VIEW `tan`.`recent_comments` AS
 
-SELECT me.comment_id, me.comment, me.created, me.object_id, object.type, object.nsfw, link.title link_title, picture.title picture_title, blog.title blog_title, poll.title poll_title, user.username FROM comments me USE INDEX (recent) JOIN object object ON object.object_id = me.object_id LEFT JOIN link link ON link.link_id = me.object_id LEFT JOIN picture picture ON picture.picture_id = me.object_id LEFT JOIN blog blog ON blog.blog_id = me.object_id LEFT JOIN poll poll ON poll.poll_id = me.object_id JOIN user user ON user.user_id = me.user_id WHERE ( me.deleted = 'N' ) AND ( object.deleted = 'N' ) ORDER BY me.created DESC LIMIT 20;
+SELECT me.comment_id, me.comment, me.created, me.object_id, object.type, object.nsfw, link.title link_title, picture.title picture_title, blog.title blog_title, poll.title poll_title, video.title video_title, user.username FROM comments me USE INDEX (recent) JOIN object object ON object.object_id = me.object_id LEFT JOIN link link ON link.link_id = me.object_id LEFT JOIN picture picture ON picture.picture_id = me.object_id LEFT JOIN blog blog ON blog.blog_id = me.object_id LEFT JOIN poll poll ON poll.poll_id = me.object_id LEFT JOIN video video ON video.video_id = me.object_id JOIN user user ON user.user_id = me.user_id WHERE ( me.deleted = 'N' ) AND ( object.deleted = 'N' ) ORDER BY me.created DESC LIMIT 20;
 USE `tan`;
 
 DELIMITER $$
