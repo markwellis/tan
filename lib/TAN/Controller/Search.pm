@@ -37,7 +37,7 @@ sub delete_from_index: Event(object_deleted) Event(mass_objects_deleted){
 sub index: Path Args(0){
     my ( $self, $c ) = @_;
 
-    my $q = $c->req->param('q');
+    my $q = $c->req->param('q') . '';
     my $page = $c->req->param('page') || 1;
 
     #nsfw...
@@ -51,7 +51,7 @@ sub index: Path Args(0){
     }
 
     $c->stash(
-        'page_title' => $c->req->param('q') . " - Search",
+        'page_title' => ( $c->req->param('q') || '' ) . " - Search",
         'template' => 'Index',
     );
 }
