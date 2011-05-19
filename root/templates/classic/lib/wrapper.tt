@@ -133,8 +133,8 @@
                     </form>
                 </div>
                 <div class="TAN-menu-ad-holder">
-                    @{[ $c->view->template('Lib::Menu') ]}
-                    @{[ $c->view->template('Lib::Ad', 'top') ]}
+                    [% PROCESS lib/menu.tt %]
+                    [% PROCESS lib/ad.tt position='top' %]
                 </div>
             </div>
             <div class="TAN-main">
