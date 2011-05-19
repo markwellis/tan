@@ -1,6 +1,6 @@
 {
     "name": "TAN",
-    "default_view": "Perl",
+    "default_view": "TT",
     "encoding": "UTF-8",
 
     "using_frontend_proxy": 1,

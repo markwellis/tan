@@ -120,7 +120,8 @@ sub avatar{
 
     if ( -e $avatar_image ){
     #avatar exists
-        $avatar_http = "$avatar_http?m=@{[ $c->view->file_mtime($avatar_image) ]}";
+        my @stats = stat($avatar_image);
+        $avatar_http = "$avatar_http?m=" . $stats[9];
     } else {
         $avatar_http = "@{[ $c->config->{'static_path'} ]}/images/_user.png";
     }

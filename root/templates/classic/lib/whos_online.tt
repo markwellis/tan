@@ -1,0 +1,14 @@
+[%- PROCESS whos_online_block -%]
+
+[%- BLOCK whos_online_block -%]
+    [%- FOREACH user IN c.model('MySQL::Views').whos_online -%]
+        [%- username = user.username | html -%]
+        <a href="[% user.profile_url %]">
+            <img 
+                title="[% username %]" 
+                alt="[% username %]" 
+                src="[% user.avatar(c) %]" 
+            />
+        </a>
+    [%- END -%]
+[%- END -%]

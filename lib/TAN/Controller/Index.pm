@@ -62,7 +62,7 @@ sub index :Path Args(2) {
         }
     }
     
-    $c->stash->{'template'} = 'Index';
+    $c->stash->{'template'} = 'index.tt';
 }
 
 __PACKAGE__->meta->make_immutable;
