@@ -1,0 +1,16 @@
+[%- PROCESS css_includes_block -%]
+
+[%- BLOCK css_includes_block -%]
+    [% FOREACH css_include IN css_includes %]
+        [%#replace @ with / so we can get the file mod time %]
+        [% css_file = css_include.replace('@/g', '/') %]
+        [% m_time = "${c.path_to('root')}${theme_settings.css_path}/${css_file}.css" | file_mtime %]
+
+        <link 
+            type="text/css" 
+            rel="stylesheet" 
+            media="screen" 
+            href="[% c.config.csscache_path %]/[% theme_settings.name %]_[% css_include %]_[% m_time %].css"
+        />
+    [%- END -%]
+[%- END -%]

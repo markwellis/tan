@@ -1,8 +1,7 @@
-[%
-    # probably wrong 
-%]
-[%- USE rss_url = url(c.req.uri, rss=1) -%]
-<!DOCTYPE  html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+[%- PROCESS wrapper_block -%]
+
+[%- BLOCK wrapper_block -%]
+    <!DOCTYPE  html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
     <html xmlns="http://www.w3.org/1999/xhtml">
         <head>
             [%- IF page_title.defined -%]
@@ -10,7 +9,7 @@
             [%- ELSE -%]
                 [%- page_title = 'This Aint News' -%]
             [% END %]
-            <title>[% page_title %]This Aint News</title>
+            <title>[% page_title %]</title>
             <meta 
                 name="Description" 
                 content="[% page_meta_description | html %]" 
@@ -32,6 +31,8 @@
                 href="/static/opensearchplugin.xml"
             />
             [%- IF can_rss %]
+                [%- USE rss_url = url("/${c.req.path}", c.req.params) -%]
+                [%- rss_url = rss_url(rss=1) -%]
                 <link 
                     rel="alternate" 
                     type="application/rss+xml" 
@@ -41,126 +42,131 @@
             [%- END %]
         </head>
         <body>
-        [%- PROCESS lib/js_includes.tt %]
-        <div class="TAN-header">
-            <h1 class="TAN-logo">
-                <a title="This Aint News" href="/index/all/0/">This Aint News</a>
-            </h1>
-            <div class="TAN-menu-top right">
-                <form 
-                    class="right" 
-                    method="post" 
-                    action="https://www.paypal.com/cgi-bin/webscr"
-                >
-                    <fieldset>
-                        <input type="hidden" value="_xclick" name="cmd" />
-                        <input 
-                            type="hidden" 
-                            value="donate@thisaintnews.com" 
-                            name="business"
-                        />
-                        <input 
-                            type="hidden" 
-                            value="TAN Donation" 
-                            name="item_name" 
-                        />
-                        <input 
-                            type="hidden" 
-                            value="[%
-                                IF c.user_exists; 
-                                    c.user.username | html;
-                                ELSE;
-                                    'n00b'; 
-                                END 
-                            %]" 
-                            name="item_number" 
-                        />
-                        <input type="hidden" value="GBP" name="currency_code" />
-                        <input type="hidden" value="0" name="tax" />
-                        <input 
-                            type="image" 
-                            alt="Donate" 
-                            name="submit" 
-                            src="/static/images/paypal.gif"
-                        />
-                    </fieldset>
-                </form>
-                <p>
-                    [%- IF can_rss %]
-                        <a href="[% rss_url %]">
-                            <img 
-                                src="/static/images/rss.png" 
-                                alt="rss" 
-                                class="TAN-rss-icon" 
+            [%- PROCESS lib/js_includes.tt %]
+            <div class="TAN-header">
+                <h1 class="TAN-logo">
+                    <a title="This Aint News" href="/index/all/0/">This Aint News</a>
+                </h1>
+                <div class="TAN-menu-top right">
+                    <form 
+                        class="right" 
+                        method="post" 
+                        action="https://www.paypal.com/cgi-bin/webscr"
+                    >
+                        <fieldset>
+                            <input type="hidden" value="_xclick" name="cmd" />
+                            <input 
+                                type="hidden" 
+                                value="donate@thisaintnews.com" 
+                                name="business"
                             />
-                        </a>
-                    [%- END %]
-                    <a href="http://www.twitter.com/thisaintnews">
-                        <img 
-                            src="/static/images/twitter.png" 
-                            height="15" 
-                            width="15" 
-                            alt="Follow thisaintnews on Twitter"
-                        />
-                    </a> |
-                    <a href="http://stats.thisaintnews.com">Stats</a> |
-                    <a class="mibbit" href="/chat/">Chat</a>
-                    [%- IF c.user_exists %]
-                        | <a href="/login/logout/">Logout</a>
-                    [%- END %]
-                </p>
-                <p>
-                    [%- IF c.user_exists %]
-                        <a href="[% c.user.profile_url %]">Profile</a> |
-                    [%- ELSE -%]
-                        <a href="/login/">Login/Register</a> | 
-                    [%- END %]
-                    <a href="/filter/" class="nsfw_filter">[% c.nsfw ? 'Enable' : 'Disable' %] filter</a> | 
-                    <a href="/adminlog/">Admin Log</a> |
-                    <a href="/faq/">FAQ</a>                    
-                </p>
-                <form class="TAN-menu-top-search" action="/search/" method="get">
-                    <fieldset>
-                        <input
-                            type="text" 
-                            size="31" 
-                            name="q" 
-                            value="[% c.req.param('q') %]"
-                        />
-                        <input type="submit" value="Search" />
-                    </fieldset>
-                </form>
+                            <input 
+                                type="hidden" 
+                                value="TAN Donation" 
+                                name="item_name" 
+                            />
+                            <input 
+                                type="hidden" 
+                                value="[%
+                                    IF c.user_exists; 
+                                        c.user.username | html;
+                                    ELSE;
+                                        'n00b'; 
+                                    END 
+                                %]" 
+                                name="item_number" 
+                            />
+                            <input type="hidden" value="GBP" name="currency_code" />
+                            <input type="hidden" value="0" name="tax" />
+                            <input 
+                                type="image" 
+                                alt="Donate" 
+                                name="submit" 
+                                src="/static/images/paypal.gif"
+                            />
+                        </fieldset>
+                    </form>
+                    <p>
+                        [%- IF can_rss %]
+                            <a href="[% rss_url %]">
+                                <img 
+                                    src="/static/images/rss.png" 
+                                    alt="rss" 
+                                    class="TAN-rss-icon" 
+                                />
+                            </a>
+                        [%- END %]
+                        <a href="http://www.twitter.com/thisaintnews">
+                            <img 
+                                src="/static/images/twitter.png" 
+                                height="15" 
+                                width="15" 
+                                alt="Follow thisaintnews on Twitter"
+                            />
+                        </a> |
+                        <a href="http://stats.thisaintnews.com">Stats</a> |
+                        <a class="mibbit" href="/chat/">Chat</a>
+                        [%- IF c.user_exists %]
+                            | <a href="/login/logout/">Logout</a>
+                        [%- END %]
+                    </p>
+                    <p>
+                        [%- IF c.user_exists %]
+                            <a href="[% c.user.profile_url %]">Profile</a> |
+                        [%- ELSE -%]
+                            <a href="/login/">Login/Register</a> | 
+                        [%- END %]
+                        <a href="/filter/" class="nsfw_filter">[% c.nsfw ? 'Enable' : 'Disable' %] filter</a> | 
+                        <a href="/adminlog/">Admin Log</a> |
+                        <a href="/faq/">FAQ</a>                    
+                    </p>
+                    <form class="TAN-menu-top-search" action="/search/" method="get">
+                        <fieldset>
+                            <input
+                                type="text" 
+                                size="31" 
+                                name="q" 
+                                value="[% c.req.param('q') %]"
+                            />
+                            <input type="submit" value="Search" />
+                        </fieldset>
+                    </form>
+                </div>
+                <div class="TAN-menu-ad-holder">
+                    @{[ $c->view->template('Lib::Menu') ]}
+                    @{[ $c->view->template('Lib::Ad', 'top') ]}
+                </div>
             </div>
-            <div class="TAN-menu-ad-holder">
-                @{[ $c->view->template('Lib::Menu') ]}
-                @{[ $c->view->template('Lib::Ad', 'top') ]}
+            <div class="TAN-main">
+                @{[ $c->view->template('Lib::RecentComments') ]}
+                <script type="text/javascript">
+                //<![CDATA[
+                    [% IF message.defined %]
+                        window.addEvent('domready', function(){
+                            TAN.alert("[% message | trim | html %]");
+                        });
+                    [% END %]
+                    var mibbit_nick = '[% 
+                        ( c.user_exists ? c.user.username : 'n00b' ) | html
+                    %]';
+                //]]>
+                </script>
+                [% IF message.defined %]
+                    <noscript>
+                        <h1>[% message %]</h1>
+                    </noscript>
+                [% END %]
+                [% content %]
             </div>
-        </div>
-        <div class="TAN-main">
-            @{[ $c->view->template('Lib::RecentComments') ]}
-        <script type="text/javascript">
-        //<![CDATA[
-            [% IF message.defined %]
-                window.addEvent('domready', function(){
-                    TAN.alert("[% message | trim | html %]");
-                });
-            [% END %]
-            var mibbit_nick = '[% 
-                ( c.user_exists ? c.user.username : 'n00b' ) | html
-            %]';
-        //]]>
-        </script>
-        [% IF message.defined %]
-            <noscript>
-                <h1>[% message %]</h1>
-            </noscript>
-        [% END %]
-        [% content %]
-    </div>
-    <div id="TAN-bottom"></div>
-    <div class="TAN-footer">
-        <span class="TAN-whos-online">[% PROCESS lib/whos_online.tt %]</span>
-        <span class="right"><a href="#">Up</a>&#160;<a href="#TAN-bottom">Down</a></span>
-    </div>
-    </body>
-</html>
+            <div id="TAN-bottom"></div>
+            <div class="TAN-footer">
+                <span class="TAN-whos-online">
+                    [% PROCESS lib/whos_online.tt %]
+                </span>
+                <span class="right">
+                    <a href="#">Up</a>&#160;<a href="#TAN-bottom">Down</a>
+                </span>
+            </div>
+        </body>
+    </html>
+[%- END -%]
