@@ -55,19 +55,17 @@ sub file_exists{
 }
 
 sub file_mtime{
-    my $file = shift;
-    my @stats = stat($file);
+    my @stats = stat(shift);
 
     return $stats[9];
 }
 
 sub strip_tags{
-    my ( $self, $text ) = @_;
-    
     my $tree = HTML::TreeBuilder->new;
-    $tree->parse($text);
+    $tree->parse(shift);
     $tree->eof;
 
+    my $text;
     if ($tree) {
         $text = $tree->as_text();
         $tree = $tree->delete;

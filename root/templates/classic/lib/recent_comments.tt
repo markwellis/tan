@@ -1,0 +1,67 @@
+[%- PROCESS recent_comments_block -%]
+
+[%- BLOCK recent_comments_block -%]
+    <ul class="TAN-recent-comments left">
+        [%- IF index.defined -%]
+            <li class="TAN-order-by">
+                Order <select>
+                    <option value="date" [% IF order == 'date' %]selected="selected"[% END %]>Date</option>
+                    <option value="comments" [% IF order == 'comments' %]selected="selected"[% END %]>Comments</option>
+                    <option value="plus" [% IF order == 'plus' %]selected="selected"[% END %]>IsNews</option>
+                    <option value="minus" [% IF order == 'minus' %]selected="selected"[% END %]>AintNews</option>
+                    <option value="views" [% IF order == 'views' %]selected="selected"[% END %]>Views</option>
+                </select>
+            </li>
+        [%- END -%]
+
+        [%- grouped_comments = c.model('MySQL::RecentComments').grouped -%]
+        [%- FOREACH object_id IN grouped_comments.keys() -%]
+            [%- type = grouped_comments.${object_id}.0.type -%]
+            [%- title_key = type _ '_title' -%]
+
+            [%- title = grouped_comments.${object_id}.0.${title_key} | html -%]
+            [%- IF grouped_comments.${object_id}.0.nsfw == 'Y' -%]
+                [%- IF !c.nsfw -%]
+                    [%- NEXT -%]
+                [%- ELSE -%]
+                    [%- title = "[NSFW] ${title}" -%]
+                [%- END -%]
+            [%- END -%]
+            <li>
+                <a 
+                    href="[% grouped_comments.${object_id}.0.url %]" 
+                    class="TAN-type-[% type %]" 
+                    title="[% title %]"
+                >
+                    [% title %]
+                </a>
+                <ul>
+                    [%- FOREACH comment IN grouped_comments.${object_id} -%]
+                        [% orig_comment = comment.comment | strip_tags %]
+
+                        [%- short_comment = orig_comment.substr(0, 50) | html -%]
+                        [%- long_comment = orig_comment.substr(0, 400) -%]
+
+                        [%- IF short_comment != orig_comment -%]
+                            [%- short_comment = "${short_comment}..." -%]
+                        [%- END -%]
+                        [%- IF long_comment != orig_comment -%]
+                            [%- long_comment = "${long_comment}..." -%]
+                        [%- END -%]
+                        
+                        [%- tip_title = "${comment.username}::${long_comment}" | html -%]
+                        <li>
+                            <a 
+                                href="[% comment.url %]#comment[% comment.comment_id %]"
+                                title="[% tip_title %]"
+                            >[% short_comment %]</a>
+                        </li>
+                    [%- END -%]
+                </ul>
+            </li>
+        [%- END -%]
+        <li>
+            [% PROCESS lib/ad.tt position='left' %]
+        </li>
+    </ul>
+[%- END -%]

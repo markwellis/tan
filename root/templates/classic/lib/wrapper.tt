@@ -138,7 +138,7 @@
                 </div>
             </div>
             <div class="TAN-main">
-                @{[ $c->view->template('Lib::RecentComments') ]}
+                [% PROCESS lib/recent_comments.tt %]
                 <script type="text/javascript">
                 //<![CDATA[
                     [% IF message.defined %]

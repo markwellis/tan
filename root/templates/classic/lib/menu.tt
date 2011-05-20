@@ -14,7 +14,7 @@
     [%- END -%]
 
     <div class="TAN-menu left">
-        <ul class="TAN-menu-tab-holder">\;
+        <ul class="TAN-menu-tab-holder">
     
             [%- FOREACH name IN menu_tab_names -%]
                 [%- count = loop.count - 1 -%]
