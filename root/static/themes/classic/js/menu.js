@@ -42,11 +42,13 @@ window.addEvent('domready', function() {
         $$('.TAN-order-by select').addEvent('change', function(e) {
             var oper = (window.location.toString().indexOf('?') !== -1) ? '&' : '?';
             var order = 'order=' + this.value;
-
-            if (window.location.toString().indexOf('order=') !== -1){
-                window.location = window.location.toString().replace(/order\=\w+/, order);
+            var locs = window.location.toString().split('#');
+            if (locs[0].indexOf('order=') !== -1){
+                locs[0] = locs[0].replace(/order\=\w+/, order);
+                window.location = locs.join('#');
             } else {
-                window.location = window.location + oper + order;
+                locs[0] = locs[0] + oper + order;
+                window.location = locs.join('#');
             }
             e.stop();
         });
