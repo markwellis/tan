@@ -17,7 +17,7 @@ sub auto: Private{
             'name' => 'classic',
         },
         'type' => 'all',
-        'template_namespace' => 'Template::Classic',
+        'location' => 'all',
     );
     
     return 1;
