@@ -41,7 +41,7 @@
     [%- max = total_pages -%]
 [%- END -%]
 
-<div class="[% IF type == 'picture' %]clear[% END %]TAN-news-pagination">
+<div class="[% IF type == 'picture' %]clear[% END %] TAN-news-pagination">
     [%- IF lower != 1 -%]
         <a 
             class="TAN-news-page-number" 

@@ -103,6 +103,7 @@ sub type: PathPart('view') Chained('/') CaptureArgs(2){
 
     $c->stash->{'object_id'} = $object_id;
     $c->stash->{'type'} = $type;
+    $c->stash->{'location'} = $type;
 }
 
 sub index: PathPart('') Chained('type') Args(1) {

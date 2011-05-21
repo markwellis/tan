@@ -1,0 +1,98 @@
+[%- type = object.type -%]
+
+[%- title = object.url_title -%]
+[%- object_url = object.url -%]
+
+[%- url = '' -%]
+[%- IF type == 'link' -%]
+    [%- url = "/redirect/external/${object.id}" -%]
+[%- ELSE -%]
+    [%- url = object_url -%]
+[%- END -%]
+
+[%- comment_url = "${object_url}#comments" -%]
+
+[%- md = 
+    object.${type}.picture_id 
+    - ( object.${type}.picture_id % 1000 ) 
+-%]
+
+[%- PROCESS lib/plus_minus.tt -%]
+<div class="TAN-news-image left">
+    <a href="[% 
+        ( object.type == 'picture' ) ? 
+            object.url 
+        :
+            object.${type}.picture.object.url 
+    %]">
+        <img 
+            alt="[% object.${type}.picture_id %]" 
+            src="[% c.config.thumb_path %]/[% md %]/[% object.${type}.picture_id %]/100"
+        />
+    </a>
+</div>
+<h2>
+    <a href="[% url %]"
+        [% IF type == 'link' %]rel="external nofollow"[% END %]
+        class="TAN-type-[% type %]"
+        title="[% object.${type}.title | html %]"
+    >
+        [% object.${type}.title | html %]
+        [% IF object.nsfw == "Y" %]- NSFW[% END %]
+    </a>
+</h2>
+<img 
+    alt="[% object.user.username | html %]"
+    src="[% object.user.avatar(c) %]"
+    class="TAN-news-avatar left"
+/>
+<ul>
+    <li>
+        Posted by <a 
+            href="[% object.user.profile_url %]" 
+            class="TAN-news-user"
+        >
+            [% object.user.username | html %]
+        </a>
+        [%- IF object.promoted -%]
+            promoted [% object.promoted %] ago
+        [%- ELSE -%]
+            posted [% object.created %] ago
+        [%- END -%]
+        <span class="TAN-type-[% type %]"> [[% type %]]</span>
+    </li>
+    <li>
+        <a href="[% comment_url %]" class="TAN-news-comment">
+            <img 
+                alt="" 
+                class="TAN-news-comment-image" 
+                src="/static/images/comment.png" 
+            /> [% object.get_column('comments') %]
+        </a> | [% object.get_column('views') %] views
+        [%- IF type == 'poll' -%]
+             | [% object.poll.votes || 0 %] votes
+        [%- END -%]
+        [%- IF 
+            ( type == 'link' )
+            || ( type == 'video' )
+        -%]
+            | [% object.${type}.url | domain %]
+        [%- END -%]
+        [%- IF c.user_exists 
+            && (
+                c.check_any_user_role('edit_object', 'edit_object_nsfw')
+                || ( c.user.id == object.user_id )
+                )
+        -%]
+            | <a 
+                href="/submit/[% type %]/edit/[% object.id %]/" 
+                class="TAN-news-comment"
+            >
+                Edit
+            </a>
+        [% END %]
+    </li>
+</ul>
+<p>
+    [% object.${type}.description | html | nl2br %]
+</p>

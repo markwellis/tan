@@ -18,7 +18,7 @@
             [%- value = menu_tab_values.${count} -%] 
             <li [% IF loop.last %]class="TAN-menu-last"[% END %]>
                 <a 
-                    class="TAN-menu-tab TAN-type-[% value %] [% IF type == value %]TAN-menu-tab-[% type %]-selected[% END %]"
+                    class="TAN-menu-tab TAN-type-[% value %] [% IF location == value %]TAN-menu-tab-[% location %]-selected[% END %]"
                     href="/index/[% value %]/0/">[% name %]</a>
             </li>
         [%- END -%]
@@ -26,7 +26,7 @@
     [%- FOREACH value IN menu_tab_values -%]
         <ul 
             class="TAN-menu-[% value %]" 
-            [% IF type == value %]style="display:block"[% END %]
+            [% IF location == value %]style="display:block"[% END %]
         >
 
         [%- IF value != 'all' -%]
@@ -40,16 +40,16 @@
             <li>
                 <a
                     href="/index/[% value %]/0/" 
-                    [%- IF ( type == value )  && !upcoming -%]
-                        class="TAN-menu-tab-[% type %]-selected"
+                    [%- IF ( location == value )  && !upcoming -%]
+                        class="TAN-menu-tab-[% location %]-selected"
                     [% END %]
                 >Promoted</a>
             </li>
             <li class="TAN-menu-last">
                 <a 
                     href="/index/[% value %]/1/"
-                    [%- IF ( type == value ) && upcoming -%]
-                        class="TAN-menu-tab-[% type %]-selected"
+                    [%- IF ( location == value ) && upcoming -%]
+                        class="TAN-menu-tab-[% location %]-selected"
                     [% END %]
                 >Upcoming</a>
             </li>
@@ -58,6 +58,6 @@
 </div>
 <script type="text/javascript">
 //<![CDATA[
-    selected_menu_type = '[% type %]';
+    selected_menu_type = '[% location %]';
 //]]>
 </script>
