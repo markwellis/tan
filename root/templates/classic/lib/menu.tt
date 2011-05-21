@@ -1,67 +1,63 @@
-[%- PROCESS menu_block -%]
+[%- menu_tab_names = [] -%]
+[%- menu_tab_values = [] -%]
 
-[%- BLOCK menu_block -%]
-    [%- menu_tab_names = [] -%]
-    [%- menu_tab_values = [] -%]
+[%- menu_tab_names.push('All') -%]
+[%- menu_tab_values.push('all') -%]
 
-    [%- menu_tab_names.push('All') -%]
-    [%- menu_tab_values.push('all') -%]
-
-    [%- FOREACH menu_item IN c.model('Submit').menu_items -%]
-        [%- menu_tab_name = "${menu_item}s" | ucfirst -%]
-        [%- menu_tab_names.push( menu_tab_name ) -%]
-        [%- menu_tab_values.push( menu_item ) -%]
-    [%- END -%]
-
-    <div class="TAN-menu left">
-        <ul class="TAN-menu-tab-holder">
-    
-            [%- FOREACH name IN menu_tab_names -%]
-                [%- count = loop.count - 1 -%]
-                [%- value = menu_tab_values.${count} -%] 
-                <li [% IF loop.last %]class="TAN-menu-last"[% END %]>
-                    <a 
-                        class="TAN-menu-tab TAN-type-[% value %] [% IF type == value %]TAN-menu-tab-[% type %]-selected[% END %]"
-                        href="/index/[% value %]/0/">[% name %]</a>
-                </li>
-            [%- END -%]
-        </ul>
-        [%- FOREACH value IN menu_tab_values -%]
-            <ul 
-                class="TAN-menu-[% value %]" 
-                [% IF type == value %]style="display:block"[% END %]
-            >
-
-            [%- IF value != 'all' -%]
-                <li>
-                    <a href="/submit/[% value %]/">Submit</a>
-                </li>
-            [%- END -%]
-                <li>
-                    <a href="/random/[% value %]/">Random</a>
-                </li>
-                <li>
-                    <a
-                        href="/index/[% value %]/0/" 
-                        [%- IF ( type == value )  && !upcoming -%]
-                            class="TAN-menu-tab-[% type %]-selected"
-                        [% END %]
-                    >Promoted</a>
-                </li>
-                <li class="TAN-menu-last">
-                    <a 
-                        href="/index/[% value %]/1/"
-                        [%- IF ( type == value ) && upcoming -%]
-                            class="TAN-menu-tab-[% type %]-selected"
-                        [% END %]
-                    >Upcoming</a>
-                </li>
-            </ul>
-        [%- END -%]
-    </div>
-    <script type="text/javascript">
-    //<![CDATA[
-        selected_menu_type = '[% type %]';
-    //]]>
-    </script>
+[%- FOREACH menu_item IN c.model('Submit').menu_items -%]
+    [%- menu_tab_name = "${menu_item}s" | ucfirst -%]
+    [%- menu_tab_names.push( menu_tab_name ) -%]
+    [%- menu_tab_values.push( menu_item ) -%]
 [%- END -%]
+
+<div class="TAN-menu left">
+    <ul class="TAN-menu-tab-holder">
+
+        [%- FOREACH name IN menu_tab_names -%]
+            [%- count = loop.count - 1 -%]
+            [%- value = menu_tab_values.${count} -%] 
+            <li [% IF loop.last %]class="TAN-menu-last"[% END %]>
+                <a 
+                    class="TAN-menu-tab TAN-type-[% value %] [% IF type == value %]TAN-menu-tab-[% type %]-selected[% END %]"
+                    href="/index/[% value %]/0/">[% name %]</a>
+            </li>
+        [%- END -%]
+    </ul>
+    [%- FOREACH value IN menu_tab_values -%]
+        <ul 
+            class="TAN-menu-[% value %]" 
+            [% IF type == value %]style="display:block"[% END %]
+        >
+
+        [%- IF value != 'all' -%]
+            <li>
+                <a href="/submit/[% value %]/">Submit</a>
+            </li>
+        [%- END -%]
+            <li>
+                <a href="/random/[% value %]/">Random</a>
+            </li>
+            <li>
+                <a
+                    href="/index/[% value %]/0/" 
+                    [%- IF ( type == value )  && !upcoming -%]
+                        class="TAN-menu-tab-[% type %]-selected"
+                    [% END %]
+                >Promoted</a>
+            </li>
+            <li class="TAN-menu-last">
+                <a 
+                    href="/index/[% value %]/1/"
+                    [%- IF ( type == value ) && upcoming -%]
+                        class="TAN-menu-tab-[% type %]-selected"
+                    [% END %]
+                >Upcoming</a>
+            </li>
+        </ul>
+    [%- END -%]
+</div>
+<script type="text/javascript">
+//<![CDATA[
+    selected_menu_type = '[% type %]';
+//]]>
+</script>
