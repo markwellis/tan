@@ -1,0 +1,14 @@
+[% css_includes.push('Profile') %]
+
+<ul class="TAN-inside">
+
+[% FOREACH user IN users.all %]
+    <li class="TAN-profile-avatar">
+        [% username = user.username | html %]
+        <a href="[% username %]/" title="[% username %]">
+            <img class="TAN-news-avatar" src="[% user.avatar(c) %]" alt="[% username %]"/><br/>
+            [% username %]
+        </a>
+    </li>
+[% END %]
+</ul>

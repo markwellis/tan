@@ -36,7 +36,7 @@ sub index: Private{
 
     $c->stash(
         'users' => $users,
-        'template' => 'Profile', 
+        'template' => 'profile.tt', 
         'page_title' => "User List",
     );
 }
