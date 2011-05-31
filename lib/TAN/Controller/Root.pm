@@ -134,7 +134,7 @@ sub faq: Local Args(0){
 
     $c->stash(
         'page_title' => 'FAQ',
-        'template' => 'FAQ',
+        'template' => 'faq.tt',
     );
 }
 
