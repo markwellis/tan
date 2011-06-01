@@ -160,7 +160,7 @@ sub index: PathPart('') Chained('type') Args(1) {
     $c->stash(
         'object' => $object,
         'page_title' => $object->$type->title || undef,
-        'template' => 'View',
+        'template' => 'view.tt',
         'page_meta_description' => $object->$type->description || undef,
     );
 }
