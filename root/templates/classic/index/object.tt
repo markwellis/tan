@@ -1,16 +1,19 @@
 [%- type = object.type -%]
 
 [%- title = object.url_title -%]
-[%- object_url = object.url -%]
 
 [%- url = '' -%]
-[%- IF type == 'link' -%]
-    [%- url = "/redirect/external/${object.id}" -%]
-[%- ELSE -%]
-    [%- url = object_url -%]
+[% IF title_url %]
+    [% url = title_url %]
+[% ELSE %]
+    [%- IF type == 'link' -%]
+        [%- url = "/redirect/external/${object.id}" -%]
+    [%- ELSE -%]
+        [%- url = object.url -%]
+    [%- END -%]
 [%- END -%]
 
-[%- comment_url = "${object_url}#comments" -%]
+[%- comment_url = "${object.url}#comments" -%]
 
 [%- md = 
     object.${type}.picture_id 
@@ -70,7 +73,7 @@
             /> [% object.get_column('comments') %]
         </a> | [% object.get_column('views') %] views
         [%- IF type == 'poll' -%]
-             | [% object.poll.votes || 0 %] votes
+             | [% object.poll.votes_rs.count || 0 %] votes
         [%- END -%]
         [%- IF 
             ( type == 'link' )
@@ -78,6 +81,10 @@
         -%]
             | [% object.${type}.url | domain %]
         [%- END -%]
+        [% IF type == 'picture' %]
+            | [% object.picture.x %]x[% object.picture.y %]
+            | [% object.picture.size | filesize_h %]
+        [% END %]
         [%- IF c.user_exists 
             && (
                 c.check_any_user_role('edit_object', 'edit_object_nsfw')

@@ -1,1 +1,5 @@
-[% PROCESS index/object.tt %]
+[% PROCESS view/_view.tt %]
+
+<div class="TAN-blog_wrapper TAN-hr">
+    [% object.blog.details %]
+</div>

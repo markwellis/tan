@@ -1,1 +1,10 @@
-[% PROCESS index/object.tt %]
+[% tag_p_extra = PROCESS view_block %]
+[% BLOCK view_block %]
+    <a 
+        class="TAN-view_link TAN-type-link" 
+        href="[% url %]" 
+        rel="external nofollow"
+    >View Link</a>
+[% END %]
+
+[% PROCESS view/_view.tt %]

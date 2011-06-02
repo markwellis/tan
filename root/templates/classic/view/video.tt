@@ -1,1 +1,13 @@
-[% PROCESS index/object.tt %]
+[% title_url = "/redirect/external/${object.id}" %] 
+[% PROCESS view/_view.tt %]
+
+<div class="TAN-video">
+    [% object.video.url | embed_url %]
+</div>
+<p>
+    <a 
+        class="TAN-view_link TAN-type-link" 
+        href="[% title_url %]" 
+        rel="external nofollow"
+    >View Link</a>
+</p>
