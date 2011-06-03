@@ -31,6 +31,13 @@
 
 [% IF c.req.user_agent.match('(?:iPhone|Android)') %]
 [%# tinymce isn't compatable with iPhone or Android %]
+    [% js_incs = [] %]
+    [% FOREACH js_include IN js_includes %]
+        [% IF js_include != 'comment' %]
+            [% js_incs.push( js_include ) %]
+        [% END %]
+    [% END %]
+    [% js_includes = js_incs %]
     [% RETURN %]
 [% END %]
 

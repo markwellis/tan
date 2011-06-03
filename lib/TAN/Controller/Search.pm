@@ -52,7 +52,7 @@ sub index: Path Args(0){
 
     $c->stash(
         'page_title' => ( $c->req->param('q') || '' ) . " - Search",
-        'template' => 'Index',
+        'template' => 'index.tt',
     );
 }
 

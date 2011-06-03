@@ -165,7 +165,7 @@ sub links: PathPart('links') Chained('user') Args(0){
     $c->forward('fetch', ['link']);
 
     $c->stash(
-        'template' => 'Index',
+        'template' => 'index.tt',
         'can_rss' => 1,
     );
 }
@@ -176,7 +176,7 @@ sub blogs: PathPart('blogs') Chained('user') Args(0){
     $c->forward('fetch', ['blog']);
 
     $c->stash(
-        'template' => 'Index',
+        'template' => 'index.tt',
         'can_rss' => 1,
     );
 }
@@ -188,7 +188,7 @@ sub pictures: PathPart('pictures') Chained('user') Args(0){
 
     $c->stash(
         'fancy_picture_index' => 1,
-        'template' => 'Index',
+        'template' => 'index.tt',
         'can_rss' => 1,
     );
 }
@@ -199,7 +199,7 @@ sub polls: PathPart('polls') Chained('user') Args(0){
     $c->forward('fetch', ['poll']);
 
     $c->stash(
-        'template' => 'Index',
+        'template' => 'index.tt',
         'can_rss' => 1,
     );
 }
@@ -210,7 +210,7 @@ sub videos: PathPart('videos') Chained('user') Args(0){
     $c->forward('fetch', ['video']);
 
     $c->stash(
-        'template' => 'Index',
+        'template' => 'index.tt',
         'can_rss' => 1,
     );
 }

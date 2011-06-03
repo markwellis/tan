@@ -238,7 +238,7 @@ sub ajax_comment: Private{
 
     $c->stash->{'comment'} = $comment_rs;
 
-    $c->stash->{'template'} = 'View::Comment';
+    $c->stash->{'template'} = 'view/comment.tt';
     $c->forward( $c->view('NoWrapper') );
 }
 
@@ -359,7 +359,7 @@ sub edit_comment: PathPart('_edit_comment') Chained('type') Args(1) {
 
     $c->stash(
         'comment' => $comment_rs,
-        'template' => 'View::EditComment',
+        'template' => 'view/edit_comment.tt',
     );
 
     if ( $c->req->param('ajax') ){
