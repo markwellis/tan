@@ -87,6 +87,7 @@ sub check_cache{
         || defined($c->stash->{'no_page_cache'})
         || defined($c->stash->{'message'})
         || ($c->res->status > 300)
+        || ( $c->req->user_agent =~ m/(?:iPhone|Android)/ )
     ){
         return 0;
     }
