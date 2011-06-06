@@ -1,0 +1,135 @@
+[% css_includes.push('Submit') %]
+[% js_includes.push('Submit') %]
+
+[% module = c.model('Submit').modules.${type} %]
+
+[%# try alias %]
+[% IF !module %]
+    [% FOREACH _mod IN c.model('Submit').modules.values() %]
+        [% NEXT IF !_mod.config.alias.defined() %]
+        [% IF type == _mod.config.alias.name %]
+            [% module = _mod %]
+            [% LAST %]
+        [% END %]
+    [% END %]
+    [% RETURN IF !module %]
+[% END %]
+<ul class="TAN-inside">
+    <li class="TAN-news">
+    <form action="post" id="submit_form" method="post" enctype="multipart/form-data">
+        <fieldset>
+            <ul>
+
+[% schema = module.config.schema %]
+[% params = c.flash.params %]
+
+[% FOREACH _key IN schema.keys() %]
+    [% field = {
+        'id' => _key,
+        'label' => schema.${_key}.label || _key,
+        'type' => schema.${_key}.type,
+        'required' => schema.${_key}.required || undef,
+        'length' => schema.${_key}.length || undef,
+    } %]
+
+    my $value;
+    [% IF  
+        edit 
+        && object.defined()
+        && object.${type} 
+    %]
+        if (
+            ( $type eq 'picture' )
+            && ( $key eq 'remote' ) 
+        ){
+            my $md = $object->picture->id - ( $object->picture->id % 1000 );
+            $value = "@{[ $c->config->{'thumb_path'} ]}/${md}/@{[ $object->picture->id ]}/600";
+            $field->{'ignore'} = 1;
+        } elsif ( $key eq 'upload' ){
+            $value = undef;
+            $field->{'ignore'} = 1;
+        } elsif ( $key eq 'tags' ){
+            my @tags = map( $_->tag, $object->tags->all );
+            $value = join( ' ', @tags );
+        } elsif( 
+            ( $type eq 'poll' )
+            && ( $key eq 'end_date' ) 
+        ){
+            $value = $object->$type->ends || 'Ended';
+            $field->{'disabled'} = 1;
+        } else {
+            $value = $object->$type->$key;
+        }
+    [% END %]
+    $field->{'value'} = $params->{ $key } || $value || $schema->{ $key }->{'default'} || '',
+
+    my $template_name = 'Submit::' . ucfirst( $field->{'type'} );
+
+
+    if ( !$field->{'ignore'} ) {
+        my %views;
+    #seems like a candidate for refactoring...
+        foreach my $view ( $c->views ){
+            $view =~ s/$template_prename_reg//;
+            $views{ $view } = 1;
+        }
+
+        if ( !$views{ $template_name } ){
+            $template_name = "Submit::Default";
+        }
+        
+        $output .= qq\
+            <li>
+                @{[ $c->view->template( $template_name, $field ) ]}
+            </li>\;
+    } elsif ( $key eq 'remote' ){
+        $output .= qq\
+            <li>
+                <img alt="@{[ $object->picture->id ]}" src="@{[ $field->{'value'} ]}" />
+            </li>\;
+    }
+[% END %]
+
+if (
+    $c->stash->{'edit'} 
+    && $c->check_any_user_role(qw/delete_object edit_object edit_object_nsfw/)
+    && ( $object->user_id != $c->user->id )
+){
+    push(@{$c->stash->{'js_includes'}}, 'AdminReason');
+
+    $output .= qq#<li>
+        <label for="_edit-reason">Reason for edit</label>
+        <input 
+            type="text" 
+            name="_edit-reason"
+            id="_edit-reason" 
+            class="required"
+        />
+    </li>#;
+}
+
+my $nsfw;
+if ( defined( $object ) ){
+    $nsfw = ( $object->nsfw eq 'Y' ) ? 1 : undef; 
+}
+$nsfw = $params->{'nsfw'} || $nsfw || undef;
+my @submit_type = split( '::', ref( $module ) );
+
+                <li>
+                    <label for="nsfw">Not Safe for Work?</label>
+                    <input type="checkbox" name="nsfw" id="nsfw" @{[ ( $nsfw ) ? 'checked="checked"' : '' ]}/>
+                </li>
+            </ul>
+            <input type="submit" value="Submit @{[ ucfirst( $c->stash->{'type'} ) ]}"/>
+            <input type="hidden" name="type" value="@{[ lc( $submit_type[-1] ) ]}" />
+
+
+if ( $c->stash->{'edit'} && $c->check_user_roles(qw/delete_object/) ){
+    $output .= qq#<input type="submit" value="Delete" name="delete" />#;
+}
+
+        </fieldset>
+    </form>
+
+    </li>
+</ul>
