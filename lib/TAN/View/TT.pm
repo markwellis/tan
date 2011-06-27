@@ -16,6 +16,7 @@ __PACKAGE__->config(TEMPLATE_EXTENSION => '.tt');
 __PACKAGE__->config({
     CATALYST_VAR => 'c',
     INCLUDE_PATH => [
+        TAN->path_to( 'root', 'templates', 'shared' ),
         TAN->path_to( 'root', 'templates', 'classic' ),
     ],
     PRE_PROCESS  => 'lib/config.tt',
@@ -36,6 +37,7 @@ __PACKAGE__->config({
     },
     render_die => 1,
     ENCODING => 'utf8',
+    EVAL_PERL => 1,
 });
 
 my $nl2br_reg = qr/\n/;
