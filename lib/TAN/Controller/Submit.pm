@@ -30,7 +30,7 @@ sub type: PathPart('submit') Chained('/') CaptureArgs(1){
 sub index: PathPart('') Chained('type') Args(0) {
     my ( $self, $c ) = @_;
 
-    $c->stash->{'template'} = 'Submit';
+    $c->stash->{'template'} = 'submit.tt';
 }
 
 sub post: PathPart('post') Chained('type') Args(0){

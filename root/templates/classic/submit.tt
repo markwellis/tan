@@ -32,36 +32,39 @@
         'length' => schema.${_key}.length || undef,
     } %]
 
-    my $value;
+    [% _value = '' %]
     [% IF  
         edit 
         && object.defined()
         && object.${type} 
     %]
-        if (
-            ( $type eq 'picture' )
-            && ( $key eq 'remote' ) 
-        ){
-            my $md = $object->picture->id - ( $object->picture->id % 1000 );
-            $value = "@{[ $c->config->{'thumb_path'} ]}/${md}/@{[ $object->picture->id ]}/600";
-            $field->{'ignore'} = 1;
-        } elsif ( $key eq 'upload' ){
-            $value = undef;
-            $field->{'ignore'} = 1;
-        } elsif ( $key eq 'tags' ){
-            my @tags = map( $_->tag, $object->tags->all );
-            $value = join( ' ', @tags );
-        } elsif( 
-            ( $type eq 'poll' )
-            && ( $key eq 'end_date' ) 
-        ){
-            $value = $object->$type->ends || 'Ended';
-            $field->{'disabled'} = 1;
-        } else {
-            $value = $object->$type->$key;
-        }
+        [% IF 
+            ( type == 'picture' )
+            && ( _key == 'remote' ) 
+        %]
+            [% _md = object.picture.id - ( object.picture.id % 1000 ) %]
+            [% _value = "${c.config.thumb_path}/${_md}/${object.picture.id}/600" %]
+            [% field.ignore = 1 %]
+        [% ELSIF _key == 'upload' %]
+            [% value = '' %]
+            [% field.ignore = 1 %]
+        [% ELSIF _key == 'tags' %]
+            [% RAWPERL %]
+                $stash->set(
+                    'value' => join( ' ', map( $_->tag, $stash->get('object')->tags->all ) ),
+                );
+            [% END %]
+        [% ELSIF
+            ( type == 'poll' )
+            && ( _key == 'end_date' ) 
+        %]
+            [% value = object.${type}_rs.ends || 'Ended' %]
+            [% field.disabled = 1 %]
+        [% ELSE %]
+            [% value = object.${type}_rs.${key} %]
+        [% END %]
     [% END %]
-    $field->{'value'} = $params->{ $key } || $value || $schema->{ $key }->{'default'} || '',
+    [% field.value = params.${key} || value || schema.${key}.default || '' %]
 
     my $template_name = 'Submit::' . ucfirst( $field->{'type'} );
 
