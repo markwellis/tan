@@ -41,8 +41,7 @@
         my $value;
         if ( 
             $stash->get('edit') 
-            && defined( $object ) 
-            && $object->$type 
+            && $object  
         ){
             if (
                 ( $type eq 'picture' )
