@@ -1,0 +1,33 @@
+[% js_includes.push('Submit@Array') %]
+
+[% answers = [] %]
+[% IF field.value %]
+    if ( ref( $field->{'value'} ) eq 'DBIx::Class::ResultSet' ){
+    #object
+        foreach my $answer ( $field->{'value'}->all ){
+            push( @answers, $answer->answer );
+        }
+    } elsif( ref( $field->{'value'} ) eq 'ARRAY' ){
+    #array
+        @answers = @{$field->{'value'}};
+    }
+    
+} else {
+    @answers = ( undef, undef );
+}
+foreach my $answer ( @answers ){
+        <li>
+            <label for="array-${loop}">@{[ ucfirst($field->{'label'}) ]} ${loop}</label>
+            <input
+                type="text" 
+                name="@{[ $field->{'id'} ]}"
+                id="array-${loop}" 
+                value="@{[ $c->view->html( $answer ) ]}"
+                class="TAN-array"
+            />
+        </li>
+}
+
+<li>
+    <a href="#" class="right TAN-array-more">MORE!</a>
+</li>
