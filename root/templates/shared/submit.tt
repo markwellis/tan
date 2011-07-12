@@ -23,47 +23,47 @@
 [% params = c.flash.params %]
 [% schema = module.config.schema %]
 
-[% FOREACH _key IN schema.keys() %]
+[% FOREACH key IN schema.keys %]
     [% field = {
-        'id' => _key,
-        'label' => schema.${_key}.label || _key,
-        'type' => schema.${_key}.type,
-        'required' => schema.${_key}.required,
-        'length' => schema.${_key}.length,
+        'id' => key,
+        'label' => schema.${key}.label || key,
+        'type' => schema.${key}.type,
+        'required' => schema.${key}.required,
+        'length' => schema.${key}.length,
     } %]
 
     [% IF ( 
         edit
-        && object.defined()
+        && object
         && object.${type}
     ) %]
         [% value = '' %]
         [% IF (
             ( type == 'picture' )
-            && ( _key == 'remote' ) 
+            && ( key == 'remote' ) 
         ) %]
             [% md = object.picture.id - ( object.picture.id % 1000 ) %]
             [% value = c.config.thumb_path _ "/${md}/${object.picture.id}/600" %]
             [% field.ignore = 1 %]
-        [% ELSIF _key == 'upload' %]
+        [% ELSIF key == 'upload' %]
             [% value = '' %]
             [% field.ignore = 1 %]
-        [% ELSIF _key == 'tags' %]
+        [% ELSIF key == 'tags' %]
             [% RAWPERL %]
                 my @tags = map( $_->tag, $stash->get('object')->tags->all );
                 $stash->set('value', join( ' ', @tags ) );
             [% END %]
         [% ELSIF ( 
             ( type == 'poll' )
-            && ( _key == 'end_date' ) 
+            && ( key == 'end_date' ) 
         ) %]
             [% value = object.${type}.ends || 'Ended' %]
             [% field.disabled = 1 %]
         [% ELSE %]
-            [% value = object.${type}.${_key} %]
+            [% value = object.${type}.${key} %]
         [% END %]
     [% END %]
-    [% field.value = params.${_key} || value || schema.${_key}.default || '' %]
+    [% field.value = params.${key} || value || schema.${key}.default || '' %]
 
     [% IF !field.ignore %]
         <li>
@@ -73,7 +73,7 @@
                 [% PROCESS 'submit/default.tt' %]
             [% END %]
         </li>
-    [% ELSIF _key == 'remote' %]
+    [% ELSIF key == 'remote' %]
         <li>
             <img alt="[% object.picture.id %]" src="[% field.value | html %]" />
         </li>
