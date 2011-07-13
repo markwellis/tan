@@ -2,19 +2,22 @@
 
 [% answers = [] %]
 [% IF field.value %]
-    if ( ref( $field->{'value'} ) eq 'DBIx::Class::ResultSet' ){
-    #object
-        foreach my $answer ( $field->{'value'}->all ){
-            push( @answers, $answer->answer );
-        }
-    } elsif( ref( $field->{'value'} ) eq 'ARRAY' ){
-    #array
-        @answers = @{$field->{'value'}};
-    }
+    [% RAWPERL %]
+        $stash->set('field_value_ref', ref( $stash->get(['field', 'value']) ));
+    [% END %]
+    [% IF field_value_ref == 'DBIx::Class::ResultSet' %]
+    [%#object %]
+        [% FOREACH answer IN field.value.all %]
+            [% answers.push( answer.answer ) %]
+        [% END %]
+    [% ELSIF field_value_ref == 'ARRAY' %]
+    [%#array %]
+        [% answers = field.value %]
+    [% END %]
     
-} else {
-    @answers = ( undef, undef );
-}
+[% ELSE %]
+    [% answers = ( '', '' ) %]
+[% END %]
 foreach my $answer ( @answers ){
         <li>
             <label for="array-${loop}">@{[ ucfirst($field->{'label'}) ]} ${loop}</label>
