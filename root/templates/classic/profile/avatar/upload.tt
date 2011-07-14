@@ -1,0 +1,18 @@
+<li class="TAN-news left" >
+    <img alt="[% c.user.username | html %]" src="[% avatar_http %]" class="avatar">
+</li>
+<li class="TAN-news">
+    <h2>
+        Upload avatar
+    </h2>
+    <p>
+        Keep your avatar safe for work
+    </p>
+
+    <form method="post" action="/profile/_avatar/upload" enctype="multipart/form-data" id="crop_form">
+        <fieldset>
+            <input type="file" name="avatar" id="avatar" />
+            <input type="submit" value="Upload" />
+        </fieldset>
+    </form>
+</li>

@@ -1,0 +1,11 @@
+[% css_includes.push('view', 'Profile@Avatar') %]
+[% js_includes.push('Lasso', 'Lasso-Crop', 'Profile@Avatar') %]
+[% avatar_http = c.user.avatar(c) %]
+
+<ul class="TAN-inside">
+    [% IF !crop %]
+        [% PROCESS 'profile/avatar/upload.tt' %]
+    [% ELSE %]
+        [% PROCESS 'profile/avatar/crop.tt' %]
+    [% END %]
+</ul>
