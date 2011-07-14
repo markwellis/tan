@@ -108,7 +108,7 @@
                 </li>
             </ul>
             <input type="submit" value="Submit [% type | ucfirst %]"/>
-            <input type="hidden" name="type" value="[% type.lower() %]" />
+            <input type="hidden" name="type" value="[% type | lower %]" />
 
             [% IF ( edit && c.check_user_roles('delete_object') ) %]
                 <input type="submit" value="Delete" name="delete" />

@@ -101,9 +101,11 @@ sub type: PathPart('view') Chained('/') CaptureArgs(2){
         $c->detach();
     }
 
-    $c->stash->{'object_id'} = $object_id;
-    $c->stash->{'type'} = $type;
-    $c->stash->{'location'} = $type;
+    $c->stash(
+        'object_id' => $object_id,
+        'type' => $type,
+        'location' => $type,
+    );
 }
 
 sub index: PathPart('') Chained('type') Args(1) {

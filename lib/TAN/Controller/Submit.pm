@@ -24,6 +24,7 @@ sub type: PathPart('submit') Chained('/') CaptureArgs(1){
     $c->stash(
         'page_title' => 'Submit ' . ucfirst($type),
         'type' => $type,
+        'location' => $type,
     );
 }
 

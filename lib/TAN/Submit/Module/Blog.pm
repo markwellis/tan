@@ -27,10 +27,6 @@ sub _build_config{
             'type' => 'textarea',
             'required' => 1,
         },
-        'picture_id' => {
-            'type' => 'hidden',
-            'required' => 1,
-        },
         'details' => {
             'length' => {
                 'min' => 20,
@@ -40,6 +36,10 @@ sub _build_config{
         },
         'tags' => {
             'type' => 'tags',
+            'required' => 1,
+        },
+        'picture_id' => {
+            'type' => 'hidden',
             'required' => 1,
         },
     );

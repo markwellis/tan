@@ -40,7 +40,7 @@
             <li>
                 <a
                     href="/index/[% value %]/0/" 
-                    [%- IF ( location == value )  && !upcoming -%]
+                    [%- IF ( location == value ) && ( upcoming.defined && !upcoming ) -%]
                         class="TAN-menu-tab-[% location %]-selected"
                     [% END %]
                 >Promoted</a>
