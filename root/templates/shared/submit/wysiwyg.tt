@@ -1,0 +1,11 @@
+[% js_includes.push('Submit@Wysiwyg') %]
+
+[% 
+    PROCESS lib/editor.tt editor = {
+        name => field.id,
+        value = field.value,
+        height => '600px',
+        required => field.required,
+        length => field.length,
+    }
+%]

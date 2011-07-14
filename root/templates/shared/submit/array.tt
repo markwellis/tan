@@ -14,22 +14,21 @@
     [%#array %]
         [% answers = field.value %]
     [% END %]
-    
 [% ELSE %]
-    [% answers = ( '', '' ) %]
+    [% answers = [ '', '' ] %]
 [% END %]
-foreach my $answer ( @answers ){
+[% FOREACH answer IN answers %]
         <li>
-            <label for="array-${loop}">@{[ ucfirst($field->{'label'}) ]} ${loop}</label>
+            <label for="array-[% loop.count %]">[% field.label | ucfirst %] [% loop.count %]</label>
             <input
                 type="text" 
-                name="@{[ $field->{'id'} ]}"
-                id="array-${loop}" 
-                value="@{[ $c->view->html( $answer ) ]}"
+                name="[% field.id %]"
+                id="array-[% loop.count %]" 
+                value="[% answer | html %]"
                 class="TAN-array"
             />
         </li>
-}
+[% END %]
 
 <li>
     <a href="#" class="right TAN-array-more">MORE!</a>
