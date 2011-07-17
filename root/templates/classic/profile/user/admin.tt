@@ -1,0 +1,28 @@
+[%#role checkings %]
+<div class="TAN-profile-user-admin-form">
+    <h2>Admin</h2>
+    <ul>
+        [% IF c.check_any_user_role('delete_object', 'edit_comment') %]
+            <li>
+                <a href="admin/delete_content">Delete Content</a>
+            </li>
+        [% END %]
+        <li>
+            <a href="admin/delete_avatar">Delete Avatar</a>
+        </li>
+        [% IF c.check_user_roles('delete_user') %]
+            <li>
+                <a href="admin/delete">
+                    [% ( user.deleted == 'N' ) ? 'Delete' : 'Undelete' %]
+                </a>
+            </li>
+        [% END %]
+        [% IF c.check_user_roles('admin_user') %]
+            <li>
+                <a href="admin/roles">
+                    Roles
+                </a>
+            </li>
+        [% END %]
+    </ul>
+</div>
