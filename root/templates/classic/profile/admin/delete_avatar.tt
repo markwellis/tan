@@ -1,0 +1,20 @@
+[% css_includes.push('Profile') %]
+
+[% deleted = ( user.deleted == 'Y' ) ? 1 : 0 %]
+<ul class="TAN-inside">
+    <li class="TAN-profile-user-admin-form">
+        <h2>Delete Avatar</h2>
+        <form action="delete_avatar" method="post">
+            <fieldset>
+                <label for="reason">Reason</label>
+                <input
+                    type="text"
+                    id="reason"
+                    name="reason" 
+                    style="width:100%;"
+                />
+                <input type="submit" value="Delete" />
+            </fieldset>
+        </form>
+    </li>
+</ul>
