@@ -9,7 +9,7 @@ sub index: Path Args(0){
     
     if ( $c->user_exists ){
         $c->flash->{'message'} = 'You are already logged in';
-        $c->res->redirect( '/', 303 );
+        $c->res->redirect( '/index/all/0/', 303 );
         $c->detach();
     }
     
@@ -22,11 +22,11 @@ sub index: Path Args(0){
         }
     );
 
-    $c->flash->{'ref'} = defined($c->req->referer) ? $c->req->referer : '/';
+    $c->flash->{'ref'} = defined($c->req->referer) ? $c->req->referer : '/index/all/0/';
     
     $c->stash(
         'page_title' => 'Login/Register',
-        'template' => 'Login',
+        'template' => 'login.tt',
         'no_ads' => 1,
     );
 }
@@ -36,7 +36,7 @@ sub login: Local Args(0){
     
     my $ref = $c->flash->{'ref'};
     if (!defined($ref) || $ref =~ m/\/login\//){
-        $ref = '/';
+        $ref = '/index/all/0/';
     }
 
     if ( $c->req->method eq 'POST' ){
@@ -51,7 +51,7 @@ sub login: Local Args(0){
                 $c->logout;
                 $c->flash->{'message'} = "You need to confirm your email address";
             } elsif ( $c->user->deleted eq 'Y' ){
-                $ref = '/';
+                $ref = '/index/all/0/';
                 $c->logout;
                 $c->flash->{'message'} = "You have been deleted";
             } else {
@@ -79,7 +79,7 @@ sub logout: Local Args(0){
         $c->flash->{'message'} = "You weren't logged in!";
     }
 
-    my $ref = $c->req->referer || '/';
+    my $ref = $c->req->referer || '/index/all/0/';
     $c->res->redirect( $ref, 303 );
     $c->detach();
 }

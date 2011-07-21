@@ -1,11 +1,9 @@
 package TAN::View::NoWrapper;
-use Moose;
-use namespace::autoclean;
+use strict;
+use warnings;
 
-extends 'TAN::View::Perl';
+use base 'TAN::View::TT';
 
-__PACKAGE__->config(
-    'wrapper' => '',
-);
+__PACKAGE__->config(WRAPPER => '');
 
-__PACKAGE__->meta->make_immutable;
+1;

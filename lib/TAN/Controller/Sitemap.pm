@@ -5,6 +5,7 @@ use namespace::autoclean;
 BEGIN { extends 'Catalyst::Controller'; }
 
 use POSIX qw/ceil/;
+use Try::Tiny;
 
 sub ping_sitemap: Event(object_created) Event(object_updated) Event(object_deleted){
     my ( $self, $c ) = @_;
@@ -12,7 +13,9 @@ sub ping_sitemap: Event(object_created) Event(object_updated) Event(object_delet
     $c->clear_cached_page('/sitemap.*');
 
 #trigger monitor to ping google and em
-    $c->model('Gearman')->run( 'sitemap_ping', 0 );
+    try{
+        $c->model('Gearman')->run( 'sitemap_ping', 0 );
+    };
 }
 
 sub index: Private{

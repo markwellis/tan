@@ -1,0 +1,64 @@
+[% css_includes.push('Profile') %]
+
+<ul class="TAN-inside">
+    <li>
+        <h1>
+            [% user.username | html %]
+            [% IF user.deleted == 'Y' %]
+                <span style="color:#f00">DELETED</span>
+            [% END %]
+        </h1>
+    </li>
+    <li>
+        <ul class="TAN-id-card">
+            <li>
+                <img class="TAN-news-avatar" src="[% user.avatar(c) %]" alt="[% user.username | html %]" />
+                <br />
+                <br />
+                <br />
+                [% IF c.user_exists && ( c.user.user_id == user.user_id ) %]
+                    <a href="/profile/_avatar/">Change Avatar</a>
+                [% END %]
+            </li>
+            <li>
+                <ul>
+                    <li>Joined [% user.join_date %] ago</li>
+                    [% things = {
+                        '0' => ['comment', 'comment_count'],
+                        '1' => ['link', 'link_count'],
+                        '2' => ['blog', 'blog_count'],
+                        '3' => ['picture', 'picture_count'],
+                        '4' => ['poll', 'poll_count'],
+                        '5' => ['video', 'video_count'],
+                    } %]
+                    [% FOREACH thing IN things.keys.nsort %]
+                        <li>
+                            [% IF things.${thing}.1 %]
+                                <a href="[% things.${thing}.0 %]s">
+                            [% END %]
+                            [% things.${thing}.0 | ucfirst %]s: [% ${things.${thing}.1} %]
+                            [% IF things.${thing}.1 %]
+                                </a>
+                            [% END %]
+                        </li>
+                    [% END %]
+                </ul>
+            </li>
+            [% IF c.check_user_roles('edit_user') %]
+                <li class="TAN-profile-user-admin">
+                    [% PROCESS 'profile/user/admin.tt' %]
+                </li>
+            [% END %]
+        </ul>
+    </li>
+    <li>
+        [% object.profile.details %]
+        <br />
+        [% IF 
+            c.check_user_roles('edit_user')
+            || c.user_id == user.user_id 
+        %]
+            <a href="[% user.profile_url %]edit">Edit</a>
+        [% END %]
+    </li>
+</ul>

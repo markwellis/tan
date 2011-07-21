@@ -42,7 +42,7 @@ sub index: Path Args(1){
         $c->stash(
             'index' => $c->model('Index')->indexinate($c, $objects, $pager),
             'order' => $order,
-            'template' => 'Index',
+            'template' => 'index.tt',
             'page_title' => "${tag} - Tag",
         );
     } else {

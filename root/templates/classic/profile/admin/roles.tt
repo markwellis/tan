@@ -1,0 +1,35 @@
+[% css_includes.push('Profile') %]
+
+<ul class="TAN-inside">
+    <li class="TAN-profile-user-admin-form">
+        <h2>Edit user roles</h2>
+        <form action="roles" method="post">
+            <fieldset>
+                <ul>
+                    [% FOREACH role IN roles.all %]
+                        <li>
+                            <input 
+                                type="checkbox" 
+                                name="roles" 
+                                value="[% role.role %]" 
+                                id="role_[% role.id %]"
+                                [% IF c.check_user_roles( user, role.role) %]
+                                    checked="checked"
+                                [% END %]
+                            />
+                            <label for="role_[% role.id %]">[% role.role %]</label>
+                        </li>
+                    [% END %]
+                </ul>
+                <label for="reason">Reason</label>
+                <input
+                    type="text"
+                    id="reason"
+                    name="reason" 
+                    style="width:100%;"
+                />
+                <input type="submit" value="Edit" />
+            </fieldset>
+        </form>
+    </li>
+</ul>

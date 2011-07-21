@@ -1,6 +1,6 @@
 window.addEvent('domready', function() {
-	document.id('comment_form').addEvents({
-		submit: function(e) {
+    document.id('comment_form').addEvents({
+        submit: function(e) {
             e.stop();
 
             var input_comment = tinyMCE.get('comment').getContent();
@@ -47,8 +47,8 @@ window.addEvent('domready', function() {
 
                 document.id('submit_comment').disabled = 1;
             }
-		}
-	});
+        }
+    });
 
     $$('.quote_link').addEvent('click', function(e) {
         e.stop();

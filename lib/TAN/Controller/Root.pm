@@ -17,7 +17,7 @@ sub auto: Private{
             'name' => 'classic',
         },
         'type' => 'all',
-        'template_namespace' => 'Template::Classic',
+        'location' => 'all',
     );
     
     return 1;
@@ -74,7 +74,7 @@ sub error: Private{
     my ( $self, $c, $code ) = @_;
 
     $c->stash(
-        'template' => "Error",
+        'template' => "error.tt",
         'error_code' => $code,
     );
 
@@ -123,7 +123,7 @@ sub chat: Local Args(0){
 
     $c->stash(
         'page_title' => 'Chat',
-        'template' => 'Chat',
+        'template' => 'chat.tt',
     );
 }
 
@@ -134,7 +134,7 @@ sub faq: Local Args(0){
 
     $c->stash(
         'page_title' => 'FAQ',
-        'template' => 'FAQ',
+        'template' => 'faq.tt',
     );
 }
 

@@ -11,13 +11,13 @@ sub index: Path Args(0){
    
     if ( $c->user_exists ){
         $c->flash->{'message'} = "You're already logged in";
-        $c->res->redirect('/', 303);
+        $c->res->redirect('/index/all/0/', 303);
         $c->detach();
     }
 
-    $c->flash->{'ref'} = defined($c->req->referer) ? $c->req->referer : '/';
+    $c->flash->{'ref'} = defined($c->req->referer) ? $c->req->referer : '/index/all/0/';
     
-    $c->stash->{'template'} = 'Login::Forgot::Index';
+    $c->stash->{'template'} = 'login/forgot/index.tt';
 }
 
 sub step1: Local{
@@ -25,14 +25,14 @@ sub step1: Local{
    
     my $email = $c->req->param('email');
     if ( $c->req->method ne 'POST' || !defined($email) ){
-        $c->res->redirect('/login/forgot', 303);
+        $c->res->redirect('/login/forgot/', 303);
         $c->detach();
     }
 
     my $user = $c->model('MySQL::User')->by_email($email);
     if ( !defined($user) ){
         $c->flash->{'message'} = 'Not a valid email';
-        $c->res->redirect('/login/forgot', 303);
+        $c->res->redirect('/login/forgot/', 303);
         $c->detach();
     }
 
@@ -48,12 +48,12 @@ sub step1: Local{
             'Subject' => 'User Details',
             'Content-Type' => 'text/html',
         ],
-        'body' => $c->view('NoWrapper')->render( $c, 'Login::Forgot::Email' ),
+        'body' => $c->view('NoWrapper')->render( $c, 'login/forgot/email.tt' ),
     );
 
 #add a message and redirect user somewhere...
     $c->flash->{'message'} = 'Email sent';
-    $c->res->redirect('/', 303);
+    $c->res->redirect('/index/all/0/', 303);
     $c->detach();
 }
 
@@ -65,7 +65,7 @@ sub step2: Local Args(2){
     if ( !defined($token_rs) ){
     #token doesn't match
         $c->flash->{'message'} = 'There has been a problem';
-        $c->res->redirect('/', 303);
+        $c->res->redirect('/index/all/0/', 303);
         $c->detach();
     }
 
@@ -96,7 +96,7 @@ sub step2: Local Args(2){
 
     $c->stash->{'token'} = $token;
     $c->stash->{'user_id'} = $user_id;
-    $c->stash->{'template'} = 'Login::Forgot::Step2';
+    $c->stash->{'template'} = 'login/forgot/step2.tt';
 }
 
 __PACKAGE__->meta->make_immutable;

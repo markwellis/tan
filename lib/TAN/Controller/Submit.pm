@@ -24,13 +24,14 @@ sub type: PathPart('submit') Chained('/') CaptureArgs(1){
     $c->stash(
         'page_title' => 'Submit ' . ucfirst($type),
         'type' => $type,
+        'location' => $type,
     );
 }
 
 sub index: PathPart('') Chained('type') Args(0) {
     my ( $self, $c ) = @_;
 
-    $c->stash->{'template'} = 'Submit';
+    $c->stash->{'template'} = 'submit.tt';
 }
 
 sub post: PathPart('post') Chained('type') Args(0){

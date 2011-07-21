@@ -21,7 +21,7 @@ use Catalyst qw/
 
 extends 'Catalyst';
 
-our $VERSION = 1.9.1;
+our $VERSION = 2.0;
 
 __PACKAGE__->config( name => 'TAN', 
     'Plugin::PageCache' => {
@@ -87,6 +87,7 @@ sub check_cache{
         || defined($c->stash->{'no_page_cache'})
         || defined($c->stash->{'message'})
         || ($c->res->status > 300)
+        || ( $c->req->user_agent =~ m/(?:iPhone|Android)/ )
     ){
         return 0;
     }

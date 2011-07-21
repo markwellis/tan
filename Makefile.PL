@@ -63,6 +63,10 @@ requires 'DateTime::Format::Human::Duration';
 requires 'Captcha::reCAPTCHA';
 requires 'HTML::Video::Embed';
 requires 'Fetch::Image';
+requires 'HTML::TreeBuilder';
+requires 'HTML::FormatText';
+requires 'URI';
+requires 'Catalyst::View::TT';
 
 #workers
 requires 'GearmanX::Simple::Worker';
@@ -87,17 +91,6 @@ requires 'LWPx::ParanoidAgent';
 
 #Catalyst::Plugin::Event
 requires 'Text::SimpleTable';
-
-#Catalyst::View::Perl
-requires 'Catalyst::Component::InstancePerContext';
-#Catalyst::View::Perl::Core
-requires 'HTML::TreeBuilder';
-requires 'HTML::FormatText';
-requires 'HTML::Entities';
-requires 'XML::Entities';
-
-#Catalyst::View::Perl::URL
-requires 'URI';
 
 #Parse::TAN
 requires 'HTML::StripScripts::Parser';

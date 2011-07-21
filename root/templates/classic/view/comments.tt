@@ -1,0 +1,21 @@
+<div class="TAN-comment_wrapper">
+    [% IF object.comments %]
+        [% FOREACH comment IN comments %]
+            [% PROCESS view/comment.tt %]
+        [% END %]
+
+        [% js_includes.push('nsfw-comments', 'comment') %]
+    [% END %]
+</div>
+<form id="comment_form" action="_comment" method="post">
+    <fieldset>
+        [% 
+            PROCESS lib/editor.tt editor = {
+                name => 'comment',
+                height => '300px'
+            }
+        %]
+        <br />
+        <input type="submit" value="Comment" id="submit_comment" />
+    </fieldset>
+</form>

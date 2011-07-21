@@ -30,7 +30,7 @@ sub index: PathPart('') Chained('validate_user') Args(){
 
     my $type = $c->stash->{'type'};
     $c->stash(
-        'template' => 'Submit',
+        'template' => 'submit.tt',
         'page_title' => 'Edit ' . ($c->stash->{'object'}->$type->title || ''),
     );
 }

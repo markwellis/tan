@@ -32,7 +32,10 @@ sub delete: Chained('../admin') Args(0){
         $c->detach;
     }
 
-    $c->stash->{'template'} = 'Profile::Admin::Delete';
+    $c->stash(
+        'template' => 'profile/admin/delete.tt',
+        'page_title' => 'Delete User',
+    );
 }
 
 sub _force_logout: Private{

@@ -56,7 +56,7 @@ sub index: Path Args(0){
         $c->flash->{'email'} = $email;
 
         $c->flash->{'message'} = $error;
-        $c->res->redirect( '/login', 303 );
+        $c->res->redirect( '/login/', 303 );
         $c->detach();
     }
 
@@ -85,14 +85,14 @@ sub index: Path Args(0){
             'Subject' => 'Confirm email address',
             'Content-Type' => 'text/html',
         ],
-        'body' => $c->view('NoWrapper')->render( $c, 'Login::Registration::Email' ),
+        'body' => $c->view('NoWrapper')->render( $c, 'login/registration/email.tt' ),
     );
 
     $c->flash->{'message'} = 'Thanks for registering, you will recieve a confirmation email shortly';
 
     my $ref = $c->flash->{'ref'};
     if ( !$ref || $ref =~ m|/login/| ){
-        $ref = '/';
+        $ref = '/index/all/0/';
     }
     $c->res->redirect($ref, 303);
 }
@@ -113,7 +113,7 @@ sub confirm: Local{
     } else {
         $c->flash->{'message'} = 'There has been a problem';
     }
-    $c->res->redirect('/login', 303);
+    $c->res->redirect('/login/', 303);
 }
 
 __PACKAGE__->meta->make_immutable;

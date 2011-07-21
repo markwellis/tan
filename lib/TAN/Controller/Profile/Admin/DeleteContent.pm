@@ -22,7 +22,10 @@ sub delete_content: Chained('../admin') Args(0){
         $c->detach;
     }
 
-    $c->stash->{'template'} = 'Profile::Admin::DeleteContent';
+    $c->stash(
+        'template' => 'profile/admin/delete_content.tt',
+        'page_title' => 'Delete Content',
+    );
 }
 
 sub delete_objects: Private{

@@ -1,0 +1,31 @@
+<ul class="TAN-inside">
+    [%- IF index -%]
+        [%- is_picture = 0 -%]
+        [%- IF 
+            ( type == 'picture' ) 
+            && ( fancy_picture_index ) 
+        -%]
+            [%- css_includes.push('index@picture') -%]
+            [%- is_picture = 1 -%]
+        [%- END -%]
+
+        [%- FOREACH object IN index.objects -%]
+            [%- NEXT IF !object -%]
+            <li 
+                class="TAN-news
+                    [% IF loop.count % 2 %] TAN-news-alternate[% END %]"
+            >
+                [%- IF is_picture -%]
+                    [%- PROCESS index/picture.tt -%]
+                [%- ELSE -%]
+                    [%- PROCESS index/object.tt -%]
+                [%- END -%]
+            </li>
+        [%- END -%]
+    [%- ELSE -%]
+        <li class="TAN-news">
+            <h1>Nothing found</h1>
+        </li>
+    [%- END -%]
+</ul>
+[%- PROCESS index/pagination.tt pager=index.pager -%]

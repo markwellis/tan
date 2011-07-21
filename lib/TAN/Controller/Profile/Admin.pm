@@ -4,7 +4,7 @@ use namespace::autoclean;
 
 BEGIN { extends 'Catalyst::Controller'; }
 
-sub admin: Chained('../user') CaptureArgs(0){
+sub admin: Chained('../user/user') CaptureArgs(0){
     my ( $self, $c ) = @_;
 
     if ( $c->req->method eq 'POST' ){

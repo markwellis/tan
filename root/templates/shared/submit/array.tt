@@ -1,0 +1,36 @@
+[% js_includes.push('Submit@Array') %]
+
+[% answers = [] %]
+[% IF field.value %]
+    [% RAWPERL %]
+        $stash->set('field_value_ref', ref( $stash->get(['field', 'value']) ));
+    [% END %]
+    [% IF field_value_ref == 'DBIx::Class::ResultSet' %]
+    [%#object %]
+        [% FOREACH answer IN field.value.all %]
+            [% answers.push( answer.answer ) %]
+        [% END %]
+    [% ELSIF field_value_ref == 'ARRAY' %]
+    [%#array %]
+        [% answers = field.value %]
+    [% END %]
+[% ELSE %]
+    [% answers = [ '', '' ] %]
+[% END %]
+<ul>
+    [% FOREACH answer IN answers %]
+        <li>
+            <label for="array-[% loop.count - 1 %]">[% field.label | ucfirst %] [% loop.count - 1 %]</label>
+            <input
+                type="text" 
+                name="[% field.id %]"
+                id="array-[% loop.count - 1 %]" 
+                value="[% answer | html %]"
+                class="TAN-array"
+            />
+        </li>
+    [% END %]
+    <li>
+        <a href="#" class="right TAN-array-more">MORE!</a>
+    </li>
+</ul>

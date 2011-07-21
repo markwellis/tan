@@ -50,6 +50,7 @@ sub index :Path Args(2) {
         $c->stash(
             'index' => $c->model('Index')->indexinate($c, $objects, $pager),
             'type' => $type,
+            'location' => $type,
             'page' => $page,
             'upcoming' => $upcoming,
             'order' => $order,
@@ -62,7 +63,7 @@ sub index :Path Args(2) {
         }
     }
     
-    $c->stash->{'template'} = 'Index';
+    $c->stash->{'template'} = 'index.tt';
 }
 
 __PACKAGE__->meta->make_immutable;
