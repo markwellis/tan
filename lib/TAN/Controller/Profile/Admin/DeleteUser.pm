@@ -1,10 +1,10 @@
-package TAN::Controller::Profile::Admin::Delete;
+package TAN::Controller::Profile::Admin::DeleteUser;
 use Moose;
 use namespace::autoclean;
 
 BEGIN { extends 'Catalyst::Controller'; }
 
-sub delete: Chained('../admin') Args(0){
+sub delete_user: Chained('../admin') Args(0){
     my ( $self, $c ) = @_;
 
     if ( $c->req->method eq 'POST' ){
@@ -33,7 +33,7 @@ sub delete: Chained('../admin') Args(0){
     }
 
     $c->stash(
-        'template' => 'profile/admin/delete.tt',
+        'template' => 'profile/user/admin/delete_user.tt',
         'page_title' => 'Delete User',
     );
 }

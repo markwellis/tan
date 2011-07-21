@@ -30,7 +30,7 @@ sub delete_avatar: Chained('../admin') Args(0){
     }
 
     $c->stash(
-        'template' => 'profile/admin/delete_avatar.tt',
+        'template' => 'profile/user/admin/delete_avatar.tt',
         'page_title' => 'Delete Avatar',
     );  
 }

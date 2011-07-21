@@ -23,7 +23,7 @@ sub delete_content: Chained('../admin') Args(0){
     }
 
     $c->stash(
-        'template' => 'profile/admin/delete_content.tt',
+        'template' => 'profile/user/admin/delete_content.tt',
         'page_title' => 'Delete Content',
     );
 }

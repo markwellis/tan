@@ -1,0 +1,16 @@
+[% css_includes.push('Profile') %]
+
+<ul class="TAN-inside">
+    <li class="TAN-profile-user-admin-form">
+        <h2>Contact User</h2>
+        <form action="contact_user" method="post">
+            <fieldset>
+                <label for="reason">Reason</label>
+                <br />
+                <textarea name="message" style="width:100%;height:250px;"></textarea>
+                <br />
+                <input type="submit" value="Contact" />
+            </fieldset>
+        </form>
+    </li>
+</ul>

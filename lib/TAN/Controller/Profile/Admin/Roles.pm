@@ -35,7 +35,7 @@ sub roles: Chained('../admin') Args(0){
     }
 
     $c->stash(
-        'template' => 'profile/admin/roles.tt',
+        'template' => 'profile/user/admin/roles.tt',
         'roles' => $roles,
         'page_title' => 'Edit Roles',
     );
