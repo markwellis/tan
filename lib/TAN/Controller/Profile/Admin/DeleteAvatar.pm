@@ -29,7 +29,10 @@ sub delete_avatar: Chained('../admin') Args(0){
         $c->detach;
     }
 
-    $c->stash->{'template'} = 'Profile::Admin::DeleteAvatar';
+    $c->stash(
+        'template' => 'profile/admin/delete_avatar.tt',
+        'page_title' => 'Delete Avatar',
+    );  
 }
 
 __PACKAGE__->meta->make_immutable;

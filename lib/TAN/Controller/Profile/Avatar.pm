@@ -31,6 +31,7 @@ sub index: Path{
 
     $c->stash(
         'template' => 'profile/avatar.tt',
+        'page_title' => 'Change avatar',
     );
 }
 

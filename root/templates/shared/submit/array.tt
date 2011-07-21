@@ -17,19 +17,20 @@
 [% ELSE %]
     [% answers = [ '', '' ] %]
 [% END %]
-[% FOREACH answer IN answers %]
+<ul>
+    [% FOREACH answer IN answers %]
         <li>
-            <label for="array-[% loop.count %]">[% field.label | ucfirst %] [% loop.count %]</label>
+            <label for="array-[% loop.count - 1 %]">[% field.label | ucfirst %] [% loop.count - 1 %]</label>
             <input
                 type="text" 
                 name="[% field.id %]"
-                id="array-[% loop.count %]" 
+                id="array-[% loop.count - 1 %]" 
                 value="[% answer | html %]"
                 class="TAN-array"
             />
         </li>
-[% END %]
-
-<li>
-    <a href="#" class="right TAN-array-more">MORE!</a>
-</li>
+    [% END %]
+    <li>
+        <a href="#" class="right TAN-array-more">MORE!</a>
+    </li>
+</ul>
