@@ -108,7 +108,11 @@
                 </li>
             </ul>
             <input type="submit" value="Submit [% type | ucfirst %]"/>
-            <input type="hidden" name="type" value="[% type | lower %]" />
+            [% RAWPERL %]
+                my @submit_type = split( '::', ref( $stash->get('module') ) );
+                $stash->set( 'submit_type', lc( $submit_type[-1] ) );
+            [% END %]
+            <input type="hidden" name="type" value="[% submit_type %]" />
 
             [% IF ( edit && c.check_user_roles('delete_object') ) %]
                 <input type="submit" value="Delete" name="delete" />

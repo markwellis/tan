@@ -5,6 +5,7 @@ use namespace::autoclean;
 BEGIN { extends 'Catalyst::Controller'; }
 
 use JSON;
+use Try::Tiny;
 
 sub spam_twitter: Event('object_promoted'){
     my ( $self, $c, $object ) = @_;
@@ -12,11 +13,13 @@ sub spam_twitter: Event('object_promoted'){
     my $type = $object->type;
     my $title = $object->$type->title;
 
-    $c->model('Gearman')->run( 'twitter_spam', {
-        'title' => $title,
-        'nsfw' => $object->nsfw,
-        'url' => $c->req->base . $object->url,
-    } );
+    try{
+        $c->model('Gearman')->run( 'twitter_spam', {
+            'title' => $title,
+            'nsfw' => $object->nsfw,
+            'url' => $c->req->base . $object->url,
+        } );
+    }
 }
 
 sub remove_blog_cache: Event(object_updated){

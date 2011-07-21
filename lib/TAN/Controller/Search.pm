@@ -4,6 +4,8 @@ use namespace::autoclean;
 
 BEGIN { extends 'Catalyst::Controller'; }
 
+use Try::Tiny;
+
 sub add_to_index: Event(object_created) Event(object_updated){
     my ( $self, $c, $object ) = @_;
 
@@ -17,7 +19,9 @@ sub add_to_index: Event(object_created) Event(object_updated){
         'description' => $object->$type->description,
     };
 
-    $c->model('Gearman')->run( 'search_add_to_index', $document );
+    try{
+        $c->model('Gearman')->run( 'search_add_to_index', $document );
+    };
 }
 
 sub delete_from_index: Event(object_deleted) Event(mass_objects_deleted){
@@ -31,7 +35,10 @@ sub delete_from_index: Event(object_deleted) Event(mass_objects_deleted){
     foreach my $object ( @{$objects} ){
         push( @ids_to_delete, $object->id );
     }
-    $c->model('Gearman')->run( 'search_delete_from_index', \@ids_to_delete );
+    
+    try{
+        $c->model('Gearman')->run( 'search_delete_from_index', \@ids_to_delete );
+    };
 }
 
 sub index: Path Args(0){
