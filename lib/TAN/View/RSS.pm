@@ -31,14 +31,6 @@ sub process {
     
     foreach my $object ( @{$c->stash->{'index'}->{'objects'}} ){
         my $type = $object->type;
-
-        my $is_video;
-        if ( $type eq 'link' ){
-            if ( $c->view->is_video($object->link->url) ){
-                $is_video = 'video';
-            }
-        }
-
         my $base = $c->req->base;
         $base =~ s|/$||;
 
