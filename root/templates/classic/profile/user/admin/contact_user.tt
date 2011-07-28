@@ -5,11 +5,21 @@
         <h2>Contact User</h2>
         <form action="contact_user" method="post">
             <fieldset>
-                <label for="reason">Reason</label>
+                <label for="subject">Subject</label>
                 <br />
-                <textarea name="message" style="width:100%;height:250px;"></textarea>
+                <input type="text" name="subject" id="subject" style="width:100%;" value="TAN admin contact" />
+                
+                <label for="body">Body</label>
+                <br />
+                [% 
+                    PROCESS lib/editor.tt editor = {
+                        name => 'body',
+                        height => '300px'
+                    }
+                %]
                 <br />
                 <input type="submit" value="Contact" />
+                <input type="hidden" value="reason" name="reason" id="reason" />
             </fieldset>
         </form>
     </li>

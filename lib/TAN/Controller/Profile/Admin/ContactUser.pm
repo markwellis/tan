@@ -10,13 +10,15 @@ sub contact_user: Chained('../admin') Args(0){
     if ( $c->req->method eq 'POST' ){
         my $user = $c->stash->{'user'};
 
-#email user here... $c->stash->{'message'}
-        $c->model('MySql::AdminLog')->log_event( {
-            'admin_id' => $c->user->id,
-            'user_id' => $user->id,
-            'action' => 'contact_user',
-            'reason' => $c->stash->{'reason'},
-        } );
+        $c->email(
+            'header' => [
+                'From'    => 'noreply@thisaintnews.com',
+                'To'      => $user->email,
+                'Subject' => $c->req->param('subject'),
+                'Content-Type' => 'text/html',
+            ],
+            'body' => $c->req->param('body'),
+        );
 
         $c->res->redirect( $user->profile_url, 303 );
         $c->detach;
