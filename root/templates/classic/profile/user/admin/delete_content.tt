@@ -13,26 +13,12 @@
                         </li>
                     [% END %]
                     [% IF c.check_user_roles('delete_object') %]
-                        <li>
-                            <input type="checkbox" name="objects" value="link" id="delete_links" />
-                            <label for="delete_links">Links</label>
-                        </li>
-                        <li>
-                            <input type="checkbox" name="objects" value="blog" id="delete_blogs" />
-                            <label for="delete_blogs">Blogs</label>
-                        </li>
-                        <li>
-                            <input type="checkbox" name="objects" value="picture" id="delete_pictures" />
-                            <label for="delete_pictures">Pictures</label>
-                        </li>
-                        <li>
-                            <input type="checkbox" name="objects" value="poll" id="delete_polls" />
-                            <label for="delete_polls">Polls</label>
-                        </li>
-                        <li>
-                            <input type="checkbox" name="objects" value="video" id="delete_videos" />
-                            <label for="delete_videos">Videos</label>
-                        </li>
+                        [% FOREACH object_type IN c.model('Object').public %]
+                            <li>
+                                <input type="checkbox" name="objects" value="[% object_type %]" id="delete_[% object_type %]" />
+                                <label for="delete_[% object_type %]">[% object_type | ucfirst %]s</label>
+                            </li>
+                        [% END %]
                     [% END %]
                 </ul>
                 <label for="reason">Reason</label>
