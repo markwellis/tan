@@ -105,6 +105,12 @@ __PACKAGE__->might_have(
 );
 
 __PACKAGE__->might_have(
+  "forum",
+  "TAN::Schema::Result::Forum",
+  { "foreign.forum_id" => "self.object_id" },
+);
+
+__PACKAGE__->might_have(
   "picture",
   "TAN::Schema::Result::Picture",
   { "foreign.picture_id" => "self.object_id" },
@@ -174,7 +180,7 @@ sub url_title{
 sub url{
     my ( $self ) = @_;
 
-    return "/view/" . $self->type . '/' 
+    return '/view/' . $self->type . '/' 
         . $self->object_id .'/' 
         . $self->url_title;
 }
@@ -192,7 +198,6 @@ promotes object
 =cut
 sub promote{
     my ( $self ) = @_;
-#so somethings been updated, do some tiwtter shit n that
 
     $self->update({
         'promoted' => \'NOW()',
