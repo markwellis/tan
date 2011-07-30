@@ -29,6 +29,10 @@
                             <input type="checkbox" name="objects" value="poll" id="delete_polls" />
                             <label for="delete_polls">Polls</label>
                         </li>
+                        <li>
+                            <input type="checkbox" name="objects" value="video" id="delete_videos" />
+                            <label for="delete_videos">Videos</label>
+                        </li>
                     [% END %]
                 </ul>
                 <label for="reason">Reason</label>

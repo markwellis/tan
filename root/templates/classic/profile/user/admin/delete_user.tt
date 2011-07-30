@@ -4,7 +4,7 @@
 <ul class="TAN-inside">
     <li class="TAN-profile-user-admin-form">
         <h2>[% deleted ? 'Undelete' : 'Delete' %] User</h2>
-        <form action="delete" method="post">
+        <form action="delete_user" method="post">
             <fieldset>
                 <label for="reason">Reason</label>
                 <input
