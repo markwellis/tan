@@ -10,7 +10,19 @@ has 'public' => (
     'lazy_build' => 1,
 );
 sub _build_public{
-    return [qw/link blog picture poll video forum/];
+#build a list of public objects from submit model
+    my $submit_model = TAN->model('Submit');
+
+    my $menu = {};
+    foreach my $key ( keys(%{$submit_model->modules}) ){
+        $menu->{ $submit_model->modules->{ $key }->config->{'menu'}->{'position'} } = $key;
+        if ( my $alias = $submit_model->modules->{ $key }->config->{'alias'} ){
+            $menu->{ $alias->{'menu'}->{'position'} } = $alias->{'name'};
+        }
+    }
+
+    my @items = map $menu->{$_}, sort(keys(%{$menu}));
+    return \@items;
 }
 
 has 'private' => (
@@ -20,6 +32,12 @@ has 'private' => (
 );
 sub _build_private{
     return [qw/profile/];
+}
+
+sub valid_public_object{
+    my ( $self, $type ) = @_;
+    
+    return grep( /^${type}$/, @{$self->public} );
 }
 
 __PACKAGE__->meta->make_immutable;

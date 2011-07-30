@@ -29,7 +29,7 @@ sub index: Private{
     $c->cache_page(3600);
 
     my $sitemap_count = $c->model('MySQL::Object')->search({
-        'type' => ['link', 'blog', 'picture', 'poll', 'video'],
+        'type' => TAN->model('Object')->public,
         'deleted' => 'N',
     })->count;
     $sitemap_count = ceil($sitemap_count / 1000);
@@ -59,7 +59,7 @@ sub xml: Path('xml') Args(1){
     }
 
     my $object_rs = $c->model('MySQL::Object')->search({
-            'type' => ['link', 'blog', 'picture', 'poll', 'video'],
+            'type' => TAN->model('Object')->public,
             'deleted' => 'N',
         }, {
         '+select' => \"DATE_FORMAT(created, '%Y-%m-%dT%H:%i:%S')",
@@ -67,7 +67,7 @@ sub xml: Path('xml') Args(1){
         'order_by' => 'created',
         'rows' => 1000,
         'page' => $page,
-        'prefetch' => ['link', 'blog', 'picture', 'poll', 'video'],
+        'prefetch' => TAN->model('Object')->public,
     });
 
     my @objects = $object_rs->all;

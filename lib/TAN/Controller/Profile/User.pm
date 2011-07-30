@@ -56,41 +56,18 @@ sub user_index: PathPart('') Chained('user') Args(0){
     }, {
         'prefetch' => 'object',
     } )->count || 0;
-    my $link_count = $user->objects->search({
-        'type' => 'link',
-        %search_opts,
-    })->count || 0;
-
-    my $blog_count = $user->objects->search({
-        'type' => 'blog',
-        %search_opts,
-    })->count || 0;
-
-    my $picture_count = $user->objects->search({
-        'type' => 'picture',
-        %search_opts,
-    })->count || 0;
-
-    my $poll_count = $user->objects->search({
-        'type' => 'poll',
-        %search_opts,
-    })->count || 0;
-
-    my $video_count = $user->objects->search({
-        'type' => 'video',
-        %search_opts,
-    })->count || 0;
-
+    
+    foreach my $public_object ( @{$c->model('Object')->public} ){
+        $c->stash->{"${public_object}_count"} = $user->objects->search({
+            'type' => $public_object,
+            %search_opts,
+        })->count || 0;
+    }
     $c->stash(
         'object' => $object,
         'page_title' => $user->username . "'s Profile",
         'template' => 'profile/user.tt',
         'comment_count' => $comment_count,
-        'link_count' => $link_count,
-        'blog_count' => $blog_count,
-        'picture_count' => $picture_count,
-        'poll_count' => $poll_count,
-        'video_count' => $video_count,
     );
 }
 
@@ -132,7 +109,7 @@ sub edit: PathPart('edit') Chained('user') Args(0){
     $c->detach;
 }
 
-sub comments: PathPart('comments') Chained('user') Args(0){
+sub comment: PathPart('comment') Chained('user') Args(0){
     my ( $self, $c ) = @_;
 
     $c->cache_page(600);
@@ -145,7 +122,7 @@ sub comments: PathPart('comments') Chained('user') Args(0){
         },
         {
             'prefetch' => ['user', {
-                'object' => ['link', 'blog', 'picture', 'poll', 'video'],
+                'object' => TAN->model('Object')->public,
             }],
             'page' => $page,
             'rows' => 50,
@@ -156,8 +133,7 @@ sub comments: PathPart('comments') Chained('user') Args(0){
     );
 
     if ( !$c->stash->{'comments'} ) {
-        $c->forward('/default');
-        $c->detach;
+        $c->detach('/default');
     }
 
     $c->stash(
@@ -166,55 +142,13 @@ sub comments: PathPart('comments') Chained('user') Args(0){
     );
 }
 
-sub links: PathPart('links') Chained('user') Args(0){
-    my ( $self, $c ) = @_;
+sub view: PathPart('') Chained('user') Args(1){
+    my ( $self, $c, $type ) = @_;
 
-    $c->forward('fetch', ['link']);
-
-    $c->stash(
-        'template' => 'index.tt',
-        'can_rss' => 1,
-    );
-}
-
-sub blogs: PathPart('blogs') Chained('user') Args(0){
-    my ( $self, $c ) = @_;
-
-    $c->forward('fetch', ['blog']);
-
-    $c->stash(
-        'template' => 'index.tt',
-        'can_rss' => 1,
-    );
-}
-
-sub pictures: PathPart('pictures') Chained('user') Args(0){
-    my ( $self, $c ) = @_;
-
-    $c->forward('fetch', ['picture']);
-
-    $c->stash(
-        'fancy_picture_index' => 1,
-        'template' => 'index.tt',
-        'can_rss' => 1,
-    );
-}
-
-sub polls: PathPart('polls') Chained('user') Args(0){
-    my ( $self, $c ) = @_;
-
-    $c->forward('fetch', ['poll']);
-
-    $c->stash(
-        'template' => 'index.tt',
-        'can_rss' => 1,
-    );
-}
-
-sub videos: PathPart('videos') Chained('user') Args(0){
-    my ( $self, $c ) = @_;
-
-    $c->forward('fetch', ['video']);
+    if ( !$c->model('object')->valid_public_object( $type ) ){
+        $c->detach('/default');
+    }
+    $c->forward('fetch', [$type]);
 
     $c->stash(
         'template' => 'index.tt',
@@ -232,16 +166,13 @@ sub fetch: Private{
 
     my ( $objects, $pager ) = $c->stash->{'user'}->objects->index( $type, $page, 1, {}, $order, $c->nsfw, "profile:" . $c->stash->{'user'}->id );
 
-    if ( scalar(@{$objects}) ){
+    if ( defined( $objects ) && scalar(@{$objects}) ){
         $c->stash(
             'index' => $c->model('Index')->indexinate($c, $objects, $pager),
             'order' => $order,
             'page_title' => $c->stash->{'user'}->username . "'s " . ucfirst($type) . "s",
             'type' => $type,
         );
-    } else {
-        $c->forward('/default');
-        $c->detach;
     }
 }
 

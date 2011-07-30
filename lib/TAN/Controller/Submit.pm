@@ -16,10 +16,8 @@ sub type: PathPart('submit') Chained('/') CaptureArgs(1){
         $c->detach();
     }
 
-    my $type_reg = $c->model('CommonRegex')->type;
-    if ($type !~ m/$type_reg/){
-        $c->forward('/default');
-        $c->detach();
+    if ( !$c->model('object')->valid_public_object( $type ) ){
+        $c->detach('/default');
     }
     $c->stash(
         'page_title' => 'Submit ' . ucfirst($type),

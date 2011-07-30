@@ -91,10 +91,8 @@ sub remove_object_cache:
 sub type: PathPart('view') Chained('/') CaptureArgs(2){
     my ( $self, $c, $type, $object_id ) = @_;
 
-    my $type_reg = $c->model('CommonRegex')->type;
-    if ($type !~ m/$type_reg/){
-        $c->forward('/default');
-        $c->detach();
+    if ( !$c->model('object')->valid_public_object( $type ) ){
+        $c->detach('/default');
     }
 
     my $not_int_reg = $c->model('CommonRegex')->not_int;

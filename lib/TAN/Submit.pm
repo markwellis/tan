@@ -136,19 +136,4 @@ sub validate_and_prepare{
     return $prepared;
 }
 
-sub menu_items{
-    my ( $self ) = @_;
-
-    my $menu = {};
-    foreach my $key ( keys(%{$self->modules}) ){
-        $menu->{ $self->modules->{ $key }->config->{'menu'}->{'position'} } = $key;
-        if ( my $alias = $self->modules->{ $key }->config->{'alias'} ){
-            $menu->{ $alias->{'menu'}->{'position'} } = $alias->{'name'};
-        }
-    }
-
-    my @items = map $menu->{$_}, sort(keys(%{$menu}));
-    return \@items;
-}
-
 __PACKAGE__->meta->make_immutable;

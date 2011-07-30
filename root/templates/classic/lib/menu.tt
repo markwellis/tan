@@ -4,7 +4,7 @@
 [%- menu_tab_names.push('All') -%]
 [%- menu_tab_values.push('all') -%]
 
-[%- FOREACH menu_item IN c.model('Submit').menu_items -%]
+[%- FOREACH menu_item IN c.model('Object').public -%]
     [%- menu_tab_name = "${menu_item}s" | ucfirst -%]
     [%- menu_tab_names.push( menu_tab_name ) -%]
     [%- menu_tab_values.push( menu_item ) -%]
