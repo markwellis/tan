@@ -13,15 +13,19 @@ sub _build_public{
 #build a list of public objects from submit model
     my $submit_model = TAN->model('Submit');
 
-    my $menu = {};
+    my $public = {};
     foreach my $key ( keys(%{$submit_model->modules}) ){
-        $menu->{ $submit_model->modules->{ $key }->config->{'menu'}->{'position'} } = $key;
         if ( my $alias = $submit_model->modules->{ $key }->config->{'alias'} ){
-            $menu->{ $alias->{'menu'}->{'position'} } = $alias->{'name'};
+        #ignore aliases here so we can add them in the proper place
+            next if ( $alias->{'name'} eq $key );
+        }
+        $public->{ $submit_model->modules->{ $key }->config->{'menu'}->{'position'} } = $key;
+        if ( my $alias = $submit_model->modules->{ $key }->config->{'alias'} ){
+            $public->{ $alias->{'menu'}->{'position'} } = $alias->{'name'};
         }
     }
 
-    my @items = map $menu->{$_}, sort(keys(%{$menu}));
+    my @items = map $public->{$_}, sort(keys(%{$public}));
     return \@items;
 }
 

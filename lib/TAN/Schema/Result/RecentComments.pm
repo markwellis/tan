@@ -78,6 +78,13 @@ __PACKAGE__->add_columns(
     is_nullable => 0,
     size => 255,
   },
+  "forum_title",
+  {
+    data_type => "VARCHAR",
+    default_value => undef,
+    is_nullable => 0,
+    size => 255,
+  },
   "nsfw",
   { data_type => "ENUM", default_value => "N", is_nullable => 0, size => 1 },
   "type",

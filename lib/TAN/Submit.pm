@@ -22,8 +22,13 @@ sub _build_modules{
     foreach my $mod ( @mods ){
         my $type = $mod;
         $type =~ s/$namespace\:\://;
+        $type = lc( $type );
+        $types->{ $type } = $mod->new;
 
-        $types->{ lc($type) } = $mod->new();
+        #setup aliases
+        if ( my $alias = $types->{ $type }->config->{'alias'} ){
+            $types->{ $alias->{'name'} } = $types->{ $type };
+        }
     }
 
     return $types;
