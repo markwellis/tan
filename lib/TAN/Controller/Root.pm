@@ -98,10 +98,11 @@ sub filter: Local Args(0){
 
 sub random: Local Args(1){
     my ( $self, $c, $type ) = @_;
-    
-    my $type_reg = $c->model('CommonRegex')->type;
 
-    if ( ($type ne 'all') && ($type !~ m/$type_reg/) ){
+    if ( 
+        ($type ne 'all') 
+        && ( !$c->model('object')->valid_public_object( $type ) ) 
+    ){
         $type = 'all';
     }
 

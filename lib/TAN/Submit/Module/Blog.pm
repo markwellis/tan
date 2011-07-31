@@ -45,6 +45,12 @@ sub _build_config{
     );
 
     return {
+        'alias' => {
+            'name' => 'forum',
+            'menu' => {
+                'position' => 60,
+            },
+        },
         'schema' => \%schema,
         'menu' => {
             'position' => 20,

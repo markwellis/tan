@@ -22,8 +22,13 @@ sub _build_modules{
     foreach my $mod ( @mods ){
         my $type = $mod;
         $type =~ s/$namespace\:\://;
+        $type = lc( $type );
+        $types->{ $type } = $mod->new;
 
-        $types->{ lc($type) } = $mod->new();
+        #setup aliases
+        if ( my $alias = $types->{ $type }->config->{'alias'} ){
+            $types->{ $alias->{'name'} } = $types->{ $type };
+        }
     }
 
     return $types;
@@ -134,21 +139,6 @@ sub validate_and_prepare{
         Exception::Simple->throw("prepare failed");
     }
     return $prepared;
-}
-
-sub menu_items{
-    my ( $self ) = @_;
-
-    my $menu = {};
-    foreach my $key ( keys(%{$self->modules}) ){
-        $menu->{ $self->modules->{ $key }->config->{'menu'}->{'position'} } = $key;
-        if ( my $alias = $self->modules->{ $key }->config->{'alias'} ){
-            $menu->{ $alias->{'menu'}->{'position'} } = $alias->{'name'};
-        }
-    }
-
-    my @items = map $menu->{$_}, sort(keys(%{$menu}));
-    return \@items;
 }
 
 __PACKAGE__->meta->make_immutable;

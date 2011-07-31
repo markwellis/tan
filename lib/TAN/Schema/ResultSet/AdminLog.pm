@@ -26,7 +26,7 @@ sub index{
     my $admin_logs = $self->search( {}, {
         'prefetch' => [
             {
-                'object' => [qw/link blog picture poll/]
+                'object' => TAN->model('Object')->public,
             },
             qw/admin user comment/,
         ],

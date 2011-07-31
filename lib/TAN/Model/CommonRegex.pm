@@ -28,12 +28,6 @@ has 'not_alpha_numeric' => (
     'default' => sub { return qr/[^a-zA-Z0-9]/ },
 );
 
-has 'type' => (
-    'is' => 'ro',
-    'isa' => 'RegexpRef',
-    'default' => sub { return qr/^(?:link|blog|picture|poll|video)$/ },
-);
-
 has 'trim' => (
     'is' => 'ro',
     'isa' => 'RegexpRef',

@@ -81,7 +81,7 @@ sub delete_comments: Private{
 
         my $comments_rs = $c->model('MySql::Comments')->search( $search_terms, {
             'prefetch' => {
-                'object' => [qw/link blog picture poll/]
+                'object' => TAN->model('Object')->public,
             },
         } );
 

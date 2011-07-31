@@ -25,16 +25,15 @@
                     <li>Joined [% user.join_date %] ago</li>
                     [% things = {
                         '0' => ['comment', 'comment_count'],
-                        '1' => ['link', 'link_count'],
-                        '2' => ['blog', 'blog_count'],
-                        '3' => ['picture', 'picture_count'],
-                        '4' => ['poll', 'poll_count'],
-                        '5' => ['video', 'video_count'],
                     } %]
+                    [% FOREACH public_object IN c.model('Object').public %]
+                        [% count = loop.count + 1 %]
+                        [% things.${count} = [public_object, "${public_object}_count"] %]
+                    [% END %]
                     [% FOREACH thing IN things.keys.nsort %]
                         <li>
-                            [% IF things.${thing}.1 %]
-                                <a href="[% things.${thing}.0 %]s">
+                            [% IF ${things.${thing}.1} %]
+                                <a href="[% things.${thing}.0 %]">
                             [% END %]
                             [% things.${thing}.0 | ucfirst %]s: [% ${things.${thing}.1} %]
                             [% IF things.${thing}.1 %]

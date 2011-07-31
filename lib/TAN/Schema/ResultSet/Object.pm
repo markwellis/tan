@@ -10,8 +10,10 @@ my $order_reg = qr/^(?:promoted|plus|minus|views|comments)$/;
 sub index {
     my ($self, $type, $page, $upcoming, $search, $order, $nsfw, $index_type) = @_;
     
-    my $type_reg = TAN->model('CommonRegex')->type;
-    if ( ($type ne 'all') && ($type !~ m/$type_reg/) ){
+    if ( 
+        ( $type ne 'all' ) 
+        && ( !TAN->model('object')->valid_public_object( $type ) )
+    ){
         return undef;
     }
 
@@ -39,7 +41,7 @@ sub index {
         }
 
         if ($type eq 'all'){
-            $type = ['link', 'blog', 'picture', 'poll', 'video'];
+            $type = TAN->model('Object')->public;
         }
         
         #order by newest to lastest
@@ -107,9 +109,8 @@ sub random{
 
     my $search = {};
     if ($type eq 'all'){
-        my $rand = int(rand(3));
-        my @types = ('link', 'blog', 'picture', 'poll', 'video');
-        $type = $types[$rand];
+        my $types = TAN->model('Object')->public;
+        $type = $types->[ int(rand(scalar(@{$types} - 1))) ];
     }
     $search->{'type'} = $type;
     my %nsfw_opts;
