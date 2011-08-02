@@ -21,7 +21,7 @@ use Catalyst qw/
 
 extends 'Catalyst';
 
-our $VERSION = 2.1.0;
+our $VERSION = 2.1.1;
 
 __PACKAGE__->config( name => 'TAN', 
     'Plugin::PageCache' => {
