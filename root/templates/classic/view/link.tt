@@ -2,7 +2,7 @@
 [% BLOCK view_block %]
     <a 
         class="TAN-view_link TAN-type-link" 
-        href="[% url %]" 
+        href="[% "/redirect/external/${object.id}" %]" 
         rel="external nofollow"
     >View Link</a>
 [% END %]
