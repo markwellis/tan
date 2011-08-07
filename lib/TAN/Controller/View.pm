@@ -108,6 +108,11 @@ sub type: PathPart('view') Chained('/') CaptureArgs(2){
         'location' => $type,
     );
 }
+sub index_no_title: PathPart('') Chained('type') Args(0){
+    my ( $self, $c ) = @_;
+
+    $c->forward('index');
+}
 
 sub index: PathPart('') Chained('type') Args(1) {
     my ( $self, $c, $title ) = @_;
