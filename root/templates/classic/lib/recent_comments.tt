@@ -50,7 +50,7 @@
                     <li>
                         <a 
                             href="[% comment.url %]#comment[% comment.comment_id %]"
-                            title="[% tip_title %]"
+                            title="[% tip_title | html %]"
                         >[% short_comment %]</a>
                     </li>
                 [%- END -%]
