@@ -1,10 +1,10 @@
+[% js_includes.push('nsfw-comments', 'comment') %]
 <div class="TAN-comment_wrapper">
     [% IF object.comments %]
         [% FOREACH comment IN comments %]
             [% PROCESS view/comment.tt %]
         [% END %]
 
-        [% js_includes.push('nsfw-comments', 'comment') %]
     [% END %]
 </div>
 <form id="comment_form" action="_comment" method="post">
