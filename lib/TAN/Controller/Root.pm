@@ -43,6 +43,9 @@ sub access_denied: Private{
 sub default: Local{
     my ( $self, $c ) = @_;
 
+    # check for a cms page
+    $c->forward('/cms/cms');
+
     $c->stash(
         'error' => 'Not found',
     );
