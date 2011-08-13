@@ -11,6 +11,7 @@ sub cms: Private{
     my $cms = $c->model('MySql::Cms')->find( $c->req->path );
 
     if ( defined( $cms ) ){
+# set page_title as well
         $c->stash(
             'cms' => $cms,
             'template' => 'cms.tt',
