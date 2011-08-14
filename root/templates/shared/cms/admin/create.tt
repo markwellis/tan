@@ -1,0 +1,42 @@
+[%- css_includes.push('Cms', 'Submit') -%]
+[% js_includes.push('Submit', 'Submit@Wysiwyg') %]
+
+<ul class="TAN-inside">
+    <li class="TAN-news">
+        <form action="create" id="submit_form" method="post" enctype="multipart/form-data">
+            <fieldset>
+                <ul>
+                    <li>
+                        <label for="title">Page Title</label>
+                        <input 
+                            type="text" 
+                            name="title"
+                            id="title" 
+                            class="required maxLength:255"
+                        />
+                    </li>
+                    <li>
+                        <label for="url">Url ( no leading / )</label>
+                        <input 
+                            type="text" 
+                            name="url"
+                            id="url" 
+                            class="required maxLength:255"
+                        />
+                    </li>
+                    <li>
+                        <label for="content">Content</label>
+                        [%
+                            PROCESS lib/editor.tt editor = {
+                                name => 'content',
+                                height => '600px',
+                                required => 1,
+                            }
+                        %]
+                    </li>
+                </ul>
+                <input type="submit" value="Submit Link"/>
+            </fieldset>
+        </form>
+    </li>
+</ul>

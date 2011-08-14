@@ -1,0 +1,30 @@
+[%- css_includes.push('Cms') -%]
+
+<ul class="TAN-inside">
+    <li>
+        <table>
+            <tr>
+                <th>Page</th>
+                <th>Url</th>
+            </tr>
+
+            [% IF cms_pages %]
+                [%- FOREACH cms_page IN cms_pages.all -%]
+                    <tr>
+                        <td class="TAN-cms-page">
+                            [% cms_page.title | html %]
+                        </td>
+                        <td class="TAN-cms-url">
+                            <a href="edit/[% cms_page.id %]">[% cms_page.url %]</a>
+                        </td>
+                    </tr>
+                [%- END -%]
+            [% END %]
+        </table>
+    </li>
+    <li>
+        <a href="create">create</a>
+    </li>
+</ul>
+
+[% PROCESS 'index/pagination.tt' pager=cms_pages.pager %]

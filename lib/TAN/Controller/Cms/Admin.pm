@@ -4,7 +4,9 @@ use namespace::autoclean;
 
 BEGIN { extends 'Catalyst::Controller'; }
 
-sub validate_user: PathPart('admin') Chained('/') CaptureArgs(0){
+use Try::Tiny;
+
+sub validate_user: PathPart('cms/admin') Chained('/') CaptureArgs(0){
     my ( $self, $c ) = @_;
 
     if ( 
@@ -26,13 +28,58 @@ sub index: PathPart('') Chained('validate_user') Args(0){
     my $cms_pages = try {
         $c->model('MySql::Cms')->index( $page );
     } catch {
-        $c->detach('/default');
+        return undef;
     };
 
     $c->stash(
         'cms_pages' => $cms_pages,
         'template' => 'cms/admin/index.tt',
         'page_title' => 'Cms Pages',
+    );
+}
+
+sub create: Chained('validate_user') Args(0){
+    my ( $self, $c ) = @_;
+
+    if ( $c->req->method eq 'POST' ){
+        #create page
+        my $url = $c->req->param('url');
+        $url =~ s/^\\//; #remove leading slash
+
+        my $cms_page = $c->model('MySql::Cms')->create( {
+            'title' => $c->req->param('title'),
+            'url' => $url,
+            'content' => $c->req->param('content'),
+            'created' => \'NOW()',
+            'user_id' => $c->user->id,
+        } );
+
+        #redirect to index
+        $c->res->redirect( '/cms/admin/', 302 );
+        $c->detach;
+    }
+
+    $c->stash(
+        'template' => 'cms/admin/create.tt',
+        'page_title' => 'Create New Cms Page',
+    );
+}
+
+sub delete: Chained('validate_user') Args(1){
+    my ( $self, $c, $cms_id ) = @_;
+
+    $c->stash(
+        'template' => 'cms/admin/delete.tt',
+        'page_title' => 'Delete Cms Page',
+    );
+}
+
+sub edit: Chained('validate_user') Args(1){
+    my ( $self, $c, $cms_id ) = @_;
+
+    $c->stash(
+        'template' => 'cms/admin/edit.tt',
+        'page_title' => 'Edit Cms Page',
     );
 }
 

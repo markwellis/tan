@@ -18,7 +18,9 @@ sub cms: Private{
             'template' => 'cms.tt',
             'page_title' => $cms->title,
         );
-        #make sure we detach if is a valid cms url
+
+        # make sure we detach if is a valid cms url
+        # otherwise the 404 handler will kick in
         $c->detach;
     }
 }
