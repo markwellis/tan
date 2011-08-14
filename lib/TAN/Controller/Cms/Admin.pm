@@ -52,6 +52,8 @@ sub create: Chained('validate_user') Args(0){
             'content' => $c->req->param('content'),
             'created' => \'NOW()',
             'user_id' => $c->user->id,
+            'revision' => 0,
+            'comment' => $c->req->param('comment'),
         } );
 
         #redirect to index

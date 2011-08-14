@@ -10,6 +10,7 @@ sub cms: Private{
 #do caching of somekind
     my $cms = $c->model('MySql::Cms')->search( {
         'url' => $c->req->path,
+        'revision' => \' = (SELECT MAX(revision) FROM cms sub WHERE me.url = sub.url)',
     } )->first;
 
     if ( defined( $cms ) ){

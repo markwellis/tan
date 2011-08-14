@@ -6,7 +6,7 @@ CREATE  TABLE IF NOT EXISTS `tan`.`cms` (
   `revision` BIGINT(20) NOT NULL ,
   `created` TIMESTAMP NOT NULL ,
   `title` VARCHAR(255) NOT NULL ,
-  `comment` MEDIUMTEXT NOT NULL ,
+  `comment` VARCHAR(255) NOT NULL ,
   PRIMARY KEY (`cms_id`) ,
   INDEX `fk_cms_1` (`user_id` ASC) ,
   INDEX `url` (`url` ASC) ,

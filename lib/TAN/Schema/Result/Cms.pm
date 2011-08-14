@@ -33,12 +33,7 @@ __PACKAGE__->add_columns(
   "title",
   { data_type => "VARCHAR", default_value => undef, is_nullable => 0, size => 255 },
   "comment",
-  {
-    data_type => "MEDIUMTEXT",
-    default_value => undef,
-    is_nullable => 0,
-    size => 16777215,
-  },
+  { data_type => "VARCHAR", default_value => undef, is_nullable => 0, size => 255 },
 );
 __PACKAGE__->set_primary_key("cms_id");
 
