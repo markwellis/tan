@@ -8,6 +8,8 @@ use base 'DBIx::Class';
 __PACKAGE__->load_components(qw/Core InflateColumn::DateTime/);
 __PACKAGE__->table("cms");
 __PACKAGE__->add_columns(
+  "cms_id",
+  { data_type => "BIGINT", default_value => undef, is_nullable => 0, size => 20 },
   "url",
   { data_type => "VARCHAR", default_value => undef, is_nullable => 0, size => 255 },
   "created",
@@ -34,8 +36,10 @@ __PACKAGE__->add_columns(
     is_nullable => 0,
     size => 16777215,
   },
+  "title",
+  { data_type => "VARCHAR", default_value => undef, is_nullable => 0, size => 255 },
 );
-__PACKAGE__->set_primary_key("url");
+__PACKAGE__->set_primary_key("cms_id");
 
 __PACKAGE__->belongs_to(
   "user",

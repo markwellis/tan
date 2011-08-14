@@ -1,1 +1,7 @@
-[% cms.content %]
+[% css_includes.push('Cms') %]
+
+<ul class="TAN-inside">
+    <li>
+        [% cms.content %]
+    </li>
+</ul>

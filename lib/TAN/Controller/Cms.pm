@@ -8,18 +8,19 @@ sub cms: Private{
     my ( $self, $c ) = @_;
 
 #do caching of somekind
-    my $cms = $c->model('MySql::Cms')->find( $c->req->path );
+    my $cms = $c->model('MySql::Cms')->search( {
+        'url' => $c->req->path,
+    } )->first;
 
     if ( defined( $cms ) ){
-# set page_title as well
         $c->stash(
             'cms' => $cms,
             'template' => 'cms.tt',
+            'page_title' => $cms->title,
         );
         #make sure we detach if is a valid cms url
         $c->detach;
     }
-
 }
 
 __PACKAGE__->meta->make_immutable;
