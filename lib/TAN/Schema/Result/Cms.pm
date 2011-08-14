@@ -19,14 +19,8 @@ __PACKAGE__->add_columns(
       datetime_undef_if_invalid => 1,
       size => 14,
   },
-  "updated",
-  {
-      data_type => 'datetime',
-      is_nullable => 1,
-      default_value => undef,
-      datetime_undef_if_invalid => 1,
-      size => 14,
-  },
+  "revision",
+  { data_type => "BIGINT", default_value => undef, is_nullable => 0, size => 20 },
   "user_id",
   { data_type => "BIGINT", default_value => undef, is_nullable => 0, size => 20 },
   "content",
@@ -38,6 +32,13 @@ __PACKAGE__->add_columns(
   },
   "title",
   { data_type => "VARCHAR", default_value => undef, is_nullable => 0, size => 255 },
+  "comment",
+  {
+    data_type => "MEDIUMTEXT",
+    default_value => undef,
+    is_nullable => 0,
+    size => 16777215,
+  },
 );
 __PACKAGE__->set_primary_key("cms_id");
 

@@ -6,16 +6,24 @@
             <tr>
                 <th>Page</th>
                 <th>Url</th>
+                <th>Comment</th>
+                <th>Revision</th>
             </tr>
 
             [% IF cms_pages %]
                 [%- FOREACH cms_page IN cms_pages.all -%]
                     <tr>
-                        <td class="TAN-cms-page">
+                        <td>
                             [% cms_page.title | html %]
                         </td>
-                        <td class="TAN-cms-url">
+                        <td>
                             <a href="edit/[% cms_page.id %]">[% cms_page.url %]</a>
+                        </td>
+                        <td>
+                            [% cms_page.comment | html %]
+                        </td>
+                        <td>
+                            [% cms_page.revision %]
                         </td>
                     </tr>
                 [%- END -%]
