@@ -8,6 +8,8 @@
                 <th>Url</th>
                 <th>Comment</th>
                 <th>Revision</th>
+                <th>System</th>
+                <th>Deleted</th>
             </tr>
 
             [% IF cms_pages %]
@@ -17,13 +19,19 @@
                             [% cms_page.title | html %]
                         </td>
                         <td>
-                            <a href="edit/[% cms_page.id %]">[% cms_page.url %]</a>
+                            <a href="edit/[% cms_page.id %]">/[% cms_page.url %]</a>
                         </td>
                         <td>
                             [% cms_page.comment | html %]
                         </td>
                         <td>
                             [% cms_page.revision %]
+                        </td>
+                        <td>
+                            [% cms_page.system %]
+                        </td>
+                        <td>
+                            [% cms_page.deleted %]
                         </td>
                     </tr>
                 [%- END -%]

@@ -54,6 +54,8 @@ sub create: Chained('validate_user') Args(0){
             'user_id' => $c->user->id,
             'revision' => 0,
             'comment' => $c->req->param('comment'),
+            'system' => ( $c->req->param('system') ) ? 'Y' : 'N',
+            'deleted' => ( $c->req->param('delete') ) ? 'Y' : 'N',
         } );
 
         #redirect to index
@@ -67,20 +69,14 @@ sub create: Chained('validate_user') Args(0){
     );
 }
 
-sub delete: Chained('validate_user') Args(1){
-    my ( $self, $c, $cms_id ) = @_;
-
-    $c->stash(
-        'template' => 'cms/admin/delete.tt',
-        'page_title' => 'Delete Cms Page',
-    );
-}
-
 sub edit: Chained('validate_user') Args(1){
     my ( $self, $c, $cms_id ) = @_;
 
+    my $cms_page = $c->model('MySql::Cms')->find( $cms_id );
+
     $c->stash(
-        'template' => 'cms/admin/edit.tt',
+        'cms_page' => $cms_page,
+        'template' => 'cms/admin/create.tt',
         'page_title' => 'Edit Cms Page',
     );
 }
