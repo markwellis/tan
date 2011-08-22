@@ -1,45 +1,72 @@
 [%- css_includes.push('Cms') -%]
+[% grouped_cms_pages = 
+    {
+        '0' => {
+            'Live' => [],
+        },
+        '1' => {
+            'System' => [],
+        },
+        '2' => {
+            'Deleted' => [],
+        },
+    }
+%]
 
+[% FOREACH cms_page IN cms_pages.all %]
+    [% IF cms_page.deleted == 'Y' %]
+        [% grouped_cms_pages.2.Deleted.push( cms_page ) %]
+    [% ELSIF cms_page.system == 'Y' %]
+        [% grouped_cms_pages.1.System.push( cms_page ) %]
+    [% ELSE %]
+        [% grouped_cms_pages.0.Live.push( cms_page ) %]
+    [% END %]
+[% END %]
 <ul class="TAN-inside">
-    <li>
-        <table>
-            <tr>
-                <th>Page</th>
-                <th>Url</th>
-                <th>Comment</th>
-                <th>Revision</th>
-                <th>System</th>
-                <th>Deleted</th>
-            </tr>
+    [% FOREACH index IN grouped_cms_pages.keys.sort %]
+        <li>
+            [% key = grouped_cms_pages.${index}.keys.0 %]
+            <h1>[% key %]</h1>
+            <table>
+                <tr>
+                    <th>Page</th>
+                    <th>Url</th>
+                    <th>Comment</th>
+                    <th>Revision</th>
+                    <th></th>
+                </tr>
 
-            [% IF cms_pages %]
-                [%- FOREACH cms_page IN cms_pages.all -%]
-                    <tr>
-                        <td>
-                            [% cms_page.title | html %]
-                        </td>
-                        <td>
-                            <a href="edit/[% cms_page.id %]">/[% cms_page.url %]</a>
-                        </td>
-                        <td>
-                            [% cms_page.comment | html %]
-                        </td>
-                        <td>
-                            [% cms_page.revision %]
-                        </td>
-                        <td>
-                            [% cms_page.system %]
-                        </td>
-                        <td>
-                            [% cms_page.deleted %]
-                        </td>
-                    </tr>
-                [%- END -%]
+                [% IF grouped_cms_pages.${index}.${key}.size %]
+                    [%- FOREACH cms_page IN grouped_cms_pages.${index}.${key} -%]
+                        <tr>
+                            <td>
+                                [% cms_page.title | html %]
+                            </td>
+                            <td>
+                                /[% cms_page.url | html %]
+                            </td>
+                            <td>
+                                [% cms_page.comment | html %]
+                            </td>
+                            <td>
+                                [% cms_page.revision %]
+                            </td>
+                            <td>
+                                <a href="edit/[% cms_page.id %]">Edit</a>
+                            </td>
+                        </tr>
+                    [%- END -%]
+                [% END %]
+            </table>
+            [% IF !loop.last %]
+                <br />
             [% END %]
-        </table>
+        </li>
+    [% END %]
+    <li>
     </li>
     <li>
-        <a href="create">create</a>
+        <a href="create">Create New Page</a>
     </li>
 </ul>
 

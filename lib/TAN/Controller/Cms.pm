@@ -11,6 +11,7 @@ sub cms: Private{
     my $cms = $c->model('MySql::Cms')->search( {
         'url' => $c->req->path,
         'revision' => \' = (SELECT MAX(revision) FROM cms sub WHERE me.url = sub.url)',
+        'deleted' => 'N',
     } )->first;
 
     if ( defined( $cms ) ){
