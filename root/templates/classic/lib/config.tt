@@ -25,5 +25,5 @@
     IF !page_meta_description.defined;
         page_meta_description = 'Social News For Internet Pirates';
     END;
-    page_keywords = 'strange pirate news community comments english social fun jokes videos pictures share sharing lol lolz funny humour humor';
+    page_keywords = 'tan thisaintnews strange pirate news community comments english social fun jokes videos pictures share sharing lol lolz funny humour humor';
 -%]
