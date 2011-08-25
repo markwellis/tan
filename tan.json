@@ -21,6 +21,8 @@
 
     "email": ["Sendmail"],
 
+    "paypal_donate_address": "donate@thisaintnews.com",
+
     "Plugin::Authentication": {
         "use_session": 1,
         "default": {

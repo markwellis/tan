@@ -528,3 +528,8 @@ fieldset{
     background-color:#3A44FF;
     color:#EFF8FC;
 }
+
+.TAN-menu-top-search > fieldset{
+    margin-right:0px;
+    padding-right:0px;
+}

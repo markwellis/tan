@@ -1,0 +1,47 @@
+<p>
+    [%- IF can_rss %]
+        <a href="[% rss_url %]">
+            <img 
+                src="/static/images/rss.png" 
+                alt="rss" 
+                class="TAN-rss-icon" 
+            />
+        </a> |
+    [%- END %]
+    <a href="http://www.twitter.com/thisaintnews">
+        <img 
+            src="/static/images/twitter.png" 
+            height="15" 
+            width="15" 
+            alt="Follow thisaintnews on Twitter"
+        />
+    </a> |
+    <a href="http://stats.thisaintnews.com">Stats</a> |
+    <a class="mibbit" href="/chat/">Chat</a>
+    [%- IF c.user_exists %]
+        | <a href="/login/logout/">Logout</a>
+    [%- END %]
+    | <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=[% c.config.paypal_donate_address | uri %]&item_name=TAN%20Donation&item_number=[% c.user_exists ? c.user.username : 'n00b' | uri %]&currency_code=GBP&tax=0">Donate</a>
+</p>
+<p>
+    [%- IF c.user_exists %]
+        <a href="[% c.user.profile_url %]">Profile</a> |
+    [%- ELSE -%]
+        <a href="/login/">Login/Register</a> | 
+    [%- END %]
+    <a href="/filter/" class="nsfw_filter">[% c.nsfw ? 'Enable' : 'Disable' %] filter</a> | 
+    <a href="/adminlog/">Admin Log</a> |
+    <a href="/faq/">FAQ</a>                    
+</p>
+[% PROCESS lib/cms_menu.tt %]
+<form class="TAN-menu-top-search" action="/search/" method="get">
+    <fieldset>
+        <input
+            type="text" 
+            size="31" 
+            name="q" 
+            value="[% c.req.param('q') %]"
+        />
+        <input type="submit" value="Search" />
+    </fieldset>
+</form>

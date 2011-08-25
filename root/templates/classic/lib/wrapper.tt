@@ -42,92 +42,10 @@
         [%- PROCESS lib/js_includes.tt %]
         <div class="TAN-header">
             <h1 class="TAN-logo">
-                <a title="This Aint News" href="/index/all/0/">This Aint News</a>
+                <a title="TAN" href="/index/all/0/">This Aint News</a>
             </h1>
             <div class="TAN-menu-top right">
-                <form 
-                    class="right" 
-                    method="post" 
-                    action="https://www.paypal.com/cgi-bin/webscr"
-                >
-                    <fieldset>
-                        <input type="hidden" value="_xclick" name="cmd" />
-                        <input 
-                            type="hidden" 
-                            value="donate@thisaintnews.com" 
-                            name="business"
-                        />
-                        <input 
-                            type="hidden" 
-                            value="TAN Donation" 
-                            name="item_name" 
-                        />
-                        <input 
-                            type="hidden" 
-                            value="[%
-                                IF c.user_exists; 
-                                    c.user.username | html;
-                                ELSE;
-                                    'n00b'; 
-                                END 
-                            %]" 
-                            name="item_number" 
-                        />
-                        <input type="hidden" value="GBP" name="currency_code" />
-                        <input type="hidden" value="0" name="tax" />
-                        <input 
-                            type="image" 
-                            alt="Donate" 
-                            name="submit" 
-                            src="/static/images/paypal.gif"
-                        />
-                    </fieldset>
-                </form>
-                <p>
-                    [%- IF can_rss %]
-                        <a href="[% rss_url %]">
-                            <img 
-                                src="/static/images/rss.png" 
-                                alt="rss" 
-                                class="TAN-rss-icon" 
-                            />
-                        </a> |
-                    [%- END %]
-                    <a href="http://www.twitter.com/thisaintnews">
-                        <img 
-                            src="/static/images/twitter.png" 
-                            height="15" 
-                            width="15" 
-                            alt="Follow thisaintnews on Twitter"
-                        />
-                    </a> |
-                    <a href="http://stats.thisaintnews.com">Stats</a> |
-                    <a class="mibbit" href="/chat/">Chat</a>
-                    [%- IF c.user_exists %]
-                        | <a href="/login/logout/">Logout</a>
-                    [%- END %]
-                </p>
-                <p>
-                    [%- IF c.user_exists %]
-                        <a href="[% c.user.profile_url %]">Profile</a> |
-                    [%- ELSE -%]
-                        <a href="/login/">Login/Register</a> | 
-                    [%- END %]
-                    <a href="/filter/" class="nsfw_filter">[% c.nsfw ? 'Enable' : 'Disable' %] filter</a> | 
-                    <a href="/adminlog/">Admin Log</a> |
-                    <a href="/faq/">FAQ</a>                    
-                </p>
-                <form class="TAN-menu-top-search" action="/search/" method="get">
-                    <fieldset>
-                        <input
-                            type="text" 
-                            size="31" 
-                            name="q" 
-                            value="[% c.req.param('q') %]"
-                        />
-                        <input type="submit" value="Search" />
-                    </fieldset>
-                </form>
+                [% PROCESS lib/top_menu.tt %]
             </div>
             <div class="TAN-menu-ad-holder">
                 [% PROCESS lib/menu.tt %]
