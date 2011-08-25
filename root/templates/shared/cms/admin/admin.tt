@@ -63,6 +63,7 @@
                     </li>
                 </ul>
                 <input type="submit" value="[% edit ? 'Edit' : 'Create' %]" />
+                [% IF edit %]<input type="submit" name="delete" value="Delete" />[% END %]
             </fieldset>
         </form>
     </li>

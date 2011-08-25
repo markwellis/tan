@@ -6,10 +6,16 @@ use URI::Encode qw/uri_decode/;
 
 BEGIN { extends 'Catalyst::Controller'; }
 
+sub clear_caches: Event('cms_update'){
+    my ( $self, $c, $url ) = @_;
+    
+    $c->cache->remove("cms:menu_items");
+    $c->cache->remove("cms:page:${url}");
+}
+
 sub cms: Private{
     my ( $self, $c ) = @_;
 
-#do caching of somekind
     my $cms = $c->model('MySql::Cms')->load( uri_decode( $c->req->path ) );
 
     if ( defined( $cms ) ){

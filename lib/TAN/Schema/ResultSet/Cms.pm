@@ -30,31 +30,49 @@ sub index{
 sub menu_items{
     my ( $self ) = @_;
 
-#caching here
-    my @grouped_items;
-    my $items = $self->search( {
-        'deleted' => 'N',
-        'system' => 'N',
-        'revision' => $self->_max_revision,
-    } );
+    local $DBIx::Class::ResultSourceHandle::thaw_schema = $self->result_source->schema;
 
-    if ( $items ){
-        foreach my $item ( $items->all ){
-            push( @grouped_items, [ $item->title, $item->url ] );
+    my $grouped_items = $self->result_source->schema->cache->get("cms:menu_items");
+
+use Data::Dumper;
+warn Dumper( $grouped_items );
+
+    if ( !defined( $grouped_items ) ){
+        my $items = $self->search( {
+            'deleted' => 'N',
+            'system' => 'N',
+            'revision' => $self->_max_revision,
+        } );
+
+        if ( $items ){
+            foreach my $item ( $items->all ){
+                push( @{$grouped_items}, [ $item->title, $item->url ] );
+            }
         }
+        $self->result_source->schema->cache->set("cms:menu_items", $grouped_items, 3600);
     }
 
-    return \@grouped_items;
+    return $grouped_items;
 }
 
 sub load{
     my ( $self, $url ) = @_;
 
-    return $self->search( {
-        'url' => $url,
-        'revision' => $self->_max_revision,
-        'deleted' => 'N',
-    } )->first;
+    local $DBIx::Class::ResultSourceHandle::thaw_schema = $self->result_source->schema;
+
+    my $cms_page = $self->result_source->schema->cache->get("cms:page:${url}");
+
+    if ( !defined( $cms_page ){
+        $cms_page = $self->search( {
+            'url' => $url,
+            'revision' => $self->_max_revision,
+            'deleted' => 'N',
+        } )->first;
+        
+        $self->result_source->schema->cache->set("cms:page:${url}", $cms_page, 3600) if ( $cms_page );
+    }
+
+    return $cms_page;
 }
 
 sub _max_revision{
@@ -66,7 +84,7 @@ sub _max_revision{
         },
         {
             'alias' => 'sub',
-        })->get_column('revision')->max_rs->as_query,
+        } )->get_column('revision')->max_rs->as_query,
     };
 }
 

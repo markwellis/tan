@@ -115,6 +115,7 @@ sub insert_cms: Private{
         'deleted' => ( $c->req->param('delete') ) ? 'Y' : 'N',
     } );
 
+    $c->trigger_event( 'cms_update', $url );
 }
 
 __PACKAGE__->meta->make_immutable;
