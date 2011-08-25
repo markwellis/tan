@@ -62,7 +62,7 @@ sub load{
 
     my $cms_page = $self->result_source->schema->cache->get("cms:page:${url}");
 
-    if ( !defined( $cms_page ){
+    if ( !defined( $cms_page ) ){
         $cms_page = $self->search( {
             'url' => $url,
             'revision' => $self->_max_revision,
