@@ -23,6 +23,9 @@
     [% END %]
 [% END %]
 <ul class="TAN-inside">
+    <li>
+        <a href="create">Create New Page</a>
+    </li>
     [% FOREACH index IN grouped_cms_pages.keys.sort %]
         <li>
             [% key = grouped_cms_pages.${index}.keys.0 %]
@@ -64,9 +67,6 @@
         </li>
     [% END %]
     <li>
-    </li>
-    <li>
-        <a href="create">Create New Page</a>
     </li>
 </ul>
 

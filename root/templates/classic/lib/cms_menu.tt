@@ -1,0 +1,11 @@
+[% menu_items = c.model('MySql::Cms').menu_items %]
+<p>
+    [% FOREACH menu_item IN menu_items %]
+        [% IF ( loop.count % 5 ) == 0 %]
+            </p>
+            <p>
+        [% END %]
+        [% IF ( loop.count % 5 ) && ( loop.count > 1 ) %] | [% END %]
+        <a href="/[% menu_item.1 | uri %]">[% menu_item.0 | html %]</a>
+    [% END %]
+</p>

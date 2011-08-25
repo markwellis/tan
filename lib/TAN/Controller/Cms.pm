@@ -2,17 +2,15 @@ package TAN::Controller::Cms;
 use Moose;
 use namespace::autoclean;
 
+use URI::Encode qw/uri_decode/;
+
 BEGIN { extends 'Catalyst::Controller'; }
 
 sub cms: Private{
     my ( $self, $c ) = @_;
 
 #do caching of somekind
-    my $cms = $c->model('MySql::Cms')->search( {
-        'url' => $c->req->path,
-        'revision' => \' = (SELECT MAX(revision) FROM cms sub WHERE me.url = sub.url)',
-        'deleted' => 'N',
-    } )->first;
+    my $cms = $c->model('MySql::Cms')->load( uri_decode( $c->req->path ) );
 
     if ( defined( $cms ) ){
         $c->stash(

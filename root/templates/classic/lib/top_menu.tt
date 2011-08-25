@@ -33,6 +33,7 @@
     <a href="/adminlog/">Admin Log</a> |
     <a href="/faq/">FAQ</a>                    
 </p>
+[% PROCESS lib/cms_menu.tt %]
 <form class="TAN-menu-top-search" action="/search/" method="get">
     <fieldset>
         <input

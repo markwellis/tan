@@ -10,7 +10,7 @@ sub index{
     my ( $self, $page ) = @_;
 
     my $cms_pages = $self->search( {
-        'revision' => \' = (SELECT MAX(revision) FROM cms sub WHERE me.url = sub.url)',
+        'revision' => $self->_max_revision,
     }, {
         'page' => $page,
         'rows' => 50,
@@ -25,6 +25,49 @@ sub index{
     }
 
     return $cms_pages;
+}
+
+sub menu_items{
+    my ( $self ) = @_;
+
+#caching here
+    my @grouped_items;
+    my $items = $self->search( {
+        'deleted' => 'N',
+        'system' => 'N',
+        'revision' => $self->_max_revision,
+    } );
+
+    if ( $items ){
+        foreach my $item ( $items->all ){
+            push( @grouped_items, [ $item->title, $item->url ] );
+        }
+    }
+
+    return \@grouped_items;
+}
+
+sub load{
+    my ( $self, $url ) = @_;
+
+    return $self->search( {
+        'url' => $url,
+        'revision' => $self->_max_revision,
+        'deleted' => 'N',
+    } )->first;
+}
+
+sub _max_revision{
+    my ( $self ) = @_;
+
+    return {
+        '=' => $self->search( {
+            'url' => { '=' => { '-ident' => 'me.url' } }
+        },
+        {
+            'alias' => 'sub',
+        })->get_column('revision')->max_rs->as_query,
+    };
 }
 
 1;
