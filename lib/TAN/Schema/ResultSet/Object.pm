@@ -123,7 +123,15 @@ sub random{
         %{$search},
     }, {
         'rows' => 1,
-        '+select' => \"(SELECT title FROM ${type} WHERE ${type}.${type}_id = me.object_id) title",
+        '+select' => $self->result_source->schema->resultset( ucfirst( $type ) )->search( {
+            "${type}_id" => { 
+                '=' => { 
+                    '-ident' => 'me.object_id' 
+                },
+            },
+        }, {
+            'alias' => 'sub',
+        } )->get_column('title')->as_query,
         '+as' => 'title',
         'order_by' => \'RAND()',
     } )->first;

@@ -60,7 +60,7 @@ sub get_details{
 
     $no_bb ||= 0;
     
-    my $key = "blog.${no_bb}:" . $self->id;
+    my $key = "forum.${no_bb}:" . $self->id;
 
     my $details = $self->result_source->schema->cache->get($key);
     if ( !$details ){

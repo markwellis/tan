@@ -31,6 +31,15 @@ sub remove_blog_cache: Event(object_updated){
     }
 }
 
+sub remove_forum_cache: Event(object_updated){
+    my ( $self, $c, $object ) = @_;
+
+    if ( $object->type eq 'forum' ){
+        $c->cache->remove("forum.0:" . $object->id);
+        $c->cache->remove("forum.1:" . $object->id);
+    }
+}
+
 sub remove_comment_cache: 
     Event(comment_created) 
     Event(comment_deleted) 

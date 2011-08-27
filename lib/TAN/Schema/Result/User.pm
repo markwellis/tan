@@ -121,7 +121,7 @@ sub avatar{
     if ( -e $avatar_image ){
     #avatar exists
         my @stats = stat($avatar_image);
-        $avatar_http = "$avatar_http?m=" . $stats[9];
+        $avatar_http = "$avatar_http/" . $stats[9];
     } else {
         $avatar_http = "@{[ $c->config->{'static_path'} ]}/images/_user.png";
     }
