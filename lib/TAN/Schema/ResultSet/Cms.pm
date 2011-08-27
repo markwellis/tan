@@ -34,9 +34,6 @@ sub menu_items{
 
     my $grouped_items = $self->result_source->schema->cache->get("cms:menu_items");
 
-use Data::Dumper;
-warn Dumper( $grouped_items );
-
     if ( !defined( $grouped_items ) ){
         my $items = $self->search( {
             'deleted' => 'N',

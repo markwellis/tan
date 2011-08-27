@@ -1,7 +1,8 @@
+[% user_can_cms = c.check_user_roles('cms') %]
 [% menu_items = c.model('MySql::Cms').menu_items %]
 <p>
-    [% IF c.check_user_roles('cms') %]
-        <a href="/cms/admin/">Admin</a>
+    [% IF user_can_cms %]
+        <a href="/cms/admin/">Cms Admin</a>
     [% END %]
     [% FOREACH menu_item IN menu_items %]
         [% IF ( loop.count % 5 ) == 0 %]
@@ -11,7 +12,7 @@
         [% IF 
             ( loop.count % 5 )
             && (
-                c.check_user_roles('cms')
+                user_can_cms
                 || ( loop.count > 1 )
             )
         %] | [% END %]
