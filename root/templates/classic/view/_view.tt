@@ -1,9 +1,12 @@
 [% PROCESS index/object.tt %]
-    
+
+[% page_keywords = 'TAN thisaintnews news' %]
+
 <p>
     <span class="TAN-tags">
         [% FOREACH tag IN object.tags %]
             <a href="/tag/[% tag.tag %]">[% tag.tag %]</a>
+            [% page_keywords = page_keywords _ " ${tag.tag}" %]
         [% END %]
     </span>
     [%- IF tag_p_extra; tag_p_extra; END -%]
