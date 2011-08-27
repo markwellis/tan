@@ -33,11 +33,7 @@ sub index: Private{
 sub access_denied: Private{
     my ( $self, $c ) = @_;
 
-    $c->stash(
-        'error' => 'Access denied',
-    );
-
-    $c->forward('/error', [401]);
+    $c->forward('/error', [401, 'Access denied']);
 }
 
 sub default: Local{
@@ -46,42 +42,31 @@ sub default: Local{
     # check for a cms page
     $c->forward('/cms/cms');
 
-    $c->stash(
-        'error' => 'Not found',
-    );
-
-    $c->forward('/error', [404]);
+    $c->forward('/error', [404, 'Not found']);
 }
 
 sub gone: Private{
     my ( $self, $c ) = @_;
 
-    $c->stash(
-        'error' => 'Gone!',
-    );
-
-    $c->forward('/error', [410]);
+    $c->forward('/error', [410, 'Gone!']);
 }
 
 sub server_error: Private{
     my ( $self, $c ) = @_;
 
-    $c->stash(
-        'error' => 'Massive cockup',
-    );
-
-    $c->forward('/error', [500]);
+    $c->forward('/error', [500, 'Massive cockup']);
 }
 
 sub error: Private{
-    my ( $self, $c, $code ) = @_;
+    my ( $self, $c, $error_code, $error ) = @_;
 
     $c->stash(
         'template' => "error.tt",
-        'error_code' => $code,
+        'error_code' => $error_code,
+        'error' => $error,
     );
 
-    $c->response->status( $code );
+    $c->response->status( $error_code );
 }
 
 sub filter: Local Args(0){
@@ -128,17 +113,6 @@ sub chat: Local Args(0){
     $c->stash(
         'page_title' => 'Chat',
         'template' => 'chat.tt',
-    );
-}
-
-sub faq: Local Args(0){
-    my ( $self, $c ) = @_;
-
-    $c->cache_page( 3600 );
-
-    $c->stash(
-        'page_title' => 'FAQ',
-        'template' => 'faq.tt',
     );
 }
 
