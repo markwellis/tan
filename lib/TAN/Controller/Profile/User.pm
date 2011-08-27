@@ -115,22 +115,26 @@ sub comment: PathPart('comment') Chained('user') Args(0){
     $c->cache_page(600);
 
     my $page = $c->req->param('page') || 1;
-
-    $c->stash->{'comments'} = $c->stash->{'user'}->comments->search({
-            'me.deleted' => 'N',
-            'object.deleted' => 'N',
-        },
-        {
-            'prefetch' => ['user', {
-                'object' => TAN->model('Object')->public,
-            }],
-            'page' => $page,
-            'rows' => 50,
-            'order_by' => {
-                '-desc' => 'me.created',
-            },
-        }
+    my %search_opts = (
+        'me.deleted' => 'N',
+        'object.deleted' => 'N',
     );
+    if ( !$c->nsfw ){
+        $search_opts{'nsfw'} = 'N';
+    }
+
+    $c->stash->{'comments'} = $c->stash->{'user'}->comments->search( {
+        %search_opts,
+    }, {
+        'prefetch' => ['user', {
+            'object' => TAN->model('Object')->public,
+        }],
+        'page' => $page,
+        'rows' => 50,
+        'order_by' => {
+            '-desc' => 'me.created',
+        },
+    } );
 
     if ( !$c->stash->{'comments'} ) {
         $c->detach('/default');
