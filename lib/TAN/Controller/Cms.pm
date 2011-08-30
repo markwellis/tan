@@ -2,7 +2,7 @@ package TAN::Controller::Cms;
 use Moose;
 use namespace::autoclean;
 
-use URI::Encode qw/uri_decode/;
+use URI::Escape::XS qw/uri_unescape/;
 
 BEGIN { extends 'Catalyst::Controller'; }
 
@@ -16,7 +16,7 @@ sub clear_caches: Event('cms_update'){
 sub cms: Private{
     my ( $self, $c ) = @_;
 
-    my $cms = $c->model('MySql::Cms')->load( uri_decode( $c->req->path ) );
+    my $cms = $c->model('MySql::Cms')->load( uri_unescape( $c->req->path ) );
 
     if ( defined( $cms ) ){
         $c->stash(

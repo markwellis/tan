@@ -66,7 +66,7 @@ requires 'Fetch::Image';
 requires 'HTML::TreeBuilder';
 requires 'HTML::FormatText';
 requires 'URI';
-requires 'URI::Encode';
+requires 'URI::Escape::XS';
 requires 'Catalyst::View::TT';
 
 #workers
