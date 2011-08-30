@@ -188,8 +188,8 @@ sub update_tags: Private{
     my $trim_reg = $c->model('CommonRegex')->trim;
 
     foreach my $tag ( @tags ){
-        $tag =~ s/$tag_reg//g;
-        $tag =~ s/$trim_reg//g;
+        $tag =~ s/$tag_reg//g if ( $tag );
+        $tag =~ s/$trim_reg//g if ( $tag );
         next if ( !$tag );
 
         if ( defined($tag) ){
