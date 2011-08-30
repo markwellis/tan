@@ -36,6 +36,7 @@
                     <th>Url</th>
                     <th>Comment</th>
                     <th>Revision</th>
+                    <th>No Wrapper</th>
                     <th></th>
                 </tr>
 
@@ -53,6 +54,9 @@
                             </td>
                             <td>
                                 [% cms_page.revision %]
+                            </td>
+                            <td>
+                                [% cms_page.nowrapper %]
                             </td>
                             <td>
                                 <a href="edit/[% cms_page.id %]">Edit</a>

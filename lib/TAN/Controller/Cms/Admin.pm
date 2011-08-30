@@ -99,6 +99,7 @@ sub insert_cms: Private{
             'revision' => $revision,
             'comment' => "page moved to /${url}",
             'system' => $cms_page->system,
+            'nowrapper' => $cms_page->nowrapper,
             'deleted' => 'Y',
         } );
         $revision = 0;
@@ -112,6 +113,7 @@ sub insert_cms: Private{
         'revision' => $revision,
         'comment' => $c->req->param('comment'),
         'system' => ( $c->req->param('system') ) ? 'Y' : 'N',
+        'nowrapper' => ( $c->req->param('nowrapper') ) ? 'Y' : 'N',
         'deleted' => ( $c->req->param('delete') ) ? 'Y' : 'N',
     } );
 

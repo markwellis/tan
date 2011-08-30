@@ -29,6 +29,7 @@ __PACKAGE__->add_columns(
     default_value => undef,
     is_nullable => 0,
     size => 16777215,
+    accessor => '_content',
   },
   "title",
   { data_type => "VARCHAR", default_value => undef, is_nullable => 0, size => 255 },
@@ -38,8 +39,30 @@ __PACKAGE__->add_columns(
   { data_type => "ENUM", default_value => "N", is_nullable => 0, size => 1 },
   "system",
   { data_type => "ENUM", default_value => "N", is_nullable => 0, size => 1 },
+  "nowrapper",
+  { data_type => "ENUM", default_value => "N", is_nullable => 0, size => 1 },
 );
 __PACKAGE__->set_primary_key("cms_id");
+
+use Parse::TAN;
+my $parser = new Parse::TAN;
+
+sub content{
+    my ( $self ) = @_;
+
+    my $key = "cms:content:" . $self->url;
+
+    my $content = $self->result_source->schema->cache->get( $key );
+    if ( !$content ){
+        $content = $parser->parse( $self->_content, 1 );
+        $self->result_source->schema->cache->set( $key, $content, 600 );
+    } else {
+#decode cached coz otherwise its double encoded!
+        utf8::decode( $content );
+    }
+
+    return $content;
+}
 
 __PACKAGE__->belongs_to(
   "user",

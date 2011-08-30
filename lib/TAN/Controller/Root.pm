@@ -116,52 +116,6 @@ sub chat: Local Args(0){
     );
 }
 
-sub google: Path('/google540d7580f0fb6a3b.html'){
-    my ( $self, $c ) = @_;
-
-    #google just check if the path exists
-    $c->res->output('google-site-verification: google540d7580f0fb6a3b.html');
-    $c->detach();
-}
-
-sub yahoo: Path('/y_key_242ef28969a04b9c.html'){
-    my ( $self, $c ) = @_;
-
-    #yahoo needs this key
-    $c->res->output('adf14f5d24cef99f');
-    $c->detach();
-}
-
-sub robots: Path('/robots.txt'){
-    my ( $self, $c ) = @_;
-
-    $c->cache_page(3600);
-
-    $c->res->output(
-"User-agent: *
-Disallow: /view/*/*/_plus
-Disallow: /view/*/*/_minus
-Disallow: /view/*/*/_comment
-Disallow: /login*
-Disallow: /filter*
-Disallow: /random*
-Disallow: /submit*
-Disallow: /profile*
-Disallow: /redirect*
-Disallow: /chat*
-Disallow: /static/cache*
-Disallow: /static/user/avatar*
-Disallow: /redirect*
-Disallow: /tag*
-Disallow: /search*
-Disallow: /index*
-
-Sitemap: http://thisaintnews.com/sitemap"
-    );
-    $c->res->header('Content-Type' => 'text/plain');
-    $c->detach();
-}
-
 sub render: ActionClass('RenderView'){}
 
 sub end: Private{

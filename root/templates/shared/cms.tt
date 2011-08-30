@@ -2,6 +2,6 @@
 
 <ul class="TAN-inside">
     <li>
-        [% cms.content %]
+        [% cms_page.content %]
     </li>
 </ul>

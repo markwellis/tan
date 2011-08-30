@@ -53,6 +53,21 @@
                         />
                     </li>
                     <li>
+                        <label for="nowrapper">No Wrapper (plain text page)</label>
+                        <input 
+                            type="checkbox" 
+                            name="nowrapper"
+                            id="nowrapper" 
+                            [% cms_page.defined 
+                                ? 
+                                    ( cms_page.nowrapper == 'Y' )
+                                        ? 'checked="checked"'
+                                        : ''
+                                : ''
+                            %]
+                        />
+                    </li>
+                    <li>
                         <label for="comment">Comment</label>
                         <input 
                             type="text" 

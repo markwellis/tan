@@ -512,6 +512,33 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
+-- Table `tan`.`cms`
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS `tan`.`cms` (
+  `cms_id` BIGINT NOT NULL AUTO_INCREMENT ,
+  `url` VARCHAR(255) NOT NULL ,
+  `content` MEDIUMTEXT NOT NULL ,
+  `user_id` BIGINT NOT NULL ,
+  `revision` BIGINT NOT NULL ,
+  `created` TIMESTAMP NOT NULL ,
+  `title` VARCHAR(255) NOT NULL ,
+  `comment` VARCHAR(255) NOT NULL ,
+  `deleted` ENUM('N', 'Y') NOT NULL DEFAULT 'N' ,
+  `system` ENUM('N', 'Y') NOT NULL DEFAULT 'N' ,
+  PRIMARY KEY (`cms_id`) ,
+  INDEX `fk_cms_1` (`user_id` ASC) ,
+  INDEX `url` (`url` ASC) ,
+  INDEX `revision` (`revision` ASC) ,
+  INDEX `deleted` (`deleted` ASC) ,
+  CONSTRAINT `fk_cms_1`
+    FOREIGN KEY (`user_id` )
+    REFERENCES `tan`.`user` (`user_id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
 -- Placeholder table for view `tan`.`recent_comments`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `tan`.`recent_comments` (`comment_id` INT, `comment` INT, `created` INT, `object_id` INT, `type` INT, `nsfw` INT, `link_title` INT, `picture_title` INT, `blog_title` INT, `poll_title` INT, `video_title` INT, `forum_title` INT, `username` INT);
