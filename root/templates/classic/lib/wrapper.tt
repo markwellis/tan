@@ -3,12 +3,16 @@
     <head>
         [%- IF page_title.defined -%]
             [%- page_title = "${page_title} - This Aint News" | html -%]
+            <meta 
+                name="title" 
+                content="[% page_title %]" 
+            />
         [%- ELSE -%]
             [%- page_title = 'This Aint News' -%]
         [% END %]
         <title>[% page_title %]</title>
         <meta 
-            name="Description" 
+            name="description" 
             content="[% page_meta_description | html %]" 
         />
         <meta 
@@ -19,6 +23,9 @@
             http-equiv="Content-Type"
             content="text/html; charset=utf-8"
         />
+        [% IF rel_extra.defined %]
+            [% rel_extra %]
+        [% END %]
         [%- PROCESS lib/css_includes.tt -%]
         <link rel="shortcut icon" href="/static/favicon.ico" />
         <link 

@@ -41,6 +41,7 @@ sub vcl_recv {
 #        && req.http.referer !~ "feeds.feedburner.com"
         && req.http.user-agent !~ "redditbot" #reddit bastards
         && req.http.user-agent !~ "googlebot"
+        && req.http.user-agent !~ "facebookexternalhit"
         && req.url !~ "100\?rss=1$"
     ){
         set req.url = regsub(
