@@ -118,22 +118,19 @@ sub add_tags: Private {
     my $tag_reg = $c->model('CommonRegex')->not_alpha_numeric;
     my $trim_reg = $c->model('CommonRegex')->trim;
 
+    my @new_tags;
     foreach my $tag ( @tags ){
         $tag =~ s/$tag_reg//g;
         $tag =~ s/$trim_reg//g;
         next if ( !$tag );
 
-        if ( !defined($tags_done->{ $tag }) ){
-            $tags_done->{ $tag } = 1;
-
-            if ( defined($tag) ){
-                $object->set_tags({
-                    'tag' => $tag,
-                    'stem' => $c->model('Stemmer')->stem( $tag ),
-                });
-            }
-        }
+        push( @new_tags, $c->model('MySql::Tags')->find_or_create( {
+            'tag' => $tag,
+            'stem' => $c->model('Stemmer')->stem( $tag ),
+        } ) );
     }
+    
+    $object->set_tags( \@new_tags );
 }
 
 __PACKAGE__->meta->make_immutable;
