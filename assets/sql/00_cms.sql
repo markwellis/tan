@@ -1,1 +1,0 @@
-ALTER TABLE `tan`.`cms` ADD COLUMN `nowrapper` ENUM('N', 'Y') NOT NULL DEFAULT 'N'  AFTER `system` ;

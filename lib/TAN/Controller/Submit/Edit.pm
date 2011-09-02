@@ -140,14 +140,9 @@ sub update_object: Private{
 
     if ( 
         $c->check_any_user_role(qw/edit_object edit_object_nsfw/)
-        && ( $object->user_id != $c->user->user_id ) 
     ){
-        if ( !$c->check_any_user_role(qw/edit_object_nsfw/) ){
-            my $old_new_tags = $c->forward( 'update_tags', [ $tags ] );
-            if ( $old_new_tags->{'old'} ne $old_new_tags->{'new'} ){
-                $original->{'tags'} = $old_new_tags->{'old'};
-                $to_update->{'tags'} = $old_new_tags->{'new'};
-            }
+        if ( $c->check_any_user_role(qw/edit_object/) ){
+            $c->forward( '/submit/add_tags', [ $object, $tags ] );
         }
 
         $c->model('MySql::AdminLog')->log_event( {
@@ -162,51 +157,6 @@ sub update_object: Private{
             'object_id' => $object->id,
         } );
     }
-}
-
-sub update_tags: Private{
-    my ( $self, $c, $tags ) = @_;
-
-    my @tags = split(/ /, lc($tags));
-
-    my $object = $c->stash->{'object'};
-
-    my %existing_tags = map { $_->tag => $_ } $object->tags->all;
-
-    my @old_tags = keys( %existing_tags );
-    my @new_tags = @tags; #clone this for admin_log
-
-    for( my $i=0,my $max=scalar(@tags); $i < $max; ++$i ){
-        if ( $existing_tags{ $tags[ $i ] } ){
-            delete( $existing_tags{ $tags[ $i ] } );
-            delete( $tags[ $i ] );
-        }
-    }
-    my @tags_to_remove = values( %existing_tags );
-
-    my $tag_reg = $c->model('CommonRegex')->not_alpha_numeric;
-    my $trim_reg = $c->model('CommonRegex')->trim;
-
-    foreach my $tag ( @tags ){
-        $tag =~ s/$tag_reg//g if ( $tag );
-        $tag =~ s/$trim_reg//g if ( $tag );
-        next if ( !$tag );
-
-        if ( defined($tag) ){
-            $object->add_to_tags({
-                'tag' => $tag,
-            });
-        }
-    }
-
-    foreach my $spare ( @tags_to_remove ){
-        $object->remove_from_tags( $spare );
-    }
-
-    return {
-        'old' => \@old_tags,
-        'new' => \@new_tags,
-    };
 }
 
 __PACKAGE__->meta->make_immutable;

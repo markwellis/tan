@@ -22,8 +22,15 @@ sub index: Path Args(1){
 #get list of things with $tag
 #assemble index
 
+    my $stem = $c->model('Stemmer')->stem( $tag );
+
+    if ( $tag ne $stem ){
+        $c->res->redirect("/tag/${stem}", 301);
+        $c->detach;
+    }
+
     my $tags_rs = $c->model('MySQL::Tags')->search({
-        'tag' => $tag,
+        'stem' => $tag,
     })->first;
 
     if ( !defined($tags_rs) ){
