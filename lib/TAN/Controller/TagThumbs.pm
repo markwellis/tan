@@ -12,6 +12,7 @@ sub index: Path Args(1) {
     my ( $self, $c, $all_tags ) = @_;
 
     my @tags = split(/ /, $all_tags);
+    $c->model('Stemmer')->stem_in_place( \@tags );
 
     #remove duplicate tags
     my %dupe_free_tags;
@@ -28,7 +29,7 @@ sub index: Path Args(1) {
 
     if ( scalar(@clean_tags) ){
         my $tags_rs = $c->model('MySQL::Tags')->search({
-            'tag' => \@clean_tags,
+            'stem' => \@clean_tags,
         });
 
         if ( $tags_rs ){

@@ -17,6 +17,13 @@ __PACKAGE__->add_columns(
     is_nullable => 0,
     size => 30,
   },
+  "stem",
+  {
+    data_type => "VARCHAR",
+    default_value => undef,
+    is_nullable => 0,
+    size => 30,
+  },
 );
 __PACKAGE__->set_primary_key("tag_id");
 

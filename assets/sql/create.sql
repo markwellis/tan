@@ -525,6 +525,7 @@ CREATE  TABLE IF NOT EXISTS `tan`.`cms` (
   `comment` VARCHAR(255) NOT NULL ,
   `deleted` ENUM('N', 'Y') NOT NULL DEFAULT 'N' ,
   `system` ENUM('N', 'Y') NOT NULL DEFAULT 'N' ,
+  `nowrapper` ENUM('N', 'Y') NOT NULL DEFAULT 'N' ,
   PRIMARY KEY (`cms_id`) ,
   INDEX `fk_cms_1` (`user_id` ASC) ,
   INDEX `url` (`url` ASC) ,

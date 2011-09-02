@@ -82,6 +82,13 @@
             "entries_per_page": 27
         }
     },
+    
+    "Model::Stemmer": {
+        "args" : {
+            "lang": "en",
+            "encoding": "UTF-8"
+        }
+    },
 
     "Model::Gearman": {
         "job_servers": [

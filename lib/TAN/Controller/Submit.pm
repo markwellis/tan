@@ -127,8 +127,9 @@ sub add_tags: Private {
             $tags_done->{ $tag } = 1;
 
             if ( defined($tag) ){
-                $object->add_to_tags({
+                $object->set_tags({
                     'tag' => $tag,
+                    'stem' => $c->model('Stemmer')->stem( $tag ),
                 });
             }
         }
