@@ -21,7 +21,7 @@
     [%- IF c.user_exists %]
         | <a href="/login/logout/">Logout</a>
     [%- END %]
-    | <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=[% c.config.paypal_donate_address | uri %]&item_name=TAN%20Donation&item_number=[% c.user_exists ? c.user.username : 'n00b' | uri %]&currency_code=GBP&tax=0">Donate</a>
+    | <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&amp;business=[% c.config.paypal_donate_address | uri %]&amp;item_name=TAN%20Donation&amp;item_number=[% c.user_exists ? c.user.username : 'n00b' | uri %]&amp;currency_code=GBP&amp;tax=0">Donate</a>
 </p>
 <p>
     [%- IF c.user_exists %]
