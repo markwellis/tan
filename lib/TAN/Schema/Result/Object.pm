@@ -204,4 +204,40 @@ sub promote{
     });
 }
 
+use DateTime;
+use POSIX;
+
+sub score{
+    my ( $self ) = @_;
+
+    my $age = ( 
+        ( 
+            ( DateTime->now->epoch - $self->_created->epoch ) 
+            / 3600 
+        ) / 24 
+    ) || 1;
+
+    $age = ceil( $age );
+
+    if ( $age < 50 ){
+# if is less than 50 days old, pretend it's 50 days old
+# to stop it promoting just because it's new
+        $age = 50;
+    }
+
+#weights
+#   plus 4
+#   minus 3
+#   comments 2 
+#   views 1
+    my $plus = ( $self->get_column('plus') * 4 );
+    my $minus = ( $self->get_column('minus') * 3 ) || 1;
+    my $comments = ( $self->get_column('comments') * 2 );
+    my $views = $self->get_column('views');
+
+    my $score = ( ( $plus + $views + $comments ) - $minus ) * ( 1 / $age );
+
+    return sprintf( "%.3f", $score );
+}
+
 1;
