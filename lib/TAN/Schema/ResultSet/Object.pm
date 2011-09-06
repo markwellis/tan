@@ -180,13 +180,10 @@ sub get{
     });
 
     if ( defined( $object_rs ) ){
+#update score here
         $self->result_source->schema->cache->set( $cache_key, $object_rs, 600);
     }
 
-#maybe here is a good place to update the score for the object
-# update it only if the new score is promotion worthy
-# else just ignore it perhaps? ( don't wanna be constantly updating mysql )
-# then promote object here if it's promotion worthy
     return $object_rs;
 }
 
