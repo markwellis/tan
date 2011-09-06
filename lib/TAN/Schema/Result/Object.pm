@@ -205,14 +205,13 @@ sub update_score{
         ( !$self->promoted ) 
         && ( $score >= TAN->config->{'promotion_cutoff'} )
     ){
-    eval{
-        $self->result_source->schema->txn_do(sub{
-            $self->update({
-                'promoted' => \'NOW()',
-            })->discard_changes;
-        });
-    };
-    warn "1:" . $self->promoted;
+        eval{
+            $self->result_source->schema->txn_do(sub{
+                $self->update({
+                    'promoted' => \'NOW()',
+                })->discard_changes;
+            });
+        };
 
         $self->result_source->schema->trigger_event->( 'object_promoted', $self );
     }

@@ -180,9 +180,7 @@ sub get{
     });
 
     if ( defined( $object_rs ) ){
-    warn "0:" . $object_rs->promoted;
         $object_rs->update_score;
-    warn "2:" . $object_rs->promoted;
         $self->result_source->schema->cache->set( $cache_key, $object_rs, 600);
     }
 
