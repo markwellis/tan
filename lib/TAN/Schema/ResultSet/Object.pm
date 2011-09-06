@@ -6,7 +6,7 @@ use base 'DBIx::Class::ResultSet';
 
 use Data::Page;
 
-my $order_reg = qr/^(?:promoted|plus|minus|views|comments)$/;
+my $order_reg = qr/^(?:promoted|plus|minus|views|comments|score)$/;
 sub index {
     my ($self, $type, $page, $upcoming, $search, $order, $nsfw, $index_type) = @_;
     
@@ -180,7 +180,9 @@ sub get{
     });
 
     if ( defined( $object_rs ) ){
-#update score here
+    warn "0:" . $object_rs->promoted;
+        $object_rs->update_score;
+    warn "2:" . $object_rs->promoted;
         $self->result_source->schema->cache->set( $cache_key, $object_rs, 600);
     }
 

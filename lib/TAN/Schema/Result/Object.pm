@@ -8,6 +8,8 @@ use base 'DBIx::Class';
 use DateTime;
 use DateTime::Format::Human::Duration;
 
+use POSIX;
+
 __PACKAGE__->load_components(qw/Core InflateColumn::DateTime/);
 __PACKAGE__->table("object");
 __PACKAGE__->add_columns(
@@ -46,6 +48,8 @@ __PACKAGE__->add_columns(
   { data_type => "BIGINT", default_value => undef, is_nullable => 0, size => 20 },
   "deleted",
   { data_type => "ENUM", default_value => "N", is_nullable => 0, size => 1 },
+  "score",
+  { data_type => "FLOAT", default_value => undef, is_nullable => 1, size => 11 },
 );
 __PACKAGE__->set_primary_key("object_id");
 
@@ -69,6 +73,7 @@ sub date_ago{
     my ( $self, $date ) = @_;
 
     return undef if !$date;
+    return undef if ( ref( $date ) eq 'SCALAR' );
 
     my $now = DateTime->now;
     my $formatter = DateTime::Format::Human::Duration->new();
@@ -185,29 +190,35 @@ sub url{
         . $self->url_title;
 }
 
-=head2 promote
-
-B<@args = (undef)>
-
-=over
-
-promotes object
-
-=back
-
-=cut
-sub promote{
+sub update_score{
     my ( $self ) = @_;
 
-    $self->update({
-        'promoted' => \'NOW()',
-    });
+    my $score = $self->_calculate_score;
+
+    if ( $self->score != $score ){
+        $self->update( {
+            'score' => $score,
+        } );
+    }
+
+    if ( 
+        ( !$self->promoted ) 
+        && ( $score >= TAN->config->{'promotion_cutoff'} )
+    ){
+    eval{
+        $self->result_source->schema->txn_do(sub{
+            $self->update({
+                'promoted' => \'NOW()',
+            })->discard_changes;
+        });
+    };
+    warn "1:" . $self->promoted;
+
+        $self->result_source->schema->trigger_event->( 'object_promoted', $self );
+    }
 }
 
-use DateTime;
-use POSIX;
-
-sub score{
+sub _calculate_score{
     my ( $self ) = @_;
 
     my $age = ( 

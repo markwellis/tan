@@ -15,16 +15,14 @@ __PACKAGE__->config(
     },
 );
 
-sub COMPONENT {
+sub ACCEPT_CONTEXT{
     my $self = shift;
     my $c = shift;
 
-    my $new = $self->next::method($c, @_);
-   
-    #hack so we can access the catalyst cache in the resultsets. 
-    $new->schema->cache( $c->cache ) if $c;
-
-    return $new;
+    $self->schema->trigger_event( sub{ $c->trigger_event( @_ ) } );
+    $self->schema->cache( $c->cache );
+    
+    return $self;
 }
 
 sub BUILD{
