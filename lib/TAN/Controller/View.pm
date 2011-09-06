@@ -22,6 +22,20 @@ sub spam_twitter: Event('object_promoted'){
     }
 }
 
+sub update_score: 
+    Event(comment_created) 
+    Event(object_plusminus)
+{
+    my ( $self, $c, $object ) = @_;
+
+    if ( ref($object) ne 'TAN::Model::MySQL::Object' ){
+    #$object_rs probably something else with a ->object relationship
+        $object = $object->object;
+    }
+
+    $object->update_score;
+}
+
 sub remove_blog_cache: Event(object_updated){
     my ( $self, $c, $object ) = @_;
 
@@ -72,6 +86,7 @@ sub remove_object_cache:
     Event(object_deleted)
     Event(object_updated)
     Event(object_plusminus)
+    Event(object_promoted)
     Event(comment_created)
     Event(comment_deleted)
     Event(comment_updated)
@@ -88,7 +103,7 @@ sub remove_object_cache:
 
     foreach my $object ( @{$objects} ){
         if ( ref($object) ne 'TAN::Model::MySQL::Object' ){
-        #$object_rs probably something else with a ->object relationshop
+        #$object_rs probably something else with a ->object relationship
             $object = $object->object;
         }
 
@@ -401,7 +416,7 @@ sub add_plus_minus: Private{
 
     if ( $c->user_exists ){
     # valid user, do work
-        my ( $count, $promoted, $deleted ) = $c->model('MySQL::PlusMinus')->add(
+        my ( $count, $deleted ) = $c->model('MySQL::PlusMinus')->add(
             $type, $c->stash->{'object_id'}, $c->user->user_id
         );
 
@@ -410,9 +425,6 @@ sub add_plus_minus: Private{
         });
 
         $c->trigger_event('object_plusminus', $object);
-        if ( $promoted ){
-            $c->trigger_event('object_promoted', $object);
-        }
 
         if ( defined($c->req->param('json')) ){
         #json

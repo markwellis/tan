@@ -7,6 +7,7 @@
                 <option value="plus" [% IF order == 'plus' %]selected="selected"[% END %]>IsNews</option>
                 <option value="minus" [% IF order == 'minus' %]selected="selected"[% END %]>AintNews</option>
                 <option value="views" [% IF order == 'views' %]selected="selected"[% END %]>Views</option>
+                <option value="score" [% IF order == 'score' %]selected="selected"[% END %]>Score</option>
             </select>
         </li>
     [%- END -%]

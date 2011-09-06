@@ -8,6 +8,8 @@ use base 'DBIx::Class';
 use DateTime;
 use DateTime::Format::Human::Duration;
 
+use POSIX;
+
 __PACKAGE__->load_components(qw/Core InflateColumn::DateTime/);
 __PACKAGE__->table("object");
 __PACKAGE__->add_columns(
@@ -46,6 +48,8 @@ __PACKAGE__->add_columns(
   { data_type => "BIGINT", default_value => undef, is_nullable => 0, size => 20 },
   "deleted",
   { data_type => "ENUM", default_value => "N", is_nullable => 0, size => 1 },
+  "score",
+  { data_type => "FLOAT", default_value => undef, is_nullable => 1, size => 11 },
 );
 __PACKAGE__->set_primary_key("object_id");
 
@@ -69,6 +73,7 @@ sub date_ago{
     my ( $self, $date ) = @_;
 
     return undef if !$date;
+    return undef if ( ref( $date ) eq 'SCALAR' );
 
     my $now = DateTime->now;
     my $formatter = DateTime::Format::Human::Duration->new();
@@ -185,23 +190,64 @@ sub url{
         . $self->url_title;
 }
 
-=head2 promote
-
-B<@args = (undef)>
-
-=over
-
-promotes object
-
-=back
-
-=cut
-sub promote{
+sub update_score{
     my ( $self ) = @_;
 
-    $self->update({
-        'promoted' => \'NOW()',
-    });
+    my $score = $self->_calculate_score;
+
+    if ( $self->score != $score ){
+        $self->update( {
+            'score' => $score,
+        } );
+    }
+
+    if ( 
+        ( !$self->promoted ) 
+        && ( $score >= TAN->config->{'promotion_cutoff'} )
+    ){
+        eval{
+            $self->result_source->schema->txn_do(sub{
+                $self->update({
+                    'promoted' => \'NOW()',
+                })->discard_changes;
+            });
+        };
+
+        $self->result_source->schema->trigger_event->( 'object_promoted', $self );
+    }
+}
+
+sub _calculate_score{
+    my ( $self ) = @_;
+
+    my $age = ( 
+        ( 
+            ( DateTime->now->epoch - $self->_created->epoch ) 
+            / 3600 
+        ) / 24 
+    ) || 1;
+
+    $age = ceil( $age );
+
+    if ( $age < 50 ){
+# if is less than 50 days old, pretend it's 50 days old
+# to stop it promoting just because it's new
+        $age = 50;
+    }
+
+#weights
+#   plus 4
+#   minus 3
+#   comments 2 
+#   views 1
+    my $plus = ( $self->get_column('plus') * 4 );
+    my $minus = ( $self->get_column('minus') * 3 ) || 1;
+    my $comments = ( $self->get_column('comments') * 2 );
+    my $views = $self->get_column('views');
+
+    my $score = ( ( $plus + $views + $comments ) - $minus ) * ( 1 / $age );
+
+    return sprintf( "%.3f", $score );
 }
 
 1;

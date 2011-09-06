@@ -300,7 +300,10 @@ DEFAULT CHARACTER SET = utf8;
 CREATE  TABLE IF NOT EXISTS `tan`.`tags` (
   `tag_id` BIGINT(20) NOT NULL AUTO_INCREMENT ,
   `tag` VARCHAR(30) NOT NULL ,
-  PRIMARY KEY (`tag_id`) )
+  `stem` VARCHAR(30) NOT NULL ,
+  PRIMARY KEY (`tag_id`) ,
+  INDEX `tag` (`tag` ASC) ,
+  INDEX `stem` (`stem` ASC) )
 ENGINE = InnoDB
 AUTO_INCREMENT = 15411
 DEFAULT CHARACTER SET = utf8;
