@@ -14,7 +14,7 @@
     "jscache_path": "/static/cache/js",
     "thumb_path": "/static/cache/thumbs",
 
-    "promotion_cutoff": 1,
+    "promotion_cutoff": 1.5,
 
     "recaptcha_public_key": "6LfOtQIAAAAAAKjR5kiq9YLFjG80_bLST2fB696F",
     "recaptcha_private_key": "6LfOtQIAAAAAAK0DnRYVGRWVP0aBtfG158_OYGok",
