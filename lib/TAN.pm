@@ -5,6 +5,8 @@ use namespace::autoclean;
 use Catalyst::Runtime 5.80;
 use Data::Dumper; #used in 500 error email
 
+our $VERSION = 3.0.5;
+
 use Catalyst qw/
     ConfigLoader
     Authentication
@@ -20,8 +22,6 @@ use Catalyst qw/
 /;
 
 extends 'Catalyst';
-
-our $VERSION = 3.0.4;
 
 __PACKAGE__->config( name => 'TAN', 
     'Plugin::PageCache' => {
