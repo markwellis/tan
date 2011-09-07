@@ -24,7 +24,9 @@ sub spam_twitter: Event('object_promoted'){
 
 sub update_score: 
     Event(comment_created) 
+    Event(comment_updated)
     Event(object_plusminus)
+    Event(mass_comments_deleted)
 {
     my ( $self, $c, $object ) = @_;
 
