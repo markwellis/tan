@@ -33,6 +33,9 @@ sub indexinate{
         }
     }
 
+    use Data::Page::Navigation;
+    # this uses some crazy inject to rape Data::Page's namespace :(
+
     return {
         'objects' => \@index,
         'pager' => $pager,
