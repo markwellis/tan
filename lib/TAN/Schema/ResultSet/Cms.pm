@@ -46,7 +46,7 @@ sub menu_items{
                 push( @{$grouped_items}, [ $item->title, $item->url ] );
             }
         }
-        $self->result_source->schema->cache->set("cms:menu_items", $grouped_items, 3600) if ( $items );
+        $self->result_source->schema->cache->set("cms:menu_items", $grouped_items, 3600) if ( $grouped_items );
     }
 
     return $grouped_items;
