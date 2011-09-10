@@ -121,10 +121,7 @@ sub update_object: Private{
                 $spare->delete;
             }
         } else {
-            my $original_value = $object->$type->$key;
-            if ( $original_value ne $prepared->{ $key } ){
-                $to_update->{ $key } = $prepared->{ $key };
-            }
+            $to_update->{ $key } = $prepared->{ $key };
         }
     }
 
