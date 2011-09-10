@@ -85,15 +85,11 @@ sub update_object: Private{
     my $tags = delete( $prepared->{'tags'} );
 
     my $to_update = {};
-    my $original = {};
 
     my $object = $c->stash->{'object'};
-    my $old_nsfw = $object->nsfw;
     my $new_nsfw = defined( $c->req->param('nsfw') ) ? 'Y' : 'N';
 
-    if ( $old_nsfw ne $new_nsfw ){
-        $original->{'nsfw'} = $object->nsfw;
-
+    if ( $object->nsfw ne $new_nsfw ){
         $object->update( {
             'nsfw' => $new_nsfw,
         } );
@@ -127,15 +123,29 @@ sub update_object: Private{
         } else {
             my $original_value = $object->$type->$key;
             if ( $original_value ne $prepared->{ $key } ){
-                $original->{ $key } = $original_value;
                 $to_update->{ $key } = $prepared->{ $key };
             }
         }
     }
 
-    $object->$type->update( $to_update );
-    if ( $original->{'nsfw'} ){
-        $to_update->{'nsfw'} = $new_nsfw;
+    my $change_type = $c->req->param('change_type');
+    if ( 
+        $change_type
+        && ( $change_type ne $type )
+        && $c->model('Object')->valid_public_object( $change_type ) 
+    ){
+        $c->model('MySQL::' . ucfirst( $change_type ))->create( {
+            "${change_type}_id" => $object->id,
+            %{ $to_update },
+        } );
+
+        $object->$type->delete;
+        
+        $object->update({
+            'type' => $change_type,
+        })->discard_changes;
+    } else {
+        $object->$type->update( $to_update );
     }
 
     if ( 
@@ -150,10 +160,6 @@ sub update_object: Private{
             'user_id' => $object->user_id,
             'action' => 'edit_object',
             'reason' => $c->req->param('_edit-reason') || ' ',
-            'bulk' => {
-                'new' => $to_update,
-                'old' => $original,
-            },
             'object_id' => $object->id,
         } );
     }
