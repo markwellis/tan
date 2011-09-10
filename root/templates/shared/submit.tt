@@ -89,6 +89,34 @@
     && c.check_any_user_role('delete_object', 'edit_object', 'edit_object_nsfw')
     && ( object.user_id != c.user.id )
 ) %]
+    [% IF c.check_any_user_role('edit_object') %]
+        [% RAWPERL %]
+            my $c = $stash->get('c');
+
+            my $type = $stash->get('type');
+            my $module = $c->model('Submit')->modules->{ $type };
+
+            my $module_type = ref( $module );
+            $module_type =~ s/TAN::Submit::Module:://;
+
+            my $alias = $module->config->{'alias'};
+            my @types = ( lcfirst( $module_type ) );
+            if ( defined( $alias ) ){
+                push( @types, $alias->{'name'} );
+            }
+            $stash->set( 'change_types', \@types );
+        [% END %]
+        [% IF change_types.size > 1 %]
+            <label for="change_type">Change type</label>
+            <select name="change_type" id="change_type">
+                [% FOREACH module_type IN change_types %]
+                    <option value="[% module_type %]" [% IF module_type == type %]selected="selected"[% END %]>
+                        [% module_type %]
+                    </option>
+                [% END %]
+            </select>
+        [% END %]
+    [% END %]
     [% js_includes.push( 'AdminReason' ) %]
     <li>
         <label for="_edit-reason">Reason for edit</label>
