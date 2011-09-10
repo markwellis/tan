@@ -50,7 +50,7 @@
     class="TAN-news-avatar left"
 />
 <ul>
-    <li>
+    <li style="font-size:0.7em">
         Posted by <a 
             href="[% object.user.profile_url %]" 
             class="TAN-news-user"
@@ -58,13 +58,12 @@
             [% object.user.username | html %]
         </a>
         [%- IF object.promoted -%]
-            promoted [% object.promoted %] ago
-        [%- ELSE -%]
-            posted [% object.created %] ago
+            promoted [% object.promoted %] ago,
         [%- END -%]
+        posted [% object.created %] ago
         <span class="TAN-type-[% type %]"> [[% type %]]</span>
     </li>
-    <li>
+    <li style="font-size:0.7em">
         <a href="[% comment_url %]" class="TAN-news-comment">
             <img 
                 alt="" 
