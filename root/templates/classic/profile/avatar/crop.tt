@@ -5,7 +5,7 @@
     <p>
         Please select the area you wish to have as your avatar
     </p>
-    <img src="[% avatar_http.replace('\?', '.no_crop?') %]" id="cropper"/>
+    <img src="[% avatar_http.replace('\/\d+$', '.no_crop') %]" id="cropper"/>
 
     <form method="post" action="/profile/_avatar/crop" id="crop_form">
         <fieldset>

@@ -55,7 +55,7 @@
         <br />
         [% IF 
             c.check_user_roles('edit_user')
-            || c.user_id == user.user_id 
+            || c.user.id == user.id 
         %]
             <a href="[% user.profile_url %]edit">Edit</a>
         [% END %]
