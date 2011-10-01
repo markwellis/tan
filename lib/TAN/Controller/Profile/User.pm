@@ -115,6 +115,10 @@ sub comment: PathPart('comment') Chained('user') Args(0){
     $c->cache_page(600);
 
     my $page = $c->req->param('page') || 1;
+    my $int_reg = $c->model('CommonRegex')->not_int;
+    $page =~ s/$int_reg//g;
+    $page ||= 1;
+
     my %search_opts = (
         'me.deleted' => 'N',
         'object.deleted' => 'N',
@@ -166,6 +170,10 @@ sub fetch: Private{
     $c->cache_page(600);
 
     my $page = $c->req->param('page') || 1;
+    my $int_reg = $c->model('CommonRegex')->not_int;
+    $page =~ s/$int_reg//g;
+    $page ||= 1;
+    
     my $order = $c->req->param('order') || 'created';
 
     my ( $objects, $pager ) = $c->stash->{'user'}->objects->index( $type, $page, 1, {}, $order, $c->nsfw, "profile:" . $c->stash->{'user'}->id );
