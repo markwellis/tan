@@ -195,11 +195,6 @@ sub update_score{
 
     my $score = $self->_calculate_score;
 
-    if ( $score < $self->score ){
-    #don't update score if old score is higher, just so objects don't drop down when orderby score
-        return;
-    }
-
     if ( $self->score != $score ){
         $self->update( {
             'score' => $score,
@@ -234,10 +229,9 @@ sub _calculate_score{
 
     $age = ceil( $age );
 
-    if ( $age < 50 ){
-# if is less than 50 days old, pretend it's 50 days old
-# to stop it promoting just because it's new
-        $age = 50;
+    if ( $age < 60 ){
+#stop promoting just because it's new
+        $age = 60;
     }
 
 #weights
