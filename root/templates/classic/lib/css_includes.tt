@@ -1,6 +1,6 @@
 [% FOREACH css_include IN css_includes %]
     [%#replace @ with / so we can get the file mod time %]
-    [%- css_file = css_include.replace('@/g', '/') -%]
+    [%- css_file = css_include.replace('@', '/') -%]
     [%- m_time = "${c.path_to('root')}${theme_settings.css_path}/${css_file}.css" | file_mtime -%]
     <link 
         type="text/css" 

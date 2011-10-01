@@ -5,8 +5,7 @@
             <script type="text/javascript" src="[% js_include %]"></script>
         [% ELSE %]
             [%#replace @ with / so we can get the file mod time %]
-            [%- js_file = js_include.replace('@/g', '/') -%]
-
+            [%- js_file = js_include.replace('@', '/') -%]
             [%- m_time = "${c.path_to('root')}${theme_settings.js_path}/${js_file}.js" | file_mtime -%]
             <script 
                 type="text/javascript" 
