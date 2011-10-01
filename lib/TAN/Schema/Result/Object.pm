@@ -196,9 +196,12 @@ sub update_score{
     my $score = $self->_calculate_score;
 
     if ( $self->score != $score ){
-        $self->update( {
-            'score' => $score,
-        } );
+        #might get a deadlock [342] - ignore in that case
+        eval{
+            $self->update( {
+                'score' => $score,
+            } );
+        };
     }
 
     if ( 
