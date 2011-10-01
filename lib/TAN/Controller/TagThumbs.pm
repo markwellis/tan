@@ -8,8 +8,10 @@ use JSON;
 use Tie::Hash::Indexed;
 
 my $tag_is_id_reg = qr/^\!(\d+)$/;
-sub index: Path Args(1) {
-    my ( $self, $c, $all_tags ) = @_;
+sub index: Args(0) {
+    my ( $self, $c ) = @_;
+
+    my $all_tags = $c->req->param('tags');
 
     my @tags = split(/ /, $all_tags);
     $c->model('Stemmer')->stem_in_place( \@tags );

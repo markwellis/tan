@@ -25,22 +25,19 @@ var thumbs;
 var per_page = 100;
 
 function get_thumbs(id){
-    var idstr;
-
-    if (id){
-        idstr = ' !' + id;
-    } else {
-        idstr = '';
+    var tags = document.id('tags').value;
+    if ( id ){
+        tags = tags + ' !' + id;
     }
 
-    if (document.id('tags').value){
+    if ( document.id('tags').value ){
         var req = new Request.JSON({
-            'url':'/tagthumbs/' + document.id('tags').value + idstr + '/',
-            'noCache': 1,
-            'onRequest': function(){
+            "url": "/tagthumbs/",
+            "noCache": 1,
+            "onRequest": function(){
                 document.id('thumb_tags').fade(0);
             },
-            'onSuccess': function(json_data){
+            "onSuccess": function(json_data){
                 thumbs = json_data;
 
                 var start = 0;
@@ -54,7 +51,8 @@ function get_thumbs(id){
                 }
             }
         }).get({
-            'random': 20
+            "random": 20,
+            "tags": tags
         });
     }
 }
