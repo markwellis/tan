@@ -45,13 +45,15 @@ sub post: PathPart('post') Chained('validate_user') Args(){
         && ( $c->req->param('delete') eq 'Delete' ) 
         && $c->check_user_roles(qw/delete_object/)
     ){
-        $c->model('MySql::AdminLog')->log_event( {
-            'admin_id' => $c->user->id,
-            'user_id' => $object->user_id,
-            'action' => 'delete_object',
-            'reason' => $c->req->param('_edit-reason') || ' ',
-            'object_id' => $object->id,
-        } );
+        if ( $object->user->id != $c->user->id ){
+            $c->model('MySql::AdminLog')->log_event( {
+                'admin_id' => $c->user->id,
+                'user_id' => $object->user_id,
+                'action' => 'delete_object',
+                'reason' => $c->req->param('_edit-reason') || ' ',
+                'object_id' => $object->id,
+            } );
+        }
 
         $object->update( {
             'deleted' => 'Y',
@@ -152,13 +154,15 @@ sub update_object: Private{
             $c->forward( '/submit/add_tags', [ $object, $tags ] );
         }
 
-        $c->model('MySql::AdminLog')->log_event( {
-            'admin_id' => $c->user->id,
-            'user_id' => $object->user_id,
-            'action' => 'edit_object',
-            'reason' => $c->req->param('_edit-reason') || ' ',
-            'object_id' => $object->id,
-        } );
+        if ( $object->user->id != $c->user->id ){
+            $c->model('MySql::AdminLog')->log_event( {
+                'admin_id' => $c->user->id,
+                'user_id' => $object->user_id,
+                'action' => 'edit_object',
+                'reason' => $c->req->param('_edit-reason') || ' ',
+                'object_id' => $object->id,
+            } );
+        }
     }
 }
 
