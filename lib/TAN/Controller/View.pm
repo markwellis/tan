@@ -30,14 +30,21 @@ sub update_score:
 {
     my ( $self, $c, $object ) = @_;
 
-    my $object_to_update = $object; #object is a ref, don't wanna change it for other subs
-
-    if ( ref($object) ne 'TAN::Model::MySQL::Object' ){
-    #$object_rs probably something else with a ->object relationship
-        $object_to_update = $object->object;
+    my $objects = [];
+    if ( ref( $object ) ne 'ARRAY' ){
+        push( @{$objects}, $object );
+    } else {
+        $objects = $object;
     }
 
-    $object_to_update->update_score;
+    foreach my $object_to_update ( @{$objects} ){
+        if ( ref($object_to_update) ne 'TAN::Model::MySQL::Object' ){
+        #$object_rs probably something else with a ->object relationship
+            $object_to_update = $object_to_update->object;
+        }
+
+        $object_to_update->update_score;
+    }
 }
 
 sub remove_blog_cache: Event(object_updated){
