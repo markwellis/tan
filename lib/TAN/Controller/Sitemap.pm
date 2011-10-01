@@ -45,6 +45,7 @@ sub index: Private{
         . '</sitemapindex>';
 
     $c->res->output( $output );
+    $c->res->header('Content-Type' => 'application/xml');
     $c->detach();
 }
 
@@ -93,6 +94,7 @@ sub xml: Path('xml') Args(1){
         . '</urlset>';
 
     $c->res->output( $output );
+    $c->res->header('Content-Type' => 'application/xml');
     $c->detach();
 }
 
