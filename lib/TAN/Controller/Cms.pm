@@ -27,6 +27,7 @@ sub cms: Private{
         );
 
         if ( $cms_page->nowrapper eq 'Y' ){
+            $c->res->header('Content-Type' => 'text/plain');
             $c->stash->{'template'} = 'cms_nowrapper.tt',
             $c->forward('View::NoWrapper');
         }
