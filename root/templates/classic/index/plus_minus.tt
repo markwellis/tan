@@ -1,0 +1,16 @@
+[%- js_includes.push('Plus-Minus') -%]
+
+<div class="TAN-plusminus right">
+    <a 
+        class="TAN-plus [% IF object.meplus %]TAN-plus-selected[% END %]" 
+        href="/view/[% type %]/[% object.${type}.id %]/_plus" 
+    >+</a>
+    <div class="TAN-object-score">
+        [% USE String( object.score ) %]
+        [% String.format("%.3f") %]
+    </div>
+    <a 
+        class="TAN-minus [% IF object.meminus %]TAN-minus-selected[% END %]"
+        href="/view/[% type %]/[% object.${type}.id %]/_minus" 
+    >-</a>
+</div>

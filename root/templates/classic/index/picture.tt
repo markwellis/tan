@@ -57,7 +57,7 @@
     </li>
 </ul>
 <div>
-    [% PROCESS lib/plus_minus.tt %]
+    [% PROCESS index/plus_minus.tt %]
     <a class="left" href="[% url %]">
         <img 
             src="[% c.config.thumb_path %]/[% md %]/[% object.picture.id %]/160" 

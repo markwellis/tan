@@ -449,58 +449,35 @@ fieldset{
 
 /* plus minus */
 
-.TAN-plusminus > div{
-    background-color:#fff;
-    border:1px solid #808080;
-    width:50px;
-    height:45px;
-    position:relative;
+.TAN-plusminus{
+    text-align:center;
 }
 
-.TAN-plusminus > div > span{
-    font-size:1.5em;
+.TAN-plusminus > a{
+    display:block;
+}
+
+.TAN-plus, .TAN-minus{
     font-weight:bold;
-    text-align:center;
-    display:block;
 }
 
-.TAN-plusminus > div > a{
-    text-align:center;
-    color:#fff;
-    display:block;
-    font-size:0.7em !important;
-    left:0px;
-    right:0px;
-    bottom:0px;
-    position:absolute;
-}
-
-.TAN-plus > span{
+.TAN-plus{
+    font-size:2em !important;
     color:#4582BE;
-}
-
-.TAN-plus > a{
-    background-color:#4582BE;
+    margin-bottom:10px;
 }
 
 .TAN-plus-selected{
-    background-color:#5A9E4A !important;
+   color:#5A9E4A !important;
 }
 
 .TAN-minus{
-    margin-top:10px;
-}
-
-.TAN-minus > span{
+    font-size:2.2em !important;
     color:#CC6A00;
 }
 
-.TAN-minus > a{
-    background-color:#CC6A00;
-}
-
 .TAN-minus-selected{
-    background-color:#000000 !important;
+    color:#000000 !important;
 }
 
 /* pagination */

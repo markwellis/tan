@@ -20,7 +20,7 @@
     - ( object.${type}.picture_id % 1000 ) 
 -%]
 
-[%- PROCESS lib/plus_minus.tt -%]
+[%- PROCESS index/plus_minus.tt -%]
 <div class="TAN-news-image left">
     <a href="[% 
         ( object.type == 'picture' ) ? 
@@ -84,7 +84,6 @@
             | [% object.picture.x %]x[% object.picture.y %]
             | [% object.picture.size | filesize_h %]
         [% END %]
-        | Score: [% object.score %]
         [%- IF c.user_exists 
             && (
                 c.check_any_user_role('edit_object', 'edit_object_nsfw')

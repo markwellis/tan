@@ -189,6 +189,7 @@ sub index: PathPart('') Chained('type') Args(1) {
         }
     }
 
+#this should be cached
     @{$c->stash->{'comments'}} = 
     $c->model('MySQL::Comments')->search({
         'me.object_id' => $c->stash->{'object_id'},
@@ -441,7 +442,7 @@ sub add_plus_minus: Private{
         #json
             $c->res->header('Content-Type' => 'application/json');
             $c->res->body( to_json({
-                'count' => $count,
+                'score' => $object->score,
                 'deleted' => $deleted,
             }) );
         } else {

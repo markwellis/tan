@@ -238,14 +238,12 @@ sub _calculate_score{
     }
 
 #weights
-#   plus 4
-#   minus 3
-#   comments 2 
-#   views 1
     my $plus = ( $self->get_column('plus') * 4 );
-    my $minus = ( $self->get_column('minus') * 3 ) || 1;
+    my $minus = ( $self->get_column('minus') * 4 ) || 1;
     my $comments = ( $self->get_column('comments') * 2 );
     my $views = $self->get_column('views');
+
+#perhaps add in type weights...
 
     my $score = ( ( $plus + $views + $comments ) - $minus ) * ( 1 / $age );
 
