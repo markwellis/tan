@@ -194,8 +194,12 @@ sub update_score{
     my ( $self ) = @_;
 
     my $score = $self->_calculate_score;
+    my $old_score = $self->score || undef;
 
-    if ( $self->score != $score ){
+    if ( 
+        !defined( $old_score ) 
+        || ( $old_score != $score ) 
+    ){
         #might get a deadlock [342] - ignore in that case
         eval{
             $self->update( {
