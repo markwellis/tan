@@ -39,12 +39,7 @@ sub add{
     };
 #end txn
 
-    my $plusminus_rs = $self->search({
-        'object_id' => $object_id,
-        'type' => $type,
-    });
-
-    return ( $plusminus_rs->count, $deleted );
+    return $deleted;
 }
 
 sub meplus_minus{

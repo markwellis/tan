@@ -56,7 +56,7 @@ sub login: Local Args(0){
                 $c->flash->{'message'} = "You have been deleted";
             } else {
                 #post any saved comments
-                $c->forward('/view/post_saved_comments');
+                $c->forward('/view/comment/post_saved_comments');
                 $c->flash->{'message'} = 'You have logged in';
             }
         } else {

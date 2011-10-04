@@ -5,7 +5,7 @@ use namespace::autoclean;
 use Catalyst::Runtime 5.80;
 use Data::Dumper; #used in 500 error email
 
-our $VERSION = 3.1.5;
+our $VERSION = 3.2.0;
 
 use Catalyst qw/
     ConfigLoader
@@ -50,8 +50,10 @@ sub check_cache{
 #recored p.i.
     if ( 
         !$c->stash->{'pi_recorded'} 
-        && ( $c->action ne 'thumb/index' )
-        && ( $c->action ne 'minifier/index' )
+        && (
+            ( $c->action eq 'view/index' )
+            || ( $c->action eq 'index/index' )
+        )
     ){
         my @params = split('/', $c->req->path);
 
