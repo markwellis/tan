@@ -449,35 +449,45 @@ fieldset{
 
 /* plus minus */
 
+.TAN-plus-wrapper, .TAN-minus-wrapper{
+    position:relative;
+    height:50px;
+    width:70px;
+    margin:auto;
+}
+
 .TAN-plusminus{
     text-align:center;
 }
 
-.TAN-plusminus > a{
-    display:block;
+.TAN-plus-arrow{ 
+    border-left: 35px solid transparent; 
+    border-right: 35px solid transparent; 
+    border-bottom: 50px solid #666; 
 }
 
-.TAN-plus, .TAN-minus{
-    font-weight:bold;
+.TAN-plus-arrow-selected{
+    border-bottom: 50px solid #5A9E4A !important; 
 }
 
 .TAN-plus{
-    font-size:2em !important;
-    color:#4582BE;
-    margin-bottom:10px;
+    position:absolute;
+    left:0px;
+    font-size:1.6em !important;
+    font-weight:bold;
+    padding-top:20px;
+    width:70px;
+    height:30px
 }
 
-.TAN-plus-selected{
-   color:#5A9E4A !important;
+.TAN-plusminus a{
+    font-size:1.6em !important;
+    font-weight:bold;
 }
 
-.TAN-minus{
-    font-size:2.2em !important;
-    color:#CC6A00;
-}
-
-.TAN-minus-selected{
-    color:#000000 !important;
+.TAN-object-score{
+    font-size:2em;
+    font-weight:bold;
 }
 
 /* pagination */

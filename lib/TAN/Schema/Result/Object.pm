@@ -210,7 +210,7 @@ sub update_score{
 
     if ( 
         ( !$self->promoted ) 
-        && ( $score >= TAN->config->{'promotion_cutoff'} )
+        && ( $score >= 100 )
     ){
         eval{
             $self->result_source->schema->txn_do(sub{
@@ -251,7 +251,9 @@ sub _calculate_score{
 
     my $score = ( ( $plus + $views + $comments ) - $minus ) * ( 1 / $age );
 
-    return sprintf( "%.3f", $score );
+# make look nicer
+    $score = ( $score * 100 ) - 20;
+    return sprintf("%d", $score);
 }
 
 1;
