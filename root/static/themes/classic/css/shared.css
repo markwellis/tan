@@ -449,6 +449,12 @@ fieldset{
 
 /* plus minus */
 
+.TAN-plusminus{
+    text-align:center;
+    font-size:1.6em !important;
+    font-weight:bold;
+}
+
 .TAN-plus-wrapper, .TAN-minus-wrapper{
     position:relative;
     height:50px;
@@ -456,13 +462,36 @@ fieldset{
     margin:auto;
 }
 
-.TAN-plusminus{
-    text-align:center;
+.TAN-plus-arrow, .TAN-minus-arrow{ 
+    border-left: 35px solid transparent; 
+    border-right: 35px solid transparent;
 }
 
-.TAN-plus-arrow{ 
-    border-left: 35px solid transparent; 
-    border-right: 35px solid transparent; 
+.TAN-plus-arrow a, .TAN-minus-arrow a{ 
+    color:#000;
+}
+
+.TAN-plus-arrow-selected a, .TAN-minus-arrow-selected a{
+    color:#fff;
+}
+
+.TAN-plus, .TAN-minus{
+    position:absolute;
+    left:0px;
+    top:0px;
+    width:70px;
+    height:30px
+}
+
+.TAN-plus{
+    padding-top:20px;
+}
+
+.TAN-minus{
+    padding-bottom:20px;
+}
+
+.TAN-plus-arrow {
     border-bottom: 50px solid #666; 
 }
 
@@ -470,24 +499,12 @@ fieldset{
     border-bottom: 50px solid #5A9E4A !important; 
 }
 
-.TAN-plus{
-    position:absolute;
-    left:0px;
-    font-size:1.6em !important;
-    font-weight:bold;
-    padding-top:20px;
-    width:70px;
-    height:30px
+.TAN-minus-arrow{ 
+    border-top: 50px solid #666; 
 }
 
-.TAN-plusminus a{
-    font-size:1.6em !important;
-    font-weight:bold;
-}
-
-.TAN-object-score{
-    font-size:2em;
-    font-weight:bold;
+.TAN-minus-arrow-selected{
+    border-top: 50px solid #5A9E4A !important; 
 }
 
 /* pagination */

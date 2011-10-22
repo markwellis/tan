@@ -14,9 +14,9 @@
         [% object.score %]
     </div>
     <div class="TAN-minus-wrapper">
-        <div class="TAN-down-arrow">
+        <div class="TAN-minus-arrow[% IF object.meminus %] TAN-minus-arrow-selected[% END %]">
             <a 
-                class="TAN-minus [% IF object.meminus %]TAN-minus-selected[% END %]"
+                class="TAN-minus"
                 href="/view/[% type %]/[% object.${type}.id %]/_minus"
                 title="TAN"
             >[% object.get_column('minus') %]</a>
