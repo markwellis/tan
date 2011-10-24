@@ -471,10 +471,6 @@ fieldset{
     color:#000;
 }
 
-.TAN-plus-arrow-selected a, .TAN-minus-arrow-selected a{
-    color:#fff;
-}
-
 .TAN-plus, .TAN-minus{
     position:absolute;
     left:0px;
@@ -496,7 +492,7 @@ fieldset{
 }
 
 .TAN-plus-arrow-selected{
-    border-bottom: 50px solid #5A9E4A !important; 
+    border-bottom: 50px solid #5A9E4A; 
 }
 
 .TAN-minus-arrow{ 
@@ -504,7 +500,7 @@ fieldset{
 }
 
 .TAN-minus-arrow-selected{
-    border-top: 50px solid #5A9E4A !important; 
+    border-top: 50px solid #5A9E4A; 
 }
 
 /* pagination */

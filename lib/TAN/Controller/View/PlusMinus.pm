@@ -23,7 +23,7 @@ sub add_plus_minus: Private{
 
     if ( $c->user_exists ){
     # valid user, do work
-        my $deleted = $c->model('MySQL::PlusMinus')->add(
+        my $created = $c->model('MySQL::PlusMinus')->add(
             $type, $c->stash->{'object_id'}, $c->user->user_id
         );
 
@@ -40,7 +40,9 @@ sub add_plus_minus: Private{
             $c->res->header('Content-Type' => 'application/json');
             $c->res->body( to_json({
                 'score' => $object->score,
-                'deleted' => $deleted,
+                'created' => $created,
+                'plus' => $object->get_column('plus'),
+                'minus' => $object->get_column('minus'),
             }) );
         } else {
         #redirect
