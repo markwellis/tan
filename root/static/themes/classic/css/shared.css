@@ -453,6 +453,7 @@ fieldset{
     text-align:center;
     font-size:1.6em !important;
     font-weight:bold;
+    width:70px;
 }
 
 .TAN-plus-wrapper, .TAN-minus-wrapper{
@@ -467,17 +468,13 @@ fieldset{
     border-right: 35px solid transparent;
 }
 
-.TAN-plus-arrow a, .TAN-minus-arrow a{ 
-    color:#000;
-}
-
 .TAN-plus, .TAN-minus{
     position:absolute;
     left:0px;
     top:0px;
     width:70px;
     height:30px;
-    display:block;
+    color:#000;
 }
 
 .TAN-plus{
