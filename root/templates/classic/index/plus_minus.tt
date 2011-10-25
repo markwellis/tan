@@ -11,7 +11,7 @@
         </div>
     </div>
     <div class="TAN-object-score">
-        [% object.score %]
+        [%- object.score -%]
     </div>
     <div class="TAN-minus-wrapper">
         <div class="TAN-minus-arrow[% IF object.meminus %] TAN-minus-arrow-selected[% END %]">

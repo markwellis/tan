@@ -451,54 +451,56 @@ fieldset{
 
 .TAN-plusminus{
     text-align:center;
-    font-size:1.6em !important;
+    font-size:1.4em !important;
     font-weight:bold;
-    width:70px;
+    width:60px;
 }
 
 .TAN-plus-wrapper, .TAN-minus-wrapper{
-    position:relative;
-    height:50px;
-    width:70px;
+    height:40px;
+    width:60px;
     margin:auto;
 }
 
 .TAN-plus-arrow, .TAN-minus-arrow{ 
-    border-left: 35px solid transparent; 
-    border-right: 35px solid transparent;
+    border-left: 30px solid transparent; 
+    border-right: 30px solid transparent;
 }
 
 .TAN-plus, .TAN-minus{
-    position:absolute;
-    left:0px;
-    top:0px;
-    width:70px;
-    height:30px;
-    color:#000;
+    width:60px;
+    color:#000080;
+    display:block;
+    float:left;
+    margin-left:-30px;
 }
 
 .TAN-plus{
-    padding-top:20px;
+    height:25px;
+    padding-top:14px;
+    margin-bottom:-40px;
 }
 
 .TAN-minus{
-    padding-bottom:20px;
+    height:30px;
+    padding-bottom:10px;
+    margin-top:-40px;
 }
 
 .TAN-plus-arrow {
-    border-bottom: 50px solid #666; 
+    border-bottom:40px solid #666; 
 }
 
 .TAN-plus-arrow-selected{
-    border-bottom: 50px solid #5A9E4A; 
+    border-bottom:40px solid #5A9E4A; 
 }
 
 .TAN-minus-arrow{ 
-    border-top: 50px solid #666; 
+    border-top:40px solid #666; 
 }
 
 .TAN-minus-arrow-selected{
-    border-top: 50px solid #5A9E4A; 
+    border-top:40px solid #5A9E4A; 
 }
 
 /* pagination */
