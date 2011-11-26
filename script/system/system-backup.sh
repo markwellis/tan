@@ -16,7 +16,7 @@ mount -o bind / $BIND_MOUNTPOINT
 
 debug "creating tarball"
 cd $BIND_MOUNTPOINT
-tar -cJpf $OUTPUT_FILENAME . --exclude "mnt/*" --exclude "tmp/*" --exclude "usr/tmp/*" --exclude "var/tmp/*" --exclude "var/cache/apt/archives/*" --exclude "var/lib/varnish"
+tar -cJpf $OUTPUT_FILENAME . --exclude "mnt/*" --exclude "tmp/*" --exclude "usr/tmp/*" --exclude "var/tmp/*" --exclude "var/cache/apt/archives/*" --exclude "var/lib/varnish/*" --exclude "var/lib/mysql/*"
 
 debug "creating sha512sum"
 sha512sum -b $OUTPUT_FILENAME > $OUTPUT_FILENAME.sha512sum
