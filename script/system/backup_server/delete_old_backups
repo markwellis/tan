@@ -1,9 +1,9 @@
 #!/bin/bash
 
-BACKUP_DIR=/homez.365/thisaint/www/backups/tan/backups
+BACKUP_DIR=/homez.365/thisaint/www/backups/tan
 
 function delete_old_sys_backups(){
-    DIR=$BACKUP_DIR
+    DIR="$BACKUP_DIR/backups"
     LATEST_FILE=$(find $BACKUP_DIR \! \( -name 'db*' -prune \) -type f | xargs stat -c %Y | sort -rn | head -1)
     DELETE_OLDER_THAN=$(_date_diff $LATEST_FILE)
 
@@ -11,7 +11,7 @@ function delete_old_sys_backups(){
 }
 
 function delete_old_db_backups(){
-    DIR=$BACKUP_DIR/db
+    DIR="$BACKUP_DIR/db_backups"
     LATEST_FILE=$(find $DIR -type f | xargs -I '{}' stat -c %Y '{}' | sort -r | head -1)
     DELETE_OLDER_THAN=$(_date_diff $LATEST_FILE)
 

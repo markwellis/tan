@@ -15,7 +15,7 @@ fi
 (
     if flock -n 88; then
         for DIR in $BACKUP_DIRS; do
-            rsync $ARGS $SOURCE/$DIR $USER@$SERVER:$DESTINATION
+            rsync --partial -z $ARGS $SOURCE/$DIR $USER@$SERVER:$DESTINATION
         done;
     fi
 ) 88>$LOCK_FILE
