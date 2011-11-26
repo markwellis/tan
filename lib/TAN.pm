@@ -5,7 +5,7 @@ use namespace::autoclean;
 use Catalyst::Runtime 5.80;
 use Data::Dumper; #used in 500 error email
 
-our $VERSION = 3.2.8;
+our $VERSION = 3.2.9;
 
 use Catalyst qw/
     ConfigLoader
