@@ -147,13 +147,16 @@ sub update_object: Private{
         $object->$type->update( $to_update );
     }
 
+    if (
+        $c->check_any_user_role(qw/edit_object/)
+        || ( $object->user_id == $c->user->user_id )
+    ){
+        $c->forward( '/submit/add_tags', [ $object, $tags ] );
+    }
+
     if ( 
         $c->check_any_user_role(qw/edit_object edit_object_nsfw/)
     ){
-        if ( $c->check_any_user_role(qw/edit_object/) ){
-            $c->forward( '/submit/add_tags', [ $object, $tags ] );
-        }
-
         if ( $object->user->id != $c->user->id ){
             $c->model('MySql::AdminLog')->log_event( {
                 'admin_id' => $c->user->id,
