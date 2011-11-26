@@ -3,7 +3,7 @@ SERVER=thisaintnews.pl
 
 SOURCE=/mnt/stuff
 DESTINATION=/homez.365/thisaint/www/backups/tan
-BACKUP_DIRS="TAN/user trac svn backups"
+BACKUP_DIRS="TAN/user trac svn backups db_backups"
 
 LOCK_FILE=/tmp/backup-sync
 
