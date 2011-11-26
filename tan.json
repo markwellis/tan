@@ -14,8 +14,8 @@
     "jscache_path": "/static/cache/js",
     "thumb_path": "/static/cache/thumbs",
 
-    "recaptcha_public_key": "6LfOtQIAAAAAAKjR5kiq9YLFjG80_bLST2fB696F",
-    "recaptcha_private_key": "6LfOtQIAAAAAAK0DnRYVGRWVP0aBtfG158_OYGok",
+    "recaptcha_public_key": "6Lf1icoSAAAAAL2RmjqU2q30R3PFXYnT0X6SOM4Y",
+    "recaptcha_private_key": "6Lf1icoSAAAAAF711Fjic0mPXzCJ1oejOAOJ2O6U",
 
     "email": ["Sendmail"],
 
