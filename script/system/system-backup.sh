@@ -22,4 +22,5 @@ debug "creating sha512sum"
 sha512sum -b $OUTPUT_FILENAME > $OUTPUT_FILENAME.sha512sum
 
 debug "unmounting bind mount"
+cd /
 umount $BIND_MOUNTPOINT
