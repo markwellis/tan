@@ -11,7 +11,6 @@ LOCK_FILE=/tmp/backup-sync
 trap "echo Exited!; exit;" SIGINT SIGTERM
 
 MAX_RETRIES=3
-i=0
 
 ARGS="-az --partial -e ssh"
 if [ $VERBOSE ]; then
@@ -22,6 +21,7 @@ fi
     if flock -n 88; then
         for DIR in $BACKUP_DIRS; do
             # Set the initial return value to failure
+            i=0
             false
             while [ $? -ne 0 -a $i -lt $MAX_RETRIES ]; do
                 i=$(($i+1))
