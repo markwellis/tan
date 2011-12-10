@@ -422,8 +422,7 @@ fieldset{
 .TAN-news > p, .TAN-news > h2{
     margin:0px;
     font-weight:normal;
-    margin:0px 65px 5px 105px;
-
+    margin:5px 65px 5px 105px;
 }
 
 .TAN-news > p{
