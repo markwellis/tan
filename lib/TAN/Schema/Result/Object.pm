@@ -49,7 +49,7 @@ __PACKAGE__->add_columns(
   "deleted",
   { data_type => "ENUM", default_value => "N", is_nullable => 0, size => 1 },
   "score",
-  { data_type => "FLOAT", default_value => undef, is_nullable => 1, size => 11 },
+  { data_type => "INT", default_value => undef, is_nullable => 1, size => 11 },
 );
 __PACKAGE__->set_primary_key("object_id");
 

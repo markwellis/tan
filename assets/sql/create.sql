@@ -37,6 +37,7 @@ CREATE  TABLE IF NOT EXISTS `tan`.`object` (
   `minus` BIGINT(20) NOT NULL DEFAULT 0 ,
   `comments` BIGINT(20) NOT NULL DEFAULT 0 ,
   `deleted` ENUM('Y','N') NOT NULL DEFAULT 'N' ,
+  `score` FLOAT NULL ,
   PRIMARY KEY (`object_id`) ,
   INDEX `created` (`created` ASC) ,
   INDEX `super_index` (`NSFW` ASC, `type` ASC, `promoted` ASC, `created` ASC, `deleted` ASC) ,
