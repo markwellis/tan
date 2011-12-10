@@ -72,16 +72,19 @@ sub external: Local Args(1){
         if ( $object_id  && $session_id ){
             my $user_id = $c->user_exists ? $c->user->user_id : undef;
 
-            $c->model('MySQL::Views')->update_or_create({
-                'session_id' => $session_id,
-                'object_id' => $object_id,
-                'user_id' => $user_id,
-                'ip' => $ip_address,
-                'created' => \'NOW()',
-                'type' => 'external',
-            },{
-                'key' => 'session_objectid',
-            });
+            eval{
+            #might get a deadlock [358] - ignore in that case
+                $c->model('MySQL::Views')->update_or_create({
+                    'session_id' => $session_id,
+                    'object_id' => $object_id,
+                    'user_id' => $user_id,
+                    'ip' => $ip_address,
+                    'created' => \'NOW()',
+                    'type' => 'external',
+                },{
+                    'key' => 'session_objectid',
+                });
+            };
         }
         my $type = $object_rs->type;
         $c->res->redirect( $object_rs->$type->url, 303 );
