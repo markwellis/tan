@@ -10,6 +10,8 @@ use Term::ProgressBar;
 use HTML::TreeBuilder;
 use HTML::FormatText;
 
+use Data::Dumper;
+
 sub strip_tags{
     my $tree = HTML::TreeBuilder->new;
     $tree->parse(shift);
@@ -71,8 +73,9 @@ my $objects = $db->resultset('Object')->search({
     },{
     'prefetch' => ['link', 'blog', 'picture', {'poll' => 'answers'}, 'video', 'forum', 'user'],
 });
+my $comments = $db->resultset('Comments')->search({},{'prefetch' => [qw/user/],});
 
-my $count = $objects->count;
+my $count = $objects->count + $comments->count;
 my $loop = 0;
 my $progress = Term::ProgressBar->new({
     'name' => 'Indexing',
@@ -80,7 +83,7 @@ my $progress = Term::ProgressBar->new({
 });
 $progress->minor(0);
 
-while (my $object = $objects->next){
+while ( my $object = $objects->next ){
     my $type = $object->type;
 
     if ( defined($object->$type) ){
@@ -110,6 +113,21 @@ while (my $object = $objects->next){
     $progress->update( ++$loop );
 }
 
-#add in comments here
+while (my $comment = $comments->next){
+    my $create = {
+        'id' => "comment-" . $comment->id,
+        'type' => 'comment',
+        'nsfw' => '',
+        'title' => '',
+        'description' => '',
+        'date' => $comment->_created->epoch,
+        'username' => $comment->user->username,
+        'tag' => '',
+        'content' => strip_tags( $comment->_comment ),
+    };
+    
+    $searcher->create( $create );
+    $progress->update( ++$loop );
+}
 
-$searcher->commit;
+$searcher->commit(1);
