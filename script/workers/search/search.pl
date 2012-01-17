@@ -3,7 +3,7 @@ use warnings;
 
 use GearmanX::Simple::Worker;
 
-use KinoSearchX::Simple;
+use LucyX::Simple;
 use Storable;
 
 use Config::Any;
@@ -19,7 +19,7 @@ my $config = Config::Any->load_files( {
 } );
 
 $config = $config->{ $config_file };
-my $searcher = KinoSearchX::Simple->new( $config->{'search_args'} );
+my $searcher = LucyX::Simple->new( $config->{'search_args'} );
 
 sub add_to_index{
     my ( $job ) = @_;
@@ -27,7 +27,7 @@ sub add_to_index{
     my $document = Storable::thaw( $job->arg );
     ERROR "adding " . $document->{'id'} . " to index" ;
     $searcher->update_or_create( $document );
-    $searcher->commit;
+    $searcher->commit(1);
 
     return 1;
 }
@@ -41,7 +41,7 @@ sub delete_from_index{
         ERROR "deleting " . $id . " from index" ;
         $searcher->delete( 'id', $id );
     }
-    $searcher->commit;
+    $searcher->commit(1);
 
     return 1;
 }

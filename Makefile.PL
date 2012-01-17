@@ -77,7 +77,7 @@ requires 'File::Basename';
 requires 'Log::Log4perl';
 
 #search
-requires 'KinoSearchX::Simple';
+requires 'LucyX::Simple';
 
 #sitemap pinger
 requires 'LWP::Simple';

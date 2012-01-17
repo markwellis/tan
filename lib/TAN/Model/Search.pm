@@ -4,6 +4,6 @@ use namespace::autoclean;
 
 extends 'Catalyst::Model::Factory::PerRequest';
 
-__PACKAGE__->config( class => 'KinoSearchX::Simple' );
+__PACKAGE__->config( class => 'LucyX::Simple' );
 
 __PACKAGE__->meta->make_immutable;

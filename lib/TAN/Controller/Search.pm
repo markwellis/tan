@@ -54,6 +54,7 @@ sub index: Path Args(0){
 
     my $searcher = $c->model('Search');
     if ( my ( $objects, $pager ) = $searcher->search( $q, $page ) ){
+warn Data::Dumper::Dumper( $objects );
         $c->stash->{'index'} = $c->model('Index')->indexinate($c, $objects, $pager);
     }
 

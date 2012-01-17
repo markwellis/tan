@@ -60,21 +60,43 @@
             "index_path": "/mnt/stuff/TAN/search_index",
             "schema": [
                 {
+                    "name": "id",
+                    "type": "string"
+                },{
                     "name": "title", 
                     "boost": 3,
+                    "stored": 0
                 },{
                     "name": "description",
+                    "stored": 0
                 },{
-                    "name": "id",
+                    "name": "content",
+                    "stored": 0
                 },{
                     "name": "type",
+                    "type": "string"
                 },{
                     "name": "nsfw",
+                    "stored": 0
+                },{
+                    "name": "date",
+                    "type": "int32",
+                    "indexed": 0,
+                    "stored": 0,
+                    "sortable": 1
+                },{
+                    "name": "username",
+                    "stored": 0
+                },{
+                    "name": "tag",
+                    "stored": 0
                 }
             ],
             "search_fields": [
-                "title",
-                "description"
+                "title", 
+                "description",
+                "content",
+                "tag"
             ],
             "search_boolop": "AND",
             "entries_per_page": 27

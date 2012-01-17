@@ -44,7 +44,7 @@ my $searcher = LucyX::Simple->new({
             'stored' => 0,
         },{
             'name' => 'type',
-            'stored' => 0,
+            'type' => 'string',
         },{
             'name' => 'nsfw',
             'stored' => 0,
@@ -62,7 +62,7 @@ my $searcher = LucyX::Simple->new({
             'stored' => 0,
         },
     ],
-    'search_fields' => ['title', 'description', 'tag'],
+    'search_fields' => ['title', 'description', 'content', 'tag'],
     'search_boolop' => 'AND',
 });
 
