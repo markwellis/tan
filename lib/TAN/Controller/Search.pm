@@ -16,7 +16,7 @@ sub add_object_to_index: Event(object_created) Event(object_updated){
         'nsfw' => $object->nsfw,
         'title' => $object->$type->title,
         'description' => $object->$type->description,
-        'date' => time,
+        'date' => ref( $object->_created ) ? $object->_created->epoch : time,
         'username' => $object->user->username,
         'tag' =>  join( ' ', map( $_->tag, $object->tags->all ) ),
     };
@@ -63,12 +63,12 @@ sub add_comment_to_index: Event(comment_created) Event(comment_updated){
         'nsfw' => '',
         'title' => '',
         'description' => '',
-        'date' => time,
+        'date' => ref( $comment->_created ) ? $comment->_created->epoch : time,
         'username' => $comment->user->username,
         'tag' => '',
         'content' => TAN::View::TT::strip_tags( $comment->_comment ),
     };
-    
+
     try{
         $c->model('Gearman')->run( 'search_add_to_index', $document );
     };
@@ -102,10 +102,8 @@ sub index: Path Args(0){
         $q .= ' nsfw:n';
     }
 
-    my $searcher = $c->model('Search');
-   
     try{
-        my ( $objects, $pager ) = $searcher->sorted_search( $q, {'date' => 1}, $page );
+        my ( $objects, $pager ) = $c->model('Search')->sorted_search( $q, {'date' => 1}, $page );
         $c->stash->{'index'} = $c->model('Index')->indexinate($c, $objects, $pager);
     };
 

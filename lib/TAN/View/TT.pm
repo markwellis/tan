@@ -2,7 +2,6 @@ package TAN::View::TT;
 use strict;
 use warnings;
 
-use HTML::TreeBuilder;
 use HTML::FormatText;
 
 use HTML::Video::Embed;
@@ -63,17 +62,11 @@ sub file_mtime{
 }
 
 sub strip_tags{
-    my $tree = HTML::TreeBuilder->new;
-    $tree->parse(shift);
-    $tree->eof;
-
-    my $text;
-    if ($tree) {
-        $text = $tree->as_text();
-        $tree = $tree->delete;
-    }
-
-    return $text;
+    return HTML::FormatText->format_string(
+        shift,
+        'leftmargin' => 0,
+        'rightmargin' => 72,
+    );
 }
 
 my $embedder = new HTML::Video::Embed({

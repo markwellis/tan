@@ -63,7 +63,6 @@ requires 'DateTime::Format::Human::Duration';
 requires 'Captcha::reCAPTCHA';
 requires 'HTML::Video::Embed';
 requires 'Fetch::Image';
-requires 'HTML::TreeBuilder';
 requires 'HTML::FormatText';
 requires 'URI';
 requires 'URI::Escape::XS';
