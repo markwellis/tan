@@ -7,6 +7,15 @@ use LucyX::Simple;
 use TAN::Model::MySQL;
 use Term::ProgressBar;
 
+use HTML::FormatText;
+sub strip_tags{
+    return HTML::FormatText->format_string(
+        shift,
+        'leftmargin' => 0,
+        'rightmargin' => 72,
+    );
+}
+
 my $searcher = LucyX::Simple->new({
     'index_path' => '/mnt/stuff/TAN/search_index',
     'schema' => [
@@ -83,7 +92,7 @@ while ( my $object = $objects->next ){
             ( $type eq 'blog' )
             || ( $type eq 'forum' )
         ){
-            $create->{'content'} = TAN::View::TT::strip_tags( $object->$type->_details );
+            $create->{'content'} = strip_tags( $object->$type->_details );
         }
 
         if ( $type eq 'poll' ){
@@ -104,7 +113,7 @@ while (my $comment = $comments->next){
         'date' => $comment->_created->epoch,
         'username' => $comment->user->username,
         'tag' => '',
-        'content' => TAN::View::TT::strip_tags( $comment->_comment ),
+        'content' => strip_tags( $comment->_comment ),
     };
     
     $searcher->create( $create );
