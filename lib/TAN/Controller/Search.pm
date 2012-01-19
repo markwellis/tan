@@ -16,7 +16,7 @@ sub add_object_to_index: Event(object_created) Event(object_updated){
         'nsfw' => $object->nsfw,
         'title' => $object->$type->title,
         'description' => $object->$type->description,
-        'date' => ref( $object->_created ) ? $object->_created->epoch : time,
+        'date' => ref( $object->_created ) ne 'SCALAR' ? $object->_created->epoch : time,
         'username' => $object->user->username,
         'tag' =>  join( ' ', map( $_->tag, $object->tags->all ) ),
     };
@@ -63,7 +63,7 @@ sub add_comment_to_index: Event(comment_created) Event(comment_updated){
         'nsfw' => '',
         'title' => '',
         'description' => '',
-        'date' => ref( $comment->_created ) ? $comment->_created->epoch : time,
+        'date' => ref( $comment->_created ) ne 'SCALAR' ? $comment->_created->epoch : time,
         'username' => $comment->user->username,
         'tag' => '',
         'content' => TAN::View::TT::strip_tags( $comment->_comment ),
