@@ -99,7 +99,7 @@ sub index: Path Args(0){
 
     #nsfw...
     if ( !$c->nsfw && ($q !~ m/nsfw\:?/) ){
-        $q .= ' nsfw:n';
+        $q .= ' NOT nsfw:y';
     }
 
     try{
