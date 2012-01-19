@@ -9,7 +9,13 @@ sub indexinate{
 
     my @index;
     foreach my $object ( @{$objects} ){
-        push(@index, $c->model('MySQL::Object')->get( $object->id, $object->type ));
+        if ( $object->can('type') && ( $object->type eq 'comment' ) ){
+            my $id = $object->id;
+            $id =~ s/\D//g;
+            push( @index, $c->model('MySQL::Comments')->find( $id ) );
+        } else {
+            push(@index, $c->model('MySQL::Object')->get( $object->id, $object->type ));
+        }
     }
 
     if ( !scalar(@index) ){
@@ -18,11 +24,11 @@ sub indexinate{
 
     if ( $c->user_exists ){
         if ( scalar(@index) ){
-            my @ids = map(defined($_) ? $_->id : undef, @index);
+            my @ids = map(defined($_) && ( ref($_) eq 'TAN::Model::MySQL::Object') ? $_->id : undef, @index);
             my $meplus_minus = $c->model('MySQL::PlusMinus')->meplus_minus($c->user->user_id, \@ids);
 
             foreach my $object ( @index ){
-                next if !$object;
+                next if !$object || ( ref( $object ) ne 'TAN::Model::MySQL::Object' );
                 if ( defined($meplus_minus->{ $object->object_id }->{'plus'}) ){
                     $object->{'meplus'} = 1;
                 } 

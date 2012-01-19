@@ -1,5 +1,5 @@
 <ul class="TAN-recent-comments left">
-    [%- IF index.defined -%]
+    [%- IF index.defined && !search -%]
         <li class="TAN-order-by">
             Order <select>
                 <option value="date" [% IF order == 'date' %]selected="selected"[% END %]>Date</option>

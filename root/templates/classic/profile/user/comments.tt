@@ -3,7 +3,7 @@
 
 <ul class="TAN-inside TAN-comment_wrapper">
     [% FOREACH comment IN comments.all %]
-        <li class="TAN-news">
+        <li class="TAN-news[% IF loop.count % 2 %] TAN-news-alternate[% END %]">
              [% PROCESS 'view/comment.tt' %]
         </li>
     [% END %]

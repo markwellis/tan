@@ -1,4 +1,4 @@
-<div class="TAN-comment_holder TAN-hr" id="comment[% comment.id %]">
+<div class="TAN-comment_holder[% IF view_comments %] TAN-hr[% END %]" id="comment[% comment.id %]">
     <ul class="left">
         <li>
             <a href="[% comment.user.profile_url %]" class="TAN-news-user">[% comment.user.username | html %]</a>
@@ -16,8 +16,10 @@
             <ul class="TAN-comment_tools">
                 <li>
                     <a href="[% comment.object.url %]#comment[% comment.id %]">Link</a>
-                    |
-                    <a href="" class="quote_link" title="[% comment.user.username | html %]::[% comment.id %]">Quote</a>
+                    [% IF view_comments %]
+                        |
+                        <a href="" class="quote_link" title="[% comment.user.username | html %]::[% comment.id %]">Quote</a>
+                    [% END %]
                 </li>
 
                 [% IF ( 
