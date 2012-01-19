@@ -2,7 +2,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
         [%- IF page_title.defined -%]
-            [%- page_title = "${page_title} - This Aint News" | html -%]
+            [%- IF !index.defined && object.defined && object.nsfw == 'Y' -%]
+                [%- nsfw_title = " - NSFW" -%]
+            [%- END -%]
+            [%- page_title = "${page_title}${nsfw_title} - This Aint News" | html -%]
             <meta 
                 name="title" 
                 content="[% page_title %]" 
