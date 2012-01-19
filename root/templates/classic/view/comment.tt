@@ -10,7 +10,7 @@
             <img class="TAN-news-avatar TAN-comment_avatar" src="[% comment.user.avatar(c) %]" alt="[% comment.user.username | html %]" />
         </li>
         <li>
-            Comment #[% comment.number || 1 %]
+            Comment #[% number( comment.number ) || 1 %]
         </li>
         <li>
             <ul class="TAN-comment_tools">

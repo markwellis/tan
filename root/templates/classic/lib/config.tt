@@ -27,3 +27,4 @@
     END;
     page_keywords = 'tan thisaintnews strange pirate news community comments english social fun jokes videos pictures share sharing lol lolz funny humour humor';
 -%]
+[%- MACRO number(n) GET n.chunk(-3).join(',') -%]

@@ -35,7 +35,7 @@
                             [% IF ${things.${thing}.1} %]
                                 <a href="[% things.${thing}.0 %]">
                             [% END %]
-                            [% things.${thing}.0 | ucfirst %]s: [% ${things.${thing}.1} %]
+                            [% things.${thing}.0 | ucfirst %]s: [% number( ${things.${thing}.1} ) %]
                             [% IF things.${thing}.1 %]
                                 </a>
                             [% END %]
