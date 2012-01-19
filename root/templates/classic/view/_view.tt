@@ -7,7 +7,7 @@
 <p>
     <span class="TAN-tags">
         [% FOREACH tag IN object.tags %]
-            <a href="/tag/[% tag.tag %]">[% tag.tag %]</a>
+            <a href="/search?q=tag:[% tag.tag %]">[% tag.tag %]</a>
             [% page_keywords = page_keywords _ " ${tag.tag}" %]
         [% END %]
     </span>
