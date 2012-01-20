@@ -32,9 +32,9 @@ sub add_object_to_index: Event(object_created) Event(object_updated){
         $document->{'content'} = join( ' ', map( $_->answer, $object->poll->answers->all ) );
     }
 
-    try{
-        $c->model('Gearman')->run( 'search_add_to_index', $document );
-    };
+    my $searcher = $c->model('Search');
+    $searcher->update_or_create( $document );
+    $searcher->commit(1);
 }
 
 sub delete_object_from_index: Event(object_deleted) Event(mass_objects_deleted){
@@ -44,14 +44,11 @@ sub delete_object_from_index: Event(object_deleted) Event(mass_objects_deleted){
         $objects = [$objects];
     }
 
-    my @ids_to_delete;
+    my $searcher = $c->model('Search');
     foreach my $object ( @{$objects} ){
-        push( @ids_to_delete, $object->id );
+        $searcher->delete( 'id', $object->id );
     }
-    
-    try{
-        $c->model('Gearman')->run( 'search_delete_from_index', \@ids_to_delete );
-    };
+    $searcher->commit(1);
 }
 
 sub add_comment_to_index: Event(comment_created) Event(comment_updated){
@@ -69,9 +66,9 @@ sub add_comment_to_index: Event(comment_created) Event(comment_updated){
         'content' => TAN::View::TT::strip_tags( $comment->_comment ),
     };
 
-    try{
-        $c->model('Gearman')->run( 'search_add_to_index', $document );
-    };
+    my $searcher = $c->model('Search');
+    $searcher->update_or_create( $document );
+    $searcher->commit(1);
 }
 
 sub delete_comment_from_index: Event(comment_deleted) Event(mass_comments_deleted){
@@ -81,14 +78,11 @@ sub delete_comment_from_index: Event(comment_deleted) Event(mass_comments_delete
         $comments = [$comments];
     }
 
-    my @ids_to_delete;
+    my $searcher = $c->model('Search');
     foreach my $comment ( @{$comments} ){
-        push( @ids_to_delete, "comment-" . $comment->id );
+        $searcher->delete( 'id', "comment-" . $comment->id );
     }
-    
-    try{
-        $c->model('Gearman')->run( 'search_delete_from_index', \@ids_to_delete );
-    };
+    $searcher->commit(1);
 }
 
 sub index: Path Args(0){
