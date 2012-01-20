@@ -2,7 +2,7 @@ package TAN::Model::Search;
 use Moose;
 use namespace::autoclean;
 
-extends 'Catalyst::Model::Adaptor';
+extends 'Catalyst::Model::Factory::PerRequest';
 
 __PACKAGE__->config( class => 'LucyX::Simple' );
 
