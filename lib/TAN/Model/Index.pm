@@ -4,6 +4,8 @@ use namespace::autoclean;
 
 extends 'Catalyst::Model';
 
+use Data::Page::Navigation;
+
 sub indexinate{
     my ( $self, $c, $objects, $pager ) = @_;
 
@@ -13,6 +15,8 @@ sub indexinate{
             my $id = $object->id;
             $id =~ s/\D//g;
             push( @index, $c->model('MySQL::Comments')->find( $id ) );
+        } elsif( ref($object) eq 'TAN::Model::MySQL::Comments' ){
+            push( @index, $object );
         } else {
             push(@index, $c->model('MySQL::Object')->get( $object->id, $object->type ));
         }
@@ -38,9 +42,6 @@ sub indexinate{
             }
         }
     }
-
-    use Data::Page::Navigation;
-    # this uses some crazy inject to rape Data::Page's namespace :(
 
     return {
         'objects' => \@index,

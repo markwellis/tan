@@ -127,7 +127,7 @@ sub comment: PathPart('comment') Chained('user') Args(0){
         $search_opts{'nsfw'} = 'N';
     }
 
-    $c->stash->{'comments'} = $c->stash->{'user'}->comments->search( {
+    my $comments_rs = $c->stash->{'user'}->comments->search( {
         %search_opts,
     }, {
         'prefetch' => ['user', {
@@ -140,13 +140,18 @@ sub comment: PathPart('comment') Chained('user') Args(0){
         },
     } );
 
-    if ( !$c->stash->{'comments'} ) {
+    my $pager = $comments_rs->pager;
+    my @comments = $comments_rs->all;
+
+    if ( !scalar( @comments ) ){
         $c->detach('/default');
     }
 
     $c->stash(
         'page_title' => $c->stash->{'user'}->username . "'s Comments",
-        'template' => 'profile/user/comments.tt',
+        'index' => $c->model('Index')->indexinate($c, \@comments, $pager),
+        'template' => 'index.tt',
+        'can_rss' => 1,
     );
 }
 
