@@ -24,10 +24,12 @@ my $searcher = LucyX::Simple->new( $config->{'search_args'} );
 sub add_to_index{
     my ( $job ) = @_;
 
+    umask(022); #App::Daemon sets this to 0133, undo that
     my $document = Storable::thaw( $job->arg );
     ERROR "adding " . $document->{'id'} . " to index" ;
     $searcher->update_or_create( $document );
     $searcher->commit(1);
+    ERROR "done";
 
     return 1;
 }
@@ -37,11 +39,13 @@ sub delete_from_index{
 
     my $ids = Storable::thaw( $job->arg );
 
+    umask(022); #App::Daemon sets this to 0133, undo that
     foreach my $id ( @{$ids} ){
         ERROR "deleting " . $id . " from index" ;
         $searcher->delete( 'id', $id );
     }
     $searcher->commit(1);
+    ERROR "done";
 
     return 1;
 }
