@@ -1,5 +1,5 @@
 USER=thisaint
-SERVER=thisaintnews.pl
+SERVER=ftp.thisaintnews.pl
 
 SOURCE=/mnt/stuff
 DESTINATION=/homez.365/thisaint/www/backups/tan
