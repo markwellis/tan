@@ -1,0 +1,9 @@
+{
+    "Model::PayPal": {
+        "email": "seller_1327839645_biz@howmanykillings.com",
+        "username": "seller_1327839645_biz_api1.howmanykillings.com",
+        "password": "1327839669",
+        "signature": "AFcWxV21C7fd0v3bYYYRCpSSRl31AKIB6AeXNz9D9kURB.ByAKFJ2lsA ",
+        "sandbox":  1
+    }
+}
