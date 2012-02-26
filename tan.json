@@ -20,6 +20,11 @@
     "email": ["Sendmail"],
 
     "paypal_donate_address": "donate@thisaintnews.com",
+    
+    "donate": {
+        "cost": 3,
+        "currency": "GBP"
+    },
 
     "Plugin::Authentication": {
         "use_session": 1,
