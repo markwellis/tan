@@ -1,0 +1,11 @@
+[% css_includes.push('Donate') %]
+
+<ul class="TAN-inside">
+    <li class="TAN-news">
+        <div>
+            [% FOREACH i IN [ 1 .. 100 ] %]
+                <a href="donate?ticket=[% i %]" [% IF loop.count == 1 %]class="selected"[% END %]>[% i %]</a>
+            [% END %]
+        </div>
+    </li>
+</ul>

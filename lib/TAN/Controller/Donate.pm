@@ -6,6 +6,17 @@ BEGIN { extends 'Catalyst::Controller'; }
 
 use Try::Tiny;
 
+sub index: Private{
+    my ( $self, $c ) = @_;
+
+#load in things here etc
+
+    $c->stash(
+        'template' => 'donate.tt',
+        'page_title' => 'Donate',
+    );
+}
+
 sub validate: Local{
     my ( $self, $c ) = @_;
     
