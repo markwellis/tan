@@ -29,7 +29,7 @@
 >[% editor.value | html %] </textarea>
 <div id="wysiwygAdvice"></div>
 
-[% IF c.req.user_agent.match('(?:iPhone|Android)') %]
+[% IF c.req.user_agent.match('(?:iPad|iPhone|Android)') %]
 [%# tinymce isn't compatable with iPhone or Android %]
     [% js_incs = [] %]
     [% FOREACH js_include IN js_includes %]
