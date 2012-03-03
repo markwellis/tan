@@ -10,7 +10,8 @@ sub index: Private{
     my ( $self, $c ) = @_;
 
 #load in things here etc
-
+# load this months used numbers, put i hash like { number => row }
+# ?
     $c->stash(
         'template' => 'donate.tt',
         'page_title' => 'Donate',
