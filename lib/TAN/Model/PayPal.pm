@@ -6,6 +6,7 @@ extends 'Catalyst::Model';
 
 use LWPx::ParanoidAgent;
 use Exception::Simple;
+use URI;
 
 has 'email' => (
     'isa' => 'Str',
@@ -38,17 +39,43 @@ has 'sandbox' => (
     'default' => 1,
 );
 
+has 'url' => (
+    'isa' => 'URI',
+    'is' => 'ro',
+    'init_arg' => undef,
+    'lazy_build' => 1,
+);
+
+sub _build_url{
+    my ( $self ) = @_;
+
+    my $uri = URI->new( 
+        'https://www' 
+        . ( $self->sandbox ? '.sandbox' : '' ) 
+        . '.paypal.com/cgi-bin/webscr'
+    );
+    
+    return $uri;
+}
+
+sub button{
+    my ( $self, $params ) = @_;
+
+    $params->{'cmd'} = '_xclick';
+    $params->{'business'} = $self->email;
+
+    my $uri = $self->url->clone;
+    $uri->query_form( $params );
+
+    return $uri;
+}
+
 sub validate{
     my ( $self, $params ) = @_;
 
     my $ua = LWPx::ParanoidAgent->new;
     $params->{'cmd'} = '_notify-validate';
-    my $url = 'https://www';
-    if ( $self->sandbox ){
-        $url .= '.sandbox';
-    }
-    $url .= '.paypal.com/cgi-bin/webscr';
-    my $res = $ua->post( $url, $params );
+    my $res = $ua->post( $self->url->as_string, $params );
     if ( $res->is_error ){
         Exception::Simple->throw('http error');
     } elsif ( $res->content eq 'VERIFIED' ){

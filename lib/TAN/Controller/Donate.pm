@@ -13,6 +13,11 @@ sub index: Private{
 # load this months used numbers, put i hash like { number => row }
 # ?
     $c->stash(
+        'button' => $c->model('PayPal')->button( {
+            'currency_code' => $c->config->{'donate'}->{'currency'},
+            'amount' => $c->config->{'donate'}->{'cost'},
+            'notify_url' => $c->uri_for('/donate/validate'),
+        } ),
         'template' => 'donate.tt',
         'page_title' => 'Donate',
     );

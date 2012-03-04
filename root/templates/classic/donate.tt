@@ -4,7 +4,7 @@
     <li class="TAN-news">
         <div>
             [% FOREACH i IN [ 1 .. 100 ] %]
-                <a href="donate?ticket=[% i %]" [% IF loop.count == 1 %]class="selected"[% END %]>[% i %]</a>
+                <a href="[% button.as_string _ '&item_number=' _ i | html %]" [% IF loop.count == 1 %]class="selected"[% END %]>[% i %]</a>
             [% END %]
         </div>
     </li>
