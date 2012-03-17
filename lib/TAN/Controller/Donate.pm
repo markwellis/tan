@@ -52,6 +52,8 @@ sub buy: PathPart('buy') Chained('user_logged_in') Args(1) {
 sub thankyou: Local{
     my ( $self, $c ) = @_;
 
+
+#mark number as confirmed
     $c->stash(
         'template' => 'donate/thankyou.tt',
     );
@@ -60,6 +62,7 @@ sub thankyou: Local{
 sub canceled: Local{
     my ( $self, $c ) = @_;
 
+#remove user number selection
     $c->stash(
         'template' => 'donate/canceled.tt',
     );
@@ -80,6 +83,7 @@ sub validate: Local{
         die 'invalid currency';
     }
 # process payment
+#harvest user paypal email
     $c->res->output('ok');
     $c->detach;
 };
