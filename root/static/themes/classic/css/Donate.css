@@ -8,7 +8,7 @@
     margin:auto;
 }
 
-.TAN-news > div > a{
+.TAN-news > div > .number{
     display:block;
     width:60px;
     height:50px;
@@ -21,7 +21,7 @@
     color:#dddddd;
 }
 
-.TAN-news > div > a:hover{
+.TAN-news > div > .number:hover{
     color:#555555;
 }
 

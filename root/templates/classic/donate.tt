@@ -3,8 +3,12 @@
 <ul class="TAN-inside">
     <li class="TAN-news">
         <div>
-            [% FOREACH i IN [ 1 .. 100 ] %]
-                <a href="[% button.as_string _ '&item_name=Number%20' _ i _ '&item_number=' _ i | html %]" [% IF loop.count == 1 %]class="selected"[% END %]>[% i %]</a>
+            [% FOREACH i IN [ 0 .. 99 ] %]
+                [% IF used_numbers.$i %]
+                    <div class="number selected">[% i %]</div>
+                [% ELSE %]
+                    <a href="buy/[% i %]/" class="number">[% i %]</a>
+                [% END %]
             [% END %]
         </div>
     </li>
