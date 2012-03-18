@@ -29,9 +29,27 @@ sub index: PathPart('') Chained('user_logged_in') Args(0) {
 sub buy: PathPart('buy') Chained('user_logged_in') Args(1) {
     my ( $self, $c, $number ) = @_;
 
-#check available
+    my $not_int_reg = $c->model('CommonRegex')->not_int;
+    $number =~ s/$not_int_reg//g;
+    if (
+        !defined( $number)
+        || $number < 0
+        || $number > 99
+    ){
+        $c->res->redirect('/donate/', 303 );
+        $c->detach;
+    }
+
+#wrap this in a transaction
+    if ( !$c->model('MySQL::Lotto')->number_available( $number ) ){
+        $c->flash->{'message'} = 'Sorry this number is taken';
+        $c->res->redirect('/donate/', 303);
+        $c->detach;
+    }
+
+    $c->model('MySQL::Lotto')->set_unavailble( $number );
+#end transaction
 # mark as preliminary unavailable
-# check number isnt over 99
 
     my $button = $c->model('PayPal')->button( {
         'currency_code' => $c->config->{'donate'}->{'currency'},
@@ -52,8 +70,6 @@ sub buy: PathPart('buy') Chained('user_logged_in') Args(1) {
 sub thankyou: Local{
     my ( $self, $c ) = @_;
 
-
-#mark number as confirmed
     $c->stash(
         'template' => 'donate/thankyou.tt',
     );
@@ -63,6 +79,8 @@ sub canceled: Local{
     my ( $self, $c ) = @_;
 
 #remove user number selection
+#how to get the number here????
+#    $c->model('MySQL::Lotto')->remove_number( $number );
     $c->stash(
         'template' => 'donate/canceled.tt',
     );
@@ -84,6 +102,9 @@ sub validate: Local{
     }
 # process payment
 #harvest user paypal email
+#how to get the number here????
+#    $c->model('MySQL::Lotto')->confirm_number( $number );
+
     $c->res->output('ok');
     $c->detach;
 };
