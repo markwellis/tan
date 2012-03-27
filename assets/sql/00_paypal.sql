@@ -9,8 +9,11 @@ CREATE  TABLE IF NOT EXISTS `tan`.`lotto` (
   `created` TIMESTAMP NOT NULL DEFAULT NOW() ,
   `user_id` BIGINT(20) NOT NULL ,
   `number` TINYINT(4) NOT NULL ,
+  `confirmed` ENUM('Y','N') NOT NULL DEFAULT 'N' ,
+  `winner` ENUM('y','n') NOT NULL DEFAULT 'N' ,
   PRIMARY KEY (`lotto_id`) ,
   INDEX `fk_lotto_1` (`user_id` ASC) ,
+  INDEX `index3` (`created` ASC) ,
   CONSTRAINT `fk_lotto_1`
     FOREIGN KEY (`user_id` )
     REFERENCES `tan`.`user` (`user_id` )
@@ -19,6 +22,7 @@ CREATE  TABLE IF NOT EXISTS `tan`.`lotto` (
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8
 COLLATE = utf8_general_ci;
+
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;

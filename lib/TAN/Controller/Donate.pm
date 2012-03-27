@@ -40,16 +40,17 @@ sub buy: PathPart('buy') Chained('user_logged_in') Args(1) {
         $c->detach;
     }
 
-#wrap this in a transaction
-    if ( !$c->model('MySQL::Lotto')->number_available( $number ) ){
-        $c->flash->{'message'} = 'Sorry this number is taken';
-        $c->res->redirect('/donate/', 303);
-        $c->detach;
-    }
+    eval{
+        $c->model('MySQL')->txn_do(sub{
+            if ( !$c->model('MySQL::Lotto')->number_available( $number ) ){ #not made
+                $c->flash->{'message'} = 'Sorry this number is taken';
+                $c->res->redirect('/donate/', 303);
+                $c->detach;
+            }
 
-    $c->model('MySQL::Lotto')->set_unavailble( $number );
-#end transaction
-# mark as preliminary unavailable
+            $c->model('MySQL::Lotto')->set_unavailble( $number ); #not made
+        });
+    };
 
     my $button = $c->model('PayPal')->button( {
         'currency_code' => $c->config->{'donate'}->{'currency'},
