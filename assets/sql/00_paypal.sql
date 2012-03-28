@@ -11,9 +11,13 @@ CREATE  TABLE IF NOT EXISTS `tan`.`lotto` (
   `number` TINYINT(4) NOT NULL ,
   `confirmed` ENUM('Y','N') NOT NULL DEFAULT 'N' ,
   `winner` ENUM('y','n') NOT NULL DEFAULT 'N' ,
+  `txn_id` VARCHAR(19) NULL DEFAULT NULL ,
   PRIMARY KEY (`lotto_id`) ,
   INDEX `fk_lotto_1` (`user_id` ASC) ,
-  INDEX `index3` (`created` ASC) ,
+  INDEX `created` (`created` ASC) ,
+  INDEX `confirmed` (`confirmed` ASC, `created` ASC) ,
+  INDEX `index5` (`winner` ASC, `created` ASC) ,
+  INDEX `index6` (`txn_id` ASC) ,
   CONSTRAINT `fk_lotto_1`
     FOREIGN KEY (`user_id` )
     REFERENCES `tan`.`user` (`user_id` )

@@ -24,7 +24,7 @@ __PACKAGE__->add_columns(
     data_type => "VARCHAR",
     default_value => undef,
     is_nullable => 0,
-    size => 512,
+    size => 128,
   },
   "user_id",
   { data_type => "BIGINT", default_value => undef, is_nullable => 1, size => 20 },

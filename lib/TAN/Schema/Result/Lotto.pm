@@ -25,6 +25,13 @@ __PACKAGE__->add_columns(
   { data_type => "ENUM", default_value => "N", is_nullable => 0, size => 1 },
   "winner",
   { data_type => "ENUM", default_value => "N", is_nullable => 0, size => 1 },
+  "txn_id",
+  {
+    data_type => "VARCHAR",
+    default_value => undef,
+    is_nullable => 0,
+    size => 19,
+  },
 );
 __PACKAGE__->set_primary_key(qw/lotto_id/);
 

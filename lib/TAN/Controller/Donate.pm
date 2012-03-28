@@ -42,13 +42,13 @@ sub buy: PathPart('buy') Chained('user_logged_in') Args(1) {
 
     eval{
         $c->model('MySQL')->txn_do(sub{
-            if ( !$c->model('MySQL::Lotto')->number_available( $number ) ){ #not made
+            if ( !$c->model('MySQL::Lotto')->number_available( $number ) ){ 
                 $c->flash->{'message'} = 'Sorry this number is taken';
                 $c->res->redirect('/donate/', 303);
                 $c->detach;
             }
 
-            $c->model('MySQL::Lotto')->set_unavailble( $number ); #not made
+            $c->model('MySQL::Lotto')->set_unavailble( $number, $c->user->id ); 
         });
     };
 
@@ -104,7 +104,7 @@ sub validate: Local{
 # process payment
 #harvest user paypal email
 #how to get the number here????
-#    $c->model('MySQL::Lotto')->confirm_number( $number );
+#    $c->model('MySQL::Lotto')->confirm_number( $number, $txn_id );
 
     $c->res->output('ok');
     $c->detach;
