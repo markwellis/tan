@@ -79,15 +79,15 @@ sub validate{
     if ( $res->is_error ){
         Exception::Simple->throw('http error');
     } elsif ( $res->content eq 'VERIFIED' ){
+#check this
         if ( $params->{'payment_status'} ne 'Completed' ){
-# check that $txn_id has not been previously processed
             Exception::Simple->throw('payment not completed');
         }
         if ( $params->{'receiver_email'} ne $self->email ){
             Exception::Simple->throw('not our receiver_email');
         }
         return;
-    } elsif ($res->content eq 'INVALID') {
+    } elsif ( $res->content eq 'INVALID' ){
         Exception::Simple->throw("invalid");
     }
     

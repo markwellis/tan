@@ -5,25 +5,12 @@ use warnings;
 use base 'DBIx::Class::ResultSet';
 
 sub used_numbers{
-    my ( $self, $page ) = @_;
+    my ( $self ) = @_;
 
     my $numbers = {};
-    eval{
-        $self->result_source->schema->txn_do(sub{
-            my @time = localtime( time );
-            my $month = $time[4] + 1;
-            my $year = $time[5] + 1900;
-
-            my $numbers_rs = $self->search( { -and => [
-                \[ 'MONTH(created) = ?', [ plain_value => $month ] ],
-                \[ 'YEAR(created) = ?', [ plain_value => $year ] ],
-            ] } );
-
-            foreach my $number ( $numbers_rs->all ){
-                $numbers->{ $number->number } = 1;
-            }
-        });
-    };
+    foreach my $number ( $self->this_month->all ){
+        $numbers->{ $number->number } = 1;
+    }
 
     return $numbers;
 }
@@ -31,17 +18,9 @@ sub used_numbers{
 sub number_available{
     my ( $self, $number ) = @_;
     
-    my @time = localtime( time );
-    my $month = $time[4] + 1;
-    my $year = $time[5] + 1900;
-
     if ( 
-        $self->find( { 
+        $self->this_month->find( { 
             'number' => $number,
-            -and => [
-                \[ 'MONTH(created) = ?', [ plain_value => $month ] ],
-                \[ 'YEAR(created) = ?', [ plain_value => $year ] ],
-            ]
         } )
     ){
         return 0;
@@ -60,5 +39,41 @@ sub set_unavailble{
         'winner' => 'N',
     } );
 }
+
+sub confirm_number{
+    my ( $self, $number, $txn_id ) = @_;
+
+    my $number_rs = $self->this_month->find( { 
+        'number' => $number,
+    } );
+
+    $number_rs->update( {
+        'confirmed' => 'Y',
+        'txn_id' => $txn_id,
+    } );
+}
+
+sub remove_number{
+    my ( $self, $number ) = @_;
+
+    $self->this_month->find( { 
+        'number' => $number,
+        'confirmed' => 'N',
+    } )->delete;
+}
+
+sub this_month{
+    my ( $self ) = @_;
+
+    my @time = localtime( time );
+    my $month = $time[4] + 1;
+    my $year = $time[5] + 1900;
+    
+    return $self->search( {
+         -and => [
+            \[ 'MONTH(created) = ?', [ plain_value => $month ] ],
+            \[ 'YEAR(created) = ?', [ plain_value => $year ] ],
+        ],
+    } );
 
 1;

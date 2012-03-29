@@ -39,18 +39,17 @@ sub buy: PathPart('buy') Chained('user_logged_in') Args(1) {
         $c->res->redirect('/donate/', 303 );
         $c->detach;
     }
+    $c->flash->{'lotto_number'} = $number;
 
-    eval{
-        $c->model('MySQL')->txn_do(sub{
-            if ( !$c->model('MySQL::Lotto')->number_available( $number ) ){ 
-                $c->flash->{'message'} = 'Sorry this number is taken';
-                $c->res->redirect('/donate/', 303);
-                $c->detach;
-            }
+    $c->model('MySQL')->txn_do(sub{
+        if ( !$c->model('MySQL::Lotto')->number_available( $number ) ){ 
+            $c->flash->{'message'} = 'Sorry this number is taken';
+            $c->res->redirect('/donate/', 303);
+            $c->detach;
+        }
 
-            $c->model('MySQL::Lotto')->set_unavailble( $number, $c->user->id ); 
-        });
-    };
+        $c->model('MySQL::Lotto')->set_unavailble( $number, $c->user->id ); 
+    });
 
     my $button = $c->model('PayPal')->button( {
         'currency_code' => $c->config->{'donate'}->{'currency'},
@@ -79,9 +78,11 @@ sub thankyou: Local{
 sub canceled: Local{
     my ( $self, $c ) = @_;
 
-#remove user number selection
-#how to get the number here????
-#    $c->model('MySQL::Lotto')->remove_number( $number );
+    my $number = $c->flash->{'lotto_number'};
+    
+    if ( defined( $number ) ){
+        $c->model('MySQL::Lotto')->remove_number( $number );
+    }
     $c->stash(
         'template' => 'donate/canceled.tt',
     );
@@ -94,6 +95,7 @@ sub validate: Local{
         $c->model('PayPal')->validate( $c->req->params );
     };
 
+#shouldn't die
     die if $error;
     if ( $c->req->param('mc_gross') != $c->config->{'donate'}->{'cost'} ){
         die 'invalid amount';
@@ -101,10 +103,12 @@ sub validate: Local{
     if ( $c->req->param('mc_currency') ne $c->config->{'donate'}->{'currency'} ){
         die 'invalid currency';
     }
-# process payment
-#harvest user paypal email
+#harvest user paypal email (trciky coz this isnt the user, it's paypal ) but we should be able to $number->user->update( { 'paypal' => $paypal_email } )
 #how to get the number here????
-#    $c->model('MySQL::Lotto')->confirm_number( $number, $txn_id );
+    my $number = ???;
+    my $txn_id = ???;
+
+    $c->model('MySQL::Lotto')->confirm_number( $number, $txn_id );
 
     $c->res->output('ok');
     $c->detach;
