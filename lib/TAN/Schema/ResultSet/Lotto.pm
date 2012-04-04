@@ -34,7 +34,7 @@ sub set_unavailble{
     
     return $self->create( {
         'number' => $number,
-        'user' => $user_id,
+        'user_id' => $user_id,
         'confirmed' => 'N',
         'winner' => 'N',
     } );
@@ -75,5 +75,5 @@ sub this_month{
             \[ 'YEAR(created) = ?', [ plain_value => $year ] ],
         ],
     } );
-
+}
 1;

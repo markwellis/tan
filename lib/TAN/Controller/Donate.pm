@@ -105,10 +105,10 @@ sub validate: Local{
     }
 #harvest user paypal email (trciky coz this isnt the user, it's paypal ) but we should be able to $number->user->update( { 'paypal' => $paypal_email } )
 #how to get the number here????
-    my $number = ???;
-    my $txn_id = ???;
+#    my $number = ???;
+#    my $txn_id = ???;
 
-    $c->model('MySQL::Lotto')->confirm_number( $number, $txn_id );
+#    $c->model('MySQL::Lotto')->confirm_number( $number, $txn_id );
 
     $c->res->output('ok');
     $c->detach;
