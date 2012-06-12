@@ -61,6 +61,7 @@ sub buy: PathPart('buy') Chained('user_logged_in') Args(1) {
         'no_note' => 1,
         'item_name' => "Number ${number}",
         'item_number' => $number,
+        'custom' => $c->user->id,
     } );
 
     $c->res->redirect( $button->as_string, 303 );
@@ -90,26 +91,31 @@ sub canceled: Local{
 
 sub validate: Local{
     my ( $self, $c ) = @_;
-    
-    my $error = try{
-        $c->model('PayPal')->validate( $c->req->params );
-    };
+   
+#let these throw if need be (for logging)
+    $c->model('PayPal')->validate( $c->req->params );
 
-#shouldn't die
-    die if $error;
     if ( $c->req->param('mc_gross') != $c->config->{'donate'}->{'cost'} ){
-        die 'invalid amount';
+        Exception::Simple->throw('invalid amount');
     }
     if ( $c->req->param('mc_currency') ne $c->config->{'donate'}->{'currency'} ){
-        die 'invalid currency';
+        Exception::Simple->throw('invalid currency');
     }
-#harvest user paypal email (trciky coz this isnt the user, it's paypal ) but we should be able to $number->user->update( { 'paypal' => $paypal_email } )
-#how to get the number here????
-#    my $number = ???;
-#    my $txn_id = ???;
+    
+#none of this is tested
+    my $user_id = $c->req->param('custom');
+    my $number = $c->req->param('item_number');
+    my $txn_id = $c->req->param('txn_id');
+#error handel any of the above being empty
 
-#    $c->model('MySQL::Lotto')->confirm_number( $number, $txn_id );
+    $c->model('MySQl::User')->find( { 
+        'user_id' => $user_id 
+    } )->update( { 
+        'paypal' => $c->req->param('payer_email') 
+    } );
 
+    $c->model('MySQL::Lotto')->confirm_number( $user_id, $number, $txn_id );
+#end untested
     $c->res->output('ok');
     $c->detach;
 };

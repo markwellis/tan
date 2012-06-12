@@ -79,7 +79,6 @@ sub validate{
     if ( $res->is_error ){
         Exception::Simple->throw('http error');
     } elsif ( $res->content eq 'VERIFIED' ){
-#check this
         if ( $params->{'payment_status'} ne 'Completed' ){
             Exception::Simple->throw('payment not completed');
         }

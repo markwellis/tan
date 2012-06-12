@@ -41,11 +41,16 @@ sub set_unavailble{
 }
 
 sub confirm_number{
-    my ( $self, $number, $txn_id ) = @_;
+    my ( $self, $user_id, $number, $txn_id ) = @_;
 
     my $number_rs = $self->this_month->find( { 
         'number' => $number,
+        'user_id' => $user_id,
     } );
+
+    if ( !$number_rs ){
+        Exception::Simple->throw('number not found');
+    }
 
     $number_rs->update( {
         'confirmed' => 'Y',
