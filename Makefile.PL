@@ -9,7 +9,7 @@ all_from 'lib/TAN.pm';
 #authenitcation 
 #template toolkit 
 
-requires 'Catalyst::Runtime' => '5.80013';
+requires 'Catalyst::Runtime' => '5.90012';
 requires 'Catalyst::Plugin::ConfigLoader';
 requires 'Catalyst::Plugin::Authentication';
 requires 'Catalyst::Plugin::Authorization::Roles';
@@ -27,7 +27,7 @@ requires 'Cache::Memcached::libmemcached';
 requires 'Catalyst::Plugin::PageCache';
 requires 'Catalyst::Plugin::Unicode::Encoding';
 requires 'Catalyst::Action::RenderView';
-requires 'Catalyst::Engine::Apache';
+#requires 'Catalyst::Engine::Apache';
 requires 'Data::Dumper';
 requires 'parent';
 requires 'Catalyst::Model::DBIC::Schema';
@@ -47,6 +47,7 @@ requires 'Data::Validate::Email';
 requires 'POSIX';
 requires 'Gearman::Client';
 requires 'JSON';
+requires 'JSON::XS';
 requires 'File::Path';
 requires 'Data::Validate::URI';
 requires 'Data::Validate::Image';
@@ -57,6 +58,8 @@ requires 'File::Copy';
 requires 'JavaScript::Minifier::XS';
 requires 'CSS::Minifier::XS';
 requires 'Data::Page';
+requires 'Data::Page::Navigation';
+requires 'Lingua::Stem::Snowball';
 requires 'utf8';
 requires 'DateTime';
 requires 'DateTime::Format::Human::Duration';
@@ -102,6 +105,6 @@ test_requires 'Test::More';
 test_requires 'Test::Exception';
 test_requires 'Catalyst::Test';
 
-install_script glob('script/*.pl');
+#install_script glob('script/*.pl');
 auto_install;
 WriteAll;

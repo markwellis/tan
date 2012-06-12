@@ -126,18 +126,18 @@ sub vcl_fetch {
     ## to cache errors.  If you want to cache redirects, you 
     ## can set this to be higher than 300 (temporary redirects are 302)
     if (beresp.status >= 300) {
-        return(pass);
+        return(hit_for_pass);
     }
     
     ## if varnish thinks it's not cachable, don't cache it.
-    if (!beresp.cacheable) {
-        return(pass);
+    if (!beresp.ttl > 0s) {
+        return(hit_for_pass);
     }
     
     ## if the object was trying to set a cookie, 
     ## it probably shouldn't be cached.
     if (beresp.http.Set-Cookie) {
-        return(pass);
+        return(hit_for_pass);
     }
     
      ## if the object is specifically saying 'don't cache me' -  
@@ -146,7 +146,7 @@ sub vcl_fetch {
         beresp.http.Cache-Control ~ "no-cache" || 
         beresp.http.Cache-Control ~ "private")  {   
     
-        return(pass);
+        return(hit_for_pass);
     } 
     
     ## if the object is saying how long to cache it, you 
@@ -155,7 +155,7 @@ sub vcl_fetch {
         unset beresp.http.Set-Cookie;
         return(deliver);
     }
-    return(pass);
+    return(hit_for_pass);
 }
 
 sub vcl_error{
