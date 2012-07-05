@@ -6,6 +6,12 @@ BEGIN { extends 'Catalyst::Controller'; }
 
 use Try::Tiny;
 
+sub auto: Private{
+    my ( $self, $c )= @_;
+    $c->detach('/default');
+    return 1;
+}
+
 sub user_logged_in: PathPart('donate') Chained('/') CaptureArgs(0){
     my ( $self, $c ) = @_;
 
