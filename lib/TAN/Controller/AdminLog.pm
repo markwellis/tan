@@ -38,6 +38,7 @@ sub index: Private{
     $c->stash(
         'admin_logs' => $admin_logs,
         'template' => 'admin_log.tt',
+        'page_title' => 'Admin Log',
     );
 }
 
