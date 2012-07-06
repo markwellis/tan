@@ -4,6 +4,14 @@ use namespace::autoclean;
 
 BEGIN { extends 'Catalyst::Controller'; }
 
+has '_mobile' => (
+    'is' => 'ro',
+    'isa' => 'HashRef',
+    'default' => sub{
+        return {'index' => 1};
+    },
+);
+
 sub clear_index_caches:
     Event(object_created)
     Event(object_promoted)

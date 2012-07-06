@@ -126,6 +126,9 @@ sub end: Private{
         if ( $c->stash->{'can_rss'} && $c->req->param('rss') ){
             $c->forward( $c->view('RSS') );
         } else {
+            if ( $c->mobile ){
+                $c->stash->{'theme_settings'}->{'name'} = 'mobile';
+            }
             $c->forward('render');
         }
     }

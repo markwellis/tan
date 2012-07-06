@@ -31,7 +31,7 @@ __PACKAGE__->config( name => 'TAN',
             my $c = shift;
             my $path = $c->req->path || 'index';
 
-            return "/${path}" . $c->nsfw;
+            return "/${path}" . $c->nsfw . $c->mobile;
         },
         'no_expire' => 0,
     }
@@ -42,6 +42,10 @@ __PACKAGE__->setup();
 
 sub check_cache{
     my $c = shift;
+
+    if ( !$c->req->cookie('mobile') ){
+        $c->forward('/mobile/detect_mobile');
+    }
 
 # this is a hack so people who have messages dont hit the page cache
 # its here coz it no worko in the end/render
@@ -89,14 +93,29 @@ sub check_cache{
         || defined($c->stash->{'no_page_cache'})
         || defined($c->stash->{'message'})
         || ($c->res->status > 300)
-        || (
-            defined( $c->req->user_agent )
-            && ( $c->req->user_agent =~ m/(?:iPhone|Android)/ )
-        )
     ){
         return 0;
     }
     return 1;
+}
+
+sub mobile{
+    my ( $c ) = @_;
+
+    my $mobile =  
+        $c->stash->{'mobile_switch'} 
+        || ( 
+            $c->req->cookie('mobile') 
+            && $c->req->cookie('mobile')->value == 1 
+        ); 
+
+    my $action = $c->action;
+    my $mobile_allowed;
+    if ( $c->controller( $action->namespace )->can('_mobile') ){
+        $mobile_allowed = $c->controller( $action->namespace )->_mobile->{ $action->name };
+    }
+
+    return ( ( $mobile && $mobile_allowed ) || 0 );
 }
 
 #filter is off if 1

@@ -16,7 +16,6 @@ __PACKAGE__->config({
     CATALYST_VAR => 'c',
     INCLUDE_PATH => [
         TAN->path_to( 'root', 'templates', 'shared' ),
-        TAN->path_to( 'root', 'templates', 'classic' ),
     ],
     PRE_PROCESS  => 'lib/config.tt',
     WRAPPER      => 'lib/wrapper.tt',
@@ -38,6 +37,14 @@ __PACKAGE__->config({
     ENCODING => 'utf8',
     EVAL_PERL => 1,
 });
+
+sub process{
+    my ( $self, $c ) = @_;
+
+    push( @{$self->config->{'INCLUDE_PATH'}}, $c->path_to( 'root', 'templates', $c->stash->{'theme_settings'}->{'name'} ) );
+
+    $self->next::method( $c );
+}
 
 my $nl2br_reg = qr/\n/;
 sub nl2br{
