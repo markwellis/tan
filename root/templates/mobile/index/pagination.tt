@@ -1,0 +1,51 @@
+[%- IF !pager -%]
+    [%- RETURN -%]
+[%- END -%]
+
+[%- page_order -%]
+[%- IF 
+    ( order != 'created' ) 
+    && ( order != 'promoted' )
+-%]
+    [%- page_order = order -%]
+[%- END -%]
+
+[%- params = c.req.params -%]
+[%- IF page_order -%]
+    [%- params.order = page_order -%]
+[%- END -%]
+
+[%- USE page_url = url("/${c.req.path}", params) -%]
+
+<div class="[% IF type == 'picture' %]clear[% END %] TAN-news-pagination">
+    [%- FOREACH page IN pager.pages_in_navigation( 10 ) -%]
+        [% IF ( loop.first ) && ( page != pager.first_page ) %]
+            <a 
+                class="TAN-news-page-number" 
+                href="[% page_url('page'=1) %]"
+            >1</a>
+            [% IF ( ( page - 1 ) != pager.first_page ) %]
+                <span class="TAN-news-page-number">...</span>
+            [% END %]
+        [% END %]
+        <a 
+            class="TAN-news-page-number
+                [% IF page == pager.current_page %]
+                    TAN-news-page-number-selected 
+                [% END %]
+                "
+            href="[% page_url('page'=page) %]"
+        >[% page %]</a>
+
+        [% IF ( loop.last && page != pager.last_page ) %]
+            [% IF ( ( page + 1 ) != pager.last_page ) %]
+                <span class="TAN-news-page-number">...</span>
+            [% END %]
+            <a 
+                class="TAN-news-page-number" 
+                href="[% page_url('page'=pager.last_page) %]"
+            >[% pager.last_page %]</a>
+        [%- END -%]
+    [%- END -%]
+
+</div>

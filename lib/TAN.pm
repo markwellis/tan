@@ -34,7 +34,7 @@ __PACKAGE__->config( name => 'TAN',
         },
         'no_expire' => 0,
     }
- );
+);
 
 # Start the application
 __PACKAGE__->setup();

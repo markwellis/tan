@@ -1,7 +1,9 @@
 [%-
     js_includes = [];
     
-    css_includes = [];
+    css_includes = [
+       'shared',
+    ];
     
     IF !page_title.defined;
         page_title = 'TAN';

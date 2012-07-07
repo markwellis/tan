@@ -1,0 +1,190 @@
+body{
+    color:#535353;
+    cursor:default;
+    font-family:Arial,sans-serif;
+    font-weight:normal;
+    height:100%;
+    min-width:300px;
+}
+
+a{
+    text-decoration:none;
+    color:#4582BE;
+}
+
+a:hover{
+    text-decoration:underline;
+}
+
+.left{
+    float:left;
+}
+
+.right{
+    float:right;
+}
+
+.clear{
+    clear:both;
+}
+
+.clear_left{
+    clear:left;
+}
+
+.clear_right{
+    clear:right;
+}
+
+.block{
+    display:block;
+}
+
+/* main */
+
+.TAN-main > ul{
+    margin:0px;
+    padding:0px;
+}
+
+.TAN-main > ul > li{
+    list-style:none;
+}
+
+/* all */
+
+.TAN-type-all, .TAN-menu-all > li > a{
+    color:#777;
+}
+
+.TAN-type-all:hover, .TAN-menu-tab-all-selected, .TAN-menu-all > li > a:hover{
+    color:#fff !important;
+    background-color:#777 !important;
+}
+
+/* link */
+
+.TAN-type-link, .TAN-menu-link > li > a{
+    color:#066ec9;
+}
+
+.TAN-type-link:hover, .TAN-menu-tab-link-selected, .TAN-menu-link > li > a:hover{
+    color:#fff !important;
+    background-color:#066ec9 !important;
+}
+
+/* blog */
+
+.TAN-type-blog, .TAN-menu-blog > li > a{
+    color:#008000;
+}
+
+.TAN-type-blog:hover, .TAN-menu-tab-blog-selected, .TAN-menu-blog > li > a:hover{
+    color:#fff !important;
+    background-color:#008000 !important;
+}
+
+/* picture */
+
+.TAN-type-picture, .TAN-menu-picture > li > a{
+    color:#d61d00;
+}
+
+.TAN-type-picture:hover, .TAN-menu-tab-picture-selected, .TAN-menu-picture > li > a:hover{
+    color:#fff !important;
+    background-color:#d61d00 !important;
+}
+
+/* poll */
+
+.TAN-type-poll, .TAN-menu-poll > li > a{
+    color:#002366;
+}
+
+.TAN-type-poll:hover, .TAN-menu-tab-poll-selected, .TAN-menu-poll > li > a:hover{
+    color:#fff !important;
+    background-color:#002366 !important;
+}
+
+/* video */
+
+.TAN-type-video, .TAN-menu-video > li > a{
+    color:#800000;
+}
+
+.TAN-type-video:hover, .TAN-menu-tab-video-selected, .TAN-menu-video > li > a:hover{
+    color:#fff !important;
+    background-color:#800000 !important;
+}
+
+/* forum */
+
+.TAN-type-forum, .TAN-menu-forum > li > a{
+    color:#300000;
+}
+
+.TAN-type-forum:hover, .TAN-menu-tab-forum-selected, .TAN-menu-forum > li > a:hover{
+    color:#fff !important;
+    background-color:#300000 !important;
+}
+
+/* news */
+
+.TAN-news{
+    max-height:300px;
+    background-color:#fff;
+    overflow:hidden;
+    border-bottom: 1px solid #CCCCCC;
+    padding: 10px 0;
+}
+
+.TAN-news > ul{
+    padding:0px;
+    margin:0px;
+}
+
+.TAN-news > ul > li{
+    list-style:none;
+}
+
+.TAN-news > a{
+    text-decoration:none;
+}
+
+.TAN-news-alternate{
+    background-color:#DDD !important;
+}
+
+.TAN-news-comment-image{
+    height:15px;
+    width: 15px;
+}
+
+.TAN-news-image{
+    overflow:hidden;
+}
+
+.TAN-news-image > a > img{
+    display:block;
+    margin:auto;
+}
+
+.TAN-news > h2{
+    font-size:large;
+} 
+
+.TAN-news > p, .TAN-news > h2{
+    margin:0px;
+    padding:0px;
+    font-weight:normal;
+}
+
+.TAN-news-avatar{
+    width:20px;
+    height:20px;
+}
+
+.TAN-news-user{
+    color:#595959;
+    font-weight:bold;
+}

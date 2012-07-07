@@ -1,0 +1,25 @@
+[%- js_includes.push('Plus-Minus') -%]
+
+<div class="TAN-plusminus right">
+    <div class="TAN-plus-wrapper">
+        <div class="TAN-plus-arrow [% IF object.meplus %] TAN-plus-arrow-selected[% END %]">
+            <a 
+                class="TAN-plus" 
+                href="/view/[% type %]/[% object.${type}.id %]/_plus"
+                title="TIN"
+            >[% object.get_column('plus') %]</a>
+        </div>
+    </div>
+    <div class="TAN-object-score">
+        [%- object.score -%]
+    </div>
+    <div class="TAN-minus-wrapper">
+        <div class="TAN-minus-arrow[% IF object.meminus %] TAN-minus-arrow-selected[% END %]">
+            <a 
+                class="TAN-minus"
+                href="/view/[% type %]/[% object.${type}.id %]/_minus"
+                title="TAN"
+            >[% object.get_column('minus') %]</a>
+        </div>
+    </div>
+</div>
