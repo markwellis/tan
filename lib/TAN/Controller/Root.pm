@@ -129,6 +129,16 @@ sub end: Private{
             if ( $c->mobile ){
                 $c->stash->{'theme_settings'}->{'name'} = 'mobile';
             }
+            
+            my $path = $c->config->{'static_path'} . "/themes/" . $c->stash->{'theme_settings'}->{'name'};
+
+            $c->stash->{'theme_settings'} = {
+                %{ $c->stash->{'theme_settings'} },
+                'css_path' => "${path}/css",
+                'js_path' => "${path}/js",
+                'image_path' => "${path}/images",
+            };
+
             $c->forward('render');
         }
     }

@@ -30,7 +30,6 @@ __PACKAGE__->config( name => 'TAN',
         'key_maker' => sub {
             my $c = shift;
             my $path = $c->req->path || 'index';
-
             return "/${path}" . $c->nsfw . $c->mobile;
         },
         'no_expire' => 0,
@@ -102,20 +101,24 @@ sub check_cache{
 sub mobile{
     my ( $c ) = @_;
 
-    my $mobile =  
-        $c->stash->{'mobile_switch'} 
-        || ( 
-            $c->req->cookie('mobile') 
-            && $c->req->cookie('mobile')->value == 1 
-        ); 
-
     my $action = $c->action;
     my $mobile_allowed;
     if ( $c->controller( $action->namespace )->can('_mobile') ){
         $mobile_allowed = $c->controller( $action->namespace )->_mobile->{ $action->name };
     }
 
-    return ( ( $mobile && $mobile_allowed ) || 0 );
+    if ( !$mobile_allowed ){
+        return 0;
+    }
+
+    my $mobile_user =  
+        $c->stash->{'mobile_switch'} 
+        || ( 
+            $c->req->cookie('mobile') 
+            && $c->req->cookie('mobile')->value == 1 
+        ); 
+
+    return $mobile_user;
 }
 
 #filter is off if 1
