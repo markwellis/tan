@@ -43,35 +43,20 @@
         [% IF object.nsfw == "Y" %]- NSFW[% END %]
     </a>
 </h2>
-<p>
-    [% object.${type}.description | html | nl2br %]
-</p>
+<p>[% object.${type}.description | html | nl2br %]</p>
 <ul>
     <li style="font-size:0.7em">
-        <img 
-            alt="[% object.user.username | html %]"
-            src="[% object.user.avatar(c) %]"
-            class="TAN-news-avatar"
-        /> <a 
+        <a 
             href="[% object.user.profile_url %]" 
             class="TAN-news-user"
-        >
-            [% object.user.username | html %]
-        </a>
-        [%- IF object.promoted -%]
-            promoted [% object.promoted %] ago,
-        [%- END -%]
-        posted [% object.created %] ago
-        <span class="TAN-type-[% type %]"> [[% type %]]</span>
-    </li>
-    <li style="font-size:0.7em">
+        >[%- object.user.username | html -%]</a> |
+         [% object.get_column('views') %] views |
         <a href="[% comment_url %]" class="TAN-news-comment">
             <img 
                 alt="" 
                 class="TAN-news-comment-image" 
                 src="/static/images/comment.png" 
-            /> [% object.get_column('comments') %]
-        </a> | [% object.get_column('views') %] views
+            /> [% object.get_column('comments') -%]</a>
         [%- IF type == 'poll' -%]
              | [% object.poll.votes_rs.count || 0 %] votes
         [%- END -%]
@@ -81,10 +66,7 @@
         -%]
             | [% object.${type}.url | domain %]
         [%- END -%]
-        [% IF type == 'picture' %]
-            | [% object.picture.x %]x[% object.picture.y %]
-            | [% object.picture.size | filesize_h %]
-        [% END %]
+        | <span class="TAN-type-[% type %]"> [[% type %]]</span>
         [%- IF c.user_exists 
             && (
                 c.check_any_user_role('edit_object', 'edit_object_nsfw')

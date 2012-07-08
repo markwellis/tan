@@ -156,8 +156,8 @@ a:hover{
 }
 
 .TAN-news-comment-image{
-    height:15px;
-    width: 15px;
+    height:10px;
+    width: 10px;
 }
 
 .TAN-news-image{
@@ -172,6 +172,11 @@ a:hover{
 .TAN-news > h2{
     font-size:large;
 } 
+
+.TAN-news > p{
+    max-height:190px;
+    overflow: hidden;
+}
 
 .TAN-news > p, .TAN-news > h2{
     margin:0px;
