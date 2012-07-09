@@ -118,7 +118,7 @@ sub mobile{
             && $c->req->cookie('mobile')->value == 1 
         ); 
 
-    return $mobile_user;
+    return $mobile_user || 0;
 }
 
 #filter is off if 1

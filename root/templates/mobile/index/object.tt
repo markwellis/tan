@@ -19,7 +19,6 @@
     - ( object.${type}.picture_id % 1000 ) 
 -%]
 
-[%- PROCESS index/plus_minus.tt -%]
 <div class="TAN-news-image right">
     <a href="[% 
         ( object.type == 'picture' ) ? 
@@ -82,3 +81,4 @@
         [% END %]
     </li>
 </ul>
+[%- PROCESS index/plus_minus.tt -%]
