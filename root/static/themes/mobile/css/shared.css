@@ -4,7 +4,7 @@ body{
     font-family:Arial,sans-serif;
     font-weight:normal;
     height:100%;
-    min-width:300px;
+    min-width:200px;
 }
 
 a{
@@ -131,7 +131,6 @@ a:hover{
 /* news */
 
 .TAN-news{
-    max-height:300px;
     background-color:#fff;
     overflow:hidden;
     border-bottom: 1px solid #CCCCCC;
@@ -156,8 +155,8 @@ a:hover{
 }
 
 .TAN-news-comment-image{
-    height:10px;
-    width: 10px;
+    height:13px;
+    width: 13px;
 }
 
 .TAN-news-image{
@@ -192,4 +191,30 @@ a:hover{
 .TAN-news-user{
     color:#595959;
     font-weight:bold;
+}
+
+.TAN-tintan-selected{
+    color:#5A9E4A; 
+    font-weight:bold;
+}
+
+/* pagination */
+
+.TAN-news-page-number{
+    background-color:#EFF8FC;
+    border:1px solid #3A44FF;
+    color:#3A44FF;
+    float:left;
+    display:block;
+    height:15px;
+    margin:1px;
+    min-width:15px;
+    padding:1px;
+    text-align:center;
+    text-decoration:none;
+}
+
+.TAN-news-page-number-selected{
+    background-color:#3A44FF;
+    color:#EFF8FC;
 }

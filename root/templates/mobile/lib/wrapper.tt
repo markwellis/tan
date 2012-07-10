@@ -26,6 +26,10 @@
             http-equiv="Content-Type"
             content="text/html; charset=utf-8"
         />
+        <meta name="HandheldFriendly" content="True">
+	    <meta name="MobileOptimized" content="200">
+	    <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+        <meta http-equiv="cleartype" content="on">
         [% IF rel_extra.defined %]
             [% rel_extra %]
         [% END %]

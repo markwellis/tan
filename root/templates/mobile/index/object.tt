@@ -43,42 +43,38 @@
     </a>
 </h2>
 <p>[% object.${type}.description | html | nl2br %]</p>
-<ul>
-    <li style="font-size:0.7em">
-        <a 
-            href="[% object.user.profile_url %]" 
-            class="TAN-news-user"
-        >[%- object.user.username | html -%]</a> |
-         [% object.get_column('views') %] views |
-        <a href="[% comment_url %]" class="TAN-news-comment">
-            <img 
-                alt="" 
-                class="TAN-news-comment-image" 
-                src="/static/images/comment.png" 
-            /> [% object.get_column('comments') -%]</a>
-        [%- IF type == 'poll' -%]
-             | [% object.poll.votes_rs.count || 0 %] votes
-        [%- END -%]
-        [%- IF 
-            ( type == 'link' )
-            || ( type == 'video' )
-        -%]
-            | [% object.${type}.url | domain %]
-        [%- END -%]
-        | <span class="TAN-type-[% type %]"> [[% type %]]</span>
-        [%- IF c.user_exists 
-            && (
-                c.check_any_user_role('edit_object', 'edit_object_nsfw')
-                || ( c.user.id == object.user_id )
-                )
-        -%]
-            | <a 
-                href="/submit/[% type %]/edit/[% object.id %]/" 
-                class="TAN-news-comment"
-            >
-                Edit
-            </a>
-        [% END %]
-    </li>
-</ul>
+<a 
+    href="[% object.user.profile_url %]" 
+    class="TAN-news-user"
+>[%- object.user.username | html -%]</a> |
+ [% object.get_column('views') %] views |
+<a href="[% comment_url %]" class="TAN-news-comment">
+    <img 
+        alt="" 
+        class="TAN-news-comment-image" 
+        src="/static/images/comment.png" 
+    /> [% object.get_column('comments') -%]</a>
+[%- IF type == 'poll' -%]
+     | [% object.poll.votes_rs.count || 0 %] votes
+[%- END -%]
+[%- IF 
+    ( type == 'link' )
+    || ( type == 'video' )
+-%]
+    | [% object.${type}.url | domain %]
+[%- END -%]
+ | <span class="TAN-type-[% type %]"> [[% type %]]</span>
+[%- IF c.user_exists 
+    && (
+        c.check_any_user_role('edit_object', 'edit_object_nsfw')
+        || ( c.user.id == object.user_id )
+        )
+-%]
+    | <a 
+        href="/submit/[% type %]/edit/[% object.id %]/" 
+        class="TAN-news-comment"
+    >
+        Edit
+    </a>
+[% END %]
 [%- PROCESS index/plus_minus.tt -%]

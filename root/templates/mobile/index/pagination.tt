@@ -17,8 +17,8 @@
 
 [%- USE page_url = url("/${c.req.path}", params) -%]
 
-<div class="[% IF type == 'picture' %]clear[% END %] TAN-news-pagination">
-    [%- FOREACH page IN pager.pages_in_navigation( 10 ) -%]
+<div class="TAN-news-pagination">
+    [%- FOREACH page IN pager.pages_in_navigation( 5 ) -%]
         [% IF ( loop.first ) && ( page != pager.first_page ) %]
             <a 
                 class="TAN-news-page-number" 
