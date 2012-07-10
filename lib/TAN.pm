@@ -103,8 +103,13 @@ sub mobile{
 
     my $action = $c->action;
     my $mobile_allowed;
-    if ( $c->controller( $action->namespace )->can('_mobile') ){
-        $mobile_allowed = $c->controller( $action->namespace )->_mobile->{ $action->name };
+    
+    my $class = $action->class;
+    $class =~ s/TAN::Controller:://;
+
+    my $controller = $c->controller( $class );
+    if ( defined( $controller ) && $controller->can('_mobile') ){
+        $mobile_allowed = $controller->_mobile->{ $action->name };
     }
 
     if ( !$mobile_allowed ){
