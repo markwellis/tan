@@ -7,6 +7,14 @@ BEGIN { extends 'Catalyst::Controller'; }
 use JSON;
 use Try::Tiny;
 
+has '_mobile' => (
+    'is' => 'ro',
+    'isa' => 'HashRef',
+    'default' => sub{
+        return {'index' => 1};
+    },
+);
+
 sub type: PathPart('view') Chained('/') CaptureArgs(2){
     my ( $self, $c, $type, $object_id ) = @_;
 

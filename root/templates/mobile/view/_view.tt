@@ -1,0 +1,15 @@
+[% PROCESS index/object.tt %]
+
+[% rel_extra = "<link rel=\"image_src\" href=\"${c.config.thumb_path}/${md}/${object.$type.picture_id}/100\" />" %]
+
+[% page_keywords = 'TAN thisaintnews news' %]
+
+<p>
+    <span class="TAN-tags">
+        [% FOREACH tag IN object.tags %]
+            <a href="/search/?q=tag:[% tag.tag %]">[% tag.tag %]</a>
+            [% page_keywords = page_keywords _ " ${tag.tag}" %]
+        [% END %]
+    </span>
+    [%- IF tag_p_extra; tag_p_extra; END -%]
+</p>

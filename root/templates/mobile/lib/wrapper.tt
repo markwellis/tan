@@ -53,8 +53,8 @@
         [%- END %]
     </head>
     <body>
-        [%- PROCESS lib/js_includes.tt %]
         <div class="TAN-header">
+            [% PROCESS lib/top_menu.tt %]
         </div>
         <div class="TAN-main">
             [% IF message %]
