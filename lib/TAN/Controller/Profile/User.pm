@@ -4,6 +4,17 @@ use namespace::autoclean;
 
 BEGIN { extends 'Catalyst::Controller'; }
 
+has '_mobile' => (
+    'is' => 'ro',
+    'isa' => 'HashRef',
+    'default' => sub{
+        return {
+            'comment' => 1,
+            'view' => 1,
+        };
+    },
+);
+
 sub user: PathPart('profile') Chained('/') CaptureArgs(1){
     my ( $self, $c, $username ) = @_;
 

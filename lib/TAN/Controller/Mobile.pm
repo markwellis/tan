@@ -27,7 +27,7 @@ sub detect_mobile: Private{
     #set this so set_mobile doesn't redirect us anywhere
     $c->stash->{'mobile_return'} = 1;
 
-    if ( defined($ua) && $ua !~ /$r2/ ) {
+    if ( defined($ua) ) {
         foreach my $pattern (@patterns) {
             if ($ua =~ /$pattern/) {
                 $c->forward('set_mobile', [1]);

@@ -3,13 +3,11 @@
     [% comment.created %]&#160;ago
     
     Comment #[% number( comment.number ) || 1 %]
-    <div class="TAN-comment_inner">
-        [% comment.comment %]
-    </div>
+    <div class="TAN-comment_inner" id="_comment:[% comment.id %]">[% comment.comment %]</div>
     <a href="[% comment.object.url %]#comment[% comment.id %]">Link</a>
     [% IF view_comments %]
         |
-        <a href="" class="quote_link" title="[% comment.user.username | html %]::[% comment.id %]">Quote</a>
+        <a href="javascript:quote_comment([% comment.id %], '[% comment.user.username | html %]')" class="quote_link" title="[% comment.user.username | html %]::[% comment.id %]">Quote</a>
     [% END %]
 
     [% IF ( 
@@ -19,6 +17,6 @@
             || ( c.user.id == comment.user.user_id )
         ) 
     ) %]
-        <a class="comment_edit" href="[% comment.object.url %]/../_edit_comment/[% comment.id %]">Edit Comment</a>
+        | <a class="comment_edit" href="[% comment.object.url %]/../_edit_comment/[% comment.id %]">Edit Comment</a>
     [% END %]
 </div>

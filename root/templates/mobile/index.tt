@@ -2,7 +2,7 @@
     [%- IF index -%]
         [%- FOREACH object IN index.objects -%]
             [%- NEXT IF !object -%]
-            <li class="TAN-news">
+            <li class="TAN-news TAN-hr">
                 [%- RAWPERL -%]
                 my $is_comment = 0;
                 if ( ref( $stash->get('object') ) eq 'TAN::Model::MySQL::Comments'){

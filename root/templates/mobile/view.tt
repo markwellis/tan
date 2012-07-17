@@ -1,7 +1,7 @@
 [%- css_includes.push('view') -%]
 
 <ul class="TAN-inside">
-    <li class="TAN-news">
+    <li class="TAN-news TAN-hr">
         [% PROCESS "view/${type}.tt" %]
     </li>
     <li class="TAN-news" id="comments">

@@ -142,8 +142,11 @@ fieldset{
 .TAN-news{
     background-color:#fff;
     overflow:hidden;
-    border-bottom: 1px solid #CCCCCC;
     padding: 10px 0;
+}
+
+.TAN-hr {
+    border-top: 1px solid #C5D0D9;
 }
 
 .TAN-news > ul{
@@ -230,7 +233,6 @@ fieldset{
 }
 
 .TAN-header{
-    border-bottom:1px solid #cccccc;
     padding-bottom:10px;
 }
 

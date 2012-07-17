@@ -1,4 +1,5 @@
 [% view_comments = 1 %]
+[% js_includes.push('quote-comment') %]
 <div class="TAN-comment_wrapper">
     [% IF object.comments %]
         [% FOREACH comment IN comments %]
