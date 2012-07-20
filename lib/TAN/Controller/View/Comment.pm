@@ -12,6 +12,9 @@ sub comment: PathPart('_comment') Chained('../type') Args(0) {
     #logged in, post
         if ( my $comment = $c->req->param('comment') ){
         #comment
+            if ( $c->req->param('mobile') ){
+                $comment = TAN::View::TT::nl2br( $comment );
+            }
             my $comment_rs = $c->model('MySQL::Comments')->create_comment( 
                 $c->stash->{'object_id'}, 
                 $c->user->user_id, 
