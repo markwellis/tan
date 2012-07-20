@@ -4,6 +4,14 @@ use namespace::autoclean;
 
 BEGIN { extends 'Catalyst::Controller'; }
 
+has '_mobile' => (
+    'is' => 'ro',
+    'isa' => 'HashRef',
+    'default' => sub{
+        return {'edit_comment' => 1};
+    },
+);
+
 sub comment: PathPart('_comment') Chained('../type') Args(0) {
     my ( $self, $c ) = @_;
 
@@ -183,8 +191,12 @@ sub edit_comment: PathPart('_edit_comment') Chained('../type') Args(1) {
                         'object_id' => $comment_rs->object_id,
                     } );
                 }
+                my $comment = $c->req->param("edit_comment_${comment_id}");
+                if ( $c->req->param('mobile') ){
+                    $comment = TAN::View::TT::nl2br( $comment );
+                }
                 $comment_rs->update({
-                    'comment' => $c->req->param("edit_comment_${comment_id}"),
+                    'comment' => $comment,
                 });
                 $c->trigger_event('comment_updated', $comment_rs);
             }

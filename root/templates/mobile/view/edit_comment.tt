@@ -14,6 +14,7 @@
         %]
             <input type="hidden" name="_edit-reason" id="_edit-reason" />
         [% END %]
+        <input type="hidden" name="mobile" mobile="1" value="1" />
         <input type="submit" value="Edit" id="edit[% comment_id %]" name="edit[% comment_id %]" />
         <input type="submit" value="Delete" id="delete[% comment_id %]" name="delete[% comment_id %]" />
     </fieldset>
