@@ -15,6 +15,7 @@
             }
         %]
         <br />
+        <input type="hidden" value="1" id="mobile" name="mobile" />
         <input type="submit" value="Comment" id="submit_comment" />
     </fieldset>
 </form>

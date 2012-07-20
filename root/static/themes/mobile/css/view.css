@@ -1,4 +1,25 @@
+img{
+    max-width:100%;
+    height:auto;
+}
+
 #comment{
     width:100%;
     margin-right:5px;
+}
+
+/* quote stuff */
+
+.quoted_username{
+}
+
+.quote_holder{
+	padding:1px;
+    background-color:#e1ebf2;
+    border: #bebebe 1px solid;
+}
+
+.quote{
+	padding-left:2px;
+    font-style:italic;
 }
