@@ -26,3 +26,7 @@ label{
 .TAN-news > form > fieldset > ul{
     padding-left:0px;
 }
+
+#recaptcha_image img {
+    width: 180px;
+}

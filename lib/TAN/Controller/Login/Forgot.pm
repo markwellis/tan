@@ -6,6 +6,18 @@ BEGIN { extends 'Catalyst::Controller'; }
 
 use Data::Validate::Email;
 
+has '_mobile' => (
+    'is' => 'ro',
+    'isa' => 'HashRef',
+    'default' => sub{
+        return {
+            'index' => 1,
+            'step1' => 1,
+            'step2' => 1,
+        };
+    },
+);
+
 sub index: Path Args(0){
     my ( $self, $c ) = @_;
    

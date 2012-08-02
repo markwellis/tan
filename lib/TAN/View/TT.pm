@@ -35,8 +35,8 @@ __PACKAGE__->config({
     EVAL_PERL => 1,
 });
 
-sub process{
-    my ( $self, $c ) = @_;
+sub render{
+    my ( $self, $c, @args ) = @_;
 
     #set this here and not in config so we can use correct theme
     $self->include_path( [
@@ -44,7 +44,7 @@ sub process{
         $c->path_to( 'root', 'templates', $c->stash->{'theme_settings'}->{'name'} ),
     ] );
 
-    $self->next::method( $c );
+    $self->next::method( $c, @args );
 }
 
 my $nl2br_reg = qr/\n/;
