@@ -8,6 +8,18 @@ use Time::HiRes qw(time);
 
 __PACKAGE__->config(namespace => '');
 
+has '_mobile' => (
+    'is' => 'ro',
+    'isa' => 'HashRef',
+    'default' => sub{
+        return {
+            'chat' => 1,
+            'error' => 1,
+            'default' => 1,
+        };
+    },
+);
+
 sub auto: Private{
     my ( $self, $c ) = @_;
 

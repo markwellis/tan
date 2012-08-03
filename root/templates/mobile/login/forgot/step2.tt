@@ -3,7 +3,6 @@
 <ul class="TAN-inside">
     <li class="TAN-news">
         <h2>Reset Password</h2>
-        <img class="newsImg" src="[% theme_settings.image_path %]/forgot_password.jpg" alt="Forgot" />
         <p>
             Enter your new password and click confirm
         </p>
