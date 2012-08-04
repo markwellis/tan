@@ -16,6 +16,7 @@ has '_mobile' => (
             'chat' => 1,
             'error' => 1,
             'default' => 1,
+            'recent_comments' => 1,
         };
     },
 );
@@ -125,6 +126,15 @@ sub chat: Local Args(0){
     $c->stash(
         'page_title' => 'Chat',
         'template' => 'chat.tt',
+    );
+}
+
+sub recent_comments: Local{
+    my ( $self, $c ) = @_;
+
+    $c->stash(
+        'recent_comments' => $c->model('MySQL::RecentComments')->grouped,
+        'template' => 'recent_comments.tt',
     );
 }
 
