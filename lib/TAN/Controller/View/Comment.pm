@@ -16,13 +16,16 @@ sub comment: PathPart('_comment') Chained('../type') Args(0) {
     my ( $self, $c ) = @_;
 
     my $comment_id;
+    my $comment = $c->req->param('comment');
+
+    if ( $c->req->param('mobile') ){
+        $comment = TAN::View::TT::nl2br( $comment );
+    }
+
     if ( $c->user_exists ){
     #logged in, post
-        if ( my $comment = $c->req->param('comment') ){
+        if ( $comment  ){
         #comment
-            if ( $c->req->param('mobile') ){
-                $comment = TAN::View::TT::nl2br( $comment );
-            }
             my $comment_rs = $c->model('MySQL::Comments')->create_comment( 
                 $c->stash->{'object_id'}, 
                 $c->user->user_id, 
@@ -33,7 +36,7 @@ sub comment: PathPart('_comment') Chained('../type') Args(0) {
         }
     } else {
     #save for later
-        if ( my $comment = $c->req->param('comment') ){
+        if ( $comment ){
         # save comment in session for later
             push( @{$c->session->{'comments'}}, {
                 'object_id' => $c->stash->{'object_id'},

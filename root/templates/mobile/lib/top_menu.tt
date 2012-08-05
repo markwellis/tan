@@ -1,5 +1,6 @@
 <p>
     <a title="TAN" href="/index/all/0/">Home</a>
+    | <a title="TAN" href="/recent_comments/">Recent Comments</a>
     [%- IF c.user_exists %]
         | <a href="/login/logout/">Logout</a>
     [%- END %]
