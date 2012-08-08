@@ -26,6 +26,10 @@
             http-equiv="Content-Type"
             content="text/html; charset=utf-8"
         />
+        <meta name="HandheldFriendly" content="True">
+	    <meta name="MobileOptimized" content="200">
+	    <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+        <meta http-equiv="cleartype" content="on">
         [% IF rel_extra.defined %]
             [% rel_extra %]
         [% END %]
@@ -51,49 +55,15 @@
     <body>
         [%- PROCESS lib/js_includes.tt %]
         <div class="TAN-header">
-            <h1 class="TAN-logo">
-                <a title="TAN" href="/index/all/0/">This Aint News</a>
-            </h1>
-            <div class="TAN-menu-top right">
-                [% PROCESS lib/top_menu.tt %]
-            </div>
-            <div class="TAN-menu-ad-holder">
-                [% PROCESS lib/menu.tt %]
-                [% PROCESS lib/ad.tt position='top' %]
-            </div>
+            [% PROCESS lib/top_menu.tt %]
+            [% PROCESS lib/menu.tt %]
         </div>
         <div class="TAN-main">
-            [% PROCESS lib/recent_comments.tt %]
-            <script type="text/javascript">
-            //<![CDATA[
-                [% IF message %]
-                    window.addEvent('domready', function(){
-                        TAN.alert("[% message | trim | html %]");
-                    });
-                [% END %]
-                var mibbit_nick = '[% 
-                    ( c.user_exists ? c.user.username : 'n00b' ) | html
-                %]';
-            //]]>
-            </script>
             [% IF message %]
-                <noscript>
-                    <h1>[% message %]</h1>
-                </noscript>
+                <h1>[% message %]</h1>
             [% END %]
             [% content %]
-            <div class="TAN-view-mobile">
-                <a href="/mobile/set_mobile/1">Mobile Site</a>
-            </div>
         </div>
-        <div id="TAN-bottom"></div>
-        <div class="TAN-footer">
-            <span class="TAN-whos-online">
-                [% PROCESS lib/whos_online.tt %]
-            </span>
-            <span class="right">
-                <a href="#">Up</a>&#160;<a href="#TAN-bottom">Down</a>
-            </span>
-        </div>
+        <div id="TAN-bottom"><a href="/mobile/set_mobile/0">Desktop Site</a></div>
     </body>
 </html>

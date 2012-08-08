@@ -1,0 +1,40 @@
+[%- menu_tab_names = [] -%]
+[%- menu_tab_values = [] -%]
+
+[%- menu_tab_names.push('All') -%]
+[%- menu_tab_values.push('all') -%]
+[%- FOREACH menu_item IN c.model('Object').public -%]
+    [%- menu_tab_name = "${menu_item}s" | ucfirst -%]
+    [%- menu_tab_names.push( menu_tab_name ) -%]
+    [%- menu_tab_values.push( menu_item ) -%]
+[%- END -%]
+<ul class="TAN-menu">
+    <li>
+        [%- FOREACH name IN menu_tab_names -%]
+            [%- count = loop.count - 1 -%]
+            [%- value = menu_tab_values.${count} -%] 
+            <a 
+                class="TAN-menu-tab TAN-type-[% value %] [% IF location == value %]TAN-menu-tab-[% location %]-selected[% END %]"
+                href="/index/[% value %]/0/">[% name %]</a>
+            [% IF !loop.last %] |[% END %]
+        [%- END -%]
+    </li>
+    <li class="TAN-menu-[% location %]">
+        [%- IF location != 'all' -%]
+            <a href="/submit/[% location %]/">Submit</a> |
+        [%- END -%]
+        <a href="/random/[% location %]/">Random</a> |
+        <a
+            href="/index/[% location %]/0/" 
+            [%- IF ( location == location ) && ( upcoming.defined && !upcoming ) -%]
+                class="TAN-menu-tab-[% location %]-selected"
+            [% END %]
+        >Promoted</a> |
+        <a 
+            href="/index/[% location %]/1/"
+            [%- IF ( location == location ) && upcoming -%]
+                class="TAN-menu-tab-[% location %]-selected"
+            [% END %]
+        >Upcoming</a>
+    </li>
+</ul>

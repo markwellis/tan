@@ -8,6 +8,19 @@ use Time::HiRes qw(time);
 
 __PACKAGE__->config(namespace => '');
 
+has '_mobile' => (
+    'is' => 'ro',
+    'isa' => 'HashRef',
+    'default' => sub{
+        return {
+            'chat' => 1,
+            'error' => 1,
+            'default' => 1,
+            'recent_comments' => 1,
+        };
+    },
+);
+
 sub auto: Private{
     my ( $self, $c ) = @_;
 
@@ -116,6 +129,15 @@ sub chat: Local Args(0){
     );
 }
 
+sub recent_comments: Local{
+    my ( $self, $c ) = @_;
+
+    $c->stash(
+        'recent_comments' => $c->model('MySQL::RecentComments')->grouped,
+        'template' => 'recent_comments.tt',
+    );
+}
+
 sub render: ActionClass('RenderView'){}
 
 sub end: Private{
@@ -126,6 +148,19 @@ sub end: Private{
         if ( $c->stash->{'can_rss'} && $c->req->param('rss') ){
             $c->forward( $c->view('RSS') );
         } else {
+            if ( $c->mobile ){
+                $c->stash->{'theme_settings'}->{'name'} = 'mobile';
+            }
+            
+            my $path = $c->config->{'static_path'} . "/themes/" . $c->stash->{'theme_settings'}->{'name'};
+
+            $c->stash->{'theme_settings'} = {
+                %{ $c->stash->{'theme_settings'} },
+                'css_path' => "${path}/css",
+                'js_path' => "${path}/js",
+                'image_path' => "${path}/images",
+            };
+
             $c->forward('render');
         }
     }

@@ -5,7 +5,7 @@ use namespace::autoclean;
 BEGIN { extends 'Catalyst::Controller'; }
 
 my $alpha_reg = qr/[^a-zA-Z0-9\-_@]/; 
-my $format_reg = qr/[a-zA-Z0-9\-@]+_(.*?)_\w+/;
+my $format_reg = qr/([a-zA-Z0-9\-@]+)_(.*?)_\w+/;
 my $ext_reg = qr/(css|js)$/;
 
 sub index: Path Args(1) {
@@ -24,12 +24,13 @@ sub index: Path Args(1) {
 # figure out if css or js from extension
     if ( $out_file =~ s/$ext_reg/\.$1/ ){
         my $type = $1;
-        $source_file =~ s/$format_reg/$1\.$type/;
+        $source_file =~ s/$format_reg/$2\.$type/;
+        my $theme_name = $1;
 
     #replace @ with / for dirs
         $source_file =~ s|@|/|g;
 
-        my $source_dir = $c->path_to('root', $c->config->{'static_path'}, 'themes', $c->stash->{'theme_settings'}->{'name'}, $type);
+        my $source_dir = $c->path_to('root', $c->config->{'static_path'}, 'themes', $theme_name, $type);
         my $theme_path;
         if ( $type eq 'css' ){
             $theme_path = $c->config->{'csscache_path'};

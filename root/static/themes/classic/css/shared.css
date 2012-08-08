@@ -350,6 +350,14 @@ fieldset{
 
 /* bottom */
 
+.TAN-view-mobile{
+    clear:both;
+    margin-left:170px;
+}
+.TAN-view-mobile > a{
+    color:#fff;
+}
+
 #TAN-bottom{
     margin-bottom:24px;
 }

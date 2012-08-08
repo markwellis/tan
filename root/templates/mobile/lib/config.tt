@@ -1,21 +1,15 @@
 [%-
-    js_includes = [
-        'mootools-1-2-5-core-nc', 
-        "mootools-more",
-        'TAN',
-        'menu',
-        'recent-comments'
-    ];
+    js_includes = [];
     
     css_includes = [
        'shared',
     ];
     
     IF !page_title.defined;
-        page_title = 'Social News For Internet Pirates';
+        page_title = 'TAN';
     END;
     IF !page_meta_description.defined;
-        page_meta_description = 'Social News For Internet Pirates';
+        page_meta_description = 'TAN - Social News For Internet Pirates';
     END;
     page_keywords = 'tan thisaintnews strange pirate news community comments english social fun jokes videos pictures share sharing lol lolz funny humour humor';
 -%]
