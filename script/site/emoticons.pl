@@ -35,8 +35,8 @@ my $patch_command = "sed -i -e \"s/tinyMCEPopup\\.getWindowArg('plugin_url') + '
 
 my $patch_popup_size = '../../root/static/tiny_mce/plugins/emotions/editor_plugin.js';
 #width and height are hacked, lookup proper values in js
-my $patch_poppup_command0 = "sed -i -e \"s/width:750/width:750/\" ${patch_popup_size}";
-my $patch_poppup_command1 = "sed -i -e \"s/height:470/height:600/\" ${patch_popup_size}";
+my $patch_poppup_command0 = "sed -i -e \"s/width:750/width:650/\" ${patch_popup_size}";
+my $patch_poppup_command1 = "sed -i -e \"s/height:470/height:400/\" ${patch_popup_size}";
 `$patch_poppup_command0`;
 `$patch_poppup_command1`;
 
