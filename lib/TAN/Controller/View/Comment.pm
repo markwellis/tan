@@ -75,9 +75,11 @@ sub comment: PathPart('_comment') Chained('../type') Args(0) {
 sub ajax_comment: Private{
     my ( $self, $c, $comment_rs ) = @_;
 
-    $c->stash->{'comment'} = $comment_rs;
-
-    $c->stash->{'template'} = 'view/comment.tt';
+    $c->stash(
+        'comment' => $comment_rs,
+        'template' => 'view/comment.tt',
+        'view_comments' => 1,
+    );
     $c->forward( $c->view('NoWrapper') );
 }
 
