@@ -64,6 +64,6 @@
             [% END %]
             [% content %]
         </div>
-        <div id="TAN-bottom"></div>
+        <div id="TAN-bottom"><a href="/mobile/set_mobile/0">Desktop Site</a></div>
     </body>
 </html>

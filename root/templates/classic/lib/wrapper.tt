@@ -82,6 +82,9 @@
                 </noscript>
             [% END %]
             [% content %]
+            <div class="TAN-view-mobile">
+                <a href="/mobile/set_mobile/1">Mobile Site</a>
+            </div>
         </div>
         <div id="TAN-bottom"></div>
         <div class="TAN-footer">
