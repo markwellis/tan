@@ -21,7 +21,7 @@ if [ ! -f "${MASTER_FILENAME}" ]; then
 fi
 
 debug "creating backup"
-mysqldump -u$DBUSER -p$DBPASSWORD --single-transaction $DB > $OUTPUT_FILENAME
+mysqldump -u$DBUSER -p$DBPASSWORD --single-transaction --triggers $DB > $OUTPUT_FILENAME
 
 if [ $IS_MASTER ]; then
     debug "moving file to master file"
