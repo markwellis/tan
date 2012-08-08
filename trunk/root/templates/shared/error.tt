@@ -1,8 +1,0 @@
-[%- css_includes.push('errors') -%]
-
-<ul class="TAN-inside">
-    <li class="TAN-news">
-        <h2 class="TAN-type-link">[% error_code %] [% error %]</h2> 
-        <img src="[% theme_settings.image_path %]/error/[% error_code %].jpg" alt="[% error_code %]" />
-    </li>
-</ul>

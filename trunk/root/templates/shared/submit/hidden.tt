@@ -1,7 +1,0 @@
-<input 
-    type="hidden" 
-    name="[% field.id %]"
-    id="[% field.id %]" 
-    value="[% field.value | html %]"
-/>
-<div id="[% field.id %]-advice"></div>

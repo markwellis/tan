@@ -1,9 +1,0 @@
-[% css_includes.push('Donate') %]
-
-<ul class="TAN-inside">
-    <li class="TAN-news">
-        <div>
-            Thank you, your number has been bought or something along those lines
-        </div>
-    </li>
-</ul>
