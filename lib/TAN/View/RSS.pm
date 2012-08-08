@@ -12,11 +12,6 @@ sub process {
 
     return if !$c->stash->{'index'}->{'objects'};
 
-    my $object = $c->stash->{'index'}->{'objects'}->[0];
-    $c->stash->{'build_date'} = DateTime::Format::Mail->format_datetime( $object->_promoted || $object->_created );
-
-    my $feed = XML::Feed->new('RSS');
-
     my $page_title = $c->stash->{'page_title'};
     if ( $page_title ){
         $page_title = "TAN - ${page_title}";
@@ -24,27 +19,49 @@ sub process {
         $page_title = "This Aint News";
     }
 
+    my $feed = XML::Feed->new('RSS');
+    
     $feed->title( $page_title );
     $feed->link( $c->req->base . $c->req->path );
     $feed->description('Social News For Internet Pirates');
-    $feed->modified( $object->_promoted || $object->_created );
+    
+    my $object = $c->stash->{'index'}->{'objects'}->[0];
+    my $date;
+    if ( $object->can('_promoted') ){
+        $date = $object->_promoted;
+    }
+    $date ||= $object->_created;
+    $feed->modified( $date );
     
     foreach my $object ( @{$c->stash->{'index'}->{'objects'}} ){
-        my $type = $object->type;
-        my $base = $c->req->base;
-        $base =~ s|/$||;
+        if ( ref( $object ) eq 'TAN::Model::MySQL::Object' ){
+            my $type = $object->type;
+            my $base = $c->req->base;
+            $base =~ s|/$||;
 
-        my $md = $object->$type->picture_id - ($object->$type->picture_id % 1000);
-        my $image = qq|<img width="100" height="100" align="left" src="@{[ $base . $c->config->{'thumb_path'} ]}/${md}/@{[ $object->$type->picture_id ]}/100?rss=1" />|;
+            my $md = $object->$type->picture_id - ($object->$type->picture_id % 1000);
+            my $image = qq|<img width="100" height="100" align="left" src="@{[ $base . $c->config->{'thumb_path'} ]}/${md}/@{[ $object->$type->picture_id ]}/100?rss=1" />|;
 
-        my $entry = XML::Feed::Entry->new('RSS');
-        $entry->id( $object->id );
-        $entry->link( $base . $object->url );
-        $entry->title( $object->$type->title . ( $object->nsfw eq "Y" ? ' - NSFW' : '' ) );
-        $entry->summary( $image . $object->$type->description );
-        $entry->issued( $object->_promoted || $object->_created );
-        $feed->add_entry( $entry );
-        
+            my $entry = XML::Feed::Entry->new('RSS');
+            $entry->id( $object->id );
+            $entry->link( $base . $object->url );
+            $entry->title( $object->$type->title . ( $object->nsfw eq "Y" ? ' - NSFW' : '' ) );
+            $entry->summary( $image . $object->$type->description );
+            $entry->issued( $object->_promoted || $object->_created );
+            $feed->add_entry( $entry );
+        } elsif ( ref( $object ) eq 'TAN::Model::MySQL::Comments' ){
+            my $type = $object->object->type;
+            my $base = $c->req->base;
+            $base =~ s|/$||;
+
+            my $entry = XML::Feed::Entry->new('RSS');
+            $entry->id( "comment:" . $object->id );
+            $entry->link( $base . $object->object->url . "#comment" . $object->id );
+            $entry->title( "Comment on " . $object->object->$type->title . ( $object->object->nsfw eq "Y" ? ' - NSFW' : '' ) );
+            $entry->summary( $object->comment );
+            $entry->issued( $object->_created );
+            $feed->add_entry( $entry );
+        }
     }
     
     $c->response->content_type('application/rss+xml; charset=utf-8');
