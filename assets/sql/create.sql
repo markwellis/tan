@@ -16,6 +16,7 @@ CREATE  TABLE IF NOT EXISTS `tan`.`user` (
   `password` VARCHAR(128) NOT NULL ,
   `confirmed` ENUM('N','Y') NOT NULL DEFAULT 'N' ,
   `deleted` ENUM('N','Y') NOT NULL DEFAULT 'N' ,
+  `paypal` VARCHAR(255) NOT NULL ,
   PRIMARY KEY (`user_id`) )
 ENGINE = InnoDB
 AUTO_INCREMENT = 751
@@ -37,7 +38,7 @@ CREATE  TABLE IF NOT EXISTS `tan`.`object` (
   `minus` BIGINT(20) NOT NULL DEFAULT 0 ,
   `comments` BIGINT(20) NOT NULL DEFAULT 0 ,
   `deleted` ENUM('Y','N') NOT NULL DEFAULT 'N' ,
-  `score` FLOAT NULL ,
+  `score` INT NULL ,
   PRIMARY KEY (`object_id`) ,
   INDEX `created` (`created` ASC) ,
   INDEX `super_index` (`NSFW` ASC, `type` ASC, `promoted` ASC, `created` ASC, `deleted` ASC) ,
@@ -536,6 +537,31 @@ CREATE  TABLE IF NOT EXISTS `tan`.`cms` (
   INDEX `revision` (`revision` ASC) ,
   INDEX `deleted` (`deleted` ASC) ,
   CONSTRAINT `fk_cms_1`
+    FOREIGN KEY (`user_id` )
+    REFERENCES `tan`.`user` (`user_id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `tan`.`lotto`
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS `tan`.`lotto` (
+  `lotto_id` BIGINT(20) NOT NULL AUTO_INCREMENT ,
+  `created` TIMESTAMP NOT NULL DEFAULT NOW() ,
+  `user_id` BIGINT(20) NOT NULL ,
+  `number` TINYINT(4) NOT NULL ,
+  `confirmed` ENUM('Y','N') NOT NULL DEFAULT 'N' ,
+  `winner` ENUM('y','n') NOT NULL DEFAULT 'N' ,
+  `txn_id` VARCHAR(19) NULL ,
+  PRIMARY KEY (`lotto_id`) ,
+  INDEX `fk_lotto_1` (`user_id` ASC) ,
+  INDEX `created` (`created` ASC) ,
+  INDEX `confirmed` (`confirmed` ASC, `created` ASC) ,
+  INDEX `index5` (`winner` ASC, `created` ASC) ,
+  INDEX `index6` (`txn_id` ASC) ,
+  CONSTRAINT `fk_lotto_1`
     FOREIGN KEY (`user_id` )
     REFERENCES `tan`.`user` (`user_id` )
     ON DELETE NO ACTION
