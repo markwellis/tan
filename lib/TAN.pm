@@ -4,6 +4,7 @@ use namespace::autoclean;
 
 use Catalyst::Runtime 5.80;
 use Data::Dumper; #used in 500 error email
+use 5.014;
 
 our $VERSION = 3.4.1;
 
