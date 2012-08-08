@@ -1,0 +1,21 @@
+[% view_comments = 1 %]
+[% js_includes.push('quote-comment') %]
+<div class="TAN-comment_wrapper">
+    [% IF object.comments %]
+        [% FOREACH comment IN comments %]
+            [% PROCESS view/comment.tt %]
+        [% END %]
+    [% END %]
+</div>
+<form id="comment_form" action="_comment" method="post">
+    <fieldset>
+        [% 
+            PROCESS lib/editor.tt editor = {
+                name => 'comment',
+            }
+        %]
+        <br />
+        <input type="hidden" value="1" id="mobile" name="mobile" />
+        <input type="submit" value="Comment" id="submit_comment" />
+    </fieldset>
+</form>

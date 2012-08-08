@@ -1,0 +1,19 @@
+[% css_includes.push('Profile') %]
+
+<ul class="TAN-inside">
+    <li>
+        <form action="edit" id="submit_form" method="post">
+            <fieldset>
+                [% 
+                    PROCESS lib/editor.tt editor = {
+                        name => 'profile',
+                        height => '600px',
+                        value => object.profile.details_nobb,
+                    }
+                %]
+               <br />
+               <input type="submit" value="Submit" />
+           </fieldset>
+       </form>
+    </li>
+</ul>

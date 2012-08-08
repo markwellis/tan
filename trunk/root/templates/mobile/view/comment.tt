@@ -1,0 +1,22 @@
+<div class="TAN-comment_holder[% IF !index.defined %] TAN-hr[% END %]" id="comment[% comment.id %]">
+    <a href="[% comment.user.profile_url %]" class="TAN-news-user"><img class="TAN-news-avatar TAN-comment_avatar" src="[% comment.user.avatar(c) %]" alt="[% comment.user.username | html %]" /> [% comment.user.username | html %]</a>
+    [% comment.created %]&#160;ago
+    
+    Comment #[% number( comment.number ) || 1 %]
+    <div class="TAN-comment_inner" id="_comment:[% comment.id %]">[% comment.comment %]</div>
+    <a href="[% comment.object.url %]#comment[% comment.id %]">Link</a>
+    [% IF view_comments %]
+        |
+        <a href="javascript:quote_comment([% comment.id %], '[% comment.user.username | html %]')" class="quote_link" title="[% comment.user.username | html %]::[% comment.id %]">Quote</a>
+    [% END %]
+
+    [% IF ( 
+        ( c.user_exists ) 
+        && ( 
+            c.check_user_roles('edit_comment')
+            || ( c.user.id == comment.user.user_id )
+        ) 
+    ) %]
+        | <a class="comment_edit" href="[% comment.object.url %]/../_edit_comment/[% comment.id %]">Edit Comment</a>
+    [% END %]
+</div>

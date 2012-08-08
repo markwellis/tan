@@ -1,0 +1,8 @@
+[% edname = editor.name.defined() ? editor.name : 'editor' %]
+
+<textarea
+    id="[% edname %]"
+    name="[% edname %]"
+    rows="10"
+    cols="20"
+>[% editor.value | html %]</textarea>

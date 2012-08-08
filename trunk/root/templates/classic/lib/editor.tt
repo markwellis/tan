@@ -1,0 +1,60 @@
+[% edheight = editor.height.defined() ? editor.height : '300px' %]
+[% edwidth = editor.width.defined() ? editor.width : '100%' %]
+[% edname = editor.name.defined() ? editor.name : 'editor' %]
+
+[% required = '' %]
+[% IF editor.required %]
+    [% required = 'required' %]
+[% END %]
+
+[% min_length = '' %]
+[% max_length = '' %]
+[% IF editor.length.defined() %]
+    [% IF editor.length.min %]
+        [% min_length = "minLength:${editor.length.min}" %]
+    [% END %]
+
+    [% IF editor.length.max %]
+        [% max_length = "maxLength:${editor.length.max}" %]
+    [% END %]
+[% END %]
+
+<textarea
+    class="[% edname %] [% required %] [% min_length %] [% max_length %] wysiwyg msgPos:wysiwygAdvice"
+    style="height:[% edheight %]width:[% edwidth %]"
+    id="[% edname %]"
+    name="[% edname %]"
+    rows="20"
+    cols="80"
+>[% editor.value | html %] </textarea>
+<div id="wysiwygAdvice"></div>
+
+[% IF c.req.user_agent.match('(?:iPad|iPhone|Android)') %]
+[%# tinymce isn't compatable with iPhone or Android %]
+    [% js_incs = [] %]
+    [% FOREACH js_include IN js_includes %]
+        [% IF js_include != 'comment' %]
+            [% js_incs.push( js_include ) %]
+        [% END %]
+    [% END %]
+    [% js_includes = js_incs %]
+    [% RETURN %]
+[% END %]
+
+[% js_includes.push('/static/tiny_mce/tiny_mce.js?r=10', 'tiny-mce-config') %]
+<script type="text/javascript">
+//<![CDATA[
+    if ( typeof( tiny_mce_config ) == 'undefined' ){
+        var tiny_mce_config = {};
+    }
+
+    window.addEvent( 'domready', function(){
+        tiny_mce_config['width'] = "[% edwidth %]";
+        tiny_mce_config['height'] = "[% edheight %]";
+        tiny_mce_config['editor_selector'] = "[% edname %]";
+        tiny_mce_config['content_css'] = "[% theme_settings.css_path %]/editor.css?r=1";
+
+        tinyMCE.init( tiny_mce_config );
+    } );
+//]]>
+</script>

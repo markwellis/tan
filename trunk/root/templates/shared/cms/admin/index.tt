@@ -1,0 +1,77 @@
+[%- css_includes.push('Cms') -%]
+[% grouped_cms_pages = 
+    {
+        '0' => {
+            'Live' => [],
+        },
+        '1' => {
+            'System' => [],
+        },
+        '2' => {
+            'Deleted' => [],
+        },
+    }
+%]
+
+[% FOREACH cms_page IN cms_pages.all %]
+    [% IF cms_page.deleted == 'Y' %]
+        [% grouped_cms_pages.2.Deleted.push( cms_page ) %]
+    [% ELSIF cms_page.system == 'Y' %]
+        [% grouped_cms_pages.1.System.push( cms_page ) %]
+    [% ELSE %]
+        [% grouped_cms_pages.0.Live.push( cms_page ) %]
+    [% END %]
+[% END %]
+<ul class="TAN-inside">
+    <li>
+        <a href="create">Create New Page</a>
+    </li>
+    [% FOREACH index IN grouped_cms_pages.keys.sort %]
+        <li>
+            [% key = grouped_cms_pages.${index}.keys.0 %]
+            <h1>[% key %]</h1>
+            <table>
+                <tr>
+                    <th>Page</th>
+                    <th>Url</th>
+                    <th>Comment</th>
+                    <th>Revision</th>
+                    <th>No Wrapper</th>
+                    <th></th>
+                </tr>
+
+                [% IF grouped_cms_pages.${index}.${key}.size %]
+                    [%- FOREACH cms_page IN grouped_cms_pages.${index}.${key} -%]
+                        <tr>
+                            <td>
+                                [% cms_page.title | html %]
+                            </td>
+                            <td>
+                                /[% cms_page.url | html %]
+                            </td>
+                            <td>
+                                [% cms_page.comment | html %]
+                            </td>
+                            <td>
+                                [% cms_page.revision %]
+                            </td>
+                            <td>
+                                [% cms_page.nowrapper %]
+                            </td>
+                            <td>
+                                <a href="edit/[% cms_page.id %]">Edit</a>
+                            </td>
+                        </tr>
+                    [%- END -%]
+                [% END %]
+            </table>
+            [% IF !loop.last %]
+                <br />
+            [% END %]
+        </li>
+    [% END %]
+    <li>
+    </li>
+</ul>
+
+[% PROCESS 'index/pagination.tt' pager=cms_pages.pager %]

@@ -1,0 +1,67 @@
+[% object_size = object.picture.size | filesize_h %]
+[% md = object.id - ( object.id % 1000 ) %]
+[% url = object.url %]
+[% username = object.user.username | html %]
+
+<h2>
+    <a 
+        class="TAN-type-picture big_font" 
+        href="[% c.config.pic_path %]/[% object.picture.filename %]"
+    >
+        [% object.picture.title | html %]
+        [% IF object.nsfw == 'Y' %]
+            - NSFW
+        [% END %]
+    </a>
+</h2>
+
+<img 
+    alt="[% username %]" 
+    src="[% object.user.avatar(c) %]" 
+    class="TAN-news-avatar left" 
+/>
+<ul>
+    <li>
+        <a 
+            href="[% object.user.profile_url %]" 
+            class="TAN-news-user"
+        >[% username %]</a>
+    </li>
+    <li>
+        <a href="[% url %]#comments">
+            <img 
+                src="[% c.config.static_path %]/images/comment.png" 
+                alt="" 
+                class="TAN-news-comment left"
+            />&nbsp;[% object.get_column('comments') %]</a>
+    </li>
+    <li>
+        [% object.get_column('views') %] views
+    </li>
+
+    [% IF c.user_exists 
+        && (
+            c.check_any_user_role('edit_object', 'edit_object_nsfw')
+            || ( c.user.id == object.user_id )
+        ) 
+    %]
+        <li>
+            <a 
+                href="/submit/[% object.type %]/edit/[% object.id %]/" 
+                class="TAN-news-comment">Edit</a>
+        </li>
+    [% END %]
+
+    <li class="TAN-menu-last">
+        [% object.picture.x %]x[% object.picture.y %]
+    </li>
+</ul>
+<div>
+    [% PROCESS index/plus_minus.tt %]
+    <a class="left" href="[% url %]">
+        <img 
+            src="[% c.config.thumb_path %]/[% md %]/[% object.picture.id %]/160" 
+            alt=""
+        />
+    </a>
+</div>

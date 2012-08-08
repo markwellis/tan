@@ -1,0 +1,42 @@
+[% css_includes.push('view', 'Profile@Comments') %]
+[% js_includes.push('nsfw-comments') %]
+<ul class="TAN-inside">
+    [%- IF index -%]
+        [%- is_picture = 0 -%]
+        [%- IF 
+            ( type == 'picture' ) 
+            && ( fancy_picture_index ) 
+        -%]
+            [%- css_includes.push('index@picture') -%]
+            [%- is_picture = 1 -%]
+        [%- END -%]
+
+        [%- FOREACH object IN index.objects -%]
+            [%- NEXT IF !object -%]
+            <li 
+                class="TAN-news
+                    [% IF loop.count % 2 %] TAN-news-alternate[% END %]"
+            >
+                [%- RAWPERL -%]
+                my $is_comment = 0;
+                if ( ref( $stash->get('object') ) eq 'TAN::Model::MySQL::Comments'){
+                    $is_comment = 1;
+                }
+                $stash->set( 'is_comment', $is_comment );
+                [% END %]
+                [%- IF is_picture -%]
+                    [%- PROCESS index/picture.tt -%]
+                [%- ELSIF is_comment -%]
+                    [%- PROCESS view/comment.tt comment=object -%]
+                [%- ELSE -%]
+                    [%- PROCESS index/object.tt -%]
+                [%- END -%]
+            </li>
+        [%- END -%]
+    [%- ELSE -%]
+        <li class="TAN-news">
+            <h1>Nothing found</h1>
+        </li>
+    [%- END -%]
+</ul>
+[%- PROCESS index/pagination.tt pager=index.pager -%]

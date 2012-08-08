@@ -1,0 +1,85 @@
+[%- css_includes.push('Cms', 'Submit') -%]
+[% js_includes.push('Submit', 'Submit@Wysiwyg') %]
+
+<ul class="TAN-inside">
+    <li class="TAN-news">
+        <form action="[% edit ? cms_page.id : 'create' %]" id="submit_form" method="post" enctype="multipart/form-data">
+            <fieldset>
+                <ul>
+                    <li>
+                        <label for="title">Page Title</label>
+                        <input 
+                            type="text" 
+                            name="title"
+                            id="title" 
+                            class="required maxLength:255"
+                            value="[% cms_page.defined ? cms_page.title : '' | html %]"
+                        />
+                    </li>
+                    <li>
+                        <label for="url">Url ( no leading / )</label>
+                        <input 
+                            type="text" 
+                            name="url"
+                            id="url" 
+                            class="required maxLength:255"
+                            value="[% cms_page.defined ? cms_page.url : '' | html %]"
+                        />
+                    </li>
+                    <li>
+                        <label for="content">Content</label>
+                        [%
+                            PROCESS lib/editor.tt editor = {
+                                name => 'content',
+                                height => '600px',
+                                required => 1,
+                                value => cms_page.defined ? cms_page.content : '',
+                            }
+                        %]
+                    </li>
+                    <li>
+                        <label for="system">System (not in menu)</label>
+                        <input 
+                            type="checkbox" 
+                            name="system"
+                            id="system" 
+                            [% cms_page.defined 
+                                ? 
+                                    ( cms_page.system == 'Y' )
+                                        ? 'checked="checked"'
+                                        : ''
+                                : ''
+                            %]
+                        />
+                    </li>
+                    <li>
+                        <label for="nowrapper">No Wrapper (plain text page)</label>
+                        <input 
+                            type="checkbox" 
+                            name="nowrapper"
+                            id="nowrapper" 
+                            [% cms_page.defined 
+                                ? 
+                                    ( cms_page.nowrapper == 'Y' )
+                                        ? 'checked="checked"'
+                                        : ''
+                                : ''
+                            %]
+                        />
+                    </li>
+                    <li>
+                        <label for="comment">Comment</label>
+                        <input 
+                            type="text" 
+                            name="comment"
+                            id="comment" 
+                            class="required maxLength:255"
+                        />
+                    </li>
+                </ul>
+                <input type="submit" value="[% edit ? 'Edit' : 'Create' %]" />
+                [% IF edit %]<input type="submit" name="delete" value="Delete" />[% END %]
+            </fieldset>
+        </form>
+    </li>
+</ul>

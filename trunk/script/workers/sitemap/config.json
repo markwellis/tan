@@ -1,0 +1,11 @@
+{
+    "job_servers": ["127.0.0.1:4730"],
+    "sitemap_url": "http://thisaintnews.com/sitemap",
+    "search_engine_ping_urls": [
+        "http://submissions.ask.com/ping?sitemap=",
+        "http://www.google.com/webmasters/sitemaps/ping?sitemap=",
+        "http://search.yahooapis.com/SiteExplorerService/V1/updateNotification?appid=IRxERwfV34EV44V9LTrJsENRs0V4JlaxrmVCr93OXcpqgzdQqUVRjKIo0FrabG1g&url=",
+        "http://webmaster.live.com/ping.aspx?siteMap=",
+        "http://api.moreover.com/ping?u="
+    ]
+}

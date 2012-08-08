@@ -1,0 +1,152 @@
+[% css_includes.push('Submit') %]
+[% js_includes.push('Submit') %]
+
+[% module = c.model('Submit').modules.${type} %]
+
+[%# try alias %]
+[% IF !module %]
+    [% FOREACH modu IN c.model('Submit').modules.values() %]
+        [% NEXT IF !modu.config.alias.defined() %]
+        [% IF type == modu.config.alias.name %]
+            [% module = modu %]
+            [% LAST %]
+        [% END %]
+    [% END %]
+    [% RETURN IF !module %]
+[% END %]
+<ul class="TAN-inside">
+    <li class="TAN-news">
+    <form action="post" id="submit_form" method="post" enctype="multipart/form-data">
+        <fieldset>
+            <ul>
+
+[% params = c.flash.params %]
+[% schema = module.config.schema %]
+
+[% FOREACH key IN schema.keys %]
+    [% field = {
+        'id' => key,
+        'label' => schema.${key}.label || key,
+        'type' => schema.${key}.type,
+        'required' => schema.${key}.required,
+        'length' => schema.${key}.length,
+    } %]
+
+    [% IF ( 
+        edit
+        && object
+        && object.${type}
+    ) %]
+        [% value = '' %]
+        [% IF (
+            ( type == 'picture' )
+            && ( key == 'remote' ) 
+        ) %]
+            [% md = object.picture.id - ( object.picture.id % 1000 ) %]
+            [% value = c.config.thumb_path _ "/${md}/${object.picture.id}/600" %]
+            [% field.ignore = 1 %]
+        [% ELSIF key == 'upload' %]
+            [% value = '' %]
+            [% field.ignore = 1 %]
+        [% ELSIF key == 'tags' %]
+            [% RAWPERL %]
+                my @tags = map( $_->tag, $stash->get('object')->tags->all );
+                $stash->set('value', join( ' ', @tags ) );
+            [% END %]
+        [% ELSIF ( 
+            ( type == 'poll' )
+            && ( key == 'end_date' ) 
+        ) %]
+            [% value = object.${type}.ends || 'Ended' %]
+            [% field.disabled = 1 %]
+        [% ELSE %]
+            [% IF object.${type}.can("${key}_nobb") %]
+                [% newkey = "${key}_nobb" %]
+                [% value = object.${type}.${newkey} %]
+            [% ELSE %]
+                [% value = object.${type}.${key} %]
+            [% END %]
+        [% END %]
+    [% END %]
+    [% field.value = params.${key} || value || schema.${key}.default || '' %]
+
+    [% IF !field.ignore %]
+        <li>
+            [% TRY %]
+                [% PROCESS "submit/${field.type}.tt" %]
+            [% CATCH %]
+                [% PROCESS 'submit/default.tt' %]
+            [% END %]
+        </li>
+    [% ELSIF key == 'remote' %]
+        <li>
+            <img alt="[% object.picture.id %]" src="[% field.value | html %]" />
+        </li>
+    [% END %]
+[% END %]
+[% IF (
+    edit 
+    && c.check_any_user_role('delete_object', 'edit_object', 'edit_object_nsfw')
+    && ( object.user_id != c.user.id )
+) %]
+    [% IF c.check_any_user_role('edit_object') %]
+        [% RAWPERL %]
+            my $c = $stash->get('c');
+
+            my $type = $stash->get('type');
+            my $module = $c->model('Submit')->modules->{ $type };
+
+            my $module_type = ref( $module );
+            $module_type =~ s/TAN::Submit::Module:://;
+
+            my $alias = $module->config->{'alias'};
+            my @types = ( lcfirst( $module_type ) );
+            if ( defined( $alias ) ){
+                push( @types, $alias->{'name'} );
+            }
+            $stash->set( 'change_types', \@types );
+        [% END %]
+        [% IF change_types.size > 1 %]
+            <label for="change_type">Change type</label>
+            <select name="change_type" id="change_type">
+                [% FOREACH module_type IN change_types %]
+                    <option value="[% module_type %]" [% IF module_type == type %]selected="selected"[% END %]>
+                        [% module_type %]
+                    </option>
+                [% END %]
+            </select>
+        [% END %]
+    [% END %]
+    [% js_includes.push( 'AdminReason' ) %]
+    <li>
+        <label for="_edit-reason">Reason for edit</label>
+        <input 
+            type="text" 
+            name="_edit-reason"
+            id="_edit-reason" 
+            class="required"
+        />
+    </li>
+[% END %]
+
+[% nsfw = 0 %]
+[% IF object.defined() %]
+    [% nsfw = ( object.nsfw == 'Y' ) ? 1 : 0 %] 
+[% END %]
+[% nsfw = params.nsfw || nsfw || 0 %]
+
+                <li>
+                    <label for="nsfw">Not Safe for Work?</label>
+                    <input type="checkbox" name="nsfw" id="nsfw" [% nsfw ? 'checked="checked"' : '' %]/>
+                </li>
+            </ul>
+            <input type="submit" value="Submit [% type | ucfirst %]"/>
+            <input type="hidden" name="type" value="[% location %]" />
+            [% IF ( edit && c.check_user_roles('delete_object') ) %]
+                <input type="submit" value="Delete" name="delete" />
+            [% END %]
+        </fieldset>
+    </form>
+
+    </li>
+</ul>

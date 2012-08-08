@@ -1,0 +1,6 @@
+[% title_url = "/redirect/external/${object.id}" %] 
+[% PROCESS view/_view.tt %]
+
+<div class="TAN-video">
+    [% object.video.url | embed_url %]
+</div>

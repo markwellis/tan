@@ -1,0 +1,32 @@
+label{
+    width:180px;
+    float:left;
+}
+
+.TAN-news ul li{
+    list-style:none;
+    padding-bottom:10px;
+}
+
+.TAN-news{
+    max-height:none !important;
+}
+
+.TAN-news .newsImg{
+    float:left;
+    height:100px;
+    padding-right:15px;
+    width:100px;
+}
+
+.TAN-news h2{
+    margin:0px 0px 10px 0px;
+}
+
+.TAN-news > form > fieldset > ul{
+    padding-left:0px;
+}
+
+#recaptcha_image img {
+    width: 180px;
+}

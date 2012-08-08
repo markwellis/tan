@@ -1,0 +1,9 @@
+[% css_includes.push('Donate') %]
+
+<ul class="TAN-inside">
+    <li class="TAN-news">
+        <div>
+        payment canceled
+        </div>
+    </li>
+</ul>

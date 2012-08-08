@@ -1,0 +1,13 @@
+<div>
+    <a 
+        [%- IF object.meplus %]class="TAN-tintan-selected"[% END -%] 
+        href="/view/[% type %]/[% object.${type}.id %]/_plus"
+        title="TIN"
+    >TIN ([% object.get_column('plus') %])</a>
+    [% object.score -%]
+    <a 
+        [%- IF object.meminus %]class="TAN-tintan-selected"[% END -%]
+        href="/view/[% type %]/[% object.${type}.id %]/_minus"
+        title="TAN"
+    >TAN ([% object.get_column('minus') %])</a>
+</div>

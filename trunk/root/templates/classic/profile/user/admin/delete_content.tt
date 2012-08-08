@@ -1,0 +1,35 @@
+[% css_includes.push('Profile') %]
+
+<ul class="TAN-inside">
+    <li class="TAN-profile-user-admin-form">
+        <h2>Delete Content</h2>
+        <form action="delete_content" method="post">
+            <fieldset>
+                <ul>
+                    [% IF c.check_user_roles('edit_comment') %]
+                        <li>
+                            <input type="checkbox" name="comments" value="comments" id="delete_comments" />
+                            <label for="delete_comments">Comments</label>
+                        </li>
+                    [% END %]
+                    [% IF c.check_user_roles('delete_object') %]
+                        [% FOREACH object_type IN c.model('Object').public %]
+                            <li>
+                                <input type="checkbox" name="objects" value="[% object_type %]" id="delete_[% object_type %]" />
+                                <label for="delete_[% object_type %]">[% object_type | ucfirst %]s</label>
+                            </li>
+                        [% END %]
+                    [% END %]
+                </ul>
+                <label for="reason">Reason</label>
+                <input
+                    type="text"
+                    id="reason"
+                    name="reason" 
+                    style="width:100%;"
+                />
+                <input type="submit" value="Delete" />
+            </fieldset>
+        </form>
+    </li>
+</ul>

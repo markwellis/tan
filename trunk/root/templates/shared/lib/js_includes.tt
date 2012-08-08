@@ -1,0 +1,17 @@
+[%- js_inc_done = {} -%]
+[% FOREACH js_include IN js_includes -%]
+    [% IF !js_inc_done.$js_include %]
+        [% IF js_include.match('^(?:http|/static)') %]
+            <script type="text/javascript" src="[% js_include %]"></script>
+        [% ELSE %]
+            [%#replace @ with / so we can get the file mod time %]
+            [%- js_file = js_include.replace('@', '/') -%]
+            [%- m_time = "${c.path_to('root')}${theme_settings.js_path}/${js_file}.js" | file_mtime -%]
+            <script 
+                type="text/javascript" 
+                src="[% c.config.jscache_path %]/[% theme_settings.name %]_[% js_include %]_[% m_time %].js"
+            ></script>
+        [% END %]
+        [%- js_inc_done.$js_include = 1 -%]
+    [% END %]
+[% END %]

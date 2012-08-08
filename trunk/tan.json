@@ -1,0 +1,131 @@
+{
+    "name": "TAN",
+    "default_view": "TT",
+    "encoding": "UTF-8",
+
+    "using_frontend_proxy": 1,
+
+    "static_path": "/static",
+    "avatar_path": "/static/user/avatar",
+    "pic_path": "/static/user/pics",
+
+    "cache_path": "/static/cache",
+    "csscache_path": "/static/cache/css",
+    "jscache_path": "/static/cache/js",
+    "thumb_path": "/static/cache/thumbs",
+
+    "recaptcha_public_key": "6Lf1icoSAAAAAL2RmjqU2q30R3PFXYnT0X6SOM4Y",
+    "recaptcha_private_key": "6Lf1icoSAAAAAF711Fjic0mPXzCJ1oejOAOJ2O6U",
+
+    "email": ["Sendmail"],
+
+    "paypal_donate_address": "donate@thisaintnews.com",
+    
+    "donate": {
+        "cost": 3,
+        "currency": "GBP"
+    },
+
+    "Plugin::Authentication": {
+        "use_session": 1,
+        "default": {
+            "credential": {
+                "class": "Password",
+                "password_type": "hashed",
+                "password_hash_type": "SHA-512"
+            },
+            "store": {
+                "class": "DBIx::Class",
+                "user_model": "MySQL::User",
+                "use_userdata_from_session": 1,
+                "user_role_user_field": "user_id",
+                "role_relation": "map_user_role",
+                "role_field": "role"
+            }
+        }
+    },
+
+    "Plugin::Cache": {
+        "backend": {
+            "class": "Cache::Memcached::libmemcached",
+            "debug": 2,
+            "servers": [
+                "127.0.0.1:11211"
+            ]
+        }
+    },
+
+    "Plugin::Session": {
+        "expires": 1209600,
+        "storage": "/tmp/tan_session_cache"
+    },
+
+    "Model::Search": {
+        "args" : {
+            "index_path": "/mnt/stuff/TAN/search_index",
+            "schema": [
+                {
+                    "name": "id",
+                    "type": "string"
+                },{
+                    "name": "title", 
+                    "boost": 3,
+                    "stored": 0
+                },{
+                    "name": "description",
+                    "stored": 0
+                },{
+                    "name": "content",
+                    "stored": 0
+                },{
+                    "name": "type",
+                    "type": "string"
+                },{
+                    "name": "nsfw",
+                    "stored": 0
+                },{
+                    "name": "date",
+                    "type": "int32",
+                    "indexed": 0,
+                    "stored": 0,
+                    "sortable": 1
+                },{
+                    "name": "username",
+                    "stored": 0
+                },{
+                    "name": "tag",
+                    "stored": 0
+                }
+            ],
+            "search_fields": [
+                "title", 
+                "description",
+                "content",
+                "tag"
+            ],
+            "search_boolop": "AND",
+            "entries_per_page": 27
+        }
+    },
+    
+    "Model::Stemmer": {
+        "args" : {
+            "lang": "en",
+            "encoding": "UTF-8"
+        }
+    },
+
+    "Model::Gearman": {
+        "job_servers": [
+            "127.0.0.1:4730"
+        ]
+    },
+
+    "Model::PayPal": {
+        "email": "seller_1327839645_biz@howmanykillings.com",
+        "username": "seller_1327839645_biz_api1.howmanykillings.com",
+        "password": "1327839669",
+        "signature": "AFcWxV21C7fd0v3bYYYRCpSSRl31AKIB6AeXNz9D9kURB.ByAKFJ2lsA ",
+        "sandbox":  1
+    }
+}
