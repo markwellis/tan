@@ -41,7 +41,7 @@ sub _build_private{
 sub valid_public_object{
     my ( $self, $type ) = @_;
     
-    return grep( /^${type}$/, @{$self->public} );
+    return grep( /^\Q${type}\E$/, @{$self->public} );
 }
 
 __PACKAGE__->meta->make_immutable;
