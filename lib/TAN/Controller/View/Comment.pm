@@ -78,7 +78,7 @@ sub ajax_comment: Private{
     $c->stash(
         'comment' => $comment_rs,
         'template' => 'view/comment.tt',
-        'view_comments' => 1,
+        'view_comments' => 1, #enable quote link
     );
     $c->forward( $c->view('NoWrapper') );
 }
