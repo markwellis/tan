@@ -81,6 +81,11 @@ sub spam_twitter{
 
     my $nsfw = '';
     my $title = $args->{'title'};
+    my @tags = @{ $args->{'tags'} };
+
+    foreach my $tag ( @tags ){
+        $title =~ s/$tag/#$tag/;
+    }
 
     if ( $args->{'nsfw'} eq 'Y' ){
         $nsfw = ' #NSFW';
