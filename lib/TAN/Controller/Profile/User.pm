@@ -162,7 +162,7 @@ sub comment: PathPart('comment') Chained('user') Args(0){
         'page_title' => $c->stash->{'user'}->username . "'s Comments",
         'index' => $c->model('Index')->indexinate($c, \@comments, $pager),
         'template' => 'index.tt',
-        'can_rss' => 1,
+        'can_rss' => 0,
     );
 }
 
