@@ -8,10 +8,9 @@ use Tie::Hash::Indexed;
 sub create_comment {
     my ( $self, $object_id, $user_id, $comment ) = @_;
 
-#this could be a trigger
     my $comment_no = $self->search({
         'user_id' => $user_id,
-    })->count;
+    })->count + 1;
 
     my $comment_rs = $self->create({
         'user_id' => $user_id,
