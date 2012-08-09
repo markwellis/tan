@@ -16,6 +16,7 @@
 }
 
 .TAN-recent-comments-page > li > ul > li > a{
+    display:block;
     color:#333;
-    padding:2px 0px;
+    padding:3px 0px;
 }

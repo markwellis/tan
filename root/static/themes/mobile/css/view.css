@@ -8,6 +8,16 @@ img{
     margin-right:5px;
 }
 
+.TAN-comment_inner{
+    padding:5px 0px 5px 1px;
+}
+
+.TAN-comment-info{
+    padding:0px;
+    margin:0px;
+    list-style:none;
+}
+
 /* quote stuff */
 
 .quoted_username{
