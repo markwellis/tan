@@ -1,19 +1,12 @@
 <p>
-    <a title="TAN" href="/index/all/0/">Home</a>
-    | <a title="TAN" href="/recent_comments/">Recent Comments</a>
+    <a title="TAN" href="/recent_comments/">Recent Comments</a> |
     [%- IF c.user_exists %]
-        | <a href="/login/logout/">Logout</a>
-    [%- END %]
-    |
-    [%- IF c.user_exists %]
-        <a href="[% c.user.profile_url %]">Profile</a> |
+        <a href="/login/logout/">Logout</a> |
     [%- ELSE -%]
         <a href="/login/">Login</a> | 
     [%- END %]
     <a href="/filter/" class="nsfw_filter">[% c.nsfw ? 'Enable' : 'Disable' %] filter</a> | 
-    <a href="/adminlog/">Admin Log</a> |
-    <a class="mibbit" href="/chat/">Chat</a> |
-    <a href="/faq/">FAQ</a>                    
+    <a href="/faq/">FAQ</a>
 </p>
 [% PROCESS lib/cms_menu.tt %]
 <form class="TAN-menu-top-search" action="/search/" method="get">
