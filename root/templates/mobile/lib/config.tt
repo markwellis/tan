@@ -1,5 +1,7 @@
 [%-
-    js_includes = [];
+    js_includes = [
+        'menu',
+    ];
     
     css_includes = [
        'shared',

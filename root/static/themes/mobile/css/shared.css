@@ -290,11 +290,10 @@ fieldset{
     color:#300000;
 }
 
-.TAN-type-forum:hover, .TAN-menu-tab-forum-selected, .TAN-menu-forum > li > a:hover{
-    color:#fff !important;
-    background-color:#300000 !important;
-}
-
 #TAN-bottom{
     clear:both;
+}
+
+.none{
+    display:none;
 }
