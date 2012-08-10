@@ -3,6 +3,24 @@
 
 [%- menu_tab_names.push('All') -%]
 [%- menu_tab_values.push('all') -%]
+
+<script type="text/javascript">
+function change_menu( new_tab ){
+    if ( new_tab === selected_tab ){
+        return false;
+    }
+
+    document.getElementById("TAN-menu-" + selected_tab ).className = "none";
+    document.getElementById("TAN-menu-" + new_tab ).className = "TAN-menu-" + new_tab;
+    
+    document.getElementById("TAN-menu-tab-" + selected_tab).className = "TAN-menu-tab TAN-type-" + selected_tab;
+    document.getElementById("TAN-menu-tab-" + new_tab).className += " TAN-menu-tab-" + new_tab + "-selected";
+
+    selected_tab = new_tab;
+    return false;
+}
+</script>
+
 [%- FOREACH menu_item IN c.model('Object').public -%]
     [%- menu_tab_name = "${menu_item}s" | ucfirst -%]
     [%- menu_tab_names.push( menu_tab_name ) -%]
@@ -15,13 +33,17 @@
             [%- value = menu_tab_values.${count} -%] 
             <a 
                 class="TAN-menu-tab TAN-type-[% value %] [% IF location == value %]TAN-menu-tab-[% location %]-selected[% END %]"
+                id="TAN-menu-tab-[% value %]"
                 href="/index/[% value %]/0/"
                 onclick="return change_menu('[% value %]')">[% name %]</a>
             [% IF !loop.last %] |[% END %]
         [%- END -%]
     </li>
     [%- FOREACH value IN menu_tab_values -%]
-        <li class="TAN-menu-[% value %] [% IF location != value %] none[% END %]">
+        <li 
+            class="TAN-menu-[% value %] [% IF location != value %] none[% END %]"
+            id="TAN-menu-[% value %]"
+        >
             [%- IF value != 'all' -%]
                 <a href="/submit/[% value %]/">Submit</a> |
             [%- END -%]
@@ -43,6 +65,6 @@
 </ul>
 <script type="text/javascript">
 //<![CDATA[
-    selected_menu_type = '[% location %]';
+    selected_tab = '[% location %]';
 //]]>
 </script>

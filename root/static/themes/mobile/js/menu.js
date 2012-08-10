@@ -1,34 +1,14 @@
-/*
-    check .TAN-type-{$name}
-    add class .none to .TAN-menu-{$selected_menu_type}
-    set $selected_menu_type = $name
-    remove class .none from .TAN-menu-{$selected_menu_type}
-*/
-
-function change_menu( tab ){
-    if ( tab === selected_menu_type ){
+function change_menu( new_tab ){
+    if ( new_tab === selected_tab ){
         return false;
     }
 
-    var selected_menu = getElementByClass("TAN-menu-" + selected_menu_type );
-    var new_menu = getElementByClass("TAN-menu-" + tab );
-    selected_menu.className += ' none';
-    new_menu.className = "TAN-menu-" + tab;
+    document.getElementById("TAN-menu-" + selected_tab ).className = "none";
+    document.getElementById("TAN-menu-" + new_tab ).className = "TAN-menu-" + new_tab;
     
-    var new_tab = getElementByClass("TAN-type-" + tab);
-    var selected_tab = getElementByClass("TAN-type-" + selected_menu_type);
-    new_tab.className += " TAN-menu-tab-" + tab + "-selected";
-    selected_tab.className = "TAN-menu-tab TAN-type-" + selected_menu_type;
+    document.getElementById("TAN-menu-tab-" + selected_tab).className = "TAN-menu-tab TAN-type-" + selected_tab;
+    document.getElementById("TAN-menu-tab-" + new_tab).className += " TAN-menu-tab-" + new_tab + "-selected";
 
-    selected_menu_type = tab;
+    selected_tab = new_tab;
     return false;
-}
-
-function getElementByClass( className ){
-    var elems = document.getElementsByTagName('*'), i;
-    for (i in elems){
-        if((" " + elems[i].className + " ").indexOf(" " + className + " ") > -1){
-            return elems[i];
-        }
-    }   
 }
