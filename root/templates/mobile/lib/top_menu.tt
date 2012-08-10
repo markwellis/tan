@@ -6,7 +6,8 @@
         <a href="/login/">Login</a> | 
     [%- END %]
     <a href="/filter/" class="nsfw_filter">[% c.nsfw ? 'Enable' : 'Disable' %] filter</a> | 
-    <a href="/faq/">FAQ</a>
+    <a href="/faq/">FAQ</a> |
+    <a href="#TAN-bottom">Down</a>
 </p>
 [% PROCESS lib/cms_menu.tt %]
 <form class="TAN-menu-top-search" action="/search/" method="get">
