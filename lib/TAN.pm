@@ -131,20 +131,22 @@ sub mobile{
 sub nsfw{
     my ($c, $value) = @_;
     
-    if (defined($value)){
+    if ( defined( $value ) ){
         $c->res->cookies->{'nsfw'} = {
             'value' => $value,
-            'expires' => '+3Y',
         };
 
         return $value;
     }
 
-    my $nsfw_res = $c->res->cookies->{'nsfw'};
-    my $nsfw_req = $c->req->cookies->{'nsfw'};
+    my $nsfw_res_val = 0;
+    my $nsfw_req_val = 0;
 
-    my $nsfw_res_val = $nsfw_res->value if ( defined($nsfw_res) );
-    my $nsfw_req_val = $nsfw_req->value if ( defined($nsfw_req) );
+    if ( my $nsfw_res = $c->res->cookies->{'nsfw'} ){
+        $nsfw_res_val = $nsfw_res->{'value'};
+    } elsif ( my $nsfw_req = $c->req->cookie('nsfw') ){
+        $nsfw_req_val = $nsfw_req->value;
+    }
 
     return $nsfw_res_val || $nsfw_req_val || 0;
 }
