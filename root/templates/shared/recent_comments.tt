@@ -32,7 +32,7 @@
                     <li>
                         <a 
                             href="[% comment.url %]#comment[% comment.comment_id %]"
-                        >[% comment.username | html %]: [% short_comment | strip_tags %]</a>
+                        >[% comment.username | html %]: [% short_comment | strip_tags | html %]</a>
                     </li>
                 [%- END -%]
             </ul>
