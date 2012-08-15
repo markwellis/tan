@@ -57,7 +57,7 @@
 
     "Plugin::Session": {
         "expires": 1209600,
-        "storage": "/tmp/tan_session_cache"
+        "storage": "/mnt/stuff/TAN/sessions"
     },
 
     "Model::Search": {
