@@ -79,7 +79,7 @@ function quote_link(link){
         el.setProperty('src', src);
     });
 
-    comment = '[quote user=' + username + ']' + quote + '[/quote]' + "\n<br /><br />";
+    comment = '[quote user=' + username + ']' + quote + '[/quote]' + "<br /><br /><br />";
 
     tinyMCE.get('comment').execCommand("mceInsertContent", false, comment);
 }
