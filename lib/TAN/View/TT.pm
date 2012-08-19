@@ -37,6 +37,19 @@ __PACKAGE__->config({
 
 sub render{
     my ( $self, $c, @args ) = @_;
+    
+    if ( $c->mobile ){
+        $c->stash->{'theme_settings'}->{'name'} = 'mobile';
+    }
+    
+    my $path = $c->config->{'static_path'} . "/themes/" . $c->stash->{'theme_settings'}->{'name'};
+
+    $c->stash->{'theme_settings'} = {
+        %{ $c->stash->{'theme_settings'} },
+        'css_path' => "${path}/css",
+        'js_path' => "${path}/js",
+        'image_path' => "${path}/images",
+    };
 
     #set this here and not in config so we can use correct theme
     $self->include_path( [
