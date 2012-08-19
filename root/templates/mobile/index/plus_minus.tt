@@ -1,13 +1,19 @@
+[%- js_includes.push('Plus-Minus') -%]
+
 <div>
     <a 
         [%- IF object.meplus %]class="TAN-tintan-selected"[% END -%] 
         href="/view/[% type %]/[% object.${type}.id %]/_plus"
         title="TIN"
+        onclick="return tin_tan('[% object.id %]', this)"
+        id="[% object.id %]:tin"
     >TIN ([% object.get_column('plus') %])</a>
-    [% object.score -%]
+    <span id="[% object.id %]:score">[% object.score -%]</span>
     <a 
         [%- IF object.meminus %]class="TAN-tintan-selected"[% END -%]
         href="/view/[% type %]/[% object.${type}.id %]/_minus"
         title="TAN"
+        onclick="return tin_tan('[% object.id %]', this)"
+        id="[% object.id %]:tan"
     >TAN ([% object.get_column('minus') %])</a>
 </div>

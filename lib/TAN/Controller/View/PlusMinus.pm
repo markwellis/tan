@@ -46,7 +46,7 @@ sub add_plus_minus: Private{
             }) );
         } else {
         #redirect
-            $c->res->redirect( $object->url, 303 );
+            $c->res->redirect( defined($c->req->referer) ? $c->req->referer : $object->url , 303 );
         }
     } else {
     #prompt for login
