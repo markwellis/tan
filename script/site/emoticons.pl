@@ -9,17 +9,19 @@ makes a html file for the emoticons tiny-mce plugin
 my $header = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title>{#emotions_dlg.title}</title>
-        <script type="text/javascript" src="../../tiny_mce_popup.js"></script>
-            <script type="text/javascript" src="js/emotions.js?r=7"></script>
-            </head>
-            <body style="display: none">
-                <div align="center">
-                        <div class="title">{#emotions_dlg.title}:<br /><br /></div>
+	<title>{#emotions_dlg.title}</title>
+	<script type="text/javascript" src="../../tiny_mce_popup.js"></script>
+	<script type="text/javascript" src="js/emotions.js"></script>
+</head>
+<body style="display: none" role="application" aria-labelledby="app_title">
+<span style="display:none;" id="app_title">{#emotions_dlg.title}</span>
+<div align="center">
+	<div class="title">{#emotions_dlg.title}:<br /><br /></div>
 
-                                <table border="0" cellspacing="0" cellpadding="4">';
+	<table id="emoticon_table" role="presentation" border="0" cellspacing="0" cellpadding="4">';
 
 my $footer = "</table>
+    <div>{#emotions_dlg.usage}</div>
     </div>
     </body>
     </html>";
@@ -36,7 +38,7 @@ my $patch_command = "sed -i -e \"s/tinyMCEPopup\\.getWindowArg('plugin_url') + '
 my $patch_popup_size = '../../root/static/tiny_mce/plugins/emotions/editor_plugin.js';
 #width and height are hacked, lookup proper values in js
 my $patch_poppup_command0 = "sed -i -e \"s/width:250/width:650/\" ${patch_popup_size}";
-my $patch_poppup_command1 = "sed -i -e \"s/height:160/height:320/\" ${patch_popup_size}";
+my $patch_poppup_command1 = "sed -i -e \"s/height:160/height:325/\" ${patch_popup_size}";
 `$patch_poppup_command0`;
 `$patch_poppup_command1`;
 
@@ -56,7 +58,7 @@ foreach my $smiley (@smilies){
     $name =~ s/\..*?$//;
     $smiley = "/static/smilies/${smiley}";
 
-    $middle .= "<td><a href=\"javascript:EmotionsDialog.insert('${smiley}','emotions_dlg.${name}');\"><img src=\"${smiley}\" border=\"0\" alt=\"{#emotions_dlg.${name}}\" title=\"{#emotions_dlg.${name}}\" /></a></td>\n";
+    $middle .= qq|<td><a class="emoticon_link" role="button" title="{#emotions_dlg.${name}}. {#emotions_dlg.usage}" href="javascript:EmotionsDialog.insert('${smiley}','emotions_dlg.${name}');"><img src="${smiley}" border="0" alt="{#emotions_dlg.${name}}. {#emotions_dlg.usage}" /></a></td>|;
 
     if ( ($i > 0) && !($i % $columns) ){
         $middle .= "</tr>";
