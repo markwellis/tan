@@ -1,0 +1,37 @@
+[% comment_id = comment.id %]
+[% ajax = c.req.param('ajax') %]
+<ul[% IF !ajax %] class="TAN-inside"[% END %]>
+    <li[% IF !ajax %] class="TAN-news" style="max-height:500px"[% END %]>
+        <form method="post" action="/[% c.req.path %]">
+            <fieldset>
+                [% 
+                    PROCESS 'lib/editor.tt' editor = {
+                        'name' => "edit_comment_${comment_id}",
+                        'value' => comment.comment_nobb,
+                        'height' => '300px',
+                    }
+                %]
+                [% IF  
+                    c.check_user_roles('edit_comment') 
+                    && ( comment.user.id != c.user.id )
+                %]
+                    [% IF ajax %]
+                        <input type="hidden" name="_edit-reason" id="_edit-reason" />
+                    [% ELSE %]
+                        <label for="_edit-reason">Reason for edit</label>
+                        <input type="text" name="_edit-reason" id="_edit-reason" />
+                    <br />
+                    [% END %]
+                [% END %]
+                [% IF c.mobile %]<input type="hidden" name="mobile" mobile="1" value="1" />[% END %]
+                <input type="submit" value="Edit" id="edit[% comment_id %]" name="edit[% comment_id %]" />
+                [% IF  
+                    c.check_user_roles('edit_comment') 
+                    && ( comment.user.id != c.user.id )
+                %]
+                    <input type="submit" value="Delete" id="delete[% comment_id %]" name="delete[% comment_id %]" />
+                [% END %]
+            </fieldset>
+        </form>
+    </li>
+</ul>
