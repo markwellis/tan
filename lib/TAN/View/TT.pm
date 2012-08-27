@@ -91,8 +91,7 @@ sub strip_tags{
 }
 
 my $embedder = new HTML::Video::Embed({
-    'width' => 500,
-    'height' => 410,
+    'class' => "TAN-video-embed",
 });
 sub embed_url{
     return $embedder->url_to_embed( shift );

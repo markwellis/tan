@@ -70,8 +70,7 @@ see L<HTML::Embed::Video>
 my $youtube_validate_reg = qr/^[a-zA-Z0-9-_]{11}$/;
 sub new {
     my $embedder = new HTML::Video::Embed({
-        'width' => 500,
-        'height' => 410,
+        'class' => "TAN-video-embed",
     });;
 
     return Parse::BBCode->new({

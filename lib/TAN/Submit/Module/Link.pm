@@ -9,7 +9,9 @@ use Data::Validate::URI;
 use Tie::Hash::Indexed;
 use HTML::Video::Embed;
 
-my $embedder = HTML::Video::Embed->new;
+my $embedder = HTML::Video::Embed->new({
+    class => "TAN-video-embed"
+});
 
 sub _build_config{
 
