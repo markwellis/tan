@@ -35,10 +35,9 @@ sub vcl_recv {
 
 #leach protection
     if ( 
-        req.url ~ "^/static/user/pics/.*$|^/static/cache/thumbs/.*$|^/static/user/pics/.*$"
+        req.url ~ "^/static/user/pics/.*$|^/static/cache/thumbs/.*$"
         && req.http.referer !~ "thisaintnews.com"
         && req.http.referer !~ "hub00.howmanykillings.com"
-#        && req.http.referer !~ "feeds.feedburner.com"
         && req.http.user-agent !~ "redditbot" #reddit bastards
         && req.http.user-agent !~ "googlebot"
         && req.http.user-agent !~ "facebookexternalhit"
@@ -51,16 +50,23 @@ sub vcl_recv {
         );
         return(pass);
     }
+    
+    if ( 
+        req.url ~ "^/static/smilies/.*$"
+        && req.http.referer !~ "thisaintnews.com"
+        && req.http.referer !~ "hub00.howmanykillings.com"
+    ){
+        set req.url = regsub(
+            req.url,
+            "^.*$",
+            "/static/images/blank.gif"
+        );
+        return(pass);
+    }
 
 	if ( req.http.host !~ "^thisaintnews.com$" ){
 		return(pass);
 	}
-
-#    if ( req.http.user-agent !~ "FeedBurner" ){
-#        if ( req.url ~ "^/index/(all|link|blog|picture|poll)/[0|1]/\?rss=1" ){
-#            error 750;
-#        }   
-#    }
 
     if (
     	req.url ~ "^/$" 
@@ -177,29 +183,16 @@ sub vcl_error{
         } elsif (req.url ~ "^/favicon.ico"){
     		set obj.http.Location = "/static/favicon.ico";
         }
-#        } elsif (req.url ~ "^/index/all/0/\?rss=1"){
-#            set obj.http.Location = "http://feeds.feedburner.com/Tan-PromotedAll";
-#        } elsif (req.url ~ "^/index/all/1/\?rss=1"){
-#            set obj.http.Location = "http://feeds.feedburner.com/Tan-UpcomingAll";
-#        } elsif (req.url ~ "^/index/link/0/\?rss=1"){
-#            set obj.http.Location = "http://feeds.feedburner.com/Tan-PromotedLinks";
-#        } elsif (req.url ~ "^/index/link/1/\?rss=1"){
-#            set obj.http.Location = "http://feeds.feedburner.com/Tan-UpcomingLinks";
-#        } elsif (req.url ~ "^/index/blog/0/\?rss=1"){
-#            set obj.http.Location = "http://feeds.feedburner.com/Tan-PromotedBlogs";
-#        } elsif (req.url ~ "^/index/blog/1/\?rss=1"){
-#            set obj.http.Location = "http://feeds.feedburner.com/Tan-UpcomingBlogs";
-#        } elsif (req.url ~ "^/index/picture/0/\?rss=1"){
-#            set obj.http.Location = "http://feeds.feedburner.com/Tan-PromotedPictures";
-#        } elsif (req.url ~ "^/index/picture/1/\?rss=1"){
-#            set obj.http.Location = "http://feeds.feedburner.com/Tan-UpcomingPictures";
-#        } elsif (req.url ~ "^/index/poll/0/\?rss=1"){
-#            set obj.http.Location = "http://feeds.feedburner.com/Tan-PromotedPolls";
-#        } elsif (req.url ~ "^/index/poll/1/\?rss=1"){
-#            set obj.http.Location = "http://feeds.feedburner.com/Tan-UpcomingPolls";
-#        }
 
         set obj.status = 301;
+        return(deliver);
+    }
+
+    if ( 
+        obj.status == 404 
+        && req.url ~ "^/static/smilies/.*$"
+    ){
+    	set obj.http.Location = "/static/images/blank.gif";
         return(deliver);
     }
 }
