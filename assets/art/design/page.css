@@ -1,141 +1,10 @@
-/* all */
-
-.TAN-type-all, .TAN-menu-all > li > a{
-    color:#777;
-}
-
-.TAN-type-all:hover, .TAN-menu-tab-all-selected, .TAN-menu-all > li > a:hover{
-    color:#fff !important;
-    background-color:#777 !important;
-}
-
-/* link */
-
-.TAN-type-link, .TAN-menu-link > li > a{
-    color:#066ec9;
-}
-
-.TAN-type-link:hover, .TAN-menu-tab-link-selected, .TAN-menu-link > li > a:hover{
-    color:#fff !important;
-    background-color:#066ec9 !important;
-}
-
-/* blog */
-
-.TAN-type-blog, .TAN-menu-blog > li > a{
-    color:#008000;
-}
-
-.TAN-type-blog:hover, .TAN-menu-tab-blog-selected, .TAN-menu-blog > li > a:hover{
-    color:#fff !important;
-    background-color:#008000 !important;
-}
-
-/* picture */
-
-.TAN-type-picture, .TAN-menu-picture > li > a{
-    color:#d61d00;
-}
-
-.TAN-type-picture:hover, .TAN-menu-tab-picture-selected, .TAN-menu-picture > li > a:hover{
-    color:#fff !important;
-    background-color:#d61d00 !important;
-}
-
-/* poll */
-
-.TAN-type-poll, .TAN-menu-poll > li > a{
-    color:#002366;
-}
-
-.TAN-type-poll:hover, .TAN-menu-tab-poll-selected, .TAN-menu-poll > li > a:hover{
-    color:#fff !important;
-    background-color:#002366 !important;
-}
-
-/* video */
-
-.TAN-type-video, .TAN-menu-video > li > a{
-    color:#800000;
-}
-
-.TAN-type-video:hover, .TAN-menu-tab-video-selected, .TAN-menu-video > li > a:hover{
-    color:#fff !important;
-    background-color:#800000 !important;
-}
-
-/* forum */
-
-.TAN-type-forum, .TAN-menu-forum > li > a{
-    color:#300000;
-}
-
-.TAN-type-forum:hover, .TAN-menu-tab-forum-selected, .TAN-menu-forum > li > a:hover{
-    color:#fff !important;
-    background-color:#300000 !important;
-}
-
-/* plus minus */
-
-.TAN-plusminus{
-    text-align:center;
-    font-size:1.4em !important;
-    font-weight:bold;
-    width:60px;
-}
-
-.TAN-plus-wrapper, .TAN-minus-wrapper{
-    height:40px;
-    width:60px;
-    margin:auto;
-}
-
-.TAN-plus-arrow, .TAN-minus-arrow{ 
-    border-left: 30px solid transparent; 
-    border-right: 30px solid transparent;
-}
-
-.TAN-plus, .TAN-minus{
-    width:60px;
-    color:#000080;
-    display:block;
-    float:left;
-    margin-left:-30px;
-}
-
-.TAN-plus{
-    height:25px;
-    padding-top:14px;
-    margin-bottom:-40px;
-}
-
-.TAN-minus{
-    height:30px;
-    padding-bottom:10px;
-    margin-top:-40px;
-}
-
-.TAN-plus-arrow {
-    border-bottom:40px solid #666; 
-}
-
-.TAN-plus-arrow-selected{
-    border-bottom:40px solid #5A9E4A; 
-}
-
-.TAN-minus-arrow{ 
-    border-top:40px solid #666; 
-}
-
-.TAN-minus-arrow-selected{
-    border-top:40px solid #5A9E4A; 
-}
-
 body{
+    color:#535353;
     margin:2px;
     min-width:1007px;
     font-family: Arial,sans-serif;
 }
+
 img{
     border:0px;
 }
@@ -206,45 +75,45 @@ a{
 }
 .TAN-main{
     background-color:#000;
-    height:100%;
+    padding:5px;
 }
-.TAN-main > ul{
-    margin:0px;
-    padding:2px;
-}
-.TAN-news{
-    list-style:none;
-    float:left;
-    height:250px;
-    width:240px;
+
+.TAN-object{
+    width:300px;
     background-color:#fff;
-    overflow:hidden;
-    padding:10px 1px;
-    min-height:110px;
+    padding:5px;
+    text-align:center;
 }
-.TAN-news > h2{
+
+.TAN-object-image{
+    display:block;
+    margin:auto;
+}
+
+.TAN-object p{
     margin:0px;
-    font-size:1.2em;
-    font-weight:normal;
 }
-.TAN-news > ul{
-    padding:0px;
+
+.TAN-object h2{
+   margin:0px; 
+   font-size:1.2em;
 }
-.TAN-news > ul > li{
-    border-right: 1px solid #bebebe;
-    float: left;
-    height: 20px;
-    list-style: none;
-    padding: 0 5px;
+
+.TAN-object-info-bar{
+    display:block;
 }
-.TAN-news-avatar{
-    height: 32px;
-    margin-left: 5px;
-    margin-right: 5px;
-    width: 32px;
+
+.TAN-object-info-bar img{
+    height:20px;
+    width:20px;
 }
-.TAN-news-user{
-    font-weight:bold;
-    text-decoration:none;
-    color:#595959;
+
+.TAN-object-user{
+    color: #595959;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.TAN-tintan{
+    color:#000;
 }
