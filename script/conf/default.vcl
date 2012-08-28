@@ -187,14 +187,6 @@ sub vcl_error{
         set obj.status = 301;
         return(deliver);
     }
-
-    if ( 
-        obj.status == 404 
-        && req.url ~ "^/static/smilies/.*$"
-    ){
-    	set obj.http.Location = "/static/images/blank.gif";
-        return(deliver);
-    }
 }
 
 ### END
