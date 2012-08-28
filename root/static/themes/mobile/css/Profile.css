@@ -1,0 +1,17 @@
+li{
+    padding-bottom:3px;
+}
+
+.TAN-profile-user-admin-form > h2{
+    margin:0px;
+}
+
+.TAN-profile-user-admin-form > ul > li > a, .TAN-profile-user-admin-form > ul > li > a:visited{
+    color:#f00;
+}
+
+.TAN-profile-user-admin-form ul{
+    list-style:none;
+    margin: 0;
+    padding: 0;
+}

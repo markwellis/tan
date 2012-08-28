@@ -1,0 +1,39 @@
+[% css_includes.push('Profile') %]
+
+<ul class="TAN-inside">
+    <li>
+        <img class="TAN-news-avatar left" src="[% user.avatar(c) %]" alt="[% user.username | html %]" />
+        [% user.username | html %]
+        [% IF user.deleted == 'Y' %]
+            <span style="color:#f00">DELETED</span>
+        [% END %]
+    </li>
+    <li>Joined [% user.join_date %] ago</li>
+    [% things = {
+        '0' => ['comment', 'comment_count'],
+    } %]
+    [% FOREACH public_object IN c.model('Object').public %]
+        [% count = loop.count + 1 %]
+        [% things.${count} = [public_object, "${public_object}_count"] %]
+    [% END %]
+    [% FOREACH thing IN things.keys.nsort %]
+        <li>
+            [% IF ${things.${thing}.1} %]
+                <a href="[% things.${thing}.0 %]">
+            [% END %]
+            [% things.${thing}.0 | ucfirst %]s: [% number( ${things.${thing}.1} ) %]
+            [% IF things.${thing}.1 %]
+                </a>
+            [% END %]
+        </li>
+    [% END %]
+            
+    <li class="TAN-hr">
+        [% object.profile.details %]
+    </li>
+    [% IF c.check_user_roles('edit_user') %]
+        <li>
+            [% PROCESS 'profile/user/admin.tt' %]
+        </li>
+    [% END %]
+</ul>

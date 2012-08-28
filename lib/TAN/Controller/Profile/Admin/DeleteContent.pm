@@ -4,6 +4,16 @@ use namespace::autoclean;
 
 BEGIN { extends 'Catalyst::Controller'; }
 
+has '_mobile' => (
+    'is' => 'ro',
+    'isa' => 'HashRef',
+    'default' => sub{
+        return {
+            'delete_content' => 1,
+        };
+    },
+);
+
 sub delete_content: Chained('../admin') Args(0){
     my ( $self, $c ) = @_;
 

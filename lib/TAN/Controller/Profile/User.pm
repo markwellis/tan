@@ -9,6 +9,7 @@ has '_mobile' => (
     'isa' => 'HashRef',
     'default' => sub{
         return {
+            'user_index' => 1,
             'comment' => 1,
             'view' => 1,
         };
