@@ -50,7 +50,7 @@ sub upload: Local{
             }
 
             try{
-                $c->model('Image')->resize( $upload->tempname, $outfile, 640 );
+                $c->model('Image')->thumbnail( $upload->tempname, $outfile, 640 );
             } catch {
                 $c->flash->{'message'} = $_->error;
                 $c->res->redirect('/profile/_avatar', 303);

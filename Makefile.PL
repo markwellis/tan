@@ -55,6 +55,7 @@ requires 'Digest::SHA';
 requires 'File::Temp';
 requires 'Storable';
 requires 'File::Copy';
+requires 'File::Basename';
 requires 'JavaScript::Minifier::XS';
 requires 'CSS::Minifier::XS';
 requires 'Data::Page';
@@ -75,7 +76,6 @@ requires 'Catalyst::View::TT';
 requires 'GearmanX::Simple::Worker';
 requires 'Storable';
 requires 'Config::Any';
-requires 'File::Basename';
 requires 'Log::Log4perl';
 
 #search
