@@ -9,6 +9,7 @@ use Exception::Simple;
 use File::Copy;
 use File::Path qw/mkpath/;
 use File::Basename;
+use Fcntl qw/:flock/;
 
 has 'image_validator' => (
     'is' => 'ro',
@@ -35,17 +36,19 @@ has 'animated_size_showall_frames' => (
     'required' => 1,
 );
 
-#TODO
-#add flocking
-
 sub thumbnail{
     my ( $self, $input, $output, $width ) = @_;
 
     mkpath( dirname( $output ) );
-
+    
     if ( !( -e $input ) ){
         Exception::Simple->throw('file not found');
     }
+
+    #flock file, it'll just sit there waiting for flock if flocked (i.e. 2 requests for the file come in at same time), after file is unflocked, if exists return (no point recreating existing thumbnail!)
+    open( my $fh, "<", $input ) || die "bugger"; #lock input, because output doesn't exist
+    flock( $fh, LOCK_EX ) || die "shit";
+    return 1 if ( -e $output );
 
     if ( !grep( /^${width}$/, @{ $self->allowed_thumbnail_sizes } ) ){
         Exception::Simple->throw('invalid thumbnail size');
@@ -100,15 +103,20 @@ sub thumbnail{
     #exit code 0 is success
         Exception::Simple->throw('resize error');
     }
+
+    flock( $fh, LOCK_UN );
+    close( $fh );
+
+    return;
 }
 
 #change this to take resize option
 sub crop{
-    my ( $self, $infile, $outfile, $x, $y, $w, $h ) = @_;
+    my ( $self, $input, $output, $x, $y, $w, $h ) = @_;
 
     my $frame_limit = "[0-" . $self->animated_frame_limit . "]";
-    if (!`convert -background transparent '${infile}'$frame_limit -coalesce -crop '${w}x${h}+${x}+${y}!' -thumbnail '100x100' -gravity center -extent 100x100 -layers OptimizePlus gif:'${outfile}'  2>&1`) {
-    #exit code 0 is success :/
+    if (!`convert -background transparent '${input}'$frame_limit -coalesce -crop '${w}x${h}+${x}+${y}!' -thumbnail '100x100' -gravity center -extent 100x100 -layers OptimizePlus gif:'${output}' 2>&1`) {
+    #exit code 0 is success
         return 1;
     }
     return 0;
@@ -117,8 +125,10 @@ sub crop{
 sub create_blank{
     my ( $self, $output_image ) = @_;
 
+    return if ( -e "$output_image" );
+
     if ( !`convert null: gif:${output_image} 2>&1` ){
-    # returns 0 on success
+    # exit code 0 is success
         return 1;
     }
 
