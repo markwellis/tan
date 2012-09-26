@@ -1,8 +1,8 @@
-package TAN::Submit::Module::Picture;
+package TAN::Model::Submit::Module::Picture;
 use Moose;
 use namespace::autoclean;
 
-with 'TAN::Submit::Module';
+with 'TAN::Model::Submit::Module';
 
 use Fetch::Image;
 use Data::Validate::Image;

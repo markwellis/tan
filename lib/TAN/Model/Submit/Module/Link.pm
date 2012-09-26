@@ -1,8 +1,8 @@
-package TAN::Submit::Module::Link;
+package TAN::Model::Submit::Module::Link;
 use Moose;
 use namespace::autoclean;
 
-with 'TAN::Submit::Module';
+with 'TAN::Model::Submit::Module';
 
 use Try::Tiny;
 use Data::Validate::URI;

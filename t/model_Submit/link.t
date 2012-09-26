@@ -1,4 +1,4 @@
-my $submit = new_ok('TAN::Submit');
+my $submit = new_ok('TAN::Model::Submit');
 my ( $res, $c ) = ctx_request('/');
 
 throws_ok{
@@ -128,8 +128,5 @@ my $data = {
     'tags' => 'asdasd',
 };
 my $prepared = $submit->validate_and_prepare( $c, $data );
-
-#remove coz we don't return this on prep
-delete($data->{ 'type' });
 
 is_deeply( $prepared, $data, "prepared data is correct");

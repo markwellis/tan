@@ -1,4 +1,4 @@
-package TAN::Submit::Module;
+package TAN::Model::Submit::Module;
 
 use Moose::Role;
 use Exception::Simple;

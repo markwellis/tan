@@ -1,4 +1,4 @@
-my $submit = new_ok('TAN::Submit');
+my $submit = new_ok('TAN::Model::Submit');
 my ( $res, $c ) = ctx_request('/');
 
 throws_ok{

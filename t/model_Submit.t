@@ -1,14 +1,14 @@
 use Test::More;
 use Test::Exception;
 
-use TAN::Submit;
+BEGIN { use_ok 'TAN::Model::Submit' }
 
 use File::Basename;
 use Try::Tiny;
 
 use Catalyst::Test 'TAN';
 
-my $submit = new_ok('TAN::Submit');
+my $submit = new_ok('TAN::Model::Submit');
 my ( $res, $c ) = ctx_request('/');
 
 #basic tests here
@@ -28,29 +28,22 @@ is($@, 'no params', 'no params');
 run_module_tests();
 
 sub run_module_tests{
-    my $this_dir = dirname($0);
-
 #so you can pass module names to the test
 # e.g.
 #  perl -I ../lib submit.t link
-
-    my @modules;
+    my @names;
     if ( scalar(@ARGV) ){
         foreach my $arg ( @ARGV ){
-            push(@modules, $submit->modules->{ $arg });
+            push(@names, $arg);
         }
     } else {
-        @modules = values(%{$submit->modules});
+        @names = keys(%{$submit->modules});
     }
 
-    foreach my $module ( @modules ){
-        my $name = ref($module);
-        my @names = split(/::/, $name);
-
-        my $filename = lc(pop(@names));
-        my $test_script_path = join('/', "${this_dir}/../lib", @names, "t/${filename}.t");
+    foreach my $name ( @names ){
+        my $test_script_path = dirname( $0 ) . "/model_Submit/${name}.t";
         if ( -e $test_script_path ){
-            note( "running module tests for\n\t$filename" );
+            note( "running module tests for\n\t${name}" );
             unless ( my $error = do $test_script_path ) {
                 die $error;
             }
