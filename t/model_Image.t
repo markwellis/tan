@@ -80,7 +80,7 @@ my $test_images_dir = dirname( __FILE__ ) . "/model_Image";
 
 {
     my $source_image = $test_images_dir . "/image.gif";
-    my $output = $test_images_dir . "/foo/out.gif";
+    my $output = "/tmp/foozxy12321.sdfA/out.gif";
     rmtree( dirname( $output ) );
 
     $model->thumbnail( $source_image, $output, 200 );
