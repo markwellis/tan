@@ -110,7 +110,6 @@ sub _build_bbcode{
                 'parse' => 1,
             },
             '' => sub { return $_[2]; },
-            'youtube' => 'block:%{youtube}s',
             'video' => 'block:%{video}s',
         },
         'escapes' => {
