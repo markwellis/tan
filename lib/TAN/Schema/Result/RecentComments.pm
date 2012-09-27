@@ -5,9 +5,6 @@ use utf8;
 
 use base qw/DBIx::Class::Core/;
 
-use Parse::TAN;
-my $parser = new Parse::TAN;
-
 __PACKAGE__->table_class('DBIx::Class::ResultSource::View');
 
 __PACKAGE__->load_components(qw/InflateColumn::DateTime/);
@@ -99,7 +96,7 @@ sub comment{
 
     my $comment = $self->result_source->schema->cache->get($key);
     if ( !$comment ){
-        $comment = $parser->parse( $self->_comment );
+        $comment = TAN->model('ParseHTML')->parse( $self->_comment );
         $self->result_source->schema->cache->set($key, $comment, 600);
     } else {
 #decode cached comment coz otherwise its double encoded!

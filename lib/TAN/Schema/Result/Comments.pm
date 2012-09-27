@@ -6,9 +6,6 @@ use utf8;
 
 use base 'DBIx::Class';
 
-use Parse::TAN;
-my $parser = new Parse::TAN;
-
 use DateTime;
 use DateTime::Format::Human::Duration;
 
@@ -85,7 +82,7 @@ sub get_comment{
 
     my $comment = $self->result_source->schema->cache->get($key);
     if ( !$comment ){
-        $comment = $parser->parse( $self->_comment, $no_bb );
+        $comment = TAN->model('ParseHTML')->parse( $self->_comment, $no_bb );
         $self->result_source->schema->cache->set($key, $comment, 600);
     } else {
 #decode cached comment coz otherwise its double encoded!

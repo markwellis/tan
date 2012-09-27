@@ -40,9 +40,6 @@ __PACKAGE__->set_primary_key("blog_id");
 # Created by DBIx::Class::Schema::Loader v0.04006 @ 2009-11-04 22:01:19
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:2yuJn4YdJ2YjHiMM992ceQ
 
-use Parse::TAN;
-my $parser = new Parse::TAN;
-
 sub details{
     my ( $self ) = @_;
 
@@ -64,7 +61,7 @@ sub get_details{
 
     my $details = $self->result_source->schema->cache->get($key);
     if ( !$details ){
-        $details = $parser->parse( $self->_details, $no_bb );
+        $details = TAN->model('ParseHTML')->parse( $self->_details, $no_bb );
         $self->result_source->schema->cache->set($key, $details, 600);
     } else {
 #decode cached coz otherwise its double encoded!

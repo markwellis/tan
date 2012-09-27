@@ -44,9 +44,6 @@ __PACKAGE__->add_columns(
 );
 __PACKAGE__->set_primary_key("cms_id");
 
-use Parse::TAN;
-my $parser = new Parse::TAN;
-
 sub content{
     my ( $self ) = @_;
 
@@ -54,7 +51,7 @@ sub content{
 
     my $content = $self->result_source->schema->cache->get( $key );
     if ( !$content ){
-        $content = $parser->parse( $self->_content, 1 );
+        $content = TAN->model('ParseHTML')->parse( $self->_content, 1 );
         $self->result_source->schema->cache->set( $key, $content, 600 );
     } else {
 #decode cached coz otherwise its double encoded!

@@ -71,6 +71,9 @@ requires 'HTML::FormatText';
 requires 'URI';
 requires 'URI::Escape::XS';
 requires 'Catalyst::View::TT';
+requires 'HTML::StripScripts::Parser';
+requires 'Parse::BBCode';
+requires 'HTML::TreeBuilder';
 
 #workers
 requires 'GearmanX::Simple::Worker';
@@ -94,12 +97,6 @@ requires 'LWPx::ParanoidAgent';
 
 #Catalyst::Plugin::Event
 requires 'Text::SimpleTable';
-
-#Parse::TAN
-requires 'HTML::StripScripts::Parser';
-
-#Parse::BBCode::TAN
-requires 'Parse::BBCode';
 
 test_requires 'Test::More';
 test_requires 'Test::Exception';
