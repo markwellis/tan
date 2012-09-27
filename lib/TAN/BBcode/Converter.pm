@@ -24,8 +24,6 @@ sub _build_bbcode{
                 if ( !is_web_uri($text) ){
                     if ( $text =~ m/$youtube_validate_reg/ ){
                         $text = "http://www.youtube.com/watch?v=${text}";
-                    } else {
-                        return "[video]${text}[/video]";
                     }
                 }
 
