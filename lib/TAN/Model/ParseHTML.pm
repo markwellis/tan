@@ -6,7 +6,7 @@ use HTML::StripScripts::Parser;
 use Parse::BBCode;
 use HTML::Video::Embed;
 use Data::Validate::URI qw/is_web_uri/;
-use HTML::TreeBuilder;
+use HTML::TreeBuilder 5 -weak;
 
 extends 'Catalyst::Model';
 
