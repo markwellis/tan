@@ -38,6 +38,21 @@ my @tests = (
         'expected' => qq|<div class="quote_holder"><span class="quoted_username">user1 wrote:</span><div class="quote">quote 1<br /><div class="quote_holder"><span class="quoted_username">user2 wrote:</span><div class="quote">quote 2</div></div></div></div>|
     },
     {
+        'name' => 'bbcode: nested quotes followed by single quote',
+        'input' => "[quote user=user1]quote 1<br />[quote username=user2]quote 2[/quote][/quote][quote user=user3]quote 3[/quote]",
+        'expected' => qq|<div class="quote_holder"><span class="quoted_username">user1 wrote:</span><div class="quote">quote 1<br /><div class="quote_holder"><span class="quoted_username">user2 wrote:</span><div class="quote">quote 2</div></div></div></div><div class="quote_holder"><span class="quoted_username">user3 wrote:</span><div class="quote">quote 3</div></div>|
+    },
+    {
+        'name' => 'bbcode: quote video',
+        'input' => "[quote user=user1][video]https://www.youtube.com/watch?v=VDss8V2OME4[/video][/quote]",
+        'expected' => qq|<div class="quote_holder"><span class="quoted_username">user1 wrote:</span><div class="quote"><iframe title="YouTube video player" width="450" height="370" src="http://www.youtube.com/embed/VDss8V2OME4" frameborder="0" allowfullscreen="1"></iframe></div></div>|,
+    },
+    {
+        'name' => 'bbcode: quote html',
+        'input' => qq|[quote user=user1]<div class="foo">bacon</div>[/quote]|,
+        'expected' => qq|<div class="quote_holder"><span class="quoted_username">user1 wrote:</span><div class="quote"><div class="foo">bacon</div></div></div>|,
+    },
+    {
         'name' => 'bbcode: video',
         'input' => "[video]https://www.youtube.com/watch?v=VDss8V2OME4[/video]",
         'expected' => qq|<iframe title="YouTube video player" width="450" height="370" src="http://www.youtube.com/embed/VDss8V2OME4" frameborder="0" allowfullscreen="1"></iframe>|
