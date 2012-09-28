@@ -22,7 +22,9 @@ my $progress = Term::ProgressBar->new({
 $progress->minor(0);
 
 open( my $fh, '>', 'log' );
-while (my $comment = $comments->next){
+while ( my $comment = $comments->next ){
+    $progress->update( ++$loop );
+    
     my $c = $comment->_comment;
     utf8::encode($c);
     say $fh "\n***\n" . $c;
@@ -39,10 +41,11 @@ while (my $comment = $comments->next){
     $comment->update( {
         'comment' => $converter->parse( $c ),
     } );
-    $progress->update( ++$loop );
 }
 
 while (my $blog = $blogs->next){
+    $progress->update( ++$loop );
+    
     my $c = $blog->_details;
     utf8::encode($c);
     say $fh "\n***\n" . $c;
@@ -59,10 +62,11 @@ while (my $blog = $blogs->next){
     $blog->update( {
         'details' => $converter->parse( $c ),
     } );
-    $progress->update( ++$loop );
 }
 
 while (my $forum = $forums->next){
+    $progress->update( ++$loop );
+    
     my $c = $forum->_details;
     utf8::encode($c);
     say $fh "\n***\n" . $c;
@@ -79,10 +83,11 @@ while (my $forum = $forums->next){
     $forum->update( {
         'details' => $converter->parse( $c ),
     } );
-    $progress->update( ++$loop );
 }
 
 while (my $profile = $profiles->next){
+    $progress->update( ++$loop );
+    
     my $c = $profile->_details;
     utf8::encode($c);
     say $fh "\n***\n" . $c;
@@ -99,5 +104,4 @@ while (my $profile = $profiles->next){
     $profile->update( {
         'details' => $converter->parse( $c ),
     } );
-    $progress->update( ++$loop );
 }
