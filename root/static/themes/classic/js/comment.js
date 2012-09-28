@@ -73,13 +73,13 @@ function quote_link(link){
         el.setProperty('src', el.retrieve('original_image').src);
     });
 
-    var quote = comment.get('html');
+    var quote = comment.title;
 
     comment.getElements('.boob_blocked').each(function(el) {
         el.setProperty('src', src);
     });
 
-    comment = '[quote user=' + username + ']' + quote + '[/quote]' + "\n<br /><br />";
+    comment = '[quote user=' + username + ']' + quote + '[/quote]';
 
     tinyMCE.get('comment').execCommand("mceInsertContent", false, comment);
 }

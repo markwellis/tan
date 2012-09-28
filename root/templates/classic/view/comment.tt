@@ -36,7 +36,7 @@
             </ul>
         </li>
     </ul>
-    <div class="TAN-comment_inner">
+    <div class="TAN-comment_inner" title="[% comment.comment_nobb | html %]">
         [% comment.comment %]
         <br />
     </div>

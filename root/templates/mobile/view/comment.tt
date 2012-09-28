@@ -8,7 +8,7 @@
         </li>
     </ul>
     
-    <div class="TAN-comment_inner" id="_comment:[% comment.id %]">[% comment.comment %]</div>
+    <div class="TAN-comment_inner" id="_comment:[% comment.id %]" title="[% comment.comment_nobb | html %]">[% comment.comment %]</div>
     <a href="[% comment.object.url %]#comment[% comment.id %]">Link</a>
     [% IF view_comments %]
         |
