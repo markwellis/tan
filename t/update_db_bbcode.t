@@ -21,12 +21,12 @@ my $tests = [
         "bbcode: [youtube]url to [video]url",
     ],
     [
-        qq|[youtube]<a href="https://www.youtube.com/watch?v=VDss8V2OME4">best video ever, derp</a>[/youtube]<div class="foobar"><span>bacon</span><p>asdasd</p><br />|,
-        qq|[video]<a href="https://www.youtube.com/watch?v=VDss8V2OME4">best video ever, derp</a>[/video]<div class="foobar"><span>bacon</span><p>asdasd</p><br />|,
+        qq|[youtube]<a href="https://www.youtube.com/watch?v=VDss8V2OME4">best video ever, derp</a>[/youtube]<div class="foobar"><span>bacon</span>asdasd</div>|,
+        qq|[video]<a href="https://www.youtube.com/watch?v=VDss8V2OME4">best video ever, derp</a>[/video]<div class="foobar"><span>bacon</span>asdasd</div>|,
         "bbcode: [youtube]hyperlink to [video]hyperlink",
     ],
     [
-        qq|<div><div class="quote_holder"><span class="quoted_username">user1 wrote:</span><div class="quote"><div class="foo">bacon</div></div></div>|,
+        qq|<div class="quote_holder"><span class="quoted_username">user1 wrote:</span><div class="quote"><div class="foo">bacon</div></div></div>|,
         qq|[quote user=user1]<div class="foo">bacon</div>[/quote]|,
         "quote: quote to bbcode",
     ],
@@ -37,8 +37,13 @@ my $tests = [
     ],
     [
         qq|<div class="quote_holder"><span class="quoted_username">user1 wrote:</span><div class="quote">quote 1<br /><div class="quote_holder"><span class="quoted_username">user2 wrote:</span><div class="quote">quote 2</div></div></div></div><div class="quote_holder"><span class="quoted_username">user3 wrote:</span><div class="quote">quote 3</div></div>|,
-        "[quote user=user1]quote 1<br />[quote username=user2]quote 2[/quote][/quote][quote user=user3]quote 3[/quote]",
+        "[quote user=user1]quote 1<br />[quote user=user2]quote 2[/quote][/quote][quote user=user3]quote 3[/quote]",
         'quote: nested quotes followed by single quote to bbcode',
+    ],
+    [
+        qq|<p>bacon face</p><div class="cheese">sdssdsdfsdf</div><ul><li>sdfsdf</li><li>gfhgfh</li><li>qweqwe</li></ul>|,
+        qq|<p>bacon face</p><div class="cheese">sdssdsdfsdf</div><ul><li>sdfsdf</li><li>gfhgfh</li><li>qweqwe</li></ul>|,
+        'normal html is untouched'
     ],
 ];
 

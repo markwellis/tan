@@ -53,6 +53,11 @@ my @tests = (
         'expected' => qq|<div class="quote_holder"><span class="quoted_username">user1 wrote:</span><div class="quote"><div class="foo">bacon</div></div></div>|,
     },
     {
+        'name' => 'bbcode: quote "username"',
+        'input' => qq|[quote user="user1"]<div class="foo">bacon</div>[/quote]|,
+        'expected' => qq|<div class="quote_holder"><span class="quoted_username">user1 wrote:</span><div class="quote"><div class="foo">bacon</div></div></div>|,
+    },
+    {
         'name' => 'bbcode: video',
         'input' => "[video]https://www.youtube.com/watch?v=VDss8V2OME4[/video]",
         'expected' => qq|<iframe title="YouTube video player" width="450" height="370" src="http://www.youtube.com/embed/VDss8V2OME4" frameborder="0" allowfullscreen="1"></iframe>|
@@ -96,6 +101,11 @@ my @tests = (
         'name' => 'hss: href relative url',
         'input' => qq|<a href="/etc/passwd?foo=goo&p=t&amp;r=q#beer">google</a>|,
         'expected' => qq|<a href="/etc/passwd?foo=goo&amp;p=t&amp;r=q#beer" rel="external nofollow">google</a>|,
+    },
+    {
+        'name' => 'hss: entities',
+        'input' => qq|'"&|,
+        'expected' => qq|&#39;&quot;&amp;|,
     },
 );
 

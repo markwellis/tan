@@ -29,7 +29,7 @@ sub _build_bbcode{
                     }
                 }
 
-                return "[video]${text}[/video]";
+                return "[video]${text}\[/video]";
             },
         },
         'linebreaks' => 0,
@@ -38,6 +38,7 @@ sub _build_bbcode{
 }
 
 my $wrote_regex = qr/ wrote:/;
+my $last_newline_regex = qr/\n$/;
 sub parse{
     my ( $self, $input ) = @_;
 
@@ -54,15 +55,13 @@ use Data::Dumper;
 #     get content
 #      replace all with [quote user=username]content[/quote]
 #       repeat
-    my @quotes = $tree->look_down(
+    while( my $quote_holder = $tree->look_down(
         '_tag' => 'div', 
         'class' => 'quote_holder'
-    );
-
-
-    foreach my $quote ( @quotes ){
-        my @content = $quote->content_list;
-        my ( $username, $quote_content );
+        )
+    ){
+        my @content = $quote_holder->content_list;
+        my ( $username, $quote );
         foreach my $content ( @content ){
             if ( 
                 ( $content->tag eq 'span' )
@@ -76,18 +75,37 @@ use Data::Dumper;
                 ( $content->tag eq 'div' )
                 && ( $content->attr('class') eq 'quote' )
             ){
-                ( $quote_content ) = $content->content_list;
-                if ( ref( $quote_content ) eq 'HTML::Element' ){
-                    $quote_content = $quote_content->as_HTML;
+                my @quotes = $content->content_list;
+                foreach my $q ( @quotes ){
+                    if ( ref( $q ) eq 'HTML::Element' ){
+                        $quote .= $q->as_XML;
+                        $quote =~ s/$last_newline_regex//;
+                    } else {
+                        $quote = $q;
+                    }
                 }
             }
         }
-        $quote->replace_with(
-            "[quote user=${username}]" . $quote_content . '[/quote]' 
-        );
+
+        my $nt = HTML::TreeBuilder->new;
+        $nt->parse_content("[quote user=${username}]${quote}\[/quote]");
+
+        $quote_holder->replace_with(
+            $nt->disembowel,
+        )->delete;
+
     }
-    my @nodes = $tree->guts;
-    ( $input ) = $nodes[0]->content_list if ( ref( $nodes[0] ) eq 'HTML::Element' );
+    my @contents = $tree->disembowel;
+    my $q;
+    foreach my $c ( @contents ){
+        if ( ref( $c ) ){
+            $q .= $c->as_XML;
+            $q =~ s/$last_newline_regex//;
+        } else {
+            $q .= $c
+        }
+    }
+    $input = $q;
     return $self->bbcode->render( $input );
 }
 

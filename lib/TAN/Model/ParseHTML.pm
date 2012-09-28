@@ -6,7 +6,7 @@ use HTML::StripScripts::Parser;
 use Parse::BBCode;
 use HTML::Video::Embed;
 use Data::Validate::URI qw/is_web_uri/;
-use HTML::TreeBuilder 5 -weak;
+use HTML::TreeBuilder 5 -weak;
 
 extends 'Catalyst::Model';
 
@@ -86,6 +86,7 @@ has 'bbcode' => (
     'lazy_build' => 1,
 );
 
+my $quote_reg = qr/\&quot\;/;
 sub _build_bbcode{
     my $embedder = HTML::Video::Embed->new( {
         'class' => "TAN-video-embed",
@@ -98,13 +99,11 @@ sub _build_bbcode{
                     my ($parser, $attr, $content, $attribute_fallback, $tag_tree) = @_;
                     # for some reason, $attr isnt set right :/
                     # but it is now!
-                    $attr = $tag_tree->get_attr->[1]->[1];
-                    $attr ||= '';
+                    my $username = $tag_tree->get_attr->[1]->[1] || '';
+                    $username =~ s/$quote_reg//g;
                     $content ||= '';
 
-
-                    return '<div class="quote_holder"><span class="quoted_username">' . $attr . ' wrote:</span>'
-                        .'<div class="quote">' . ${$content} . '</div></div>';
+                    return qq|<div class="quote_holder"><span class="quoted_username">${username} wrote:</span><div class="quote">${$content}</div></div>|;
                 },
                 'class' => 'block',
                 'parse' => 1,
