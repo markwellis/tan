@@ -94,8 +94,8 @@ my @tests = (
     },
     {
         'name' => 'hss: href relative url',
-        'input' => qq|<a href="/etc/passwd">google</a>|,
-        'expected' => qq|<a href="/etc/passwd" rel="external nofollow">google</a>|,
+        'input' => qq|<a href="/etc/passwd?foo=goo&p=t&amp;r=q#beer">google</a>|,
+        'expected' => qq|<a href="/etc/passwd?foo=goo&amp;p=t&amp;r=q#beer" rel="external nofollow">google</a>|,
     },
 );
 
