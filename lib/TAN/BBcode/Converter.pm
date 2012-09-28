@@ -70,6 +70,7 @@ sub parse{
                 && ( $content->attr('class') eq 'quoted_username' )
             ){
                 ( $username ) = $content->content_list;
+                $username ||= '';
                 $username =~ s/$wrote_regex//g;
             }
 
