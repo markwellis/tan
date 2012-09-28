@@ -116,7 +116,9 @@ sub _build_bbcode{
                 my ( $parser, $tag, $text ) = @_;
 
 #is $text a html a element?
-                my $tree = HTML::TreeBuilder->new;
+                my $tree = HTML::TreeBuilder->new(
+                    no_expand_entities => 1,
+                );
                 $tree->implicit_tags(0);
                 $tree->parse_content( $text );
                 my ( $node ) = $tree->guts(); #only use first item

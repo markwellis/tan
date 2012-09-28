@@ -93,10 +93,11 @@ requires 'WebService::Bitly';
 requires 'Net::Twitter';
 requires 'LWPx::ParanoidAgent';
 
-##doesnt belong in here!
-
 #Catalyst::Plugin::Event
 requires 'Text::SimpleTable';
+
+#scripts
+requires 'Term::ProgressBar';
 
 test_requires 'Test::More';
 test_requires 'Test::Exception';

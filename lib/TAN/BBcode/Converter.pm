@@ -42,9 +42,9 @@ my $last_newline_regex = qr/\n$/;
 sub parse{
     my ( $self, $input ) = @_;
 
-use Data::Dumper;
-
-    my $tree = HTML::TreeBuilder->new;
+    my $tree = HTML::TreeBuilder->new(
+        no_expand_entities => 1,
+    );
     $tree->implicit_tags(0);
     $tree->parse_content( $input );
 #go through tree
@@ -61,7 +61,7 @@ use Data::Dumper;
         )
     ){
         my @content = $quote_holder->content_list;
-        my ( $username, $quote );
+        my ( $username, $quote ) = ('', '');
         foreach my $content ( @content ){
             if ( 
                 ( $content->tag eq 'span' )
@@ -72,7 +72,9 @@ use Data::Dumper;
             }
 
             if ( 
-                ( $content->tag eq 'div' )
+                ( $content->tag )
+                && ( $content->attr('class') )
+                && ( $content->tag eq 'div' )
                 && ( $content->attr('class') eq 'quote' )
             ){
                 my @quotes = $content->content_list;
@@ -87,13 +89,14 @@ use Data::Dumper;
             }
         }
 
-        my $nt = HTML::TreeBuilder->new;
+        my $nt = HTML::TreeBuilder->new(
+            no_expand_entities => 1,
+        );
         $nt->parse_content("[quote user=${username}]${quote}\[/quote]");
 
         $quote_holder->replace_with(
             $nt->disembowel,
         )->delete;
-
     }
     my @contents = $tree->disembowel;
     my $q;

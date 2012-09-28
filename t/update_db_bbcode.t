@@ -31,8 +31,8 @@ my $tests = [
         "quote: quote to bbcode",
     ],
     [
-        qq|<div class="quote_holder"><span class="quoted_username">user1 wrote:</span><div class="quote">[video]https://www.youtube.com/watch?v=VDss8V2OME4[/video]</div></div>|,
-        "[quote user=user1][video]https://www.youtube.com/watch?v=VDss8V2OME4[/video][/quote]",
+        qq|&lt;sdfsdf&gt;<div class="quote_holder"><span class="quoted_username">user1 wrote:</span><div class="quote">[video]https://www.youtube.com/watch?v=VDss8V2OME4[/video]</div></div>|,
+        "&lt;sdfsdf&gt;[quote user=user1][video]https://www.youtube.com/watch?v=VDss8V2OME4[/video][/quote]",
         "quote: quote video to bbcode",
     ],
     [
@@ -45,6 +45,23 @@ my $tests = [
         qq|<p>bacon face</p><div class="cheese">sdssdsdfsdf</div><ul><li>sdfsdf</li><li>gfhgfh</li><li>qweqwe</li></ul>|,
         'normal html is untouched'
     ],
+    [
+        qq|[quote user="psidust42
+            <div class="quote_holder">
+            <div class="quote"><br />
+            Mr Wizard was a 1950's show where a man called Mr. Wizard (Don Herbert to be exact) did science for all the viewers out there in TV land. As for Tooter Turtle, well we don't need no Mortimer Snerd wannabees hangin 'round this here thread.</div>
+            </div>
+            �<br /><br /><br />
+            [/quote] <br /><br />
+            Yeah I know who the black and white Mr Wizard was.� You said "simon" which made me think of Sherman, then Mr Peabody, Then the other Mr Wizard and then the turtle then Rocky and Bullwinkle then Mechanical Metal Munching Mice from the Moon then how hot Natasha Fatale was ....Now I'm thinking about Tennessee� Tuxedo, You know how that goes. What time is it?<br />|,
+        qq|[quote user="psidust42 [quote user=] Mr Wizard was a 1950's show where a man called Mr. Wizard (Don Herbert to be exact) did science for all the viewers out there in TV land. As for Tooter Turtle, well we don't need no Mortimer Snerd wannabees hangin 'round this here thread.[/quote] �<br /><br /><br /> [/quote] <br /><br /> Yeah I know who the black and white Mr Wizard was.� You said "simon" which made me think of Sherman, then Mr Peabody, Then the other Mr Wizard and then the turtle then Rocky and Bullwinkle then Mechanical Metal Munching Mice from the Moon then how hot Natasha Fatale was ....Now I'm thinking about Tennessee� Tuxedo, You know how that goes. What time is it?<br />|,
+        'quote: invalid quote',
+    ],
+    [
+        qq|[youtube]&lt;object width="425" height="344"&gt;&lt;param name="movie" value="<a href="http://www.youtube.com/v/KrapC2a_3Xg&amp;hl=en&amp;fs=1&amp;">http://www.youtube.com/v/KrapC2a_3Xg&amp;hl=en&amp;fs=1&amp;"&gt;&lt;/param&gt;&lt;param</a> name="allowFullScreen" value="true"&gt;&lt;/param&gt;&lt;param name="allowscriptaccess" value="always"&gt;&lt;/param&gt;&lt;embed src="<a href="http://www.youtube.com/v/KrapC2a_3Xg&amp;hl=en&amp;fs=1">http://www.youtube.com/v/KrapC2a_3Xg&amp;hl=en&amp;fs=1</a>&amp;" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="425" height="344"&gt;&lt;/embed&gt;&lt;/object&gt;[/youtube]|,
+        qq|[video]&lt;object width="425" height="344"&gt;&lt;param name="movie" value="<a href="http://www.youtube.com/v/KrapC2a_3Xg&amp;hl=en&amp;fs=1&amp;">http://www.youtube.com/v/KrapC2a_3Xg&amp;hl=en&amp;fs=1&amp;&quot;&gt;&lt;/param&gt;&lt;param</a> name="allowFullScreen" value="true"&gt;&lt;/param&gt;&lt;param name="allowscriptaccess" value="always"&gt;&lt;/param&gt;&lt;embed src="<a href="http://www.youtube.com/v/KrapC2a_3Xg&amp;hl=en&amp;fs=1">http://www.youtube.com/v/KrapC2a_3Xg&amp;hl=en&amp;fs=1</a>&amp;" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="425" height="344"&gt;&lt;/embed&gt;&lt;/object&gt;[/video]|,
+        qq|youtube: retarded input|,
+    ]
 ];
 
 foreach my $test ( @{ $tests } ){
