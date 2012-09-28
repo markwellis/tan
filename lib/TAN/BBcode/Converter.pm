@@ -64,7 +64,9 @@ sub parse{
         my ( $username, $quote ) = ('', '');
         foreach my $content ( @content ){
             if ( 
-                ( $content->tag eq 'span' )
+                ( $content->tag )
+                && ( $content->attr('class') )
+                && ( $content->tag eq 'span' )
                 && ( $content->attr('class') eq 'quoted_username' )
             ){
                 ( $username ) = $content->content_list;
