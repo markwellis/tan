@@ -13,6 +13,8 @@ a{
     color:#4582BE;
 }
 
+
+
 /* form stuff */
 
 input[type=text], input[type=password], textarea{
@@ -55,6 +57,10 @@ fieldset{
 
 .clear_right{
     clear:right;
+}
+
+.hidden{
+    display:none;
 }
 
 .TAN-rss-icon{

@@ -65,21 +65,9 @@ function quote_link(link){
     var title = link.title.split('::');
     var username = title[0]; 
     var comment_id = title[1]; 
-    var comment = link.getParent().getParent().getParent().getParent().getParent().getElement('.TAN-comment_inner');
-    var src;
-
-    comment.getElements('.boob_blocked').each(function(el) {
-        src = el.getProperty('src');
-        el.setProperty('src', el.retrieve('original_image').src);
-    });
-
-    var quote = comment.title;
-
-    comment.getElements('.boob_blocked').each(function(el) {
-        el.setProperty('src', src);
-    });
-
-    comment = '[quote user=' + username + ']' + quote + '[/quote]';
+    var comment = link.getParent().getParent().getParent().getParent().getParent().getElement('.TAN-comment-quoteable');
+    
+    comment = '[quote user=' + username + ']' + comment.get('html') + '[/quote]';
 
     tinyMCE.get('comment').execCommand("mceInsertContent", false, comment);
 }

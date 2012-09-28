@@ -8,11 +8,12 @@
         </li>
     </ul>
     
-    <div class="TAN-comment_inner" id="_comment:[% comment.id %]" title="[% comment.comment_nobb | html %]">[% comment.comment %]</div>
+    <div id="_comment:[% comment.id %]" class="hidden">[% comment.comment_nobb %]</div>
+    <div class="TAN-comment_inner">[% comment.comment %]</div>
     <a href="[% comment.object.url %]#comment[% comment.id %]">Link</a>
     [% IF view_comments %]
         |
-        <a href="javascript:quote_comment([% comment.id %], '[% comment.user.username | html %]')" class="quote_link" title="[% comment.user.username | html %]::[% comment.id %]">Quote</a>
+        <a href="javascript:quote_comment([% comment.id %], '[% comment.user.username | html %]')" class="quote_link">Quote</a>
     [% END %]
 
     [% IF ( 
