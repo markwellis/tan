@@ -72,7 +72,7 @@
             /> [% object.get_column('comments') %]
         </a> | [% object.get_column('views') %] views
         [%- IF type == 'poll' -%]
-             | [% object.poll.votes_rs.count || 0 %] votes
+             | [% object.poll.get_column('votes') || 0 %] votes
         [%- END -%]
         [%- IF 
             ( type == 'link' )

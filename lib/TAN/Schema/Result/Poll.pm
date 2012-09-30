@@ -35,6 +35,8 @@ __PACKAGE__->add_columns(
       is_nullable => 1,
       datetime_undef_if_invalid => 1,
   },
+  "votes",
+  { data_type => "BIGINT", default_value => undef, is_nullable => 0, size => 20 },
 );
 __PACKAGE__->set_primary_key("poll_id");
 

@@ -36,7 +36,7 @@ sub vote: PathPart('_vote') Chained('../type') Args(0) {
         #json
             $c->res->header('Content-Type' => 'application/json');
             my @results;
-            my $total_votes = $poll->votes->count;
+            my $total_votes = $poll->get_column('votes') + 1; #we have to add 1, for our vote, even though there's a trigger, but the updated data doesn't get read unless we rerun the query, and that's inefficient
             foreach my $answer ( $poll->answers->all ){
                 push(@results, {
                     'name' => $answer->answer, 

@@ -8,7 +8,7 @@
         <fieldset>
 [% END %]
             <ul class="TAN-poll">
-                [% total_votes = object.poll.votes_rs.count %]
+                [% total_votes = object.poll.get_column('votes') %]
                 [% FOREACH poll_answer IN object.poll.answers_rs.search({}, {'order_by' => 'answer_id'}) %]
                     [% percent = poll_answer.percent( total_votes ) %]
                     <li>

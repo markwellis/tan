@@ -42,8 +42,7 @@ __PACKAGE__->has_many(
 sub percent{
     my ( $self, $total_votes ) = @_;
 
-    my $votes = $self->votes->count;
-
+    my $votes = $self->get_column('votes');
     return 0 if ( !$total_votes || !$votes );
     my $percentage = sprintf("%0.2f", ((100 / $total_votes) * $votes) );
     $percentage =~ s/\.00//;
