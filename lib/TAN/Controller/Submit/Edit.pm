@@ -4,6 +4,16 @@ use namespace::autoclean;
 
 BEGIN { extends 'Catalyst::Controller'; }
 
+has '_mobile' => (
+    'is' => 'ro',
+    'isa' => 'HashRef',
+    'default' => sub{
+        return {
+            'index' => 1,
+        };
+    },
+);
+
 sub validate_user: PathPart('edit') Chained('../type') CaptureArgs(1){
     my ( $self, $c, $object_id ) = @_;
 

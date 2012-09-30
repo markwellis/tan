@@ -39,13 +39,9 @@
     ) %]
         [% value = '' %]
         [% IF (
-            ( type == 'picture' )
-            && ( key == 'remote' ) 
+            ( key == 'upload' )
+            || ( key == 'remote' ) 
         ) %]
-            [% md = object.picture.id - ( object.picture.id % 1000 ) %]
-            [% value = c.config.thumb_path _ "/${md}/${object.picture.id}/600" %]
-            [% field.ignore = 1 %]
-        [% ELSIF key == 'upload' %]
             [% value = '' %]
             [% field.ignore = 1 %]
         [% ELSIF key == 'tags' %]
@@ -78,10 +74,6 @@
                 [% PROCESS 'submit/default.tt' %]
             [% END %]
         </li>
-    [% ELSIF key == 'remote' %]
-        <li>
-            <img alt="[% object.picture.id %]" src="[% field.value | html %]" />
-        </li>
     [% END %]
 [% END %]
 [% IF (
@@ -97,7 +89,7 @@
             my $module = $c->model('Submit')->modules->{ $type };
 
             my $module_type = ref( $module );
-            $module_type =~ s/TAN::Submit::Module:://;
+            $module_type =~ s/TAN::Model::Submit::Module:://;
 
             my $alias = $module->config->{'alias'};
             my @types = ( lcfirst( $module_type ) );
@@ -117,7 +109,6 @@
             </select>
         [% END %]
     [% END %]
-    [% js_includes.push( 'AdminReason' ) %]
     <li>
         <label for="_edit-reason">Reason for edit</label>
         <input 
