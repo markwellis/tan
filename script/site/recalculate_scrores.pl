@@ -11,15 +11,18 @@ my $objects = $db->resultset('Object')->search;
 my $count = $objects->count;
 my $loop = 0;
 my $progress = Term::ProgressBar->new({
-    'name' => 'Promoting',
+    'name' => 'Scoring',
     'count' => $count,
 });
 $progress->minor(0);
 foreach my $object ( $objects->all ){
-    if ( $object->score > 1 ){
-        $object->update({
-            'promoted' => \'NOW()',
-        });
+    my $score = $object->_calculate_score;
+    my $args = {
+        'score' => $score,
+    };
+    if ( $score >= 100 ){
+        $args->{'promoted'} = \'NOW()';
     }
+    $object->update( $args );
     $progress->update( ++$loop );
 }
