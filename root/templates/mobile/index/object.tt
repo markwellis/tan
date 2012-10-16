@@ -81,4 +81,11 @@
         Edit
     </a>
 [% END %]
+<br />
+[%- IF object.promoted -%]
+Promoted [% object.promoted %] ago
+<br />
+[%- END -%]
+Posted [% object.created %] ago
+<br />
 [%- PROCESS index/plus_minus.tt -%]

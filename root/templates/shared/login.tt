@@ -3,6 +3,7 @@
 <ul class="TAN-inside">
     <li class="TAN-news">
         <h2>Sign In</h2>
+        [% IF !c.mobile %]<img class="newsImg" src="[% theme_settings.image_path %]/login.png" alt="Login" />[% END %]
         <form id="loginform" method="post" action="/login/login">
             <fieldset>
                 <ul>
@@ -26,6 +27,7 @@
     </li>
     <li class="TAN-news TAN-news-alternate">
         <h2>Register</h2>
+        [% IF !c.mobile %]<img class="newsImg" src="[% theme_settings.image_path %]/register.png" alt="Register" />[% END %]
         <form action="/login/registration" id="regform" method="post">
             <fieldset>
                 <ul>

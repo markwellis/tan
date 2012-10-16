@@ -1,7 +1,8 @@
 [% tag_p_extra = PROCESS view_block %]
 [% BLOCK view_block %]
-    <br /><a 
-        class="right TAN-type-link" 
+    [% IF c.mobile %]<br />[% END %]
+    <a 
+        class="TAN-view_link TAN-type-link[% IF c.mobile %] right[% END %]" 
         href="[% "/redirect/external/${object.id}" %]" 
         rel="external nofollow"
     >View Link</a>

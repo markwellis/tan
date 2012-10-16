@@ -1,8 +1,7 @@
 [%- type = object.type -%]
-
 [%- title = object.url_title -%]
-
 [%- url = '' -%]
+
 [% IF title_url %]
     [% url = title_url %]
 [% ELSE %]

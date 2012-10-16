@@ -1,11 +1,15 @@
 [% title_url = "${c.config.pic_path}/${object.picture.filename}" %] 
 [% PROCESS view/_view.tt %]
-
+[% IF c.mobile %]
+    [% size = 200 %]
+[% ELSE %]
+    [% size = 600 %]
+[% END %]
 <div class="TAN-video">
     <a class="big_center_cell" href="[% title_url %]">
         <img 
             class="big_picture" 
-            src="[% "${c.config.thumb_path}/${md}/${object.picture.id}" %]/600" 
+            src="[% "${c.config.thumb_path}/${md}/${object.picture.id}/${size}" %]" 
             alt="" 
         />
     </a>

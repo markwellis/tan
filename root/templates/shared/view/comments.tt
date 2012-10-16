@@ -1,5 +1,9 @@
+[% IF c.mobile %]
+    [% js_includes.push('quote-comment') %]
+[% ELSE %]
+    [% js_includes.push('nsfw-comments', 'comment') %]
+[% END %]
 [% view_comments = 1 %]
-[% js_includes.push('quote-comment') %]
 <div class="TAN-comment_wrapper">
     [% IF object.comments %]
         [% FOREACH comment IN comments %]
@@ -12,10 +16,10 @@
         [% 
             PROCESS lib/editor.tt editor = {
                 name => 'comment',
+                height => '300px'
             }
         %]
         <br />
-        <input type="hidden" value="1" id="mobile" name="mobile" />
         <input type="submit" value="Comment" id="submit_comment" />
     </fieldset>
 </form>
