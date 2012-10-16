@@ -89,9 +89,15 @@
 }
 
 /* poll */
+
+.TAN-poll{
+    margin:0px;
+    padding:0px;
+}
+
 .TAN-poll li{
     list-style:none;
-    width:490px;
+    width:600px;
     position:relative;
     padding-bottom:10px;
     border-bottom:1px solid #EAEAEA;
@@ -113,8 +119,7 @@
 }
 
 .TAN-poll-percent-holder{
-    margin-left:10px;
-    width:400px;
+    margin:0px 10px;
     border:1px solid #a3a3a3;
     background-color:#f6f6f6;
 }
@@ -125,8 +130,7 @@
 
 .TAN-poll-percent-voted{
     position:absolute;
-    right:55px;
     bottom:12px;
-    text-align:left;
-    width:20px;
+    text-align:center;
+    width:100%;
 }

@@ -15,13 +15,13 @@
                         [% IF !voted && ends %]
                             <label for="answer[% loop.count %]">
                                 <input type="radio" value="[% poll_answer.id %]" id="answer[% loop.count %]" name="answer_id" />
-                        [% END %]
-                                [% poll_answer.answer | html %]
+                        [%- END -%]
+                                [%- poll_answer.answer | html -%]
                                 <span class="TAN-poll-percent-holder">
                                     <span class="TAN-poll-percent" style="width:[% percent %]%"></span>
                                 </span>
                                 <span class="TAN-poll-percent-voted">
-                                    [% percent %]%
+                                    [% percent %]% ([% poll_answer.get_column('votes') %])
                                 </span>
                         [% IF !voted && ends %]
                             </label>
