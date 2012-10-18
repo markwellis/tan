@@ -17,7 +17,7 @@ sub index: Path{
         $c->detach('/default');
     }
 
-    my $format = qr/^[a-zA-Z0-9\-]+(?:\.css|\.js)$/;
+    my $format = qr/^[a-zA-Z0-9\-]+(?:\.css|\.js)?$/;
     my @files;
     foreach my $file ( @file_list ){
         if ( $file =~ /$format/ ){
@@ -25,6 +25,7 @@ sub index: Path{
         }
     }
     my $file = join( '/', @files );
+
     my $source_dir = $c->path_to('root', $c->config->{'static_path'}, 'themes', $theme, $type);
 
     if ( ! -e "${source_dir}/${file}" ){

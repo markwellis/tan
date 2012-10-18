@@ -4,23 +4,6 @@
 [%- menu_tab_names.push('All') -%]
 [%- menu_tab_values.push('all') -%]
 
-<script type="text/javascript">
-function change_menu( new_tab ){
-    if ( new_tab === selected_tab ){
-        return false;
-    }
-
-    document.getElementById("TAN-menu-" + selected_tab ).className = "none";
-    document.getElementById("TAN-menu-" + new_tab ).className = "TAN-menu-" + new_tab;
-    
-    document.getElementById("TAN-menu-tab-" + selected_tab).className = "TAN-menu-tab TAN-type-" + selected_tab;
-    document.getElementById("TAN-menu-tab-" + new_tab).className += " TAN-menu-tab-" + new_tab + "-selected";
-
-    selected_tab = new_tab;
-    return false;
-}
-</script>
-
 [%- FOREACH menu_item IN c.model('Object').public -%]
     [%- menu_tab_name = "${menu_item}s" | ucfirst -%]
     [%- menu_tab_names.push( menu_tab_name ) -%]

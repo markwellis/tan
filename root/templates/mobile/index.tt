@@ -1,3 +1,4 @@
+[% css_includes.push('View') %]
 <ul class="TAN-inside">
     [%- IF index -%]
         [%- FOREACH object IN index.objects -%]

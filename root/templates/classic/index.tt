@@ -1,5 +1,5 @@
-[% css_includes.push('view', 'Profile/Comments') %]
-[% js_includes.push('nsfw-comments') %]
+[% css_includes.push('View', 'Profile/Comments') %]
+[% js_includes.push('View/NSFW') %]
 <ul class="TAN-inside">
     [%- IF index -%]
         [%- is_picture = 0 -%]
@@ -7,7 +7,7 @@
             ( type == 'picture' ) 
             && ( fancy_picture_index ) 
         -%]
-            [%- css_includes.push('index/picture') -%]
+            [%- css_includes.push('Index/Picture') -%]
             [%- is_picture = 1 -%]
         [%- END -%]
 

@@ -1,5 +1,5 @@
-[% css_includes.push('view', 'Profile/Avatar') %]
-[% js_includes.push('Lasso', 'Lasso-Crop', 'Profile/Avatar') %]
+[% css_includes.push('View', 'Profile/Avatar') %]
+[% js_includes.push('Profile/Lasso', 'Profile/Lasso-Crop', 'Profile/Avatar') %]
 [% avatar_http = c.user.avatar(c) %]
 
 <ul class="TAN-inside">

@@ -1,12 +1,12 @@
-[%- css_includes.push('view') -%]
-[%- js_includes.push('comment') -%]
+[%- css_includes.push('View') -%]
+[%- js_includes.push('View/Comment') -%]
 
 [% IF type == 'poll' %]
     [% voted = (c.user_exists) ? object.poll.voted( c.user.id ) : 0 %]
     [% ends = object.poll.ends %]
 
     [% IF !voted && ends %]
-        [% js_includes.push('poll') %]
+        [% js_includes.push('View/Poll') %]
     [% END %]
 [% END %]
 

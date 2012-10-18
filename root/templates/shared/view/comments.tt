@@ -1,8 +1,4 @@
-[% IF c.mobile %]
-    [% js_includes.push('quote-comment') %]
-[% ELSE %]
-    [% js_includes.push('nsfw-comments', 'comment') %]
-[% END %]
+[% js_includes.push('View/NSFW', 'View/Comment') %]
 [% view_comments = 1 %]
 <div class="TAN-comment_wrapper">
     [% IF object.comments %]

@@ -1,4 +1,4 @@
-[%- css_includes.push('errors') -%]
+[%- css_includes.push('Error') -%]
 
 <ul class="TAN-inside">
     <li class="TAN-news">

@@ -1,4 +1,4 @@
-[%- js_includes.push('Plus-Minus') -%]
+[%- js_includes.push('Lib/PlusMinus') -%]
 
 <div class="TAN-plusminus right">
     <div class="TAN-plus-wrapper">

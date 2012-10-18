@@ -1,4 +1,4 @@
-[%- css_includes.push('login') -%]
+[%- css_includes.push('Login') -%]
 
 <ul class="TAN-inside">
     <li class="TAN-news">

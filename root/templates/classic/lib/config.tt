@@ -1,10 +1,10 @@
 [%-
     js_includes = [
-        'mootools-1-2-5-core-nc', 
-        "mootools-more",
-        'TAN',
-        'menu',
-        'recent-comments'
+        'Lib/mootools-1-2-5-core-nc', 
+        "Lib/mootools-more",
+        'Lib/TAN',
+        'Lib/Menu',
+        'Lib/RecentComments'
     ];
     
     css_includes = [

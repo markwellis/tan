@@ -24,25 +24,32 @@ sub minify{
         }
     } elsif (-e $input){
 
-        mkpath( dirname( $output ) );
 
         open(INPUT, "< ${input}");
-        open(OUTPUT, "> ${output}");
+        if ( !$ENV{'CATALYST_DEBUG'} ){
+            mkpath( dirname( $output ) );
+            open(OUTPUT, "> ${output}");
+        }
         
         while (my $line = <INPUT>) {
             $text .= $line;
         }
 
-        if ( $type eq 'css' ){
-            $text = CSS::Minifier::XS::minify($text);
-        } elsif ( $type eq 'js' ){
-            $text = JavaScript::Minifier::XS::minify($text);
+        if ( !$ENV{'CATALYST_DEBUG'} ){
+        #disable minify for dev mode
+            if ( $type eq 'css' ){
+                $text = CSS::Minifier::XS::minify($text);
+            } elsif ( $type eq 'js' ){
+                $text = JavaScript::Minifier::XS::minify($text);
+            }
+
+            print OUTPUT $text;
         }
 
-        print OUTPUT $text;
-
         close(INPUT);
-        close(OUTPUT);
+        if ( !$ENV{'CATALYST_DEBUG'} ){
+            close(OUTPUT);
+        }
     }
 
     return $text;

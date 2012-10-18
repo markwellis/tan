@@ -33,7 +33,7 @@
 [%# tinymce isn't compatable with iPhone or Android %]
     [% js_incs = [] %]
     [% FOREACH js_include IN js_includes %]
-        [% IF js_include != 'comment' %]
+        [% IF js_include != 'View/Comment' %]
             [% js_incs.push( js_include ) %]
         [% END %]
     [% END %]
@@ -41,7 +41,7 @@
     [% RETURN %]
 [% END %]
 
-[% js_includes.push('/static/tiny_mce/tiny_mce.js?r=10', 'tiny-mce-config') %]
+[% js_includes.push('/static/tiny_mce/tiny_mce.js?r=10', 'Lib/tiny-mce-config') %]
 <script type="text/javascript">
 //<![CDATA[
     if ( typeof( tiny_mce_config ) == 'undefined' ){

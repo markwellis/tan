@@ -1,6 +1,6 @@
 [%-
     js_includes = [
-        'menu',
+        'Lib/Menu',
     ];
     
     css_includes = [
