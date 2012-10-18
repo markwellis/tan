@@ -1,4 +1,4 @@
-[% js_includes.push('Submit@Wysiwyg') %]
+[% js_includes.push('Submit/Wysiwyg') %]
 
 [% 
     PROCESS lib/editor.tt editor = {

@@ -1,4 +1,4 @@
-[% js_includes.push('Submit@Array') %]
+[% js_includes.push('Submit/Array') %]
 
 [% answers = [] %]
 [% IF field.value %]

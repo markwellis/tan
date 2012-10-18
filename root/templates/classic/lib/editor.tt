@@ -52,7 +52,7 @@
         tiny_mce_config['width'] = "[% edwidth %]";
         tiny_mce_config['height'] = "[% edheight %]";
         tiny_mce_config['editor_selector'] = "[% edname %]";
-        tiny_mce_config['content_css'] = "[% theme_settings.css_path %]/editor.css?r=1";
+        tiny_mce_config['content_css'] = "[% c.config.cache_path %]/minify/[% c.VERSION %]/[% theme_settings.name %]/css/editor.css";
 
         tinyMCE.init( tiny_mce_config );
     } );

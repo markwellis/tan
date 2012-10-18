@@ -1,6 +1,6 @@
 [% IF type != 'picture' %]
     [%#half done, waiting on js upgrades %] 
-    [% js_includes.push('Submit@Tags') %]
+    [% js_includes.push('Submit/Tags') %]
 [% END %]
 
 [% required = '', min_length = '', max_length = '' %]

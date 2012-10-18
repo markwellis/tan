@@ -10,8 +10,6 @@
     "pic_path": "/static/user/pics",
 
     "cache_path": "/static/cache",
-    "csscache_path": "/static/cache/css",
-    "jscache_path": "/static/cache/js",
     "thumb_path": "/static/cache/thumbs",
 
     "recaptcha_public_key": "6Lf1icoSAAAAAL2RmjqU2q30R3PFXYnT0X6SOM4Y",
