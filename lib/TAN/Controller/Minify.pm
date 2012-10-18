@@ -6,8 +6,8 @@ BEGIN { extends 'Catalyst::Controller'; }
 
 use File::Path qw/rmtree/;
 
-sub version_check: PathPart('minify') Chained('/') CaptureArgs(3){
-    my ( $self, $c, $version, $theme, $type ) = @_;
+sub index: Path{
+    my ( $self, $c, $version, $theme, $type, @file_list ) = @_;
 
     if ( $version ne $c->VERSION ){
         $c->detach('/default');
@@ -17,25 +17,6 @@ sub version_check: PathPart('minify') Chained('/') CaptureArgs(3){
         $c->detach('/default');
     }
 
-    $c->stash(
-        'theme' => $theme,
-        'type' => $type,
-    );
-
-    #remove old files
-    my $version_dir = $c->path_to('root') . $c->config->{'cache_path'} . '/minify';
-    foreach my $version ( <$version_dir/*> ){
-        if ( $version ne "${version_dir}/" . $c->VERSION ){
-            rmtree( $version );
-        }
-    }
-}
-
-sub minify: PathPart('') Chained('version_check'){
-    my ( $self, $c, @file_list ) = @_;
-
-    my $type = $c->stash->{'type'};
-
     my $format = qr/^[a-zA-Z0-9\-]+(?:\.css|\.js)$/;
     my @files;
     foreach my $file ( @file_list ){
@@ -44,13 +25,13 @@ sub minify: PathPart('') Chained('version_check'){
         }
     }
     my $file = join( '/', @files );
-    my $source_dir = $c->path_to('root', $c->config->{'static_path'}, 'themes', $c->stash->{'theme'}, $type);
+    my $source_dir = $c->path_to('root', $c->config->{'static_path'}, 'themes', $theme, $type);
 
     if ( ! -e "${source_dir}/${file}" ){
         $c->detach('/default');
     }
 
-    my $out_dir = $c->path_to('root') . $c->config->{'cache_path'} . '/minify/' . $c->VERSION . '/' . $c->stash->{'theme'} . "/${type}";
+    my $out_dir = $c->path_to('root') . $c->config->{'cache_path'} . '/minify/' . $c->VERSION . "/${theme}/${type}";
     #/static/cache/minify/4.1.04/mobile/css/shared.css
 
     my $text = $c->model('Minify')->minify(
@@ -66,6 +47,15 @@ sub minify: PathPart('') Chained('version_check'){
             $c->res->header('Content-Type' => 'application/x-javascript');
         }
         $c->response->body( $text );
+    
+        #remove old files
+        my $version_dir = $c->path_to('root') . $c->config->{'cache_path'} . '/minify';
+        foreach my $version_cache ( <$version_dir/*> ){
+            if ( $version_cache ne "${version_dir}/" . $c->VERSION ){
+                rmtree( $version_cache );
+            }
+        }
+
         $c->detach;
     }
     
