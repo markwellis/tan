@@ -6,7 +6,7 @@
     <li class="TAN-profile-avatar">
         [% username = user.username | html %]
         <a href="[% username %]/" title="[% username %]">
-            <img class="TAN-news-avatar" src="[% user.avatar(c) %]" alt="[% username %]"/><br/>
+            <img class="TAN-news-avatar" src="[% user.avatar %]" alt="[% username %]"/><br/>
             [% username %]
         </a>
     </li>

@@ -20,12 +20,15 @@ sub delete_avatar: Chained('../admin') Args(0){
     my $user = $c->stash->{'user'};
 
     if ( $c->req->method eq 'POST' ){
-        my @outfile_path = split('/', "root/@{[ $c->config->{'avatar_path'} ]}/@{[ $user->id ]}");
-        my $outfile = $c->path_to( @outfile_path );
+        my $outfile = $c->path_to( 'root' ) . $c->config->{'avatar_path'} . '/' . $user->id . '/' . $user->avatar;
 
         if ( -e $outfile ){
             unlink( $outfile );
         }
+
+        $user->update( {
+            'avatar' => undef,
+        } );
 
         $c->model('MySql::AdminLog')->log_event( {
             'admin_id' => $c->user->id,

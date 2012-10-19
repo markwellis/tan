@@ -50,6 +50,14 @@ __PACKAGE__->add_columns(
     is_nullable => 0,
     size => 255,
   },
+  "avatar",
+  {
+    data_type => "VARCHAR",
+    default_value => undef,
+    is_nullable => 1,
+    size => 10,
+    accessor => '_avatar',
+  },
 );
 __PACKAGE__->set_primary_key("user_id");
 
@@ -119,21 +127,15 @@ sub confirm{
 }
 
 sub avatar{
-    my ( $self, $c ) = @_;
+    my ( $self ) = @_;
 
-    my $avatar_http = "@{[ $c->config->{'avatar_path'} ]}/@{[ $self->id ]}";
-    my $avatar_image = "@{[ $c->path_to('root') ]}${avatar_http}";
-    my $avatar_mtime;
+    my $avatar = $self->_avatar;
 
-    if ( -e $avatar_image ){
-    #avatar exists
-        my @stats = stat($avatar_image);
-        $avatar_http = "$avatar_http/" . $stats[9];
-    } else {
-        $avatar_http = "@{[ $c->config->{'static_path'} ]}/images/_user.png";
+    if ( !$avatar ){
+        return TAN->config->{'static_path'} . '/images/_user.png';
     }
-    
-    return $avatar_http;
+
+    return TAN->config->{'avatar_path'} . '/' . $self->id . '/' . $avatar;
 }
 
 sub profile_url{

@@ -9,6 +9,7 @@ __PACKAGE__->config(namespace => 'profile/_avatar');
 
 use JSON;
 use Try::Tiny;
+use File::Path qw/mkpath/;
 
 sub auto: Private{
     my ( $self, $c ) = @_;
@@ -41,21 +42,22 @@ sub upload: Local{
     if ( my $upload = $c->request->upload('avatar') ){
         #upload
         try{
-            my @outfile_path = split('/', "root/@{[ $c->config->{'avatar_path'} ]}/@{[ $c->user->user_id ]}.no_crop");
-            my $outfile = $c->path_to( @outfile_path );
+            my $avatar_dir = $c->path_to('root') . $c->config->{'avatar_path'} . '/' . $c->user->user_id;
+            mkpath( $avatar_dir );
 
-            if ( -e $outfile ){
+            my $pre_crop = "${avatar_dir}/pre_crop";
+
+            if ( -e $pre_crop ){
             #delete existing pre-crop
-                unlink( $outfile );
+                unlink( $pre_crop );
             }
 
             try{
-                $c->model('Image')->thumbnail( $upload->tempname, $outfile, 640 );
+                $c->model('Image')->thumbnail( $upload->tempname, $pre_crop, 640 );
             } catch {
                 $c->flash->{'message'} = $_->error;
                 $c->res->redirect('/profile/_avatar', 303);
             };
-            undef $upload;
 
             # upload success
             #redirect back to avatar upload page
@@ -68,7 +70,7 @@ sub upload: Local{
         $c->flash->{'message'} = 'no image uploaded';
         $c->res->redirect('/profile/_avatar/', 303);
     }
-    $c->detach();
+    $c->detach;
 }
 
 sub crop: Local{
@@ -80,7 +82,7 @@ sub crop: Local{
 #ERROR HERE
         $c->flash->{'message'} = 'Crop error';
         $c->res->redirect('/profile/_avatar/?crop=true', 303);
-        $c->detach();
+        $c->detach;
     }
     my $cords;
     
@@ -90,7 +92,7 @@ sub crop: Local{
     } catch {
         $c->flash->{'message'} = 'Crop error';
         $c->res->redirect('/profile/_avatar/?crop=true', 303);
-        $c->detach();
+        $c->detach;
     };
 
     my ($x, $y, $w, $h) = (
@@ -112,21 +114,28 @@ sub crop: Local{
 #ERROR HERE
         $c->flash->{'message'} = 'Crop error';
         $c->res->redirect('/profile/_avatar?crop=true', 303);
-        $c->detach();
+        $c->detach;
     }
 
-    my @path = split('/', 'root/' . $c->config->{'avatar_path'} . '/' . $c->user->user_id);
-    my $filename = $c->path_to(@path);
+    my $avatar_dir = $c->path_to('root') . $c->config->{'avatar_path'} . '/' . $c->user->user_id;
+    my @stat = stat("${avatar_dir}/pre_crop");
+    my $filename = "${avatar_dir}/" . $stat[9];
 
-    my $crop_res = $c->model('Image')->crop("${filename}.no_crop", $filename, $x, $y, $w, $h);
+    my $crop_res = $c->model('Image')->crop("${avatar_dir}/pre_crop", $filename, $x, $y, $w, $h);
+
+    $c->user->update({
+        'avatar' => $stat[9],
+    });
+    #update user info in the session
+    $c->persist_user;
 
     if ( $crop_res ){
 # SUCCESS
         $c->flash->{'message'} = 'Upload complete';
 
-        if ( -e $filename . '.no_crop' ){
+        if ( -e "${avatar_dir}/pre_crop" ){
 #        #delete pre-crop
-            unlink( $filename . '.no_crop' );
+            unlink( "${avatar_dir}/pre_crop" );
         }
 
         $c->res->redirect('/profile/_avatar/', 303);
@@ -136,7 +145,7 @@ sub crop: Local{
         $c->res->redirect('/profile/_avatar/?crop=true', 303);
     }
     
-    $c->detach();
+    $c->detach;
 }
 
 __PACKAGE__->meta->make_immutable;

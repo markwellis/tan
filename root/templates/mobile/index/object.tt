@@ -48,7 +48,7 @@
 <a 
     href="[% object.user.profile_url %]" 
     class="TAN-news-user"
-><img class="TAN-news-avatar TAN-comment_avatar" src="[% object.user.avatar(c) %]" alt="[% object.user.username | html %]" />
+><img class="TAN-news-avatar TAN-comment_avatar" src="[% object.user.avatar %]" alt="[% object.user.username | html %]" />
 [%- object.user.username | html -%]</a> |
     
  [% object.get_column('views') %] views |

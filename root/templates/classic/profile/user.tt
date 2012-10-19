@@ -12,7 +12,7 @@
     <li>
         <ul class="TAN-id-card">
             <li>
-                <img class="TAN-news-avatar" src="[% user.avatar(c) %]" alt="[% user.username | html %]" />
+                <img class="TAN-news-avatar" src="[% user.avatar %]" alt="[% user.username | html %]" />
                 <br />
                 <br />
                 <br />

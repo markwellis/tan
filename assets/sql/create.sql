@@ -217,6 +217,7 @@ CREATE  TABLE IF NOT EXISTS `tan`.`poll` (
   `title` VARCHAR(255) NOT NULL ,
   `description` VARCHAR(1000) NOT NULL ,
   `end_date` TIMESTAMP NULL DEFAULT NULL ,
+  `votes` BIGINT(20) NOT NULL DEFAULT 0 ,
   PRIMARY KEY (`poll_id`) ,
   INDEX `fk_poll_1` (`poll_id` ASC) ,
   INDEX `fk_poll_2` (`picture_id` ASC) ,
@@ -654,12 +655,13 @@ DELIMITER $$
 USE `tan`$$
 
 
-Create Trigger increment_poll_answer_vote
+Create Trigger increment_poll_votes
 	AFTER INSERT ON poll_vote
 	FOR EACH ROW
 BEGIN
 
 UPDATE poll_answer SET votes=votes+1 WHERE answer_id=NEW.answer_id;
+UPDATE poll SET poll.votes=poll.votes+1 WHERE poll.poll_id=( SELECT poll_answer.poll_id FROM poll_answer WHERE poll_answer.answer_id = NEW.answer_id );
 
 END$$
 

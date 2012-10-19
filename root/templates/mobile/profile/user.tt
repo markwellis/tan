@@ -2,7 +2,7 @@
 
 <ul class="TAN-inside">
     <li>
-        <img class="TAN-news-avatar left" src="[% user.avatar(c) %]" alt="[% user.username | html %]" />
+        <img class="TAN-news-avatar left" src="[% user.avatar %]" alt="[% user.username | html %]" />
         [% user.username | html %]
         [% IF user.deleted == 'Y' %]
             <span style="color:#f00">DELETED</span>

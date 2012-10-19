@@ -45,7 +45,7 @@
 </h2>
 <img 
     alt="[% object.user.username | html %]"
-    src="[% object.user.avatar(c) %]"
+    src="[% object.user.avatar %]"
     class="TAN-news-avatar left"
 />
 <ul>

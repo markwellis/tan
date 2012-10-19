@@ -114,7 +114,7 @@
     },
 
     "Model::Image": {
-        "allowed_thumbnail_sizes": [100, 160, 200, 600],
+        "allowed_thumbnail_sizes": [100, 160, 200, 600, 640],
         "animated_frame_limit": 9,
         "animated_size_showall_frames": [200, 600]
     },

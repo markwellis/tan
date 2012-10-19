@@ -4,7 +4,7 @@
         <img 
             title="[% username %]" 
             alt="[% username %]" 
-            src="[% user.avatar(c) %]" 
+            src="[% user.avatar %]" 
         />
     </a>
 [%- END -%]
