@@ -17,6 +17,7 @@ CREATE  TABLE IF NOT EXISTS `tan`.`user` (
   `confirmed` ENUM('N','Y') NOT NULL DEFAULT 'N' ,
   `deleted` ENUM('N','Y') NOT NULL DEFAULT 'N' ,
   `paypal` VARCHAR(255) NOT NULL ,
+  `avatar` VARCHAR(10) NULL ,
   PRIMARY KEY (`user_id`) )
 ENGINE = InnoDB
 AUTO_INCREMENT = 751
