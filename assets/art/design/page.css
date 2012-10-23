@@ -1,7 +1,7 @@
 body{
     color:#535353;
     margin:auto;
-    width:908px;
+    width:902px;
     font-family: Arial,sans-serif;
 }
 
@@ -28,26 +28,15 @@ a{
 .TAN-header{
     position:relative;
     height:75px;
-    margin-bottom:2px;
 }
 
 .TAN-logo{
-    position:absolute;
-    top:0px;
-    left:0px;
     background-image: url("images/logo.png");
     height:75px;
     margin:0px;
     text-indent:-1000px;
     width:517px;
-}
-
-.TAN-top-menu{
-    position:absolute;
-    top:0px;
-    right:0px;
-    width:389px;
-    height:45px;
+    float:left;
 }
 
 .TAN-top-menu > p{
@@ -58,16 +47,6 @@ a{
     color:#888;
 }
 
-.TAN-search{
-    position:absolute;
-    bottom:0px;
-    right:0px;
-    width:389px;
-    height:28px;
-    text-align: right;
-    margin:0px;
-}
-
 .TAN-search > fieldset{
     margin:0px;
     border:0px;
@@ -75,7 +54,7 @@ a{
 }
 
 .TAN-search > fieldset > input[type="text"]{
-    width:317px;
+    width:315px;
 }
 
 .TAN-search > fieldset > input[type="submit"]{
@@ -89,12 +68,14 @@ a{
 
 .TAN-main{
     padding-bottom:26px;
+    background-image:url(images/main.jpg);
+    background-repeat:repeat-y;
 }
 
 .TAN-column{
     float:left;
     width:300px;
-    border-right:1px solid #ddd;
+    margin-right:1px;
 }
 
 .TAN-object{
@@ -148,9 +129,8 @@ a{
     bottom: 0;
     height: 20px;
     padding: 2px;
-    margin-left:2px;
     position: fixed;
-    width:900px;
+    width:902px;
 }
 
 .TAN-whos-online img {
