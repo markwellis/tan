@@ -32,6 +32,18 @@ sub auto: Private{
         'type' => 'all',
         'location' => 'all',
     );
+
+    if ( $c->user_exists ){
+        if ( 
+            ( $c->action eq 'view/index' )
+            || ( $c->action eq 'index/index' )
+        ){
+            if ( $c->user->tcs != $c->model('MySql::Cms')->load('tcs')->revision ){
+                $c->res->redirect('/tcs');
+                $c->detach;
+            }
+        }
+    }
     
     return 1;
 }

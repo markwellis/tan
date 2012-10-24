@@ -58,6 +58,8 @@ __PACKAGE__->add_columns(
     size => 10,
     accessor => '_avatar',
   },
+  "tcs",
+  { data_type => "BIGINT", default_value => undef, is_nullable => 1, size => 20 },
 );
 __PACKAGE__->set_primary_key("user_id");
 

@@ -1,0 +1,20 @@
+[% css_includes.push('Cms') %]
+
+<ul class="TAN-inside">
+    <li>
+        [% tcs.content %]
+    </li>
+    [%- IF 
+        c.user_exists 
+        && c.user.tcs != tcs.revision
+    -%]
+        <li>
+            <form action="/tcs/submit" method="get">
+                <fieldset>
+                    <input type="submit" value="Agree" name="accept" />
+                    <input type="submit" value="Decline" name="accept" />
+                </fieldset>
+            </form>
+        </li>
+    [%- END -%]
+</ul>
