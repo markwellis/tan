@@ -34,7 +34,7 @@ sub auto: Private{
     );
 
     if ( $c->user_exists ){
-        my $user_tcs = $c->user->tcs || -1;
+        my $user_tcs = $c->user->tcs // -1;
         if ( 
             ( $c->action eq 'view/index' )
             || ( $c->action eq 'index/index' )
