@@ -6,6 +6,16 @@ BEGIN { extends 'Catalyst::Controller'; }
 
 use 5.014;
 
+has '_mobile' => (
+    'is' => 'ro',
+    'isa' => 'HashRef',
+    'default' => sub{
+        return {
+            'index' => 1,
+        };
+    },
+);
+
 sub index: Path{
     my ( $self, $c ) = @_;
 

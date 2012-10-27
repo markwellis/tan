@@ -9,6 +9,7 @@
         && c.user.tcs != tcs.revision
     -%]
         <li>
+            <p>To use this site you must agree to the above terms and conditions</p>
             <form action="/tcs/submit" method="get">
                 <fieldset>
                     <input type="submit" value="Agree" name="accept" />

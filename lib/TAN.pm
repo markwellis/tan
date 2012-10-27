@@ -233,4 +233,22 @@ sub finalize_error {
     }
 }
 
+around dispatch => sub {
+    my $orig = shift;
+    my $c = shift;
+
+    return if ( $c->res->status != 200 );
+
+    if ( 
+        $ENV{'CATALYST_DEBUG'}
+        && $c->log->can('abort')
+        && ( $c->action eq 'minify/index')
+    ){
+        #don't log minify requests, they're annoying
+        $c->log->abort(1);
+    }
+
+    return $c->$orig(@_);
+};
+
 1;
