@@ -33,8 +33,8 @@ sub auto: Private{
         'location' => 'all',
     );
 
-    my $user_tcs = $c->user->tcs || -1;
     if ( $c->user_exists ){
+        my $user_tcs = $c->user->tcs || -1;
         if ( 
             ( $c->action eq 'view/index' )
             || ( $c->action eq 'index/index' )
