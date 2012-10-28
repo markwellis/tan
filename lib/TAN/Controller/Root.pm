@@ -33,16 +33,13 @@ sub auto: Private{
         'location' => 'all',
     );
 
-    if ( $c->user_exists ){
-        my $user_tcs = $c->user->tcs // -1;
-        if ( 
-            ( $c->action eq 'view/index' )
-            || ( $c->action eq 'index/index' )
-        ){
-            if ( $user_tcs != $c->model('MySql::Cms')->load('tcs')->revision ){
-                $c->res->redirect('/tcs');
-                $c->detach;
-            }
+    if ( 
+        ( $c->action eq 'view/index' )
+        || ( $c->action eq 'index/index' )
+    ){
+        if ( !$c->check_usr_tcs ){
+            $c->res->redirect('/tcs');
+            $c->detach;
         }
     }
     

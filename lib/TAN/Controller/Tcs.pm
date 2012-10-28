@@ -58,6 +58,8 @@ sub agree: Private{
     } );
     #update user info in the session
     $c->persist_user;
+                    
+    $c->forward('/view/comment/post_saved_comments');
 }
 
 sub decline: Private{

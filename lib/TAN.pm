@@ -233,6 +233,19 @@ sub finalize_error {
     }
 }
 
+sub check_usr_tcs{
+    my $c = shift;
+
+    if ( $c->user_exists ){
+        my $user_tcs = $c->user->tcs // -1;
+        if ( $user_tcs != $c->model('MySql::Cms')->load('tcs')->revision ){
+            return 0;
+        }
+    }
+
+    return 1;
+}
+
 around dispatch => sub {
     my $orig = shift;
     my $c = shift;
