@@ -70,8 +70,6 @@ sub vcl_recv {
 
     if (
     	req.url ~ "^/$" 
-    	|| req.url ~ "^/index/(all|link|blog|picture)/[0-1]/[0-9]+/$"
-	    || req.url ~ "^/(link|blog|picture)/[0-1]/[0-9]+/$"
     	|| req.url ~ "^/favicon.ico$"
     ){  
         error 750;
@@ -168,18 +166,6 @@ sub vcl_error{
     if (obj.status == 750) {
         if (req.url ~ "^/$"){
             set obj.http.Location = "/index/all/0/";
-        } elsif (req.url ~ "^/index/(all|link|blog|picture)/[0-1]/[0-9]+/.*$"){
-            set obj.http.Location = regsub(
-                req.url,
-                "^/index/(all|link|blog|picture)/([0-1])/([0-9]+)/.*$",
-                "/index/\1/\2/\?page=\3"
-            );
-        } elsif (req.url ~ "^/(link|blog|picture)/[0-1]/[0-9]+/.*$"){
-            set obj.http.Location = regsub(
-                req.url,
-                "^/(link|blog|picture)/([0-1])/([0-9]+)/.*$",
-                "/index/\1/\2/\?page=\3"
-            );
         } elsif (req.url ~ "^/favicon.ico"){
     		set obj.http.Location = "/static/favicon.ico";
         }

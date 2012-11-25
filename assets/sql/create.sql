@@ -165,24 +165,6 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `tan`.`old_lookup`
--- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `tan`.`old_lookup` (
-  `new_id` BIGINT(20) NOT NULL ,
-  `old_id` INT(11) NOT NULL ,
-  `type` ENUM('link','blog','picture') NOT NULL ,
-  INDEX `lookup` (`old_id` ASC, `type` ASC) ,
-  INDEX `fk_old_lookup_1` (`new_id` ASC) ,
-  CONSTRAINT `fk_old_lookup_1`
-    FOREIGN KEY (`new_id` )
-    REFERENCES `tan`.`object` (`object_id` )
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8;
-
-
--- -----------------------------------------------------
 -- Table `tan`.`plus_minus`
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `tan`.`plus_minus` (
