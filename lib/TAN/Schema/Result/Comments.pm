@@ -11,39 +11,18 @@ use DateTime::Format::Human::Duration;
 
 __PACKAGE__->load_components(qw/Core InflateColumn::DateTime/);
 __PACKAGE__->table("comments");
+__PACKAGE__->add_columns(qw/comment_id user_id number object_id deleted/);
 __PACKAGE__->add_columns(
-  "comment_id",
-  { data_type => "BIGINT", default_value => undef, is_nullable => 0, size => 20 },
-  "user_id",
-  { data_type => "BIGINT", default_value => undef, is_nullable => 0, size => 20 },
-  "number",
-  { data_type => "BIGINT", default_value => undef, is_nullable => 0, size => 20 },
-  "comment",
-  {
-    data_type => "MEDIUMTEXT",
-    default_value => undef,
-    is_nullable => 0,
-    size => 16777215,
-    accessor => '_comment',
-  },
-  "created",
-  {
-    data_type => 'datetime',
-    default_value => "CURRENT_TIMESTAMP",
-    is_nullable => 0,
-    size => 14,
-    datetime_undef_if_invalid => 1,
-    accessor => '_created',
-  },
-  "object_id",
-  { data_type => "BIGINT", default_value => undef, is_nullable => 0, size => 20 },
-  "deleted",
-  { data_type => "ENUM", default_value => "N", is_nullable => 0, size => 1 },
+    "comment" => {
+        accessor => '_comment',
+    },
+    "created" => {
+        data_type => 'datetime',
+        datetime_undef_if_invalid => 1,
+        accessor => '_created',
+    },
 );
 __PACKAGE__->set_primary_key("comment_id");
-
-# Created by DBIx::Class::Schema::Loader v0.04006 @ 2009-11-04 22:01:20
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:1eFIzFs/gXnMuzdofLP07Q
 
 sub created{
     my ( $self ) = @_;

@@ -6,86 +6,19 @@ use utf8;
 use base qw/DBIx::Class::Core/;
 
 __PACKAGE__->table_class('DBIx::Class::ResultSource::View');
-
 __PACKAGE__->load_components(qw/InflateColumn::DateTime/);
-
 __PACKAGE__->table("recent_comments");
 
+__PACKAGE__->add_columns(qw/comment_id object_id username link_title picture_title blog_title poll_title video_title forum_title nsfw type/);
 __PACKAGE__->add_columns(
-  "comment_id",
-  { data_type => "BIGINT", default_value => undef, is_nullable => 0, size => 20 },
-  "comment",
-  {
-    data_type => "MEDIUMTEXT",
-    default_value => undef,
-    is_nullable => 0,
-    size => 16777215,
-    accessor => '_comment',
-  },
-  "created",
-  {
-    data_type => 'datetime',
-    default_value => "CURRENT_TIMESTAMP",
-    is_nullable => 0,
-    size => 14,
-    datetime_undef_if_invalid => 1,
-    accessor => '_created',
-  },
-  "object_id",
-  { data_type => "BIGINT", default_value => undef, is_nullable => 0, size => 20 },
-  "username",
-  {
-    data_type => "VARCHAR",
-    default_value => undef,
-    is_nullable => 0,
-    size => 255,
-  },
-  "link_title",
-  {
-    data_type => "VARCHAR",
-    default_value => undef,
-    is_nullable => 0,
-    size => 255,
-  },
-  "picture_title",
-  {
-    data_type => "VARCHAR",
-    default_value => undef,
-    is_nullable => 0,
-    size => 255,
-  },
-  "blog_title",
-  {
-    data_type => "VARCHAR",
-    default_value => undef,
-    is_nullable => 0,
-    size => 255,
-  },
-  "poll_title",
-  {
-    data_type => "VARCHAR",
-    default_value => undef,
-    is_nullable => 0,
-    size => 255,
-  },
-  "video_title",
-  {
-    data_type => "VARCHAR",
-    default_value => undef,
-    is_nullable => 0,
-    size => 255,
-  },
-  "forum_title",
-  {
-    data_type => "VARCHAR",
-    default_value => undef,
-    is_nullable => 0,
-    size => 255,
-  },
-  "nsfw",
-  { data_type => "ENUM", default_value => "N", is_nullable => 0, size => 1 },
-  "type",
-  { data_type => "ENUM", default_value => undef, is_nullable => 0, size => 7 },
+    "comment" => {
+        accessor => '_comment',
+    },
+    "created" => {
+        data_type => 'datetime',
+        datetime_undef_if_invalid => 1,
+        accessor => '_created',
+    },
 );
 __PACKAGE__->set_primary_key("comment_id");
 

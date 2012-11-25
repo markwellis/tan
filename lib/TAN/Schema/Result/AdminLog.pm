@@ -6,17 +6,14 @@ use base 'DBIx::Class';
 
 __PACKAGE__->load_components(qw/Core InflateColumn::DateTime/);
 __PACKAGE__->table("admin_log");
-__PACKAGE__->add_columns( qw/log_id admin_id action reason bulk user_id comment_id object_id other/ );
+__PACKAGE__->add_columns(qw/log_id admin_id action reason bulk user_id comment_id object_id other/);
 
-__PACKAGE__->add_columns( "created" =>
-  {
-    data_type => 'datetime',
-    default_value => "CURRENT_TIMESTAMP",
-    is_nullable => 0,
-    size => 14,
-    datetime_undef_if_invalid => 1,
-    accessor => '_created',
-  },
+__PACKAGE__->add_columns( 
+    "created" => {
+        data_type => 'datetime',
+        datetime_undef_if_invalid => 1,
+        accessor => '_created',
+    },
 );
 
 sub created{

@@ -12,50 +12,22 @@ use POSIX;
 
 __PACKAGE__->load_components(qw/Core InflateColumn::DateTime/);
 __PACKAGE__->table("object");
+__PACKAGE__->add_columns(qw/object_id type user_id nsfw views plus minus comments deleted score/);
+
 __PACKAGE__->add_columns(
-  "object_id",
-  { data_type => "BIGINT", default_value => undef, is_nullable => 0, size => 20 },
-  "type",
-  { data_type => "ENUM", default_value => undef, is_nullable => 0, size => 7 },
-  "created",
-  {
+  "created" => {
       data_type => 'datetime',
-      is_nullable => 0,
       datetime_undef_if_invalid => 1,
-      size => 14,
       accessor => '_created',
   },
-  "promoted",
-  {
+  "promoted" => {
       data_type => 'datetime',
       datetime_undef_if_invalid => 1,
-      default_value => undef,
-      is_nullable => 1,
-      size => 14,
       accessor => '_promoted',
-  },
-  "user_id",
-  { data_type => "BIGINT", default_value => undef, is_nullable => 0, size => 20 },
-  "nsfw",
-  { data_type => "ENUM", default_value => "N", is_nullable => 0, size => 1 },
-  "views",
-  { data_type => "BIGINT", default_value => undef, is_nullable => 0, size => 20 },
-  "plus",
-  { data_type => "BIGINT", default_value => undef, is_nullable => 0, size => 20 },
-  "minus",
-  { data_type => "BIGINT", default_value => undef, is_nullable => 0, size => 20 },
-  "comments",
-  { data_type => "BIGINT", default_value => undef, is_nullable => 0, size => 20 },
-  "deleted",
-  { data_type => "ENUM", default_value => "N", is_nullable => 0, size => 1 },
-  "score",
-  { data_type => "INT", default_value => undef, is_nullable => 1, size => 11 },
+  }
 );
+
 __PACKAGE__->set_primary_key("object_id");
-
-
-# Created by DBIx::Class::Schema::Loader v0.04006 @ 2009-11-04 22:01:20
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:zHtxjN50TOUzr4b7Jb877A
 
 sub created{
     my ( $self ) = @_;

@@ -10,38 +10,14 @@ use DateTime::Format::Human::Duration;
 
 __PACKAGE__->load_components(qw/Core InflateColumn::DateTime/);
 __PACKAGE__->table("poll");
+__PACKAGE__->add_columns(qw/poll_id picture_id title description votes/);
 __PACKAGE__->add_columns(
-  "poll_id",
-  { data_type => "BIGINT", default_value => undef, is_nullable => 0, size => 20 },
-  "picture_id",
-  { data_type => "BIGINT", default_value => undef, is_nullable => 0, size => 20 },
-  "title",
-  {
-    data_type => "VARCHAR",
-    default_value => undef,
-    is_nullable => 0,
-    size => 255,
-  },
-  "description",
-  {
-    data_type => "VARCHAR",
-    default_value => undef,
-    is_nullable => 0,
-    size => 1000,
-  },
-  "end_date",
-  {
-      data_type => 'datetime',
-      is_nullable => 1,
-      datetime_undef_if_invalid => 1,
-  },
-  "votes",
-  { data_type => "BIGINT", default_value => undef, is_nullable => 0, size => 20 },
+    "end_date" => {
+        data_type => 'datetime',
+        datetime_undef_if_invalid => 1,
+    },
 );
 __PACKAGE__->set_primary_key("poll_id");
-
-# Created by DBIx::Class::Schema::Loader v0.04006 @ 2009-11-04 22:01:19
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:2yuJn4YdJ2YjHiMM992ceQ
 
 __PACKAGE__->belongs_to(
   "object",

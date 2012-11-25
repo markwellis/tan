@@ -7,16 +7,7 @@ use base 'DBIx::Class';
 
 __PACKAGE__->load_components("Core");
 __PACKAGE__->table("plus_minus");
-__PACKAGE__->add_columns(
-  "plus_minus_id",
-  { data_type => "BIGINT", default_value => undef, is_nullable => 0, size => 20 },
-  "user_id",
-  { data_type => "BIGINT", default_value => undef, is_nullable => 0, size => 20 },
-  "object_id",
-  { data_type => "BIGINT", default_value => undef, is_nullable => 0, size => 20 },
-  "type",
-  { data_type => "ENUM", default_value => undef, is_nullable => 0, size => 7 },
-);
+__PACKAGE__->add_columns(qw/plus_minus_id user_id object_id type/);
 __PACKAGE__->set_primary_key("plus_minus_id");
 
 __PACKAGE__->belongs_to(

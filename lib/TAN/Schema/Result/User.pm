@@ -7,64 +7,17 @@ use base 'DBIx::Class';
 
 __PACKAGE__->load_components(qw/Core InflateColumn::DateTime/);
 __PACKAGE__->table("user");
+__PACKAGE__->add_columns(qw/user_id username email password confirmed deleted paypal tcs/);
 __PACKAGE__->add_columns(
-  "user_id",
-  { data_type => "BIGINT", default_value => undef, is_nullable => 0, size => 20 },
-  "username",
-  {
-    data_type => "VARCHAR",
-    default_value => undef,
-    is_nullable => 0,
-    size => 255,
-  },
-  "join_date",
-  {
-    data_type => 'datetime',
-    is_nullable => 0,
-    datetime_undef_if_invalid => 1,
-    size => 14,
-    accessor => '_join_date',
-  },
-  "email",
-  {
-    data_type => "VARCHAR",
-    default_value => undef,
-    is_nullable => 0,
-    size => 255,
-  },
-  "password",
-  {
-    data_type => "VARCHAR",
-    default_value => undef,
-    is_nullable => 0,
-    size => 128,
-  },
-  "confirmed",
-  { data_type => "ENUM", default_value => "N", is_nullable => 0, size => 1 },
-  "deleted",
-  { data_type => "ENUM", default_value => "N", is_nullable => 0, size => 1 },
-  "paypal",
-  {
-    data_type => "VARCHAR",
-    default_value => undef,
-    is_nullable => 0,
-    size => 255,
-  },
-  "avatar",
-  {
-    data_type => "VARCHAR",
-    default_value => undef,
-    is_nullable => 1,
-    size => 10,
-    accessor => '_avatar',
-  },
-  "tcs",
-  { data_type => "BIGINT", default_value => undef, is_nullable => 1, size => 20 },
+    "avatar" => {
+        accessor => '_avatar',
+    },
+    "join_date" => {
+        data_type => 'datetime',
+        datetime_undef_if_invalid => 1,
+    },
 );
 __PACKAGE__->set_primary_key("user_id");
-
-# Created by DBIx::Class::Schema::Loader v0.04006 @ 2009-11-04 22:01:20
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:y1r+PaK7ykzu5OXwbRRICw
 
 __PACKAGE__->has_many(
   "plus_minus",
