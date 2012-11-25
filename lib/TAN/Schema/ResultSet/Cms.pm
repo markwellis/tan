@@ -36,8 +36,8 @@ sub menu_items{
 
     if ( !defined( $grouped_items ) ){
         my $items = $self->search( {
-            'deleted' => 'N',
-            'system' => 'N',
+            'deleted' => 0,
+            'system' => 0,
             'revision' => $self->_max_revision,
         } );
 
@@ -67,7 +67,7 @@ sub load{
         $cms_page = $self->search( {
             'url' => $url,
             'revision' => $self->_max_revision,
-            'deleted' => 'N',
+            'deleted' => 0,
         } )->first;
         
         $self->result_source->schema->cache->set("cms:page:${url}", $cms_page, 3600) if ( $cms_page );

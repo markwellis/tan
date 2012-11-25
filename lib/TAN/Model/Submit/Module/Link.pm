@@ -51,7 +51,7 @@ sub _build_config{
                     }
 
                     if ( $link_rs ){
-                        if ( $link_rs->object->deleted eq 'Y' ){
+                        if ( $link_rs->object->deleted ){
                             Exception::Simple->throw(
                                 'error' => 'deleted repost',
                                 'url' => '/index/all/0/',

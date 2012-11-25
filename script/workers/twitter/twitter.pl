@@ -87,7 +87,10 @@ sub spam_twitter{
         $title =~ s/($tag)/#$1/i;
     }
 
-    if ( $args->{'nsfw'} eq 'Y' ){
+    #remove duplicate #
+    $title =~ s/#+/#/g;
+
+    if ( $args->{'nsfw'} ){
         $nsfw = ' #NSFW';
         $availble_length -= length( $nsfw );
     }

@@ -14,9 +14,9 @@
 %]
 
 [% FOREACH cms_page IN cms_pages.all %]
-    [% IF cms_page.deleted == 'Y' %]
+    [% IF cms_page.deleted %]
         [% grouped_cms_pages.2.Deleted.push( cms_page ) %]
-    [% ELSIF cms_page.system == 'Y' %]
+    [% ELSIF cms_page.system %]
         [% grouped_cms_pages.1.System.push( cms_page ) %]
     [% ELSE %]
         [% grouped_cms_pages.0.Live.push( cms_page ) %]

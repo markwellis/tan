@@ -59,7 +59,7 @@ sub index: PathPart('') Chained('type') Args(1) {
         $c->detach();
     }
 
-    if ( $object->deleted eq 'Y' ){
+    if ( $object->deleted ){
         $c->forward('/gone');
         $c->detach();
     }
@@ -86,7 +86,7 @@ sub index: PathPart('') Chained('type') Args(1) {
     @{$c->stash->{'comments'}} = 
     $c->model('MySQL::Comments')->search({
         'me.object_id' => $c->stash->{'object_id'},
-        'me.deleted' => 'N',
+        'me.deleted' => 0,
     },{
         'prefetch' => ['user', {
             'object' => $type,

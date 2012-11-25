@@ -45,7 +45,7 @@ sub delete_objects: Private{
     if ( scalar( @object_types ) ){
         my $search_terms = {
             'type' => \@object_types,
-            'deleted' => 'N',
+            'deleted' => 0,
             'user_id' => $c->stash->{'user'}->id,
         };
 
@@ -72,7 +72,7 @@ sub delete_objects: Private{
             # do this again beacuse it'll do an indvidual query 
             # for each update otherwise (coz of the prefetch)
             $c->model('MySql::Object')->search( $search_terms )->update( {
-                'deleted' => 'Y',
+                'deleted' => 1,
             } );
 
             $c->trigger_event( 'mass_objects_deleted', \@objects );
@@ -85,7 +85,7 @@ sub delete_comments: Private{
 
     if ( $c->req->param('comments') ){
         my $search_terms = {
-            'me.deleted' => 'N',
+            'me.deleted' => 0,
             'me.user_id' => $c->stash->{'user'}->id,
         };
 
@@ -111,7 +111,7 @@ sub delete_comments: Private{
             } );
 
             $c->model('MySql::Comments')->search( $search_terms )->update( {
-                'deleted' => 'Y',
+                'deleted' => 1,
             } );
 
             $c->trigger_event( 'mass_comments_deleted', \@comments );

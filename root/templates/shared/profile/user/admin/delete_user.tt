@@ -1,6 +1,6 @@
 [% css_includes.push('Profile') %]
 
-[% deleted = ( user.deleted == 'Y' ) ? 1 : 0 %]
+[% deleted = user.deleted %]
 <ul class="TAN-inside">
     <li class="TAN-profile-user-admin-form">
         <h2>[% deleted ? 'Undelete' : 'Delete' %] User</h2>

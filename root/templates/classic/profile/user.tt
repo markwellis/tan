@@ -4,7 +4,7 @@
     <li>
         <h1>
             [% user.username | html %]
-            [% IF user.deleted == 'Y' %]
+            [% IF user.deleted %]
                 <span style="color:#f00">DELETED</span>
             [% END %]
         </h1>

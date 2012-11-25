@@ -54,11 +54,11 @@ sub login: Local Args(0){
                 'password' => $c->req->param('password'),
             })
         ){
-            if ( $c->user->confirmed eq 'N' ){
+            if ( !$c->user->confirmed ){
                 $ref = '/login/';
                 $c->logout;
                 $c->flash->{'message'} = "You need to confirm your email address";
-            } elsif ( $c->user->deleted eq 'Y' ){
+            } elsif ( $c->user->deleted ){
                 $ref = '/index/all/0/';
                 $c->logout;
                 $c->flash->{'message'} = "You have been deleted";

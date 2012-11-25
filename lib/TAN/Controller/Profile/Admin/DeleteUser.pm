@@ -20,7 +20,7 @@ sub delete_user: Chained('../admin') Args(0){
     if ( $c->req->method eq 'POST' ){
         my $user = $c->stash->{'user'};
         #toggle delete
-        my $deleted = ( $user->deleted eq 'Y' ) ? 'N' : 'Y';
+        my $deleted = ( $user->deleted ) ? 0 : 1;
         $user->update( {
             'deleted' => $deleted,
         } );

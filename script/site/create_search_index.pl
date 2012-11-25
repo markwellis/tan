@@ -59,12 +59,13 @@ my $searcher = LucyX::Simple->new({
 my $db = new TAN::Model::MySQL;
 
 my $objects = $db->resultset('Object')->search({
-        'me.deleted' => 'N',
+        'me.deleted' => 0,
         'type' =>[qw/link blog picture poll video forum/],
     },{
-    'prefetch' => ['link', 'blog', 'picture', {'poll' => 'answers'}, 'video', 'forum', 'user'],
+    'prefetch' => [qw/link blog picture poll video forum user/],
 });
-my $comments = $db->resultset('Comments')->search({ 'me.deleted' => 'N' },{'prefetch' => [qw/user/],});
+
+my $comments = $db->resultset('Comments')->search({ 'me.deleted' => 0 },{'prefetch' => [qw/user/],});
 
 my $count = $objects->count + $comments->count;
 my $loop = 0;

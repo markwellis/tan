@@ -26,7 +26,7 @@ sub index: Private{
     $c->cache_page(600);
 
     my $users = $c->model('MySQL::User')->search({
-        'deleted' => 'N',
+        'deleted' => 0,
     },{
         'columns' => [
             'user_id', 

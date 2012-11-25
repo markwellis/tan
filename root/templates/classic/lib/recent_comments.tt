@@ -18,7 +18,7 @@
         [%- title_key = type _ '_title' -%]
 
         [%- title = grouped_comments.${object_id}.0.${title_key} | html -%]
-        [%- IF grouped_comments.${object_id}.0.nsfw == 'Y' -%]
+        [%- IF grouped_comments.${object_id}.0.nsfw -%]
             [%- IF !c.nsfw -%]
                 [%- NEXT -%]
             [%- ELSE -%]

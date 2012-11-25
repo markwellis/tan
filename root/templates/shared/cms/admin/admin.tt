@@ -45,7 +45,7 @@
                             id="system" 
                             [% cms_page.defined 
                                 ? 
-                                    ( cms_page.system == 'Y' )
+                                    ( cms_page.system )
                                         ? 'checked="checked"'
                                         : ''
                                 : ''
@@ -60,7 +60,7 @@
                             id="nowrapper" 
                             [% cms_page.defined 
                                 ? 
-                                    ( cms_page.nowrapper == 'Y' )
+                                    ( cms_page.nowrapper )
                                         ? 'checked="checked"'
                                         : ''
                                 : ''

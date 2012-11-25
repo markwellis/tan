@@ -100,7 +100,7 @@ sub insert_cms: Private{
             'comment' => "page moved to /${url}",
             'system' => $cms_page->system,
             'nowrapper' => $cms_page->nowrapper,
-            'deleted' => 'Y',
+            'deleted' => 1,
         } );
         $revision = 0;
     }
@@ -112,9 +112,9 @@ sub insert_cms: Private{
         'user_id' => $c->user->id,
         'revision' => $revision,
         'comment' => $c->req->param('comment'),
-        'system' => ( $c->req->param('system') ) ? 'Y' : 'N',
-        'nowrapper' => ( $c->req->param('nowrapper') ) ? 'Y' : 'N',
-        'deleted' => ( $c->req->param('delete') ) ? 'Y' : 'N',
+        'system' => defined( $c->req->param('system') ),
+        'nowrapper' => defined( $c->req->param('nowrapper') ),
+        'deleted' => defined( $c->req->param('delete') ),
     } );
 
     $c->trigger_event( 'cms_update', $url );

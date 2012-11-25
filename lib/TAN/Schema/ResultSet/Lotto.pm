@@ -35,8 +35,8 @@ sub set_unavailble{
     return $self->create( {
         'number' => $number,
         'user_id' => $user_id,
-        'confirmed' => 'N',
-        'winner' => 'N',
+        'confirmed' => 0,
+        'winner' => 0,
     } );
 }
 
@@ -53,7 +53,7 @@ sub confirm_number{
     }
 
     $number_rs->update( {
-        'confirmed' => 'Y',
+        'confirmed' => 1,
         'txn_id' => $txn_id,
     } );
 }
@@ -63,7 +63,7 @@ sub remove_number{
 
     $self->this_month->find( { 
         'number' => $number,
-        'confirmed' => 'N',
+        'confirmed' => 0,
     } )->delete;
 }
 

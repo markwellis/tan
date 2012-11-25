@@ -77,7 +77,7 @@ sub confirm{
     my ( $self ) = @_;
 
     $self->update({
-        'confirmed' => 'Y',
+        'confirmed' => 1,
     });
 }
 

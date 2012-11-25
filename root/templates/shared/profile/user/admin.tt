@@ -13,7 +13,7 @@
         [% IF c.check_user_roles('delete_user') %]
             <li>
                 <a href="admin/delete_user">
-                    [% ( user.deleted == 'N' ) ? 'Delete' : 'Undelete' %] User
+                    [% ( !user.deleted ) ? 'Delete' : 'Undelete' %] User
                 </a>
             </li>
         [% END %]

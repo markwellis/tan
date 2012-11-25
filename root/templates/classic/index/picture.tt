@@ -9,7 +9,7 @@
         href="[% c.config.pic_path %]/[% object.picture.filename %]"
     >
         [% object.picture.title | html %]
-        [% IF object.nsfw == 'Y' %]
+        [% IF object.nsfw %]
             - NSFW
         [% END %]
     </a>

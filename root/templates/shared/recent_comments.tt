@@ -6,7 +6,7 @@
         [%- title_key = type _ '_title' -%]
 
         [%- title = recent_comments.${object_id}.0.${title_key} | html -%]
-        [%- IF recent_comments.${object_id}.0.nsfw == 'Y' -%]
+        [%- IF recent_comments.${object_id}.0.nsfw -%]
             [%- IF !c.nsfw -%]
                 [%- NEXT -%]
             [%- ELSE -%]

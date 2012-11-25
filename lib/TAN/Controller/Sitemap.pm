@@ -30,7 +30,7 @@ sub index: Private{
 
     my $sitemap_count = $c->model('MySQL::Object')->search({
         'type' => TAN->model('Object')->public,
-        'deleted' => 'N',
+        'deleted' => 0,
     })->count;
     $sitemap_count = ceil($sitemap_count / 1000);
 
@@ -61,7 +61,7 @@ sub xml: Path('xml') Args(1){
 
     my $object_rs = $c->model('MySQL::Object')->search({
             'type' => TAN->model('Object')->public,
-            'deleted' => 'N',
+            'deleted' => 0,
         }, {
         '+select' => \"DATE_FORMAT(created, '%Y-%m-%dT%H:%i:%S')",
         '+as' => 'W3Cdate',

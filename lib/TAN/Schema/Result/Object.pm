@@ -145,7 +145,7 @@ sub url_title{
 
     my $type = $self->type;
     my $title = $self->$type->title;
-    if ( $self->nsfw eq 'Y' ){
+    if ( $self->nsfw ){
         $title .= '-NSFW';
     }
 

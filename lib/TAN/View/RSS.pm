@@ -45,7 +45,7 @@ sub process {
             my $entry = XML::Feed::Entry->new('RSS');
             $entry->id( $object->id );
             $entry->link( $base . $object->url );
-            $entry->title( $object->$type->title . ( $object->nsfw eq "Y" ? ' - NSFW' : '' ) );
+            $entry->title( $object->$type->title . ( $object->nsfw ? ' - NSFW' : '' ) );
             $entry->summary( $image . $object->$type->description );
             $entry->issued( $object->_promoted || $object->_created );
             $feed->add_entry( $entry );
@@ -57,7 +57,7 @@ sub process {
             my $entry = XML::Feed::Entry->new('RSS');
             $entry->id( "comment:" . $object->id );
             $entry->link( $base . $object->object->url . "#comment" . $object->id );
-            $entry->title( "Comment on " . $object->object->$type->title . ( $object->object->nsfw eq "Y" ? ' - NSFW' : '' ) );
+            $entry->title( "Comment on " . $object->object->$type->title . ( $object->object->nsfw ? ' - NSFW' : '' ) );
             $entry->summary( $object->comment );
             $entry->issued( $object->_created );
             $feed->add_entry( $entry );

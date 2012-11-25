@@ -56,13 +56,13 @@ sub index {
         }
         
         if ( (!defined($nsfw) || !$nsfw) && !defined($search->{'nsfw'}) ){
-            $search->{'nsfw'} = 'N';
+            $search->{'nsfw'} = 0;
         }
 
         my $index_rs = $self->search({
             %{$search},
             'type' => $type,
-            'deleted' => 'N',
+            'deleted' => 0,
         },
         {
             'order_by' => {
@@ -115,11 +115,11 @@ sub random{
     $search->{'type'} = $type;
     my %nsfw_opts;
     if ( !defined($nsfw) || !$nsfw ){
-        $search->{'nsfw'} = 'N';
+        $search->{'nsfw'} = 0;
     }
 
     return $self->search( {
-        'deleted' => 'N',
+        'deleted' => 0,
         %{$search},
     }, {
         'rows' => 1,

@@ -153,7 +153,7 @@ sub edit_comment: PathPart('_edit_comment') Chained('../type') Args(1) {
         ){
 #DELETE comment
             $comment_rs->update({
-                'deleted' => 'Y',
+                'deleted' => 1,
             });
             $c->trigger_event('comment_deleted', $comment_rs);
 

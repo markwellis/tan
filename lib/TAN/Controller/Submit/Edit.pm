@@ -66,7 +66,7 @@ sub post: PathPart('post') Chained('validate_user') Args(){
         }
 
         $object->update( {
-            'deleted' => 'Y',
+            'deleted' => 1,
         } );
         $c->trigger_event( 'object_deleted', $object );
 
@@ -99,7 +99,7 @@ sub update_object: Private{
     my $to_update = {};
 
     my $object = $c->stash->{'object'};
-    my $new_nsfw = defined( $c->req->param('nsfw') ) ? 'Y' : 'N';
+    my $new_nsfw = defined( $c->req->param('nsfw') );
 
     if ( $object->nsfw ne $new_nsfw ){
         $object->update( {

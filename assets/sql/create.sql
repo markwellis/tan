@@ -14,8 +14,8 @@ CREATE  TABLE IF NOT EXISTS `tan`.`user` (
   `join_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ,
   `email` VARCHAR(255) NOT NULL ,
   `password` VARCHAR(128) NOT NULL ,
-  `confirmed` ENUM('N','Y') NOT NULL DEFAULT 'N' ,
-  `deleted` ENUM('N','Y') NOT NULL DEFAULT 'N' ,
+  `confirmed` TINYINT(1) NOT NULL DEFAULT 0 ,
+  `deleted` TINYINT(1) NOT NULL DEFAULT 0 ,
   `paypal` VARCHAR(255) NOT NULL ,
   `avatar` VARCHAR(10) NULL ,
   `tcs` BIGINT NULL ,
@@ -34,18 +34,18 @@ CREATE  TABLE IF NOT EXISTS `tan`.`object` (
   `created` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ,
   `promoted` TIMESTAMP NULL DEFAULT NULL ,
   `user_id` BIGINT(20) NOT NULL ,
-  `NSFW` ENUM('Y','N') NOT NULL DEFAULT 'N' ,
+  `nsfw` TINYINT(1) NOT NULL DEFAULT 0 ,
   `views` BIGINT(20) NOT NULL DEFAULT 0 ,
   `plus` BIGINT(20) NOT NULL DEFAULT 0 ,
   `minus` BIGINT(20) NOT NULL DEFAULT 0 ,
   `comments` BIGINT(20) NOT NULL DEFAULT 0 ,
-  `deleted` ENUM('Y','N') NOT NULL DEFAULT 'N' ,
+  `deleted` TINYINT(1) NOT NULL DEFAULT 0 ,
   `score` INT NULL ,
   PRIMARY KEY (`object_id`) ,
   INDEX `created` (`created` ASC) ,
-  INDEX `super_index` (`NSFW` ASC, `type` ASC, `promoted` ASC, `created` ASC, `deleted` ASC) ,
+  INDEX `super_index` (`nsfw` ASC, `type` ASC, `promoted` ASC, `created` ASC, `deleted` ASC) ,
   INDEX `promoted` (`promoted` ASC) ,
-  INDEX `profile` (`type` ASC, `user_id` ASC, `NSFW` ASC, `created` ASC) ,
+  INDEX `profile` (`type` ASC, `user_id` ASC, `nsfw` ASC, `created` ASC) ,
   INDEX `fk_object_1` (`user_id` ASC) ,
   CONSTRAINT `fk_object_1`
     FOREIGN KEY (`user_id` )
@@ -117,7 +117,7 @@ CREATE  TABLE IF NOT EXISTS `tan`.`comments` (
   `comment` MEDIUMTEXT NOT NULL ,
   `created` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ,
   `object_id` BIGINT(20) NOT NULL ,
-  `deleted` ENUM('Y','N') NOT NULL DEFAULT 'N' ,
+  `deleted` TINYINT(1) NOT NULL DEFAULT 0 ,
   `number` BIGINT(20) NOT NULL ,
   PRIMARY KEY (`comment_id`) ,
   INDEX `recent` (`created` ASC, `object_id` ASC, `deleted` ASC) ,
@@ -322,7 +322,6 @@ CREATE  TABLE IF NOT EXISTS `tan`.`tag_objects` (
   `tag_id` BIGINT(20) NOT NULL ,
   `user_id` BIGINT(20) NOT NULL ,
   `object_id` BIGINT(20) NOT NULL ,
-  `created` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ,
   PRIMARY KEY (`object_tag_id`) ,
   INDEX `fk_tag_objects_1` (`tag_id` ASC) ,
   INDEX `fk_tag_objects_2` (`object_id` ASC) ,
@@ -531,9 +530,9 @@ CREATE  TABLE IF NOT EXISTS `tan`.`cms` (
   `created` TIMESTAMP NOT NULL ,
   `title` VARCHAR(255) NOT NULL ,
   `comment` VARCHAR(255) NOT NULL ,
-  `deleted` ENUM('N', 'Y') NOT NULL DEFAULT 'N' ,
-  `system` ENUM('N', 'Y') NOT NULL DEFAULT 'N' ,
-  `nowrapper` ENUM('N', 'Y') NOT NULL DEFAULT 'N' ,
+  `deleted` TINYINT(1) NOT NULL DEFAULT 0 ,
+  `system` TINYINT(1) NOT NULL DEFAULT 0 ,
+  `nowrapper` TINYINT(1) NOT NULL DEFAULT 0 ,
   PRIMARY KEY (`cms_id`) ,
   INDEX `fk_cms_1` (`user_id` ASC) ,
   INDEX `url` (`url` ASC) ,
@@ -555,8 +554,8 @@ CREATE  TABLE IF NOT EXISTS `tan`.`lotto` (
   `created` TIMESTAMP NOT NULL DEFAULT NOW() ,
   `user_id` BIGINT(20) NOT NULL ,
   `number` TINYINT(4) NOT NULL ,
-  `confirmed` ENUM('Y','N') NOT NULL DEFAULT 'N' ,
-  `winner` ENUM('y','n') NOT NULL DEFAULT 'N' ,
+  `confirmed` TINYINT(1) NOT NULL DEFAULT 0 ,
+  `winner` TINYINT(1) NOT NULL DEFAULT 0 ,
   `txn_id` VARCHAR(19) NULL ,
   PRIMARY KEY (`lotto_id`) ,
   INDEX `fk_lotto_1` (`user_id` ASC) ,
@@ -584,7 +583,7 @@ DROP TABLE IF EXISTS `tan`.`recent_comments`;
 USE `tan`;
 CREATE  OR REPLACE VIEW `tan`.`recent_comments` AS
 
-SELECT me.comment_id, me.comment, me.created, me.object_id, object.type, object.nsfw, link.title link_title, picture.title picture_title, blog.title blog_title, poll.title poll_title, video.title video_title, forum.title forum_title, user.username FROM comments me USE INDEX (recent) JOIN object object ON object.object_id = me.object_id LEFT JOIN link link ON link.link_id = me.object_id LEFT JOIN picture picture ON picture.picture_id = me.object_id LEFT JOIN blog blog ON blog.blog_id = me.object_id LEFT JOIN poll poll ON poll.poll_id = me.object_id LEFT JOIN video video ON video.video_id = me.object_id LEFT JOIN forum forum ON forum.forum_id = me.object_id JOIN user user ON user.user_id = me.user_id WHERE ( me.deleted = 'N' ) AND ( object.deleted = 'N' ) ORDER BY me.created DESC LIMIT 20;
+SELECT me.comment_id, me.comment, me.created, me.object_id, object.type, object.nsfw, link.title link_title, picture.title picture_title, blog.title blog_title, poll.title poll_title, video.title video_title, forum.title forum_title, user.username FROM comments me USE INDEX (recent) JOIN object object ON object.object_id = me.object_id LEFT JOIN link link ON link.link_id = me.object_id LEFT JOIN picture picture ON picture.picture_id = me.object_id LEFT JOIN blog blog ON blog.blog_id = me.object_id LEFT JOIN poll poll ON poll.poll_id = me.object_id LEFT JOIN video video ON video.video_id = me.object_id LEFT JOIN forum forum ON forum.forum_id = me.object_id JOIN user user ON user.user_id = me.user_id WHERE ( me.deleted = 0 ) AND ( object.deleted = 0 ) ORDER BY me.created DESC LIMIT 20;
 USE `tan`;
 
 DELIMITER $$
@@ -608,7 +607,7 @@ Create Trigger decrement_object_comments
 	FOR EACH ROW
 BEGIN
 
-IF NEW.deleted = 'Y' THEN
+IF NEW.deleted THEN
 	UPDATE object SET comments=comments-1 WHERE object_id=NEW.object_id;
 END IF;
 

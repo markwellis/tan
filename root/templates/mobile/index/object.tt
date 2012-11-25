@@ -41,7 +41,7 @@
         title="[% object.${type}.title | html %]"
     >
         [% object.${type}.title | html %]
-        [% IF object.nsfw == "Y" %]- NSFW[% END %]
+        [% IF object.nsfw %]- NSFW[% END %]
     </a>
 </h2>
 <p>[% object.${type}.description | html | nl2br %]</p>

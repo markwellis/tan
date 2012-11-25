@@ -56,15 +56,15 @@ sub user_index: PathPart('') Chained('user') Args(0){
     };
 
     my %search_opts = (
-        'me.deleted' => 'N',
+        'me.deleted' => 0,
     );
     if ( !$c->nsfw ){
-        $search_opts{'nsfw'} = 'N';
+        $search_opts{'nsfw'} = 0;
     }
 
     my $comment_count = $user->comments->search( {
         %search_opts,
-        'object.deleted' => 'N',
+        'object.deleted' => 0,
     }, {
         'prefetch' => 'object',
     } )->count || 0;
@@ -132,11 +132,11 @@ sub comment: PathPart('comment') Chained('user') Args(0){
     $page ||= 1;
 
     my %search_opts = (
-        'me.deleted' => 'N',
-        'object.deleted' => 'N',
+        'me.deleted' => 0,
+        'object.deleted' => 0,
     );
     if ( !$c->nsfw ){
-        $search_opts{'nsfw'} = 'N';
+        $search_opts{'nsfw'} = 0;
     }
 
     my $comments_rs = $c->stash->{'user'}->comments->search( {

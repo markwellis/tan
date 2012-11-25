@@ -99,7 +99,7 @@ sub create_new: Private{
         'created' => \'NOW()',
         'promoted' => 0,
         'user_id' => $c->user->user_id,
-        'nsfw' => defined($c->req->param('nsfw')) ? 'Y' : 'N',
+        'nsfw' => defined($c->req->param('nsfw')) ? 1 : 0,
         $type => $prepared,
         'plus_minus' => [{
             'type' => 'plus',

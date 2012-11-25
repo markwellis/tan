@@ -39,7 +39,7 @@ sub index: Args(0) {
             #have to do this coz of the many_to_many :(
                 my $objects_rs = $tag_rs->objects->search({
                     'type' => 'picture',
-                    'nsfw' => 'N',
+                    'nsfw' => 0,
                 });
                 if ( $objects_rs ){
                     foreach my $object ( $objects_rs->all ){
@@ -61,7 +61,7 @@ sub index: Args(0) {
 
         my $randoms_rs = $c->model('MySQL::Object')->search({
             'type' => 'picture',
-            'nsfw' => 'N',
+            'nsfw' => 0,
         }, {
             'order_by' => \'RAND()',
             'rows' => $random,
