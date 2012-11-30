@@ -1,1 +1,0 @@
-ALTER TABLE `tan`.`tag_objects` DROP COLUMN `created` ;
