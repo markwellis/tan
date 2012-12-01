@@ -2,11 +2,11 @@ package TAN;
 use Moose;
 use namespace::autoclean;
 
-use Catalyst::Runtime 5.80;
+use Catalyst::Runtime 5.90;
 use Data::Dumper; #used in 500 error email
 use 5.014;
 
-our $VERSION = 4.2.0;
+our $VERSION = 4.2.1;
 
 use Catalyst qw/
     ConfigLoader
