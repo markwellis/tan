@@ -10,11 +10,11 @@ sub index: Path{
     my ( $self, $c, $version, $theme, $type, @file_list ) = @_;
 
     if ( $version ne $c->VERSION ){
-        $c->detach('/default');
+        $c->detach('e404');
     }
     
     if ( $type !~ m/^(?:css|js)$/ ){
-        $c->detach('/default');
+        $c->detach('e404');
     }
 
     my $format = qr/^[a-zA-Z0-9\-]+(?:\.css|\.js)?$/;
@@ -29,7 +29,7 @@ sub index: Path{
     my $source_dir = $c->path_to('root', $c->config->{'static_path'}, 'themes', $theme, $type);
 
     if ( ! -e "${source_dir}/${file}" ){
-        $c->detach('/default');
+        $c->detach('e404');
     }
 
     my $out_dir = $c->path_to('root') . $c->config->{'cache_path'} . '/minify/' . $c->VERSION . "/${theme}/${type}";
@@ -60,7 +60,15 @@ sub index: Path{
         $c->detach;
     }
     
-    $c->detach('/default');
+    $c->detach('e404');
+}
+
+sub e404: Private{
+    my ( $self, $c ) = @_;
+    
+    $c->response->status(404);
+    $c->response->body('404 not found');
+    $c->detach;
 }
 
 __PACKAGE__->meta->make_immutable;
