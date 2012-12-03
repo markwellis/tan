@@ -12,7 +12,7 @@ use POSIX;
 
 __PACKAGE__->load_components(qw/Core InflateColumn::DateTime/);
 __PACKAGE__->table("object");
-__PACKAGE__->add_columns(qw/object_id type user_id nsfw views plus minus comments deleted score/);
+__PACKAGE__->add_columns(qw/object_id type user_id nsfw views plus minus comments deleted score locked/);
 
 __PACKAGE__->add_columns(
   "created" => {

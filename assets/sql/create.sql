@@ -51,6 +51,7 @@ CREATE  TABLE IF NOT EXISTS `tan`.`object` (
   `comments` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT '0' ,
   `deleted` TINYINT(1) NOT NULL DEFAULT '0' ,
   `score` MEDIUMINT(8) UNSIGNED NULL DEFAULT NULL ,
+  `locked` TINYINT(1) NOT NULL DEFAULT 0 ,
   PRIMARY KEY (`object_id`) ,
   INDEX `created` (`created` ASC) ,
   INDEX `promoted` (`promoted` ASC) ,
