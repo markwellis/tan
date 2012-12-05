@@ -119,6 +119,15 @@
         />
     </li>
 [% END %]
+[% IF (
+    edit 
+    && c.check_any_user_role('delete_object', 'edit_object', 'edit_object_nsfw')
+) %]
+    <li>
+        <label for="_locked">Edit Locked</label>
+        <input type="checkbox" name="locked" id="_locked" [% object.locked ? 'checked="checked"' : '' %]/>
+    </li>
+[% END %]
 
 [% nsfw = 0 %]
 [% IF object.defined() %]

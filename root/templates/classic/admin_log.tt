@@ -9,6 +9,7 @@
                 <th>Username</th>
                 <th>When</th>
                 <th>Reason</th>
+                <th>Object</th>
             </tr>
 
             [%- FOREACH admin_log IN admin_logs.all -%]
@@ -27,6 +28,14 @@
                     </td>
                     <td class="TAN-adminlog-reason">
                         [% admin_log.reason | html %]
+                    </td>
+                    <td class="TAN-adminlog-object">
+                        [% IF admin_log.action == 'edit_object' %]
+                            <a href="[% admin_log.object.url %]">Link</a>
+                        [% END %]
+                        [% IF admin_log.action == 'edit_comment' %]
+                            <a href="[% admin_log.object.url %]#comment[% admin_log.comment.id %]">Link</a>
+                        [% END %]
                     </td>
                 </tr>
             [%- END -%]

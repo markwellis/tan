@@ -29,6 +29,18 @@ sub validate_user: PathPart('edit') Chained('../type') CaptureArgs(1){
         $c->detach('/access_denied');
     }
 
+    if (
+        $object->locked
+        && (
+            ( $c->user->id == $object->user_id )
+            && !$c->check_any_user_role(qw/edit_object edit_object_nsfw/) 
+        )
+    ){
+            $c->flash->{'message'} = 'This has been locked for edit';
+            $c->res->redirect( defined( $c->req->referer ) ? $c->req->referer :  '/', 301 );
+            $c->detach;
+    }
+
     $c->stash(
         'object' => $object,
         'edit' => 1,
@@ -136,7 +148,13 @@ sub update_object: Private{
             $to_update->{ $key } = $prepared->{ $key };
         }
     }
-
+    
+    if ( $c->check_any_user_role(qw/edit_object edit_object_nsfw/) ){
+        $object->update( {
+            'locked' => defined( $c->req->param('locked') ),
+        } )->discard_changes;
+    }
+    
     my $change_type = $c->req->param('change_type');
     if ( 
         $change_type
