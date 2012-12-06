@@ -15,6 +15,7 @@ __PACKAGE__->add_columns(
     "join_date" => {
         data_type => 'datetime',
         datetime_undef_if_invalid => 1,
+        accessor => '_join_date',
     },
 );
 __PACKAGE__->set_primary_key("user_id");
