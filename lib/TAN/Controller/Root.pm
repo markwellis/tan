@@ -14,8 +14,9 @@ has '_mobile' => (
     'default' => sub{
         return {
             'chat' => 1,
-            'error' => 1,
             'default' => 1,
+            'gone' => 1,
+            'server_error' => 1,
             'recent_comments' => 1,
         };
     },
