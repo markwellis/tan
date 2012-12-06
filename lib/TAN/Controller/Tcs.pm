@@ -31,12 +31,14 @@ sub index: Path{
 sub submit: Local{
     my ( $self, $c ) = @_;
 
-    given( $c->req->param('accept') ){
-        when('Agree'){
-            $c->forward('agree');
-        }
-        default {
-            $c->forward('decline');
+    if ( $c->user_exists ){
+        given( $c->req->param('accept') ){
+            when('Agree'){
+                $c->forward('agree');
+            }
+            default {
+                $c->forward('decline');
+            }
         }
     }
 
