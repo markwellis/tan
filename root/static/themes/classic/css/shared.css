@@ -464,56 +464,22 @@ fieldset{
 
 .TAN-plusminus{
     text-align:center;
-    font-size:1.4em !important;
     font-weight:bold;
+    font-size:1.2em;
     width:60px;
-}
-
-.TAN-plus-wrapper, .TAN-minus-wrapper{
-    height:40px;
-    width:60px;
-    margin:auto;
-}
-
-.TAN-plus-arrow, .TAN-minus-arrow{ 
-    border-left: 30px solid transparent; 
-    border-right: 30px solid transparent;
-}
-
-.TAN-plus, .TAN-minus{
-    width:60px;
-    color:#000080;
-    display:block;
-    float:left;
-    margin-left:-30px;
 }
 
 .TAN-plus{
-    height:25px;
-    padding-top:14px;
-    margin-bottom:-40px;
+    color:#009900;
 }
 
 .TAN-minus{
-    height:30px;
-    padding-bottom:10px;
-    margin-top:-40px;
+    color:#dd0000;
 }
 
-.TAN-plus-arrow {
-    border-bottom:40px solid #666; 
-}
-
-.TAN-plus-arrow-selected{
-    border-bottom:40px solid #5A9E4A; 
-}
-
-.TAN-minus-arrow{ 
-    border-top:40px solid #666; 
-}
-
-.TAN-minus-arrow-selected{
-    border-top:40px solid #5A9E4A; 
+.TAN-plus-selected, .TAN-minus-selected{
+    font-size:1.3em;
+    text-shadow: 0.1em 0.1em 0.2em #777777;
 }
 
 /* pagination */
