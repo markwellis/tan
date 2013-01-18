@@ -469,6 +469,10 @@ fieldset{
     width:60px;
 }
 
+.TAN-plusminus a{
+    outline: none;
+}
+
 .TAN-plus{
     color:#009900;
 }
