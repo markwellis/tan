@@ -1,3 +1,8 @@
+//http://stackoverflow.com/questions/14267457/firefox-18-breaks-mootools-1-2-5-selector-engine
+String.prototype.contains = function(string, separator){
+    return (separator) ? (separator + this + separator).indexOf(separator + string + separator) > -1 : String(this).indexOf(string) > -1;
+};
+
 var TAN_class = new Class({
     initialize: function(){
         /*
