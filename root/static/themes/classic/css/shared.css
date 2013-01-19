@@ -471,6 +471,7 @@ fieldset{
 
 .TAN-plusminus a{
     outline: none;
+    display:block;
 }
 
 .TAN-plus{
