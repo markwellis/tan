@@ -26,7 +26,7 @@ a{
 }
 
 .TAN-header{
-    background-image: url("images/top.png");
+    background-image: url("../images/top.png");
     background-repeat:no-repeat;
     background-position:center;
     background-color:#000;
@@ -36,12 +36,17 @@ a{
 }
 
 .TAN-logo{
-    background-image: url("images/logo3.png");
+    background-image: url("../images/logo3.png");
     height:75px;
     margin:2px;
     text-indent:-1000px;
     width:315px;
     float:left;
+}
+
+.TAN-logo > a{
+    display: block;
+    height:100%;
 }
 
 .TAN-top-menu > p{
@@ -79,7 +84,7 @@ a{
     width:902px;
     margin:auto;
     padding-bottom:26px;
-    background-image:url(images/main.jpg);
+    background-image:url(../images/main.jpg);
     background-repeat:repeat-y;
     box-shadow: 8px 0 20px #222,  -8px 0 20px #222;
 }
