@@ -10,17 +10,18 @@ var template = {
         tan.debug('template: "' + name + '" registered');
     },
     "_load": function( name ){
+        var _this = this;
         //Asset doesn't offer async
         var req = new Request( {
             "url": tan.config.template_path + '/' + name + '.js',
             "async": false,
             "method": "get",
             "onSuccess": function( script ){
-                tan.template.register( name, script );
+                _this.register( name, script );
             },
             "onFailure": function( xhr ){
                 tan.debug('template: "' + name + '" load failed, code: ' + xhr.status);
-                tan.template._templates[name] = null;
+                _this._templates[name] = null;
             } 
         } );
 
@@ -33,7 +34,7 @@ var template = {
     },
     "process": function( name, stash ){
         if ( this._templates[name] == undefined ){
-            tan.debug('template: "' + name + '" not loaded, loading');
+            tan.debug('template: "' + name + '" loading');
 
             this._load( name );
         }

@@ -21,6 +21,15 @@
                         objects.push( json );
                     }
                 }).send();
+                
+                new Request.JSON({
+                    'url': 'json/1.json',
+                    'async': false,
+                    'method': 'get',
+                    "onSuccess": function( json ){
+                        objects.push( json );
+                    }
+                }).send();
 
                 body_templates.push(
                     tan.template.process("lib/config"),
@@ -29,7 +38,9 @@
                         tan.template.process('lib/column').adopt(
                             tan.template.process('lib/object', objects[0])
                         ),
-                        tan.template.process('lib/column'),
+                        tan.template.process('lib/column').adopt(
+                            tan.template.process('lib/object', objects[1])
+                        ),
                         tan.template.process('lib/column'),
                         new Element('br', {
                             'class': 'clear'
