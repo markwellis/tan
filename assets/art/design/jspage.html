@@ -11,10 +11,30 @@
         <script type="text/javascript">
             var body_templates = new Elements;
             window.addEvent( 'domready', function(){
+                var objects = [];
+
+                new Request.JSON({
+                    'url': 'json/0.json',
+                    'async': false,
+                    'method': 'get',
+                    "onSuccess": function( json ){
+                        objects.push( json );
+                    }
+                }).send();
+
                 body_templates.push(
                     tan.template.process("lib/config"),
                     tan.template.process("lib/header"),
-                    tan.template.process("body"),
+                    tan.template.process("body").adopt(
+                        tan.template.process('lib/column').adopt(
+                            tan.template.process('lib/object', objects[0])
+                        ),
+                        tan.template.process('lib/column'),
+                        tan.template.process('lib/column'),
+                        new Element('br', {
+                            'class': 'clear'
+                        })
+                    ),
                     tan.template.process("lib/footer")
                 );
 

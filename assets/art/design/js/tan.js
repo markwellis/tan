@@ -6,11 +6,11 @@ var template = {
 
             return;
         }
-        this._templates[name] = function(){ return eval( call ) };
+        this._templates[name] = function( stash ){ return eval( call ) };
         tan.debug('template: "' + name + '" registered');
     },
     "_load": function( name ){
-        //asset doesn't offer async
+        //Asset doesn't offer async
         var req = new Request( {
             "url": tan.config.template_path + '/' + name + '.js',
             "async": false,
@@ -24,15 +24,14 @@ var template = {
             } 
         } );
 
-        //don't autoexec template coz we do funky things with it
+        //don't autoexec template coz we wrap it in a function and eval it
         req.processScripts = function( text ){
             return text;
         };
         
         req.send();
     },
-    "process": function( name, vars ){
-        tan.debug('template: "' + name + '" processing');
+    "process": function( name, stash ){
         if ( this._templates[name] == undefined ){
             tan.debug('template: "' + name + '" not loaded, loading');
 
@@ -44,7 +43,8 @@ var template = {
             return;
         }
         
-        return this._templates[name]( name, vars );
+        tan.debug('template: "' + name + '" processing');
+        return this._templates[name]( stash );
     }
 };
 
