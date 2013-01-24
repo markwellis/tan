@@ -1,8 +1,8 @@
 (function(){
-    var els = new Elements();
+    var output = []
 
     tan.template._css.each( function( css ){
-        els.push( 
+        output.push(
             new Element('link', {
                 "type": "text/css",
                 "rel": "stylesheet", 
@@ -12,5 +12,5 @@
         );
     } );
 
-    return els;
+    return output;
 })();
