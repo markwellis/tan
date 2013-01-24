@@ -29,29 +29,35 @@
             }),
             'top'
         ),
-        new Element('a', {
-            'class': 'TAN-plus',
-            'href': '#',
-            'text': 'TIN (' + stash.plus + ')'
-        }),
         new Element('span', {
-            'class': 'TAN-object-score',
-            'text': stash.score
-        }),
-        new Element('a', {
-            'class': 'TAN-minus TAN-pipe-right',
-            'href': '#',
-            'text': 'TAN (' + stash.minus + ')'
-        }),
-        new Element('a', {
-            'href': '#',
-            'text': ' ' + stash.comments
-        }).grab(
-            new Element('img', {
-                'src': 'images/comment.png',
-                'alt': '#'
+            'class': 'TAN-pipe-right'
+        }).adopt(
+            new Element('a', {
+                'class': 'TAN-plus',
+                'href': '#',
+                'text': 'TIN (' + stash.plus + ')'
             }),
-            'top'
+            new Element('span', {
+                'class': 'TAN-object-score',
+                'text': stash.score
+            }),
+            new Element('a', {
+                'class': 'TAN-minus',
+                'href': '#',
+                'text': 'TAN (' + stash.minus + ')'
+            })
+        ),
+        new Element('span').adopt(
+            new Element('a', {
+                'href': '#',
+                'text': ' ' + stash.comments
+            }).grab(
+                new Element('img', {
+                    'src': 'images/comment.png',
+                    'alt': '#'
+                }),
+                'top'
+            )
         )
     )
 ];

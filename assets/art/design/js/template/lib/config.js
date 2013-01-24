@@ -1,2 +1,3 @@
-tan.template._css = [
-];
+(function(){
+    tan.template._css = [];
+})();

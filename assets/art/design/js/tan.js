@@ -1,13 +1,27 @@
-var template = {
+//don't cause errors when there's no console 
+if ( typeof( console ) == 'undefined' ){
+    var console = {};
+}
+if ( typeof( console.log ) == 'undefined' ){
+    console.log = function(){};
+}
+if ( typeof( console.groupCollapsed ) == 'undefined' ){
+    console.groupCollapsed = function(){};
+}
+if ( typeof( console.groupEnd ) == 'undefined' ){
+    console.groupEnd = function(){};
+}
+
+var _template = {
     "_templates": {},
     "register": function( name, call ){
         if ( typeof( this._templates[name] ) != 'undefined' ){
-            tan.debug('template: "' + name + '" already registered');
+            console.log('already registered');
 
             return;
         }
         this._templates[name] = function( stash ){ return eval( call ) };
-        tan.debug('template: "' + name + '" registered');
+        console.log('registered');
     },
     "_load": function( name ){
         var _this = this;
@@ -20,7 +34,7 @@ var template = {
                 _this.register( name, script );
             },
             "onFailure": function( xhr ){
-                tan.debug('template: "' + name + '" load failed, code: ' + xhr.status);
+                console.log('load failed, code: ' + xhr.status);
                 _this._templates[name] = null;
             } 
         } );
@@ -33,29 +47,34 @@ var template = {
         req.send();
     },
     "process": function( name, stash ){
-        if ( this._templates[name] == undefined ){
-            tan.debug('template: "' + name + '" loading');
+        console.groupCollapsed( 'template: ' + name );
+        var data;
 
-            this._load( name );
-        }
+        try{
+            if ( this._templates[name] == undefined ){
+                console.log('loading');
 
-        if ( this._templates[name] === null ){
-            tan.debug('template: "' + name + '" not found');
-            return;
+                this._load( name );
+            }
+
+            if ( this._templates[name] === null ){
+                console.log('not found');
+                return;
+            }
+            
+            console.log('processing');
+            data = this._templates[name]( stash );
+        } catch( e ){
+            console.log( 'caught excption: ' + e.message + " " +  name );
         }
-        
-        tan.debug('template: "' + name + '" processing');
-        return this._templates[name]( stash );
+        console.groupEnd( 'template: ' + name );
+
+        return data;
     }
 };
 
 var tan = {
-    "template": template,
-    "debug": function( data ){
-        if ( typeof( console ) != 'undefined' ){
-            console.log( data );
-        }
-    },
+    "template": _template,
     "config": function(){
         //TODO IRL this will be part of the page request or something
         var data;
@@ -65,7 +84,7 @@ var tan = {
             "method": "get",
             "onSuccess": function( json ){
                 data = json;
-            },
+            }
         } ).send();
 
         return data;

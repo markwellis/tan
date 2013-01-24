@@ -2,7 +2,7 @@ new Element('div', {
     "class": "TAN-header"
 }).adopt( 
     new Element('h1', {
-        "class": "TAN-logo",
+        "class": "TAN-logo"
     }).adopt(
         new Element('a', {
             "href": "/",
@@ -10,7 +10,7 @@ new Element('div', {
         })
     ), 
     new Element('div', {
-        'class': 'TAN-top-menu',
+        'class': 'TAN-top-menu'
     }).adopt(
         new Element('p').adopt(
             new Element('a', {
