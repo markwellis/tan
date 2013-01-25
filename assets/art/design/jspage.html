@@ -31,16 +31,17 @@
                     '2': []
                 };
 
+                var loop = 0;
                 [0,1,2].each( function( id ){
-                    var col = id % 3;
                     new Request.JSON({
                         'url': 'json/' + id + '.json',
                         'async': false,
                         'method': 'get',
                         "onSuccess": function( json ){
-                            objects[col].push( json );
+                            objects[ loop % 3 ].push( json );
                         }
                     }).send();
+                    loop++;
                 } );
 
                 var body_templates = [];

@@ -111,7 +111,7 @@ a{
 }
 
 .TAN-object p{
-    margin:0px;
+    margin:3px 0px 0px 0px;
 }
 
 .TAN-object h2{
@@ -133,11 +133,18 @@ a{
 }
 
 .TAN-object-info-bar{
+    margin-top:3px;
+}
+
+.TAN-object-info-bar span{
+    display:inline-block;
 }
 
 .TAN-object-info-bar img{
     height:20px;
     width:20px;
+    float:left;
+    padding-right:5px;
 }
 
 .TAN-object-user{
