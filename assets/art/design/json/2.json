@@ -1,8 +1,8 @@
 {
     "id": 1,
-    "type": "picture",
-    "title": "Your mother",
-    "username": "someoneWITHaLONGusername",
+    "type": "video",
+    "title": "Awesome Hockey Fight",
+    "username": "username",
     "avatar": "images/avatar.gif",
     "plus": 3,
     "minus": 1,
@@ -11,5 +11,7 @@
     "views": 41000,
     "date": "1 months 2 weeks ago",
     "promoted": "1 months 2 weeks ago",
-    "image": "images/your-mother.jpg"
+    "image": "images/your-mother.jpg",
+    "url": "http://youtube.com/?v=435dfdf",
+    "embed": "<iframe frameborder=\"0\" allowfullscreen=\"1\" src=\"http://www.youtube.com/embed/yJJPivHWy2k\" class=\"TAN-video-embed\" title=\"YouTube video player\"></iframe>"
 }

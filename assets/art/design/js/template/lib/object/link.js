@@ -1,8 +1,6 @@
 (function(){
     var short_username = stash.username.truncate(17);
 
-    console.log( short_username );
-
     return [
         new Element('h2', {
             'class': 'TAN-type-' + stash.type,
@@ -11,11 +9,20 @@
         new Element('a', {
             'href': 'view/' + stash.type + '/' + stash.id
         }).adopt(
-            new Element('img', {
-                'class': 'TAN-object-image',
-                'src': stash.image,
-                'alt': ''
-            })
+            (function(){
+                if ( stash.type === 'video' ){
+                    return new Element('div', {
+                        'class': 'TAN-video',
+                        'html': stash.embed
+                    });
+                } else {
+                    return new Element('img', {
+                        'class': 'TAN-object-image',
+                        'src': stash.image,
+                        'alt': ''
+                    });
+                }
+            })()
         ),
         new Element('p', {
             'text': stash.description ? stash.description : ''

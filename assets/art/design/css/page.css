@@ -95,6 +95,10 @@ a{
     margin-right:1px;
 }
 
+.TAN-column-right{
+    margin-right:0px;
+}
+
 .TAN-object{
     width:300px;
     text-align:center;
@@ -122,6 +126,10 @@ a{
 
 .TAN-type-picture{
     text-shadow:#D61D00 0.1em 0.1em 0.2em;
+}
+
+.TAN-type-video{
+    text-shadow:#800000 0.1em 0.1em 0.2em;
 }
 
 .TAN-object-info-bar{

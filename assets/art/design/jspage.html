@@ -25,25 +25,23 @@
 
                 tan = new TAN( config );
 
-                var objects = [];
+                var objects = {
+                    '0': [],
+                    '1': [],
+                    '2': []
+                };
 
-                new Request.JSON({
-                    'url': 'json/0.json',
-                    'async': false,
-                    'method': 'get',
-                    "onSuccess": function( json ){
-                        objects.push( json );
-                    }
-                }).send();
-                
-                new Request.JSON({
-                    'url': 'json/1.json',
-                    'async': false,
-                    'method': 'get',
-                    "onSuccess": function( json ){
-                        objects.push( json );
-                    }
-                }).send();
+                [0,1,2].each( function( id ){
+                    var col = id % 3;
+                    new Request.JSON({
+                        'url': 'json/' + id + '.json',
+                        'async': false,
+                        'method': 'get',
+                        "onSuccess": function( json ){
+                            objects[col].push( json );
+                        }
+                    }).send();
+                } );
 
                 var body_templates = [];
                 body_templates.push(
@@ -51,12 +49,35 @@
                     tan.template.process("lib/header"),
                     tan.template.process("body").adopt(
                         tan.template.process('lib/column').adopt(
-                            tan.template.process('lib/object', objects[0])
+                            (function(){
+                                var objs = [];
+                                objects[0].each( function( obj ){
+                                    objs.push( tan.template.process( 'lib/object', obj ) );
+                                });
+
+                                return objs;
+                            })()
                         ),
                         tan.template.process('lib/column').adopt(
-                            tan.template.process('lib/object', objects[1])
+                            (function(){
+                                var objs = [];
+                                objects[1].each( function( obj ){
+                                    objs.push( tan.template.process( 'lib/object', obj ) );
+                                });
+
+                                return objs;
+                            })()
                         ),
-                        tan.template.process('lib/column'),
+                        tan.template.process('lib/column').addClass('TAN-column-right').adopt(
+                            (function(){
+                                var objs = [];
+                                objects[2].each( function( obj ){
+                                    objs.push( tan.template.process( 'lib/object', obj ) );
+                                });
+
+                                return objs;
+                            })()
+                        ),
                         new Element('br', {
                             'class': 'clear'
                         })
