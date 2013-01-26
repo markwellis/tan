@@ -16,6 +16,7 @@
             }
         %]
         <br />
+        [% IF c.mobile %]<input type="hidden" name="mobile" mobile="1" value="1" />[% END %]
         <input type="submit" value="Comment" id="submit_comment" />
     </fieldset>
 </form>
