@@ -116,13 +116,13 @@ sub prepare{
     if ( !$c->stash->{'edit'} ){
         my $image_info = $validator_return_values->[0];
 
-        open(INFILE, $image_info->{'temp_file'}->filename);
+        open(my $fh, $image_info->{'temp_file'}->filename) || die "failed to open '" . $image_info->{'temp_file'}->filename . "' for read error: '${!}'";
         my $sha = new Digest::SHA(512);
-        $sha->addfile(*INFILE);
+        $sha->addfile( $fh );
 
-        my $sha512sum = $sha->hexdigest();
+        my $sha512sum = $sha->hexdigest;
 
-        close(INFILE);
+        close( $fh );
 
 #we do this here coz we need the result from the validator
         my $pic_rs = $c->model('MySQL::Picture')->find({

@@ -10,28 +10,30 @@ use File::Basename;
 use File::Path qw/mkpath/;
 
 sub minify{
-    my ($self, $type, $input, $output) = @_;
+    my ( $self, $type, $input, $output ) = @_;
     my $text;
 
     if (-e $output){
         # use cached file if avaible, really though, this should be handled in the webserver
         # but its a good fall back incase something goes wrong.
 
-        open(INPUT, $output);
+        open( my $input_fh, $output ) || die "failed to open '${output}' for read error: '${!}'";
 
-        while (my $line = <INPUT>) {
+        while (my $line = <$input_fh>) {
             $text .= $line;
         }
+
+        close( $input_fh );
     } elsif (-e $input){
+        open( my $input_fh , "< ${input}" ) || die "failed to open '${input}' for read error: '${!}'";
 
-
-        open(INPUT, "< ${input}");
+        my $output_fh;
         if ( !$ENV{'CATALYST_DEBUG'} ){
             mkpath( dirname( $output ) );
-            open(OUTPUT, "> ${output}");
+            open( $output_fh, "> ${output}") || die "failed to opne '${output}' for write error: '${!}'";
         }
         
-        while (my $line = <INPUT>) {
+        while ( my $line = <$input_fh> ){
             $text .= $line;
         }
 
@@ -43,12 +45,12 @@ sub minify{
                 $text = JavaScript::Minifier::XS::minify($text);
             }
 
-            print OUTPUT $text;
+            print $output_fh $text;
         }
 
-        close(INPUT);
+        close( $input_fh );
         if ( !$ENV{'CATALYST_DEBUG'} ){
-            close(OUTPUT);
+            close( $output_fh );
         }
     }
 
