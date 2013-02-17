@@ -1,10 +1,12 @@
 <p>
     <a title="TAN" href="/recent_comments/">Recent Comments</a> |
     [%- IF c.user_exists %]
-        <a href="/login/logout/">Logout</a> |
+        <a href="/login/logout/">Logout</a>
     [%- ELSE -%]
-        <a href="/login/">Login</a> | 
+        <a href="/login/">Login</a> 
     [%- END %]
+</p>
+<p>
     <a href="/filter/" class="nsfw_filter">[% c.nsfw ? 'Enable' : 'Disable' %] filter</a> | 
     <a href="/faq/">FAQ</a> |
     <a href="#TAN-bottom">Down</a>
