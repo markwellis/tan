@@ -226,10 +226,9 @@ fieldset{
     color:#3A44FF;
     float:left;
     display:block;
-    height:15px;
     margin:1px;
-    min-width:15px;
-    padding:1px;
+    padding:10px;
+    font-size:1.2em;
     text-align:center;
     text-decoration:none;
 }
