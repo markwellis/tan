@@ -13,7 +13,7 @@
                 [%- title = "[NSFW] ${title}" -%]
             [%- END -%]
         [%- END -%]
-        <li[% IF loop.first %]class="TAN-hr"[% END %]>
+        <li[% IF loop.first %] class="TAN-hr"[% END %]>
             <a 
                 href="[% recent_comments.${object_id}.0.url %]" 
                 class="TAN-type-[% type %]" 
