@@ -12,8 +12,8 @@
     "cache_path": "/static/cache",
     "thumb_path": "/static/cache/thumbs",
 
-    "recaptcha_public_key": "6Lf1icoSAAAAAL2RmjqU2q30R3PFXYnT0X6SOM4Y",
-    "recaptcha_private_key": "6Lf1icoSAAAAAF711Fjic0mPXzCJ1oejOAOJ2O6U",
+    "recaptcha_public_key": "6Lczmt0SAAAAAAqU2QBwiR9us4E0ySjj_EY2xty1",
+    "recaptcha_private_key": "6Lczmt0SAAAAAEz24v4Z2vBg4mwedRikv_DPsSPp",
 
     "email": ["Sendmail"],
 

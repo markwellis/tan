@@ -6,7 +6,7 @@ use Catalyst::Runtime 5.90;
 use Data::Dumper; #used in 500 error email
 use 5.014;
 
-our $VERSION = 4.2.14;
+our $VERSION = 4.2.15;
 
 use Catalyst qw/
     ConfigLoader
