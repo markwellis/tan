@@ -83,9 +83,11 @@ sub confirm{
 }
 
 sub avatar{
-    my ( $self ) = @_;
+    my ( $self, $avatar ) = @_;
 
-    my $avatar = $self->_avatar;
+    if ( !defined( $avatar) ){
+        $avatar = $self->_avatar;
+    }
 
     if ( !$avatar ){
         return TAN->config->{'static_path'} . '/images/_user.png';
