@@ -140,7 +140,7 @@
                     <input type="checkbox" name="nsfw" id="nsfw" [% nsfw ? 'checked="checked"' : '' %]/>
                 </li>
             </ul>
-            <input type="submit" value="Submit [% type | ucfirst %]"/>
+            <input type="submit" value="[% edit ? 'Edit' : 'Submit'; type | ucfirst %]"/>
             <input type="hidden" name="type" value="[% location %]" />
             [% IF ( edit && c.check_user_roles('delete_object') ) %]
                 <input type="submit" value="Delete" name="delete" />
