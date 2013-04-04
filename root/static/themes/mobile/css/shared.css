@@ -309,3 +309,7 @@ fieldset{
 .none{
     display:none;
 }
+
+#edit_comment{
+    width:100%;
+}
