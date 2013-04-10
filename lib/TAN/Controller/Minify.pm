@@ -5,6 +5,7 @@ use namespace::autoclean;
 BEGIN { extends 'Catalyst::Controller'; }
 
 use File::Path qw/rmtree/;
+use Fcntl qw/:flock/;
 
 sub index: Path{
     my ( $self, $c, $version, $theme, $type, @file_list ) = @_;
@@ -53,7 +54,13 @@ sub index: Path{
         my $version_dir = $c->path_to('root') . $c->config->{'cache_path'} . '/minify';
         foreach my $version_cache ( <$version_dir/*> ){
             if ( $version_cache ne "${version_dir}/" . $c->VERSION ){
-                rmtree( $version_cache );
+                open( my $fh, ">", '/tmp/tan_old_js_clean' ) || die "failed to open /tmp/tan_old_js_clean' $!";
+                if ( flock( $fh, LOCK_EX | LOCK_NB ) ){
+                    rmtree( $version_cache );
+                    flock( $fh, LOCK_UN );
+                }
+                close( $fh );
+                unlink( '/tmp/tan_old_js_clean' ) || die "failed to unlink '/tmp/tan_old_js_clean' $!";
             }
         }
 
