@@ -132,10 +132,13 @@ sub _build_bbcode{
     } );
 
     return Parse::BBCode->new( {
+        'direct_attributes' => 0,
+        'linebreaks' => 0,
+        'url_finder' => 1,
+        'text_processor' => sub { return shift },
         'smileys' => {
             'base_url' => $self->smilies_dir,
             'icons' => $self->build_smilies_list,
-            format => '<img src="%s" alt="%s">',
         },
         'tags' => {
             'quote' => {
@@ -152,7 +155,6 @@ sub _build_bbcode{
                 'class' => 'block',
                 'parse' => 1,
             },
-            '' => sub { return $_[2]; },
             'video' => 'block:%{video}s',
         },
         'escapes' => {
@@ -175,8 +177,6 @@ sub _build_bbcode{
                 return $embedder->url_to_embed( $text ) || "[video]${text}[/video]";
             },
         },
-        'linebreaks' => 0,
-        'direct_attributes' => 0,
     } );
 }
 

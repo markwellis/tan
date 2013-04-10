@@ -147,7 +147,7 @@ my @tests = (
     },
     {
         'name' => 'smilies test',
-        'input' => qq|:) :beer :bacooooon|,
+        'input' => qq|:) :) :beer :bacooooon|,
         'expected' => qq||,
     },
 );
