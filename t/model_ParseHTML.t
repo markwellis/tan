@@ -1,9 +1,32 @@
 use strict;
 use warnings;
 use Test::More;
+use Cwd 'abs_path';
+use File::Basename;
+use Config::Any;
+use HTML::Video::Embed;
+
+my $config_file = dirname(__FILE__) . '/..';
+
+my $first_config = Config::Any->load_files( {
+    'files' => [ "${config_file}/tan.json", "${config_file}/tan_devel.json" ],
+    'flatten_to_hash' => 1,
+    'use_ext' => 1,
+} );
+
+my $config = $first_config->{"${config_file}/tan.json"};
+#$config = $first_config->{ "${config_file}/tan_devel.json" };
+foreach my $key ( keys( %{ $first_config->{"${config_file}/tan_devel.json"} } ) ){
+    $config->{ $key } = $first_config->{"${config_file}/tan_devel.json"}->{ $key };
+}
 
 BEGIN { use_ok 'TAN::Model::ParseHTML' };
-my $model = new_ok('TAN::Model::ParseHTML');
+my $model = new_ok( 'TAN::Model::ParseHTML' => [ $config->{'Model::ParseHTML'} ] );
+
+my $embedder = HTML::Video::Embed->new( {
+    'class' => "TAN-video-embed",
+} );
+my $youtube_embed_code = $embedder->url_to_embed('https://www.youtube.com/watch?v=VDss8V2OME4');
 
 my @tests = (
     {
@@ -45,7 +68,7 @@ my @tests = (
     {
         'name' => 'bbcode: quote video',
         'input' => "[quote user=user1][video]https://www.youtube.com/watch?v=VDss8V2OME4[/video][/quote]",
-        'expected' => qq|<div class="quote_holder"><span class="quoted_username">user1 wrote:</span><div class="quote"><iframe title="YouTube video player" width="450" height="370" src="http://www.youtube.com/embed/VDss8V2OME4" frameborder="0" allowfullscreen="1"></iframe></div></div>|,
+        'expected' => qq|<div class="quote_holder"><span class="quoted_username">user1 wrote:</span><div class="quote">${youtube_embed_code}</div></div>|,
     },
     {
         'name' => 'bbcode: quote html',
@@ -60,7 +83,7 @@ my @tests = (
     {
         'name' => 'bbcode: video',
         'input' => "[video]https://www.youtube.com/watch?v=VDss8V2OME4[/video]",
-        'expected' => qq|<iframe title="YouTube video player" width="450" height="370" src="http://www.youtube.com/embed/VDss8V2OME4" frameborder="0" allowfullscreen="1"></iframe>|
+        'expected' => qq|${youtube_embed_code}|
     },
     {
         'name' => 'bbcode: video invalid',
@@ -70,7 +93,7 @@ my @tests = (
     {
         'name' => 'bbcode: video hyperlink',
         'input' => qq|[video]<a href="https://www.youtube.com/watch?v=VDss8V2OME4">best video ever, derp</a>[/video]|,
-        'expected' => qq|<iframe title="YouTube video player" width="450" height="370" src="http://www.youtube.com/embed/VDss8V2OME4" frameborder="0" allowfullscreen="1"></iframe>|
+        'expected' => qq|${youtube_embed_code}|
     },
     {
         'name' => 'hss: rel="external nofollow" injection',
@@ -106,6 +129,26 @@ my @tests = (
         'name' => 'hss: entities',
         'input' => qq|'"&|,
         'expected' => qq|&#39;&quot;&amp;|,
+    },
+    {
+        'name' => 'text url to hyperlink',
+        'input' => qq|http://thisaintnews.com|,
+        'expected' => qq|<a href="http://thisaintnews.com" rel="external nofollow">http://thisaintnews.com</a>|,
+    },
+    {
+        'name' => 'text video url to video (not in [video] block)',
+        'input' => qq|https://www.youtube.com/watch?v=VDss8V2OME4|,
+        'expected' => qq|${youtube_embed_code}|,
+    },
+    {
+        'name' => 'hyperlink video url to video (not in [video] block)',
+        'input' => qq|<a href="https://www.youtube.com/watch?v=VDss8V2OME4">video</a>|,
+        'expected' => qq|${youtube_embed_code}|,
+    },
+    {
+        'name' => 'smilies test',
+        'input' => qq|:) :beer :bacooooon|,
+        'expected' => qq||,
     },
 );
 

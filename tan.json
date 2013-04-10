@@ -124,6 +124,45 @@
             "127.0.0.1:4730"
         ]
     },
+    
+    "Model::ParseHTML": {
+        "smilies_dir": "/static/smilies/",
+        "smilies": {
+            "o_O": "bulgy-eyes.png",
+            ":s": "confused.png",
+            ":S": "confused.png",
+            ":-s": "confused.png",
+            ":-S": "confused.png",
+            ":'(": "crying.png",
+            "B-)": "glasses-cool.png",
+            "B)": "glasses-cool.png",
+            "<3": "in-love.png",
+            ":-*": "kiss.png",
+            ":*": "kiss.png",
+            ":-|": "neutral.png",
+            ":|": "neutral.png",
+            ":(": "sad.png",
+            ":-(": "sad.png",
+            ":o": "shock.png",
+            ":O": "shock.png",
+            ":-o": "shock.png",
+            ":-O": "shock.png",
+            ":-x": "shut-mouth.png",
+            ":x": "shut-mouth.png",
+            ":-X": "shut-mouth.png",
+            ":X": "shut-mouth.png",
+            ":)": "smile.png",
+            ":-)": "smile.png",
+            ":-/": "thinking.png",
+            ":-\\": "thinking.png",
+            ":/": "thinking.png",
+            ":\\": "thinking.png",
+            ":-p": "tongue.png",
+            ":-P": "tongue.png",
+            ":p": "tongue.png",
+            ":P": "tongue.png"
+        }
+    },
 
     "Model::PayPal": {
         "email": "seller_1327839645_biz@howmanykillings.com",

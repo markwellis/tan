@@ -7,6 +7,8 @@ use Parse::BBCode;
 use HTML::Video::Embed;
 use Data::Validate::URI qw/is_web_uri/;
 use HTML::TreeBuilder 5 -weak;
+use Cwd 'abs_path';
+use File::Basename;
 
 extends 'Catalyst::Model';
 
@@ -14,6 +16,18 @@ has 'hss' => (
     'is' => 'ro',
     'isa' => 'HTML::StripScripts::Parser',
     'lazy_build' => 1,
+);
+
+has 'smilies_dir' => (
+    'is' => 'ro',
+    'isa' => 'Str',
+    'required' => 1,
+);
+
+has 'smilies' => (
+    'is' => 'ro',
+    'isa' => 'HashRef',
+    'default' => sub{ return {} },
 );
 
 sub _build_hss{
@@ -80,6 +94,29 @@ sub _build_hss{
     return $hss;
 }
 
+sub build_smilies_list{
+    my ( $self ) = @_;
+
+    my $icons = $self->smilies;
+    
+    my $dir = dirname( abs_path( __FILE__ ) ) . "/../../../root/" . $self->smilies_dir; #TODO HACK maybe get rid of the /../../../ bit ...
+    
+    opendir( my $dh, "$dir" ) || die "failed to opendir $dir: $!";
+    while ( my $smilie = readdir( $dh ) ){
+        #load each image and strip .png add prefix off : and register
+        if ( $smilie =~ m/^\./ ){
+            next;
+        }
+
+        my $alias = ':' . fileparse( $smilie, ".png", ".gif" );
+        $icons->{ $alias } = $smilie;
+
+    }
+    closedir( $dh );
+
+    return $icons; 
+};
+
 has 'bbcode' => (
     'is' => 'ro',
     'isa' => 'Parse::BBCode',
@@ -88,11 +125,18 @@ has 'bbcode' => (
 
 my $quote_reg = qr/\&quot\;/;
 sub _build_bbcode{
+    my ( $self ) = @_;
+
     my $embedder = HTML::Video::Embed->new( {
         'class' => "TAN-video-embed",
     } );
 
     return Parse::BBCode->new( {
+        'smileys' => {
+            'base_url' => $self->smilies_dir,
+            'icons' => $self->build_smilies_list,
+            format => '<img src="%s" alt="%s">',
+        },
         'tags' => {
             'quote' => {
                 'code' => sub {
