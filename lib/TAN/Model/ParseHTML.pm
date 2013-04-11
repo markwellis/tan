@@ -203,6 +203,7 @@ sub _build_bbcode{
             }gsex;
 
             #smilies
+#do it like this or the match fails coz we change the string we're trying to match in some cases, so you end up with edge cases that fail to convert, eg ":) :) :)" will convert the first and the last and leave the middle. this way they're all converted.
             while ($text =~ s{(^|\s+?)(${ $self->_smilies_reg })(\s+?|$)}{
                 my $url = $self->smilies_dir . $self->smilies->{ $2 };
                 my $image = sprintf( '<img src="%s" alt="%s">', $url, $2 );
