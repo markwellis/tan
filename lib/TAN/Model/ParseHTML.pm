@@ -9,6 +9,17 @@ use Data::Validate::URI qw/is_web_uri/;
 use HTML::TreeBuilder 5 -weak;
 use Cwd 'abs_path';
 use File::Basename;
+use URI::Find;
+use Data::Validate::URI;
+
+#hack to use URI::Find regex, coz Regexp::Common::URI::http doesn't pick up query or fragment :/
+my $finder = URI::Find->new(sub{});
+my $uri_reg = $finder->uri_re;
+
+my $a_match_reg = qr|<a.+?href=['"]?($uri_reg)['"]?(?:.+?)?>(?:.+?)?</a>|;
+my $uri_find_url_reg = qr/((?:<\w+.+?=['"]?)?$uri_reg.?)/;
+my $href_match_reg = qr/href=['"]?/;
+my $src_match_reg = qr/src=['"]?/;
 
 extends 'Catalyst::Model';
 
@@ -134,7 +145,43 @@ sub _build_bbcode{
     return Parse::BBCode->new( {
         'direct_attributes' => 0,
         'linebreaks' => 0,
-        'url_finder' => 1,
+        'url_finder' => sub{
+            my ( $ref_content, $post, $info ) = @_;
+
+            #order matters!
+                # first look for hyperlinks that should be videos
+                #then look for plaintext urls/videos
+
+            #replace video hyperlinks with embed code, or leave untouched
+            $$ref_content =~ s{$a_match_reg}{
+                #we're in a hyperlink element...
+                $embedder->url_to_embed( $1 ) || $$ref_content;
+            }gsex;
+
+            #find plain text urls/vidoes
+            $$ref_content =~ s{$uri_find_url_reg}{
+                my $url = $1;
+
+                if (
+                    ( $url !~ m/$href_match_reg/ )
+                    && ( $url !~ m/$src_match_reg/ )
+                ){
+                    $url =~ s{($uri_reg)}{
+                        $url = $1;
+                        if (
+                            defined Data::Validate::URI::is_web_uri( $url )
+                        ){
+                            $url =
+                                $embedder->url_to_embed( $1 )
+                                || sprintf( '<a href="%s" rel="external nofollow">%s</a>', $1, $1 ); #auto escaped
+                        }
+                        $url;
+                    }gsex;
+                }
+
+                $url;
+            }gsex;
+        },
         'text_processor' => sub { return shift },
         'smileys' => {
             'base_url' => $self->smilies_dir,

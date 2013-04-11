@@ -42,8 +42,8 @@ my @tests = (
     },
     {
         'name' => 'bbcode: invalid',
-        'input' => '[i]not italic[/i] [b]not bold[/b] [url=http://google.com]not a url[/url] <br />',
-        'expected' => '[i]not italic[/i] [b]not bold[/b] [url=http://google.com]not a url[/url] <br />',
+        'input' => '[i]not italic[/i] [b]not bold[/b] [url=http://google.com] not a url[/url] <br />',
+        'expected' => '[i]not italic[/i] [b]not bold[/b] [url=http://google.com] not a url[/url] <br />',
     },
     {
         'name' => 'bbcode: unclosed',
@@ -131,9 +131,14 @@ my @tests = (
         'expected' => qq|&#39;&quot;&amp;|,
     },
     {
+        'name' => 'img src left alone',
+        'input' => qq|<img src="http://thisaintnews.com" />|,
+        'expected' => qq|<img src="http://thisaintnews.com" />|,
+    },
+    {
         'name' => 'text url to hyperlink',
-        'input' => qq|http://thisaintnews.com|,
-        'expected' => qq|<a href="http://thisaintnews.com" rel="external nofollow">http://thisaintnews.com</a>|,
+        'input' => qq|http://thisaintnews.com?foo=bar&t=f#g|,
+        'expected' => qq|<a href="http://thisaintnews.com?foo=bar&amp;t=f#g" rel="external nofollow">http://thisaintnews.com?foo=bar&amp;t=f#g</a>|,
     },
     {
         'name' => 'text video url to video (not in [video] block)',
@@ -142,7 +147,7 @@ my @tests = (
     },
     {
         'name' => 'hyperlink video url to video (not in [video] block)',
-        'input' => qq|<a href="https://www.youtube.com/watch?v=VDss8V2OME4">video</a>|,
+        'input' => qq|<a href="http://www.youtube.com/watch?v=VDss8V2OME4">video</a>|,
         'expected' => qq|${youtube_embed_code}|,
     },
     {

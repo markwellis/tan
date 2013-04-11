@@ -74,6 +74,7 @@ requires 'Catalyst::View::TT';
 requires 'HTML::StripScripts::Parser';
 requires 'Parse::BBCode';
 requires 'HTML::TreeBuilder';
+requires 'URI::Find';
 
 #workers
 requires 'GearmanX::Simple::Worker';
