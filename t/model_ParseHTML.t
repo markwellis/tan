@@ -151,9 +151,14 @@ my @tests = (
         'expected' => qq|${youtube_embed_code}|,
     },
     {
-        'name' => 'smilies test',
-        'input' => qq|:) :) :beer :bacooooon|,
-        'expected' => qq||,
+        'name' => 'javascript plain text url not converted to hyperlink',
+        'input' => qq|javascript:alert('foo');|,
+        'expected' => qq|javascript:alert(&#39;foo&#39;);|,
+    },
+    {
+        'name' => 'smilies to images',
+        'input' => qq|:) :\| :beer :bacooooon :* B) :'(|,
+        'expected' => qq{<img src="/static/smilies/smile.png" alt=":)"> <img src="/static/smilies/neutral.png" alt=":|"> <img src="/static/smilies/beer.png" alt=":beer"> :bacooooon <img src="/static/smilies/kiss.png" alt=":*"> <img src="/static/smilies/glasses-cool.png" alt="B)"> <img src="/static/smilies/crying.png" alt=":&#39;(">},
     },
 );
 

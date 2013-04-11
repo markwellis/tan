@@ -36,10 +36,52 @@ has 'smilies_dir' => (
 );
 
 has 'smilies' => (
-    'is' => 'ro',
+    'is' => 'rw',
     'isa' => 'HashRef',
     'default' => sub{ return {} },
 );
+
+has '_smilies_reg' => (
+    'is' => 'ro',
+    'init_arg' => undef,
+    'lazy_build' => 1
+);
+
+sub _build__smilies_reg{
+    my ( $self ) = @_;
+
+    my $icons = $self->smilies;
+
+    my $dir = dirname( abs_path( __FILE__ ) ) . "/../../../root/" . $self->smilies_dir; #TODO HACK maybe get rid of the /../../../ bit ...
+
+    opendir( my $dh, "$dir" ) || die "failed to opendir $dir: $!";
+    while ( my $smilie = readdir( $dh ) ){
+        #load each image and strip .png add prefix off : and register
+        if ( $smilie =~ m/^\./ ){
+            next;
+        }
+
+        my $alias = ':' . fileparse( $smilie, ".png", ".gif" );
+        $icons->{ $alias } = $smilie;
+
+    }
+    closedir( $dh );
+
+    #by the time get to looking for the smilies,
+    # the xss stripper has changed ' to &#39; etc so we have to escape
+    my $icons_escaped = {};
+    foreach my $key ( keys( %{ $icons } ) ){
+        my $key_escaped = Parse::BBCode::escape_html( $key );
+        $icons_escaped->{ $key_escaped } = $icons->{ $key };
+    }
+    $self->smilies( $icons_escaped );
+
+    my $re = join '|', map { quotemeta $_ } sort { length $b <=> length $a }
+        keys %{ $icons_escaped };
+
+    return qr/$re/;
+};
+
 
 sub _build_hss{
     my $hss = HTML::StripScripts::Parser->new( 
@@ -105,29 +147,6 @@ sub _build_hss{
     return $hss;
 }
 
-sub build_smilies_list{
-    my ( $self ) = @_;
-
-    my $icons = $self->smilies;
-    
-    my $dir = dirname( abs_path( __FILE__ ) ) . "/../../../root/" . $self->smilies_dir; #TODO HACK maybe get rid of the /../../../ bit ...
-    
-    opendir( my $dh, "$dir" ) || die "failed to opendir $dir: $!";
-    while ( my $smilie = readdir( $dh ) ){
-        #load each image and strip .png add prefix off : and register
-        if ( $smilie =~ m/^\./ ){
-            next;
-        }
-
-        my $alias = ':' . fileparse( $smilie, ".png", ".gif" );
-        $icons->{ $alias } = $smilie;
-
-    }
-    closedir( $dh );
-
-    return $icons; 
-};
-
 has 'bbcode' => (
     'is' => 'ro',
     'isa' => 'Parse::BBCode',
@@ -145,21 +164,22 @@ sub _build_bbcode{
     return Parse::BBCode->new( {
         'direct_attributes' => 0,
         'linebreaks' => 0,
-        'url_finder' => sub{
-            my ( $ref_content, $post, $info ) = @_;
+        'text_processor' => sub{
+            my ( $text ) = @_;
 
             #order matters!
-                # first look for hyperlinks that should be videos
-                #then look for plaintext urls/videos
+                # 1st - hyperlinks that should be videos
+                # 2nd - plaintext urls/videos
+                # 3rd - smilies
 
             #replace video hyperlinks with embed code, or leave untouched
-            $$ref_content =~ s{$a_match_reg}{
+            $text =~ s{$a_match_reg}{
                 #we're in a hyperlink element...
-                $embedder->url_to_embed( $1 ) || $$ref_content;
+                $embedder->url_to_embed( $1 ) || $text;
             }gsex;
 
             #find plain text urls/vidoes
-            $$ref_content =~ s{$uri_find_url_reg}{
+            $text =~ s{$uri_find_url_reg}{
                 my $url = $1;
 
                 if (
@@ -181,11 +201,15 @@ sub _build_bbcode{
 
                 $url;
             }gsex;
-        },
-        'text_processor' => sub { return shift },
-        'smileys' => {
-            'base_url' => $self->smilies_dir,
-            'icons' => $self->build_smilies_list,
+
+            #smilies
+            while ($text =~ s{(^|\s+?)(${ $self->_smilies_reg })(\s+?|$)}{
+                my $url = $self->smilies_dir . $self->smilies->{ $2 };
+                my $image = sprintf( '<img src="%s" alt="%s">', $url, $2 );
+                "${1}${image}${3}";
+            }msex){};
+
+            return $text;
         },
         'tags' => {
             'quote' => {
