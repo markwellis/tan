@@ -26,7 +26,7 @@
     name="[% edname %]"
     rows="20"
     cols="80"
->[% editor.value | html %] </textarea>
+>[% editor.value | html %]</textarea>
 <div id="wysiwygAdvice"></div>
 
 [% IF c.req.user_agent.match('(?:iPad|iPhone|Android)') %]
@@ -41,6 +41,7 @@
     [% RETURN %]
 [% END %]
 
+[%- #make sure tiny_mce is loaded first! -%]
 [% js_includes.push('/static/tiny_mce/tiny_mce.js?r=10', 'Lib/tiny-mce-config') %]
 <script type="text/javascript">
 //<![CDATA[
