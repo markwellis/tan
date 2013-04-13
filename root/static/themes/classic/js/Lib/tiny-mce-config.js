@@ -1,14 +1,16 @@
+tinymce.PluginManager.load('smilies', '/static/tiny_mce_plugins/smilies/smilies.js');
+
 var tiny_mce_config = {
     theme: "advanced",
 
-    plugins: "emotions,fullscreen,inlinepopups",
+    plugins: "-smilies,fullscreen,inlinepopups",
 
     theme_advanced_buttons1: "code,|,undo,redo,|,fontsizeselect,|,"
         + "bold,italic,underline,strikethrough,|,"
         + "justifyleft,justifycenter,justifyright,"
         + "justifyfull|,sub,sup,|,forecolor,backcolor,|,"
         + "hr,bullist,numlist,|,"
-        + "link,unlink,image,emotions,|,fullscreen",
+        + "link,unlink,image,smilies,|,fullscreen",
     theme_advanced_buttons2: "",
     theme_advanced_buttons3: "",
     theme_advanced_buttons4: "",
