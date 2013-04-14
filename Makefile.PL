@@ -75,6 +75,7 @@ requires 'HTML::StripScripts::Parser';
 requires 'Parse::BBCode';
 requires 'HTML::TreeBuilder';
 requires 'URI::Find';
+requires 'Tie::Hash::Sorted';
 
 #workers
 requires 'GearmanX::Simple::Worker';
