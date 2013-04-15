@@ -7,6 +7,7 @@ use Data::Dumper; #used in 500 error email
 use 5.014;
 
 our $VERSION = 4.2.17;
+$VERSION = eval $VERSION;
 
 use Catalyst qw/
     ConfigLoader
