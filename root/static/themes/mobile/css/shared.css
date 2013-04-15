@@ -310,6 +310,6 @@ fieldset{
     display:none;
 }
 
-#edit_comment{
+.editor{
     width:100%;
 }

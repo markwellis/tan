@@ -5,4 +5,5 @@
     name="[% edname %]"
     rows="10"
     cols="20"
+    class="editor"
 >[% editor.value | html %]</textarea>
