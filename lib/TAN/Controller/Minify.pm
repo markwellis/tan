@@ -60,7 +60,9 @@ sub index: Path{
                     flock( $fh, LOCK_UN );
                 }
                 close( $fh );
-                unlink( '/tmp/tan_old_js_clean' ) || die "failed to unlink '/tmp/tan_old_js_clean' $!";
+                if ( -e '/tmp/tan_old_js_clean' ){
+                    unlink( '/tmp/tan_old_js_clean' ) || die "failed to unlink '/tmp/tan_old_js_clean' $!";
+                }
             }
         }
 
