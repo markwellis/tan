@@ -16,7 +16,7 @@ use Data::Validate::URI;
 my $finder = URI::Find->new(sub{});
 my $uri_reg = $finder->uri_re;
 
-my $a_match_reg = qr|<a.+?href=['"]?($uri_reg)['"]?(?:.+?)?>(?:.+?)?</a>|;
+my $a_match_reg = qr|(<a.+?href=['"]?($uri_reg)['"]?(?:.+?)?>(?:.+?)?</a>)|;
 my $uri_find_url_reg = qr/((?:<\w+.+?=['"]?)?$uri_reg.?)/;
 my $href_match_reg = qr/href=['"]?/;
 my $src_match_reg = qr/src=['"]?/;
@@ -175,7 +175,8 @@ sub _build_bbcode{
             #replace video hyperlinks with embed code, or leave untouched
             $text =~ s{$a_match_reg}{
                 #we're in a hyperlink element...
-                $embedder->url_to_embed( $1 ) || $text;
+                #$2 is the url, $1 is the whole element
+                $embedder->url_to_embed( $2 ) || $1;
             }gsex;
 
             #find plain text urls/vidoes

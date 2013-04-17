@@ -160,6 +160,11 @@ my @tests = (
         'input' => qq|:) ;) ;-) :\| :beer :bacooooon :* B) :'(|,
         'expected' => qq{<img src="/static/smilies/smile.png" alt=":)"> <img src="/static/smilies/wink.png" alt=";)"> <img src="/static/smilies/wink.png" alt=";-)"> <img src="/static/smilies/neutral.png" alt=":|"> <img src="/static/smilies/beer.png" alt=":beer"> :bacooooon <img src="/static/smilies/kiss.png" alt=":*"> <img src="/static/smilies/glasses-cool.png" alt="B)"> <img src="/static/smilies/crying.png" alt=":&#39;(">},
     },
+    {
+        'name' => 'don\'t double output with a html link',
+        'input' => qq|Ah. Paul Watson. <a href="http://thisaintnews.com/view/link/120270/Olympics-2012-Conspiracies---The-BBC---VIDEO-#comment328306" rel="external nofollow">This Paul Watson</a>. Everything makes sense now.<br /><br />He's a bit of a barrel scraper.|,
+        'expected' => qq{Ah. Paul Watson. <a href="http://thisaintnews.com/view/link/120270/Olympics-2012-Conspiracies---The-BBC---VIDEO-#comment328306" rel="external nofollow">This Paul Watson</a>. Everything makes sense now.<br /><br />He&#39;s a bit of a barrel scraper.},
+    },
 );
 
 foreach my $test ( @tests ){
