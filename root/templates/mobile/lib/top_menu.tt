@@ -7,12 +7,12 @@
     [%- END %]
 </p>
 <p>
+    [%- IF c.user_exists %]
+        <a href="[% c.user.profile_url %]">Profile</a> |
+    [%- END %]
     <a href="/filter/" class="nsfw_filter">[% c.nsfw ? 'Enable' : 'Disable' %] filter</a> | 
     <a href="/faq/">FAQ</a> |
     <a href="#TAN-bottom">Down</a>
-    [%- IF c.user_exists %]
-        | <a href="[% c.user.profile_url %]">Profile</a>
-    [%- END %]
 </p>
 [% PROCESS lib/cms_menu.tt %]
 <form class="TAN-menu-top-search" action="/search/" method="get">
