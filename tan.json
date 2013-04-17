@@ -129,6 +129,7 @@
         "smilies_dir": "/static/smilies/",
         "smilies": {
             "o_O": "bulgy-eyes.png",
+            "O_o": "bulgy-eyes.png",
             ":s": "confused.png",
             ":S": "confused.png",
             ":-s": "confused.png",

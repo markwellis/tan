@@ -79,7 +79,7 @@ sub _build__smilies_reg{
     my $re = join '|', map { quotemeta $_ } sort { length $b <=> length $a }
         keys %{ $icons_escaped };
 
-    return qr/(^|\s+?)(${re})(\s+?|$)/;
+    return qr/(^|\s+?|>)(${re})(\s+?|<|$)/;
 };
 
 
