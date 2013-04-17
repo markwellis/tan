@@ -6,7 +6,7 @@ use Catalyst::Runtime 5.90;
 use Data::Dumper; #used in 500 error email
 use 5.014;
 
-our $VERSION = 4.2.17;
+our $VERSION = 5.000000;
 $VERSION = eval $VERSION;
 
 use Catalyst qw/
