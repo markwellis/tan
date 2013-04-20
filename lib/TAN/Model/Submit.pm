@@ -52,6 +52,7 @@ sub _validate{
     my $trim_reg = $c->model('CommonRegex')->trim;
 
     foreach my $post_key ( keys(%{$post_data}) ){
+        next if !defined( $post_data->{ $post_key } );
         $post_data->{ $post_key } =~ s/$trim_reg//g;
         next if ( $post_data->{ $post_key } eq '' ); #ignore empty fields
 
