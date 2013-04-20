@@ -6,10 +6,6 @@
                 [%- nsfw_title = " - NSFW" -%]
             [%- END -%]
             [%- page_title = "${page_title}${nsfw_title} - This Aint News" | html -%]
-            <meta 
-                name="title" 
-                content="[% page_title %]" 
-            />
         [%- ELSE -%]
             [%- page_title = 'This Aint News' -%]
         [% END %]
