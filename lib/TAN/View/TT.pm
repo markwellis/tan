@@ -60,7 +60,7 @@ sub render{
     $self->next::method( $c, @args );
 }
 
-my $nl2br_reg = qr/\n/;
+my $nl2br_reg = qr/\n\r|\r\n|\n|\r/;
 sub nl2br{
     my $text = shift;
     chomp($text);
