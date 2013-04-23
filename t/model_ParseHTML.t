@@ -165,6 +165,21 @@ my @tests = (
         'input' => qq|Ah. Paul Watson. <a href="http://thisaintnews.com/view/link/120270/Olympics-2012-Conspiracies---The-BBC---VIDEO-#comment328306" rel="external nofollow">This Paul Watson</a>. Everything makes sense now.<br /><br />He's a bit of a barrel scraper.|,
         'expected' => qq{Ah. Paul Watson. <a href="http://thisaintnews.com/view/link/120270/Olympics-2012-Conspiracies---The-BBC---VIDEO-#comment328306" rel="external nofollow">This Paul Watson</a>. Everything makes sense now.<br /><br />He&#39;s a bit of a barrel scraper.},
     },
+    {
+        'name' => 'smilie with &#160; instead of space',
+        'input' => qq|^ What makes it worse is the retailer is CarPhoneWarehouse, the possibility of having to send it back&#160; :suicide<br /><br />[quote user=DigitalAntichrist]<br />lol.&#160; Y'mean, it's many fragmented pieces are coming with Yodel...&#160; to a somewhat similar address... eventually...[/quote]<br /><br />lol, the Yodel guy may end up going back in fragmented pieces if this is the case&#160;&#160;:terror|,
+        'expected' => qq|^ What makes it worse is the retailer is CarPhoneWarehouse, the possibility of having to send it back&#160; <img src="/static/smilies/suicide.gif" alt=":suicide" /><br /><br /><div class="quote_holder"><span class="quoted_username">DigitalAntichrist wrote:</span><div class="quote"><br />lol.&#160; Y&#39;mean, it&#39;s many fragmented pieces are coming with Yodel...&#160; to a somewhat similar address... eventually...</div></div><br /><br />lol, the Yodel guy may end up going back in fragmented pieces if this is the case&#160;&#160;<img src="/static/smilies/terror.png" alt=":terror" />|,
+    },
+    {
+        'name' => 'smilie with &nbsp; instead of space',
+        'input' => qq|^ What makes it worse is the retailer is CarPhoneWarehouse, the possibility of having to send it back&#160; :suicide<br /><br />[quote user=DigitalAntichrist]<br />lol.&#160; Y'mean, it's many fragmented pieces are coming with Yodel...&#160; to a somewhat similar address... eventually...[/quote]<br /><br />lol, the Yodel guy may end up going back in fragmented pieces if this is the case&#160;&nbsp;:terror|,
+        'expected' => qq|^ What makes it worse is the retailer is CarPhoneWarehouse, the possibility of having to send it back&#160; <img src="/static/smilies/suicide.gif" alt=":suicide" /><br /><br /><div class="quote_holder"><span class="quoted_username">DigitalAntichrist wrote:</span><div class="quote"><br />lol.&#160; Y&#39;mean, it&#39;s many fragmented pieces are coming with Yodel...&#160; to a somewhat similar address... eventually...</div></div><br /><br />lol, the Yodel guy may end up going back in fragmented pieces if this is the case&#160;&nbsp;<img src="/static/smilies/terror.png" alt=":terror" />|,
+    },
+    {
+        'name' => 'check url finder regex isnt being greedy',
+        'input' => qq|<br />http://www.youtube.com/watch?v=VDss8V2OME4<br /><img src="http://venustodaymag.files.wordpress.com/2011/12/breasts-in-art2-cropped.jpg" />|,
+        'expected' => qq|<br />${youtube_embed_code}<br /><img src="http://venustodaymag.files.wordpress.com/2011/12/breasts-in-art2-cropped.jpg" />|,
+    },
 );
 
 foreach my $test ( @tests ){

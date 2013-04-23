@@ -17,7 +17,7 @@ my $finder = URI::Find->new(sub{});
 my $uri_reg = $finder->uri_re;
 
 my $a_match_reg = qr|(<a.+?href=['"]?($uri_reg)['"]?(?:.+?)?>(?:.+?)?</a>)|;
-my $uri_find_url_reg = qr/((?:<\w+.+?=['"]?)?$uri_reg.?)/;
+my $uri_find_url_reg = qr/((?:(?:href|src)=['"]?)?$uri_reg.?)/;
 my $href_match_reg = qr/href=['"]?/;
 my $src_match_reg = qr/src=['"]?/;
 
@@ -79,7 +79,7 @@ sub _build__smilies_reg{
     my $re = join '|', map { quotemeta $_ } sort { length $b <=> length $a }
         keys %{ $icons_escaped };
 
-    return qr/(^|\s+?|>)(${re})(\s+?|<|$)/;
+    return qr/(^|\s|&#160;|&nbsp;|>)(${re})(\s|&#160;|&nbsp;|<|$)/;
 };
 
 
