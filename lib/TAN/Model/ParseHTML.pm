@@ -17,9 +17,8 @@ my $finder = URI::Find->new(sub{});
 my $uri_reg = $finder->uri_re;
 
 my $a_match_reg = qr|(<a.+?href=['"]?($uri_reg)['"]?(?:.+?)?>(?:.+?)?</a>)|;
-my $uri_find_url_reg = qr/((?:(?:href|src)=['"]?)?$uri_reg.?)/;
-my $href_match_reg = qr/href=['"]?/;
-my $src_match_reg = qr/src=['"]?/;
+my $href_match_reg = qr/(?:href|src|alt)=['"]?/;
+my $uri_find_url_reg = qr/((?:$href_match_reg)?$uri_reg.?)/;
 
 extends 'Catalyst::Model';
 
@@ -185,7 +184,6 @@ sub _build_bbcode{
 
                 if (
                     ( $url !~ m/$href_match_reg/ )
-                    && ( $url !~ m/$src_match_reg/ )
                 ){
                     $url =~ s{($uri_reg)}{
                         $url = $1;

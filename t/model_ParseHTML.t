@@ -180,6 +180,11 @@ my @tests = (
         'input' => qq|<br />http://www.youtube.com/watch?v=VDss8V2OME4<br /><img src="http://venustodaymag.files.wordpress.com/2011/12/breasts-in-art2-cropped.jpg" />|,
         'expected' => qq|<br />${youtube_embed_code}<br /><img src="http://venustodaymag.files.wordpress.com/2011/12/breasts-in-art2-cropped.jpg" />|,
     },
+    {
+        'name' => 'check url finder isn\'t breaking img with alt same as src',
+        'input' => qq|<br /><img alt="http://s2.postimg.org/isc0q4cp5/Lucy_Pinder_Superman.jpg" src="http://s2.postimg.org/isc0q4cp5/Lucy_Pinder_Superman.jpg" />|,
+        'expected' => qq|<br /><img alt="http://s2.postimg.org/isc0q4cp5/Lucy_Pinder_Superman.jpg" src="http://s2.postimg.org/isc0q4cp5/Lucy_Pinder_Superman.jpg" />|,
+    },
 );
 
 foreach my $test ( @tests ){
