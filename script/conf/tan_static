@@ -1,9 +1,9 @@
 server {
 	listen 8080;
 
-	root /var/www/thisaintnews.com/root/static;
+	root /var/www/thisaintnews.com/root;
 
-	server_name static.dev.thisaintnews.com;
+	server_name localhost;
 
     expires max;
 
@@ -17,28 +17,28 @@ server {
 	#}
 
     #css/js minify generation
-    location /cache/minify/ {
+    location /static/cache/minify/ {
         #ifs are evil, but how else?
         if (!-f $request_filename) {
             rewrite 
-                ^/cache/minify/([0-9\.]+)/(\w+)/(\w+)/(.*) 
+                ^/static/cache/minify/([0-9\.]+)/(\w+)/(\w+)/(.*) 
                 /minify/$1/$2/$3/$4 
                 break;
-            proxy_pass http://thisaintnews.com:8081;
+            proxy_pass http://localhost:8081;
         }
     }
 
     #thumbnail generation
-    location /cache/thumbs/ {
+    location /static/cache/thumbs/ {
         #ifs are evil, but how else?
         if (!-f $request_filename) {
-            rewrite ^/cache/thumbs/(.*)$ /thumb/$1 break;
-            proxy_pass http://thisaintnews.com:8081; 
+            rewrite ^/static/cache/thumbs/(.*)$ /thumb/$1 break;
+            proxy_pass http://localhost:8081; 
         }
     }
 
     #missing smilies
-    location /smilies/ {
-        try_files $uri /images/blank.gif;
+    location /static/smilies/ {
+        try_files $uri /static/images/blank.gif;
     }
 }

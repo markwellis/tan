@@ -1,10 +1,10 @@
 backend static {
-    .host = "127.0.0.1";
+    .host = "localhost";
     .port = "8080";
 }
 
 backend tan {
-    .host = "127.0.0.1";
+    .host = "localhost";
     .port = "8081";
 }
 
@@ -12,15 +12,15 @@ sub vcl_recv {
     remove req.http.X-Forwarded-For;
     set    req.http.X-Forwarded-For = client.ip;
 
-    #do it this way so the static is the default (for other sites etc)
     if ( req.http.host ~ "^(?:dev.)?thisaintnews.com$" ){
-        set req.backend = tan;
+    #do it this way so the static is the default (for other sites etc)
+        if ( req.url !~ "^/static/" ){
+            set req.backend = tan;
+        } else {
+            set req.backend = static;
+        }
     } else {
-        set req.backend = static;
-    }
-    
     #pass if we're some other domain
-    if ( req.http.host !~ "^(?:static.)?(?:dev.)?thisaintnews.com$" ){
         return(pass);
     }
 
@@ -47,7 +47,7 @@ sub vcl_recv {
         }
 
         if ( 
-            req.url ~ "^/user/pics/.*$|^/cache/thumbs/.*$"
+            req.url ~ "^/static/user/pics/.*$|^/static/cache/thumbs/.*$"
             && req.http.referer !~ "thisaintnews.com"
             && req.http.user-agent !~ "redditbot" #reddit bastards
             && req.http.user-agent !~ "googlebot"
@@ -56,14 +56,14 @@ sub vcl_recv {
         ){
             set req.url = regsub(
                 req.url,
-                "^/user/pics/(.*)$|^/cache/thumbs/[0-9]+/([0-9]+)/[0-9]+.*$|^/thumb/[0-9]+/([0-9]+)/[0-9]+.*$",
+                "^/static/user/pics/(.*)$|^/static/cache/thumbs/[0-9]+/([0-9]+)/[0-9]+.*$|^/thumb/[0-9]+/([0-9]+)/[0-9]+.*$",
                 "/redirect/internal/\1\2\3"
             );
             return(pass);
         }
         
         if ( 
-            req.url ~ "^/smilies/.*$"
+            req.url ~ "^/static/smilies/.*$"
             && req.http.referer !~ "thisaintnews.com"
         ){
             set req.url = regsub(
@@ -79,11 +79,7 @@ sub vcl_recv {
         ( req.backend == tan ) 
         && ( req.url ~ "^/favicon.ico$" )
     ){
-        if ( req.http.host == "static.thisaintnews.com" ){  
-            error 750;
-        } else if ( req.http.host == "static.dev.thisaintnews.com" ){
-            error 751;
-        }
+        error 750;
     }
 
     ## Chances are that if we are receiving POST data, we don't want to cache 
@@ -157,14 +153,7 @@ sub vcl_fetch {
 
 sub vcl_error{
     if (obj.status == 750) {
-        set obj.http.Location = "http://static.thisaintnews.com/favicon.ico";
-
-        set obj.status = 301;
-        return(deliver);
-    }
-    
-    if (obj.status == 751) {
-        set obj.http.Location = "http://static.dev.thisaintnews.com/favicon.ico";
+        set obj.http.Location = "/static/favicon.ico";
 
         set obj.status = 301;
         return(deliver);
