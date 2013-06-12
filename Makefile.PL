@@ -76,6 +76,9 @@ requires 'Parse::BBCode';
 requires 'HTML::TreeBuilder';
 requires 'URI::Find';
 requires 'Tie::Hash::Sorted';
+requires 'Cwd';
+requires 'DBD::mysql';
+requires 'Starman';
 
 #workers
 requires 'GearmanX::Simple::Worker';
