@@ -44,6 +44,13 @@ __PACKAGE__->setup();
 sub check_cache{
     my $c = shift;
 
+    if (
+        ( $c->action eq 'thumb/index')
+        || ( $c->action eq 'minify/index')
+    ){
+        return 0;
+    }
+
     if ( !$c->req->cookie('mobile') ){
         $c->forward('/mobile/detect_mobile');
     }
@@ -257,6 +264,7 @@ around dispatch => sub {
         $ENV{'CATALYST_DEBUG'}
         && $c->log->can('abort')
         && ( $c->action eq 'minify/index')
+        && ( !$c->req->param('show_minify') )
     ){
         #don't log minify requests, they're annoying
         $c->log->abort(1);
