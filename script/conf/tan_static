@@ -1,0 +1,44 @@
+server {
+	listen 8080;
+
+	root /var/www/thisaintnews.com/root/static;
+
+	server_name static.dev.thisaintnews.com;
+
+    expires max;
+
+	#error_page 404 /404.html;
+
+	# redirect server error pages to the static page /50x.html
+	#
+	#error_page 500 502 503 504 /50x.html;
+	#location = /50x.html {
+	#	root /usr/share/nginx/html;
+	#}
+
+    #css/js minify generation
+    location /cache/minify/ {
+        #ifs are evil, but how else?
+        if (!-f $request_filename) {
+            rewrite 
+                ^/cache/minify/([0-9\.]+)/(\w+)/(\w+)/(.*) 
+                /minify/$1/$2/$3/$4 
+                break;
+            proxy_pass http://thisaintnews.com:8081;
+        }
+    }
+
+    #thumbnail generation
+    location /cache/thumbs/ {
+        #ifs are evil, but how else?
+        if (!-f $request_filename) {
+            rewrite ^/cache/thumbs/(.*)$ /thumb/$1 break;
+            proxy_pass http://thisaintnews.com:8081; 
+        }
+    }
+
+    #missing smilies
+    location /smilies/ {
+        try_files $uri /images/blank.gif;
+    }
+}
