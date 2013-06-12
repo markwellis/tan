@@ -50,7 +50,7 @@ sub auto: Private{
 sub index: Private{
     my ( $self, $c ) = @_;
 
-    $c->res->redirect('/index/all/0/');
+    $c->res->redirect( '/index/all/0' . $c->req->uri->path_query );
     $c->detach;
 }
 

@@ -47,6 +47,7 @@ sub check_cache{
     if (
         ( $c->action eq 'thumb/index')
         || ( $c->action eq 'minify/index')
+        || ( $c->action eq 'index')
     ){
         return 0;
     }
