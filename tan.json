@@ -46,7 +46,6 @@
     "Plugin::Cache": {
         "backend": {
             "class": "Cache::Memcached::libmemcached",
-            "debug": 2,
             "servers": [
                 "127.0.0.1:11211"
             ]
