@@ -14,7 +14,7 @@ LogFormat "%{X-Forwarded-For}i %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-A
     CustomLog /var/log/apache2/access.tan.log varnishcombined
     ErrorLog /var/log/apache2/error.log
 
-    DocumentRoot "/var/www/thisaintnews.com/root"
+    DocumentRoot "/var/www/TAN/root"
 
     <Directory />
         AllowOverride None
