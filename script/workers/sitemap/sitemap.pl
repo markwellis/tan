@@ -1,14 +1,15 @@
-use strict;
+use 5.018;
 use warnings;
 
-use GearmanX::Simple::Worker;
+use Gearman::Worker;
 
 use LWP::Simple;
 use CGI;
 
 use Config::Any;
 use File::Basename;
-use Log::Log4perl qw/:easy/;
+
+say "Started: pid $$: " . scalar( localtime );
 
 my $config_file = dirname(__FILE__) . '/config.json';
 
@@ -28,7 +29,7 @@ sub sitemap_ping{
     if ( !$lastrun || (time - $lastrun) > 600 ){
     #10 min limit
         foreach my $search_engine_ping_url ( @{$config->{'search_engine_ping_urls'}} ) {
-            ERROR "pinging $search_engine_ping_url";
+            say "pinging $search_engine_ping_url";
             get( $search_engine_ping_url . CGI::escape( $config->{'sitemap_url'} ) );
         }
         $lastrun = time;
@@ -37,8 +38,17 @@ sub sitemap_ping{
     return 1;
 }
 
-my $worker = GearmanX::Simple::Worker->new( $config->{'job_servers'}, {
-    'sitemap_ping' => \&sitemap_ping,
-} );
+my $worker = Gearman::Worker->new;
+$worker->job_servers( @{ $config->{'job_servers'} } );
+$worker->register_function( 'sitemap_ping' => \&sitemap_ping );
 
-$worker->work;
+my $exit_trap = sub{
+    $worker->unregister_function('sitemap_ping');
+    say "Ended: pid $$: " . scalar( localtime );
+    exit;
+};
+
+$SIG{TERM} = $exit_trap;
+$SIG{INT} = $exit_trap;
+
+$worker->work while 1;

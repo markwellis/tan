@@ -81,7 +81,7 @@ requires 'DBD::mysql';
 requires 'Starman';
 
 #workers
-requires 'GearmanX::Simple::Worker';
+requires 'Gearman::Worker';
 requires 'Storable';
 requires 'Config::Any';
 requires 'Log::Log4perl';

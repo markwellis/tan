@@ -1,14 +1,15 @@
-use strict;
+use 5.018;
 use warnings;
 
-use GearmanX::Simple::Worker;
+use Gearman::Worker;
 
 use LucyX::Simple;
 use Storable;
 
 use Config::Any;
 use File::Basename;
-use Log::Log4perl qw/:easy/;
+
+say "Started: pid $$: " . scalar( localtime );
 
 my $config_file = dirname(__FILE__) . '/config.json';
 
@@ -24,12 +25,11 @@ my $searcher = LucyX::Simple->new( $config->{'search_args'} );
 sub add_to_index{
     my ( $job ) = @_;
 
-    umask(022); #App::Daemon sets this to 0133, undo that
     my $document = Storable::thaw( $job->arg );
-    ERROR "adding " . $document->{'id'} . " to index" ;
+    say "adding " . $document->{'id'} . " to index" ;
     $searcher->update_or_create( $document );
     $searcher->commit(1);
-    ERROR "done";
+    say "done";
 
     return 1;
 }
@@ -39,20 +39,29 @@ sub delete_from_index{
 
     my $ids = Storable::thaw( $job->arg );
 
-    umask(022); #App::Daemon sets this to 0133, undo that
     foreach my $id ( @{$ids} ){
-        ERROR "deleting " . $id . " from index" ;
+        say "deleting " . $id . " from index" ;
         $searcher->delete( 'id', $id );
     }
     $searcher->commit(1);
-    ERROR "done";
+    say "done";
 
     return 1;
 }
 
-my $worker = GearmanX::Simple::Worker->new( $config->{'job_servers'}, {
-    'search_add_to_index' => \&add_to_index,
-    'search_delete_from_index' => \&delete_from_index,
-} );
+my $worker = Gearman::Worker->new;
+$worker->job_servers( @{ $config->{'job_servers'} } );
+$worker->register_function( 'search_add_to_index' => \&add_to_index );
+$worker->register_function( 'search_delete_from_index' => \&delete_from_index );
 
-$worker->work;
+my $exit_trap = sub{
+    $worker->unregister_function('search_add_to_index');
+    $worker->unregister_function('search_delete_from_index');
+    say "Ended: pid $$: " . scalar( localtime );
+    exit;
+};
+
+$SIG{TERM} = $exit_trap;
+$SIG{INT} = $exit_trap;
+
+$worker->work while 1;

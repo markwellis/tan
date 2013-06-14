@@ -1,7 +1,7 @@
-use strict;
+use 5.018;
 use warnings;
 
-use GearmanX::Simple::Worker;
+use Gearman::Worker;
 
 use WebService::Bitly;
 use Net::Twitter;
@@ -11,7 +11,8 @@ use LWPx::ParanoidAgent;
 
 use Config::Any;
 use File::Basename;
-use Log::Log4perl qw/:easy/;
+
+say "Started: pid $$: " . scalar( localtime );
 
 my $config_file = dirname(__FILE__) . '/config.json';
 my $devel_config_file = dirname(__FILE__) . '/config_devel.json';
@@ -56,7 +57,7 @@ sub spam_twitter{
 
     my $shorten = $bitly->shorten( $args->{'url'} );
     if ( $shorten->is_error ){
-        ERROR $shorten->status_code . ': ' . $shorten->status_txt . "\n";
+        say $shorten->status_code . ': ' . $shorten->status_txt . "\n";
 
         return 1;
     }
@@ -99,18 +100,27 @@ sub spam_twitter{
         $title = substr( $title, 0, ( $availble_length ) );
     }
 
-    ERROR "status: ${title}${nsfw} ${url}\n";
+    say "status: ${title}${nsfw} ${url}\n";
     eval{
         $nt->update( "${title}${nsfw} ${url}" );
     };
 
-    ERROR "${@}\n" if $@;
+    say "${@}\n" if $@;
 
     return 1;
 }
 
-my $worker = GearmanX::Simple::Worker->new( $config->{'job_servers'}, {
-    'twitter_spam' => \&spam_twitter,
-} );
+my $worker = Gearman::Worker->new;
+$worker->job_servers( @{ $config->{'job_servers'} } );
+$worker->register_function( 'twitter_spam' => \&spam_twitter );
 
-$worker->work;
+my $exit_trap = sub{
+    $worker->unregister_function('twitter_spam');
+    say "Ended: pid $$: " . scalar( localtime );
+    exit;
+};
+
+$SIG{TERM} = $exit_trap;
+$SIG{INT} = $exit_trap;
+
+$worker->work while 1;
