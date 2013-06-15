@@ -7,6 +7,7 @@ LISTEN=localhost:8081
 
 if [ $DEVELOPMENT ]; then 
     export CATALYST_DEBUG=1
+    export CATALYST_CONFIG_LOCAL_SUFFIX=devel
     WORKERS=1
 fi;
 
