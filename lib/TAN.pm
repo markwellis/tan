@@ -19,7 +19,6 @@ use Catalyst qw/
     Session::State::Cookie
     Cache
     PageCache
-    Unicode::Encoding
     Event
 /;
 
