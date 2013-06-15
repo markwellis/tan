@@ -32,13 +32,10 @@ sub submit: Local{
     my ( $self, $c ) = @_;
 
     if ( $c->user_exists ){
-        given( $c->req->param('accept') ){
-            when('Agree'){
-                $c->forward('agree');
-            }
-            default {
-                $c->forward('decline');
-            }
+        if ( $c->req->param('accept') eq 'Agree' ){
+            $c->forward('agree');
+        } else {
+            $c->forward('decline');
         }
     }
 
