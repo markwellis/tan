@@ -53,14 +53,11 @@ sub step1: Local{
     $c->stash->{'user'} = $user;
     $c->stash->{'token'} = $user->tokens->new_token($user->id, 'forgot');
 
-    $c->email(
-        'header' => [
-            'From'    => 'noreply@thisaintnews.com',
-            'To'      => $email,
-            'Subject' => 'User Details',
-            'Content-Type' => 'text/html',
-        ],
-        'body' => $c->view('NoWrapper')->render( $c, 'login/forgot/email.tt' ),
+    $c->model('Email')->send(
+        'from'    => 'noreply@thisaintnews.com',
+        'to'      => $email,
+        'subject' => 'User Details',
+        'htmltext' => $c->view('NoWrapper')->render( $c, 'login/forgot/email.tt' ),
     );
 
 #add a message and redirect user somewhere...

@@ -15,8 +15,6 @@
     "recaptcha_public_key": "6Lczmt0SAAAAAAqU2QBwiR9us4E0ySjj_EY2xty1",
     "recaptcha_private_key": "6Lczmt0SAAAAAEz24v4Z2vBg4mwedRikv_DPsSPp",
 
-    "email": ["Sendmail"],
-
     "paypal_donate_address": "donate@thisaintnews.com",
     
     "donate": {

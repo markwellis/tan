@@ -78,14 +78,11 @@ sub index: Path Args(0){
     })->token;
     $c->stash->{'user_id'} = $new_user->id;
 
-    $c->email(
-        'header' => [
-            'From'    => 'noreply@thisaintnews.com',
-            'To'      => $email,
-            'Subject' => 'Confirm email address',
-            'Content-Type' => 'text/html',
-        ],
-        'body' => $c->view('NoWrapper')->render( $c, 'login/registration/email.tt' ),
+    $c->model('Email')->send(
+        'from'    => 'noreply@thisaintnews.com',
+        'to'      => $email,
+        'subject' => 'Confirm email address',
+        'htmltext' => $c->view('NoWrapper')->render( $c, 'login/registration/email.tt' ),
     );
 
     $c->flash->{'message'} = 'Thanks for registering, you will recieve a confirmation email shortly';

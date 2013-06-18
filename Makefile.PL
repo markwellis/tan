@@ -16,7 +16,6 @@ requires 'Catalyst::Plugin::Authorization::Roles';
 requires 'Catalyst::Authentication::Store::DBIx::Class';
 requires 'DBIx::Class::InflateColumn::DateTime';
 requires 'DateTime::Format::MySQL';
-requires 'Catalyst::Plugin::Email';
 requires 'Catalyst::Model::Adaptor';
 requires 'Catalyst::Model::Factory::PerRequest';
 requires 'Catalyst::Plugin::Session';
@@ -79,6 +78,8 @@ requires 'Tie::Hash::Sorted';
 requires 'Cwd';
 requires 'DBD::mysql';
 requires 'Starman';
+requires 'Catalyst::Model::Factory';
+requires 'Mail::Builder::Simple';
 
 #workers
 requires 'Gearman::Worker';

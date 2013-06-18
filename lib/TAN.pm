@@ -13,7 +13,6 @@ use Catalyst qw/
     ConfigLoader
     Authentication
     Authorization::Roles
-    Email
     Session
     Session::Store::File
     Session::State::Cookie
@@ -186,7 +185,7 @@ sub finalize_error {
         my $subject = 'TAN 500 Error: ' . $error;
         $subject =~ s/\s+/ /g;
         $subject = substr( $subject, 0, 200 );
-        my $from = $ENV{'ADMIN_EMAIL'} || 'tan.webmaster@thisaintnews.com';
+        my $from = 'tan.webmaster@thisaintnews.com';
 
         my $req = {};
         $req->{'uri'} = $c->req->uri || '';
@@ -203,39 +202,16 @@ sub finalize_error {
             . "\n\nClient IP:\n"
             . $req->{'address'};
 
-        $c->email(
-            header => [
-                'To'      => $to,
-                'From'    => $from,
-                'Subject' => $subject,
-            ],
-            parts => [
-                Email::MIME->create(
-                    'attributes' => {
-                        'content_type' => 'text/plain',
-                        'disposition'  => 'inline',
-                        'charset'      => 'UTF-8',
-                    },
-                    'body' => $body,
-                ),
-                Email::MIME->create(
-                    'attributes' => {
-                        'filename'     => 'request.txt',
-                        'content_type' => 'text/plain',
-                        'disposition'  => 'attachment',
-                        'charset'      => 'UTF-8',
-                    },
-                    'body' => Dumper( $c->req ),
-                ),
-                Email::MIME->create(
-                    'attributes' => {
-                        'filename'     => 'stash.txt',
-                        'content_type' => 'text/plain',
-                        'disposition'  => 'attachment',
-                        'charset'      => 'UTF-8',
-                    },
-                    'body' => Dumper( $c->stash ),
-                ),
+        my $stash = Dumper( $c->stash );
+        $req = Dumper( $c->req );
+        $c->model('Email')->send(
+            'to'      => $to,
+            'from'    => $from,
+            'subject' => $subject,
+            'plaintext' => $body,
+            'attachment' => [
+                [\$req, 'request.txt', 'text/plain'],
+                [\$stash, 'stash.txt', 'text/plain'],
             ],
         );
     }
