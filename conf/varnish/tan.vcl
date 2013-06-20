@@ -39,7 +39,7 @@ sub vcl_recv {
         }
     } else {
     #pass if we're some other domain
-        return(pass);
+        error 751;
     }
 
     #ie6 can't handle gzip
@@ -174,6 +174,13 @@ sub vcl_error{
         set obj.http.Location = "/static/favicon.ico";
 
         set obj.status = 301;
+        return(deliver);
+    }
+
+    if (obj.status == 751) {
+        set obj.http.Location = "http://thisaintnews.com/";
+
+        set obj.status = 302;
         return(deliver);
     }
 }
