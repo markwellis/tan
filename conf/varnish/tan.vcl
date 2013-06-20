@@ -13,6 +13,11 @@ backend stats {
     .port = "8080";
 }
 
+backend sns {
+    .host = "sns-structcadtech.com";
+    .port = "8080";
+}
+
 backend tan {
     .host = "tan.tan";
     .port = "8081";
@@ -37,6 +42,9 @@ sub vcl_recv {
         } else {
             set req.backend = static;
         }
+    }
+    else if ( req.http.host ~ "^(?:www\.)?sns-structcadtech\.com$" ){
+        set req.backend = sns;
     } else {
     #pass if we're some other domain
         error 751;
