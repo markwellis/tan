@@ -1,18 +1,9 @@
-ServerAdmin postmaster@thisaintnews.com
-
-#PerlSetEnv CATALYST_DEBUG 1
-#PerlSetEnv CATALYST_CONFIG_LOCAL_SUFFIX devel
-
-#create new log format
-LogFormat "%{X-Forwarded-For}i %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\"" varnishcombined
-
 <VirtualHost *:8080>
-    ServerName localhost
+    ServerName static.tan
+    ServerAlias thisaintnews.com dev.thisaintnews.com
 
-    LogLevel warn
-
-    CustomLog /var/log/apache2/access.tan.log varnishcombined
     ErrorLog /var/log/apache2/error.log
+    CustomLog /var/log/apache2/access.tan.log combined
 
     DocumentRoot "/var/www/TAN/root"
 

@@ -1,19 +1,27 @@
 backend static {
-    .host = "localhost";
+    .host = "static.tan";
+    .port = "8080";
+}
+
+backend trac {
+    .host = "trac.tan";
     .port = "8080";
 }
 
 backend tan {
-    .host = "localhost";
+    .host = "tan.tan";
     .port = "8081";
 }
+
+import std;
+#std.syslog(180, "RECV: " + req.http.host);
 
 sub vcl_recv {
     remove req.http.X-Forwarded-For;
     set    req.http.X-Forwarded-For = client.ip;
-
-    if ( req.http.host ~ "^(?:dev.)?thisaintnews.com$" ){
-    #do it this way so the static is the default (for other sites etc)
+    if ( req.http.host ~ "^trac\.(?:dev\.)?thisaintnews\.com$" ){
+        set req.backend = trac;
+    } else if ( req.http.host ~ "^(?:dev\.)?thisaintnews\.com$" ){
         if ( req.url !~ "^/static/" ){
             set req.backend = tan;
         } else {

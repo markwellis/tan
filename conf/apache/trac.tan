@@ -1,0 +1,34 @@
+WSGIPythonPath /mnt/stuff/python
+
+LogLevel debug
+<VirtualHost *:8080>
+    ServerName trac.tan
+    ServerAlias trac.thisaintnews.com trac.dev.thisaintnews.com
+
+    ErrorLog /var/log/apache2/error.log
+    CustomLog /var/log/apache2/access.trac.log combined
+
+    Alias /thisaintnews/chrome/common /var/lib/trac/thisaintnews/htdocs/common
+    Alias /thisaintnews/chrome/site /var/lib/trac/thisaintnews/htdocs/site
+    
+    <Directory "/var/lib/trac/thisaintnews/htdocs">
+      Order allow,deny
+      Allow from all
+    </Directory>
+    
+    WSGIScriptAlias /thisaintnews /var/lib/trac/thisaintnews/cgi-bin/trac.wsgi
+
+    <LocationMatch "/">
+        Options FollowSymLinks
+        WSGIApplicationGroup %{GLOBAL}
+
+        AuthType Basic
+        AuthName "Trac Server"
+        AuthUserFile /var/lib/trac/thisaintnews/passwd
+        Require valid-user
+
+        RewriteEngine on
+        RewriteCond %{REQUEST_URI} !thisaintnews/
+        RewriteRule .* /thisaintnews/ [R,NC,L]
+    </LocationMatch>
+</VirtualHost>
