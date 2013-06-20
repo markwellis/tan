@@ -12,6 +12,7 @@ __PACKAGE__->config(
         'user' => 'thisaintnews',
         'password' => 'caBi2ieL',
         'mysql_enable_utf8' => 1,
+        'quote_names' => 1,
     },
 );
 
