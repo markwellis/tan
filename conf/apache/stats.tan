@@ -1,0 +1,21 @@
+<VirtualHost *:8080>
+    ServerName stats.tan
+    ServerAlias stats.dev.thisaintnews.com stats.thisaintnews.com
+    
+    ErrorLog /var/log/apache2/error.log
+    CustomLog /var/log/apache2/access.stats.log combined
+    
+    DocumentRoot "/var/www/stats.thisaintnews.com/htdocs"
+
+    Alias /awstatsclasses "/usr/share/awstats/lib/"
+    Alias /awstats-icon/ "/usr/share/awstats/icon/"
+    Alias /awstatscss "/usr/share/doc/awstats/examples/css"
+ 
+    <Directory "/var/www/stats.thisaintnews.com/htdocs">
+    	DirectoryIndex awstats.thisaintnews.com.html
+        Options -Indexes FollowSymLinks
+
+        ExpiresActive On
+        ExpiresDefault "access plus 1 hour"
+    </Directory>
+</VirtualHost>

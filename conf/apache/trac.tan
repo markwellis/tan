@@ -1,6 +1,4 @@
 WSGIPythonPath /mnt/stuff/python
-
-LogLevel debug
 <VirtualHost *:8080>
     ServerName trac.tan
     ServerAlias trac.thisaintnews.com trac.dev.thisaintnews.com
