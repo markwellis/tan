@@ -79,7 +79,6 @@
 [% IF (
     edit 
     && c.check_any_user_role('delete_object', 'edit_object', 'edit_object_nsfw')
-    && ( object.user_id != c.user.id )
 ) %]
     [% IF c.check_any_user_role('edit_object') %]
         [% RAWPERL %]
@@ -109,6 +108,7 @@
             </select>
         [% END %]
     [% END %]
+    [% IF ( object.user_id != c.user.id ) %]
     <li>
         <label for="_edit-reason">Reason for edit</label>
         <input 
@@ -118,6 +118,7 @@
             class="required"
         />
     </li>
+    [% END %]
 [% END %]
 [% IF (
     edit 
