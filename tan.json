@@ -127,6 +127,8 @@
         "smilies": {
             "o_O": "bulgy-eyes.png",
             "O_o": "bulgy-eyes.png",
+            "0_o": "bulgy-eyes.png",
+            "o_0": "bulgy-eyes.png",
             ":s": "confused.png",
             ":S": "confused.png",
             ":-s": "confused.png",
