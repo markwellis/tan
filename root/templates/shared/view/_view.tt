@@ -1,6 +1,6 @@
 [% PROCESS index/object.tt %]
 
-[% rel_extra = "<link rel=\"image_src\" href=\"${c.config.thumb_path}/${md}/${object.$type.picture_id}/100\" />" %]
+[% rel_extra = "<link rel=\"image_src\" href=\"${c.req.base.replace('/$', '')}${c.config.thumb_path}/${md}/${object.$type.picture_id}/100\" />" %]
 
 [% page_keywords = 'TAN thisaintnews news' %]
 
