@@ -65,7 +65,7 @@ sub spam_twitter{
     my $url = $shorten->short_url;
 
     my $nt = Net::Twitter->new(
-        traits   => [qw/OAuth API::REST/],
+        traits   => [qw/API::RESTv1_1/],
         consumer_key => $config->{'twitter'}->{'consumer_key'},
         consumer_secret => $config->{'twitter'}->{'consumer_secret'},
         access_token => $config->{'twitter'}->{'access_token'},
