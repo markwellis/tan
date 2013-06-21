@@ -31,6 +31,7 @@ sub index: Private{
         'columns' => [
             'user_id', 
             'username',
+            'avatar',
         ],
     });
 
