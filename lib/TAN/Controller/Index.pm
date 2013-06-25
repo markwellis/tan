@@ -32,10 +32,15 @@ sub index :Path Args(2) {
 
     my $page = $c->req->param('page') || 1;
 
-    my $int_reg = $c->model('CommonRegex')->not_int;
-    $page =~ s/$int_reg//g;
-    $page ||= 1;
+    my $not_int_reg = $c->model('CommonRegex')->not_int;
+    if ( $page =~ m/$not_int_reg/ ){
+        $page = 1;
+    }
+    $c->req->params->{'page'} = $page;
 
+    if ( $upcoming =~ m/$not_int_reg/ ){
+        $upcoming = 1;
+    }
     $upcoming ||= 0;
 
     #redirect to somewhere sensible if someone has made up some random url...
