@@ -1,8 +1,19 @@
 [% PROCESS index/object.tt %]
 
-[% rel_extra = "<link rel=\"image_src\" href=\"${c.req.base.replace('/$', '')}${c.config.thumb_path}/${md}/${object.$type.picture_id}/100\" />" %]
+[%-
+thumb_image_src = "${c.req.base.replace('/$', '')}${c.config.thumb_path}/${md}/${object.$type.picture_id}/200";
+object_title = object.${type}.title | html;
+object_description = object.${type}.description | html;
+page_url = c.req.base _ c.req.path | html;
 
-[% page_keywords = 'TAN thisaintnews news' %]
+rel_extra = "<link rel=\"image_src\" href=\"${thumb_image_src}\" />"
+    _ "<meta property=\"og:image\" content=\"${thumb_image_src}\" />"
+    _ "<meta property=\"og:title\" content=\"${object_title}\" />"
+    _ "<meta property=\"og:description\" content=\"${object_description}\" />"
+    _ "<meta property=\"og:url\" content=\"${page_url}\" />"
+    _ "<meta property=\"og:type\" content=\"website\" />";
+page_keywords = 'TAN thisaintnews news';
+-%]
 
 <p>
     <span class="TAN-tags">
