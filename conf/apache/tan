@@ -29,7 +29,7 @@
     RewriteEngine on
     RewriteRule /favicon.ico /static/favicon.ico [L]
 
-    RewriteCond %{HTTP_HOST} !^(?:dev.)thisaintnews.com
+    RewriteCond %{HTTP_HOST} !^(?:dev.)?thisaintnews.com
     RewriteRule "(.*)" "https://thisaintnews.com$1" [R=302,L]
 
     <Location /static>
