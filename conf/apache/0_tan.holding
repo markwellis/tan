@@ -9,7 +9,7 @@
     SSLCertificateKeyFile   /var/www/TAN/conf/ssl/thisaintnews.key
 
     RewriteEngine on
-    RewriteCond %{HTTP_HOST} !^(?:dev.)thisaintnews.com
+    RewriteCond %{HTTP_HOST} !^(?:dev.)?thisaintnews.com
     RewriteRule "(.*)" "https://thisaintnews.com$1" [R=302,L]
 
     DocumentRoot "/var/www/TAN.holding"
