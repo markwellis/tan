@@ -29,12 +29,15 @@
     RewriteEngine on
     RewriteRule /favicon.ico /static/favicon.ico [L]
 
+    RewriteCond %{REQUEST_URI} =^/$
+    RewriteRule "(.*)" "https://thisaintnews.com/index/all/0/$1" [R=302,L]
+
     RewriteCond %{HTTP_HOST} !^(?:dev.)?thisaintnews.com
-    RewriteRule "(.*)" "https://thisaintnews.com$1" [R=302,L]
+    RewriteRule ".*" "https://thisaintnews.com/index/all/0/" [R=302,L]
 
     <Location /static>
         RewriteEngine on
-        ErrorDocument 404 /error404.html
+        ErrorDocument 404 /static/error404.html
 
     #cache css/js
         RewriteCond %{REQUEST_FILENAME} !-f 
