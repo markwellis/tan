@@ -1,0 +1,62 @@
+<VirtualHost *:443>
+    ServerName thisaintnews.com
+    ServerAlias dev.thisaintnews.com
+
+    ErrorLog /var/log/apache2/error.log
+    CustomLog /var/log/apache2/access.tan.log combined
+
+    DocumentRoot "/var/www/TAN/root"
+    
+    SSLEngine on
+    SSLCipherSuite ALL:!ADH:!EXPORT56:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv2:+EXP
+
+    SSLCertificateFile      /var/www/TAN/conf/ssl/thisaintnews.crt
+    SSLCertificateKeyFile   /var/www/TAN/conf/ssl/thisaintnews.key
+
+    RequestHeader set X-Forwarded-Proto https
+    RequestHeader set X-Forwarded-Port 443
+
+    SpdyEnabled on
+
+    <Directory />
+        AllowOverride None
+    </Directory>
+
+    LimitRequestBody 8388608
+    ProxyPass /static !
+    ProxyPass / http://localhost:8081/
+
+    RewriteEngine on
+    RewriteRule /favicon.ico /static/favicon.ico [L]
+
+    <Location /static>
+        RewriteEngine on
+        ErrorDocument 404 /error404.html
+
+    #cache css/js
+        RewriteCond %{REQUEST_FILENAME} !-f 
+        #/static/cache/minify/4.1.04/mobile/css/shared
+        #/static/cache/minify/4.1.04/mobile/js/somejs
+        RewriteRule /static/cache/minify/([0-9\.]+)/(\w+)/(\w+)/(.*) http://localhost:8081/minify/$1/$2/$3/$4 [P]
+
+    #cache images
+        RewriteCond %{REQUEST_FILENAME} !-f
+        RewriteRule /static/cache/thumbs/(.*)$ http://localhost:8081/thumb/$1 [P]
+    
+    #missing smilies
+        RewriteCond %{REQUEST_FILENAME} !-f
+        RewriteRule /static/smilies.*$ /static/images/blank.gif [L]
+
+    #generally, static content can be cached for a loooong time
+        ExpiresActive On
+        ExpiresDefault "access plus 1 year"
+    </Location>
+</VirtualHost>
+
+<VirtualHost *:80>
+    ServerName thisaintnews.com
+    ServerAlias dev.thisaintnews.com
+
+    RewriteEngine On
+    RewriteRule "(.*)" "https://%{HTTP_HOST}$1" [R=301,L]
+</VirtualHost>

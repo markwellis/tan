@@ -1,7 +1,7 @@
 WSGIPythonPath /mnt/stuff/python
-<VirtualHost *:8080>
-    ServerName trac.tan
-    ServerAlias trac.thisaintnews.com trac.dev.thisaintnews.com
+<VirtualHost *:80>
+    ServerName trac.thisaintnews.com
+    ServerAlias trac.dev.thisaintnews.com
 
     ErrorLog /var/log/apache2/error.log
     CustomLog /var/log/apache2/access.trac.log combined

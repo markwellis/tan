@@ -1,0 +1,23 @@
+<VirtualHost *:443>
+    ServerName thisaintnews.com
+    ServerAlias dev.thisaintnews.com
+
+    SSLEngine on
+    SSLCipherSuite ALL:!ADH:!EXPORT56:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv2:+EXP
+
+    SSLCertificateFile      /var/www/TAN/conf/ssl/thisaintnews.crt
+    SSLCertificateKeyFile   /var/www/TAN/conf/ssl/thisaintnews.key
+
+    SpdyEnabled on
+    
+    DocumentRoot "/var/www/TAN.holding"
+    ErrorDocument 404 /index.html
+</VirtualHost>
+
+<VirtualHost *:80>
+    ServerName thisaintnews.com
+    ServerAlias dev.thisaintnews.com
+
+    RewriteEngine On
+    RewriteRule "(.*)" "https://%{HTTP_HOST}$1" [R=301,L]
+</VirtualHost>

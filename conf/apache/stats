@@ -1,6 +1,6 @@
-<VirtualHost *:8080>
-    ServerName stats.tan
-    ServerAlias stats.dev.thisaintnews.com stats.thisaintnews.com
+<VirtualHost *:80>
+    ServerName stats.thisaintnews.com
+    ServerAlias stats.dev.thisaintnews.com
     
     ErrorLog /var/log/apache2/error.log
     CustomLog /var/log/apache2/access.stats.log combined

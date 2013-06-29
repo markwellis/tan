@@ -4,8 +4,8 @@
   <LongName>This Aint News</LongName>
   <Description>Search This Aint News</Description>
   <InputEncoding>UTF-8</InputEncoding>
-  <Image height="16" width="16" type="image/x-icon">http://thisaintnews.com/static/favicon.ico</Image>
-  <Url type="text/html" method="get" template="http://thisaintnews.com/search/?q={searchTerms}" />
+  <Image height="16" width="16" type="image/x-icon">https://thisaintnews.com/static/favicon.ico</Image>
+  <Url type="text/html" method="get" template="https://thisaintnews.com/search/?q={searchTerms}" />
   <Developer>This Aint News</Developer>
   <Language>en-GB</Language>
 </OpenSearchDescription>
