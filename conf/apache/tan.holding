@@ -8,8 +8,10 @@
     SSLCertificateFile      /var/www/TAN/conf/ssl/thisaintnews.crt
     SSLCertificateKeyFile   /var/www/TAN/conf/ssl/thisaintnews.key
 
-    SpdyEnabled on
-    
+    RewriteEngine on
+    RewriteCond %{HTTP_HOST} !^(?:dev.)thisaintnews.com
+    RewriteRule "(.*)" "https://thisaintnews.com$1" [R=302,L]
+
     DocumentRoot "/var/www/TAN.holding"
     ErrorDocument 404 /index.html
 </VirtualHost>
@@ -19,5 +21,5 @@
     ServerAlias dev.thisaintnews.com
 
     RewriteEngine On
-    RewriteRule "(.*)" "https://%{HTTP_HOST}$1" [R=301,L]
+    RewriteRule "(.*)" "https://%{HTTP_HOST}$1" [R=302,L]
 </VirtualHost>

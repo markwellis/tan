@@ -1,4 +1,4 @@
 <VirtualHost *:80>
     ServerAlias *
-    Redirect 301 / https://thisaintnews.com/
+    Redirect 302 / https://thisaintnews.com/
 </VirtualHost>

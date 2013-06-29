@@ -6,7 +6,7 @@
     CustomLog /var/log/apache2/access.tan.log combined
 
     DocumentRoot "/var/www/TAN/root"
-    
+
     SSLEngine on
     SSLCipherSuite ALL:!ADH:!EXPORT56:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv2:+EXP
 
@@ -16,7 +16,7 @@
     RequestHeader set X-Forwarded-Proto https
     RequestHeader set X-Forwarded-Port 443
 
-    SpdyEnabled on
+    Header unset X-Catalyst
 
     <Directory />
         AllowOverride None
@@ -28,6 +28,9 @@
 
     RewriteEngine on
     RewriteRule /favicon.ico /static/favicon.ico [L]
+
+    RewriteCond %{HTTP_HOST} !^(?:dev.)thisaintnews.com
+    RewriteRule "(.*)" "https://thisaintnews.com$1" [R=302,L]
 
     <Location /static>
         RewriteEngine on
@@ -58,5 +61,5 @@
     ServerAlias dev.thisaintnews.com
 
     RewriteEngine On
-    RewriteRule "(.*)" "https://%{HTTP_HOST}$1" [R=301,L]
+    RewriteRule "(.*)" "https://%{HTTP_HOST}$1" [R=302,L]
 </VirtualHost>
