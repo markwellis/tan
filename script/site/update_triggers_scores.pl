@@ -16,11 +16,22 @@ my $progress = Term::ProgressBar->new({
 });
 $progress->minor(0);
 foreach my $object ( $objects->all ){
+    eval{
+        $object->update({
+            'plus' => $object->plus_minus->search({'type' => 'plus'})->count,
+            'minus' => $object->plus_minus->search({'type' => 'minus'})->count,
+            'comments' => $object->comments->search({'deleted' => 0})->count,
+        })->discard_changes;
+    };
+
     my $score = $object->_calculate_score;
     my $args = {
         'score' => $score,
     };
-    if ( $score >= 100 ){
+    if (
+        ( $score >= 100 )
+        && !$object->promoted
+    ){
         $args->{'promoted'} = \'NOW()';
     }
     $object->update( $args );
