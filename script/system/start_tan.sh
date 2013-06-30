@@ -11,4 +11,4 @@ if [ $DEVELOPMENT ]; then
     WORKERS=1
 fi;
 
-exec starman --workers $WORKERS --l $LISTEN --limit-request-body 8388608 /var/www/TAN/tan.psgi
+exec starman --workers $WORKERS --l $LISTEN /var/www/TAN/tan.psgi
