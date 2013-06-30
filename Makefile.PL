@@ -80,6 +80,8 @@ requires 'DBD::mysql';
 requires 'Starman';
 requires 'Catalyst::Model::Factory';
 requires 'Mail::Builder::Simple';
+requires 'Math::Random::Secure';
+requires 'Crypt::PBKDF2';
 
 #workers
 requires 'Gearman::Worker';

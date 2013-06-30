@@ -27,8 +27,7 @@
         "default": {
             "credential": {
                 "class": "Password",
-                "password_type": "hashed",
-                "password_hash_type": "SHA-512"
+                "password_type": "self_check",
             },
             "store": {
                 "class": "DBIx::Class",
