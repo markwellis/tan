@@ -84,7 +84,7 @@ sub step2: Local Args(2){
         if ( $password0 eq $password1 ){
             if ( length($password0) > 5 ){
                 #good stuff
-                $c->model('MySQL::User')->change_password($user_id, $password0);
+                $c->model('MySQL::User')->find( $user_id )->set_password( $password0 );
                 #delete the token since we're done with it now
                 $token_rs->delete;
 

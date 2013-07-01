@@ -4,8 +4,6 @@ use strict;
 use warnings;
 use base 'DBIx::Class::ResultSet';
 
-use Digest::SHA;
-
 sub username_exists{
     my ( $self, $username ) = @_;
     
@@ -38,35 +36,21 @@ sub new_user{
     my ( $self, $username, $password, $email ) = @_;
     
 # create new user
+# set password
 # create tokens
 # return new user
     my $new_user = $self->create({
         'username' => $username,
         'join_date' => \'NOW()',
         'email' => $email,
-        'password' => Digest::SHA::sha512_hex($password),
     });
+
+    $new_user->set_password( $password );
 
     return undef if ( !defined($new_user) );
     my $token = $new_user->tokens->new_token($new_user->id, 'reg');
 
     return $new_user;
-}
-
-sub change_password{
-    my ( $self, $user_id, $password ) = @_;
-
-    my $user = $self->find({
-        'user_id' => $user_id,
-    });
-
-    return undef if ( !defined($user) );
-
-    $user->update({
-        'password' => Digest::SHA::sha512_hex($password),
-    });
-
-    return 1;
 }
 
 1;

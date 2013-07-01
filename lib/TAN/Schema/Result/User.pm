@@ -5,9 +5,9 @@ use warnings;
 
 use base 'DBIx::Class';
 
-use TAN::Salt;
 use Digest::SHA;
 use Crypt::PBKDF2;
+use Math::Random::Secure qw/irand/;
 
 __PACKAGE__->load_components(qw/Core InflateColumn::DateTime/);
 __PACKAGE__->table("user");
@@ -107,43 +107,52 @@ sub profile_url{
     return "/profile/@{[ $self->username ]}/";
 }
 
+my $salt_dir = '/mnt/stuff/TAN/salt/';
 sub _get_salt{
     my ( $self ) = @_;
 
-    open my $salt_fh, '<', '/mnt/stuff/TAN/salt/' . $self->id || die "$!";
+    open my $salt_fh, '<', $salt_dir . $self->id || die "$!";
     chomp( my $salt = <$salt_fh> );
     close $salt_fh;
 
     return $salt;
 }
 
-# tan::salt::salt can probably be in here
-
 sub _set_salt{
     my ( $self ) = @_;
 
-    my $salt = TAN::Salt::salt;
+    my $salt = unpack( 'H*', join "", ('.', '/', '_', '+', '-', '=', 0..9, 'A'..'Z', 'a'..'z')[map {irand(64)} (1..512)] );
 
-    open my $salt_fh, '>', '/mnt/stuff/TAN/salt/' . $self->id || die "$!";
+    open my $salt_fh, '>', $salt_dir . $self->id || die "$!";
     print $salt_fh $salt;
     close $salt_fh;
+
+    return $salt;
 }
 
-#add sub new_password
+my $crypt = Crypt::PBKDF2->new(
+    hash_class => 'HMACSHA2',
+    hash_args => {
+        sha_size => 512,
+    },
+    iterations => 10_000,
+);
+
+sub set_password{
+    my ( $self, $password ) = @_;
+
+    $password = Digest::SHA::sha512_hex( $password );
+
+#reset salt, update password
+    $self->update( {
+        'password' => $crypt->PBKDF2_base64( $self->_set_salt, $password )
+    } );
+}
 
 sub check_password{
     my ( $self, $password ) = @_;
 
     $password = Digest::SHA::sha512_hex( $password );
-    my $crypt = Crypt::PBKDF2->new(
-        hash_class => 'HMACSHA2',
-        hash_args => {
-            sha_size => 512,
-        },
-        iterations => 10_000,
-    );
-
-    my $salt = $self->_get_salt;
 
     return $crypt->PBKDF2_base64( $self->_get_salt, $password ) eq $self->password;
 }
