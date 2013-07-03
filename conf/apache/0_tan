@@ -9,10 +9,13 @@ LimitRequestBody 8388608
     DocumentRoot "/var/www/TAN/root"
 
     SSLEngine on
-    SSLCipherSuite ALL:!ADH:!EXPORT56:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv2:+EXP
+    SSLProtocol all -SSLv2
+    SSLCipherSuite ALL:!ADH:!EXPORT:!SSLv2:RC4+RSA:+HIGH:+MEDIUM
 
     SSLCertificateFile      /var/www/TAN/conf/ssl/thisaintnews.crt
     SSLCertificateKeyFile   /var/www/TAN/conf/ssl/thisaintnews.key
+    SSLCertificateChainFile /var/www/TAN/conf/ssl/sub.class1.server.ca.pem
+    SSLCACertificateFile    /var/www/TAN/conf/ssl/ca.pem
 
     RequestHeader set X-Forwarded-Proto https
     RequestHeader set X-Forwarded-Port 443
