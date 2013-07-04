@@ -1,5 +1,5 @@
 LimitRequestBody 8388608
-<VirtualHost 88.198.17.206:443>
+<VirtualHost *:443>
     ServerName thisaintnews.com
     ServerAlias dev.thisaintnews.com
 
@@ -67,5 +67,12 @@ LimitRequestBody 8388608
     ServerAlias dev.thisaintnews.com
 
     RewriteEngine On
+
+    RewriteCond %{REQUEST_URI} ^www\.
+    RewriteRule .* /index/all/0/ [NC]
+
+    RewriteCond %{REQUEST_URI} =/
+    RewriteRule .* /index/all/0/ [NC]
+
     RewriteRule "(.*)" "https://%{HTTP_HOST}$1" [R=302,L]
 </VirtualHost>
