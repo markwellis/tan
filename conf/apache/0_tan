@@ -1,5 +1,5 @@
 LimitRequestBody 8388608
-<VirtualHost *:443>
+<VirtualHost 88.198.17.206:443>
     ServerName thisaintnews.com
     ServerAlias dev.thisaintnews.com
 

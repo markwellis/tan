@@ -1,10 +1,18 @@
 WSGIPythonPath /mnt/stuff/python
-<VirtualHost *:80>
+<VirtualHost 88.198.17.221:443>
     ServerName trac.thisaintnews.com
     ServerAlias trac.dev.thisaintnews.com
 
     ErrorLog /var/log/apache2/error.log
     CustomLog /var/log/apache2/access.trac.log combined
+
+    SSLEngine on
+    SSLProtocol all -SSLv2
+    SSLCipherSuite ALL:!ADH:!EXPORT:!SSLv2:RC4+RSA:+HIGH:+MEDIUM
+
+    SSLCertificateFile      /var/www/TAN/conf/ssl/cacert/thisaintnews.crt
+    SSLCertificateKeyFile   /var/www/TAN/conf/ssl/thisaintnews.key
+    SSLCertificateChainFile /var/www/TAN/conf/ssl/cacert/cacert_root.crt
 
     Alias /thisaintnews/chrome/common /var/lib/trac/thisaintnews/htdocs/common
     Alias /thisaintnews/chrome/site /var/lib/trac/thisaintnews/htdocs/site
