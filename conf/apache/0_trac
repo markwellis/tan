@@ -38,3 +38,11 @@ WSGIPythonPath /mnt/stuff/python
         RewriteRule .* /thisaintnews/ [R,NC,L]
     </LocationMatch>
 </VirtualHost>
+
+<VirtualHost 88.198.17.221:80>
+    ServerName trac.thisaintnews.com
+    ServerAlias trac.dev.thisaintnews.com
+
+    RewriteEngine On
+    RewriteRule "(.*)" "https://%{HTTP_HOST}$1" [R=302,L]
+</VirtualHost>
