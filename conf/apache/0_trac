@@ -34,7 +34,7 @@ WSGIPythonPath /mnt/stuff/python
         Require valid-user
 
         RewriteEngine on
-        RewriteCond %{REQUEST_URI} !^thisaintnews/
+        RewriteCond %{REQUEST_URI} !^/thisaintnews/
         RewriteRule .* /thisaintnews/ [R,NC,L]
     </LocationMatch>
 </VirtualHost>
