@@ -1,10 +1,8 @@
 WSGIPythonPath /mnt/stuff/python
 <VirtualHost 88.198.17.221:443>
     ServerName trac.thisaintnews.com
-    ServerAlias trac.dev.thisaintnews.com
 
-    ErrorLog /var/log/apache2/error.log
-    CustomLog /var/log/apache2/access.trac.log combined
+    CustomLog ${APACHE_LOG_DIR}/access.trac.log combined
 
     SSLEngine on
     SSLProtocol all -SSLv2
@@ -41,7 +39,8 @@ WSGIPythonPath /mnt/stuff/python
 
 <VirtualHost *:80>
     ServerName trac.thisaintnews.com
-    ServerAlias trac.dev.thisaintnews.com
+
+    CustomLog ${APACHE_LOG_DIR}/access.trac_redirect.log combined
 
     RewriteEngine On
 

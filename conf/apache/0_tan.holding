@@ -1,6 +1,9 @@
 <VirtualHost *:443>
     ServerName thisaintnews.com
-    ServerAlias dev.thisaintnews.com
+
+    CustomLog ${APACHE_LOG_DIR}/access.tan_holding.log combined
+
+    DocumentRoot "/var/www/TAN.holding"
 
     SSLEngine on
     SSLProtocol all -SSLv2
@@ -15,13 +18,14 @@
     RewriteCond %{HTTP_HOST} !^(?:dev.)?thisaintnews.com
     RewriteRule "(.*)" "https://thisaintnews.com$1" [R=302,L]
 
-    DocumentRoot "/var/www/TAN.holding"
     ErrorDocument 404 /index.html
 </VirtualHost>
 
 <VirtualHost *:80>
     ServerName thisaintnews.com
     ServerAlias dev.thisaintnews.com
+
+    CustomLog ${APACHE_LOG_DIR}/access.tan_holding_redirect.log combined
 
     RewriteEngine On
     RewriteRule "(.*)" "https://%{HTTP_HOST}$1" [R=302,L]

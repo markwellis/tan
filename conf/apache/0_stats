@@ -1,9 +1,7 @@
 <VirtualHost *:80>
     ServerName stats.thisaintnews.com
-    ServerAlias stats.dev.thisaintnews.com
-    
-    ErrorLog /var/log/apache2/error.log
-    CustomLog /var/log/apache2/access.stats.log combined
+
+    CustomLog ${APACHE_LOG_DIR}/access.stats.log combined
     
     DocumentRoot "/var/www/stats.thisaintnews.com/htdocs"
 

@@ -3,8 +3,7 @@ LimitRequestBody 8388608
     ServerName thisaintnews.com
     ServerAlias dev.thisaintnews.com
 
-    ErrorLog /var/log/apache2/error.log
-    CustomLog /var/log/apache2/access.tan.log combined
+    CustomLog ${APACHE_LOG_DIR}/access.tan.log combined
 
     DocumentRoot "/var/www/TAN/root"
 
@@ -65,6 +64,8 @@ LimitRequestBody 8388608
 <VirtualHost *:80>
     ServerName thisaintnews.com
     ServerAlias dev.thisaintnews.com
+
+    CustomLog ${APACHE_LOG_DIR}/access.tan_redirect.log combined
 
     RewriteEngine On
 
