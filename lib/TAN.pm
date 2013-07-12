@@ -141,6 +141,7 @@ sub nsfw{
     if ( defined( $value ) ){
         $c->res->cookies->{'nsfw'} = {
             'value' => $value,
+            'expires' => '+10y',
         };
 
         return $value;

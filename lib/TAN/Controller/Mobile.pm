@@ -43,15 +43,14 @@ sub detect_mobile: Private{
 sub set_mobile: Local{
     my( $self, $c, $value) = @_;
 
-    if ( defined($value) ) {
     #if we have a value, set the cookie to this value
-        $c->res->cookies->{'mobile'} = {value => $value};
-        $c->stash->{'mobile_switch'} = $value;
-    } else {
     #else force mobile cookie
-        $c->res->cookies->{'mobile'} = {value => 1};
-        $c->stash->{'mobile_switch'} = 1;
-    }
+    $value //= 1;
+    $c->res->cookies->{'mobile'} = {
+        'value' => $value,
+        'expires' => '+10y',
+    };
+    $c->stash->{'mobile_switch'} = $value;
 
     # if we're called from detect_mobile return here
     if ( defined($c->stash->{'mobile_return'}) ){
