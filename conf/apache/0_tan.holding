@@ -16,7 +16,7 @@
 
     RewriteEngine on
     RewriteCond %{HTTP_HOST} !^(?:dev.)?thisaintnews.com
-    RewriteRule "(.*)" "https://thisaintnews.com$1" [R=302,L]
+    RewriteRule "(.*)" "https://thisaintnews.com$1" [R=302,NE,L]
 
     ErrorDocument 404 /index.html
 </VirtualHost>
@@ -28,5 +28,5 @@
     CustomLog ${APACHE_LOG_DIR}/access.tan_holding_redirect.log combined
 
     RewriteEngine On
-    RewriteRule "(.*)" "https://%{HTTP_HOST}$1" [R=302,L]
+    RewriteRule "(.*)" "https://%{HTTP_HOST}$1" [R=302,NE,L]
 </VirtualHost>

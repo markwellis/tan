@@ -47,5 +47,5 @@ WSGIPythonPath /mnt/stuff/python
     RewriteCond %{REQUEST_URI} =/
     RewriteRule .* /thisaintnews/ [NC]
 
-    RewriteRule "(.*)" "https://%{HTTP_HOST}$1" [R=302,L]
+    RewriteRule "(.*)" "https://%{HTTP_HOST}$1" [R=302,NE,L]
 </VirtualHost>

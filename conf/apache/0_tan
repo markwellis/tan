@@ -32,10 +32,10 @@ LimitRequestBody 8388608
     RewriteRule /favicon.ico /static/favicon.ico [L]
 
     RewriteCond %{REQUEST_URI} =^/$
-    RewriteRule "(.*)" "https://thisaintnews.com/index/all/0/$1" [R=302,L]
+    RewriteRule "(.*)" "https://thisaintnews.com/index/all/0/$1" [R=302,NE,L]
 
     RewriteCond %{HTTP_HOST} !^(?:dev.)?thisaintnews.com
-    RewriteRule ".*" "https://thisaintnews.com/index/all/0/" [R=302,L]
+    RewriteRule ".*" "https://thisaintnews.com/index/all/0/" [R=302,NE,L]
 
     <Location /static>
         RewriteEngine on
@@ -75,5 +75,5 @@ LimitRequestBody 8388608
     RewriteCond %{REQUEST_URI} =/
     RewriteRule .* /index/all/0/ [NC]
 
-    RewriteRule "(.*)" "https://%{HTTP_HOST}$1" [R=302,L]
+    RewriteRule "(.*)" "https://%{HTTP_HOST}$1" [R=302,NE,L]
 </VirtualHost>
