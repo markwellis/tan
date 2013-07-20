@@ -17,7 +17,7 @@ has '_mobile' => (
 sub index: Path Args(0){
     my ( $self, $c ) = @_;
 
-    my $q = $c->req->param('q') . '';
+    my $q = $c->req->param('q') || '';
     my $page = $c->req->param('page') || 1;
 
     #nsfw...
