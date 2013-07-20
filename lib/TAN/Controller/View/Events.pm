@@ -13,11 +13,14 @@ sub spam_twitter: Event('object_promoted'){
     my $title = $object->$type->title;
 
     try{
+        my $url = $object->url;
+        $url =~ s|^/||;
+
         my @tags = map( $_->stem, $object->tags->all );
         $c->model('Gearman')->run( 'twitter_spam', {
             'title' => $title,
             'nsfw' => $object->nsfw,
-            'url' => $c->req->base . $object->url,
+            'url' => $c->req->base . $url,
             'tags' => \@tags,
         } );
     }

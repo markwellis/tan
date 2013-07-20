@@ -53,7 +53,7 @@ sub spam_twitter{
         ),
     );
 
-    $args->{'url'} =~ s|(?<!http:)//|/|g; #remove duplicate // in url
+    $args->{'url'} =~ s|(?<!https:)//|/|g; #remove duplicate // in url
 
     my $shorten = $bitly->shorten( $args->{'url'} );
     if ( $shorten->is_error ){
