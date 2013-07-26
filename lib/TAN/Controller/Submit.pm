@@ -7,6 +7,14 @@ BEGIN { extends 'Catalyst::Controller'; }
 use Try::Tiny;
 use Scalar::Util 'blessed';
 
+has '_mobile' => (
+    'is' => 'ro',
+    'isa' => 'HashRef',
+    'default' => sub{
+        return {'post' => 1};
+    },
+);
+
 sub type: PathPart('submit') Chained('/') CaptureArgs(1){
     my ( $self, $c, $type ) = @_;
 
@@ -59,6 +67,18 @@ sub validate_and_prepare: Private{
     my ( $self, $c ) = @_;
 
     return try {
+        my $params = $c->req->params;
+        #hack to replace newlines with brs for mobile
+        if (
+            $c->mobile
+            && (
+                ( $params->{'type'} eq 'blog' )
+                || ( $params->{'type'} eq 'forum' )
+            )
+        ){
+            $params->{'details'} = TAN::View::TT::nl2br( $params->{'details'} );
+        }
+
         $c->model('Submit')->validate_and_prepare( $c, $c->req->params );
     } catch {
         if ( blessed( $_ ) ){

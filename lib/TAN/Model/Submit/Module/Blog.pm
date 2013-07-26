@@ -58,4 +58,14 @@ sub _build_config{
     };
 }
 
+my $nl_reg = qr/\n\r|\r\n|\n|\r/;
+around 'prepare' => sub {
+    my ( $orig, $self, $c, $params, $validator_return_values ) = @_;
+
+    #strip newlines from $params->{'details'}
+    $params->{'details'} =~ s/$nl_reg//msg;
+
+    return $self->$orig( $c, $params, $validator_return_values );
+};
+
 __PACKAGE__->meta->make_immutable;

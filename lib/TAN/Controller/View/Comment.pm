@@ -12,6 +12,7 @@ has '_mobile' => (
     },
 );
 
+my $nl_reg = qr/\n\r|\r\n|\n|\r/;
 sub comment: PathPart('_comment') Chained('../type') Args(0) {
     my ( $self, $c ) = @_;
 
@@ -20,6 +21,8 @@ sub comment: PathPart('_comment') Chained('../type') Args(0) {
 
     if ( $c->req->param('mobile') ){
         $comment = TAN::View::TT::nl2br( $comment );
+    } else {
+        $comment =~ s/$nl_reg//msg;
     }
 
     if ( $c->user_exists ){
