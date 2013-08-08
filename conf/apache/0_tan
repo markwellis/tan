@@ -1,4 +1,5 @@
 LimitRequestBody 8388608
+WSGIPythonPath /mnt/stuff/python
 <VirtualHost *:443>
     ServerName thisaintnews.com
     ServerAlias dev.thisaintnews.com
@@ -26,6 +27,7 @@ LimitRequestBody 8388608
     </Directory>
 
     ProxyPass /static !
+    ProxyPass /trac !
     ProxyPass / http://localhost:8081/
 
     RewriteEngine on
@@ -58,6 +60,22 @@ LimitRequestBody 8388608
     #generally, static content can be cached for a loooong time
         ExpiresActive On
         ExpiresDefault "access plus 1 year"
+    </Location>
+
+    Alias /trac/chrome/common /var/lib/trac/thisaintnews/htdocs/common
+    Alias /trac/chrome/site   /var/lib/trac/thisaintnews/htdocs/site
+
+    WSGIScriptAlias /trac /var/lib/trac/thisaintnews/cgi-bin/trac.wsgi
+
+    <Location /trac>
+#       not allowed here :(
+#        CustomLog ${APACHE_LOG_DIR}/access.trac.log combined
+        WSGIApplicationGroup %{GLOBAL}
+
+        AuthType Basic
+        AuthName "Trac Server"
+        AuthUserFile /var/lib/trac/thisaintnews/passwd
+        Require valid-user
     </Location>
 </VirtualHost>
 
