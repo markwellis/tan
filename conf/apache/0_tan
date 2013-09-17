@@ -10,7 +10,8 @@ WSGIPythonPath /mnt/stuff/python
 
     SSLEngine on
     SSLProtocol all -SSLv2
-    SSLCipherSuite ALL:!ADH:!EXPORT:!SSLv2:RC4+RSA:+HIGH:+MEDIUM
+    SSLHonorCipherOrder on
+    SSLCipherSuite ECDHE-RSA-RC4-SHA:ECDHE-RSA-AES128-SHA:DHE-RSA-AES128-SHA:DHE-RSA-CAMELLIA128-SHA:AES128-SHA:HIGH:!aNULL:!MD5:!ADH
 
     SSLCertificateFile      /var/www/TAN/conf/ssl/thisaintnews.crt
     SSLCertificateKeyFile   /var/www/TAN/conf/ssl/thisaintnews.key
