@@ -14,24 +14,24 @@ has '_mobile' => (
 
 sub index: Path Args(0){
     my ( $self, $c ) = @_;
-    
+
     if ( $c->user_exists ){
         $c->flash->{'message'} = 'You are already logged in';
         $c->res->redirect( '/index/all/0/', 303 );
         $c->detach();
     }
-    
-    $c->stash->{'recaptcha_html'} = $c->model('reCAPTCHA')->get_html( 
+
+    $c->stash->{'recaptcha_html'} = $c->model('reCAPTCHA')->get_html(
         $c->config->{'recaptcha_public_key'},
         undef,
-        undef,
+        1,
         {
             'theme' => 'blackglass',
         }
     );
 
-    $c->flash->{'ref'} = defined($c->req->referer) ? $c->req->referer : '/index/all/0/';
-    
+    $c->flash->{'ref'} = $c->req->referer // '/index/all/0/';
+
     $c->stash(
         'page_title' => 'Login/Register',
         'template' => 'login.tt',
@@ -41,7 +41,7 @@ sub index: Path Args(0){
 
 sub login: Local Args(0){
     my ( $self, $c ) = @_;
-    
+
     my $ref = $c->flash->{'ref'};
     if (!defined($ref) || $ref =~ m/\/login\//){
         $ref = '/index/all/0/';
@@ -81,7 +81,7 @@ sub login: Local Args(0){
 
 sub logout: Local Args(0){
     my ( $self, $c ) = @_;
-    
+
     if ( $c->user_exists ){
         $c->logout;
         $c->flash->{'message'} = "You have logged out";
