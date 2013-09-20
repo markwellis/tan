@@ -5,6 +5,7 @@ use namespace::autoclean;
 BEGIN { extends 'Catalyst::Controller'; }
 
 use Data::Validate::Email;
+use Try::Tiny;
 
 sub index: Path Args(0){
     my ( $self, $c ) = @_;
@@ -13,9 +14,9 @@ sub index: Path Args(0){
 
 #check recaptcha
     my $result = $c->model('reCAPTCHA')->check_answer(
-        $c->config->{'recaptcha_private_key'}, 
-        $c->req->address, 
-        $c->req->param("recaptcha_challenge_field"), 
+        $c->config->{'recaptcha_private_key'},
+        $c->req->address,
+        $c->req->param("recaptcha_challenge_field"),
         $c->req->param("recaptcha_response_field"),
     );
 
@@ -51,6 +52,17 @@ sub index: Path Args(0){
        $error = 'Email address already exists';
     }
 
+#return new user object or error
+    my $new_user;
+    if ( !$error ){
+        $new_user = try{
+            $c->model('MySQL::User')->new_user($username, $password0, $email);
+        } catch {
+            $error = $_->error;
+            return undef;
+        };
+    }
+
     if ( $error ){
         $c->flash->{'username'} = $username;
         $c->flash->{'email'} = $email;
@@ -60,8 +72,6 @@ sub index: Path Args(0){
         $c->detach();
     }
 
-#return new user object or error
-    my $new_user = $c->model('MySQL::User')->new_user($username, $password0, $email);
     if ( !$new_user ){
         $c->flash->{'username'} = $c->req->param('rusername');
         $c->flash->{'email'} = $c->req->param('remail');

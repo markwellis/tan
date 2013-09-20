@@ -8,6 +8,7 @@ use base 'DBIx::Class';
 use Digest::SHA;
 use Crypt::PBKDF2;
 use Math::Random::Secure qw/irand/;
+use Exception::Simple;
 
 __PACKAGE__->load_components(qw/Core InflateColumn::DateTime/);
 __PACKAGE__->table("user");
@@ -58,26 +59,15 @@ __PACKAGE__->has_many(
 
 __PACKAGE__->many_to_many(
   "map_user_role" => "user_admin",
-  "admin" 
+  "admin"
 );
 
 sub join_date{
     my ( $self ) = @_;
-    
+
     return TAN::Schema::Result::Object->date_ago( $self->_join_date );
 }
 
-=head2 confirm
-
-B<@args = (undef)
-
-=over
-
-confirms a users token
-
-=back
-
-=cut
 sub confirm{
     my ( $self ) = @_;
 
@@ -141,6 +131,7 @@ my $crypt = Crypt::PBKDF2->new(
 sub set_password{
     my ( $self, $password ) = @_;
 
+    $self->_assert_password_max_length( $password );
     $password = Digest::SHA::sha512_hex( $password );
 
 #reset salt, update password
@@ -152,8 +143,18 @@ sub set_password{
 sub check_password{
     my ( $self, $password ) = @_;
 
+    $self->_assert_password_max_length( $password );
     $password = Digest::SHA::sha512_hex( $password );
 
     return $crypt->PBKDF2_base64( $self->_get_salt, $password ) eq $self->password;
+}
+
+sub _assert_password_max_length{
+    my ( $self, $password ) = @_;
+
+    my $max_password_length = TAN->config->{'max_password_length'};
+    if ( length( $password ) > $max_password_length ){
+        Exception::Simple->throw("Password cannot be over ${max_password_length} chars");
+    }
 }
 1;

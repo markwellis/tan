@@ -4,6 +4,8 @@ use namespace::autoclean;
 
 BEGIN { extends 'Catalyst::Controller'; }
 
+use Try::Tiny;
+
 has '_mobile' => (
     'is' => 'ro',
     'isa' => 'HashRef',
@@ -48,12 +50,15 @@ sub login: Local Args(0){
     }
 
     if ( $c->req->method eq 'POST' ){
-        if (
+        my $authenticated = try{
             $c->authenticate({
                 'username' => $c->req->param('username'),
                 'password' => $c->req->param('password'),
             })
-        ){
+        } catch {
+            return undef;
+        };
+        if ( $authenticated ){
             if ( !$c->user->confirmed ){
                 $ref = '/login/';
                 $c->logout;

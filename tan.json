@@ -16,7 +16,8 @@
     "recaptcha_private_key": "6Lczmt0SAAAAAEz24v4Z2vBg4mwedRikv_DPsSPp",
 
     "paypal_donate_address": "donate@thisaintnews.com",
-    
+    "max_password_length": 50,
+
     "donate": {
         "cost": 3,
         "currency": "GBP"
