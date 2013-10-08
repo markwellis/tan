@@ -6,7 +6,7 @@ use base 'DBIx::Class::ResultSet';
 
 sub username_exists{
     my ( $self, $username ) = @_;
-    
+
     return $self->search({
         'username' => {
             'like' => $username
@@ -16,7 +16,7 @@ sub username_exists{
 
 sub email_exists{
     my ( $self, $email ) = @_;
-    
+
     return $self->search({
         'email' => {
             'like' => $email
@@ -26,7 +26,7 @@ sub email_exists{
 
 sub by_email{
     my ( $self, $email ) = @_;
-    
+
     return $self->find({
         'email' => $email,
     }) || undef;
@@ -34,7 +34,7 @@ sub by_email{
 
 sub new_user{
     my ( $self, $username, $password, $email ) = @_;
-    
+
 # create new user
 # set password
 # create tokens
