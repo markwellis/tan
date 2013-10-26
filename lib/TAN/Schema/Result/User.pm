@@ -111,7 +111,7 @@ sub _get_salt{
 sub _set_salt{
     my ( $self ) = @_;
 
-    my $salt = unpack( 'H*', join "", ('.', '/', '_', '+', '-', '=', 0..9, 'A'..'Z', 'a'..'z')[map {irand(64)} (1..512)] );
+    my $salt = unpack( 'H*', join "", ('.', '/', '_', '+', '-', '=', 0..9, 'A'..'Z', 'a'..'z')[map {irand(67)} (0..31)] );
 
     open my $salt_fh, '>', $salt_dir . $self->id || die "$!";
     print $salt_fh $salt;
