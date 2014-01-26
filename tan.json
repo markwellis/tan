@@ -166,7 +166,8 @@
             ":p": "tongue.png",
             ":P": "tongue.png",
             ";)": "wink.png",
-            ";-)": "wink.png"
+            ";-)": "wink.png",
+            ":dance": "dance2.gif"
         }
     },
 
