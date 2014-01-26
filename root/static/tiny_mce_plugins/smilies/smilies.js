@@ -6,7 +6,7 @@
 			// Register commands
 			ed.addCommand('mceSmiley', function() {
 				ed.windowManager.open({
-					file : url + '/smilies.html',
+					file : url + '/smilies.html?r=1',
 					width : 590,
 					height : 270,
 					inline : 1
@@ -14,10 +14,10 @@
 					plugin_url : url
 				});
 			});
-			
+
             // Register buttons
 			ed.addButton('smilies', {
-                title : 'Smilies', 
+                title : 'Smilies',
                 cmd : 'mceSmiley',
                 image: url + '/smilies.png'
             });

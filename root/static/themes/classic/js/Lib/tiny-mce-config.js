@@ -1,4 +1,4 @@
-tinymce.PluginManager.load('smilies', '/static/tiny_mce_plugins/smilies/smilies.js');
+tinymce.PluginManager.load('smilies', '/static/tiny_mce_plugins/smilies/smilies.js?r=1');
 
 var tiny_mce_config = {
     theme: "advanced",
