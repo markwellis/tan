@@ -82,6 +82,7 @@ requires 'Catalyst::Model::Factory';
 requires 'Mail::Builder::Simple';
 requires 'Math::Random::Secure';
 requires 'Crypt::PBKDF2';
+requires 'MooseX::MethodAttributes';
 
 #workers
 requires 'Gearman::Worker';

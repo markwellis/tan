@@ -10,7 +10,7 @@
     [%- IF c.user_exists %]
         <a href="[% c.user.profile_url %]">Profile</a> |
     [%- END %]
-    <a href="/filter/" class="nsfw_filter">[% c.nsfw ? 'Enable' : 'Disable' %] filter</a> | 
+    <a href="/settings/toggle_nsfw/" class="nsfw_filter">[% c.nsfw ? 'Enable' : 'Disable' %] filter</a> | 
     <a href="/faq/">FAQ</a> |
     <a href="#TAN-bottom">Down</a>
 </p>

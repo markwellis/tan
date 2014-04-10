@@ -93,21 +93,6 @@ sub error: Private{
     $c->response->status( $error_code );
 }
 
-sub filter: Local Args(0){
-    my ( $self, $c ) = @_;
-
-    #bitwise ftw
-    $c->nsfw($c->nsfw ^ 1);
-
-    my $ref = $c->req->referer;
-    if (!defined($ref)){
-        $ref = '/';
-    }
-
-    $c->res->redirect( $ref, 303 );
-    $c->detach();
-}
-
 sub random: Local Args(1){
     my ( $self, $c, $type ) = @_;
 

@@ -1,6 +1,17 @@
 [% css_includes.push('Profile') %]
 
 <ul class="TAN-inside">
+[% IF c.user_exists && ( c.user.user_id == user.user_id ) %]
+    <li class="button">
+        <a href="[% c.uri_for('/settings/password') %]">Change password</a>
+    </li>
+    <li class="button">
+        <a href="[% c.uri_for('/settings/avatar') %]">Change avatar</a>
+    </li>
+    <li class="button">
+        <a href="[% c.uri_for('/settings/email') %]">Change email address</a>
+    </li>
+[% END %]
     <li>
         <h1>
             [% user.username | html %]
@@ -16,9 +27,6 @@
                 <br />
                 <br />
                 <br />
-                [% IF c.user_exists && ( c.user.user_id == user.user_id ) %]
-                    <a href="/profile/_avatar/">Change Avatar</a>
-                [% END %]
             </li>
             <li>
                 <ul>

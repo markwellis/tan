@@ -131,7 +131,7 @@ my $crypt = Crypt::PBKDF2->new(
 sub set_password{
     my ( $self, $password ) = @_;
 
-    $self->_assert_password_max_length( $password );
+    $self->_assert_password_rules( $password );
     $password = Digest::SHA::sha512_hex( $password );
 
 #reset salt, update password
@@ -143,18 +143,19 @@ sub set_password{
 sub check_password{
     my ( $self, $password ) = @_;
 
-    $self->_assert_password_max_length( $password );
     $password = Digest::SHA::sha512_hex( $password );
 
     return $crypt->PBKDF2_base64( $self->_get_salt, $password ) eq $self->password;
 }
 
-sub _assert_password_max_length{
+sub _assert_password_rules{
     my ( $self, $password ) = @_;
 
     my $max_password_length = TAN->config->{'max_password_length'};
-    if ( length( $password ) > $max_password_length ){
-        Exception::Simple->throw("Password cannot be over ${max_password_length} chars");
-    }
+    die "Password cannot be over ${max_password_length} chars\n"
+        if ( length( $password ) > $max_password_length );
+
+    die "Password needs to be atleast 6 letters\n"
+        if ( length( $password ) < 5  );
 }
 1;
