@@ -1,0 +1,6 @@
+[% css_includes.push('Settings') %]
+<div class="TAN-inside">
+    <a href="password/">Change password</a><br />
+    <a href="avatar/">Change avatar</a><br />
+    <a href="email/">Change email address</a><br />
+</div>

@@ -1,29 +1,16 @@
-package TAN::Controller::Profile::Avatar;
+package TAN::Controller::Settings::Avatar;
 use Moose;
 use namespace::autoclean;
 
 BEGIN { extends 'Catalyst::Controller'; }
 
-#override namespace
-__PACKAGE__->config(namespace => 'profile/_avatar');
-
 use JSON;
 use Try::Tiny;
 use File::Path qw/mkpath/;
 
-sub auto: Private{
-    my ( $self, $c ) = @_;
+sub avatar(): Chained(../check_user) CaptureArgs(0) { 1 }
 
-    if ( !$c->user_exists ){
-        $c->flash->{'message'} = 'Please login';
-        $c->res->redirect('/login/', 303);
-        $c->detach();
-    }
-
-    return 1;
-}
-
-sub index: Path{
+sub index: Chained(avatar) PathPart('') Args(0){
     my ( $self, $c ) = @_;
 
     if ( $c->req->param('crop') ){
@@ -31,12 +18,12 @@ sub index: Path{
     }
 
     $c->stash(
-        'template' => 'profile/avatar.tt',
+        'template' => 'settings/avatar.tt',
         'page_title' => 'Change avatar',
     );
 }
 
-sub upload: Local{
+sub upload: Chained(avatar) Args(0){
     my ( $self, $c ) = @_;
 
     if ( my $upload = $c->request->upload('avatar') ){
@@ -56,24 +43,24 @@ sub upload: Local{
                 $c->model('Image')->thumbnail( $upload->tempname, $pre_crop, 640 );
             } catch {
                 $c->flash->{'message'} = $_->error;
-                $c->res->redirect('/profile/_avatar', 303);
+                $c->res->redirect('/settings/avatar', 303);
             };
 
             # upload success
             #redirect back to avatar upload page
-            $c->res->redirect('/profile/_avatar/?crop=true', 303);
+            $c->res->redirect('/settings/avatar/?crop=true', 303);
         }catch{
             $c->flash->{'message'} = $_->error;
-            $c->res->redirect('/profile/_avatar', 303);
+            $c->res->redirect('/settings/avatar', 303);
         };
     } else {
         $c->flash->{'message'} = 'no image uploaded';
-        $c->res->redirect('/profile/_avatar/', 303);
+        $c->res->redirect('/settings/avatar/', 303);
     }
     $c->detach;
 }
 
-sub crop: Local{
+sub crop: Chained(avatar) Args(0){
     my ( $self, $c ) = @_;
 
     my $json = $c->req->param('cords');
@@ -81,7 +68,7 @@ sub crop: Local{
     if ( !$json ){
 #ERROR HERE
         $c->flash->{'message'} = 'Crop error';
-        $c->res->redirect('/profile/_avatar/?crop=true', 303);
+        $c->res->redirect('/settings/avatar/?crop=true', 303);
         $c->detach;
     }
     my $cords;
@@ -91,7 +78,7 @@ sub crop: Local{
         return from_json( $json );
     } catch {
         $c->flash->{'message'} = 'Crop error';
-        $c->res->redirect('/profile/_avatar/?crop=true', 303);
+        $c->res->redirect('/settings/avatar/?crop=true', 303);
         $c->detach;
     };
 
@@ -113,7 +100,7 @@ sub crop: Local{
     if ( !$w || !$h ){
 #ERROR HERE
         $c->flash->{'message'} = 'Crop error';
-        $c->res->redirect('/profile/_avatar?crop=true', 303);
+        $c->res->redirect('/settings/avatar?crop=true', 303);
         $c->detach;
     }
 
@@ -138,11 +125,11 @@ sub crop: Local{
             unlink( "${avatar_dir}/pre_crop" );
         }
 
-        $c->res->redirect('/profile/_avatar/', 303);
+        $c->res->redirect('/settings/avatar/', 303);
     } else {
 #ERROR HERE
         $c->flash->{'message'} = 'Crop error';
-        $c->res->redirect('/profile/_avatar/?crop=true', 303);
+        $c->res->redirect('/settings/avatar/?crop=true', 303);
     }
     
     $c->detach;

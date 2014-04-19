@@ -1,0 +1,10 @@
+[% css_includes.push('View', 'Settings/Avatar') %]
+[% js_includes.push('Settings/Lasso', 'Settings/Lasso-Crop', 'Settings/Avatar') %]
+
+<ul class="TAN-inside">
+    [% IF !crop %]
+        [% PROCESS 'settings/avatar/upload.tt' %]
+    [% ELSE %]
+        [% PROCESS 'settings/avatar/crop.tt' %]
+    [% END %]
+</ul>
