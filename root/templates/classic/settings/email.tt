@@ -1,0 +1,14 @@
+[% css_includes.push('Settings') %]
+<div class="TAN-inside">
+    <form action="/settings/email/change" method="POST">
+        <label for="email0">New Email Address</label>
+        <input type="text" name="email0" id="email0" />
+        <br />
+
+        <label for="email1">Repeat the new Email Address</label>
+        <input type="text" name="email1" id="email1" />
+        <br />
+
+        <button type="submit" val="submit">Change Email Address</button>
+    </form>
+</div>

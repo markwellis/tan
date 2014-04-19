@@ -81,25 +81,23 @@ sub step2: Local Args(2){
     if ( $c->req->method eq 'POST' ){
         my $password0 = $c->req->param('password0');
         my $password1 = $c->req->param('password1');
-        if ( $password0 eq $password1 ){
-            if ( length($password0) > 5 ){
-                #good stuff
-                $c->model('MySQL::User')->find( $user_id )->set_password( $password0 );
-                #delete the token since we're done with it now
-                $token_rs->delete;
+        try {
+            die "Passwords do not match" if ( $password0 ne $password1 );
 
-                $c->flash->{'message'} = 'Your password has been changed';
-                $c->res->redirect('/login/', 303);
-                $c->detach();
-            } else {
-                #why stash not flash?
-                # coz flash is transfered to stash in $c->check_cache, 
-                # but we don't hit that here or below coz we jump into the render
-                $c->stash->{'message'} = 'Password needs to be at least 6 letters';
-            }
-        } else {
-            #see note above
-            $c->stash->{'message'} = 'Passwords do not match';
+            $c->model('MySQL::User')->find( $user_id )->set_password( $password0 );
+
+            #delete the token since we're done with it now
+            $token_rs->delete;
+
+            $c->flash->{'message'} = 'Your password has been changed';
+            $c->res->redirect('/login/', 303);
+            $c->detach();
+        }
+        catch {
+            #why stash not flash?
+            # coz flash is transfered to stash in $c->check_cache,
+            # but we don't hit that here or below coz we jump into the render
+            $c->stash->{'message'} =  $_;
         }
     }
 

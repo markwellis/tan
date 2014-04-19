@@ -1,0 +1,9 @@
+.TAN-inside{
+    background-color:#fff;
+}
+
+label {
+    width:250px;
+    display:block;
+    float:left;
+}

@@ -38,9 +38,6 @@ sub index: Path Args(0){
     } elsif ( $password0 ne $password1 ){
     #passwords dont match
         $error = 'Passwords do not match';
-    } elsif ( length($password0) < 5  ){
-    #password  short
-        $error = 'Password needs to be atleast 6 letters';
     } elsif ( $username =~ m/\W+/g ){
     #username cantains invalid chars
         $error = 'Username can only contain letters or numbers';
@@ -58,7 +55,7 @@ sub index: Path Args(0){
         $new_user = try{
             $c->model('MySQL::User')->new_user($username, $password0, $email);
         } catch {
-            $error = $_->error;
+            $error = $_;
             return undef;
         };
     }

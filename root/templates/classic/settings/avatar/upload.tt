@@ -9,7 +9,7 @@
         Keep your avatar safe for work
     </p>
 
-    <form method="post" action="/profile/_avatar/upload" enctype="multipart/form-data" id="crop_form">
+    <form method="post" action="/settings/avatar/upload" enctype="multipart/form-data" id="crop_form">
         <fieldset>
             <input type="file" name="avatar" id="avatar" />
             <input type="submit" value="Upload" />
