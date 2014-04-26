@@ -8,6 +8,10 @@ use TAN::Model::MySQL;
 use Term::ProgressBar;
 
 use HTML::FormatText;
+
+use File::Basename;
+use Config::JFDI;
+
 sub strip_tags{
     return HTML::FormatText->format_string(
         shift,
@@ -16,47 +20,12 @@ sub strip_tags{
     );
 }
 
-my $searcher = LucyX::Simple->new({
-    'index_path' => '/mnt/stuff/TAN/search_index',
-    'schema' => [
-        {
-            'name' => 'id',
-            'type' => 'string',
-        },{
-            'name' => 'title', 
-            'boost' => 3,
-            'stored' => 0,
-        },{
-            'name' => 'description',
-            'stored' => 0,
-        },{
-            'name' => 'content',
-            'stored' => 0,
-        },{
-            'name' => 'type',
-            'type' => 'string',
-        },{
-            'name' => 'nsfw',
-            'stored' => 0,
-        },{
-            'name' => 'date',
-            'type' => 'int32',
-            'indexed' => 0,
-            'stored' => 0,
-            'sortable' => 1,
-        },{
-            'name' => 'username',
-            'stored' => 0,
-        },{
-            'name' => 'tag',
-            'stored' => 0,
-        },
-    ],
-    'search_fields' => ['title', 'description', 'content', 'tag'],
-    'search_boolop' => 'AND',
-});
+my $tan_config = Config::JFDI->new(name => "TAN", path => dirname(__FILE__) . "/../../")->get;
+my $search_config = $tan_config->{'Model::Search'}->{args};
 
-my $db = new TAN::Model::MySQL;
+my $searcher = LucyX::Simple->new( $search_config );
+
+my $db = TAN::Model::MySQL->new( $tan_config->{'Model::MySQL'} );
 
 my $objects = $db->resultset('Object')->search({
         'me.deleted' => 0,
@@ -65,7 +34,7 @@ my $objects = $db->resultset('Object')->search({
     'prefetch' => [qw/link blog picture poll video forum user/],
 });
 
-my $comments = $db->resultset('Comments')->search({ 'me.deleted' => 0 },{'prefetch' => [qw/user/],});
+my $comments = $db->resultset('Comments')->search({ 'me.deleted' => 0 },{'prefetch' => [qw/user object/],});
 
 my $count = $objects->count + $comments->count;
 my $loop = 0;
@@ -90,7 +59,7 @@ while ( my $object = $objects->next ){
             'tag' =>  join( ' ', map( $_->tag, $object->tags->all ) ),
         };
 
-        if ( 
+        if (
             ( $type eq 'blog' )
             || ( $type eq 'forum' )
         ){
@@ -109,7 +78,7 @@ while (my $comment = $comments->next){
     my $create = {
         'id' => "comment-" . $comment->id,
         'type' => 'comment',
-        'nsfw' => '',
+        'nsfw' => $comment->object->nsfw,
         'title' => '',
         'description' => '',
         'date' => $comment->_created->epoch,
@@ -117,7 +86,7 @@ while (my $comment = $comments->next){
         'tag' => '',
         'content' => strip_tags( $comment->_comment ),
     };
-    
+
     $searcher->create( $create );
     $progress->update( ++$loop );
 }

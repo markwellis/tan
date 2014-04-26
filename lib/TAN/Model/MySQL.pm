@@ -4,17 +4,6 @@ use Moose;
 extends 'Catalyst::Model::DBIC::Schema';
 
 use TAN::DBProfiler;
- 
-__PACKAGE__->config(
-    schema_class => 'TAN::Schema',
-    connect_info => {
-        'dsn' => 'dbi:mysql:tan;',
-        'user' => 'thisaintnews',
-        'password' => 'caBi2ieL',
-        'mysql_enable_utf8' => 1,
-        'quote_names' => 1,
-    },
-);
 
 sub ACCEPT_CONTEXT{
     my $self = shift;
