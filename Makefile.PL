@@ -83,6 +83,7 @@ requires 'Mail::Builder::Simple';
 requires 'Math::Random::Secure';
 requires 'Crypt::PBKDF2';
 requires 'MooseX::MethodAttributes';
+requires 'Config::JFDI';
 
 #workers
 requires 'Gearman::Worker';

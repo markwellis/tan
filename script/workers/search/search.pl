@@ -6,21 +6,16 @@ use Gearman::Worker;
 use LucyX::Simple;
 use Storable;
 
-use Config::Any;
 use File::Basename;
+use Config::JFDI;
 
 say "Started: pid $$: " . scalar( localtime );
 
-my $config_file = dirname(__FILE__) . '/config.json';
+my $tan_config = Config::JFDI->new(name => "TAN", path => dirname(__FILE__) . "/../../../")->get;
+my $gearman_config = $tan_config->{'Model::Gearman'};
+my $search_config = $tan_config->{'Model::Search'}->{args};
 
-my $config = Config::Any->load_files( {
-    'files' => [ $config_file ],
-    'flatten_to_hash' => 1,
-    'use_ext' => 1,
-} );
-
-$config = $config->{ $config_file };
-my $searcher = LucyX::Simple->new( $config->{'search_args'} );
+my $searcher = LucyX::Simple->new( $search_config );
 
 sub add_to_index{
     my ( $job ) = @_;
@@ -50,7 +45,7 @@ sub delete_from_index{
 }
 
 my $worker = Gearman::Worker->new;
-$worker->job_servers( @{ $config->{'job_servers'} } );
+$worker->job_servers( @{ $gearman_config->{'job_servers'} } );
 $worker->register_function( 'search_add_to_index' => \&add_to_index );
 $worker->register_function( 'search_delete_from_index' => \&delete_from_index );
 

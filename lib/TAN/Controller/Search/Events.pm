@@ -60,7 +60,7 @@ sub add_comment_to_index: Event(comment_created) Event(comment_updated){
     my $document = {
         'id' => "comment-" . $comment->id,
         'type' => 'comment',
-        'nsfw' => '',
+        'nsfw' => $comment->object->nsfw,
         'title' => '',
         'description' => '',
         'date' => ref( $comment->_created ) ne 'SCALAR' ? $comment->_created->epoch : time,

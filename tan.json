@@ -177,5 +177,17 @@
         "password": "1327839669",
         "signature": "AFcWxV21C7fd0v3bYYYRCpSSRl31AKIB6AeXNz9D9kURB.ByAKFJ2lsA ",
         "sandbox":  1
+    },
+
+    "Model::MySQL": {
+        "schema_class"  : "TAN::Schema",
+        "connect_info"  : {
+            "dsn"               : "dbi:mysql:tan;",
+            "user"              : "thisaintnews",
+            "password"          : "caBi2ieL",
+            "mysql_enable_utf8" : 1,
+            "quote_names"       : 1
+    }
+
     }
 }
