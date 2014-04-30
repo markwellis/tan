@@ -76,6 +76,7 @@ sub _build_config{
 
                     return if ( $c->stash->{'edit'} );
 
+                    local $ENV{PERL_LWP_SSL_VERIFY_HOSTNAME} = 0;
                     return $self->_fetcher->fetch( $url ); #throws an Exception::Simple if fails
                 },
 
