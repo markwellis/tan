@@ -77,7 +77,7 @@ requires 'URI::Find';
 requires 'Tie::Hash::Sorted';
 requires 'Cwd';
 requires 'DBD::mysql';
-requires 'Starman';
+requires 'Starlet';
 requires 'Catalyst::Model::Factory';
 requires 'Mail::Builder::Simple';
 requires 'Math::Random::Secure';

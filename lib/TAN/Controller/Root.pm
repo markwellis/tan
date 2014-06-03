@@ -1,10 +1,9 @@
 package TAN::Controller::Root;
 use Moose;
 use namespace::autoclean;
+use MooseX::MethodAttributes;
 
-BEGIN { extends 'Catalyst::Controller'; }
-
-use Time::HiRes qw(time);
+extends 'Catalyst::Controller';
 
 __PACKAGE__->config(namespace => '');
 
@@ -22,7 +21,7 @@ has '_mobile' => (
     },
 );
 
-sub auto: Private{
+sub auto: Private {
     my ( $self, $c ) = @_;
 
 ## theme shouldn't be set here!!
@@ -34,7 +33,7 @@ sub auto: Private{
         'location' => 'all',
     );
 
-    if ( 
+    if (
         ( $c->action eq 'view/index' )
         || ( $c->action eq 'index/index' )
     ){
@@ -43,45 +42,45 @@ sub auto: Private{
             $c->detach;
         }
     }
-    
+
     return 1;
 }
 
-sub index: Private{
+sub index: Private {
     my ( $self, $c ) = @_;
 
     $c->res->redirect( '/index/all/0' . $c->req->uri->path_query );
     $c->detach;
 }
 
-sub access_denied: Private{
-    my ( $self, $c ) = @_;
-
-    $c->forward('/error', [401, 'Access denied']);
-}
-
-sub default: Local{
+sub default: Private {
     my ( $self, $c ) = @_;
 
     # check for a cms page
     $c->forward('/cms/cms');
 
-    $c->forward('/error', [404, 'Not found']);
+    $self->error( $c, 404, 'Not Found' );
 }
 
-sub gone: Private{
+sub access_denied: Private {
     my ( $self, $c ) = @_;
 
-    $c->forward('/error', [410, 'Gone!']);
+    $self->error( $c, 401, 'Access denied' );
 }
 
-sub server_error: Private{
+sub gone: Private {
     my ( $self, $c ) = @_;
 
-    $c->forward('/error', [500, 'Massive cockup']);
+    $self->error( $c, 410, 'Gone!' );
 }
 
-sub error: Private{
+sub server_error: Private {
+    my ( $self, $c ) = @_;
+
+    $self->error( $c, 500, 'Massive cockup' );
+}
+
+sub error {
     my ( $self, $c, $error_code, $error ) = @_;
 
     $c->stash(
@@ -91,14 +90,15 @@ sub error: Private{
     );
 
     $c->response->status( $error_code );
+    $c->detach;
 }
 
-sub random: Local Args(1){
+sub random: Chained(/) Args(1) {
     my ( $self, $c, $type ) = @_;
 
-    if ( 
-        ($type ne 'all') 
-        && ( !$c->model('object')->valid_public_object( $type ) ) 
+    if (
+        ($type ne 'all')
+        && ( !$c->model('object')->valid_public_object( $type ) )
     ){
         $type = 'all';
     }
@@ -114,7 +114,7 @@ sub random: Local Args(1){
     $c->detach();
 }
 
-sub chat: Local Args(0){
+sub chat: Chained(/) Args(0) {
     my ( $self, $c ) = @_;
 
     $c->cache_page( 3600 );
@@ -125,7 +125,7 @@ sub chat: Local Args(0){
     );
 }
 
-sub recent_comments: Local{
+sub recent_comments: Chained(/) Args(0) {
     my ( $self, $c ) = @_;
 
     $c->stash(
@@ -134,9 +134,9 @@ sub recent_comments: Local{
     );
 }
 
-sub render: ActionClass('RenderView'){}
+sub render: ActionClass('RenderView') {}
 
-sub end: Private{
+sub end: Private {
     my ( $self, $c ) = @_;
 
     if ( !$c->res->output ){
@@ -146,18 +146,6 @@ sub end: Private{
         } else {
             $c->forward('render');
         }
-    }
-
-    if($c->debug) {
-        my $sql_queries = $c->model('MySQL')->get_query_count();
-        my $time = $c->model('MySQL')->storage()->debugobj()->{'total_time'};
-
-        $c->log->debug("Queries this request ${sql_queries}: ${time} seconds") if $c->stash->{'sql_queries'};
-
-        if( defined($sql_queries) && $sql_queries > 15) {
-            $c->log->warn("****** Are you sure you need ${sql_queries} queries? ******");
-        }
-        $c->model('MySQL')->reset_count();
     }
 }
 
