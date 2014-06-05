@@ -3,8 +3,8 @@ use Moose;
 use namespace::autoclean;
 
 use Catalyst::Runtime 5.90;
-use Data::Dumper; #used in 500 error email
-use 5.014;
+use Data::Dumper::Concise; #used in 500 error email
+use 5.020;
 
 our $VERSION = 5.003011;
 $VERSION = eval $VERSION;
@@ -36,8 +36,7 @@ __PACKAGE__->config( name => 'TAN',
     }
 );
 
-# Start the application
-__PACKAGE__->setup();
+__PACKAGE__->setup;
 
 sub check_cache{
     my $c = shift;
