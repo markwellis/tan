@@ -1,0 +1,166 @@
+---
+default_view: TT
+using_frontend_proxy: 1
+name: TAN
+encoding: UTF-8
+abort_chain_on_error_fix: 1
+
+donate:
+    cost: 3
+    currency: GBP
+
+max_password_length: 50
+paypal_donate_address: donate@thisaintnews.com
+
+recaptcha_private_key: 6Lczmt0SAAAAAEz24v4Z2vBg4mwedRikv_DPsSPp
+recaptcha_public_key: 6Lczmt0SAAAAAAqU2QBwiR9us4E0ySjj_EY2xty1
+
+static_path: /static
+
+cache_path: /static/cache
+thumb_path: /static/cache/thumbs
+
+avatar_path: /static/user/avatar
+pic_path: /static/user/pics
+
+Plugin::Authentication:
+    default:
+        credential:
+            class: Password
+            password_type: self_check
+        store:
+            class: DBIx::Class
+            role_field: role
+            role_relation: map_user_role
+            use_userdata_from_session: 1
+            user_model: MySQL::User
+            user_role_user_field: user_id
+    use_session: 1
+
+Plugin::Cache:
+    backend:
+        class: Cache::Memcached::libmemcached
+        servers:
+            - 127.0.0.1:11211
+
+Plugin::Session:
+    expires: 1209600
+    storage: /mnt/stuff/TAN/sessions
+
+Model::Gearman:
+    job_servers:
+        - 127.0.0.1:4730
+
+Model::Image:
+    allowed_thumbnail_sizes:
+        - 100
+        - 160
+        - 200
+        - 600
+        - 640
+    animated_frame_limit: 9
+    animated_size_showall_frames:
+        - 200
+        - 600
+
+Model::MySQL:
+    connect_info:
+        dsn: dbi:mysql:tan;
+        mysql_enable_utf8: 1
+        password: caBi2ieL
+        quote_names: 1
+        user: thisaintnews
+    schema_class: TAN::Schema
+
+Model::ParseHTML:
+    smilies:
+        0_o: bulgy-eyes.png
+        :'(: crying.png
+        :(: sad.png
+        :): smile.png
+        :*: kiss.png
+        :-(: sad.png
+        :-): smile.png
+        :-*: kiss.png
+        :-/: thinking.png
+        :-D: laugh.png
+        :-O: shock.png
+        :-P: tongue.png
+        :-S: confused.png
+        :-X: shut-mouth.png
+        :-\: thinking.png
+        :-d: laugh.png
+        :-o: shock.png
+        :-p: tongue.png
+        :-s: confused.png
+        :-x: shut-mouth.png
+        ':-|': neutral.png
+        :/: thinking.png
+        :D: laugh.png
+        :O: shock.png
+        :P: tongue.png
+        :S: confused.png
+        :X: shut-mouth.png
+        :\: thinking.png
+        :d: laugh.png
+        :dance: dance2.gif
+        :o: shock.png
+        :p: tongue.png
+        :s: confused.png
+        :x: shut-mouth.png
+        ':|': neutral.png
+        ;): wink.png
+        ;-): wink.png
+        <3: in-love.png
+        B): glasses-cool.png
+        B-): glasses-cool.png
+        O_o: bulgy-eyes.png
+        o_0: bulgy-eyes.png
+        o_O: bulgy-eyes.png
+    smilies_dir: /static/smilies/
+
+Model::PayPal:
+    email: seller_1327839645_biz@howmanykillings.com
+    password: 1327839669
+    sandbox: 1
+    signature: 'AFcWxV21C7fd0v3bYYYRCpSSRl31AKIB6AeXNz9D9kURB.ByAKFJ2lsA '
+    username: seller_1327839645_biz_api1.howmanykillings.com
+
+Model::Search:
+    args:
+        entries_per_page: 27
+        index_path: /mnt/stuff/TAN/search_index
+        schema:
+            - name: id
+              type: string
+            - boost: 3
+              name: title
+              stored: 0
+            - name: description
+              stored: 0
+            - name: content
+              stored: 0
+            - name: type
+              type: string
+            - name: nsfw
+              stored: 0
+            - indexed: 0
+              name: date
+              sortable: 1
+              stored: 0
+              type: int32
+            - name: username
+              stored: 0
+            - name: tag
+              stored: 0
+        search_boolop: AND
+        search_fields:
+            - title
+            - description
+            - content
+            - tag
+
+Model::Stemmer:
+    args:
+        encoding: UTF-8
+        lang: en

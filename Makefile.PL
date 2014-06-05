@@ -26,12 +26,11 @@ requires 'Cache::Memcached::libmemcached';
 requires 'Catalyst::Plugin::PageCache';
 requires 'Catalyst::Plugin::Unicode::Encoding';
 requires 'Catalyst::Action::RenderView';
-#requires 'Catalyst::Engine::Apache';
-requires 'Data::Dumper';
+requires 'Data::Dumper::Concise';
 requires 'parent';
 requires 'Catalyst::Model::DBIC::Schema';
 requires 'Test::More';
-requires 'Config::JSON';
+requires 'YAML::XS';
 
 requires 'Module::Find';
 requires 'Exception::Simple';
