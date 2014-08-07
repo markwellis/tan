@@ -1,6 +1,6 @@
 {
     "job_servers": ["127.0.0.1:4730"],
-    "sitemap_url": "http://thisaintnews.com/sitemap",
+    "sitemap_url": "https://thisaintnews.com/sitemap",
     "search_engine_ping_urls": [
         "http://submissions.ask.com/ping?sitemap=",
         "http://www.google.com/webmasters/sitemaps/ping?sitemap=",
