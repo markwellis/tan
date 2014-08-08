@@ -56,24 +56,38 @@
             </div>
         </div>
         <div class="TAN-main">
-            [% PROCESS lib/recent_comments.tt %]
+            <div class="left-menu">
+                [%- IF index.defined && !search -%]
+                    <div class="order-by">
+                        Order <select>
+                            <option value="date" [% IF order == 'date' %]selected="selected"[% END %]>Date</option>
+                            <option value="comments" [% IF order == 'comments' %]selected="selected"[% END %]>Comments</option>
+                            <option value="plus" [% IF order == 'plus' %]selected="selected"[% END %]>IsNews</option>
+                            <option value="minus" [% IF order == 'minus' %]selected="selected"[% END %]>AintNews</option>
+                            <option value="views" [% IF order == 'views' %]selected="selected"[% END %]>Views</option>
+                            <option value="score" [% IF order == 'score' %]selected="selected"[% END %]>Score</option>
+                        </select>
+                    </div>
+                [%- END -%]
+                <div id="recent_comments"></div>
+                [% PROCESS lib/ad.tt position='left' %]
+            </div>
+            [%- message = c.flash.message -%]
             <script type="text/javascript">
-            //<![CDATA[
-                [% IF message %]
+                [%- IF message -%]
                     window.addEvent('domready', function(){
                         TAN.alert("[% message | trim | html %]");
                     });
-                [% END %]
-                var mibbit_nick = '[% 
+                [%- END -%]
+                var mibbit_nick = '[%-
                     ( c.user_exists ? c.user.username : 'n00b' ) | html
-                %]';
-            //]]>
+                -%]';
             </script>
-            [% IF message %]
+            [%- IF message -%]
                 <noscript>
-                    <h1>[% message %]</h1>
+                    <h1>[%- message -%]</h1>
                 </noscript>
-            [% END %]
+            [%- END -%]
             [% content %]
             <div class="TAN-view-mobile">
                 <a href="/mobile/set_mobile/1">Mobile Site</a>

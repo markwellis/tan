@@ -1,5 +1,5 @@
 <p>
-    <a title="TAN" href="/recent_comments/">Recent Comments</a> |
+    <a title="TAN" href="[% c.uri_for_action('/recent/comments') %]">Recent Comments</a> |
     [%- IF c.user_exists %]
         <a href="/login/logout/">Logout</a>
     [%- ELSE -%]

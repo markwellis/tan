@@ -30,19 +30,10 @@
     margin-left:5px;
     padding-top:10px;
     padding-bottom:10px;
-    min-height:200px;
+    min-height:220px;
 }
 
-.TAN-comment_holder > ul, .TAN-comment_holder > ul > li > ul{
-    padding:0px;
-    margin:0px;
-}
-
-.TAN-comment_holder > ul > li, .TAN-comment_holder > ul > li > ul > li{
-    list-style:none;
-}
-
-.TAN-comment_holder > ul{
+.TAN-comment_holder .comment_info {
     font-size:.8em;
     padding-right:3px;
     width:120px;

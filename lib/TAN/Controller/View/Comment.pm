@@ -4,6 +4,8 @@ use namespace::autoclean;
 
 BEGIN { extends 'Catalyst::Controller'; }
 
+use Scalar::Util qw/looks_like_number/;
+
 has '_mobile' => (
     'is' => 'ro',
     'isa' => 'HashRef',
@@ -29,12 +31,12 @@ sub comment: PathPart('_comment') Chained('../type') Args(0) {
     #logged in, post
         if ( $comment  ){
         #comment
-            my $comment_rs = $c->model('MySQL::Comments')->create_comment( 
+            my $comment_rs = $c->model('MySQL::Comment')->create_comment( 
                 $c->stash->{'object_id'}, 
                 $c->user->user_id, 
                 $comment
             );
-            $comment_id = $comment_rs->comment_id;
+            $comment_id = $comment_rs->id;
             $c->trigger_event('comment_created', $comment_rs);
         }
     } else {
@@ -73,8 +75,8 @@ sub comment: PathPart('_comment') Chained('../type') Args(0) {
     } else {
     #ajax 
         #return the comment, filtered and all that
-        my $comment_rs = $c->model('MySQL::Comments')->find({
-            'comment_id' => $comment_id,
+        my $comment_rs = $c->model('MySQL::Comment')->find({
+            'id' => $comment_id,
         });
 
         #better add some validation in
@@ -121,7 +123,7 @@ sub edit_comment: PathPart('_edit_comment') Chained('../type') Args(1) {
         $c->detach();
     }
 
-    my $comment_rs = $c->model('MySQL::Comments')->find( $comment_id );
+    my $comment_rs = $c->model('MySQL::Comment')->find( $comment_id );
 
     if ( !defined($comment_rs) ){
 #FAIL (comment not found)
@@ -209,7 +211,7 @@ sub edit_comment: PathPart('_edit_comment') Chained('../type') Args(1) {
                 $c->trigger_event('comment_updated', $comment_rs);
             }
             if ( !defined($c->req->param('ajax')) ){
-                $c->res->redirect( $comment_rs->object->url . '#comment' . $comment_rs->comment_id, 303 );
+                $c->res->redirect( $comment_rs->object->url . '#comment' . $comment_rs->id, 303 );
             } else {
 # RETURN COMMENT HERE
                 $c->forward('ajax_comment', [$comment_rs]);
@@ -236,7 +238,7 @@ sub post_saved_comments: Private{
     #logged in, post
         foreach my $saved_comment ( @{$c->session->{'comments'}} ){
             if ( defined($saved_comment->{'object_id'}) && defined($saved_comment->{'comment'}) ){
-                my $comment_rs = $c->model('MySQL::Comments')->create_comment( 
+                my $comment_rs = $c->model('MySQL::Comment')->create_comment( 
                     $saved_comment->{'object_id'}, 
                     $c->user->user_id, 
                     $saved_comment->{'comment'} 

@@ -9,6 +9,9 @@ use Number::Format;
 
 use base 'Catalyst::View::TT';
 
+use Carp;
+use Data::Dumper::Concise;
+
 __PACKAGE__->config(TEMPLATE_EXTENSION => '.tt');
 
 __PACKAGE__->config({
@@ -28,7 +31,7 @@ __PACKAGE__->config({
         'domain' => sub { return domain(shift); },
         'filesize_h' => sub { return filesize_h(shift); },
     },
-    expose_methods => [qw/embed_url/],
+    expose_methods => [qw/embed_url warn_dumper/],
     render_die => 1,
     ENCODING => 'utf8',
     EVAL_PERL => 1,
@@ -112,6 +115,13 @@ sub filesize_h{
     } else {
         return Number::Format::format_number($size) . 'KB';
     }
+}
+
+sub warn_dumper {
+    my $self = shift;
+    my $c = shift;
+
+    carp Dumper( @_ );
 }
 
 1;

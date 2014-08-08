@@ -49,7 +49,7 @@ sub process {
             $entry->summary( $image . $object->$type->description );
             $entry->issued( $object->_promoted || $object->_created );
             $feed->add_entry( $entry );
-        } elsif ( ref( $object ) eq 'TAN::Model::MySQL::Comments' ){
+        } elsif ( ref( $object ) eq 'TAN::Model::MySQL::Comment' ){
             my $type = $object->object->type;
             my $base = $c->req->base;
             $base =~ s|/$||;

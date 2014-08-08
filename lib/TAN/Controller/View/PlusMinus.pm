@@ -23,27 +23,21 @@ sub add_plus_minus: Private{
 
     if ( $c->user_exists ){
     # valid user, do work
-        my $created = $c->model('MySQL::PlusMinus')->add(
-            $type, $c->stash->{'object_id'}, $c->user->user_id
-        );
-
-        my $object = $c->model('MySQL::Object')->find( {
-                'object_id' => $c->stash->{'object_id'}
-            },{
-                'prefetch' => $c->stash->{'type'},
-            } );
+        my $object = $c->stash->{object};
+        my $created = $object->add_plus_minus( $type, $c->user->id );
 
         $c->trigger_event('object_plusminus', $object);
 
         if ( defined($c->req->param('json')) ){
-        #json
-            $c->res->header('Content-Type' => 'application/json');
-            $c->res->body( to_json({
-                'score' => $object->score,
-                'created' => $created,
-                'plus' => $object->get_column('plus'),
-                'minus' => $object->get_column('minus'),
-            }) );
+            $c->stash(
+                json_data   => {
+                    score       => $object->score,
+                    created     => $created,
+                    plus        => $object->plus,
+                    minus       => $object->minus,
+                },
+                current_view    => 'JSON',
+            );
         } else {
         #redirect
             $c->res->redirect( defined($c->req->referer) ? $c->req->referer : $object->url , 303 );

@@ -2,16 +2,16 @@
 
 <div class="TAN-plusminus right">
     <a 
-        class="TAN-plus[% IF object.meplus %] TAN-plus-selected[% END %]" 
+        class="TAN-plus[% IF me_plus_minus.objects.${object.id} == 'plus' %] TAN-plus-selected[% END %]" 
         href="/view/[% type %]/[% object.${type}.id %]/_plus"
         title="TIN"
-    ><span class="TAN-object-plus">[% object.get_column('plus') %]</span><br />TIN</a>
+    ><span class="TAN-object-plus">[% object.plus %]</span><br />TIN</a>
     <div class="TAN-object-score">
         [%- object.score -%]
     </div>
     <a 
-        class="TAN-minus[% IF object.meminus %] TAN-minus-selected[% END %]"
+        class="TAN-minus[% IF me_plus_minus.objects.${object.id} == 'minus' %] TAN-minus-selected[% END %]"
         href="/view/[% type %]/[% object.${type}.id %]/_minus"
         title="TAN"
-    >TAN<br /><span class="TAN-object-minus">[% object.get_column('minus') %]</span></a>
+    >TAN<br /><span class="TAN-object-minus">[% object.minus %]</span></a>
 </div>

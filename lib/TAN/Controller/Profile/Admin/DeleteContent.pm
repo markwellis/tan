@@ -89,7 +89,7 @@ sub delete_comments: Private{
             'me.user_id' => $c->stash->{'user'}->id,
         };
 
-        my $comments_rs = $c->model('MySql::Comments')->search( $search_terms, {
+        my $comments_rs = $c->model('MySql::Comment')->search( $search_terms, {
             'prefetch' => {
                 'object' => TAN->model('Object')->public,
             },
@@ -110,7 +110,7 @@ sub delete_comments: Private{
                 'reason' => $c->stash->{'reason'},
             } );
 
-            $c->model('MySql::Comments')->search( $search_terms )->update( {
+            $c->model('MySql::Comment')->search( $search_terms )->update( {
                 'deleted' => 1,
             } );
 

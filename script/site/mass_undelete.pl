@@ -15,8 +15,8 @@ my $bulk = from_json( $admin_log->bulk );
 
 say "undo " . $admin_log->action;
 if ( $admin_log->action eq 'mass_delete_comments' ){
-    my $comments = $db->resultset('Comments')->search( {
-        'comment_id' => $bulk,
+    my $comments = $db->resultset('Comment')->search( {
+        id => $bulk,
     } )->update( {
         'deleted' => 0,
     } );

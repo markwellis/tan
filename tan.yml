@@ -5,6 +5,8 @@ name: TAN
 encoding: UTF-8
 abort_chain_on_error_fix: 1
 
+comment_hide_threshold: 5
+
 donate:
     cost: 3
     currency: GBP
@@ -39,7 +41,7 @@ Plugin::Authentication:
 
 Plugin::Cache:
     backend:
-        class: Cache::Memcached::libmemcached
+        class: Cache::Memcached
         servers:
             - 127.0.0.1:11211
 
@@ -169,3 +171,6 @@ Model::Video:
     args:
         class: TAN-video-embed
         secure: 1
+
+View::JSON:
+    expose_stash: json_data
