@@ -215,7 +215,7 @@ sub _calculate_score{
 
 #weights
     my $plus = ( $self->get_column('plus') * 4 );
-    my $minus = ( $self->get_column('minus') * 4 ) || 1;
+    my $minus = ( $self->get_column('minus') * 12 ) || 0;
     my $comments = ( $self->get_column('comments') * 2 );
     my $views = $self->get_column('views');
 
