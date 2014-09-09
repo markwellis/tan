@@ -1,6 +1,7 @@
 package TAN::Controller::Login::Forgot;
 use Moose;
 use namespace::autoclean;
+use Try::Tiny;
 
 BEGIN { extends 'Catalyst::Controller'; }
 
@@ -82,7 +83,7 @@ sub step2: Local Args(2){
         my $password0 = $c->req->param('password0');
         my $password1 = $c->req->param('password1');
         try {
-            die "Passwords do not match" if ( $password0 ne $password1 );
+            die "Passwords do not match\n" if ( $password0 ne $password1 );
 
             $c->model('MySQL::User')->find( $user_id )->set_password( $password0 );
 
