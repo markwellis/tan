@@ -49,7 +49,7 @@ sub auto: Private {
 sub index: Private {
     my ( $self, $c ) = @_;
 
-    $c->res->redirect( '/index/all/0' . $c->req->uri->path_query );
+    $c->res->redirect( $c->uri_for( '/index/all/0/', $c->req->params ), 301 );
     $c->detach;
 }
 
