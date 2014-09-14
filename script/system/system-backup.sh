@@ -13,8 +13,6 @@ debug "creating tarball"
 cd $BIND_MOUNTPOINT
 tar -cJpf $OUTPUT_FILENAME . --exclude "mnt/*" --exclude "tmp/*" --exclude "usr/tmp/*" --exclude "var/tmp/*" --exclude "var/cache/apt/archives/*" --exclude "var/lib/varnish/*" --exclude "var/lib/mysql/*"
 
-encrypt_file "${OUTPUT_FILENAME}"
-
 debug "unmounting bind mount"
 cd /
 umount $BIND_MOUNTPOINT
