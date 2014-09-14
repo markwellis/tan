@@ -10,9 +10,16 @@ OUTPUT_DIR='/mnt/stuff/db_backups'
 #filename = yyyy-mm-dd.sql
 OUTPUT_FILENAME="${OUTPUT_DIR}/$(date --rfc-3339=date).sql"
 
-debug "creating backup"
-mysqldump -u$DBUSER -p$DBPASSWORD --single-transaction --triggers --no-data $DB > $OUTPUT_FILENAME
-mysqldump -u$DBUSER -p$DBPASSWORD --single-transaction --no-create-info --ignore-table=$DB.views $DB >> $OUTPUT_FILENAME
-xz $OUTPUT_FILENAME
+debug "dumping schema"
+mysqldump -u$DBUSER -p$DBPASSWORD --single-transaction --no-data --skip-triggers --skip-add-drop-table $DB > $OUTPUT_FILENAME
+
+debug "dumping data"
+mysqldump -u$DBUSER -p$DBPASSWORD --single-transaction --no-create-info --skip-triggers --ignore-table=$DB.views $DB >> $OUTPUT_FILENAME
+
+debug "dumping triggers"
+mysqldump -u$DBUSER -p$DBPASSWORD --single-transaction --no-create-info --no-data --triggers $DB >> $OUTPUT_FILENAME
+
+debug "compressing"
+#xz $OUTPUT_FILENAME
 
 exit 0;
