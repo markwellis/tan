@@ -4,7 +4,6 @@ use namespace::autoclean;
 
 use HTML::StripScripts::Parser;
 use Parse::BBCode;
-use HTML::Video::Embed;
 use Data::Validate::URI qw/is_web_uri/;
 use HTML::TreeBuilder 5 -weak;
 use Cwd 'abs_path';
@@ -156,9 +155,7 @@ my $quote_reg = qr/\&quot\;/;
 sub _build_bbcode{
     my ( $self ) = @_;
 
-    my $embedder = HTML::Video::Embed->new( {
-        'class' => "TAN-video-embed",
-    } );
+    my $embedder = TAN->model('Video');
 
     return Parse::BBCode->new( {
         'direct_attributes' => 0,

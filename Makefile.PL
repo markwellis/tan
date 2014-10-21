@@ -63,7 +63,7 @@ requires 'utf8';
 requires 'DateTime';
 requires 'DateTime::Format::Human::Duration';
 requires 'Captcha::reCAPTCHA';
-requires 'HTML::Video::Embed';
+requires 'HTML::Video::Embed' => '0.01600';
 requires 'Fetch::Image';
 requires 'HTML::FormatText';
 requires 'URI';
