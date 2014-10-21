@@ -4,7 +4,6 @@ use warnings;
 
 use HTML::FormatText;
 
-use HTML::Video::Embed;
 use URI;
 use Number::Format;
 
@@ -26,10 +25,10 @@ __PACKAGE__->config({
         'file_exists' => sub { return file_exists(shift); },
         'strip_tags' => sub { return strip_tags(shift); },
         'file_mtime' => sub { return file_mtime(shift); },
-        'embed_url' => sub { return embed_url(shift); },
         'domain' => sub { return domain(shift); },
         'filesize_h' => sub { return filesize_h(shift); },
     },
+    expose_methods => [qw/embed_url/],
     render_die => 1,
     ENCODING => 'utf8',
     EVAL_PERL => 1,
@@ -90,11 +89,10 @@ sub strip_tags{
     );
 }
 
-my $embedder = new HTML::Video::Embed({
-    'class' => "TAN-video-embed",
-});
-sub embed_url{
-    return $embedder->url_to_embed( shift );
+sub embed_url {
+    my ( $self, $c, $url ) = @_;
+
+    return $c->model('Video')->url_to_embed( $url );
 }
 
 sub domain{

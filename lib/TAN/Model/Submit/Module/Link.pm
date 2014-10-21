@@ -7,11 +7,6 @@ with 'TAN::Model::Submit::Module';
 use Try::Tiny;
 use Data::Validate::URI;
 use Tie::Hash::Indexed;
-use HTML::Video::Embed;
-
-my $embedder = HTML::Video::Embed->new({
-    class => "TAN-video-embed"
-});
 
 sub _build_config{
 
@@ -67,11 +62,8 @@ sub _build_config{
                 sub {
                     my ( $c, $url ) = @_;
 
-                    my ( $domain, $uri ) = $embedder->_is_video( $url );
-
-                    if ( $domain ){
-                        return 'video';
-                    }
+                    my $res = $c->model('Video')->url_to_embed( $url );
+                    return 'video' if $res;
                 }
             ],
         },

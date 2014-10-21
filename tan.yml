@@ -164,3 +164,8 @@ Model::Stemmer:
     args:
         encoding: UTF-8
         lang: en
+
+Model::Video:
+    args:
+        class: TAN-video-embed
+        secure: 1
