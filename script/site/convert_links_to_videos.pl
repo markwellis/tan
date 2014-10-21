@@ -1,11 +1,10 @@
 use strict;
 use warnings;
 
-use HTML::Video::Embed;
-use TAN::Model::MySQL;
+use TAN;
 use Term::ProgressBar;
 
-my $db = TAN::Model::MySQL->new;
+my $db = TAN->model('MySQL');
 my $objects = $db->resultset('Object')->search( {
         'type' => 'link',
     },{
@@ -20,13 +19,13 @@ my $progress = Term::ProgressBar->new({
 });
 $progress->minor(0);
 
-my $embedder = HTML::Video::Embed->new;
+my $embedder = TAN->model('Video');
 
 while ( my $object = $objects->next ){
     my $url = $object->link->url;
 
-    my ( $domain, $uri ) = $embedder->_is_video( $url );
-    if ( defined( $domain ) ){
+    my $res = TAN->model('Video')->url_to_embed( $url );
+    if ( $res ){
         my $link = $object->link;
         $object->update( {
             'type' => 'video',

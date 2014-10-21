@@ -1,6 +1,11 @@
 [% title_url = "/redirect/external/${object.id}" %] 
 [% PROCESS view/_view.tt %]
 
+[%- video_embed_code = embed_url( object.video.url ) -%]
 <div class="TAN-video">
-    [% object.video.url | embed_url %]
+    [%- IF video_embed_code -%]
+        [% video_embed_code %]
+    [%- ELSE -%]
+        <a href="[% "/redirect/external/${object.id}" %]" rel="external nofollow">This video is not available on site, please click here to view</a>
+    [%- END -%]
 </div>

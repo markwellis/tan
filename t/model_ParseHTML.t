@@ -1,31 +1,11 @@
 use strict;
 use warnings;
 use Test::More;
-use Cwd 'abs_path';
-use File::Basename;
-use Config::Any;
-use HTML::Video::Embed;
+use TAN;
 
-my $config_file = dirname(__FILE__) . '/..';
+my $model = TAN->model('ParseHTML');
 
-my $first_config = Config::Any->load_files( {
-    'files' => [ "${config_file}/tan.json", "${config_file}/tan_devel.json" ],
-    'flatten_to_hash' => 1,
-    'use_ext' => 1,
-} );
-
-my $config = $first_config->{"${config_file}/tan.json"};
-#$config = $first_config->{ "${config_file}/tan_devel.json" };
-foreach my $key ( keys( %{ $first_config->{"${config_file}/tan_devel.json"} } ) ){
-    $config->{ $key } = $first_config->{"${config_file}/tan_devel.json"}->{ $key };
-}
-
-BEGIN { use_ok 'TAN::Model::ParseHTML' };
-my $model = new_ok( 'TAN::Model::ParseHTML' => [ $config->{'Model::ParseHTML'} ] );
-
-my $embedder = HTML::Video::Embed->new( {
-    'class' => "TAN-video-embed",
-} );
+my $embedder = TAN->model('Video');
 my $youtube_embed_code = $embedder->url_to_embed('https://www.youtube.com/watch?v=VDss8V2OME4');
 
 my @tests = (
