@@ -6,7 +6,6 @@ use HTML::StripScripts::Parser;
 use Parse::BBCode;
 use Data::Validate::URI qw/is_web_uri/;
 use HTML::TreeBuilder 5 -weak;
-use Cwd 'abs_path';
 use File::Basename;
 use URI::Find;
 use Data::Validate::URI;
@@ -33,6 +32,12 @@ has 'smilies_dir' => (
     'required' => 1,
 );
 
+has 'smilies_url' => (
+    'is' => 'ro',
+    'isa' => 'Str',
+    'required' => 1,
+);
+
 has 'smilies' => (
     'is' => 'rw',
     'isa' => 'HashRef',
@@ -50,9 +55,7 @@ sub _build__smilies_reg{
 
     my $icons = $self->smilies;
 
-    my $dir = dirname( abs_path( __FILE__ ) ) . "/../../../root/" . $self->smilies_dir; #TODO HACK maybe get rid of the /../../../ bit ...
-
-    opendir( my $dh, "$dir" ) || die "failed to opendir $dir: $!";
+    opendir( my $dh, $self->smilies_dir ) || die "failed to opendir $self->smilies_dir: $!";
     while ( my $smilie = readdir( $dh ) ){
         #load each image and strip .png add prefix off : and register
         if ( $smilie =~ m/^\./ ){
@@ -82,8 +85,8 @@ sub _build__smilies_reg{
 
 
 sub _build_hss{
-    my $hss = HTML::StripScripts::Parser->new( 
-        { 
+    my $hss = HTML::StripScripts::Parser->new(
+        {
             'Context'     => 'Flow',
             'AllowSrc'    => 1,
             'AllowHref'   => 1,
@@ -201,7 +204,7 @@ sub _build_bbcode{
             #smilies
 #do it like this or the match fails coz we change the string we're trying to match in some cases, so you end up with edge cases that fail to convert, eg ":) :) :)" will convert the first and the last and leave the middle. this way they're all converted.
             while ($text =~ s{${ $self->_smilies_reg }}{
-                my $url = $self->smilies_dir . $self->smilies->{ $2 };
+                my $url = TAN->uri_for( $self->smilies_url . '/' . $self->smilies->{ $2 } );
                 my $image = sprintf( '<img src="%s" alt="%s" />', $url, $2 );
                 "${1}${image}${3}";
             }msex){};
