@@ -120,6 +120,7 @@ sub create_new: Private{
         'promoted' => 0,
         'user_id' => $c->user->user_id,
         'nsfw' => defined($c->req->param('nsfw')) ? 1 : 0,
+        plus    => 1,
         $type => $prepared,
         'plus_minus' => [{
             'type' => 'plus',

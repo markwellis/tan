@@ -14,7 +14,7 @@
         <a href="[% object.url | html %]" class="TAN-type-[% type %]">[% title %]</a>
 
         [%- FOREACH comment IN recent_comments.${object_id} -%]
-            [% orig_comment = comment.comment | strip_tags %]
+            [% orig_comment = comment.user.username _ ': ' _ comment.comment | strip_tags %]
 
             [%- short_comment = orig_comment.substr(0, 50) | html -%]
             [%- long_comment = orig_comment.substr(0, 400) -%]

@@ -38,8 +38,8 @@ window.addEvent('domready', function() {
         e.stop();
     });
 
-    if ( $$('.TAN-order-by select') != undefined ){
-        $$('.TAN-order-by select').addEvent('change', function(e) {
+    if ( $$('.order-by select') != undefined ){
+        $$('.order-by select').addEvent('change', function(e) {
             var oper = (window.location.toString().indexOf('?') !== -1) ? '&' : '?';
             var order = 'order=' + this.value;
             var locs = window.location.toString().split('#');

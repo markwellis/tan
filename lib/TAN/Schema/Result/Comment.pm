@@ -143,6 +143,20 @@ sub get_comment{
     return $comment;
 }
 
+sub set_deleted {
+    my $self = shift;
+
+    $self->result_source->schema->txn_do( sub {
+        $self->update( {
+            'deleted' => 1,
+        } );
+
+        $self->object->update( {
+            comments => $self->object->comments->visible->count,
+        } );
+    });
+}
+
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 __PACKAGE__->meta->make_immutable;
 1;
