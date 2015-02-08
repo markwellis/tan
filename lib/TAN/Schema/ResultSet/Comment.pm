@@ -8,18 +8,24 @@ use Tie::Hash::Indexed;
 sub create_comment {
     my ( $self, $object_id, $user_id, $comment ) = @_;
 
-    my $comment_no = $self->search({
-        'user_id' => $user_id,
-    })->count + 1;
+    $self->result_source->schema->txn_do( sub {
+        my $comment_no = $self->search({
+            'user_id' => $user_id,
+        })->count + 1;
 
-    my $comment_rs = $self->create({
-        'user_id' => $user_id,
-        'comment' => $comment,
-        'object_id' => $object_id,
-        'number' => $comment_no || 1,
-    });
+        my $comment_rs = $self->create({
+            'user_id' => $user_id,
+            'comment' => $comment,
+            'object_id' => $object_id,
+            'number' => $comment_no || 1,
+        });
 
-    return $comment_rs;
+        $comment_rs->object->update( {
+            comments => $comment_rs->object->comments->visible->count,
+        } );
+
+        return $comment_rs;
+    } );
 }
 
 use Tie::Hash::Indexed;
@@ -48,6 +54,12 @@ sub recent {
         push @{$grouped_comments{ $comment->object_id } }, $comment;
     }
     return \%grouped_comments;
+}
+
+sub visible {
+    $_[0]->search( {
+        deleted => 0,
+    } );
 }
 
 1;

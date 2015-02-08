@@ -157,9 +157,7 @@ sub edit_comment: PathPart('_edit_comment') Chained('../type') Args(1) {
             && ( $c->req->param("delete${comment_id}") eq 'Delete' )
         ){
 #DELETE comment
-            $comment_rs->update({
-                'deleted' => 1,
-            });
+            $comment_rs->set_deleted;
             $c->trigger_event('comment_deleted', $comment_rs);
 
             if ( $c->check_user_roles(qw/edit_comment/)
