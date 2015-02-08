@@ -113,7 +113,7 @@ __PACKAGE__->might_have(
 
 __PACKAGE__->has_many(
   "comments",
-  "TAN::Schema::Result::Comments",
+  "TAN::Schema::Result::Comment",
   { "foreign.object_id" => "self.object_id" },
 );
 
@@ -214,8 +214,8 @@ sub _calculate_score{
     }
 
 #weights
-    my $plus = ( $self->get_column('plus') * 4 );
-    my $minus = ( $self->get_column('minus') * 12 ) || 0;
+    my $plus = ( $self->plus * 4 );
+    my $minus = ( $self->minus * 12 ) || 0;
     my $comments = ( $self->get_column('comments') * 2 );
     my $views = $self->get_column('views');
 
@@ -226,6 +226,23 @@ sub _calculate_score{
 # make look nicer
     $score = ( $score * 100 ) - 20;
     return sprintf("%d", $score);
+}
+
+sub add_plus_minus {
+    my ( $self, $type, $user_id ) = @_;
+
+    return $self->result_source->schema->txn_do( sub {
+        my $created = $self->plus_minus->add( $type, $user_id );
+
+        #update score and things now
+        $self->update( {
+                plus    => $self->plus_minus->search( { type => 'plus' } )->count,
+                minus   => $self->plus_minus->search( { type => 'minus' } )->count,
+            } );
+
+        $self->update_score;
+        return $created;
+    } );
 }
 
 1;

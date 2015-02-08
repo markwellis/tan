@@ -47,6 +47,8 @@ var TAN_class = new Class({
         this.overlay.grab(this.box);
 
         $$("body").grab(this.overlay);
+
+        this.load_recent_comments();
     },
     alert: function (log_text){
         this.box.set('html', log_text);
@@ -74,6 +76,33 @@ var TAN_class = new Class({
         }
 
         return parseInt(Cookie.read('nsfw')) || 0;
+    },
+    load_recent_comments: function() {
+        new Request.HTML( {
+            'url': '/recent/comments',
+            'noCache': true,
+            "onSuccess": function( tree, elements, html ) {
+                elements.each( function( element, index ) {
+
+                    var comment = element.get('data-comment');
+                    if ( comment == undefined ) return;
+
+                    var username = element.get('data-username');
+
+                    new FloatingTips( element, {
+                        content: function(e) { return comment },
+                        position: 'right',
+                        center: false,
+                    });
+                } );
+
+                var recent_comments = document.id('recent_comments');
+                recent_comments.getElements('*').destroy();
+                recent_comments.adopt( tree );
+            }
+        } ).get( {
+            'ajax': 1
+        } );
     }
 });
 

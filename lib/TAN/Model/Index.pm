@@ -14,8 +14,8 @@ sub indexinate{
         if ( $object->can('type') && ( $object->type eq 'comment' ) ){
             my $id = $object->id;
             $id =~ s/\D//g;
-            push( @index, $c->model('MySQL::Comments')->find( $id ) );
-        } elsif( ref($object) eq 'TAN::Model::MySQL::Comments' ){
+            push( @index, $c->model('MySQL::Comment')->find( $id ) );
+        } elsif( ref($object) eq 'TAN::Model::MySQL::Comment' ){
             push( @index, $object );
         } else {
             push(@index, $c->model('MySQL::Object')->get( $object->id, $object->type ));
@@ -26,26 +26,9 @@ sub indexinate{
         return undef;
     }
 
-    if ( $c->user_exists ){
-        if ( scalar(@index) ){
-            my @ids = map(defined($_) && ( ref($_) eq 'TAN::Model::MySQL::Object') ? $_->id : undef, @index);
-            my $meplus_minus = $c->model('MySQL::PlusMinus')->meplus_minus($c->user->user_id, \@ids);
-
-            foreach my $object ( @index ){
-                next if !$object || ( ref( $object ) ne 'TAN::Model::MySQL::Object' );
-                if ( defined($meplus_minus->{ $object->object_id }->{'plus'}) ){
-                    $object->{'meplus'} = 1;
-                } 
-                if ( defined($meplus_minus->{ $object->object_id }->{'minus'}) ){
-                    $object->{'meminus'} = 1;  
-                }
-            }
-        }
-    }
-
     return {
-        'objects' => \@index,
-        'pager' => $pager,
+        objects     => \@index,
+        pager       => $pager,
     };
 }
 

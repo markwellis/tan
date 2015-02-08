@@ -13,9 +13,9 @@ function tin_tan( object_id, el ){
     if ( !xmlhttp ){
         return true;
     }
-    
+
     xmlhttp.onreadystatechange = function(){
-        if ( 
+        if (
             ( xmlhttp.readyState == 4  )
             && ( xmlhttp.status == 200 )
         ){
@@ -30,9 +30,12 @@ function tin_tan( object_id, el ){
 }
 
 function parse_json( json, object_id ){
-    var score =  document.getElementById( object_id + ':score' );
-    var tin =  document.getElementById( object_id + ':tin' );
-    var tan =  document.getElementById( object_id + ':tan' );
+    if ( json.login === 1 ) {
+        return window.location= '/login/';
+    }
+    var score = document.getElementById( object_id + ':score' );
+    var tin = document.getElementById( object_id + ':tin' );
+    var tan = document.getElementById( object_id + ':tan' );
 
     score.innerHTML = json.score;
     tin.innerHTML = "TIN (" + json.plus + ")";

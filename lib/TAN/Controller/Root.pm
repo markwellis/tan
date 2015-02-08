@@ -59,6 +59,12 @@ sub default: Private {
     # check for a cms page
     $c->forward('/cms/cms');
 
+    $c->forward('/not_found');
+}
+
+sub not_found: Private {
+    my ( $self, $c ) = @_;
+
     $self->error( $c, 404, 'Not Found' );
 }
 
@@ -125,15 +131,6 @@ sub chat: Chained(/) Args(0) {
     );
 }
 
-sub recent_comments: Chained(/) Args(0) {
-    my ( $self, $c ) = @_;
-
-    $c->stash(
-        'recent_comments' => $c->model('MySQL::RecentComments')->grouped,
-        'template' => 'recent_comments.tt',
-    );
-}
-
 sub render: ActionClass('RenderView') {}
 
 sub end: Private {
@@ -144,6 +141,11 @@ sub end: Private {
         if ( $c->stash->{'can_rss'} && $c->req->param('rss') ){
             $c->forward( $c->view('RSS') );
         } else {
+            if ( $c->stash->{no_wrapper} ) {
+                $c->stash(
+                    current_view    => 'NoWrapper',
+                );
+            }
             $c->forward('render');
         }
     }

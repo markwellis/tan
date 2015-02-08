@@ -7,26 +7,25 @@ BEGIN { extends 'Catalyst::Controller'; }
 use Try::Tiny;
 
 has '_mobile' => (
-    'is' => 'ro',
-    'isa' => 'HashRef',
-    'default' => sub{
-        return {'index' => 1};
+    'is'      => 'ro',
+    'isa'     => 'HashRef',
+    'default' => sub {
+        return { 'index' => 1 };
     },
 );
 
-sub index: Path Args(0){
+sub index : Path Args(0) {
     my ( $self, $c ) = @_;
 
-    if ( $c->user_exists ){
+    if ( $c->user_exists ) {
         $c->flash->{'message'} = 'You are already logged in';
         $c->res->redirect( '/index/all/0/', 303 );
         $c->detach();
     }
 
-    $c->stash->{'recaptcha_html'} = $c->model('reCAPTCHA')->get_html(
+    $c->stash->{'recaptcha_html'} = $c->model( 'reCAPTCHA' )->get_html(
         $c->config->{'recaptcha_public_key'},
-        undef,
-        1,
+        undef, 1,
         {
             'theme' => 'blackglass',
         }
@@ -36,45 +35,51 @@ sub index: Path Args(0){
 
     $c->stash(
         'page_title' => 'Login/Register',
-        'template' => 'login.tt',
-        'no_ads' => 1,
+        'template'   => 'login.tt',
+        'no_ads'     => 1,
     );
 }
 
-sub login: Local Args(0){
+sub login : Local Args(0) {
     my ( $self, $c ) = @_;
 
     my $ref = $c->flash->{'ref'};
-    if (!defined($ref) || $ref =~ m/\/login\//){
+    if ( !defined( $ref ) || $ref =~ m/\/login\// ) {
         $ref = '/index/all/0/';
     }
 
-    if ( $c->req->method eq 'POST' ){
-        my $authenticated = try{
-            $c->authenticate({
-                'username' => $c->req->param('username'),
-                'password' => $c->req->param('password'),
-            })
-        } catch {
+    if ( $c->req->method eq 'POST' ) {
+        my $authenticated = try {
+            $c->authenticate(
+                {
+                    'username' => $c->req->param( 'username' ),
+                    'password' => $c->req->param( 'password' ),
+                }
+              )
+        }
+        catch {
             return undef;
         };
-        if ( $authenticated ){
-            if ( !$c->user->confirmed ){
+        if ( $authenticated ) {
+            if ( !$c->user->confirmed ) {
                 $ref = '/login/';
                 $c->logout;
                 $c->flash->{'message'} = "You need to confirm your email address";
-            } elsif ( $c->user->deleted ){
+            }
+            elsif ( $c->user->deleted ) {
                 $ref = '/index/all/0/';
                 $c->logout;
                 $c->flash->{'message'} = "You have been deleted";
-            } else {
+            }
+            else {
                 #post any saved comments
-                if ( $c->check_usr_tcs ){
-                    $c->forward('/view/comment/post_saved_comments');
+                if ( $c->check_usr_tcs ) {
+                    $c->forward( '/view/comment/post_saved_comments' );
                 }
                 $c->flash->{'message'} = 'You have logged in';
             }
-        } else {
+        }
+        else {
             $ref = '/login/';
             $c->flash->{'message'} = "Couldn't find you with that username and password";
         }
@@ -84,13 +89,14 @@ sub login: Local Args(0){
     $c->detach();
 }
 
-sub logout: Local Args(0){
+sub logout : Local Args(0) {
     my ( $self, $c ) = @_;
 
-    if ( $c->user_exists ){
+    if ( $c->user_exists ) {
         $c->logout;
         $c->flash->{'message'} = "You have logged out";
-    } else {
+    }
+    else {
         $c->flash->{'message'} = "You weren't logged in!";
     }
 

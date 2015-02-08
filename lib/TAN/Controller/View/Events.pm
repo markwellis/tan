@@ -29,7 +29,6 @@ sub spam_twitter: Event('object_promoted'){
 sub update_score: 
     Event(comment_created) 
     Event(comment_updated)
-    Event(object_plusminus)
     Event(mass_comments_deleted)
 {
     my ( $self, $c, $object ) = @_;
@@ -85,7 +84,7 @@ sub remove_comment_cache:
     }
 
     foreach my $comment ( @{$comments} ){
-        if ( ref($comment) eq 'TAN::Model::MySQL::Comments' ){
+        if ( ref($comment) eq 'TAN::Model::MySQL::Comment' ){
             $c->cache->remove("comment.0:" . $comment->id);
             $c->cache->remove("comment.1:" . $comment->id);
         }

@@ -33,7 +33,7 @@ __PACKAGE__->has_many(
 
 __PACKAGE__->has_many(
   "comments",
-  "TAN::Schema::Result::Comments",
+  "TAN::Schema::Result::Comment",
   { "foreign.user_id" => "self.user_id" },
 );
 __PACKAGE__->has_many(
@@ -145,6 +145,37 @@ sub check_password{
     $password = Digest::SHA::sha512_hex( $password );
 
     return $crypt->PBKDF2_base64( $self->_get_salt, $password ) eq $self->password;
+}
+
+sub me_plus_minus {
+    my ( $self, $object_ids, $comment_ids ) = @_;
+
+    $object_ids //= [];
+    $comment_ids //= [];
+
+    my $plus_minuses = $self->plus_minus->search( [
+            {
+                object_id   => $object_ids,
+            },
+            {
+                comment_id  => $comment_ids,
+            }
+        ] );
+
+    my $me_plus_minus = {
+        objects     => {},
+        comments    => {},
+    };
+    while ( my $plus_minus = $plus_minuses->next ) {
+        if ( $plus_minus->object_id ) {
+            $me_plus_minus->{objects}->{ $plus_minus->object_id } = $plus_minus->type;
+        }
+        else {
+            $me_plus_minus->{comments}->{ $plus_minus->comment_id } = $plus_minus->type;
+        }
+    }
+
+    return $me_plus_minus;
 }
 
 1;

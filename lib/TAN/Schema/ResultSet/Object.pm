@@ -187,4 +187,40 @@ sub get{
     return $object_rs;
 }
 
+sub _recent {
+    my ( $self ) = @_;
+
+    $self->search( {
+            type            => { '!=' => 'profile'},
+            'me.deleted'    => 0,
+        }, {
+            rows            => 20,
+            order_by        => {-desc => 'me.created'},
+            prefetch        => [
+                    'link',
+                    'blog',
+                    'picture',
+                    'poll',
+                    'video',
+                    'forum',
+                ],
+        } );
+}
+
+sub recent_promoted {
+    my ( $self ) = @_;
+
+    $self->_recent->search( {
+            promoted    => { '!=' => undef },
+        } );
+}
+
+sub recent_upcoming {
+    my ( $self ) = @_;
+
+    $self->_recent->search( {
+            promoted    => undef,
+        } );
+}
+
 1;

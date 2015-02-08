@@ -34,7 +34,7 @@ my $objects = $db->resultset('Object')->search({
     'prefetch' => [qw/link blog picture poll video forum user/],
 });
 
-my $comments = $db->resultset('Comments')->search({ 'me.deleted' => 0 },{'prefetch' => [qw/user object/],});
+my $comments = $db->resultset('Comment')->search({ 'me.deleted' => 0 },{'prefetch' => [qw/user object/],});
 
 my $count = $objects->count + $comments->count;
 my $loop = 0;
