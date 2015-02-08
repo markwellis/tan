@@ -1,0 +1,34 @@
+[%- BLOCK recent_comments -%]
+    [%- FOREACH object_id IN recent_comments.keys() -%]
+        [% object = recent_comments.${object_id}.0.object %]
+        [%- type = object.type -%]
+        [%- title = object.$type.title | html -%]
+        [%- IF object.nsfw -%]
+            [%- IF !c.nsfw -%]
+                [%- NEXT -%]
+            [%- ELSE -%]
+                [%- title = "[NSFW] ${title}" -%]
+            [%- END -%]
+        [%- END -%]
+
+        <a href="[% object.url | html %]" class="TAN-type-[% type %]">[% title %]</a>
+
+        [%- FOREACH comment IN recent_comments.${object_id} -%]
+            [% orig_comment = comment.comment | strip_tags %]
+
+            [%- short_comment = orig_comment.substr(0, 50) | html -%]
+            [%- long_comment = orig_comment.substr(0, 400) -%]
+
+            [%- IF short_comment != orig_comment -%]
+                [%- short_comment = "${short_comment}..." -%]
+            [%- END -%]
+            [%- IF long_comment != orig_comment -%]
+                [%- long_comment = "${long_comment}..." -%]
+            [%- END -%]
+
+            <a href="[% object.url %]#comment[% comment.id %]" class="indent" data-username="[% comment.user.username | html %]" data-comment="[% long_comment | html %]">[% short_comment %]</a>
+        [%- END -%]
+    [%- END -%]
+[%- END -%]
+
+[%- INCLUDE recent_comments -%]

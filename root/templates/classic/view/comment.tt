@@ -1,44 +1,28 @@
 <div class="TAN-comment_holder[% IF !index.defined %] TAN-hr[% END %]" id="comment[% comment.id %]">
-    <ul class="left">
-        <li>
+    <div class="comment_info left">
             <a href="[% comment.user.profile_url %]" class="TAN-news-user">[% comment.user.username | html %]</a>
-        </li>
-        <li>
-            [% comment.created %]&#160;ago
-        </li>
-        <li>
+            <div>[% comment.created %]&#160;ago</div>
             <img class="TAN-news-avatar TAN-comment_avatar" src="[% comment.user.avatar %]" alt="[% comment.user.username | html %]" />
-        </li>
-        <li>
             Comment #[% number( comment.number ) || 1 %]
-        </li>
-        <li>
-            <ul class="TAN-comment_tools">
-                <li>
-                    <a href="[% comment.object.url %]#comment[% comment.id %]">Link</a>
-                    [% IF view_comments %]
-                        |
-                        <a href="" class="quote_link" title="[% comment.user.username | html %]::[% comment.id %]">Quote</a>
-                    [% END %]
-                </li>
+            <div class="TAN-comment_tools">
+                <a href="[% comment.object.url %]#comment[% comment.id %]">Link</a>
+                [%- IF view_comments -%]
+                    | <a href="" class="quote_link" title="[% comment.user.username | html %]::[% comment.id %]">Quote</a>
+                [%- END -%]
 
-                [% IF ( 
+                [%- IF ( 
                     ( c.user_exists ) 
                     && ( 
                         c.check_user_roles('edit_comment')
                         || ( c.user.id == comment.user.user_id )
                     ) 
-                ) %]
-                    <li>
-                        <a class="comment_edit" href="[% comment.object.url %]/../_edit_comment/[% comment.id %]">Edit Comment</a>
-                    </li>
-                [% END %]
-            </ul>
-        </li>
-    </ul>
+                ) -%]
+                    <a class="comment_edit" href="[% comment.object.url %]/../_edit_comment/[% comment.id %]">Edit Comment</a>
+                [%- END -%]
+        </div>
+    </div>
     <div class="TAN-comment-quoteable hidden">[% comment.comment_nobb %]</div>
     <div class="TAN-comment_inner">
         [% comment.comment %]
-        <br />
     </div>
 </div>

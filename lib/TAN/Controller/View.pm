@@ -1,11 +1,10 @@
 package TAN::Controller::View;
 use Moose;
-use namespace::autoclean;
+use MooseX::MethodAttributes;
 
-BEGIN { extends 'Catalyst::Controller'; }
+extends qw/Catalyst::Controller/;
 
-use JSON;
-use Try::Tiny;
+use Scalar::Util qw/looks_like_number/;
 
 has '_mobile' => (
     'is' => 'ro',
@@ -18,21 +17,28 @@ has '_mobile' => (
 sub type: PathPart('view') Chained('/') CaptureArgs(2){
     my ( $self, $c, $type, $object_id ) = @_;
 
-    if ( !$c->model('object')->valid_public_object( $type ) ){
-        $c->detach('/default');
+    if (
+        !$c->model('object')->valid_public_object( $type )
+        || !looks_like_number( $object_id )
+    ) {
+        $c->detach('/not_found');
     }
 
-    my $not_int_reg = $c->model('CommonRegex')->not_int;
-    $object_id =~ s/$not_int_reg//g;
-    if ( !$object_id ){
-        $c->forward('/default');
-        $c->detach();
+    my $object = $c->model('MySQL::Object')->get( $object_id, $type );
+
+    if ( !defined($object) ){
+        $c->detach('/not_found');
+    }
+
+    if ( $object->deleted ){
+        $c->detach('/gone');
     }
 
     $c->stash(
-        'object_id' => $object_id,
-        'type' => $type,
-        'location' => $type,
+        object      => $object,
+        object_id   => $object_id,
+        type        => $type,
+        location    => $type,
     );
 }
 
@@ -52,17 +58,7 @@ sub index: PathPart('') Chained('type') Args(1) {
 # display article
 # load comments etc
     my $type = $c->stash->{'type'};
-    my $object = $c->model('MySQL::Object')->get($c->stash->{'object_id'}, $type);
-
-    if ( !defined($object) ){
-        $c->forward('/default');
-        $c->detach();
-    }
-
-    if ( $object->deleted ){
-        $c->forward('/gone');
-        $c->detach();
-    }
+    my $object = $c->stash->{object};
 
     my $url = $object->url;
     if ( $c->req->uri->path ne $url ){
@@ -70,35 +66,26 @@ sub index: PathPart('') Chained('type') Args(1) {
         $c->detach();
     }
 
-    if ( $c->user_exists ){
-        #get me plus info
-        my $meplus_minus = $object->plus_minus->meplus_minus( $c->user->user_id );
-
-        if ( defined($meplus_minus->{ $object->object_id }->{'plus'}) ){
-            $object->{'meplus'} = 1;
-        }
-        if ( defined($meplus_minus->{ $object->object_id }->{'minus'}) ){
-            $object->{'meminus'} = 1;  
-        }
-    }
-
 #this should be cached
-    @{$c->stash->{'comments'}} = 
-    $c->model('MySQL::Comments')->search({
-        'me.object_id' => $c->stash->{'object_id'},
-        'me.deleted' => 0,
-    },{
-        'prefetch' => ['user', {
-            'object' => $type,
-        }],
-        'order_by' => 'me.created',
-    })->all;
+    my @comments = $c->model('MySQL::Comment')->search( {
+            'me.object_id' => $object->id,
+            'me.deleted' => 0,
+        }, {
+            'prefetch' => ['user', {
+                'object' => $type,
+            }],
+            'order_by' => 'me.created',
+        } )->all;
+    my @comment_ids = map { $_->id } @comments;
+    my $me_plus_minus = $c->user_exists ? $c->user->me_plus_minus( [$object->id], \@comment_ids ) : undef;
 
     $c->stash(
-        'object' => $object,
-        'page_title' => $object->$type->title || undef,
-        'template' => 'view.tt',
-        'page_meta_description' => $object->$type->description || undef,
+        me_plus_minus           => $me_plus_minus,
+        comments                => \@comments,
+        object                  => $object,
+        page_title              => $object->$type->title || undef,
+        template                => 'view.tt',
+        page_meta_description   => $object->$type->description || undef,
     );
 }
 

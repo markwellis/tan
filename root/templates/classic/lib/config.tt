@@ -4,7 +4,7 @@
         "Lib/mootools-more",
         'Lib/TAN',
         'Lib/Menu',
-        'Lib/RecentComments'
+        'Lib/FloatingTips',
     ];
     
     css_includes = [

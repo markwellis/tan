@@ -20,6 +20,8 @@ debug "dumping triggers"
 mysqldump -u$DBUSER -p$DBPASSWORD --single-transaction --no-create-info --no-data --triggers $DB >> $OUTPUT_FILENAME
 
 debug "compressing"
-#xz $OUTPUT_FILENAME
+
+md5sum $OUTPUT_FILENAME > "${OUTPUT_FILENAME}.md5sum"
+gzip $OUTPUT_FILENAME
 
 exit 0;

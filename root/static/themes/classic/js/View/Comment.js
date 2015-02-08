@@ -65,7 +65,7 @@ function quote_link(link){
     var title = link.title.split('::');
     var username = title[0]; 
     var comment_id = title[1]; 
-    var comment = link.getParent().getParent().getParent().getParent().getParent().getElement('.TAN-comment-quoteable');
+    var comment = link.getParent().getParent().getParent().getElement('.TAN-comment-quoteable');
     
     comment = '[quote user=' + username + ']' + comment.get('html') + '[/quote]';
 
@@ -74,7 +74,8 @@ function quote_link(link){
 
 function edit_link(link){
     // LOL
-    var comment_holder = link.getParent().getParent().getParent().getParent().getParent();
+    var comment_holder = link.getParent().getParent().getParent();
+
     var comment_id = comment_holder.id.replace(/\D+/g, '');
     var req = new Request.HTML({
         'url' : link.href,

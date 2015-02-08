@@ -50,6 +50,7 @@
             [% PROCESS lib/menu.tt %]
         </div>
         <div class="TAN-main">
+            [%- message = c.flash.message -%]
             [% IF message %]
                 <h1>[% message %]</h1>
             [% END %]

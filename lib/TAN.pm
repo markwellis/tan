@@ -23,10 +23,10 @@ use Catalyst qw/
 
 extends 'Catalyst';
 
-__PACKAGE__->config( name => 'TAN', 
+__PACKAGE__->config( name => 'TAN',
     'Plugin::PageCache' => {
         'cache_hook' => 'check_cache',
-        'disable_index' => 0, 
+        'disable_index' => 0,
         'key_maker' => sub {
             my $c = shift;
             my $path = $c->req->path || 'index';
@@ -35,8 +35,6 @@ __PACKAGE__->config( name => 'TAN',
         'no_expire' => 0,
     }
 );
-
-__PACKAGE__->setup;
 
 sub check_cache{
     my $c = shift;
@@ -53,21 +51,14 @@ sub check_cache{
         $c->forward('/mobile/detect_mobile');
     }
 
-# this is a hack so people who have messages dont hit the page cache
-# its here coz it no worko in the end/render
-    $c->stash->{'message'} = $c->flash->{'message'};
+    my $action = $c->action;
 
 #recored p.i.
-    if ( 
-        !$c->stash->{'pi_recorded'} 
-        && (
-            ( $c->action eq 'view/index' )
-            || ( $c->action eq 'index/index' )
-        )
+    if (
+        $action eq 'view/index'
+        || $action eq 'index/index'
     ){
-        my @params = split('/', $c->req->path);
-
-        my $object_id = ( $c->action eq 'view/index' ) ? $params[2] : undef;
+        my $object_id = ( $action eq 'view/index' ) ? $c->req->captures->[-1] : undef;
         my $session_id = $c->sessionid;
         my $ip_address = $c->req->address;
 
@@ -76,32 +67,27 @@ sub check_cache{
 
             eval{
             #might get a deadlock [284] - ignore in that case
-                $ENV{DBIC_NULLABLE_KEY_NOWARN} = 1; #we *do* want to lookup with a null value, so stop the warning about this is probably not what we want
-                $c->model('MySQL::Views')->update_or_create({
-                    'session_id' => $session_id,
-                    'object_id' => $object_id,
-                    'user_id' => $user_id,
-                    'ip' => $ip_address,
-                    'created' => \'NOW()',
-                    'type' => 'internal',
-                },{
-                    'key' => 'session_objectid',
+                $c->model('MySQL::Views')->create({
+                    session_id  => $session_id,
+                    object_id   => $object_id,
+                    user_id     => $user_id,
+                    ip          => $ip_address,
+                    created     => \'NOW()',
+                    type        => 'internal',
                 });
-                delete $ENV{DBIC_NULLABLE_KEY_NOWARN};
             };
         }
-        #stop duplicate recordings
-        $c->stash->{'pi_recorded'} = 1;
     }
-    
-    if ( 
+
+    if (
         $c->user_exists
         || defined($c->stash->{'no_page_cache'})
-        || defined($c->stash->{'message'})
+        || defined($c->flash->{'message'})
         || ($c->res->status > 300)
     ){
         return 0;
     }
+
     return 1;
 }
 
@@ -110,7 +96,7 @@ sub mobile{
 
     my $action = $c->action;
     my $mobile_allowed;
-    
+
     my $class = $action->class;
     $class =~ s/TAN::Controller:://;
 
@@ -123,12 +109,12 @@ sub mobile{
         return 0;
     }
 
-    my $mobile_user =  
-        $c->stash->{'mobile_switch'} 
-        || ( 
-            $c->req->cookie('mobile') 
-            && $c->req->cookie('mobile')->value == 1 
-        ); 
+    my $mobile_user =
+        $c->stash->{'mobile_switch'}
+        || (
+            $c->req->cookie('mobile')
+            && $c->req->cookie('mobile')->value == 1
+        );
 
     return $mobile_user || 0;
 }
@@ -136,7 +122,7 @@ sub mobile{
 #filter is off if 1
 sub nsfw{
     my ($c, $value) = @_;
-    
+
     if ( defined( $value ) ){
         $c->res->cookies->{'nsfw'} = {
             'value' => $value,
@@ -230,13 +216,19 @@ sub check_usr_tcs{
     return 1;
 }
 
+after setup_finalize => sub {
+    my $c = shift;
+
+    $c->log->autoflush(0);
+};
+
 around dispatch => sub {
     my $orig = shift;
     my $c = shift;
 
     return if ( $c->res->status != 200 );
 
-    if ( 
+    if (
         $ENV{'CATALYST_DEBUG'}
         && $c->log->can('abort')
         && ( $c->action eq 'minify/index')
@@ -248,5 +240,7 @@ around dispatch => sub {
 
     return $c->$orig(@_);
 };
+
+__PACKAGE__->setup;
 
 1;
