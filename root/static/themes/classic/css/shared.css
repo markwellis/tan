@@ -13,8 +13,6 @@ a{
     color:#4582BE;
 }
 
-
-
 /* form stuff */
 
 input[type=text], input[type=password], textarea{
@@ -500,6 +498,10 @@ fieldset{
     background-color:#ccc;
     margin:0px;
     float:left;
+}
+
+.left-menu #recent_comments {
+    min-height:600px;
 }
 
 .left-menu #recent_comments a {
