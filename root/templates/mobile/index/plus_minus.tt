@@ -2,7 +2,7 @@
 
 <div>
     <a 
-        [%- IF me_plus_minus.objects.$object_id == 'plus' %]class="TAN-tintan-selected"[% END -%] 
+        [%- IF me_plus_minus.objects.${object.id} == 'plus' %]class="TAN-tintan-selected"[% END -%] 
         href="/view/[% type %]/[% object.${type}.id %]/_plus"
         title="TIN"
         onclick="return tin_tan('[% object.id %]', this)"
@@ -10,7 +10,7 @@
     >TIN ([% object.plus %])</a>
     <span id="[% object.id %]:score">[% object.score -%]</span>
     <a 
-        [%- IF me_plus_minus.objects.$object_id == 'minus' %]class="TAN-tintan-selected"[% END -%]
+        [%- IF me_plus_minus.objects.${object.id} == 'minus' %]class="TAN-tintan-selected"[% END -%]
         href="/view/[% type %]/[% object.${type}.id %]/_minus"
         title="TAN"
         onclick="return tin_tan('[% object.id %]', this)"
