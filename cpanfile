@@ -22,7 +22,7 @@ requires 'Test::More';
 requires 'YAML::XS';
 
 requires 'Module::Find';
-requires 'Exception::Simple';
+requires 'Exception::Simple' => '1.000001';
 requires 'Try::Tiny';
 requires 'Tie::Hash::Indexed';
 requires 'Number::Format';
@@ -104,6 +104,13 @@ requires 'MooseX::NonMoose';
 requires 'DBIx::Class::Schema::Loader';
 requires 'DBIx::Class::TimeStamp';
 
+requires 'Imager';
+requires 'Imager::File::JPEG';
+requires 'Imager::File::GIF';
+requires 'Imager::File::PNG';
+requires 'Imager::File::TIFF';
+
 test_requires 'Test::More';
 test_requires 'Test::Exception';
+test_requires 'Test::Fatal';
 test_requires 'Catalyst::Test';
