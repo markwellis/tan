@@ -33,19 +33,23 @@ use Tie::Hash::Indexed;
 sub recent {
     my ( $self ) = @_;
 
-    my $recent_comments = $self->search( {
-            'me.deleted'    => 0,
-        }, {
-            rows            => 20,
-            order_by        => {-desc => 'me.created'},
-            prefetch        => [
+    my $recent_comments = $self->search(
+        {
+            'me.deleted'     => 0,
+            'object.deleted' => 0,
+        },
+        {
+            rows     => 20,
+            order_by => { -desc => 'me.created' },
+            prefetch => [
                 'user',
                 {
-                    'object' => [qw/link picture blog poll video/],
+                    'object' => [ qw/link picture blog poll video/ ],
                 },
             ],
-            use_index   => 'recent',
-        } );
+            use_index => 'recent',
+        }
+    );
 
     tie my %grouped_comments, 'Tie::Hash::Indexed';
     while ( my $comment = $recent_comments->next ) {
