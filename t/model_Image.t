@@ -1,154 +1,235 @@
 use strict;
 use warnings;
-use Test::More;
-use Test::Exception;
+use Test::More tests => 24;
+use Test::Fatal;
 
-BEGIN { use_ok 'TAN::Model::Image' }
+use FindBin qw/$Bin/;
+use Path::Tiny;
 
-use Config::Any;
-use File::Basename;
+use TAN;
+my $model = TAN->model('Image');
+
+my $test_images_dir = "$Bin/model_Image";
+
 use File::Temp;
-use File::Path qw/rmtree/;
-use Digest::SHA qw/sha512_hex/;
+local $File::Temp::KEEP_ALL = 1 if $ENV{KEEP};
 
-my $config_file = dirname( __FILE__ ) . "/../tan.json";
-my $config = Config::Any->load_files( {
-    'files' => [ $config_file ],
-    'flatten_to_hash' => 1,
-    'use_ext' => 1,
-} );
-$config = $config->{ $config_file }->{'Model::Image'};
-
-my $model = new_ok( 'TAN::Model::Image' => [ $config ] );
-
-my $test_images_dir = dirname( __FILE__ ) . "/model_Image";
-
-{
-    my $filename = mktemp('/tmp/model_Imagetmp.XXXXX');
-    my $source_image = $test_images_dir . "/image.gif";
-
-    $model->thumbnail( $source_image, $filename, 200 );
-    open( my $temp_file, "<", $filename );
-    is( sha512_hex( <$temp_file> ), 'a9b1da6f178df75e72c0e8cc8dad1486be87a10327c0e27d2e178ed2a2e1199dd1cf5eabc32448259ac3229d833a1da703039d7d829bea3957f355188febca35', "thumbnail: image" );
-    close( $temp_file );
-    unlink( $filename );
+my $i = 0;
+sub tempfile($) {
+    ++$i;
+    Path::Tiny->tempfile( "model_Image-$i-$_[0].XXXXX" );
 }
 
 {
-    my $filename = mktemp('/tmp/model_Imagetmp.XXXXX');
+    my $filename = tempfile 'thumbnail_image';
+    my $source_image = $test_images_dir . "/image.gif";
+
+    $model->thumbnail( $source_image, $filename, 200 );
+
+    is( $filename->digest('SHA-512'), '457124b3176274598f71f9aa41dadf8f076172b4295f6a5c14660a1d9e3e32b9ec548a0b6341a2fe9c7a7b5320c9f5d9fc3d287a9ed26cecc83d388c6ea7ace4', "thumbnail: image" );
+}
+
+{
+    my $filename = tempfile 'thumbnail_short_gif';
     my $source_image = $test_images_dir . "/animated.gif";
 
     $model->thumbnail( $source_image, $filename, 160 );
-    open( my $temp_file, "<", $filename );
-    is( sha512_hex( <$temp_file> ), '1a5c57c04dd2971fb6e7e782cbcb4afa1a8a3e3a54c126e73a99760faeff555d9df05ab4a3e3cf1cdde0a271a414458a94081e09ffc7ad4cca7a7e8d4d6fadd1', "thumbnail: animation shortened" );
-    close( $temp_file );
-    unlink( $filename );
+
+    is( $filename->digest('SHA-512'), 'a4e149620f01bf78431ea9395fd4c2288b7280c9fd24afe4e1817880d0f294818de4eee574cf95e9a3569bd79dbbd0dfe83e10fd6113ab44223238d774591007', "thumbnail: animation shortened" );
 }
 
 {
-    my $filename = mktemp('/tmp/model_Imagetmp.XXXXX');
+    my $filename = tempfile 'thumbnail_unshort_gif';
     my $source_image = $test_images_dir . "/animated.gif";
 
     $model->thumbnail( $source_image, $filename, 200 );
-    open( my $temp_file, "<", $filename );
-    is( sha512_hex( <$temp_file> ), '3fb321f5d99b8ab58f5c9453c37add0629da35aea1421e8c694f642267f2fef81c982fc1a6c2bf4d19f4fcb2bec9665c8aa146c0ba50151820ec247caeb4aa80', "thumbnail: animation unshortened" );
-    close( $temp_file );
-    unlink( $filename );
+
+    is( $filename->digest('SHA-512'), '4e66cfb4c758752aa659b3ecd01dea2790066689a7ce6d87b388535f32436f9414946637b6d758f5c307303282ef37ae5bb775f9a3efefb46aae9cdb2d7bd699', "thumbnail: animation unshortened" );
 }
 
 {
-    my $filename = mktemp('/tmp/model_Imagetmp.XXXXX');
+    my $filename = tempfile 'thumbnail_copy_image';
     my $source_image = $test_images_dir . "/image.gif";
 
     $model->thumbnail( $source_image, $filename, 600 );
-    open( my $temp_file, "<", $filename );
-    is( sha512_hex( <$temp_file> ), '3ab150069441ef8e9bf8f91be6dc5e9a243d517d316b769e42ead431c1a5d3106bec69f0e40068d1724fba2be8310609ddfadba916a594dbff9c8d6c14080f13', "thumbnail: copied image as thumbnail would have been bigger" );
-    close( $temp_file );
-    unlink( $filename );
+
+    is( $filename->digest('SHA-512'), '3ab150069441ef8e9bf8f91be6dc5e9a243d517d316b769e42ead431c1a5d3106bec69f0e40068d1724fba2be8310609ddfadba916a594dbff9c8d6c14080f13', "thumbnail: copied image as thumbnail would have been bigger" );
 }
 
 {
-    my $filename = mktemp('/tmp/model_Imagetmp.XXXXX');
+    my $filename = tempfile 'thumbnail_copy_animated_gif';
     my $source_image = $test_images_dir . "/animated200.gif";
 
     $model->thumbnail( $source_image, $filename, 600 );
-    open( my $temp_file, "<", $filename );
-    is( sha512_hex( <$temp_file> ), '111a18bf06360a5cf1c99455b5b4b4ee6f4c31f51ddcb602792aff97c1e728bf20429b7f5c613c3e27e407fad6ce4ce38faa4ec422bf8580f5c521cd3d25ddb8', "thumbnail: copied animated image as thumbnail would have been bigger" );
-    close( $temp_file );
-    unlink( $filename );
+
+    is( $filename->digest('SHA-512'), '111a18bf06360a5cf1c99455b5b4b4ee6f4c31f51ddcb602792aff97c1e728bf20429b7f5c613c3e27e407fad6ce4ce38faa4ec422bf8580f5c521cd3d25ddb8', "thumbnail: copied animated image as thumbnail would have been bigger" );
 }
 
 {
     my $source_image = $test_images_dir . "/image.gif";
-    my $output = "/tmp/foozxy12321.sdfA/out.gif";
-    rmtree( dirname( $output ) );
+    my $output = tempfile 'thumbnail_mkpath';
 
     $model->thumbnail( $source_image, $output, 200 );
 
-    ok( -e $output, "thumbnail: mkpath worked" );
-    rmtree( dirname( $output ) );
+    ok( $output->exists, "thumbnail: mkpath worked" );
 }
 
 {
-    my $filename = mktemp('/tmp/model_Imagetmp.XXXXX');
+    my $filename = tempfile 'errors';
     my $source_image = $test_images_dir . "/not a file";
 
-    throws_ok{
-        $model->thumbnail( $source_image, $filename, 200 );
-    } qr/^file not found$/, 'thumbnail: file not found exception';
-    
+    like(
+        exception {
+            $model->thumbnail( $source_image, $filename, 200 );
+        },
+        qr/file not found/,
+        'thumbnail: file not found exception'
+    );
+
     $source_image = $test_images_dir . "/image.gif";
-    throws_ok{
-        $model->thumbnail( $source_image, $filename, 123 );
-    } qr/^invalid thumbnail size$/, 'thumbnail: invalid thumbnail size exception';
-    
+    like(
+        exception {
+            $model->thumbnail( $source_image, $filename, 123 );
+        },
+        qr/invalid thumbnail size/,
+        'thumbnail: invalid thumbnail size exception'
+    );
+
     $source_image = $test_images_dir . "/not_image";
-    throws_ok{
-        $model->thumbnail( $source_image, $filename, 200 );
-    } qr/^not an image$/, 'thumbnail: not an image exception';
+    like(
+        exception { $model->thumbnail( $source_image, $filename, 200 ) },
+        qr/open image failed/,
+        'thumbnail: not an image exception'
+    );
 }
 
 {
-    my $filename = mktemp('/tmp/model_Imagetmp.XXXXX');
+    my $filename = tempfile 'error_permission_denined';
 
     $model->create_blank( $filename );
-    open( my $temp_file, "<", $filename );
-    is( sha512_hex( <$temp_file> ), '49b8daf1f5ba868bc8c6b224c787a75025ca36513ef8633d1d8f34e48ee0b578f466fcc104a7bed553404ddc5f9faff3fef5f894b31cd57f32245e550fad656a', "create_blank: test" );
-    close( $temp_file );
-    unlink( $filename );
-    
-    throws_ok{
-        $model->create_blank( '/this/path/isnt/real' );
-    } qr/^error creating blank image$/, 'create_blank: invalid path exception';
-    
+
+    is( $filename->digest('SHA-512'), '68fd3db10efa1b40a1a45d8f8e97b77e2558f7573acc3c81f19b5eae390c9e2947ad2464acc4c24dd77d691ed78ebc1cb3a7e47aa36b84188e62a5bdcb04c3ac', "create_blank: test" );
+
+    like(
+        exception {
+            $model->create_blank( '/this/path/isnt/real' );
+        },
+        qr/Permission denied/,
+        'create_blank: invalid path exception'
+    );
 }
 
 {
-    my $temp_file = File::Temp->new;
+    my $tempfile = tempfile 'crop';
     my $source_image = $test_images_dir . "/image.gif";
 
-    $model->crop( $source_image, $temp_file->filename, 70, 181, 96, 83 );
-    is( sha512_hex( <$temp_file> ), 'db738707ff771ab0ad0ea8dc790d0690541e28dc226a34b7f130aba23ec566bbc9ef096657175b9717140a58a22541de091e6f2aa8ef43921038351c65ef10da', "crop: image" );
+    #this should be an eye
+    $model->crop( $source_image, $tempfile, 70, 181, 96, 83 );
+    is( $tempfile->digest('SHA-512'), 'd92a97beaa96257f4fe28393de82b9c40d1d1a325581057bfc9ac5404d0bcef6df3f1e2e086a4b975485ba1158ceb89fee87e2adcf02b9a04c84181813ee7e43', "crop: image" );
 }
 
 {
-    #flock
+    my $tempfile = tempfile 'thumbnail_jpeg';
+    my $source_image = $test_images_dir . "/drunk-gorilla-punch.jpg";
 
-    my $filename = mktemp('/tmp/model_Imagetmp.XXXXX');
-    my $source_image = $test_images_dir . "/animated.gif";
-    my $pid = fork;
-
-    if ( $pid ){ 
-        $model->thumbnail( $source_image, $filename, 160 );
-        open( my $temp_file, "<", $filename );
-        is( sha512_hex( <$temp_file> ), '1a5c57c04dd2971fb6e7e782cbcb4afa1a8a3e3a54c126e73a99760faeff555d9df05ab4a3e3cf1cdde0a271a414458a94081e09ffc7ad4cca7a7e8d4d6fadd1', "thumbnail: flock test: parent create thumb" );
-        close( $temp_file );
-        unlink( $filename );
-    } else {
-        is( $model->thumbnail( $source_image, $filename, 160 ), 1, "thumbnail: flock test: child wait for parent to create thumb");
-
-        exit(0);
-    }
+    $model->thumbnail( $source_image, $tempfile, 200 );
+    is( $tempfile->digest('SHA-512'), '2877701649e5efb81735bb8452acf66cea3495dfd062bf529ee5697819ed1cf2caad2d7dd72eb503d75dfaaf58a6b38e0b40a4008ca1dc9c89fdf377ac713376', "thumbnail: jpg" );
 }
 
-done_testing;
+{
+    my $tempfile = tempfile 'thumbnail_sonic_160';
+    my $source_image = $test_images_dir . "/sonic.gif";
+
+    $model->thumbnail( $source_image, $tempfile, 160 );
+    is( $tempfile->digest('SHA-512'), 'de7f3986da155d183d39ef35f6767bb69edcf4df3a5ef5fd695aa42204fba852789f33a1388daa940a2b53376da7999683ab4089e1f5a6f89f541b1118249210', "thumbnail: sonic 160" );
+}
+
+{
+    my $tempfile = tempfile 'thumbnail_sonic_200';
+    my $source_image = $test_images_dir . "/sonic.gif";
+
+    $model->thumbnail( $source_image, $tempfile, 200 );
+    is( $tempfile->digest('SHA-512'), 'be475a733099b97b7f02b0e83d727e753ff9e975e55529274e5f45cb9b9f9c3009f9de12b33074af52d453dca6886110a7df6d8882fbd41ee3e30744605573bd', "thumbnail: sonic_200" );
+}
+
+{
+    my $tempfile = tempfile 'thumbnail_png';
+    my $source_image = $test_images_dir . "/awesome.png";
+
+    $model->thumbnail( $source_image, $tempfile, 160 );
+    is( $tempfile->digest('SHA-512'), 'f43e498a0d4d5ae0f9264baafe358e7f33a1afc39a8822c10d3bdfa7fb06f438403fbc4519586c3a075c6cc9bf60c68f8511a1752b4b322438b8490a4a0b2233', "thumbnail: png" );
+}
+
+{
+    my $tempfile = tempfile 'crop_animated_sonic';
+    my $source_image = $test_images_dir . "/sonic.gif";
+
+    $model->crop( $source_image, $tempfile, 5, 70, 80, 86 );
+    is( $tempfile->digest('SHA-512'), 'd798f0c348cd5e429b500a7dae2b6b8581dc26c91527b290ba1906b218546e12664a62b86f2d700cc371a3849c66013506b4ea773ee4eda265d84bcede0a79ce', "crop: sonic" );
+}
+
+{
+    my $tempfile = tempfile 'crop_animated_gif';
+    my $source_image = $test_images_dir . "/animated.gif";
+
+    $model->crop( $source_image, $tempfile, 168, 262, 200, 200 );
+    is( $tempfile->digest('SHA-512'), '2e6279e2862c4bdd6d08d1a7514569e2377f46f2a505d17070200f31675e3297245b2c0540b2ea1143c0aa3c09cd94876deec3f3c7989647f3b362d9e1ce2310', "crop: animated" );
+}
+
+{
+    my $tempfile = tempfile 'crop_animated_squares_gif';
+    my $source_image = $test_images_dir . "/squares.gif";
+
+    $model->crop( $source_image, $tempfile, 250, 250, 100, 100 );
+    is( $tempfile->digest('SHA-512'), '59f79111029799c869070f3857958e96af2211dfa0c000b1ee586b3bcab5ce357bae8a0c9e209c75bd03d40782a9f11ac03af7cf68b68abe8b2e8acbb3834c86', "crop: squares animated" );
+}
+
+{
+    my $tempfile = tempfile 'crop_animated_squares_2_gif';
+    my $source_image = $test_images_dir . "/squares_2.gif";
+
+    $model->crop( $source_image, $tempfile, 250, 250, 100, 100 );
+    is( $tempfile->digest('SHA-512'), '77a61a6b61400431e02f8be63c5ba238e51d1102dfd7655dc71f147006f96f5392c2fdfd44ccce6248949c5fd3fad5da60ed380f1ae05a17a4dad2376f052461', "crop: squares_2 animated" );
+}
+
+{
+    my $tempfile = tempfile 'crop_animated_squares_3_gif';
+    my $source_image = $test_images_dir . "/squares_3.gif";
+
+    $model->crop( $source_image, $tempfile, 150, 150, 100, 100 );
+    is( $tempfile->digest('SHA-512'), 'e7c17f3f4b646c81a448206e078861044f95ab4eaf1bef0533f5013c83fbc25de1512b1a27741192d5b769f81d1b394272c8b0499fccc9212c7e06173fb9e11a', "crop: squares_3 animated" );
+}
+
+{
+    my $tempfile = tempfile 'crop_animated_squares_4_gif';
+    my $source_image = $test_images_dir . "/squares_4.gif";
+
+    $model->crop( $source_image, $tempfile, 3, 3, 6, 6 );
+    is( $tempfile->digest('SHA-512'), '6aa10caf00805a9361afe4e323974d6be6c7ce20f0efbcf2619f0f82052d56e54e8a733b81b9283dad09e400889c76b788eabadc6b6dd62b398ef6cfac8bc220', "crop: squares_4 animated" );
+}
+
+{
+    my $filename = tempfile 'thumbnail_txt_jpeg_ext';
+    my $source_image = $test_images_dir . "/image.fake.jpg";
+
+    like(
+        exception {
+            $model->thumbnail( $source_image, $filename, 200 );
+        },
+        qr/open image failed/,
+        'thumbnail: txt_jpeg_ext'
+    );
+}
+
+{
+    my $filename = tempfile 'thumbnail_txt_magic_jpeg';
+    my $source_image = $test_images_dir . "/magic_jpg_php.jpg";
+
+    like(
+        exception {
+            $model->thumbnail( $source_image, $filename, 200 );
+        },
+        qr/open image failed/,
+        'thumbnail: txt_jpeg_ext'
+    );
+}

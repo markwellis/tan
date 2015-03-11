@@ -4,135 +4,219 @@ use namespace::autoclean;
 
 extends 'Catalyst::Model';
 
-use Data::Validate::Image;
-use Exception::Simple;
-use File::Copy;
-use File::Path qw/mkpath/;
-use File::Basename;
-use Fcntl qw/:flock/;
-
-has 'image_validator' => (
-    'is' => 'ro',
-    'isa' => 'ClassName',
-    'lazy' => 1,
-    'default' => 'Data::Validate::Image',
-);
-
-has 'allowed_thumbnail_sizes' => (
-    'is' => 'ro',
-    'isa' => 'ArrayRef',
-    'required' => 1,
-);
+use Path::Tiny;
+use Imager;
+use Carp;
+use POSIX qw/ceil/;
 
 has 'animated_frame_limit' => (
-    'is' => 'ro',
-    'isa' => 'Str',
+    'is'       => 'ro',
+    'isa'      => 'Int',
     'required' => 1,
 );
 
-has 'animated_size_showall_frames' => (
-    'is' => 'ro',
-    'isa' => 'ArrayRef',
+has $_  => (
+    'is'       => 'ro',
+    'isa'      => 'ArrayRef',
     'required' => 1,
-);
+) for qw/animated_size_showall_frames allowed_thumbnail_sizes/;
 
-sub thumbnail{
-    my ( $self, $input, $output, $width ) = @_;
+sub thumbnail {
+    my ( $self, $input_s, $output_s, $width ) = @_;
 
-    mkpath( dirname( $output ) );
-    
-    if ( !( -e $input ) ){
-        Exception::Simple->throw('file not found');
+    my $input = path( $input_s );
+    my $output = path( $output_s );
+
+    if ( !grep { $_ == $width } @{ $self->allowed_thumbnail_sizes } ) {
+        croak 'invalid thumbnail size';
     }
 
-    #flock file, it'll just sit there waiting for flock if flocked (i.e. 2 requests for the file come in at same time), after file is unflocked, if exists return (no point recreating existing thumbnail!)
-    open( my $fh, "<", $input ) || die "bugger"; #lock input, because output doesn't exist
-    flock( $fh, LOCK_EX ) || die "shit";
-    return 1 if ( -e $output );
+    my @images = $self->_read_image( $input );
+    my $filetype = $self->_image_type( $images[0] );
+    my $frames = scalar @images;
 
-    if ( !grep( /^${width}$/, @{ $self->allowed_thumbnail_sizes } ) ){
-        Exception::Simple->throw('invalid thumbnail size');
-    }
+    my $scalefactor = $width / $images[0]->getwidth;
 
-    my $image_info = $self->image_validator->validate( $input );
-
-    if ( !$image_info || !$image_info->{'width'} || !$image_info->{'height'} ){
-    #thumb not an image
-        Exception::Simple->throw('not an image');
-    }
-
-    my $new_width = $width * ( $image_info->{'width'} / $image_info->{'height'} );
-    $new_width = ( $new_width > $width) ? $width : $new_width;
-
-    my $new_height = $new_width * ($image_info->{'height'} / $image_info->{'width'});
-
-    if (
-        ( $new_width > $image_info->{'width'} )
-        || ( $new_height > $image_info->{'height'} )
-    ){
-    #don't make thumbnails bigger than the original image
+    if ( $scalefactor > 1 ) {
+        #don't make thumbnails bigger than the original image
         if (
-            !$image_info->{'animated'}
-            || grep( /^${width}$/, @{ $self->animated_size_showall_frames } )
-        ){
-        #just copy the file if it's not animated
-        # or if it's an animation where all the frames are shown
-            copy( $input, $output );
+            $frames == 1
+            || grep {$_ == $width } @{ $self->animated_size_showall_frames }
+        ) {
+            #just copy the file if it's not animated
+            # or if it's an animation where all the frames are shown
+            $input->copy( $output );
             return;
         }
+
         # else carry on resizing, since we need to drop the framecount down
-        $new_width = $image_info->{'width'};
-        $new_height = $image_info->{'height'};
+        $scalefactor = 1;
     }
 
-    my $retval;
-    if ( 
-        ( $image_info->{'mime'} eq 'image/gif' ) 
-        && ( $image_info->{'animated'} ) 
-    ){
-        my $frame_limit = "";
-        if ( !grep( /^${width}$/, @{ $self->animated_size_showall_frames } ) ){
-            $frame_limit = "[0-" . $self->animated_frame_limit . "]";
+    my @thumbs;
+    my $frame_limit = $frames - 1;
+
+    if (
+        ( $filetype eq 'gif' )
+        && ( $frames > $self->animated_frame_limit )
+        && !grep {$_ == $width } @{ $self->animated_size_showall_frames }
+    ) {
+        $frame_limit = $self->animated_frame_limit;
+    }
+
+    foreach my $image ( @images[0..$frame_limit] ) {
+        my $thumb = $image->scale(
+            scalefactor => $scalefactor,
+        );
+        $self->_copy_tags( $image, $thumb );
+        foreach my $tag ( qw/gif_left gif_top gif_screen_width gif_screen_height/ ) {
+            my $original_value = $thumb->tags( name => $tag );
+            next if !defined $original_value;
+
+            $thumb->settag(
+                name    => $tag,
+                value   => ceil( $original_value * $scalefactor ),
+            );
         }
 
-        $retval = `convert -background transparent '${input}'$frame_limit -coalesce -thumbnail '${new_width}x${new_height}' -layers OptimizePlus '${output}' 2>&1`;
-    } else {
-        $retval = `convert '${input}' -thumbnail '${new_width}x${new_height}' '${output}' 2>&1`;
-    }
-    if ( $retval ){
-    #exit code 0 is success
-        Exception::Simple->throw('resize error');
+        push @thumbs, $thumb;
     }
 
-    flock( $fh, LOCK_UN );
-    close( $fh );
-
-    return;
+    $self->_write_image( $output, $filetype, \@thumbs );
 }
 
 #change this to take resize option
-sub crop{
-    my ( $self, $input, $output, $x, $y, $w, $h ) = @_;
+sub crop {
+    my ( $self, $input_s, $output_s, $left, $top, $width, $height ) = @_;
 
-    my $frame_limit = "[0-" . $self->animated_frame_limit . "]";
-    if (!`convert -background transparent '${input}'$frame_limit -coalesce -crop '${w}x${h}+${x}+${y}!' -thumbnail '100x100' -gravity center -extent 100x100 -layers OptimizePlus gif:'${output}' 2>&1`) {
-    #exit code 0 is success
-        return 1;
+    my $input = path( $input_s );
+    my $output = path( $output_s );
+
+    my @images = $self->_read_image( $input );
+    my $filetype = $self->_image_type( $images[0] );
+    my $frames = scalar @images;
+
+    my $frame_limit = $frames - 1;
+    if (
+        ( $filetype eq 'gif' )
+        && ( $frames > $self->animated_frame_limit )
+    ) {
+        $frame_limit = $self->animated_frame_limit;
     }
-    return 0;
+
+    my @cropped;
+    foreach my $image ( @images[0..$frame_limit] ) {
+        my ( $existing_left, $existing_top ) = ( 0 ) x 2;
+        my $new_left = $left;
+        my $new_top = $top;
+
+        if ( $filetype eq 'gif' ) {
+            $new_left -= $image->tags( name => 'gif_left') ;
+            $new_top -= $image->tags( name => 'gif_top');
+        }
+
+        my $new = $image->crop(
+            left   => $new_left,
+            top    => $new_top,
+            width  => $width,
+            height => $height,
+        );
+        next if !$new;
+
+        $self->_copy_tags( $image, $new );
+        if ( $filetype eq 'gif' ) {
+            my $layer_left = $new->tags( name => 'gif_left') - $left;
+            $layer_left = 0 if $layer_left < 0;
+
+            my $layer_top = $new->tags( name => 'gif_top') - $top;
+            $layer_top = 0 if $layer_top < 0;
+
+            $new->settag(
+                name    => 'gif_left',
+                value   => $layer_left,
+            );
+            $new->settag(
+                name    => 'gif_top',
+                value   => $layer_top,
+            );
+            $new->settag(
+                name    => 'gif_screen_width',
+                value   => $width,
+            );
+            $new->settag(
+                name    => 'gif_screen_height',
+                value   => $height,
+            );
+        }
+
+        push @cropped, $new;
+    }
+
+    $self->_write_image( $output, $filetype, \@cropped );
 }
 
-sub create_blank{
-    my ( $self, $output_image ) = @_;
+sub create_blank {
+    my ( $self, $output_filename_s ) = @_;
 
-    return if ( -e "$output_image" );
+    my $output_filename = path( $output_filename_s );
 
-    if ( !`convert null: gif:${output_image} 2>&1` ){
-    # exit code 0 is success
-        return 1;
+    my $image = Imager->new(
+        xsize       => 1,
+        ysize       => 1,
+        channels    => 4
+    );
+    $image->box(
+        filled      => 1,
+        color       => '#00000000',
+    );
+
+    $self->_write_image( $output_filename, 'gif', [$image] );
+}
+
+sub _read_image {
+    my ( $self, $input ) = @_;
+
+    if ( !$input->exists ) {
+        croak 'file not found';
     }
 
-    Exception::Simple->throw("error creating blank image");
+    my @images = Imager->read_multi(
+        file => $input,
+    ) or croak "open image failed " . Imager->errstr;
+
+    return @images;
+}
+
+
+sub _write_image {
+    my ( $self, $output, $filetype, $images ) = @_;
+
+    $output->parent->mkpath;
+
+    Imager->write_multi(
+        {
+            file => $output,
+            type => $filetype,
+        },
+        @$images
+    ) or croak 'write image  error ' . Imager->errstr;
+}
+
+sub _copy_tags {
+    my ( $self, $source, $target ) = @_;
+
+    for my $tag ( $source->tags ) {
+        $target->addtag(
+            name    => $tag->[ 0 ],
+            value   => $tag->[ 1 ],
+        );
+    }
+}
+
+sub _image_type {
+    my ( $self, $image ) = @_;
+
+    return $image->tags( name => 'i_format' );
 }
 
 __PACKAGE__->meta->make_immutable;
