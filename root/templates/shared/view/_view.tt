@@ -1,7 +1,7 @@
 [% PROCESS index/object.tt %]
 
 [%-
-thumb_image_src = "${c.req.base.replace('/$', '')}${c.config.thumb_path}/${md}/${object.$type.picture_id}/200";
+thumb_image_src = "${c.req.base.replace('/$', '')}${c.config.thumb_path}/${md}/${object.$type.picture_id}/640";
 object_title = object.${type}.title | html;
 object_description = object.${type}.description | html;
 page_url = c.req.base _ c.req.path | html;
@@ -11,7 +11,7 @@ rel_extra = "<link rel=\"image_src\" href=\"${thumb_image_src}\" />"
     _ "<meta property=\"og:title\" content=\"${object_title}\" />"
     _ "<meta property=\"og:description\" content=\"${object_description}\" />"
     _ "<meta property=\"og:url\" content=\"${page_url}\" />"
-    _ "<meta property=\"og:type\" content=\"website\" />";
+    _ "<meta property=\"og:type\" content=\"article\" />";
 page_keywords = 'TAN thisaintnews news';
 -%]
 
