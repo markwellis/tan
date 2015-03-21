@@ -40,8 +40,6 @@ sub user_index: PathPart('') Chained('user') Args(0){
         $c->detach;
     }
 
-    $c->cache_page(600);
-
     my $user = $c->stash->{'user'};
     my $object;
 #prevent race
@@ -124,8 +122,6 @@ sub edit: PathPart('edit') Chained('user') Args(0){
 sub comment: PathPart('comment') Chained('user') Args(0){
     my ( $self, $c ) = @_;
 
-    $c->cache_page(600);
-
     my $page = $c->req->param('page') || 1;
     my $int_reg = $c->model('CommonRegex')->not_int;
     $page =~ s/$int_reg//g;
@@ -183,8 +179,6 @@ sub view: PathPart('') Chained('user') Args(1){
 
 sub fetch: Private{
     my ( $self, $c, $type ) = @_;
-
-    $c->cache_page(600);
 
     my $page = $c->req->param('page') || 1;
     my $int_reg = $c->model('CommonRegex')->not_int;

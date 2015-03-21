@@ -10,8 +10,6 @@ use Try::Tiny;
 sub ping_sitemap: Event(object_created) Event(object_updated) Event(object_deleted){
     my ( $self, $c ) = @_;
 
-    $c->clear_cached_page('/sitemap.*');
-
 #trigger monitor to ping google and em
     try{
         $c->model('Gearman')->run( 'sitemap_ping', 0 );
@@ -25,8 +23,6 @@ sub index: Private{
         $c->res->redirect( '/sitemap', 301 );
         $c->detach;
     }
-
-    $c->cache_page(3600);
 
     my $sitemap_count = $c->model('MySQL::Object')->search({
         'type' => TAN->model('Object')->public,
@@ -52,7 +48,6 @@ sub index: Private{
 sub xml: Path('xml') Args(1){
     my ( $self, $c, $page ) = @_;
 
-    $c->cache_page(3600);
     $page = int($page); #convert into a real number
     if ( !defined($page) ){
         $c->forward('/default');

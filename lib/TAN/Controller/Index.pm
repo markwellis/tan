@@ -25,13 +25,10 @@ sub clear_index_caches:
     my ( $self, $c ) = @_;
 
     $c->model('MySQL::Object')->clear_index_cache();
-    $c->clear_cached_page('/index.*');
 }
 
 sub index :Path Args(2) {
     my ( $self, $c, $type, $upcoming ) = @_;
-
-    $c->cache_page( 60 );
 
     my $page = $c->req->param('page') || 1;
 
