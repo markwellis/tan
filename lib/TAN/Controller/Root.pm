@@ -123,8 +123,6 @@ sub random: Chained(/) Args(1) {
 sub chat: Chained(/) Args(0) {
     my ( $self, $c ) = @_;
 
-    $c->cache_page( 3600 );
-
     $c->stash(
         'page_title' => 'Chat',
         'template' => 'chat.tt',

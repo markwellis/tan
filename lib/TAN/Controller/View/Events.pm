@@ -117,7 +117,6 @@ sub remove_object_cache:
         }
 
         $c->cache->remove("object:" . $object->id);
-        $c->clear_cached_page( $object->url . '.*' );
     }
 }
 

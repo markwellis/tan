@@ -12,8 +12,6 @@ requires 'Catalyst::Plugin::Session::Store::File';
 requires 'Catalyst::Plugin::Session::State::Cookie';
 requires 'Catalyst::Plugin::Cache';
 requires 'Cache::Memcached';
-requires 'Catalyst::Plugin::PageCache';
-requires 'Catalyst::Plugin::Unicode::Encoding';
 requires 'Catalyst::Action::RenderView';
 requires 'Data::Dumper::Concise';
 requires 'parent';

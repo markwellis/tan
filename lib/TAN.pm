@@ -17,79 +17,10 @@ use Catalyst qw/
     Session::Store::File
     Session::State::Cookie
     Cache
-    PageCache
     Event
 /;
 
 extends 'Catalyst';
-
-__PACKAGE__->config( name => 'TAN',
-    'Plugin::PageCache' => {
-        'cache_hook' => 'check_cache',
-        'disable_index' => 0,
-        'key_maker' => sub {
-            my $c = shift;
-            my $path = $c->req->path || 'index';
-            return "/${path}" . $c->nsfw . $c->mobile;
-        },
-        'no_expire' => 0,
-    }
-);
-
-sub check_cache{
-    my $c = shift;
-
-    if (
-        ( $c->action eq 'thumb/index')
-        || ( $c->action eq 'minify/index')
-        || ( $c->action eq 'index')
-    ){
-        return 0;
-    }
-
-    if ( !$c->req->cookie('mobile') ){
-        $c->forward('/mobile/detect_mobile');
-    }
-
-    my $action = $c->action;
-
-#recored p.i.
-    if (
-        $action eq 'view/index'
-        || $action eq 'index/index'
-    ){
-        my $object_id = ( $action eq 'view/index' ) ? $c->req->captures->[-1] : undef;
-        my $session_id = $c->sessionid;
-        my $ip_address = $c->req->address;
-
-        if ( $session_id ){
-            my $user_id = $c->user_exists ? $c->user->user_id : undef;
-
-            eval{
-            #might get a deadlock [284] - ignore in that case
-                $c->model('MySQL::Views')->create({
-                    session_id  => $session_id,
-                    object_id   => $object_id,
-                    user_id     => $user_id,
-                    ip          => $ip_address,
-                    created     => \'NOW()',
-                    type        => 'internal',
-                });
-            };
-        }
-    }
-
-    if (
-        $c->user_exists
-        || defined($c->stash->{'no_page_cache'})
-        || defined($c->flash->{'message'})
-        || ($c->res->status > 300)
-    ){
-        return 0;
-    }
-
-    return 1;
-}
 
 sub mobile{
     my ( $c ) = @_;
@@ -226,7 +157,9 @@ around dispatch => sub {
     my $orig = shift;
     my $c = shift;
 
-    return if ( $c->res->status != 200 );
+    if ( !$c->req->cookie('mobile') ){
+        $c->forward('/mobile/detect_mobile');
+    }
 
     if (
         $ENV{'CATALYST_DEBUG'}
@@ -236,6 +169,32 @@ around dispatch => sub {
     ){
         #don't log minify requests, they're annoying
         $c->log->abort(1);
+    }
+
+    my $action = $c->action;
+    if (
+        $action eq 'view/index'
+        || $action eq 'index/index'
+    ){
+        my $object_id = ( $action eq 'view/index' ) ? $c->req->captures->[-1] : undef;
+        my $session_id = $c->sessionid;
+        my $ip_address = $c->req->address;
+
+        if ( $session_id ){
+            my $user_id = $c->user_exists ? $c->user->user_id : undef;
+
+            eval{
+            #might get a deadlock [284] - ignore in that case
+                $c->model('MySQL::Views')->create({
+                    session_id  => $session_id,
+                    object_id   => $object_id,
+                    user_id     => $user_id,
+                    ip          => $ip_address,
+                    created     => \'NOW()',
+                    type        => 'internal',
+                });
+            };
+        }
     }
 
     return $c->$orig(@_);
