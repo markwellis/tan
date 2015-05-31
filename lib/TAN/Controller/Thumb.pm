@@ -13,6 +13,10 @@ sub index: Path Args(3) {
     $id =~ s/$not_int_reg//g;
     $x =~ s/$not_int_reg//g;
 
+    if ( !$x || !$id ){
+        $c->detach('/default');
+    }
+
     #work out mod incase someone ddoses server by requesting random mods :\
     if ( $mod != ( $id - ( $id % 1000 ) ) ){
         $mod = $id - ( $id % 1000 );
@@ -36,7 +40,7 @@ sub index: Path Args(3) {
     } catch {
         $c->model('Image')->create_blank( $output_image );
     };
-    
+
     $c->res->redirect( $c->config->{'thumb_path'} . "/${mod}/${id}/${x}?" . int(rand(100)), 303 );
     $c->detach;
 }
