@@ -109,7 +109,7 @@ sub random: Chained(/) Args(1) {
         $type = 'all';
     }
 
-    my $object = $c->model('MySQL::Object')->random($type, $c->nsfw);
+    my $object = $c->model('DB::Object')->random($type, $c->nsfw);
 
     if ($object){
         $c->res->redirect( $object->url, 303 );

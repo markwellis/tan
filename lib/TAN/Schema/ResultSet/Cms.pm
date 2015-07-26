@@ -14,10 +14,7 @@ sub index{
     }, {
         'page' => $page,
         'rows' => 50,
-        'group_by' => 'url',
-        'order_by' => {
-            '-desc' => 'me.created',
-        },
+        'order_by' => 'title',
     } );
 
     if ( !$cms_pages ){

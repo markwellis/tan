@@ -30,7 +30,7 @@ sub index: Private{
     $page ||= 1;
 
     my $admin_logs = try {
-        $c->model('MySql::AdminLog')->index( $page );
+        $c->model('DB::AdminLog')->index( $page );
     } catch {
         $c->detach('/default');
     };

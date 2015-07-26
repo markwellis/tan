@@ -39,7 +39,7 @@ sub _build_config{
 
                     my $not_int_reg = $c->model('CommonRegex')->not_int;
 
-                    $end_date =~ s/$not_int_reg//;
+                    $end_date =~ s/$not_int_reg//g;
                     if ( !$end_date ){ # 0 would be an invalid end_date as well
                         Exception::Simple->throw('invalid end date');
                     }
@@ -84,7 +84,7 @@ around 'prepare' => sub {
         #cleaned in validator
         $days = ( $days > 31 ) ? 31 : $days;
 
-        $prepared->{'end_date'} = \"DATE_ADD(NOW(), INTERVAL ${days} DAY)";
+        $prepared->{'end_date'} = \"(current_timestamp + interval '$days' day)";
     }
     $prepared->{'answers'} = [map( {'answer' => $_}, @{$prepared->{'answers'}} )];
 

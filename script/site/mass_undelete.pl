@@ -1,11 +1,11 @@
 use 5.14.0;
-use TAN::Model::MySQL;
+use TAN::Model::DB;
 use JSON;
 
 my $admin_log_id = $ARGV[0];
 die "need admin_log.id to continue" if !$admin_log_id;
 
-my $db = TAN::Model::MySQL->new;
+my $db = TAN::Model::DB->new;
 my $admin_log = $db->resultset('AdminLog')->find( {
     'log_id' => $admin_log_id
 } );

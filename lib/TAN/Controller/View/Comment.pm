@@ -31,7 +31,7 @@ sub comment: PathPart('_comment') Chained('../type') Args(0) {
     #logged in, post
         if ( $comment  ){
         #comment
-            my $comment_rs = $c->model('MySQL::Comment')->create_comment( 
+            my $comment_rs = $c->model('DB::Comment')->create_comment( 
                 $c->stash->{'object_id'}, 
                 $c->user->user_id, 
                 $comment
@@ -61,7 +61,7 @@ sub comment: PathPart('_comment') Chained('../type') Args(0) {
     if ( !defined($c->req->param('ajax')) ){
     #not an ajax request
         my $type = $c->stash->{'type'};
-        my $object_rs = $c->model('MySQL::' . ucfirst($type) )->find( $c->stash->{'object_id'} );
+        my $object_rs = $c->model('DB::' . ucfirst($type) )->find( $c->stash->{'object_id'} );
 
         if ( defined($object_rs) ){
         #redirect to the object
@@ -75,7 +75,7 @@ sub comment: PathPart('_comment') Chained('../type') Args(0) {
     } else {
     #ajax 
         #return the comment, filtered and all that
-        my $comment_rs = $c->model('MySQL::Comment')->find({
+        my $comment_rs = $c->model('DB::Comment')->find({
             'id' => $comment_id,
         });
 
@@ -107,7 +107,7 @@ sub edit_comment: PathPart('_edit_comment') Chained('../type') Args(1) {
 
     my $not_int_reg = $c->model('CommonRegex')->not_int;
     $comment_id =~ s/$not_int_reg//g;
-    my $object_rs = $c->model('MySQL::Object')->find({
+    my $object_rs = $c->model('DB::Object')->find({
         'object_id' => $c->stash->{'object_id'},
     });
 
@@ -123,7 +123,7 @@ sub edit_comment: PathPart('_edit_comment') Chained('../type') Args(1) {
         $c->detach();
     }
 
-    my $comment_rs = $c->model('MySQL::Comment')->find( $comment_id );
+    my $comment_rs = $c->model('DB::Comment')->find( $comment_id );
 
     if ( !defined($comment_rs) ){
 #FAIL (comment not found)
@@ -163,7 +163,7 @@ sub edit_comment: PathPart('_edit_comment') Chained('../type') Args(1) {
             if ( $c->check_user_roles(qw/edit_comment/)
                 && ( $comment_rs->user_id != $c->user->user_id ) 
             ){
-                $c->model('MySql::AdminLog')->log_event( {
+                $c->model('DB::AdminLog')->log_event( {
                     'admin_id' => $c->user->id,
                     'user_id' => $comment_rs->user_id,
                     'action' => 'delete_comment',
@@ -186,7 +186,7 @@ sub edit_comment: PathPart('_edit_comment') Chained('../type') Args(1) {
                 if ( $c->check_user_roles(qw/edit_comment/)
                     && ( $comment_rs->user_id != $c->user->user_id ) 
                 ){
-                    $c->model('MySql::AdminLog')->log_event( {
+                    $c->model('DB::AdminLog')->log_event( {
                         'admin_id' => $c->user->id,
                         'user_id' => $comment_rs->user_id,
                         'action' => 'edit_comment',
@@ -236,7 +236,7 @@ sub post_saved_comments: Private{
     #logged in, post
         foreach my $saved_comment ( @{$c->session->{'comments'}} ){
             if ( defined($saved_comment->{'object_id'}) && defined($saved_comment->{'comment'}) ){
-                my $comment_rs = $c->model('MySQL::Comment')->create_comment( 
+                my $comment_rs = $c->model('DB::Comment')->create_comment( 
                     $saved_comment->{'object_id'}, 
                     $c->user->user_id, 
                     $saved_comment->{'comment'} 

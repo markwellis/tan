@@ -30,7 +30,7 @@ sub delete_avatar: Chained('../admin') Args(0){
             'avatar' => undef,
         } );
 
-        $c->model('MySql::AdminLog')->log_event( {
+        $c->model('DB::AdminLog')->log_event( {
             'admin_id' => $c->user->id,
             'user_id' => $user->id,
             'action' => 'delete_avatar',

@@ -26,7 +26,7 @@ sub index: PathPart('') Chained('validate_user') Args(0){
     $page ||= 1;
 
     my $cms_pages = try {
-        $c->model('MySql::Cms')->index( $page );
+        $c->model('DB::Cms')->index( $page );
     } catch {
         return undef;
     };
@@ -59,7 +59,7 @@ sub create: Chained('validate_user') Args(0){
 sub edit: Chained('validate_user') Args(1){
     my ( $self, $c, $cms_id ) = @_;
 
-    my $cms_page = $c->model('MySql::Cms')->find( $cms_id );
+    my $cms_page = $c->model('DB::Cms')->find( $cms_id );
 
     if ( !$cms_page ){
         $c->detach('/default');
@@ -91,30 +91,30 @@ sub insert_cms: Private{
 
     if ( $cms_page && ( $url ne $cms_page->url) ){
     #new url, delete old page
-        $c->model('MySql::Cms')->create( {
-            'title' => $cms_page->title,
-            'url' => $cms_page->url,
-            'content' => $cms_page->content,
-            'user_id' => $c->user->id,
-            'revision' => $revision,
-            'comment' => "page moved to /${url}",
-            'system' => $cms_page->system,
+        $c->model('DB::Cms')->create( {
+            'title'     => $cms_page->title,
+            'url'       => $cms_page->url,
+            'content'   => $cms_page->content,
+            'user_id'   => $c->user->id,
+            'revision'  => $revision,
+            'comment'   => "page moved to /${url}",
+            'system'    => $cms_page->system,
             'nowrapper' => $cms_page->nowrapper,
-            'deleted' => 1,
+            'deleted'   => 1,
         } );
         $revision = 0;
     }
 
-    $c->model('MySql::Cms')->create( {
-        'title' => $c->req->param('title'),
-        'url' => $url,
-        'content' => $c->req->param('content'),
-        'user_id' => $c->user->id,
-        'revision' => $revision,
-        'comment' => $c->req->param('comment'),
-        'system' => defined( $c->req->param('system') ),
-        'nowrapper' => defined( $c->req->param('nowrapper') ),
-        'deleted' => defined( $c->req->param('delete') ),
+    $c->model('DB::Cms')->create( {
+        'title'     => $c->req->param('title'),
+        'url'       => $url,
+        'content'   => $c->req->param('content'),
+        'user_id'   => $c->user->id,
+        'revision'  => $revision,
+        'comment'   => $c->req->param('comment'),
+        'system'    => defined( $c->req->param('system') ) ? 1 : 0,
+        'nowrapper' => defined( $c->req->param('nowrapper') ) ? 1 : 0,
+        'deleted'   => defined( $c->req->param('delete') ) ? 1 : 0,
     } );
 
     $c->trigger_event( 'cms_update', $url );

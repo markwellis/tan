@@ -34,7 +34,7 @@ sub process {
     $feed->modified( $date );
     
     foreach my $object ( @{$c->stash->{'index'}->{'objects'}} ){
-        if ( ref( $object ) eq 'TAN::Model::MySQL::Object' ){
+        if ( ref( $object ) eq 'TAN::Model::DB::Object' ){
             my $type = $object->type;
             my $base = $c->req->base;
             $base =~ s|/$||;
@@ -49,7 +49,7 @@ sub process {
             $entry->summary( $image . $object->$type->description );
             $entry->issued( $object->_promoted || $object->_created );
             $feed->add_entry( $entry );
-        } elsif ( ref( $object ) eq 'TAN::Model::MySQL::Comment' ){
+        } elsif ( ref( $object ) eq 'TAN::Model::DB::Comment' ){
             my $type = $object->object->type;
             my $base = $c->req->base;
             $base =~ s|/$||;

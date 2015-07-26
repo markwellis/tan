@@ -14,11 +14,11 @@ sub indexinate{
         if ( $object->can('type') && ( $object->type eq 'comment' ) ){
             my $id = $object->id;
             $id =~ s/\D//g;
-            push( @index, $c->model('MySQL::Comment')->find( $id ) );
-        } elsif( ref($object) eq 'TAN::Model::MySQL::Comment' ){
+            push( @index, $c->model('DB::Comment')->find( $id ) );
+        } elsif( ref($object) eq 'TAN::Model::DB::Comment' ){
             push( @index, $object );
         } else {
-            push(@index, $c->model('MySQL::Object')->get( $object->id, $object->type ));
+            push(@index, $c->model('DB::Object')->get( $object->id, $object->type ));
         }
     }
 

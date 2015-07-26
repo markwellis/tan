@@ -7,7 +7,7 @@ BEGIN { extends 'Catalyst::Controller'; }
 sub index: Private{
     my ( $self, $c ) = @_;
 
-    my $users = $c->model('MySQL::User')->search({
+    my $users = $c->model('DB::User')->search({
         'deleted' => 0,
     },{
         'columns' => [

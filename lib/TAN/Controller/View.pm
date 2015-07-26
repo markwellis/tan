@@ -24,7 +24,7 @@ sub type: PathPart('view') Chained('/') CaptureArgs(2){
         $c->detach('/not_found');
     }
 
-    my $object = $c->model('MySQL::Object')->get( $object_id, $type );
+    my $object = $c->model('DB::Object')->get( $object_id, $type );
 
     if ( !defined($object) ){
         $c->detach('/not_found');
@@ -66,7 +66,7 @@ sub index: PathPart('') Chained('type') Args(1) {
     }
 
 #this should be cached
-    my @comments = $c->model('MySQL::Comment')->search( {
+    my @comments = $c->model('DB::Comment')->search( {
             'me.object_id' => $object->id,
             'me.deleted' => 0,
         }, {

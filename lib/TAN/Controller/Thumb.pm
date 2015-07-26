@@ -24,7 +24,7 @@ sub index: Path Args(3) {
         $c->detach;
     }
 
-    my $picture = $c->model('MySQL::Picture')->find({
+    my $picture = $c->model('DB::Picture')->find({
         'picture_id' => $id,
     });
 

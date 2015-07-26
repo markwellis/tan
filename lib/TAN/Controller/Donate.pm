@@ -26,7 +26,7 @@ sub index: PathPart('') Chained('user_logged_in') Args(0) {
     my ( $self, $c ) = @_;
 
     $c->stash(
-        'used_numbers' => $c->model('MySQL::Lotto')->used_numbers,
+        'used_numbers' => $c->model('DB::Lotto')->used_numbers,
         'template' => 'donate.tt',
         'page_title' => 'Donate',
     );
@@ -47,14 +47,14 @@ sub buy: PathPart('buy') Chained('user_logged_in') Args(1) {
     }
     $c->flash->{'lotto_number'} = $number;
 
-    $c->model('MySQL')->txn_do(sub{
-        if ( !$c->model('MySQL::Lotto')->number_available( $number ) ){ 
+    $c->model('DB')->txn_do(sub{
+        if ( !$c->model('DB::Lotto')->number_available( $number ) ){ 
             $c->flash->{'message'} = 'Sorry this number is taken';
             $c->res->redirect('/donate/', 303);
             $c->detach;
         }
 
-        $c->model('MySQL::Lotto')->set_unavailble( $number, $c->user->id ); 
+        $c->model('DB::Lotto')->set_unavailble( $number, $c->user->id ); 
     });
 
     my $button = $c->model('PayPal')->button( {
@@ -88,7 +88,7 @@ sub canceled: Local{
     my $number = $c->flash->{'lotto_number'};
     
     if ( defined( $number ) ){
-        $c->model('MySQL::Lotto')->remove_number( $number );
+        $c->model('DB::Lotto')->remove_number( $number );
     }
     $c->stash(
         'template' => 'donate/canceled.tt',
@@ -114,13 +114,13 @@ sub validate: Local{
     my $txn_id = $c->req->param('txn_id');
 #error handel any of the above being empty
 
-    $c->model('MySQl::User')->find( { 
+    $c->model('DB::User')->find( { 
         'user_id' => $user_id 
     } )->update( { 
         'paypal' => $c->req->param('payer_email') 
     } );
 
-    $c->model('MySQL::Lotto')->confirm_number( $user_id, $number, $txn_id );
+    $c->model('DB::Lotto')->confirm_number( $user_id, $number, $txn_id );
 #end untested
     $c->res->output('ok');
     $c->detach;

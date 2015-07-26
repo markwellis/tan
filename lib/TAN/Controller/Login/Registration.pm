@@ -41,10 +41,10 @@ sub index: Path Args(0){
     } elsif ( $username =~ m/\W+/g ){
     #username cantains invalid chars
         $error = 'Username can only contain letters or numbers';
-    } elsif ( $c->model('MySQL::User')->username_exists($username) ) {
+    } elsif ( $c->model('DB::User')->username_exists($username) ) {
     #username exists
         $error = 'Username already exists';
-    } elsif ( $c->model('MySQL::User')->email_exists($email) ) {
+    } elsif ( $c->model('DB::User')->email_exists($email) ) {
     #email exists
        $error = 'Email address already exists';
     }
@@ -53,7 +53,7 @@ sub index: Path Args(0){
     my $new_user;
     if ( !$error ){
         $new_user = try{
-            $c->model('MySQL::User')->new_user($username, $password0, $email);
+            $c->model('DB::User')->new_user($username, $password0, $email);
         } catch {
             $error = $_;
             return undef;
@@ -104,8 +104,8 @@ sub index: Path Args(0){
 sub confirm: Local{
     my ( $self, $c, $user_id, $token ) = @_;
 
-    if ( $c->model('MySQL::UserTokens')->compare($user_id, $token, 'reg') ){
-        my $user = $c->model('MySQL::User')->find({
+    if ( $c->model('DB::UserTokens')->compare($user_id, $token, 'reg') ){
+        my $user = $c->model('DB::User')->find({
             'user_id' => $user_id,
         });
         if ( $user ){

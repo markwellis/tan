@@ -1061,6 +1061,21 @@ DISTRIBUTIONS
       Path::Class 0.26
       Try::Tiny 0.19
       perl 5.006
+  DBD-Pg-3.5.1
+    pathname: T/TU/TURNSTEP/DBD-Pg-3.5.1.tar.gz
+    provides:
+      Bundle::DBD::Pg 3.005001
+      DBD::Pg 3.005001
+      DBD::Pg::DefaultValue 3.005001
+      DBD::Pg::db 3.005001
+      DBD::Pg::dr 3.005001
+      DBD::Pg::st 3.005001
+    requirements:
+      DBI 1.614
+      ExtUtils::MakeMaker 6.11
+      Test::More 0.88
+      Time::HiRes 0
+      version 0
   DBD-SQLite-1.46
     pathname: I/IS/ISHIGAKI/DBD-SQLite-1.46.tar.gz
     provides:
@@ -1629,6 +1644,17 @@ DISTRIBUTIONS
       DateTime 0
       DateTime::Format::Builder 0.6
       Module::Build 0
+  DateTime-Format-Pg-0.16011
+    pathname: D/DM/DMAKI/DateTime-Format-Pg-0.16011.tar.gz
+    provides:
+      DateTime::Format::Pg 0.16011
+    requirements:
+      DateTime 0.10
+      DateTime::Format::Builder 0.72
+      DateTime::TimeZone 0.05
+      ExtUtils::MakeMaker 6.36
+      Module::Build 0.38
+      Test::More 0
   DateTime-Format-SQLite-0.11
     pathname: C/CF/CFAERBER/DateTime-Format-SQLite-0.11.tar.gz
     provides:
@@ -6317,6 +6343,20 @@ DISTRIBUTIONS
       Test::More 0
       Test::use::ok 0
       Tie::RefHash 0
+  Time-Moment-0.22
+    pathname: C/CH/CHANSEN/Time-Moment-0.22.tar.gz
+    provides:
+      Time::Moment 0.22
+    requirements:
+      Carp 0
+      ExtUtils::MakeMaker 6.59
+      ExtUtils::ParseXS 3.18
+      Test::Fatal 0.006
+      Test::More 0.88
+      Test::Requires 0
+      Time::HiRes 0
+      XSLoader 0.02
+      perl 5.008001
   Time-Warp-0.51
     pathname: S/SZ/SZABGAB/Time-Warp-0.51.tar.gz
     provides:

@@ -30,7 +30,7 @@ sub index: Args(0) {
     my @clean_tags = keys( %dupe_free_tags );
 
     if ( scalar(@clean_tags) ){
-        my $tags_rs = $c->model('MySQL::Tags')->search({
+        my $tags_rs = $c->model('DB::Tags')->search({
             'stem' => \@clean_tags,
         });
 
@@ -59,11 +59,11 @@ sub index: Args(0) {
         #little security
         $random = ($random > 50) ? 50 : $random;
 
-        my $randoms_rs = $c->model('MySQL::Object')->search({
+        my $randoms_rs = $c->model('DB::Object')->search({
             'type' => 'picture',
             'nsfw' => 0,
         }, {
-            'order_by' => \'RAND()',
+            'order_by' => \'random()',
             'rows' => $random,
         });
 
