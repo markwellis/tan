@@ -47,7 +47,6 @@ sub recent {
                     'object' => [ qw/link picture blog poll video/ ],
                 },
             ],
-            use_index => 'recent',
         }
     );
 

@@ -139,7 +139,7 @@ sub check_usr_tcs{
 
     if ( $c->user_exists ){
         my $user_tcs = $c->user->tcs // -1;
-        if ( $user_tcs != $c->model('MySql::Cms')->load('tcs')->revision ){
+        if ( $user_tcs != $c->model('DB::Cms')->load('tcs')->revision ){
             return 0;
         }
     }
@@ -185,7 +185,7 @@ around dispatch => sub {
 
             eval{
             #might get a deadlock [284] - ignore in that case
-                $c->model('MySQL::Views')->create({
+                $c->model('DB::Views')->create({
                     session_id  => $session_id,
                     object_id   => $object_id,
                     user_id     => $user_id,
@@ -194,6 +194,9 @@ around dispatch => sub {
                     type        => 'internal',
                 });
             };
+
+            #TODO
+            #incriment object.views
         }
     }
 

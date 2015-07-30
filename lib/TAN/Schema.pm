@@ -14,8 +14,6 @@ __PACKAGE__->load_namespaces;
 # Created by DBIx::Class::Schema::Loader v0.07041 @ 2014-08-11 21:01:58
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:kW4tfk3YPdQrAmj98EXV9g
 
-__PACKAGE__->storage_type('TAN::DBIx::Storage');
-
 has cache => (
     is  => 'rw',
 );

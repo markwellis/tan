@@ -25,7 +25,7 @@ sub change: POST Chained(email) Args(0) {
 
     try {
         die "Email already exists\n"
-            if $c->model('MySQL::User')->find( {
+            if $c->model('DB::User')->find( {
                 email   => $email0,
             } );
 

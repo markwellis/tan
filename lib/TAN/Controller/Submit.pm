@@ -49,7 +49,7 @@ sub post: PathPart('post') Chained('type') Args(0){
     my $tags = delete( $prepared->{'tags'} );
 
     my $object;
-    $c->model('MySQL')->txn_do( sub {
+    $c->model('DB')->txn_do( sub {
         $object = $c->forward( 'create_new', [ $prepared ] );
 
         $c->forward( 'add_tags', [ $object, $tags ] ) if ( defined( $object ) );
@@ -114,10 +114,10 @@ sub create_new: Private{
     my ( $self, $c, $prepared ) = @_;
     
     my $type = delete( $prepared->{'type'} ) || $c->req->param('type');
-    return $c->model('MySQL::Object')->create({
+    return $c->model('DB::Object')->create({
         'type' => $type,
         'created' => \'NOW()',
-        'promoted' => 0,
+        'promoted' => undef,
         'user_id' => $c->user->user_id,
         'nsfw' => defined($c->req->param('nsfw')) ? 1 : 0,
         plus    => 1,
@@ -145,7 +145,7 @@ sub add_tags: Private {
         $tag =~ s/$trim_reg//g;
         next if ( !$tag );
 
-        push( @new_tags, $c->model('MySql::Tags')->find_or_create( {
+        push( @new_tags, $c->model('DB::Tags')->find_or_create( {
             'tag' => $tag,
             'stem' => $c->model('Stemmer')->stem( $tag ),
         } ) );

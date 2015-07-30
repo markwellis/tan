@@ -133,7 +133,7 @@ sub random{
             'alias' => 'sub',
         } )->get_column('title')->as_query,
         '+as' => 'title',
-        'order_by' => \'RAND()',
+        'order_by' => \'random()',
     } )->first;
 
 }

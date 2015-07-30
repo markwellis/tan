@@ -13,7 +13,7 @@ sub internal: Local{
         my $is_int_reg = $c->model('CommonRegex')->int;
         if ( !defined($filename) && ($source =~ m/^$is_int_reg$/) ){
         #id
-            my $object = $c->model('MySQL::Object')->find({
+            my $object = $c->model('DB::Object')->find({
                 'object_id' => $source,
             });
 
@@ -29,7 +29,7 @@ sub internal: Local{
                 $filename = $source;
                 $source = ($pic_time - ($pic_time % 604800));
             }
-            my $picture = $c->model('MySQL::Picture')->find({
+            my $picture = $c->model('DB::Picture')->find({
                 'filename' => "${source}/${filename}",
             });
 
@@ -58,7 +58,7 @@ sub external: Local Args(1){
     my $not_int_reg = $c->model('CommonRegex')->not_int;
     $object_id =~ s/$not_int_reg//g;
 
-    my $object_rs = $c->model('MySQL::Object')->find($object_id);
+    my $object_rs = $c->model('DB::Object')->find($object_id);
     if ( 
         defined($object_rs) 
         && (
@@ -75,7 +75,7 @@ sub external: Local Args(1){
 
             eval{
             #might get a deadlock [358] - ignore in that case
-                $c->model('MySQL::Views')->update_or_create({
+                $c->model('DB::Views')->update_or_create({
                     'session_id' => $session_id,
                     'object_id' => $object_id,
                     'user_id' => $user_id,

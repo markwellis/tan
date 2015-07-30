@@ -35,22 +35,22 @@ sub by_email{
 sub new_user{
     my ( $self, $username, $password, $email ) = @_;
 
-# create new user
-# set password
-# create tokens
-# return new user
-    my $new_user = $self->create({
-        'username' => $username,
-        'join_date' => \'NOW()',
-        'email' => $email,
-    });
+    $self->result_source->schema->txn_do( sub {
+        my $new_user = $self->create({
+            username  => $username,
+            join_date => \'NOW()',
+            email     => $email,
+            password  => 'this is not the password', #horrible hack. tan's code is shit
+        });
 
-    $new_user->set_password( $password );
+        $new_user->set_password( $password );
+        $new_user->insert;
 
-    return undef if ( !defined($new_user) );
-    my $token = $new_user->tokens->new_token($new_user->id, 'reg');
+        return undef if ( !defined($new_user) );
+        my $token = $new_user->tokens->new_token($new_user->id, 'reg');
 
-    return $new_user;
+        return $new_user;
+    } );
 }
 
 1;

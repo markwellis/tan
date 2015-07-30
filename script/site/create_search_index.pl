@@ -4,7 +4,7 @@ use warnings;
 
 use LucyX::Simple;
 
-use TAN::Model::MySQL;
+use TAN::Model::DB;
 use Term::ProgressBar;
 
 use HTML::FormatText;
@@ -25,7 +25,7 @@ my $search_config = $tan_config->{'Model::Search'}->{args};
 
 my $searcher = LucyX::Simple->new( $search_config );
 
-my $db = TAN::Model::MySQL->new( $tan_config->{'Model::MySQL'} );
+my $db = TAN::Model::DB->new( $tan_config->{'Model::DB'} );
 
 my $objects = $db->resultset('Object')->search({
         'me.deleted' => 0,

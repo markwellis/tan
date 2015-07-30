@@ -19,9 +19,9 @@ sub base : PathPart(recent) Chained(/) CaptureArgs(0) {}
 sub comments : GET Chained(base) Args(0) {
     my ( $self, $c ) = @_;
 
-    my $recent_comments = $c->model('MySQL::Comment')->recent;
-    my $recent_promoted = $c->model('MySQL::Object')->recent_promoted;
-    my $recent_upcoming = $c->model('MySQL::Object')->recent_upcoming;
+    my $recent_comments = $c->model('DB::Comment')->recent;
+    my $recent_promoted = $c->model('DB::Object')->recent_promoted;
+    my $recent_upcoming = $c->model('DB::Object')->recent_upcoming;
 
     $c->stash(
         recent_comments => $recent_comments,

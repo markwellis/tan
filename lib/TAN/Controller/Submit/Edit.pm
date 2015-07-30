@@ -17,7 +17,7 @@ has '_mobile' => (
 sub validate_user: PathPart('edit') Chained('../type') CaptureArgs(1){
     my ( $self, $c, $object_id ) = @_;
 
-    my $object = $c->model('MySQL::Object')->get( $object_id, $c->stash->{'type'} );
+    my $object = $c->model('DB::Object')->get( $object_id, $c->stash->{'type'} );
 
     if ( 
         !defined($object)
@@ -68,7 +68,7 @@ sub post: PathPart('post') Chained('validate_user') Args(){
         && $c->check_user_roles(qw/delete_object/)
     ){
         if ( $object->user->id != $c->user->id ){
-            $c->model('MySql::AdminLog')->log_event( {
+            $c->model('DB::AdminLog')->log_event( {
                 'admin_id' => $c->user->id,
                 'user_id' => $object->user_id,
                 'action' => 'delete_object',
@@ -86,7 +86,7 @@ sub post: PathPart('post') Chained('validate_user') Args(){
     } else {
         my $prepared = $c->forward('/submit/validate_and_prepare');
 
-        $c->model('MySQL')->txn_do( sub {
+        $c->model('DB')->txn_do( sub {
             $c->forward( 'update_object', [ $prepared ] );
 
             $c->trigger_event( 'object_updated', $object );
@@ -111,7 +111,7 @@ sub update_object: Private{
     my $to_update = {};
 
     my $object = $c->stash->{'object'};
-    my $new_nsfw = defined( $c->req->param('nsfw') );
+    my $new_nsfw = defined( $c->req->param('nsfw') ) || 0;
 
     if ( $object->nsfw ne $new_nsfw ){
         $object->update( {
@@ -151,7 +151,7 @@ sub update_object: Private{
     
     if ( $c->check_any_user_role(qw/edit_object edit_object_nsfw/) ){
         $object->update( {
-            'locked' => defined( $c->req->param('locked') ),
+            'locked' => defined( $c->req->param('locked') ) || 0,
         } )->discard_changes;
     }
     
@@ -161,7 +161,7 @@ sub update_object: Private{
         && ( $change_type ne $type )
         && $c->model('Object')->valid_public_object( $change_type ) 
     ){
-        $c->model('MySQL::' . ucfirst( $change_type ))->create( {
+        $c->model('DB::' . ucfirst( $change_type ))->create( {
             "${change_type}_id" => $object->id,
             %{ $to_update },
         } );
@@ -186,7 +186,7 @@ sub update_object: Private{
         $c->check_any_user_role(qw/edit_object edit_object_nsfw/)
     ){
         if ( $object->user->id != $c->user->id ){
-            $c->model('MySql::AdminLog')->log_event( {
+            $c->model('DB::AdminLog')->log_event( {
                 'admin_id' => $c->user->id,
                 'user_id' => $object->user_id,
                 'action' => 'edit_object',

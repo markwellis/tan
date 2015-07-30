@@ -69,13 +69,11 @@ sub voted{
 sub vote{
     my ( $self, $user_id, $answer_id ) = @_;
 
-#transaction
-# prevents race condition
     $self->result_source->schema->txn_do(sub{
         my $vote = $self->votes->find({
             'user_id' => $user_id,
         });
-        
+
         if ( $vote ){
             return 0;
         } else {
@@ -83,6 +81,16 @@ sub vote{
                 'user_id' => $user_id,
                 'answer_id' => $answer_id,
             });
+            $self->update( {
+                    votes   => scalar $self->votes,
+                } );
+            my $answer = $self->answers->search( {
+                    answer_id   => $answer_id,
+                } )->first;
+
+            $answer->set_column( votes => scalar $answer->votes );
+            $answer->update;
+
             return 1;
         }
     });

@@ -2,10 +2,10 @@ use 5.014;
 
 use File::Copy;
 use File::Basename;
-use TAN::Model::MySQL;
+use TAN::Model::DB;
 use File::Path qw/mkpath/;
 
-my $db = new TAN::Model::MySQL;
+my $db = new TAN::Model::DB;
 
 foreach my $file ( <root/static/user/avatar/*> ){
     if ( $file =~ m/\.no_crop$/ ){

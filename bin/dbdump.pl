@@ -37,7 +37,7 @@ make_schema_at(
         },
     },
     [
-        'dbi:mysql:tan',
+        'dbi:DB:tan',
         'thisaintnews',
         'caBi2ieL',
     ],

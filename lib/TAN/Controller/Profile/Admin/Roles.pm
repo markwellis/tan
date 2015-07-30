@@ -17,7 +17,7 @@ has '_mobile' => (
 sub roles: Chained('../admin') Args(0){
     my ( $self, $c ) = @_;
 
-    my $roles = $c->model('MySql::Admin')->search;
+    my $roles = $c->model('DB::Admin')->search;
     if ( $c->req->method eq 'POST' ){
         my $user = $c->stash->{'user'};
         my @user_roles = $c->req->param('roles');
@@ -33,7 +33,7 @@ sub roles: Chained('../admin') Args(0){
         }
 
 #update $c->stash->{'user'} roles here
-        $c->model('MySql::AdminLog')->log_event( {
+        $c->model('DB::AdminLog')->log_event( {
             'admin_id' => $c->user->id,
             'user_id' => $user->id,
             'action' => 'admin_user',

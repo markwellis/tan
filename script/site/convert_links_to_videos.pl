@@ -4,7 +4,7 @@ use warnings;
 use TAN;
 use Term::ProgressBar;
 
-my $db = TAN->model('MySQL');
+my $db = TAN->model('DB');
 my $objects = $db->resultset('Object')->search( {
         'type' => 'link',
     },{

@@ -49,7 +49,7 @@ sub delete_objects: Private{
             'user_id' => $c->stash->{'user'}->id,
         };
 
-        my $objects_rs = $c->model('MySql::Object')->search( $search_terms, {
+        my $objects_rs = $c->model('DB::Object')->search( $search_terms, {
             'prefetch' => \@object_types,
         } );
         
@@ -60,7 +60,7 @@ sub delete_objects: Private{
                 push( @object_ids, $object->id );
             }
 
-            $c->model('MySql::AdminLog')->log_event( {
+            $c->model('DB::AdminLog')->log_event( {
                 'admin_id' => $c->user->id,
                 'user_id' => $c->stash->{'user'}->id,
                 'action' => 'mass_delete_objects',
@@ -71,7 +71,7 @@ sub delete_objects: Private{
 
             # do this again beacuse it'll do an indvidual query 
             # for each update otherwise (coz of the prefetch)
-            $c->model('MySql::Object')->search( $search_terms )->update( {
+            $c->model('DB::Object')->search( $search_terms )->update( {
                 'deleted' => 1,
             } );
 
@@ -89,7 +89,7 @@ sub delete_comments: Private{
             'me.user_id' => $c->stash->{'user'}->id,
         };
 
-        my $comments_rs = $c->model('MySql::Comment')->search( $search_terms, {
+        my $comments_rs = $c->model('DB::Comment')->search( $search_terms, {
             'prefetch' => {
                 'object' => TAN->model('Object')->public,
             },
@@ -102,7 +102,7 @@ sub delete_comments: Private{
                 push( @comment_ids, $comment->id );
             }
 
-            $c->model('MySql::AdminLog')->log_event( {
+            $c->model('DB::AdminLog')->log_event( {
                 'admin_id' => $c->user->id,
                 'user_id' => $c->stash->{'user'}->id,
                 'action' => 'mass_delete_comments',
@@ -110,7 +110,7 @@ sub delete_comments: Private{
                 'reason' => $c->stash->{'reason'},
             } );
 
-            $c->model('MySql::Comment')->search( $search_terms )->update( {
+            $c->model('DB::Comment')->search( $search_terms )->update( {
                 'deleted' => 1,
             } );
 

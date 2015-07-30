@@ -4,7 +4,7 @@ use warnings;
 use Term::ProgressBar;
 use Crypt::PBKDF2;
 
-use TAN::Model::MySQL;
+use TAN::Model::DB;
 
 say "Do not run this script if the user passwords are already salted!";
 say "type YES to continue";
@@ -15,7 +15,7 @@ if ( $continue ne 'YES' ){
     exit;
 }
 
-my $db = TAN::Model::MySQL->new;
+my $db = TAN::Model::DB->new;
 my $users = $db->resultset('User')->search;
 
 my $count = $users->count;

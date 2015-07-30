@@ -35,7 +35,7 @@ Plugin::Authentication:
             role_field: role
             role_relation: map_user_role
             use_userdata_from_session: 1
-            user_model: MySQL::User
+            user_model: DB::User
             user_role_user_field: user_id
     use_session: 1
 
@@ -65,11 +65,11 @@ Model::Image:
         - 200
         - 600
 
-Model::MySQL:
+Model::DB:
     connect_info:
-        dsn: dbi:mysql:tan;
-        mysql_enable_utf8: 1
+        dsn: dbi:Pg:dbname=tan;
         password: caBi2ieL
+        pg_enable_utf8: 1
         quote_names: 1
         user: thisaintnews
     schema_class: TAN::Schema

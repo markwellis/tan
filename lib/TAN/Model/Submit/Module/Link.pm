@@ -35,12 +35,12 @@ sub _build_config{
                     my ( $c, $url ) = @_;
                     return if ( $c->stash->{'edit'} );
 
-                    my $link_rs = $c->model('MySQL::Link')->find({
+                    my $link_rs = $c->model('DB::Link')->find({
                         'url' => $url,
                     });
 
                     if ( !$link_rs ){
-                        $link_rs = $c->model('MySQL::Video')->find({
+                        $link_rs = $c->model('DB::Video')->find({
                             'url' => $url,
                         });
                     }

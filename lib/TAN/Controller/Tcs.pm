@@ -19,7 +19,7 @@ has '_mobile' => (
 sub index: Path{
     my ( $self, $c ) = @_;
 
-    my $cms_page = $c->model('MySql::Cms')->load('tcs');
+    my $cms_page = $c->model('DB::Cms')->load('tcs');
 
     $c->stash(
         'page_title' => $cms_page->title,
@@ -51,7 +51,7 @@ sub submit: Local{
 sub agree: Private{
     my ( $self, $c ) = @_;
 
-    my $cms_page = $c->model('MySql::Cms')->load('tcs');
+    my $cms_page = $c->model('DB::Cms')->load('tcs');
     $c->user->update( {
         'tcs' => $cms_page->revision,
     } );
