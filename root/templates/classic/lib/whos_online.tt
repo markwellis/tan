@@ -1,4 +1,4 @@
-[%- FOREACH user IN c.model('MySQL::Views').whos_online -%]
+[%- FOREACH user IN c.model('DB::Views').whos_online -%]
     [%- username = user.username | html -%]
     <a href="[% user.profile_url %]">
         <img 

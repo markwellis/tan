@@ -19,7 +19,7 @@
             >
                 [%- RAWPERL -%]
                 my $is_comment = 0;
-                if ( ref( $stash->get('object') ) eq 'TAN::Model::MySQL::Comment'){
+                if ( ref( $stash->get('object') ) eq 'TAN::Model::DB::Comment'){
                     $is_comment = 1;
                 }
                 $stash->set( 'is_comment', $is_comment );

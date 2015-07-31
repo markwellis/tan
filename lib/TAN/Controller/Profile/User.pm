@@ -44,8 +44,8 @@ sub user_index: PathPart('') Chained('user') Args(0){
     my $object;
 #prevent race
     eval{
-        $c->model('MySQL')->txn_do(sub{
-            $object = $c->model('MySQL::Object')->find_or_create({
+        $c->model('DB')->txn_do(sub{
+            $object = $c->model('DB::Object')->find_or_create({
                 'user_id' => $user->id,
                 'type' => 'profile',
             });
@@ -90,7 +90,7 @@ sub edit: PathPart('edit') Chained('user') Args(0){
             || $c->check_user_roles(qw/edit_user/)
         )
     ){
-        $c->stash->{'object'} = $c->model('MySQL::Object')->find({
+        $c->stash->{'object'} = $c->model('DB::Object')->find({
             'user_id' => $c->stash->{'user'}->id,
             'type' => 'profile',
         });

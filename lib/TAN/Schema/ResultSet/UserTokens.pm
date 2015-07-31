@@ -16,7 +16,7 @@ sub new_token{
         'token' => $token,
         'type' => $type,
         'user_id' => $user_id,
-        'expires' => \'DATE_ADD(NOW(), INTERVAL 5 DAY)',
+        'expires' => \"(current_timestamp + interval '5' day)",
     });
 
     return $token;

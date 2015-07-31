@@ -1,0 +1,16 @@
+BEGIN;
+    SELECT setval('admin_admin_id_seq', COALESCE((SELECT MAX(admin_id)+1 FROM "admin"), 1), false);
+    SELECT setval('admin_log_log_id_seq', COALESCE((SELECT MAX(log_id)+1 FROM "admin_log"), 1), false);
+    SELECT setval('cms_cms_id_seq', COALESCE((SELECT MAX(cms_id)+1 FROM "cms"), 1), false);
+    SELECT setval('comments_id_seq', COALESCE((SELECT MAX(id)+1 FROM "comments"), 1), false);
+    SELECT setval('lotto_lotto_id_seq', COALESCE((SELECT MAX(lotto_id)+1 FROM "lotto"), 1), false);
+    SELECT setval('object_object_id_seq', COALESCE((SELECT MAX(object_id)+1 FROM "object"), 1), false);
+    SELECT setval('plus_minus_id_seq', COALESCE((SELECT MAX(id)+1 FROM "plus_minus"), 1), false);
+    SELECT setval('poll_answer_answer_id_seq', COALESCE((SELECT MAX(answer_id)+1 FROM "poll_answer"), 1), false);
+    SELECT setval('poll_vote_vote_id_seq', COALESCE((SELECT MAX(vote_id)+1 FROM "poll_vote"), 1), false);
+    SELECT setval('tag_objects_object_tag_id_seq', COALESCE((SELECT MAX(object_tag_id)+1 FROM "tag_objects"), 1), false);
+    SELECT setval('tags_tag_id_seq', COALESCE((SELECT MAX(tag_id)+1 FROM "tags"), 1), false);
+    SELECT setval('user_tokens_token_id_seq', COALESCE((SELECT MAX(token_id)+1 FROM "user_tokens"), 1), false);
+    SELECT setval('user_user_id_seq', COALESCE((SELECT MAX(user_id)+1 FROM "user"), 1), false);
+    SELECT setval('views_view_id_seq', COALESCE((SELECT MAX(view_id)+1 FROM "views"), 1), false);
+COMMIT;

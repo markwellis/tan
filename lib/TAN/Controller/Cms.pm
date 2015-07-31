@@ -17,7 +17,7 @@ sub clear_caches: Event('cms_update'){
 sub cms: Private{
     my ( $self, $c ) = @_;
 
-    my $cms_page = $c->model('MySql::Cms')->load( uri_unescape( $c->req->path ) );
+    my $cms_page = $c->model('DB::Cms')->load( uri_unescape( $c->req->path ) );
 
     if ( defined( $cms_page ) ){
         $c->stash(

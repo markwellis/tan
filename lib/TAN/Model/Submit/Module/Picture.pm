@@ -126,7 +126,7 @@ sub prepare{
         close( $fh );
 
 #we do this here coz we need the result from the validator
-        my $pic_rs = $c->model('MySQL::Picture')->find({
+        my $pic_rs = $c->model('DB::Picture')->find({
             'sha512sum' => $sha512sum,
         });
 

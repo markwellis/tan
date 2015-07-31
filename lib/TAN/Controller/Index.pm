@@ -24,7 +24,7 @@ sub clear_index_caches:
 {
     my ( $self, $c ) = @_;
 
-    $c->model('MySQL::Object')->clear_index_cache();
+    $c->model('DB::Object')->clear_index_cache();
 }
 
 sub index :Path Args(2) {
@@ -52,11 +52,11 @@ sub index :Path Args(2) {
 
     my $search = {};
     if ( $upcoming ){
-        $search->{'promoted'} = \'= 0';
+        $search->{'promoted'} = undef;
     } else {
-        $search->{'promoted'} = \'!= 0';
+        $search->{'promoted'} = {'!=' => undef};
     }
-    my ( $objects, $pager ) = $c->model('MySQL::Object')->index( $type, $page, $upcoming, $search, $order, $c->nsfw, "index" );
+    my ( $objects, $pager ) = $c->model('DB::Object')->index( $type, $page, $upcoming, $search, $order, $c->nsfw, "index" );
     my @object_ids = map { $_->id } @{$objects};
     my $me_plus_minus = $c->user_exists ? $c->user->me_plus_minus( \@object_ids ) : undef;
 

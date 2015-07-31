@@ -42,7 +42,7 @@ sub step1: Local{
         $c->detach();
     }
 
-    my $user = $c->model('MySQL::User')->by_email($email);
+    my $user = $c->model('DB::User')->by_email($email);
     if ( !defined($user) ){
         $c->flash->{'message'} = 'Not a valid email';
         $c->res->redirect('/login/forgot/', 303);
@@ -70,7 +70,7 @@ sub step1: Local{
 sub step2: Local Args(2){
     my ( $self, $c, $user_id, $token ) = @_;
 
-    my $token_rs = $c->model('MySQL::UserTokens')->compare($user_id, $token, 'forgot', 1);
+    my $token_rs = $c->model('DB::UserTokens')->compare($user_id, $token, 'forgot', 1);
 
     if ( !defined($token_rs) ){
     #token doesn't match
@@ -85,7 +85,7 @@ sub step2: Local Args(2){
         try {
             die "Passwords do not match\n" if ( $password0 ne $password1 );
 
-            $c->model('MySQL::User')->find( $user_id )->set_password( $password0 );
+            $c->model('DB::User')->find( $user_id )->set_password( $password0 );
 
             #delete the token since we're done with it now
             $token_rs->delete;

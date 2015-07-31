@@ -27,7 +27,7 @@ sub delete_user: Chained('../admin') Args(0){
 
         $c->forward('_force_logout');
         
-        $c->model('MySql::AdminLog')->log_event( {
+        $c->model('DB::AdminLog')->log_event( {
             'admin_id' => $c->user->id,
             'user_id' => $user->id,
             'action' => 'delete_user',
@@ -51,7 +51,7 @@ sub delete_user: Chained('../admin') Args(0){
 sub _force_logout: Private{
     my ( $self, $c ) = @_;
 
-    my $views_rs = $c->model('MySql::Views')->search( {
+    my $views_rs = $c->model('DB::Views')->search( {
         'user_id' => $c->stash->{'user'}->id,
     },{
         'group_by' => 'session_id',

@@ -1,4 +1,4 @@
-package TAN::Model::MySQL;
+package TAN::Model::DB;
 use Moose;
 
 extends 'Catalyst::Model::DBIC::Schema';

@@ -1,5 +1,5 @@
 [% user_can_cms = c.check_user_roles('cms') %]
-[% menu_items = c.model('MySql::Cms').menu_items %]
+[% menu_items = c.model('DB::Cms').menu_items %]
 
 [% IF user_can_cms || menu_items %]
 <p>

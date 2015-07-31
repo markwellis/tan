@@ -1,0 +1,32 @@
+#add postgres repo
+#sudo aptitude install postgresql-9.4 libpq-dev
+
+ssh tan mysqldump -u root -p tan -d --skip-add-drop-table --skip-triggers > tan-schema.sql
+#manually fix (add enums, keys etc)
+
+#run fix sql
+update link set description = SUBSTRING(description,1,950);
+update picture set description = SUBSTRING(description,1,900);
+update poll set description = SUBSTRING(description,1,950);
+update video set description = SUBSTRING(description,1,950);
+update plus_minus set created = now() where created  = 0;
+
+mysqldump -u root -p --default-character-set=utf8 --compatible=postgresql --complete-insert --extended-insert --no-create-info --skip-comments --skip-lock-tables --skip-add-locks --verbose --skip-triggers --quick --single-transaction tan > tan-data.sql
+
+echo -e "BEGIN;\nSET CONSTRAINTS ALL DEFERRED;\nSET standard_conforming_strings = 'off';\nSET backslash_quote = 'on';\nSET escape_string_warning = 'off';" | cat - tan-data.sql | sed "s/'0000-00-00 00:00:00'/null/g" | sed 's/\\r\\n/\n/g' | sed 's/\\n/\n/g' > tan-data-fixed.sql ; echo 'COMMIT;' >> tan-data-fixed.sql
+
+#add to tan-data.sql
+#BEGIN;
+#SET CONSTRAINTS ALL DEFERRED;
+#SET standard_conforming_strings = 'off';
+#SET backslash_quote = 'on';
+#SET escape_string_warning = 'off';
+#...
+#COMMIT;
+
+cat tan-data.sql | sed "s/'0000-00-00 00:00:00'/null/g" | sed 's/\\r\\n/\n/g' | sed 's/\\n/\n/g' > tan-data-fixed.sql
+
+#ssh -C tan mysqldump -u root -p tan --no-create-info --single-transaction --compatible=postgresql --complete-insert --default-character-set=utf8 --quick --skip-triggers > tan-data.sql
+#--skip-extended-insert
+
+#echo -e "BEGIN;\nSET CONSTRAINTS ALL DEFERRED;\n"| cat - tan-data.sql | grep -v 'LOCK TABLES' | sed "s/\\\'/''/g;" | sed 's/\\\"/"/g' |sed "s/'0000-00-00 00:00:00'/null/g" | sed "s/\\\'/\\\\\\\/g" | perl -ne 's/\r\n/\n/;print' > tan-data-fixed.sql ; echo 'COMMIT;' >> tan-data-fixed.sql

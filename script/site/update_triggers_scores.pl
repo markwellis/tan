@@ -3,8 +3,8 @@ use warnings;
 
 use Term::ProgressBar;
 
-use TAN::Model::MySQL;
-my $db = TAN::Model::MySQL->new;
+use TAN::Model::DB;
+my $db = TAN::Model::DB->new;
 
 my $objects = $db->resultset('Object')->search;
 

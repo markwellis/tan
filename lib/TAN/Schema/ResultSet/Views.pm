@@ -11,15 +11,15 @@ sub whos_online {
 
     if ( !$who ){
         my $whos_online_rs = $self->search({
-            'created' => {
-                '>' => \'DATE_SUB(NOW(), INTERVAL 5 MINUTE)',
+            created => {
+                '>' => \"(current_timestamp - interval '5' minute)",
             },
         },{
-            'select' => [\'DISTINCT(me.user_id)'],
-            'as' => 'user_id',
-            'join' => 'user',
-            'rows' => 30,
-            'prefetch' => 'user',
+            select   => [{ DISTINCT => 'me.user_id' } ],
+            as       => 'user_id',
+            join     => 'user',
+            rows     => 30,
+            prefetch => 'user',
         });
 
         #make this into an array ref

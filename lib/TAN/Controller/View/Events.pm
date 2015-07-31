@@ -41,7 +41,7 @@ sub update_score:
     }
 
     foreach my $object_to_update ( @{$objects} ){
-        if ( ref($object_to_update) ne 'TAN::Model::MySQL::Object' ){
+        if ( ref($object_to_update) ne 'TAN::Model::DB::Object' ){
         #$object_rs probably something else with a ->object relationship
             $object_to_update = $object_to_update->object;
         }
@@ -84,7 +84,7 @@ sub remove_comment_cache:
     }
 
     foreach my $comment ( @{$comments} ){
-        if ( ref($comment) eq 'TAN::Model::MySQL::Comment' ){
+        if ( ref($comment) eq 'TAN::Model::DB::Comment' ){
             $c->cache->remove("comment.0:" . $comment->id);
             $c->cache->remove("comment.1:" . $comment->id);
         }
@@ -111,7 +111,7 @@ sub remove_object_cache:
     }
 
     foreach my $object ( @{$objects} ){
-        if ( ref($object) ne 'TAN::Model::MySQL::Object' ){
+        if ( ref($object) ne 'TAN::Model::DB::Object' ){
         #$object_rs probably something else with a ->object relationship
             $object = $object->object;
         }

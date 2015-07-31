@@ -24,7 +24,7 @@ sub index: Private{
         $c->detach;
     }
 
-    my $sitemap_count = $c->model('MySQL::Object')->search({
+    my $sitemap_count = $c->model('DB::Object')->search({
         'type' => TAN->model('Object')->public,
         'deleted' => 0,
     })->count;
@@ -54,11 +54,11 @@ sub xml: Path('xml') Args(1){
         $c->detach();
     }
 
-    my $object_rs = $c->model('MySQL::Object')->search({
+    my $object_rs = $c->model('DB::Object')->search({
             'type' => TAN->model('Object')->public,
             'deleted' => 0,
         }, {
-        '+select' => \"DATE_FORMAT(created, '%Y-%m-%dT%H:%i:%S')",
+        '+select' => \"to_char(created, 'YYYY-MM-DDTHH24:MI:SS')",
         '+as' => 'W3Cdate',
         'order_by' => 'created',
         'rows' => 1000,
