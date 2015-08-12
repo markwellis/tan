@@ -68,6 +68,13 @@ sub thumbnail {
         my $thumb = $image->scale(
             scalefactor => $scalefactor,
         );
+        if ( $scalefactor < 0.5 ) {
+        #sharpen the thumb
+            $thumb->filter(
+                type=>"conv", coef=>[ -0.3, 2, -0.3 ]
+            );
+        }
+
         $self->_copy_tags( $image, $thumb );
         foreach my $tag ( qw/gif_left gif_top gif_screen_width gif_screen_height/ ) {
             my $original_value = $thumb->tags( name => $tag );
@@ -78,6 +85,7 @@ sub thumbnail {
                 value   => ceil( $original_value * $scalefactor ),
             );
         }
+
 
         push @thumbs, $thumb;
     }
@@ -195,8 +203,14 @@ sub _write_image {
 
     Imager->write_multi(
         {
-            file => $output,
-            type => $filetype,
+            file            => $output,
+            type            => $filetype,
+            jpegquality     => 95,
+            jpeg_optimize   => 1,
+            gif_local_map => 1,
+            make_colors => 'addi',
+            translate => 'closest',
+            transp => 'errdiff',
         },
         @$images
     ) or croak 'write image  error ' . Imager->errstr;
