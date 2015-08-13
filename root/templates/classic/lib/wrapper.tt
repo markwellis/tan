@@ -76,16 +76,14 @@
             <script type="text/javascript">
                 [%- IF message -%]
                     window.addEvent('domready', function(){
-                        TAN.alert("[% message | trim | html %]");
+                        TAN.alert("[% message | trim | js %]");
                     });
                 [%- END -%]
-                var mibbit_nick = '[%-
-                    ( c.user_exists ? c.user.username : 'n00b' ) | html
-                -%]';
+                var mibbit_nick = '[%- ( c.user_exists ? c.user.username : 'n00b' ) | js -%]';
             </script>
             [%- IF message -%]
                 <noscript>
-                    <h1>[%- message -%]</h1>
+                    <h1>[%- message | html -%]</h1>
                 </noscript>
             [%- END -%]
             [% content %]
