@@ -215,9 +215,9 @@ sub _calculate_score{
 
 #weights
     my $plus = ( $self->plus * 4 );
-    my $minus = ( $self->minus * 12 ) || 0;
-    my $comments = ( $self->get_column('comments') * 2 );
-    my $views = $self->get_column('views');
+    my $minus = ( $self->minus * 14 ) || 0;
+    my $comments = ( $self->get_column('comments') * 5 );
+    my $views = ( $self->get_column('views') * 1.5 );
 
 #perhaps add in type weights...
 
@@ -243,6 +243,22 @@ sub add_plus_minus {
         $self->update_score;
         return $created;
     } );
+}
+
+sub distinct_views {
+	my $self = shift;
+
+	my $rs = $self->search_related( 'views',
+	    {
+			type	=> 'internal',
+		}, {
+	      select => [
+    	    { count => { distinct => 'session_id' } }
+	      ],
+    	  as => [ 'count' ]
+	    }
+	)->first;
+	return $rs->get_column('count');
 }
 
 1;

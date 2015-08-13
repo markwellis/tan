@@ -183,20 +183,27 @@ around dispatch => sub {
         if ( $session_id ){
             my $user_id = $c->user_exists ? $c->user->user_id : undef;
 
-            eval{
-            #might get a deadlock [284] - ignore in that case
-                $c->model('DB::Views')->create({
-                    session_id  => $session_id,
-                    object_id   => $object_id,
-                    user_id     => $user_id,
-                    ip          => $ip_address,
-                    created     => \'NOW()',
-                    type        => 'internal',
-                });
-            };
+			$c->model('DB')->txn_do( sub {
+				eval{
+				#might get a deadlock [284] - ignore in that case
+					$c->model('DB::Views')->create({
+						session_id  => $session_id,
+						object_id   => $object_id,
+						user_id     => $user_id,
+						ip          => $ip_address,
+						created     => \'NOW()',
+						type        => 'internal',
+					});
+				};
 
-            #TODO
-            #incriment object.views
+				if ( $object_id ) {
+					my $object = $c->model('DB::Object')->find( {
+							object_id => $object_id,
+						} );
+					$object->set_column( views	=> $object->distinct_views );
+					$object->update;
+				}
+			} );
         }
     }
 

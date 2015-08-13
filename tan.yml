@@ -67,7 +67,7 @@ Model::Image:
 
 Model::DB:
     connect_info:
-        dsn: dbi:Pg:dbname=tan;
+        dsn: dbi:Pg:dbname=tan;host=localhost;
         password: caBi2ieL
         pg_enable_utf8: 1
         quote_names: 1
