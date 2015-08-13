@@ -38,7 +38,7 @@ sub index: Path Args(3) {
     try{
         $c->model('Image')->thumbnail( $source_image, $output_image, $x );
     } catch {
-        $c->model('Image')->create_blank( $output_image );
+        die $_;
     };
 
     $c->res->redirect( $c->config->{'thumb_path'} . "/${mod}/${id}/${x}?" . int(rand(100)), 303 );
