@@ -30,6 +30,7 @@ __PACKAGE__->config({
         'file_mtime' => sub { return file_mtime(shift); },
         'domain' => sub { return domain(shift); },
         'filesize_h' => sub { return filesize_h(shift); },
+        js  => \&js_filter,
     },
     expose_methods => [qw/embed_url warn_dumper/],
     render_die => 1,
@@ -101,6 +102,10 @@ sub embed_url {
 sub domain{
     my $u = URI->new(shift);
     return $u->host;
+}
+
+sub js_filter {
+    join '', map { '\x' . sprintf "%02X", ord } split //, $_[0];
 }
 
 sub filesize_h{
