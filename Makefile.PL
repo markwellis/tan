@@ -11,4 +11,13 @@ all_from 'lib/TAN.pm';
 
 #install_script glob('script/*.pl');
 auto_install;
+
+makemaker_args(
+    dist => {
+        COMPRESS    => 'gzip -1', #size is not an issue, but speed is
+    },
+    MAN1PODS    => {}, #disable manifaction
+    MAN3PODS    => {},
+);
+
 WriteAll;

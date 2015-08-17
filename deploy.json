@@ -1,0 +1,29 @@
+{
+    "app"           : "TAN",
+    "keep_releases" : 5,
+    "symlinks"      : {
+        "local"          : "local",
+        "tan_local.yml"  : "tan_local.yml",
+        "user"           : "root/static/user",
+        "cache"          : "root/static/cache",
+    },
+    "profiles"      : {
+        "live"          : {
+            "services"          : {
+                "tan-app1.h1.thisaintnews.com"  : ["tan"],
+            },
+            "servers"           : [
+                "tan-app1.h1.thisaintnews.com",
+                "tan-fe1.h1.thisaintnews.com",
+            ],
+            "no_carton_install" : ["tan-fe1.h1.thisaintnews.com"],
+            "release_dir"       : "/var/www/vhosts/thisaintnews.com/releases",
+            "share_dir"         : "/var/www/vhosts/thisaintnews.com/share",
+            "user"              : "tan",
+            "group"             : "tan-shared",
+            "status_url"        : {
+                "tan-app1.h1.thisaintnews.com" : "http://127.0.0.1:8081/server_status",
+            }
+        },
+    }
+}
