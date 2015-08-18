@@ -17,3 +17,6 @@ Vagrantfile
 vagrant/
 ^sqitch/
 ^perltidy\.ERR
+^t/.*
+^assets/.*
+^inc/.*

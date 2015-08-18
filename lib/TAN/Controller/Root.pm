@@ -21,6 +21,8 @@ has '_mobile' => (
     },
 );
 
+sub base: Chained(/) PathPart('') CaptureArgs(0) {}
+
 sub auto: Private {
     my ( $self, $c ) = @_;
 
@@ -129,8 +131,16 @@ sub chat: Chained(/) Args(0) {
     );
 }
 
-sub render: ActionClass('RenderView') {}
+sub server_status : GET Chained(base) Args(0) {
+    my ( $self, $c ) = @_;
 
+#    $c->model('DB::Product')->exists;
+
+    $c->res->body('SERVER OK');
+    $c->res->status(200);
+}
+
+sub render: ActionClass('RenderView') {}
 sub end: Private {
     my ( $self, $c ) = @_;
 
