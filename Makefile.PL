@@ -4,8 +4,9 @@
 use inc::Module::Install;
 
 name 'TAN';
-all_from 'lib/TAN.pm';
-
+version_from 'lib/TAN.pm';
+author 'Mark Ellis <m@rkellis.com>';
+license license "restricted";
 #authenitcation 
 #template toolkit 
 
@@ -14,7 +15,7 @@ auto_install;
 
 makemaker_args(
     dist => {
-        COMPRESS    => 'gzip -1', #size is not an issue, but speed is
+        COMPRESS    => 'gzip -9', #size is not an issue, but speed is
     },
     MAN1PODS    => {}, #disable manifaction
     MAN3PODS    => {},

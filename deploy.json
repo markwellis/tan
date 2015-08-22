@@ -25,7 +25,7 @@
             "group"             : "tan-shared",
             "status_url"        : {
                 "tan-app1.h1.thisaintnews.com" : "http://127.0.0.1:8081/server_status",
-                "tan-app2.h2.thisaintnews.com" : "http://127.0.0.1:8081/server_status",
+                "tan-app2.h1.thisaintnews.com" : "http://127.0.0.1:8081/server_status",
             }
         },
     }

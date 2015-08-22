@@ -8,12 +8,15 @@ use Getopt::Long;
 use Scalar::Util qw/looks_like_number/;
 use Pod::Usage;
 use List::Util qw/first/;
+use Term::ANSIColor;
+use Carp qw/croak/;
 
 die "please run from the project root dir\n" if ( !-e 'Makefile.PL' );
 
 my @args;
 GetOptions (
     'force' => \my $force,
+    'debug' => \my $debug,
     '<>'    => sub { push @args, shift },
 ) || pod2usage(-verbose => 2);
 
@@ -69,6 +72,8 @@ else {
 }
 
 sub make {
+    my $to_null = "> /dev/null" unless $debug;
+    my $stderr_to_stdout = "2>&1" unless $debug;
     if ( !$force ) {
         my $error = "unclean git dir, try running 'git status' and maybe 'git ls-files --other --exclude-standard --directory', or rerun with the --force option\n";
 
@@ -82,12 +87,12 @@ sub make {
     }
 
     my $commands = <<END;
-rm $config->{app}.tar.gz
-make distclean DISTVNAME=$config->{app}
-rm MANIFEST
-echo y | perl Makefile.PL
-make manifest
-make dist DISTVNAME=$config->{app} #TODO tag this with username
+rm $config->{app}.tar.gz $to_null $stderr_to_stdout
+make distclean $to_null $stderr_to_stdout
+rm MANIFEST $to_null $stderr_to_stdout
+echo y | perl Makefile.PL $to_null
+make manifest $to_null $stderr_to_stdout
+make dist DISTVNAME=$config->{app} $to_null #TODO tag this with username
 END
     system( $commands );
 
@@ -98,8 +103,9 @@ sub copy {
     #copy new dist file to servers
     die "no dist to copy\n" if !-e "$config->{app}.tar.gz";
 
+    info( undef, "copying $config->{app}.tar.gz" );
     foreach my $server ( @{$c_profile->{servers}} ) {
-        say "copying $config->{app}.tar.gz to $server:$c_profile->{release_dir}";
+        info( "$server" );
         `rsync --chmod=u+rw,g+rw,o+r $config->{app}.tar.gz $server:$c_profile->{release_dir}`;
         `ssh $server chown :$c_profile->{group} $c_profile->{release_dir}/$config->{app}.tar.gz`;
 
@@ -115,7 +121,9 @@ sub install {
 
     my $git_remote = $config->{git_remote} || "origin";
 
-    `git tag release/$profile/$release_name; git push $git_remote release/$profile/$release_name`;
+    my $quiet = "-q" unless $debug;
+    info( undef, "tagging release $release_name" );
+    `git tag release/$profile/$release_name; git push $quiet $git_remote release/$profile/$release_name`;
 
     my $create_symlink_commands = '';
     foreach my $source ( keys %{ $config->{symlinks} } ) {
@@ -126,7 +134,6 @@ sub install {
     foreach my $server ( @{$c_profile->{servers}} ) {
         my $install_commands = <<END;
 [ -e $release_dir/$config->{app}.tar.gz ] || { echo "run copy first"; exit 254; }
-source ~$c_profile->{user}/perl5/perlbrew/etc/bashrc
 mkdir $release_dir/$release_name
 tar --strip 1 -xzf $release_dir/$config->{app}.tar.gz -C $release_dir/$release_name
 
@@ -136,7 +143,7 @@ END
 
             if ( !first { $_ eq $server } @{$c_profile->{no_carton_install}} ) {
                 #install the app!
-                $install_commands .= "carton install --deployment -p $release_dir/$release_name/local -cpanfile $release_dir/$release_name/cpanfile;\n";
+                $install_commands .= "cd $release_dir/$release_name; carton install\n";
             }
 
             $install_commands .= <<"END";
@@ -149,11 +156,13 @@ perl -MFile::Path\\ 'remove_tree' -E 'chdir "$release_dir"; \@f = <*>; \@d = sor
 
 END
 
-        _execute_remote_commands( $install_commands, undef, $server );
+        _execute_remote_commands( 
+            commands => $install_commands,
+            servers  => $server,
+            info     => "installing $release_name"
+        );
     }
-
-    #clean up local dir
-    `make distclean`;
+    `make distclean > /dev/null 2>&1`
 }
 
 sub start {
@@ -161,7 +170,11 @@ sub start {
         my $services = $c_profile->{services}->{$server};
 
         foreach ( @{$services} ) {
-            _execute_remote_commands( "systemctl start $_", 1 );
+            _execute_remote_commands(
+                commands => "systemctl start $_",
+                root     => 1,
+                info     => "starting $_"
+            );
         }
     }
 }
@@ -171,7 +184,11 @@ sub stop {
         my $services = $c_profile->{services}->{$server};
 
         foreach ( @{$services} ) {
-            _execute_remote_commands( "systemctl stop $_", 1 );
+            _execute_remote_commands(
+                commands => "systemctl stop $_",
+                root     => 1,
+                info     => "stopping $_"
+            );
         }
     }
 }
@@ -189,22 +206,26 @@ COUNT=1
 while [ 1 ]; do
     STATUS=\$(curl --connect-timeout 3 -m 3 -s -o /dev/null -w "%{http_code}" "${status_url}")
     if ! grep -q 200 <<< \$STATUS; then
-        echo "server not ok"
         ((COUNT++))
         if [ \$COUNT -gt 20 ]; then
-            echo "server didn't start, exiting"
+            echo -e "\\e[31mserver failed to start, exiting\\e[0m"
             exit 33
         fi
-        echo "sleeping before retry"
+        echo -e "\\e[39msleeping before retry\\e[0m"
         sleep 3
     else
-        echo "server ok"
-        break
+       echo -e "\\e[32mserver started\\e[0m"
+       break
     fi
 done
 END
             }
-            _execute_remote_commands( $commands, 1, $server )
+            _execute_remote_commands(
+                commands => $commands,
+                root     => 1,
+                servers  => $server,
+                info     => "restarting $_"
+            )
         }
     }
 }
@@ -219,14 +240,17 @@ sub rollback {
         }
         $rollback = $extra;
     }
-    say "rolling back $rollback releases\n";
+    info( undef, "rolling back $rollback releases" );
 
     my $commands = <<END;
 perl -E 'chdir "$release_dir"; \@f = <*>; \@d = sort grep { -d \$_ && ! -l \$_ } \@f; die "not enough releases to rollback $rollback\\n" if !\$d[-$rollback]; unlink "$release_dir/current"; symlink("$release_dir/\$d[-$rollback]", "$release_dir/current")';
 END
-    _execute_remote_commands( $commands );
+    _execute_remote_commands(
+        commands => $commands,
+        info     => "rolling back"
+    );
 
-    say "rollback complete, now restart";
+    restart();
 }
 
 sub deploy {
@@ -237,7 +261,12 @@ sub deploy {
 }
 
 sub _execute_remote_commands {
-    my ( $commands, $root, $servers ) = @_;
+    my %args = @_;
+
+    my $commands = $args{commands} // croak "no command";
+    my $root = $args{root};
+    my $servers = $args{servers};
+    my $info = $args{info};
 
     if ( defined $servers && !ref $servers ) {
         $servers = [$servers];
@@ -250,15 +279,22 @@ sub _execute_remote_commands {
     }
 
     foreach my $server ( @{$servers} ) {
-        open( my $f, "|-", "ssh $server 'sudo $user -i bash --login'") || die "can't exec ssh";
+        open( my $f, "|-", "ssh $server 'sudo $user -s'") || die "can't exec ssh";
+        my $perlbrewrc = "~$c_profile->{user}/perl5/perlbrew/etc/bashrc";
+        print $f "[ -e $perlbrewrc ] && source $perlbrewrc\n";
+        info( $server, $info );
 
+        my $command_to_run = '';
         foreach my $command ( split /\n/, $commands ) {
-            my $safe_command_echo = '';
             if ( $command ) {
-                $safe_command_echo = "echo $c_profile->{user}\@$server\$ " . quotemeta $command;
-                print $f "$safe_command_echo\n"
-                    . "$command\necho\n";
+                $command_to_run .= "$command\n";
+                say $command if $debug;
             }
+        }
+        if ( $command_to_run ) {
+            print $f "echo -ne \\\e[32m\n";
+            print $f "$command_to_run\n";
+            print $f "echo -ne \\\e[0m\n";
         }
         close $f;
 
@@ -267,6 +303,19 @@ sub _execute_remote_commands {
     }
 }
 
+sub info {
+    my ( $host, $info ) = @_;
+
+    if ( $host ) {
+        print color('white') . "[$host]" . color('reset') . " ";
+    }
+    if ( $info ) {
+        say color('cyan') . "$info" . color('reset');
+    }
+    else {
+        print "\n";
+    }
+}
 =head1 NAME
 
 deploy.pl - deploy an app to a server

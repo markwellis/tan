@@ -20,3 +20,5 @@ vagrant/
 ^t/.*
 ^assets/.*
 ^inc/.*
+^migrations/.*
+^conf/.*
