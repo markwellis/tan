@@ -105,12 +105,12 @@ sub copy {
 
     info( undef, "copying $config->{app}.tar.gz" );
     foreach my $server ( @{$c_profile->{servers}} ) {
-        info( "$server" );
         `rsync --chmod=u+rw,g+rw,o+r $config->{app}.tar.gz $server:$c_profile->{release_dir}`;
         `ssh $server chown :$c_profile->{group} $c_profile->{release_dir}/$config->{app}.tar.gz`;
 
         my $exit_code = $? >> 8;
         die "failed, code $exit_code" if $exit_code;
+        info( "$server", "complete" );
     }
 }
 
@@ -211,10 +211,10 @@ while [ 1 ]; do
             echo -e "\\e[31mserver failed to start, exiting\\e[0m"
             exit 33
         fi
-        echo -e "\\e[39msleeping before retry\\e[0m"
+        echo -e "waiting..."
         sleep 3
     else
-       echo -e "\\e[32mserver started\\e[0m"
+       echo -e "..server started"
        break
     fi
 done
@@ -310,7 +310,7 @@ sub info {
         print color('white') . "[$host]" . color('reset') . " ";
     }
     if ( $info ) {
-        say color('cyan') . "$info" . color('reset');
+        say color('blue') . "$info" . color('reset');
     }
     else {
         print "\n";
