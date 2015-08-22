@@ -7,7 +7,7 @@ use base 'DBIx::Class';
 
 __PACKAGE__->load_components("Core");
 __PACKAGE__->table("tag_objects");
-__PACKAGE__->add_columns(qw/object_tag_id tag_id user_id object_id/);
+__PACKAGE__->add_columns(qw/object_tag_id tag_id object_id/);
 __PACKAGE__->set_primary_key("object_tag_id");
 
 __PACKAGE__->belongs_to(

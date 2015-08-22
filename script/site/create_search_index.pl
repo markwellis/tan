@@ -31,8 +31,9 @@ my $objects = $db->resultset('Object')->search({
         'me.deleted' => 0,
         'type' =>[qw/link blog picture poll video forum/],
     },{
-    'prefetch' => [qw/link blog picture poll video forum user/],
-});
+        'prefetch' => [qw/link blog picture poll video forum user/, { tag_objects => 'tag' }],
+    }
+);
 
 my $comments = $db->resultset('Comment')->search({ 'me.deleted' => 0 },{'prefetch' => [qw/user object/],});
 
