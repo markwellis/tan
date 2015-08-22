@@ -1,5 +1,4 @@
 #!/bin/bash
-source "$(dirname "$0")/use_perlbrew.sh"
+source ~/perl5/perlbrew/etc/bashrc
 
-cd /var/www/TAN
-exec carton exec perl /var/www/TAN/script/workers/$1/$1.pl
+exec carton exec -- perl script/workers/$1/$1.pl
