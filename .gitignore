@@ -2,6 +2,12 @@
 *.mwb.bak
 tan_local.yml
 local/
-MANIFEST
 TAN.tar.gz
 deploy_local.*
+
+MANIFEST
+META.yml
+MYMETA.json
+MYMETA.yml
+Makefile
+inc/
