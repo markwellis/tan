@@ -11,9 +11,11 @@
         "live"          : {
             "services"          : {
                 "tan-app1.h1.thisaintnews.com"  : ["tan"],
+                "tan-app2.h1.thisaintnews.com"  : ["tan"],
             },
             "servers"           : [
                 "tan-app1.h1.thisaintnews.com",
+                "tan-app2.h1.thisaintnews.com",
                 "tan-fe1.h1.thisaintnews.com",
             ],
             "no_carton_install" : ["tan-fe1.h1.thisaintnews.com"],
@@ -23,6 +25,7 @@
             "group"             : "tan-shared",
             "status_url"        : {
                 "tan-app1.h1.thisaintnews.com" : "http://127.0.0.1:8081/server_status",
+                "tan-app2.h2.thisaintnews.com" : "http://127.0.0.1:8081/server_status",
             }
         },
     }
