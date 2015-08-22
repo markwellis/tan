@@ -12,11 +12,13 @@
             "services"          : {
                 "tan-app1.h1.thisaintnews.com"  : ["tan"],
                 "tan-app2.h1.thisaintnews.com"  : ["tan"],
+                "tan-jobs1.h1.thisaintnews.com"  : ["tan-worker@*"],
             },
             "servers"           : [
                 "tan-app1.h1.thisaintnews.com",
                 "tan-app2.h1.thisaintnews.com",
                 "tan-fe1.h1.thisaintnews.com",
+                "tan-jobs1.h1.thisaintnews.com",
             ],
             "no_carton_install" : ["tan-fe1.h1.thisaintnews.com"],
             "release_dir"       : "/var/www/vhosts/thisaintnews.com/releases",
