@@ -1,7 +1,7 @@
 *.swp
 *.mwb.bak
 tan_local.yml
-local/*
+local/
 MANIFEST
 TAN.tar.gz
 deploy_local.*
