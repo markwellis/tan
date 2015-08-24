@@ -173,6 +173,7 @@ sub start {
             _execute_remote_commands(
                 commands => "systemctl start $_",
                 root     => 1,
+                servers  => $server,
                 info     => "starting $_"
             );
         }
@@ -187,6 +188,7 @@ sub stop {
             _execute_remote_commands(
                 commands => "systemctl stop $_",
                 root     => 1,
+                servers  => $server,
                 info     => "stopping $_"
             );
         }
