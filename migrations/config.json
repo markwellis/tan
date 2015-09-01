@@ -1,39 +1,19 @@
 {
     "default": {
-        "dsn": "dbi:mysql:officekitten_dev",
-        "user": "officekitten",
-        "password": "BHc6dCUxPbNn4J",
+        "dsn": "dbi:Pg:dbname=tan;host=localhost",
+        "user": "thisaintnews",
+        "password": "caBi2ieL",
     },
     "live": {
         "tunnel": {
-            "host": "ok-db1.rbx",
-            "port": "3333",
+            "host": "tan-pg1.h1.thisaintnews.com",
+            "port": {
+                "local"  : 5555,
+                "remote" : 5432
+            }
         },
-        "dsn": "dbi:mysql:officekitten_live;host=127.0.0.1;port=3333",
-        "user": "officekitten",
-        "password": "BHc6dCUxPbNn4J",
+        "dsn": "dbi:Pg:dbname=tan;host=127.0.0.1;port=3333",
+        "user": "thisaintnews",
+        "password": "caBi2ieL",
     },
-    "beta": {
-        "tunnel": {
-            "host": "ok-db1.rbx",
-            "port": "3333",
-        },
-        "dsn": "dbi:mysql:officekitten_beta;host=127.0.0.1;port=3333",
-        "user": "officekitten",
-        "password": "BHc6dCUxPbNn4J",
-    },
-    "staging": {
-        "tunnel": {
-            "host": "ok-db1.rbx",
-            "port": "3333",
-        },
-        "dsn": "dbi:mysql:officekitten_staging;host=127.0.0.1;port=3333",
-        "user": "officekitten",
-        "password": "BHc6dCUxPbNn4J",
-    },
-    "jenkinsRelease": {
-        "dsn": "dbi:mysql:officekitten_release",
-        "user": "officekitten",
-        "password": "bfNvfNQ84D",
-    }
 }

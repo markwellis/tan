@@ -332,6 +332,7 @@ DISTRIBUTIONS
       DBD::SQLite 0
       DBIx::Class 0.08114
       ExtUtils::MakeMaker 6.59
+      Hash::Merge 0
       List::MoreUtils 0
       Module::Runtime 0.012
       Moose 1.12
@@ -424,20 +425,6 @@ DISTRIBUTIONS
       Path::Class 0
       Test::More 0
       perl 5.008
-  Catalyst-Plugin-PageCache-0.31
-    pathname: T/TI/TIMB/Catalyst-Plugin-PageCache-0.31.tar.gz
-    provides:
-      Catalyst::Plugin::PageCache 0.31
-    requirements:
-      Cache::Cache 1.04
-      Cache::FileCache 0
-      Catalyst::Plugin::Cache 0.10
-      Catalyst::Runtime 0
-      Digest::SHA1 0
-      ExtUtils::MakeMaker 6.42
-      File::Path 2.07
-      MRO::Compat 0.10
-      Test::More 0
   Catalyst-Plugin-Session-0.40
     pathname: J/JJ/JJNAPIORK/Catalyst-Plugin-Session-0.40.tar.gz
     provides:
@@ -967,6 +954,18 @@ DISTRIBUTIONS
       Path::Class 0
       Sub::Install 0
       Test::Most 0
+  Config-ZOMG-1.000000
+    pathname: F/FR/FREW/Config-ZOMG-1.000000.tar.gz
+    provides:
+      Config::ZOMG 1.000000
+      Config::ZOMG::Source::Loader 1.000000
+    requirements:
+      Clone 0
+      Config::Any 0
+      ExtUtils::MakeMaker 6.30
+      Hash::Merge::Simple 0
+      List::Util 0
+      Moo 0
   Context-Preserve-0.01
     pathname: J/JR/JROCKWAY/Context-Preserve-0.01.tar.gz
     provides:
@@ -1097,21 +1096,6 @@ DISTRIBUTIONS
       Test::More 0.47
       Tie::Hash 0
       perl 5.006
-  DBD-mysql-4.029
-    pathname: C/CA/CAPTTOFU/DBD-mysql-4.029.tar.gz
-    provides:
-      Bundle::DBD::mysql 4.027
-      DBD::mysql 4.029
-      DBD::mysql::GetInfo undef
-      DBD::mysql::db 4.029
-      DBD::mysql::dr 4.029
-      DBD::mysql::st 4.029
-    requirements:
-      DBI 1.08
-      Data::Dumper 0
-      Test::Deep 0
-      Test::More 0
-      perl 5.008001
   DBI-1.633
     pathname: T/TI/TIMB/DBI-1.633.tar.gz
     provides:
@@ -2775,6 +2759,14 @@ DISTRIBUTIONS
       Scalar::Util 0
       Test::More 0
       perl 5.006
+  Encode-JavaScript-UCS-0.01
+    pathname: M/MI/MIYAGAWA/Encode-JavaScript-UCS-0.01.tar.gz
+    provides:
+      Encode::JavaScript::UCS 0.01
+    requirements:
+      Encode 2.12
+      ExtUtils::MakeMaker 0
+      Test::More 0.32
   Encode-Locale-1.04
     pathname: G/GA/GAAS/Encode-Locale-1.04.tar.gz
     provides:
@@ -3492,30 +3484,6 @@ DISTRIBUTIONS
       Scalar::Util 1
       Test::More 0.47
       XSLoader 0
-  Imager-File-GIF-0.90
-    pathname: T/TO/TONYC/Imager-File-GIF-0.90.tar.gz
-    provides:
-      Imager::File::GIF 0.90
-    requirements:
-      ExtUtils::MakeMaker 0
-      Imager 0.94
-      XSLoader 0
-  Imager-File-JPEG-0.90
-    pathname: T/TO/TONYC/Imager-File-JPEG-0.90.tar.gz
-    provides:
-      Imager::File::JPEG 0.90
-    requirements:
-      ExtUtils::MakeMaker 0
-      Imager 0.86
-      XSLoader 0
-  Imager-File-PNG-0.92
-    pathname: T/TO/TONYC/Imager-File-PNG-0.92.tar.gz
-    provides:
-      Imager::File::PNG 0.92
-    requirements:
-      ExtUtils::MakeMaker 0
-      Imager 0.90
-      XSLoader 0
   Imager-File-TIFF-0.89
     pathname: T/TO/TONYC/Imager-File-TIFF-0.89.tar.gz
     provides:
@@ -3524,17 +3492,6 @@ DISTRIBUTIONS
       ExtUtils::MakeMaker 0
       Imager 0.94
       XSLoader 0
-  Imager-GIF-0.002
-    pathname: T/TA/TADZIK/Imager-GIF-0.002.tar.gz
-    provides:
-      Imager::GIF undef
-    requirements:
-      Carp 0
-      ExtUtils::MakeMaker 6.30
-      Imager 0
-      Test::More 0
-      strict 0
-      warnings 0
   Import-Into-1.002004
     pathname: E/ET/ETHER/Import-Into-1.002004.tar.gz
     provides:
@@ -6343,20 +6300,6 @@ DISTRIBUTIONS
       Test::More 0
       Test::use::ok 0
       Tie::RefHash 0
-  Time-Moment-0.22
-    pathname: C/CH/CHANSEN/Time-Moment-0.22.tar.gz
-    provides:
-      Time::Moment 0.22
-    requirements:
-      Carp 0
-      ExtUtils::MakeMaker 6.59
-      ExtUtils::ParseXS 3.18
-      Test::Fatal 0.006
-      Test::More 0.88
-      Test::Requires 0
-      Time::HiRes 0
-      XSLoader 0.02
-      perl 5.008001
   Time-Warp-0.51
     pathname: S/SZ/SZABGAB/Time-Warp-0.51.tar.gz
     provides:

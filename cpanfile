@@ -107,6 +107,7 @@ requires 'Imager::File::JPEG';
 requires 'Imager::File::GIF';
 requires 'Imager::File::PNG';
 requires 'Imager::File::TIFF';
+requires 'Config::ZOMG';
 
 test_requires 'Test::More';
 test_requires 'Test::Exception';
