@@ -49,17 +49,18 @@ sub login : Local Args(0) {
     }
 
     if ( $c->req->method eq 'POST' ) {
-        my $authenticated = try {
-            $c->authenticate(
-                {
-                    'username' => $c->req->param( 'username' ),
-                    'password' => $c->req->param( 'password' ),
-                }
-              )
-        }
-        catch {
-            return undef;
-        };
+        my $authenticated = $c->authenticate(
+            {
+                dbix_class  => {
+                    searchargs  => [
+                        [
+                            \[ 'LOWER(username) = LOWER(?)', $c->req->param( 'username' ) ],
+                        ],
+                    ],
+                },
+                password    => $c->req->param( 'password' ),
+            }
+        );
         if ( $authenticated ) {
             if ( !$c->user->confirmed ) {
                 $ref = '/login/';

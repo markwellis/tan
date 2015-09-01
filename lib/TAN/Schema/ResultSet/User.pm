@@ -7,29 +7,31 @@ use base 'DBIx::Class::ResultSet';
 sub username_exists{
     my ( $self, $username ) = @_;
 
-    return $self->search({
-        'username' => {
-            'like' => $username
-        },
-    })->count || undef;
+    return $self->search(
+        [
+            \[ 'LOWER(username) = LOWER(?)', $username ],
+        ],
+    )->count || undef;
 }
 
 sub email_exists{
     my ( $self, $email ) = @_;
 
-    return $self->search({
-        'email' => {
-            'like' => $email
-        },
-    })->count || undef;
+    return $self->search(
+        [
+            \[ 'LOWER(email) = LOWER(?)', $email ],
+        ],
+    )->count || undef;
 }
 
 sub by_email{
     my ( $self, $email ) = @_;
 
-    return $self->find({
-        'email' => $email,
-    }) || undef;
+    return $self->find(
+        [
+            \[ 'LOWER(email) = LOWER(?)', $email ],
+        ],
+    );
 }
 
 sub new_user{
