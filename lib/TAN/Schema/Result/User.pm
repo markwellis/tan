@@ -97,7 +97,8 @@ sub profile_url{
     return "/profile/@{[ $self->username ]}/";
 }
 
-my $salt_dir = '/mnt/stuff/TAN/salt/';
+#this needs to be a config option!
+my $salt_dir = '/var/www/vhosts/thisaintnews.com/share/salt/';
 sub _get_salt{
     my ( $self ) = @_;
 
