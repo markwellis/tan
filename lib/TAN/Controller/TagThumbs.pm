@@ -13,7 +13,7 @@ sub index: Args(0) {
 
     my $all_tags = $c->req->param('tags');
 
-    my @tags = split(/ /, $all_tags);
+    my @tags = split(/ /, lc $all_tags);
     $c->model('Stemmer')->stem_in_place( \@tags );
 
     #remove duplicate tags
