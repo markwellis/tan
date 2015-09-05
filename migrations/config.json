@@ -12,7 +12,7 @@
                 "remote" : 5432
             }
         },
-        "dsn": "dbi:Pg:dbname=tan;host=127.0.0.1;port=3333",
+        "dsn": "dbi:Pg:dbname=tan;host=127.0.0.1;port=5555",
         "user": "thisaintnews",
         "password": "caBi2ieL",
     },
