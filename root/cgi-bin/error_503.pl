@@ -2,21 +2,13 @@
 use strict;
 use warnings;
 
-use CGI qw/-standard/;
+use CGI qw/:standard/;
 
 use Email::Sender::Simple qw/sendmail/;
 use Email::Simple;
 use Email::Simple::Creator;
 use Sys::Hostname;
-
-my $body = << "ENDBODY";
-url:
-    @{[ $q->url( -full => 1, -query =>1 ) ]}
-request type:
-    $ENV{REQUEST_METHOD}
-client ip:
-    $ENV{REMOTE_ADDR}
-ENDBODY
+use Data::Dumper::Concise;
 
 my $email = Email::Simple->create(
   header => [
@@ -24,7 +16,7 @@ my $email = Email::Simple->create(
     From    => "apache@" . hostname,
     Subject => "proxy timeout error",
   ],
-  body => $body,
+  body => Dumper( \%ENV ),
 );
 
 sendmail($email);
