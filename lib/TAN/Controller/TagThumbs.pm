@@ -38,8 +38,10 @@ sub index: Args(0) {
             foreach my $tag_rs ( $tags_rs->all ){
             #have to do this coz of the many_to_many :(
                 my $objects_rs = $tag_rs->objects->search({
-                    'type' => 'picture',
-                    'nsfw' => 0,
+                    type    => 'picture',
+                    nsfw    => 0,
+                    deleted => 0,
+
                 });
                 if ( $objects_rs ){
                     foreach my $object ( $objects_rs->all ){
