@@ -2,12 +2,9 @@
 [% FOREACH js_include IN js_includes -%]
     [% IF !js_inc_done.$js_include %]
         [% IF js_include.match('^(?:http|/static)') %]
-            <script type="text/javascript" src="[% js_include %]"></script>
+            <script src="[% js_include %]" async></script>
         [% ELSE %]
-            <script 
-                type="text/javascript" 
-                src="[% c.config.cache_path %]/minify/[% c.VERSION %]/[% theme_settings.name %]/js/[% js_include %].js"
-            ></script>
+            <script src="[% c.config.cache_path %]/minify/[% c.VERSION %]/[% theme_settings.name %]/js/[% js_include %].js" async></script>
         [% END %]
         [%- js_inc_done.$js_include = 1 -%]
     [% END %]
