@@ -27,11 +27,11 @@ sub email_exists{
 sub by_email{
     my ( $self, $email ) = @_;
 
-    return $self->find(
+    return $self->search(
         [
             \[ 'LOWER(email) = LOWER(?)', $email ],
         ],
-    );
+    )->first;
 }
 
 sub new_user{
