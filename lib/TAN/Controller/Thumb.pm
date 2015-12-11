@@ -35,11 +35,7 @@ sub index: Path Args(3) {
     my $source_image = $c->path_to('root') . $c->config->{'pic_path'} . "/" . $picture->filename;
     my $output_image = $c->path_to('root') . $c->config->{'thumb_path'} . "/${mod}/${id}/${x}";
 
-    try{
-        $c->model('Image')->thumbnail( $source_image, $output_image, $x );
-    } catch {
-        die $_;
-    };
+    $c->model('Image')->thumbnail( $source_image, $output_image, $x );
 
     $c->res->redirect( $c->config->{'thumb_path'} . "/${mod}/${id}/${x}?" . int(rand(100)), 303 );
     $c->detach;
