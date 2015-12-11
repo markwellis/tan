@@ -8,6 +8,7 @@ use Path::Tiny;
 use Imager;
 use Carp;
 use POSIX qw/ceil/;
+use List::Util qw/any/;
 
 has 'animated_frame_limit' => (
     'is'       => 'ro',
@@ -33,6 +34,14 @@ sub thumbnail {
 
     $output->parent->mkpath;
 
+    my $frame_limit;
+    if ( any { $_ == $width } @{ $self->animated_size_showall_frames } ) {
+        $frame_limit = undef;
+    }
+    else {
+        $frame_limit = $self->animated_frame_limit;
+    }
+
     my @images = $self->_read_image( $input );
     my $filetype = $self->_image_type( $images[0] );
     my $frames = scalar @images;
@@ -56,17 +65,8 @@ sub thumbnail {
     }
 
     my @thumbs;
-    my $frame_limit = $frames - 1;
 
-    if (
-        ( $filetype eq 'gif' )
-        && ( $frames > $self->animated_frame_limit )
-        && !grep {$_ == $width } @{ $self->animated_size_showall_frames }
-    ) {
-        $frame_limit = $self->animated_frame_limit;
-    }
-
-    foreach my $image ( @images[0..$frame_limit] ) {
+    foreach my $image ( @images ) {
         my $thumb = $image->scale(
             scalefactor => $scalefactor,
         );
@@ -102,20 +102,12 @@ sub crop {
     my $input = path( $input_s );
     my $output = path( $output_s );
 
-    my @images = $self->_read_image( $input );
+    my @images = $self->_read_image( $input, 30 );
     my $filetype = $self->_image_type( $images[0] );
     my $frames = scalar @images;
 
-    my $frame_limit = $frames - 1;
-    if (
-        ( $filetype eq 'gif' )
-        && ( $frames > $self->animated_frame_limit )
-    ) {
-        $frame_limit = $self->animated_frame_limit;
-    }
-
     my @cropped;
-    foreach my $image ( @images[0..$frame_limit] ) {
+    foreach my $image ( @images ) {
         my ( $existing_left, $existing_top ) = ( 0 ) x 2;
         my $new_left = $left;
         my $new_top = $top;
@@ -184,17 +176,46 @@ sub create_blank {
 }
 
 sub _read_image {
-    my ( $self, $input ) = @_;
+    my ( $self, $input, $frame_limit ) = @_;
+    $frame_limit //= 500;
 
     if ( !$input->exists ) {
         croak 'file not found';
     }
 
-    my @images = Imager->read_multi(
+    my @images;
+    my $first_image = Imager->new;
+    $first_image->read(
         file => $input,
-    ) or croak "open image failed " . Imager->errstr;
+        page => 0,
+    ) or croak "open image failed " . $first_image->errstr;
 
-    return @images;
+    push @images, $first_image;
+
+    #load the animated gif frames
+    #only do this for gifs because it can get stuck on jpegs
+    if ( $self->_image_type( $first_image ) eq 'gif' ) {
+        my $page = 1;
+
+        while ( 1 ) {
+            #XXX looking for infinate loop???
+            last if $page > $frame_limit;
+
+            my $img = Imager->new;
+            $img->read(
+                file => $input,
+                page => $page,
+            );
+
+            last if $img->errstr;
+
+            ++$page;
+
+            push @images, $img;
+        }
+    }
+
+    @images;
 }
 
 
