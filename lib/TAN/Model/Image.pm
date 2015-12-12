@@ -42,7 +42,7 @@ sub thumbnail {
         $frame_limit = $self->animated_frame_limit;
     }
 
-    my @images = $self->_read_image( $input );
+    my @images = $self->_read_image( $input, $frame_limit );
     my $filetype = $self->_image_type( $images[0] );
     my $frames = scalar @images;
 
