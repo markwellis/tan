@@ -102,11 +102,8 @@ requires 'MooseX::NonMoose';
 requires 'DBIx::Class::Schema::Loader';
 requires 'DBIx::Class::TimeStamp';
 
-requires 'Imager';
-requires 'Imager::File::JPEG';
-requires 'Imager::File::GIF';
-requires 'Imager::File::PNG';
-requires 'Imager::File::TIFF';
+requires 'Alien::ImageMagick';
+
 requires 'Config::ZOMG';
 
 test_requires 'Test::More';

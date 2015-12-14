@@ -5,7 +5,7 @@ use namespace::autoclean;
 extends 'Catalyst::Model';
 
 use Path::Tiny;
-use Imager;
+use Image::Magick;
 use Carp;
 use POSIX qw/ceil/;
 use List::Util qw/any/;
@@ -41,19 +41,16 @@ sub thumbnail {
     else {
         $frame_limit = $self->animated_frame_limit;
     }
+    my @images;
 
-    my @images = $self->_read_image( $input, $frame_limit );
-    my $filetype = $self->_image_type( $images[0] );
-    my $frames = scalar @images;
+    my ( $image, $frame_count, $filetype ) = $self->_read_image( $input );
+    return if !$image;
 
-    my $scalefactor = $width / $images[0]->getwidth;
+    my $scalefactor = $width / $image->Get('width');
 
     if ( $scalefactor > 1 ) {
         #don't make thumbnails bigger than the original image
-        if (
-            $frames == 1
-            || grep {$_ == $width } @{ $self->animated_size_showall_frames }
-        ) {
+        if ( $frame_limit ) {
             #just copy the file if it's not animated
             # or if it's an animation where all the frames are shown
             $input->copy( $output );
@@ -64,196 +61,117 @@ sub thumbnail {
         $scalefactor = 1;
     }
 
-    my @thumbs;
+    my $new_width = int( $image->Get('width') * $scalefactor );
+    my $new_height = int ( $image->Get('height') * $scalefactor );
 
-    foreach my $image ( @images ) {
-        my $thumb = $image->scale(
-            scalefactor => $scalefactor,
+    if ( ( $filetype eq 'gif' ) && ( $frame_count > 1 ) ) {
+#animated gif
+        if ( $frame_limit && ( $frame_count > $frame_limit ) ) {
+        #drop framelimit
+            $image = $self->_reduce_frames( $image, $frame_limit );
+        }
+
+        $image->Set(
+            background => 'transparent',
         );
-        if ( $scalefactor < 0.5 ) {
-        #sharpen the thumb
-            $thumb->filter(
-                type=>"conv", coef=>[ -0.3, 2, -0.3 ]
-            );
-        }
-
-        $self->_copy_tags( $image, $thumb );
-        foreach my $tag ( qw/gif_left gif_top gif_screen_width gif_screen_height/ ) {
-            my $original_value = $thumb->tags( name => $tag );
-            next if !defined $original_value;
-
-            $thumb->settag(
-                name    => $tag,
-                value   => ceil( $original_value * $scalefactor ),
-            );
-        }
-
-
-        push @thumbs, $thumb;
+        #look at the api consistency
+        # this one returns a new image!
+        $image = $image->Coalesce;
+        $image->Thumbnail(
+            width  => $new_width,
+            height => $new_height,
+        );
+        $image->Layers(
+            method  => 'optimize-transparency',
+        );
+        $image->Layers(
+            method  => 'optimize-plus',
+        );
+    }
+    else {
+        $image->Thumbnail(
+            width  => $new_width,
+            height => $new_height,
+        );
     }
 
-    $self->_write_image( $output, $filetype, \@thumbs );
+    $self->_write_image( $output, $image );
 }
 
-#change this to take resize option
 sub crop {
-    my ( $self, $input_s, $output_s, $left, $top, $width, $height ) = @_;
+    my ( $self, $input_s, $output_s, $x, $y, $w, $h ) = @_;
 
     my $input = path( $input_s );
     my $output = path( $output_s );
 
-    my @images = $self->_read_image( $input, 30 );
-    my $filetype = $self->_image_type( $images[0] );
-    my $frames = scalar @images;
+    my ( $image, $frame_count, $filetype ) = $self->_read_image( $input );
+    return if !$image;
 
-    my @cropped;
-    foreach my $image ( @images ) {
-        my ( $existing_left, $existing_top ) = ( 0 ) x 2;
-        my $new_left = $left;
-        my $new_top = $top;
-
-        if ( $filetype eq 'gif' ) {
-            $new_left -= $image->tags( name => 'gif_left') ;
-            $new_top -= $image->tags( name => 'gif_top');
-        }
-
-        my $new = $image->crop(
-            left   => $new_left,
-            top    => $new_top,
-            width  => $width,
-            height => $height,
+    if ( ( $frame_count > 1 ) && ( $filetype eq 'gif' ) ) {
+        $image->Set(
+            background => 'transparent',
         );
-        next if !$new;
-
-        $self->_copy_tags( $image, $new );
-        if ( $filetype eq 'gif' ) {
-            my $layer_left = $new->tags( name => 'gif_left') - $left;
-            $layer_left = 0 if $layer_left < 0;
-
-            my $layer_top = $new->tags( name => 'gif_top') - $top;
-            $layer_top = 0 if $layer_top < 0;
-
-            $new->settag(
-                name    => 'gif_left',
-                value   => $layer_left,
-            );
-            $new->settag(
-                name    => 'gif_top',
-                value   => $layer_top,
-            );
-            $new->settag(
-                name    => 'gif_screen_width',
-                value   => $width,
-            );
-            $new->settag(
-                name    => 'gif_screen_height',
-                value   => $height,
-            );
-        }
-
-        push @cropped, $new;
+        $image = $image->Coalesce;
+        $image = $self->_reduce_frames( $image, $self->animated_frame_limit );
     }
 
-    $self->_write_image( $output, $filetype, \@cropped );
+    $image->Crop(
+        width   => $w,
+        height  => $h,
+        x       => $x,
+        y       => $y,
+    );
+    $image->Thumbnail(
+        height  => 100,
+        width   => 100,
+    );
+    $image->Extent(
+        width   => 100,
+        height  => 100,
+        gravity => 'Center',
+    );
+
+    $image->Layers(
+        method  => 'optimize-transparency',
+    );
+    $image->Layers(
+        method  => 'optimize-plus',
+    );
+
+    $self->_write_image( $output, $image );
 }
 
-sub create_blank {
-    my ( $self, $output_filename_s ) = @_;
+sub _reduce_frames {
+    my ( $self, $image, $frame_limit ) = @_;
 
-    my $output_filename = path( $output_filename_s );
-
-    my $image = Imager->new(
-        xsize       => 1,
-        ysize       => 1,
-        channels    => 4
-    );
-    $image->box(
-        filled      => 1,
-        color       => '#00000000',
-    );
-
-    $self->_write_image( $output_filename, 'gif', [$image] );
+    #this is a massive hack
+    return bless [ @$image[ 0..$frame_limit ] ], 'Image::Magick';
 }
 
 sub _read_image {
-    my ( $self, $input, $frame_limit ) = @_;
-    $frame_limit //= 500;
+    my ( $self, $input ) = @_;
 
-    if ( !$input->exists ) {
-        croak 'file not found';
+    return if !$input->exists;
+
+    my $image = Image::Magick->new;
+    my $error = $image->Read( $input );
+    die $error if $error;
+
+    if ( wantarray ) {
+        return ( $image, scalar @$image, lc $image->Get('magick') );
     }
-
-    my @images;
-    my $first_image = Imager->new;
-    $first_image->read(
-        file => $input,
-        page => 0,
-    ) or croak "open image failed " . $first_image->errstr;
-
-    push @images, $first_image;
-
-    #load the animated gif frames
-    #only do this for gifs because it can get stuck on jpegs
-    if ( $self->_image_type( $first_image ) eq 'gif' ) {
-        my $page = 1;
-
-        while ( 1 ) {
-            #XXX looking for infinate loop???
-            last if $page > $frame_limit;
-
-            my $img = Imager->new;
-            $img->read(
-                file => $input,
-                page => $page,
-            );
-
-            last if $img->errstr;
-
-            ++$page;
-
-            push @images, $img;
-        }
-    }
-
-    @images;
+    return $image;
 }
 
-
 sub _write_image {
-    my ( $self, $output, $filetype, $images ) = @_;
+    my ( $self, $output, $image ) = @_;
 
     $output->parent->mkpath;
 
-    Imager->write_multi(
-        {
-            file            => $output,
-            type            => $filetype,
-            jpegquality     => 95,
-            jpeg_optimize   => 1,
-            gif_local_map => 1,
-            make_colors => 'addi',
-            translate => 'closest',
-            transp => 'errdiff',
-        },
-        @$images
-    ) or croak 'write image  error ' . Imager->errstr;
-}
+    my $error = $image->Write( $output );
+    die $error if $error;
 
-sub _copy_tags {
-    my ( $self, $source, $target ) = @_;
-
-    for my $tag ( $source->tags ) {
-        $target->addtag(
-            name    => $tag->[ 0 ],
-            value   => $tag->[ 1 ],
-        );
-    }
-}
-
-sub _image_type {
-    my ( $self, $image ) = @_;
-
-    return $image->tags( name => 'i_format' );
+    1;
 }
 
 __PACKAGE__->meta->make_immutable;
