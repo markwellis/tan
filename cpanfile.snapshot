@@ -16,6 +16,46 @@ DISTRIBUTIONS
       Algorithm::Diff::_impl 1.1903
     requirements:
       ExtUtils::MakeMaker 0
+  Alien-Base-0.023
+    pathname: P/PL/PLICEASE/Alien-Base-0.023.tar.gz
+    provides:
+      Alien::Base 0.023
+      Alien::Base::ModuleBuild 0.023
+      Alien::Base::ModuleBuild::Cabinet 0.023
+      Alien::Base::ModuleBuild::File 0.023
+      Alien::Base::ModuleBuild::Repository 0.023
+      Alien::Base::ModuleBuild::Repository::FTP 0.023
+      Alien::Base::ModuleBuild::Repository::HTTP 0.023
+      Alien::Base::ModuleBuild::Repository::Local 0.023
+      Alien::Base::ModuleBuild::Utils 0.023
+      Alien::Base::PkgConfig 0.023
+    requirements:
+      Archive::Extract 0
+      Capture::Tiny 0.17
+      FFI::CheckLib 0.11
+      File::ShareDir 0
+      File::chdir 0.1005
+      HTTP::Tiny 0
+      List::MoreUtils 0
+      Module::Build 0.36
+      Perl::OSType 0
+      Shell::Config::Generate 0
+      Shell::Guess 0
+      Sort::Versions 0
+      Text::ParseWords 3.26
+      URI 0
+      parent 0
+      perl v5.8.1
+  Alien-ImageMagick-0.05
+    pathname: J/JE/JETEVE/Alien-ImageMagick-0.05.tar.gz
+    provides:
+      Alien::ImageMagick 0.05
+    requirements:
+      Alien::Base 0.009
+      File::ShareDir 1.00
+      Module::Build 0.38
+      Test::More 1.001014
+      perl 5.006
   Any-Moose-0.26
     pathname: E/ET/ETHER/Any-Moose-0.26.tar.gz
     provides:
@@ -53,6 +93,21 @@ DISTRIBUTIONS
     requirements:
       ExtUtils::MakeMaker 0
       Test::More 0
+  Archive-Extract-0.76
+    pathname: B/BI/BINGOS/Archive-Extract-0.76.tar.gz
+    provides:
+      Archive::Extract 0.76
+    requirements:
+      ExtUtils::MakeMaker 0
+      File::Basename 0
+      File::Path 0
+      File::Spec 0.82
+      IPC::Cmd 0.64
+      Locale::Maketext::Simple 0
+      Module::Load::Conditional 0.04
+      Params::Check 0.07
+      Test::More 0
+      if 0
   B-Hooks-EndOfScope-0.14
     pathname: E/ET/ETHER/B-Hooks-EndOfScope-0.14.tar.gz
     provides:
@@ -2903,6 +2958,13 @@ DISTRIBUTIONS
       File::Spec 0
       strict 0
       warnings 0
+  FFI-CheckLib-0.14
+    pathname: P/PL/PLICEASE/FFI-CheckLib-0.14.tar.gz
+    provides:
+      FFI::CheckLib 0.14
+    requirements:
+      ExtUtils::MakeMaker 0
+      perl 5.006
   Feed-Find-0.07
     pathname: B/BT/BTROTT/Feed-Find-0.07.tar.gz
     provides:
@@ -2964,6 +3026,21 @@ DISTRIBUTIONS
       ExtUtils::MakeMaker 6.11
       File::Spec 0
       IO::Dir 0
+  File-chdir-0.1010
+    pathname: D/DA/DAGOLDEN/File-chdir-0.1010.tar.gz
+    provides:
+      File::chdir 0.1010
+      File::chdir::ARRAY 0.1010
+      File::chdir::SCALAR 0.1010
+    requirements:
+      Carp 0
+      Cwd 3.16
+      Exporter 0
+      ExtUtils::MakeMaker 6.17
+      File::Spec::Functions 3.27
+      perl 5.006
+      strict 0
+      vars 0
   Filesys-Notify-Simple-0.12
     pathname: M/MI/MIYAGAWA/Filesys-Notify-Simple-0.12.tar.gz
     provides:
@@ -5625,6 +5702,21 @@ DISTRIBUTIONS
       ExtUtils::MakeMaker 0
       Scalar::Util 0
       Test::More 0
+  Shell-Config-Generate-0.24
+    pathname: P/PL/PLICEASE/Shell-Config-Generate-0.24.tar.gz
+    provides:
+      Shell::Config::Generate 0.24
+    requirements:
+      ExtUtils::MakeMaker 0
+      Shell::Guess 0.02
+      perl 5.008001
+  Shell-Guess-0.06
+    pathname: P/PL/PLICEASE/Shell-Guess-0.06.tar.gz
+    provides:
+      Shell::Guess 0.06
+    requirements:
+      Module::Build 0.28
+      perl 5.006
   Signal-Mask-0.008
     pathname: L/LE/LEONT/Signal-Mask-0.008.tar.gz
     provides:
@@ -5649,6 +5741,16 @@ DISTRIBUTIONS
       Lingua::Stem::Snowball::Se 1.2
     requirements:
       Test::More 0.42
+  Sort-Versions-1.62
+    pathname: N/NE/NEILB/Sort-Versions-1.62.tar.gz
+    provides:
+      Sort::Versions 1.62
+    requirements:
+      Exporter 0
+      ExtUtils::MakeMaker 0
+      perl 5.006
+      strict 0
+      warnings 0
   Stream-Buffered-0.03
     pathname: D/DO/DOY/Stream-Buffered-0.03.tar.gz
     provides:
