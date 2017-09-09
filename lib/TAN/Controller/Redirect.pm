@@ -50,17 +50,17 @@ sub internal: Local{
 sub external: Local Args(1){
     my ( $self, $c, $object_id ) = @_;
 
+    my $not_int_reg = $c->model('CommonRegex')->not_int;
+    $object_id =~ s/$not_int_reg//g;
+
     if ( !$object_id ){
         $c->forward('/default');
         $c->detach;
     }
 
-    my $not_int_reg = $c->model('CommonRegex')->not_int;
-    $object_id =~ s/$not_int_reg//g;
-
     my $object_rs = $c->model('DB::Object')->find($object_id);
-    if ( 
-        defined($object_rs) 
+    if (
+        defined($object_rs)
         && (
             ($object_rs->type eq 'link')
             || ($object_rs->type eq 'video')
