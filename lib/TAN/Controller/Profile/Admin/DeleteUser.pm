@@ -26,7 +26,7 @@ sub delete_user: Chained('../admin') Args(0){
         } );
 
         $c->forward('_force_logout');
-        
+
         $c->model('DB::AdminLog')->log_event( {
             'admin_id' => $c->user->id,
             'user_id' => $user->id,
@@ -52,12 +52,13 @@ sub _force_logout: Private{
     my ( $self, $c ) = @_;
 
     my $views_rs = $c->model('DB::Views')->search( {
-        'user_id' => $c->stash->{'user'}->id,
+        user_id  => $c->stash->{'user'}->id,
     },{
-        'group_by' => 'session_id',
+        select   => ['session_id'],
+        distinct => 1,
     } );
 
-    foreach my $view ( $views_rs->all ){
+    while ( my $view = $views_rs->next ) {
         foreach my $key ( ('session','expires') ){
             $c->delete_session_data( "${key}:" . $view->session_id );
         }
