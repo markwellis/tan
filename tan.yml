@@ -14,8 +14,8 @@ donate:
 max_password_length: 50
 paypal_donate_address: donate@thisaintnews.com
 
-recaptcha_private_key: 6LeJSz4UAAAAABovjxAiyYYZ0l8JHHj_uZl_HFzH
-recaptcha_public_key: 6LeJSz4UAAAAAGTZJdoOFxddpWs82oRw9fQKjnts
+recaptcha_public_key: 6LeVTT4UAAAAAMMIWr4N3m2vlMoJ52DQ1Q6fzStv
+recaptcha_private_key: 6LeVTT4UAAAAAEKlP5vGCnJdggEUCsbq4zIREJ3B
 
 static_path: /static
 
