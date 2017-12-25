@@ -13,11 +13,16 @@ sub index: Path Args(0){
 # do some security shit here, perhaps add a nonce
 
 #check recaptcha
-    my $result = $c->model('reCAPTCHA')->check_answer_v2(
-        $c->config->{'recaptcha_private_key'},
-        $c->req->param("recaptcha_response_field"),
-        $c->req->address,
-    );
+    my $result = do {
+        #meh
+        local $ENV{PERL_LWP_SSL_VERIFY_HOSTNAME} = 0;
+
+        $c->model('reCAPTCHA')->check_answer_v2(
+            $c->config->{'recaptcha_private_key'},
+            $c->req->param("g-recaptcha-response"),
+            $c->req->address,
+        );
+    };
 
     my $password0 = $c->req->param("rpassword0");
     my $password1 = $c->req->param("rpassword1");

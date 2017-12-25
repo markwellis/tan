@@ -25,9 +25,7 @@ sub index : Path Args(0) {
 
     $c->stash->{'recaptcha_html'} = $c->model( 'reCAPTCHA' )->get_html_v2(
         $c->config->{'recaptcha_public_key'},
-        {
-            'data-theme' => 'dark',
-        }
+        {}
     );
 
     $c->flash->{'ref'} = $c->req->referer // '/index/all/0/';
