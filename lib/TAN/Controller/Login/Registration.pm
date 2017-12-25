@@ -13,11 +13,10 @@ sub index: Path Args(0){
 # do some security shit here, perhaps add a nonce
 
 #check recaptcha
-    my $result = $c->model('reCAPTCHA')->check_answer(
+    my $result = $c->model('reCAPTCHA')->check_answer_v2(
         $c->config->{'recaptcha_private_key'},
-        $c->req->address,
-        $c->req->param("recaptcha_challenge_field"),
         $c->req->param("recaptcha_response_field"),
+        $c->req->address,
     );
 
     my $password0 = $c->req->param("rpassword0");

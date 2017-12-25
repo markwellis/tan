@@ -50,7 +50,7 @@ requires 'Lingua::Stem::Snowball';
 requires 'utf8';
 requires 'DateTime';
 requires 'DateTime::Format::Human::Duration';
-requires 'Captcha::reCAPTCHA';
+requires 'Captcha::reCAPTCHA' => '0.99';
 requires 'HTML::Video::Embed' => '0.01600';
 requires 'Fetch::Image';
 requires 'HTML::FormatText';

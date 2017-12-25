@@ -23,11 +23,10 @@ sub index : Path Args(0) {
         $c->detach();
     }
 
-    $c->stash->{'recaptcha_html'} = $c->model( 'reCAPTCHA' )->get_html(
+    $c->stash->{'recaptcha_html'} = $c->model( 'reCAPTCHA' )->get_html_v2(
         $c->config->{'recaptcha_public_key'},
-        undef, 1,
         {
-            'theme' => 'blackglass',
+            'data-theme' => 'dark',
         }
     );
 
