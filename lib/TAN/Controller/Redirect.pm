@@ -60,7 +60,7 @@ sub external: Local Args(1){
     my $object = $c->model('DB::Object')->find($object_id);
     if (
         !defined($object)
-        && ($object->type ne 'link' || $object->type ne 'video')
+        || ($object->type ne 'link' && $object->type ne 'video')
     ){
     # not a link
         $c->detach('/not_found');
