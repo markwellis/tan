@@ -54,46 +54,46 @@ sub external: Local Args(1){
     $object_id =~ s/$not_int_reg//g;
 
     if ( !$object_id ){
-        $c->forward('/default');
-        $c->detach;
+        $c->detach('/not_found');
     }
 
-    my $object_rs = $c->model('DB::Object')->find($object_id);
+    my $object = $c->model('DB::Object')->find($object_id);
     if (
-        defined($object_rs)
-        && (
-            ($object_rs->type eq 'link')
-            || ($object_rs->type eq 'video')
-        )
+        !defined($object)
+        && ($object->type ne 'link' || $object->type ne 'video')
     ){
-    #links or videos have urls
-        my $session_id = $c->sessionid;
-        my $ip_address = $c->req->address;
-
-        if ( $object_id  && $session_id ){
-            my $user_id = $c->user_exists ? $c->user->user_id : undef;
-
-            eval{
-            #might get a deadlock [358] - ignore in that case
-                $c->model('DB::Views')->update_or_create({
-                    'session_id' => $session_id,
-                    'object_id' => $object_id,
-                    'user_id' => $user_id,
-                    'ip' => $ip_address,
-                    'created' => \'NOW()',
-                    'type' => 'external',
-                },{
-                    'key' => 'session_objectid',
-                });
-            };
-        }
-        my $type = $object_rs->type;
-        $c->res->redirect( $object_rs->$type->url, 303 );
-    } else {
     # not a link
-        $c->forward('/default');
+        $c->detach('/not_found');
     }
-    $c->detach();
+
+    if ( $object->deleted ){
+        $c->detach('/gone');
+    }
+
+    #links or videos have urls
+    my $session_id = $c->sessionid;
+    my $ip_address = $c->req->address;
+
+    my $user_id = $c->user_exists ? $c->user->user_id : undef;
+
+    eval{
+    #might get a deadlock [358] - ignore in that case
+        $c->model('DB::Views')->update_or_create({
+            'session_id' => $session_id,
+            'object_id' => $object_id,
+            'user_id' => $user_id,
+            'ip' => $ip_address,
+            'created' => \'NOW()',
+            'type' => 'external',
+        },{
+            'key' => 'session_objectid',
+        });
+    };
+
+    my $type = $object->type;
+    $c->res->redirect( $object->$type->url, 303 );
+
+    $c->detach;
 }
 
 __PACKAGE__->meta->make_immutable;
