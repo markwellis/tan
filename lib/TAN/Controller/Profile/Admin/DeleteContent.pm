@@ -58,6 +58,9 @@ sub delete_objects: Private{
             my @object_ids;
             foreach my $object ( @objects ){
                 push( @object_ids, $object->id );
+                if ($object->type eq 'picture') {
+                    unlink ($c->path_to('root') . $c->config->{'pic_path'} . "/" . $object->picture->filename);
+                }
             }
 
             $c->model('DB::AdminLog')->log_event( {
