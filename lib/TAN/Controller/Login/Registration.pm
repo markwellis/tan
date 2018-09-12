@@ -60,13 +60,13 @@ sub index: Path Args(0){
            die 'Email address already exists';
         }
         $new_user = eval {$c->model('DB::User')->new_user($username, $password0, $email);};
-        if $@ die "problem registering";
+        die "problem registering" if $@;
     }
     catch {
         $c->flash->{'username'} = $username;
         $c->flash->{'email'} = $email;
 
-        $c->flash->{'message'} = $error;
+        $c->flash->{'message'} = $_;
         $c->res->redirect( '/login/', 303 );
         $c->detach;
     };
