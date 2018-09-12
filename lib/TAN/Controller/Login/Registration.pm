@@ -59,7 +59,7 @@ sub index: Path Args(0){
         #email exists
            die 'Email address already exists';
         }
-        $new_user = eval {$c->model('DB::User')->new_user($username, $password0, $email);}
+        $new_user = eval {$c->model('DB::User')->new_user($username, $password0, $email);};
         if $@ die "problem registering";
     }
     catch {
