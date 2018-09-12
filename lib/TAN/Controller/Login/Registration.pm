@@ -67,7 +67,7 @@ sub index: Path Args(0){
         $c->flash->{'username'} = $username;
         $c->flash->{'email'} = $email;
 
-        $c->flash->{'message'} = $_;
+        $c->flash->{'message'} = "$_";
         $c->res->redirect( '/login/', 303 );
         $c->detach;
     };
