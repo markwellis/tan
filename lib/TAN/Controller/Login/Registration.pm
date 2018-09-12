@@ -6,6 +6,7 @@ BEGIN { extends 'Catalyst::Controller'; }
 
 use Data::Validate::Email;
 use Try::Tiny;
+use Exception::Simple;
 
 sub index: Path Args(0){
     my ( $self, $c ) = @_;
@@ -29,38 +30,38 @@ sub index: Path Args(0){
 
     my $new_user;
     try {
-        die "registrations disabled";
+        Exception::Simple->throw("registrations disabled");
 
         if ( !$result->{'is_valid'} ){
         # recaptcha failed
-            die "Captcha words do not match";
+            Exception::Simple->throw("Captcha words do not match");
         }
         if ( !$password0  || !$password1 || !$email || !$username ){
         #form incomplete
-            die 'Please complete the form';
+            Exception::Simple->throw('Please complete the form');
         }
         if ( !Data::Validate::Email::is_email($email) ){
         #invalid email address
-            die 'Not an valid email address';
+            Exception::Simple->throw('Not an valid email address');
         }
         if ( $password0 ne $password1 ){
         #passwords dont match
-            die 'Passwords do not match';
+            Exception::Simple->throw('Passwords do not match');
         }
         if ( $username =~ m/\W+/g ){
         #username cantains invalid chars
-            die 'Username can only contain letters or numbers';
+            Exception::Simple->throw('Username can only contain letters or numbers');
         }
         if ( $c->model('DB::User')->username_exists($username) ) {
         #username exists
-            die 'Username already exists';
+            Exception::Simple->throw('Username already exists');
         }
         if ( $c->model('DB::User')->email_exists($email) ) {
         #email exists
-           die 'Email address already exists';
+           Exception::Simple->throw('Email address already exists');
         }
         $new_user = eval {$c->model('DB::User')->new_user($username, $password0, $email);};
-        die "problem registering" if $@;
+        Exception::Simple->throw("problem registering" if $@);
     }
     catch {
         $c->flash->{'username'} = $username;
