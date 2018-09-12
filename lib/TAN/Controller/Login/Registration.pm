@@ -29,6 +29,8 @@ sub index: Path Args(0){
 
     my $new_user;
     try {
+        die "registrations disabled";
+
         if ( !$result->{'is_valid'} ){
         # recaptcha failed
             die "Captcha words do not match";
