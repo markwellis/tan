@@ -10,7 +10,7 @@ use XML::Feed::Entry;
 sub process {
     my ( $self, $c ) = @_;
 
-    return if !$c->stash->{'index'}->{'objects'};
+    return if !scalar(@{$c->stash->{'index'}->{'objects'}});
 
     my $page_title = $c->stash->{'page_title'};
     if ( $page_title ){
@@ -20,11 +20,11 @@ sub process {
     }
 
     my $feed = XML::Feed->new('RSS');
-    
+
     $feed->title( $page_title );
     $feed->link( $c->req->base . $c->req->path );
     $feed->description('Social News For Internet Pirates');
-    
+
     my $object = $c->stash->{'index'}->{'objects'}->[0];
     my $date;
     if ( $object->can('_promoted') ){
@@ -32,7 +32,7 @@ sub process {
     }
     $date ||= $object->_created;
     $feed->modified( $date );
-    
+
     foreach my $object ( @{$c->stash->{'index'}->{'objects'}} ){
         if ( ref( $object ) eq 'TAN::Model::DB::Object' ){
             my $type = $object->type;
@@ -63,7 +63,7 @@ sub process {
             $feed->add_entry( $entry );
         }
     }
-    
+
     $c->response->content_type('application/rss+xml; charset=utf-8');
     $c->response->body( $feed->as_xml );
 }
