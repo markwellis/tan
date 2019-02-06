@@ -10,7 +10,9 @@ use XML::Feed::Entry;
 sub process {
     my ( $self, $c ) = @_;
 
-    return if !scalar(@{$c->stash->{'index'}->{'objects'}});
+    if (!$c->stash->{'index'}->{'objects'} || !scalar(@{$c->stash->{'index'}->{'objects'}})) {
+        return
+    }
 
     my $page_title = $c->stash->{'page_title'};
     if ( $page_title ){
