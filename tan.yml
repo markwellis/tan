@@ -119,7 +119,8 @@ Model::ParseHTML:
         O_o: bulgy-eyes.png
         o_0: bulgy-eyes.png
         o_O: bulgy-eyes.png
-    smilies_dir: /static/smilies/
+    smilies_dir: __path_to(root/static/smilies)__
+    smilies_url: /static/smilies
 
 Model::PayPal:
     email: seller_1327839645_biz@howmanykillings.com
