@@ -39,6 +39,7 @@ DISTRIBUTIONS
       List::MoreUtils 0
       Module::Build 0.36
       Perl::OSType 0
+      PkgConfig 0.07520
       Shell::Config::Generate 0
       Shell::Guess 0
       Sort::Versions 0
@@ -46,12 +47,13 @@ DISTRIBUTIONS
       URI 0
       parent 0
       perl v5.8.1
-  Alien-ImageMagick-0.05
-    pathname: J/JE/JETEVE/Alien-ImageMagick-0.05.tar.gz
+  Alien-ImageMagick-0.07
+    pathname: J/JE/JETEVE/Alien-ImageMagick-0.07.tar.gz
     provides:
-      Alien::ImageMagick 0.05
+      Alien::ImageMagick 0.07
     requirements:
       Alien::Base 0.009
+      Alien::Base::ModuleBuild 0.009
       File::ShareDir 1.00
       Module::Build 0.38
       Test::More 1.001014
@@ -183,29 +185,6 @@ DISTRIBUTIONS
       Storable 0
       Test::Deep 0
       Test::More 0
-  CPAN-Meta-2.143240
-    pathname: D/DA/DAGOLDEN/CPAN-Meta-2.143240.tar.gz
-    provides:
-      CPAN::Meta 2.143240
-      CPAN::Meta::Converter 2.143240
-      CPAN::Meta::Feature 2.143240
-      CPAN::Meta::History 2.143240
-      CPAN::Meta::Merge 2.143240
-      CPAN::Meta::Prereqs 2.143240
-      CPAN::Meta::Spec 2.143240
-      CPAN::Meta::Validator 2.143240
-    requirements:
-      CPAN::Meta::Requirements 2.121
-      CPAN::Meta::YAML 0.008
-      Carp 0
-      ExtUtils::MakeMaker 6.17
-      JSON::PP 2.27200
-      Parse::CPAN::Meta 1.4414
-      Scalar::Util 0
-      perl 5.008
-      strict 0
-      version 0.88
-      warnings 0
   CSS-Minifier-XS-0.09
     pathname: G/GT/GTERMARS/CSS-Minifier-XS-0.09.tar.gz
     provides:
@@ -253,10 +232,10 @@ DISTRIBUTIONS
       Storable 0
       String::CRC32 0
       Time::HiRes 0
-  Captcha-reCAPTCHA-0.97
-    pathname: P/PH/PHRED/Captcha-reCAPTCHA-0.97.tar.gz
+  Captcha-reCaptcha-0.99
+    pathname: S/SU/SUNNYP/Captcha-reCaptcha-0.99.tar.gz
     provides:
-      Captcha::reCAPTCHA 0.97
+      Captcha::reCAPTCHA 0.99
     requirements:
       ExtUtils::MakeMaker 0
       HTML::Tiny 0.904
@@ -386,7 +365,6 @@ DISTRIBUTIONS
       CatalystX::Component::Traits 0.14
       DBD::SQLite 0
       DBIx::Class 0.08114
-      DBIx::Class::Schema::Loader 0.04005
       ExtUtils::MakeMaker 6.59
       Hash::Merge 0
       List::MoreUtils 0
@@ -891,8 +869,6 @@ DISTRIBUTIONS
     pathname: C/CR/CREAMYG/Clownfish-0.4.2.tar.gz
     provides:
       Clownfish 0.004002
-      Clownfish::Build undef
-      Clownfish::Build::Binding undef
       Clownfish::ByteBuf 0.004002
       Clownfish::Class 0.004002
       Clownfish::Err 0.004002
@@ -907,8 +883,6 @@ DISTRIBUTIONS
       Clownfish::Util::StringHelper 0.004002
       Clownfish::VArray 0.004002
       Clownfish::ViewByteBuf 0.004002
-      MyErr undef
-      MyObj undef
     requirements:
       Clownfish::CFC 0.004002
       Clownfish::CFC::Perl::Build 0.004002
@@ -935,7 +909,6 @@ DISTRIBUTIONS
       Clownfish::CFC::Binding::Perl::Pod 0.004002
       Clownfish::CFC::Binding::Perl::Subroutine 0.004002
       Clownfish::CFC::Binding::Perl::TypeMap 0.004002
-      Clownfish::CFC::Build undef
       Clownfish::CFC::Model::CBlock 0.004002
       Clownfish::CFC::Model::Class 0.004002
       Clownfish::CFC::Model::DocuComment 0.004002
@@ -1119,12 +1092,8 @@ DISTRIBUTIONS
   DBD-Pg-3.5.1
     pathname: T/TU/TURNSTEP/DBD-Pg-3.5.1.tar.gz
     provides:
-      Bundle::DBD::Pg 3.005001
-      DBD::Pg 3.005001
-      DBD::Pg::DefaultValue 3.005001
-      DBD::Pg::db 3.005001
-      DBD::Pg::dr 3.005001
-      DBD::Pg::st 3.005001
+      Bundle::DBD::Pg v3.5.1
+      DBD::Pg v3.5.1
     requirements:
       DBI 1.614
       ExtUtils::MakeMaker 6.11
@@ -1396,7 +1365,7 @@ DISTRIBUTIONS
       DBIx::Class::IntrospectableM2M 0.001001
     requirements:
       DBIx::Class 0
-      ExtUtils::MakeMaker 6.98
+      ExtUtils::MakeMaker 7.0402
       Test::More 0
   DBIx-Class-Schema-Loader-0.07042
     pathname: I/IL/ILMARI/DBIx-Class-Schema-Loader-0.07042.tar.gz
@@ -1703,6 +1672,7 @@ DISTRIBUTIONS
       DateTime 0.1
       DateTime::Format::Builder 0.6
       ExtUtils::MakeMaker 0
+      perl 5.003
   DateTime-Format-Strptime-1.56
     pathname: D/DR/DROLSKY/DateTime-Format-Strptime-1.56.tar.gz
     provides:
@@ -2830,8 +2800,8 @@ DISTRIBUTIONS
     provides:
       Error 0.17022
       Error::Simple 0.17022
-      Error::WarnDie 0.17022
-      Error::subs 0.17022
+      Error::WarnDie undef
+      Error::subs undef
     requirements:
       Module::Build 0.39
       Scalar::Util 0
@@ -3197,14 +3167,16 @@ DISTRIBUTIONS
       HTML::Tagset 3
       XSLoader 0
       perl 5.008
-  HTML-StripScripts-1.05
-    pathname: D/DR/DRTECH/HTML-StripScripts-1.05.tar.gz
+  HTML-StripScripts-1.06
+    pathname: D/DR/DRTECH/HTML-StripScripts-1.06.tar.gz
     provides:
-      HTML::StripScripts 1.05
+      HTML::StripScripts 1.06
       MyStripScripts undef
     requirements:
       ExtUtils::MakeMaker 0
-      Test::More 0
+      strict 0
+      vars 0
+      warnings 0
   HTML-StripScripts-Parser-1.03
     pathname: D/DR/DRTECH/HTML-StripScripts-Parser-1.03.tar.gz
     provides:
@@ -3510,7 +3482,6 @@ DISTRIBUTIONS
       Image::TIFF::Rational 1.09
     requirements:
       ExtUtils::MakeMaker 0
-      IO::Scalar 0
       perl 5.006
   Import-Into-1.002004
     pathname: E/ET/ETHER/Import-Into-1.002004.tar.gz
@@ -3855,8 +3826,129 @@ DISTRIBUTIONS
   Lucy-0.4.2
     pathname: C/CR/CREAMYG/Lucy-0.4.2.tar.gz
     provides:
-      Lucy undef
+      Lucy 0.004002
+      Lucy::Analysis::Analyzer 0.004002
+      Lucy::Analysis::CaseFolder 0.004002
+      Lucy::Analysis::EasyAnalyzer 0.004002
+      Lucy::Analysis::Inversion 0.004002
+      Lucy::Analysis::Normalizer 0.004002
+      Lucy::Analysis::PolyAnalyzer 0.004002
+      Lucy::Analysis::RegexTokenizer 0.004002
+      Lucy::Analysis::SnowballStemmer 0.004002
+      Lucy::Analysis::SnowballStopFilter 0.004002
+      Lucy::Analysis::StandardTokenizer 0.004002
+      Lucy::Analysis::Token 0.004002
+      Lucy::Document::Doc 0.004002
+      Lucy::Document::HitDoc 0.004002
+      Lucy::Highlight::HeatMap 0.004002
+      Lucy::Highlight::Highlighter 0.004002
+      Lucy::Index::BackgroundMerger 0.004002
+      Lucy::Index::DataReader 0.004002
+      Lucy::Index::DataWriter 0.004002
+      Lucy::Index::DeletionsReader 0.004002
+      Lucy::Index::DeletionsWriter 0.004002
+      Lucy::Index::DocReader 0.004002
+      Lucy::Index::DocVector 0.004002
+      Lucy::Index::DocWriter 0.004002
+      Lucy::Index::FilePurger 0.004002
+      Lucy::Index::HighlightReader 0.004002
+      Lucy::Index::HighlightWriter 0.004002
+      Lucy::Index::IndexManager 0.004002
+      Lucy::Index::IndexReader 0.004002
+      Lucy::Index::Indexer 0.004002
+      Lucy::Index::Inverter 0.004002
+      Lucy::Index::Lexicon 0.004002
+      Lucy::Index::LexiconReader 0.004002
+      Lucy::Index::LexiconWriter 0.004002
+      Lucy::Index::PolyLexicon 0.004002
+      Lucy::Index::PolyReader 0.004002
+      Lucy::Index::Posting 0.004002
+      Lucy::Index::Posting::MatchPosting 0.004002
+      Lucy::Index::Posting::RichPosting 0.004002
+      Lucy::Index::Posting::ScorePosting 0.004002
+      Lucy::Index::PostingList 0.004002
+      Lucy::Index::PostingListReader 0.004002
+      Lucy::Index::PostingListWriter 0.004002
+      Lucy::Index::SegLexicon 0.004002
+      Lucy::Index::SegPostingList 0.004002
+      Lucy::Index::SegReader 0.004002
+      Lucy::Index::SegWriter 0.004002
+      Lucy::Index::Segment 0.004002
+      Lucy::Index::Similarity 0.004002
+      Lucy::Index::Snapshot 0.004002
+      Lucy::Index::SortCache 0.004002
+      Lucy::Index::SortReader 0.004002
+      Lucy::Index::SortWriter 0.004002
+      Lucy::Index::TermInfo 0.004002
+      Lucy::Index::TermVector 0.004002
+      Lucy::Object::BitVector 0.004002
+      Lucy::Object::I32Array 0.004002
+      Lucy::Object::Obj 0.004002
+      Lucy::Plan::Architecture 0.004002
+      Lucy::Plan::BlobType 0.004002
+      Lucy::Plan::FieldType 0.004002
+      Lucy::Plan::Float32Type 0.004002
+      Lucy::Plan::Float64Type 0.004002
+      Lucy::Plan::FullTextType 0.004002
+      Lucy::Plan::Int32Type 0.004002
+      Lucy::Plan::Int64Type 0.004002
+      Lucy::Plan::Schema 0.004002
+      Lucy::Plan::StringType 0.004002
+      Lucy::Search::ANDMatcher 0.004002
+      Lucy::Search::ANDQuery 0.004002
+      Lucy::Search::BitVecMatcher 0.004002
+      Lucy::Search::Collector 0.004002
+      Lucy::Search::Collector::BitCollector 0.004002
+      Lucy::Search::Collector::SortCollector 0.004002
+      Lucy::Search::Compiler 0.004002
+      Lucy::Search::HitQueue 0.004002
+      Lucy::Search::Hits 0.004002
+      Lucy::Search::IndexSearcher 0.004002
+      Lucy::Search::LeafQuery 0.004002
+      Lucy::Search::MatchAllQuery 0.004002
+      Lucy::Search::MatchDoc 0.004002
+      Lucy::Search::Matcher 0.004002
+      Lucy::Search::NOTMatcher 0.004002
+      Lucy::Search::NOTQuery 0.004002
+      Lucy::Search::NoMatchQuery 0.004002
+      Lucy::Search::ORQuery 0.004002
+      Lucy::Search::ORScorer 0.004002
+      Lucy::Search::PhraseQuery 0.004002
+      Lucy::Search::PolyCompiler 0.004002
+      Lucy::Search::PolyQuery 0.004002
+      Lucy::Search::PolySearcher 0.004002
+      Lucy::Search::Query 0.004002
+      Lucy::Search::QueryParser 0.004002
+      Lucy::Search::RangeQuery 0.004002
+      Lucy::Search::RequiredOptionalMatcher 0.004002
+      Lucy::Search::RequiredOptionalQuery 0.004002
+      Lucy::Search::Searcher 0.004002
+      Lucy::Search::SortRule 0.004002
+      Lucy::Search::SortSpec 0.004002
+      Lucy::Search::Span 0.004002
+      Lucy::Search::TermQuery 0.004002
+      Lucy::Search::TopDocs 0.004002
       Lucy::Simple 0.004002
+      Lucy::Store::FSFileHandle 0.004002
+      Lucy::Store::FSFolder 0.004002
+      Lucy::Store::FileHandle 0.004002
+      Lucy::Store::Folder 0.004002
+      Lucy::Store::InStream 0.004002
+      Lucy::Store::Lock 0.004002
+      Lucy::Store::LockErr 0.004002
+      Lucy::Store::LockFactory 0.004002
+      Lucy::Store::OutStream 0.004002
+      Lucy::Store::RAMFile 0.004002
+      Lucy::Store::RAMFileHandle 0.004002
+      Lucy::Store::RAMFolder 0.004002
+      Lucy::Test 0.004002
+      Lucy::Util::Debug 0.004002
+      Lucy::Util::IndexFileNames 0.004002
+      Lucy::Util::Json 0.004002
+      Lucy::Util::MemoryPool 0.004002
+      Lucy::Util::PriorityQueue 0.004002
+      Lucy::Util::SortExternal 0.004002
+      Lucy::Util::Stepper 0.004002
       LucyX::Index::ByteBufDocReader 0.004002
       LucyX::Index::ByteBufDocWriter 0.004002
       LucyX::Index::LongFieldSim 0.004002
@@ -3869,6 +3961,7 @@ DISTRIBUTIONS
       LucyX::Search::FilterCompiler 0.004002
       LucyX::Search::FilterMatcher 0.004002
       LucyX::Search::MockMatcher 0.004002
+      LucyX::Search::ProximityQuery 0.004002
     requirements:
       Clownfish 0
       Clownfish::CFC::Perl::Build 0
@@ -4289,6 +4382,35 @@ DISTRIBUTIONS
       Class::MOP::Overload 2.1403
       Class::MOP::Package 2.1403
       Moose 2.1403
+      Moose::Cookbook 2.1403
+      Moose::Cookbook::Basics::BankAccount_MethodModifiersAndSubclassing 2.1403
+      Moose::Cookbook::Basics::BinaryTree_AttributeFeatures 2.1403
+      Moose::Cookbook::Basics::BinaryTree_BuilderAndLazyBuild 2.1403
+      Moose::Cookbook::Basics::Company_Subtypes 2.1403
+      Moose::Cookbook::Basics::DateTime_ExtendingNonMooseParent 2.1403
+      Moose::Cookbook::Basics::Document_AugmentAndInner 2.1403
+      Moose::Cookbook::Basics::Genome_OverloadingSubtypesAndCoercion 2.1403
+      Moose::Cookbook::Basics::HTTP_SubtypesAndCoercion 2.1403
+      Moose::Cookbook::Basics::Immutable 2.1403
+      Moose::Cookbook::Basics::Person_BUILDARGSAndBUILD 2.1403
+      Moose::Cookbook::Basics::Point_AttributesAndSubclassing 2.1403
+      Moose::Cookbook::Extending::Debugging_BaseClassRole 2.1403
+      Moose::Cookbook::Extending::ExtensionOverview 2.1403
+      Moose::Cookbook::Extending::Mooseish_MooseSugar 2.1403
+      Moose::Cookbook::Legacy::Debugging_BaseClassReplacement 2.1403
+      Moose::Cookbook::Legacy::Labeled_AttributeMetaclass 2.1403
+      Moose::Cookbook::Legacy::Table_ClassMetaclass 2.1403
+      Moose::Cookbook::Meta::GlobRef_InstanceMetaclass 2.1403
+      Moose::Cookbook::Meta::Labeled_AttributeTrait 2.1403
+      Moose::Cookbook::Meta::PrivateOrPublic_MethodMetaclass 2.1403
+      Moose::Cookbook::Meta::Table_MetaclassTrait 2.1403
+      Moose::Cookbook::Meta::WhyMeta 2.1403
+      Moose::Cookbook::Roles::ApplicationToInstance 2.1403
+      Moose::Cookbook::Roles::Comparable_CodeReuse 2.1403
+      Moose::Cookbook::Roles::Restartable_AdvancedComposition 2.1403
+      Moose::Cookbook::Snack::Keywords 2.1403
+      Moose::Cookbook::Snack::Types 2.1403
+      Moose::Cookbook::Style 2.1403
       Moose::Exception 2.1403
       Moose::Exception::AccessorMustReadWrite 2.1403
       Moose::Exception::AddParameterizableTypeTakesParameterizableType 2.1403
@@ -4519,6 +4641,26 @@ DISTRIBUTIONS
       Moose::Exception::WrapTakesACodeRefToBless 2.1403
       Moose::Exception::WrongTypeConstraintGiven 2.1403
       Moose::Exporter 2.1403
+      Moose::Intro 2.1403
+      Moose::Manual 2.1403
+      Moose::Manual::Attributes 2.1403
+      Moose::Manual::BestPractices 2.1403
+      Moose::Manual::Classes 2.1403
+      Moose::Manual::Concepts 2.1403
+      Moose::Manual::Construction 2.1403
+      Moose::Manual::Contributing 2.1403
+      Moose::Manual::Delegation 2.1403
+      Moose::Manual::Delta 2.1403
+      Moose::Manual::Exceptions 2.1403
+      Moose::Manual::Exceptions::Manifest 2.1403
+      Moose::Manual::FAQ 2.1403
+      Moose::Manual::MOP 2.1403
+      Moose::Manual::MethodModifiers 2.1403
+      Moose::Manual::MooseX 2.1403
+      Moose::Manual::Roles 2.1403
+      Moose::Manual::Support 2.1403
+      Moose::Manual::Types 2.1403
+      Moose::Manual::Unsweetened 2.1403
       Moose::Meta::Attribute 2.1403
       Moose::Meta::Attribute::Custom::Moose 2.1403
       Moose::Meta::Attribute::Native 2.1403
@@ -4563,6 +4705,8 @@ DISTRIBUTIONS
       Moose::Meta::TypeConstraint::Union 2.1403
       Moose::Object 2.1403
       Moose::Role 2.1403
+      Moose::Spec::Role 2.1403
+      Moose::Unsweetened 2.1403
       Moose::Util 2.1403
       Moose::Util::MetaRole 2.1403
       Moose::Util::TypeConstraints 2.1403
@@ -4810,7 +4954,7 @@ DISTRIBUTIONS
   Mouse-2.4.1
     pathname: G/GF/GFUJI/Mouse-2.4.1.tar.gz
     provides:
-      Mouse 2.004001
+      Mouse v2.4.1
       Mouse::Exporter undef
       Mouse::Meta::Attribute undef
       Mouse::Meta::Class undef
@@ -4828,10 +4972,11 @@ DISTRIBUTIONS
       Mouse::Meta::TypeConstraint undef
       Mouse::Object undef
       Mouse::PurePerl undef
-      Mouse::Role 2.004001
-      Mouse::Spec 2.004001
+      Mouse::Role v2.4.1
+      Mouse::Spec v2.4.1
+      Mouse::Tiny v2.2.0
       Mouse::TypeRegistry undef
-      Mouse::Util undef
+      Mouse::Util v2.4.1
       Mouse::Util::MetaRole undef
       Mouse::Util::TypeConstraints undef
       Squirrel undef
@@ -5011,16 +5156,15 @@ DISTRIBUTIONS
       Test::More 0.66
       Test::Warn 0.21
       URI::Escape 3.28
-  Net-SSLeay-1.68
-    pathname: M/MI/MIKEM/Net-SSLeay-1.68.tar.gz
+  Net-SSLeay-1.88
+    pathname: C/CH/CHRISN/Net-SSLeay-1.88.tar.gz
     provides:
-      Net::SSLeay 1.68
-      Net::SSLeay::Handle 0.61
+      Net::SSLeay 1.88
+      Net::SSLeay::Handle 1.88
     requirements:
-      ExtUtils::MakeMaker 6.36
+      ExtUtils::MakeMaker 0
       MIME::Base64 0
-      Test::More 0.60_01
-      perl 5.005
+      perl 5.008001
   Net-Twitter-4.01008
     pathname: M/MM/MMIMS/Net-Twitter-4.01008.tar.gz
     provides:
@@ -5309,6 +5453,14 @@ DISTRIBUTIONS
       overload 0
       parent 0
       strict 0
+  PkgConfig-0.23026
+    pathname: P/PL/PLICEASE/PkgConfig-0.23026.tar.gz
+    provides:
+      PkgConfig 0.23026
+    requirements:
+      ExtUtils::MakeMaker 6.56
+      Test::More 0.94
+      perl 5.006000
   Plack-1.0034
     pathname: M/MI/MIYAGAWA/Plack-1.0034.tar.gz
     provides:
@@ -5844,7 +5996,7 @@ DISTRIBUTIONS
       Template::Monad::Scalar 1
       Template::Namespace::Constants 1.27
       Template::Parser 2.89
-      Template::Perl 2.2
+      Template::Perl 2.87
       Template::Plugin 2.7
       Template::Plugin::Assert 1
       Template::Plugin::CGI 2.7
@@ -6140,28 +6292,6 @@ DISTRIBUTIONS
       Test::Builder::Module 0
       Test::More 0.88
       perl 5.008_001
-  Test-Simple-1.001014
-    pathname: E/EX/EXODIST/Test-Simple-1.001014.tar.gz
-    provides:
-      Test::Builder 1.001014
-      Test::Builder::IO::Scalar 2.113
-      Test::Builder::Module 1.001014
-      Test::Builder::Tester 1.28
-      Test::Builder::Tester::Color 1.290001
-      Test::Builder::Tester::Tie 1.28
-      Test::More 1.001014
-      Test::Simple 1.001014
-      Test::Tester 0.114
-      Test::Tester::Capture undef
-      Test::Tester::CaptureRunner undef
-      Test::Tester::Delegate undef
-      Test::use::ok 0.16
-      ok 0.16
-    requirements:
-      ExtUtils::MakeMaker 0
-      Scalar::Util 1.13
-      Test::Harness 2.03
-      perl 5.006
   Test-TCP-2.07
     pathname: T/TO/TOKUHIROM/Test-TCP-2.07.tar.gz
     provides:
@@ -6178,14 +6308,14 @@ DISTRIBUTIONS
   Test-Unit-Lite-0.1202
     pathname: D/DE/DEXTER/Test-Unit-Lite-0.1202.tar.gz
     provides:
-      Test::Unit::Debug 0.1202
-      Test::Unit::HarnessUnit 0.1202
+      Test::Unit::Debug 0
+      Test::Unit::HarnessUnit 0
       Test::Unit::Lite 0.1202
-      Test::Unit::Lite::AllTests 0.1202
-      Test::Unit::Result 0.1202
-      Test::Unit::TestCase 0.1202
-      Test::Unit::TestRunner 0.1202
-      Test::Unit::TestSuite 0.1202
+      Test::Unit::Lite::AllTests 0
+      Test::Unit::Result 0
+      Test::Unit::TestCase 0
+      Test::Unit::TestRunner 0
+      Test::Unit::TestSuite 0
     requirements:
       perl 5.006
   Test-WWW-Mechanize-1.44
@@ -6276,6 +6406,7 @@ DISTRIBUTIONS
     requirements:
       ExtUtils::MakeMaker 0
       Test::More 0
+      perl 5.008001
   Text-Table-1.130
     pathname: S/SH/SHLOMIF/Text-Table-1.130.tar.gz
     provides:
@@ -6813,7 +6944,6 @@ DISTRIBUTIONS
   XML-RSS-1.56
     pathname: S/SH/SHLOMIF/XML-RSS-1.56.tar.gz
     provides:
-      Test::Run::CmdLine::WithTestManifest undef
       XML::RSS 1.56
       XML::RSS::Private::Output::Base undef
       XML::RSS::Private::Output::Roles::ImageDims undef

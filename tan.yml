@@ -49,7 +49,7 @@ Plugin::Cache:
 
 Plugin::Session:
     expires: 1209600
-    storage: /mnt/stuff/TAN/sessions
+    storage: share/sessions
 
 Model::Gearman:
     job_servers:
@@ -70,10 +70,10 @@ Model::Image:
 Model::DB:
     connect_info:
         dsn: dbi:Pg:dbname=tan;host=localhost;
-        password: caBi2ieL
+        user: thisaintnews
+        password: tan
         pg_enable_utf8: 1
         quote_names: 1
-        user: thisaintnews
     schema_class: TAN::Schema
 
 Model::ParseHTML:
@@ -134,7 +134,7 @@ Model::PayPal:
 Model::Search:
     args:
         entries_per_page: 27
-        index_path: /mnt/stuff/TAN/search_index
+        index_path: share/search_index
         schema:
             - name: id
               type: string

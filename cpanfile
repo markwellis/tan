@@ -105,6 +105,8 @@ requires 'DBIx::Class::TimeStamp';
 requires 'Alien::ImageMagick';
 
 requires 'Config::ZOMG';
+requires 'Net::SSLeay' => '1.88';
+requires 'HTML::StripScripts' => '1.06';
 
 test_requires 'Test::More';
 test_requires 'Test::Exception';

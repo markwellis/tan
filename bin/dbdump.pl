@@ -39,6 +39,6 @@ make_schema_at(
     [
         'dbi:DB:tan',
         'thisaintnews',
-        'caBi2ieL',
+        'tan',
     ],
 );

@@ -11,3 +11,7 @@ MYMETA.json
 MYMETA.yml
 Makefile
 inc/
+.vagrant/
+migrations/config_local.json
+root/static/cache/minify
+share/
