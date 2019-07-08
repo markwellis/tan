@@ -11,18 +11,6 @@ use Exception::Simple;
 sub index: Path Args(0){
     my ( $self, $c ) = @_;
 
-#check recaptcha
-    my $result = do {
-        #meh
-        local $ENV{PERL_LWP_SSL_VERIFY_HOSTNAME} = 0;
-
-        $c->model('reCAPTCHA')->check_answer_v2(
-            $c->config->{'recaptcha_private_key'},
-            $c->req->param("g-recaptcha-response"),
-            $c->req->address,
-        );
-    };
-
     my $password0 = $c->req->param("rpassword0");
     my $password1 = $c->req->param("rpassword1");
     my $username = $c->req->param("rusername");
@@ -30,7 +18,26 @@ sub index: Path Args(0){
 
     my $new_user;
     try {
-        Exception::Simple->throw("registrations disabled");
+        if ($c->config->{registration_disabled}) {
+            Exception::Simple->throw("registrations disabled");
+        }
+
+        #check recaptcha
+        my $result = do {
+            #meh
+            local $ENV{PERL_LWP_SSL_VERIFY_HOSTNAME} = 0;
+
+            try {
+                $c->model('reCAPTCHA')->check_answer_v2(
+                    $c->config->{'recaptcha_private_key'},
+                    $c->req->param("g-recaptcha-response"),
+                    $c->req->address,
+                );
+            }
+            catch {
+                Exception::Simple->throw("Captcha check failed");
+            };
+        };
 
         if ( !$result->{'is_valid'} ){
         # recaptcha failed
