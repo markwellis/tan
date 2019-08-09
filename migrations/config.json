@@ -2,18 +2,6 @@
     "default": {
         "dsn": "dbi:Pg:dbname=tan;host=localhost",
         "user": "thisaintnews",
-        "password": "caBi2ieL",
-    },
-    "live": {
-        "tunnel": {
-            "host": "tan-pg1.h1.thisaintnews.com",
-            "port": {
-                "local"  : 5555,
-                "remote" : 5432
-            }
-        },
-        "dsn": "dbi:Pg:dbname=tan;host=127.0.0.1;port=5555",
-        "user": "thisaintnews",
-        "password": "caBi2ieL",
-    },
+        "password": "tan",
+    }
 }

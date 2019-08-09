@@ -1,0 +1,4 @@
+---
+recaptcha_public_key: key_here
+recaptcha_private_key: key_here
+mail_domain: faketan.test

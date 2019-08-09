@@ -102,7 +102,7 @@ sub finalize_error {
         my $subject = 'TAN 500 Error: ' . $error;
         $subject =~ s/\s+/ /g;
         $subject = substr( $subject, 0, 200 );
-        my $from = 'tan.webmaster@thisaintnews.com';
+        my $from = 'tan.webmaster@' . $c->config->{mail_domain};
 
         my $req = {};
         $req->{'uri'} = $c->req->uri || '';

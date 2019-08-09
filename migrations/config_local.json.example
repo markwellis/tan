@@ -1,0 +1,19 @@
+{
+    "prod_via_ssh_jumphost": {
+        "tunnel": {
+            "host": "some.optional.ssh.jumphost",
+            "port": {
+                "local"  : 5555,
+                "remote" : 5432
+            }
+        },
+        "dsn": "dbi:Pg:dbname=tan;host=127.0.0.1;port=5555",
+        "user": "db_user",
+        "password": "db_password",
+    },
+    "prod_direct": {
+        "dsn": "dbi:Pg:dbname=tan;host=dbhost.direct.com;port=5555",
+        "user": "db_user",
+        "password": "db_password",
+    }
+}

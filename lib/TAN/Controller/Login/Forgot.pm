@@ -55,7 +55,7 @@ sub step1: Local{
     $c->stash->{'token'} = $user->tokens->new_token($user->id, 'forgot');
 
     $c->model('Email')->send(
-        'from'    => 'noreply@thisaintnews.com',
+        'from'    => 'noreply@' . $c->config->{mail_domain},
         'to'      => $email,
         'subject' => 'User Details',
         'htmltext' => $c->view('NoWrapper')->render( $c, 'login/forgot/email.tt' ),

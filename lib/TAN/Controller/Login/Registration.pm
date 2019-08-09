@@ -87,7 +87,7 @@ sub index: Path Args(0){
     $c->stash->{'user_id'} = $new_user->id;
 
     $c->model('Email')->send(
-        'from'    => 'noreply@thisaintnews.com',
+        'from'    => 'noreply@' . $c->config->{mail_domain},
         'to'      => $email,
         'subject' => 'Confirm email address',
         'htmltext' => $c->view('NoWrapper')->render( $c, 'login/registration/email.tt' ),
