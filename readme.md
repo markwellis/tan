@@ -9,6 +9,9 @@ It's something I knocked up over the years. It's good at the job it does, but it
 The first commit was 10-Sep-2008 and this was PHP code.
 I started the move to Perl a year later on 27-Sep-2009. That's the version that still runs today.
 
+## Ticket numbers
+In the commit log you'll see commits that start with `#NUMBER` - these are ticket references. I've created a dump of the ticket db in [tickets.md](tickets.md)
+
 ## Running
 There's a [vagrant](https://www.vagrantup.com/) setup to run locally.
 
