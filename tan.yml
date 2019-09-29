@@ -125,11 +125,11 @@ Model::ParseHTML:
     smilies_url: /static/smilies
 
 Model::PayPal:
-    email: seller_1327839645_biz@howmanykillings.com
-    password: 1327839669
+    email: paypal@email.com
+    password: password
     sandbox: 1
-    signature: 'AFcWxV21C7fd0v3bYYYRCpSSRl31AKIB6AeXNz9D9kURB.ByAKFJ2lsA '
-    username: seller_1327839645_biz_api1.howmanykillings.com
+    signature: 'paypal signature'
+    username: paypal_username
 
 Model::Search:
     args:
