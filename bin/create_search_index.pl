@@ -20,7 +20,7 @@ sub strip_tags{
     );
 }
 
-my $tan_config = Config::JFDI->new(name => "TAN", path => dirname(__FILE__) . "/../../")->get;
+my $tan_config = Config::JFDI->new(name => "TAN", path => dirname(__FILE__) . "/../")->get;
 my $search_config = $tan_config->{'Model::Search'}->{args};
 
 my $searcher = LucyX::Simple->new( $search_config );

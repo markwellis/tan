@@ -9,8 +9,23 @@ It's something I knocked up over the years. It's good at the job it does, but it
 The first commit was 10-Sep-2008 and this was PHP code.
 I started the move to Perl a year later on 27-Sep-2009. That's the version that still runs today.
 
+# Archived assets
+[Here's a link to download a db dump (personal info and usernames anonymised) and uploaded images.](https://web.tresorit.com/l#ZsDSVmFC6qzTuJ2vtg9QGw)
+## To restore a db dump
+```
+vagrant ssh
+sudo -iu postgres pg_restore -d tan -c /path/to/tan_db.psql
+```
+
+## To restore images
+Put them in `root/static/user/pics`
+
+## Rebuild search index
+Run `carton exec -- perl -I lib/ bin/create_search_index.pl` to rebuild the search index
+
+# Development
 ## Ticket numbers
-In the commit log you'll see commits that start with `#NUMBER` - these are ticket references. I've created a dump of the ticket db in [tickets.md](tickets.md)
+In the git commit log you'll see commits that start with `#NUMBER` - these are ticket references. I've created a dump of the ticket db in [tickets.md](tickets.md)
 
 ## Running
 There's a [vagrant](https://www.vagrantup.com/) setup to run locally.
@@ -20,14 +35,19 @@ Run `vagrant up` and go make a brew. That will download a linux vm, configure it
 Once that's done, run the following to start the TAN service.
 
 ```
+vagrant ssh
 pushd /vagrant
 CATALYST_DEBUG=1 carton exec -- plackup -l 0.0.0.0:8081 -E development --no-default-middleware tan.psgi
 ```
 
 site will be available at https://faketan.test/
 
-## Tests
-There are some tests in the `t/` dir.
+## Connect to the DB
+Database is postgres. Connect with these commands
+```
+vagrant ssh
+sudo -iu postgres psql tan
+```
 
 ## To register a user
 get a recaptcha v2 key from http://www.google.com/recaptcha/admin
@@ -49,6 +69,19 @@ sudo postcat -q XXXXXXX
 see here for more info
 http://www.tech-g.com/2012/07/15/inspecting-postfixs-email-queue/
 
+## To give your user admin rights
+connect to the db and run the following:
+
+*replace _$USERNAME_ with you newly registered user's username*
+```pgsql
+insert into user_admin(user_id, admin_id) select user_id, unnest(array[1,2,3,4,6,9,11,12]) id from "user" where username = '$USERNAME';
+```
+
+there are currently a few roles defined. See the list with this query
+```pgsql
+select * from admin;
+```
+
 # How it all works
 ## Code
 TAN is written in Perl, using the [Catalyst MVC Framework](https://metacpan.org/pod/Catalyst::Manual) and the [DBIx::Class](https://metacpan.org/pod/DBIx::Class) ORM. It uses [Carton](https://metacpan.org/pod/Carton) for dependency management
@@ -60,6 +93,9 @@ The DB models are in `lib/TAN/Schema`
 Database is postgres.
 Migrations are in `migrations/`. They use a custom db migration manager, which is in `bin/db_manager.pl`/
 There's a script `bin/dbdump.pl` that will dump the database schema to the DBIx::Class models
+
+## Tests
+There are some tests in the `t/` dir. Run with `prove -v t/`
 
 ## Sessions
 Sessions are stored on disk. These days Redis would be the place to store them, but back then this made a lot of sense.
@@ -106,6 +142,3 @@ Minified CSS & JS assets are cached in `root/static/cache/minify`
 Picture thumbnails are cached in `root/static/cache/thumbs`
 
 Workers are in `script/workers`
-
-# Archived assets
-[Here's a link to download a db dump (personal info redacted) and uploaded images.](https://web.tresorit.com/l#ZsDSVmFC6qzTuJ2vtg9QGw)
