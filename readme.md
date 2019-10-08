@@ -2,12 +2,14 @@
 Social news website/forum/cms that used to run at [thisaintnews.com](https://thisaintnews.com)
 
 ## Quick history of the code
-This code is quite old. It's written in Modern Perl.
+TAN is written in Perl, using the [Catalyst MVC Framework](https://metacpan.org/pod/Catalyst::Manual) and the [DBIx::Class](https://metacpan.org/pod/DBIx::Class) ORM. It uses [Carton](https://metacpan.org/pod/Carton) for dependency management
 
 It's something I knocked up over the years. It's good at the job it does, but it's over 10 years old.
 
 The first commit was 10-Sep-2008 and this was PHP code.
 I started the move to Perl a year later on 27-Sep-2009. That's the version that still runs today.
+
+Hopefully the documentation below is enough to get started. It's a bit of a mess as I've hacked it up mostly from memory quite quickly.
 
 # Archived assets
 [Here's a link to download a db dump (personal info and usernames anonymised) and uploaded images.](https://web.tresorit.com/l#ZsDSVmFC6qzTuJ2vtg9QGw)
@@ -41,6 +43,32 @@ CATALYST_DEBUG=1 carton exec -- plackup -l 0.0.0.0:8081 -E development --no-defa
 ```
 
 site will be available at https://faketan.test/
+
+## Running scripts
+You'll have to run perl scripts with `carton exec -- perl -I lib/`. Otherwise you'll get missing library errors.
+
+There's a bunch in `bin/` and some more in `script/`
+
+### create_search_index.pl
+creates the search index
+
+### create_smilies_json.pl
+creates json for the files in `root/static/smilies/`. json needs manually adding to `root/static/tiny_mce_plugins/smilies/smilies.html`
+
+### db_manager.pl
+manages the db migrations
+
+### dbdump.pl
+dumps the db schema to dbix
+
+### deploy.pl
+used to deploy the code to the servers
+
+### mass_undelete.pl
+undoes an admin mass undelete based on the admin_log.bulk db table contents
+
+### update_triggers_scores.pl
+rebuilds the scores for submitted content
 
 ## Connect to the DB
 Database is postgres. Connect with these commands
@@ -84,14 +112,15 @@ select * from admin;
 
 # How it all works
 ## Code
-TAN is written in Perl, using the [Catalyst MVC Framework](https://metacpan.org/pod/Catalyst::Manual) and the [DBIx::Class](https://metacpan.org/pod/DBIx::Class) ORM. It uses [Carton](https://metacpan.org/pod/Carton) for dependency management
-
 The code is in `lib/TAN/`.
+
 The DB models are in `lib/TAN/Schema`
 
 ## Database
 Database is postgres.
+
 Migrations are in `migrations/`. They use a custom db migration manager, which is in `bin/db_manager.pl`/
+
 There's a script `bin/dbdump.pl` that will dump the database schema to the DBIx::Class models
 
 ## Tests
@@ -102,10 +131,12 @@ Sessions are stored on disk. These days Redis would be the place to store them, 
 
 ## Caching
 The cache is memcached.
+
 The strategy is to cache individual things, and not full pages. It means when an index page loads, it loads a list of things on that page, then the items in that list. both are cached. The index list cache is removed when something makes a change that would impact that page. This is done using a system of events and triggers.
 
 ## Users
 Passwords are PBKDF2.
+
 Salt is stored outside of the db in the `/var/www/vhosts/thisaintnews.com/share/salt/` directory. This is hardcoded in `lib/TAN/Schema/Result/User.pm`:101
 
 ## Search
@@ -116,7 +147,9 @@ Items are added to the index on submission asynchronously via a [gearman worker]
 
 ## Workers
 There 3 workers in the `script/workers` directory.
+
 Workers run via [gearman](http://gearman.org/).
+
 There's a script to start a worker in `script/system/start_tan_worker.sh`. It takes 1 argument, the name of the worker to start.
 
 ### Search Worker
@@ -129,16 +162,18 @@ Pings search engines when the sitemap is updated.
 Spams twitter when something is promoted or something I forget. Doesn't seem to work anymore anyway.
 
 ## Directories of interest
-Login salts are stored in the following dir. This is hardcoded and not a config option
-`/var/www/vhosts/thisaintnews.com/share/salt/`
+Login salts are stored in the following dir. This is hardcoded and not a config option `/var/www/vhosts/thisaintnews.com/share/salt/`
 
 Sessions are stored in `share/sessions` as defined by the config option `Plugin::Session.storage`
 
 Static assets are stored in `root/static`
+
 User uploaded pictures are stored in `root/static/user/pics`
+
 User avatars are stored in `root/static/user/avatar`
 
 Minified CSS & JS assets are cached in `root/static/cache/minify`
+
 Picture thumbnails are cached in `root/static/cache/thumbs`
 
 Workers are in `script/workers`
