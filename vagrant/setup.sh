@@ -58,3 +58,9 @@ carton exec -- perl ./bin/db_manager.pl deploy
 if [[ ! -e ~"/perl5/perlbrew/perls/perl-${perlversion}/lib/libMagickCore-7.Q16HDRI.so.6" ]]; then
     carton exec -- cpanm -n --reinstall Alien::ImageMagick
 fi
+
+sudo mkdir -p /var/lib/tan/search_index
+sudo chown vagrant:vagrant /var/lib/tan/search_index
+mkdir -p /vagrant/share/search_index
+echo "/var/lib/tan/search_index /vagrant/share/search_index/ none bind 0 0" | sudo tee /etc/fstab
+sudo mount -a
