@@ -1,34 +1,6 @@
 # TAN
 Social news website/forum/cms that used to run at [thisaintnews.com](https://thisaintnews.com)
 
-## Quick history of the code
-TAN is written in Perl, using the [Catalyst MVC Framework](https://metacpan.org/pod/Catalyst::Manual) and the [DBIx::Class](https://metacpan.org/pod/DBIx::Class) ORM. It uses [Carton](https://metacpan.org/pod/Carton) for dependency management
-
-It's something I knocked up over the years. It's good at the job it does, but it's over 10 years old.
-
-The first commit was 10-Sep-2008 and this was PHP code.
-I started the move to Perl a year later on 27-Sep-2009. That's the version that still runs today.
-
-Hopefully the documentation below is enough to get started. It's a bit of a mess as I've hacked it up mostly from memory quite quickly.
-
-# Archived assets
-[Here's a link to download a db dump (personal info and usernames anonymised) and uploaded images.](https://web.tresorit.com/l#ZsDSVmFC6qzTuJ2vtg9QGw)
-## To restore a db dump
-```
-vagrant ssh
-sudo -iu postgres pg_restore -d tan -c /path/to/tan_db.psql
-```
-
-## To restore images
-Put them in `root/static/user/pics`
-
-## Rebuild search index
-Run `carton exec -- perl -I lib/ bin/create_search_index.pl` to rebuild the search index
-
-# Development
-## Ticket numbers
-In the git commit log you'll see commits that start with `#NUMBER` - these are ticket references. I've created a dump of the ticket db in [tickets.md](tickets.md)
-
 ## Running
 There's a [vagrant](https://www.vagrantup.com/) setup to run locally.
 
@@ -43,6 +15,19 @@ CATALYST_DEBUG=1 carton exec -- plackup -l 0.0.0.0:8081 -E development --no-defa
 ```
 
 site will be available at https://faketan.test/
+
+## Quick history of the code
+TAN is written in Perl, using the [Catalyst MVC Framework](https://metacpan.org/pod/Catalyst::Manual) and the [DBIx::Class](https://metacpan.org/pod/DBIx::Class) ORM. It uses [Carton](https://metacpan.org/pod/Carton) for dependency management
+
+It's something I knocked up over the years. It's good at the job it does, but it's over 10 years old.
+
+The first commit was 10-Sep-2008 and this was PHP code.
+I started the move to Perl a year later on 27-Sep-2009. That's the version that still runs today.
+
+Hopefully the documentation below is enough to get started. It's a bit of a mess as I've hacked it up mostly from memory quite quickly.
+
+## Ticket numbers
+In the git commit log you'll see commits that start with `#NUMBER` - these are ticket references. I've created a dump of the ticket db in [tickets.md](tickets.md)
 
 ## Running scripts
 You'll have to run perl scripts with `carton exec -- perl -I lib/`. Otherwise you'll get missing library errors.
