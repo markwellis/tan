@@ -10,3 +10,4 @@ lib/TAN/Controller/Settings/*.pm linguist-language=Perl
 lib/TAN/Model/*.pm linguist-language=Perl
 lib/TAN/Model/Submit/Module/*.pm linguist-language=Perl
 t/*.t linguist-language=Perl
+t/model_Submit/*.t linguist-language=Perl
