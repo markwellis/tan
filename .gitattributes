@@ -4,4 +4,9 @@ assets/art/design/js/mootools-more-1.4.0.1.js linguist-vendored
 assets/art/design/js/mootools-core-1.4.5.js linguist-vendored
 root/static/themes/classic/js/Lib/mootools-1-2-5-core-nc.js linguist-vendored
 root/static/themes/classic/js/Lib/mootools-more.js linguist-vendored
-*.pm linguist-language=Perl
+lib/TAN/Controller/*.pm linguist-language=Perl
+lib/TAN/Controller/Login/*.pm linguist-language=Perl
+lib/TAN/Controller/Settings/*.pm linguist-language=Perl
+lib/TAN/Model/*.pm linguist-language=Perl
+lib/TAN/Model/Submit/Module/*.pm linguist-language=Perl
+t/*.t linguist-language=Perl
