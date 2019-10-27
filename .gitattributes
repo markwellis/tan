@@ -1,0 +1,6 @@
+root/static/tiny_mce/* linguist-vendored
+root/static/tiny_mce_plugins/* linguist-vendored
+assets/art/design/js/mootools-more-1.4.0.1.js linguist-vendored
+assets/art/design/js/mootools-core-1.4.5.js linguist-vendored
+root/static/themes/classic/js/Lib/mootools-1-2-5-core-nc.js linguist-vendored
+root/static/themes/classic/js/Lib/mootools-more.js linguist-vendored
